@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resumen Parcial — Estadística (Clases 1-5)</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [
+          {left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}
+        ]});"></script>
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+
+<style>
+  :root{
+    --bg:#0f172a; --panel:#1e293b; --panel2:#273449; --border:#334155;
+    --text:#e2e8f0; --muted:#94a3b8; --accent:#38bdf8; --accent2:#a78bfa;
+    --good:#34d399; --warn:#fbbf24; --bad:#f87171; --r:#1f6feb;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+       background:var(--bg); color:var(--text); line-height:1.55}
+  .layout{display:grid; grid-template-columns:260px 1fr; min-height:100vh}
+  nav.sidebar{background:var(--panel); border-right:1px solid var(--border);
+              padding:18px 14px; position:sticky; top:0; height:100vh; overflow-y:auto}
+  nav.sidebar h2{font-size:13px; color:var(--accent); letter-spacing:.5px; margin:14px 0 6px;
+                 text-transform:uppercase}
+  nav.sidebar a{display:block; color:var(--text); text-decoration:none; padding:5px 8px;
+                border-radius:6px; font-size:13.5px; margin:1px 0}
+  nav.sidebar a:hover{background:var(--panel2); color:var(--accent)}
+  .brand{font-weight:700; font-size:17px; color:white; margin-bottom:4px}
+  .brand small{display:block; font-weight:400; color:var(--muted); font-size:11.5px}
+
+  main{padding:30px 40px; max-width:1100px}
+  h1{font-size:30px; margin:6px 0 4px; color:white}
+  h2{font-size:22px; margin:32px 0 10px; color:var(--accent);
+     border-bottom:1px solid var(--border); padding-bottom:6px}
+  h3{font-size:17px; margin:22px 0 8px; color:var(--accent2)}
+  h4{font-size:14.5px; margin:16px 0 6px; color:#fde68a}
+  p,li{font-size:14.5px}
+  ul,ol{padding-left:22px}
+
+  .card{background:var(--panel); border:1px solid var(--border); border-radius:10px;
+        padding:16px 20px; margin:12px 0}
+  .card.tip{border-left:4px solid var(--good)}
+  .card.warn{border-left:4px solid var(--warn)}
+  .card.formula{border-left:4px solid var(--accent2); background:var(--panel2)}
+  .card.r{border-left:4px solid var(--r); background:#0d1117}
+
+  table{border-collapse:collapse; width:100%; margin:10px 0; font-size:14px}
+  th,td{border:1px solid var(--border); padding:7px 10px; text-align:left; vertical-align:top}
+  th{background:var(--panel2); color:var(--accent)}
+
+  code{background:#0b1220; padding:2px 6px; border-radius:4px; font-size:13px; color:#fcd34d}
+  pre{background:#0b1220; border:1px solid var(--border); border-radius:6px;
+      padding:12px 16px; overflow-x:auto; font-size:13px; color:#e2e8f0}
+  pre .cm{color:#94a3b8}
+  pre .kw{color:#a78bfa}
+  pre .fn{color:#38bdf8}
+  pre .str{color:#fcd34d}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  @media(max-width:900px){.grid2{grid-template-columns:1fr}}
+
+  .controls{display:flex; flex-wrap:wrap; gap:12px; margin:14px 0}
+  .controls label{display:flex; flex-direction:column; font-size:13px; color:var(--muted); min-width:130px}
+  .controls input[type=number]{background:#0b1220; color:var(--text); border:1px solid var(--border);
+                               border-radius:6px; padding:6px 10px; font-size:14px; margin-top:3px}
+  .stat-output{display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
+               gap:10px; margin-top:12px}
+  .stat-box{background:#0b1220; padding:10px 12px; border-radius:8px; border:1px solid var(--border)}
+  .stat-box .label{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px}
+  .stat-box .value{font-size:18px; font-weight:700; color:var(--accent)}
+  .plot{width:100%; height:380px; background:#0b1220; border-radius:8px; border:1px solid var(--border)}
+
+  .badge{display:inline-block; padding:2px 8px; border-radius:12px; background:var(--panel2);
+         color:var(--accent); font-size:11.5px; margin-right:6px; font-weight:600}
+  .badge.r{background:#0d1117; color:#1f6feb; border:1px solid var(--r)}
+
+  .footer{margin-top:60px; padding:20px; text-align:center; color:var(--muted); font-size:12px;
+          border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav class="sidebar">
+  <div class="brand">📊 Estadística<br><small>Resumen parcial · Clases 1-5</small></div>
+
+  <h2>Clase 1 — Variables</h2>
+  <a href="#variables">Tipos de variables</a>
+  <a href="#poblacion">Población · muestra</a>
+
+  <h2>Clase 2 — Resumen</h2>
+  <a href="#central">Tendencia central</a>
+  <a href="#dispersion">Dispersión</a>
+  <a href="#cuandousar">¿Qué medida usar?</a>
+
+  <h2>Clase 3 — EDA</h2>
+  <a href="#histograma">Histogramas</a>
+  <a href="#boxplot">Boxplots y outliers</a>
+  <a href="#calc">🧮 Calculadora EDA</a>
+
+  <h2>Clase 4 — Probabilidad</h2>
+  <a href="#prob-conceptos">Conceptos</a>
+  <a href="#prob-reglas">Reglas</a>
+  <a href="#condicional">Condicional · árbol</a>
+
+  <h2>Clase 5 — VA discretas</h2>
+  <a href="#va">VA discretas</a>
+  <a href="#esperanza">Esperanza · varianza</a>
+  <a href="#bernoulli">Bernoulli</a>
+  <a href="#binomial">📈 Binomial</a>
+  <a href="#poisson">📈 Poisson</a>
+  <a href="#bin-poi">Binomial → Poisson</a>
+
+  <h2>Extras</h2>
+  <a href="#r-cheat">🔵 Funciones R</a>
+  <a href="#errores">Errores comunes</a>
+  <a href="#integrador">Ejercicio integrador</a>
+</nav>
+
+<main>
+<h1>Resumen Parcial — Estadística</h1>
+<p style="color:var(--muted)">Lic. en Automatización y Control · Universidad Nacional de Pilar · Clases 1 a 5.<br>
+Ejemplos en contexto industrial (sensores, manufactura, defectos). Código en <span class="badge r">R</span>.</p>
+
+<!-- ============== CLASE 1 ============== -->
+<h2 id="variables">1. Tipos de variables <span class="badge">Clase 1</span></h2>
+
+<div class="card">
+<table>
+  <tr><th>Tipo</th><th>Sub-tipo</th><th>Descripción</th><th>Ejemplos del curso</th></tr>
+  <tr><td rowspan="2"><b>Cualitativa</b></td><td>Nominal</td><td>Sin orden natural</td>
+      <td>Operador (García, Pérez), Componente (Alpha, Beta, Gamma), Alarma (Sí/No)</td></tr>
+  <tr><td>Ordinal</td><td>Con orden, sin distancia</td><td>Turno (Mañana, Tarde, Noche), nivel</td></tr>
+  <tr><td rowspan="2"><b>Cuantitativa</b></td><td>Discreta</td><td>Valores aislados (contables)</td>
+      <td>N° alarmas/día, defectos por placa</td></tr>
+  <tr><td>Continua</td><td>Cualquier valor en intervalo</td><td>pH, turbidez (NTU), caudal (m³/h), temperatura (°C), tiempo de ciclo (s)</td></tr>
+</table>
+</div>
+
+<div class="card tip">💡 <b>Truco para clasificar</b>: si tiene sentido calcular un promedio y la unidad es física → cuantitativa. Si "el promedio" no aporta nada (¿promedio de turnos?) → cualitativa.</div>
+
+<h3 id="poblacion">Población, muestra y unidad experimental</h3>
+<div class="card">
+<ul>
+<li><b>Población</b>: conjunto total que se quiere estudiar (ej: <i>todas las placas producidas en la planta</i>).</li>
+<li><b>Muestra</b>: subconjunto de la población observado realmente (ej: <i>las 30 placas de la última semana</i>).</li>
+<li><b>Unidad experimental</b>: cada elemento individual sobre el que se mide (ej: <i>una placa, un sensor, un día</i>).</li>
+</ul>
+</div>
+
+<!-- ============== CLASE 2 ============== -->
+<h2 id="central">2. Medidas de tendencia central <span class="badge">Clase 2</span></h2>
+
+<div class="grid2">
+<div class="card formula">
+<h4>Media aritmética</h4>
+$$\bar{x} = \frac{\sum_{i=1}^{n} x_i}{n}$$
+<p><b>Sensible a outliers.</b> Ej curso: tiempo de ciclo promedio = 13,06 s.</p>
+</div>
+<div class="card formula">
+<h4>Mediana (Mdn)</h4>
+<p>Valor central con datos ordenados. Si <i>n</i> es par: promedio de los dos centrales.</p>
+<p><b>Robusta</b> ante outliers. Ej curso: mediana = 12,95 s.</p>
+</div>
+<div class="card formula">
+<h4>Moda (Mₒ)</h4>
+<p>Valor que más se repite. Puede no haber moda o haber varias (multimodal).</p>
+</div>
+<div class="card tip">
+<h4>💡 Cuándo aparece cada una</h4>
+<ul style="margin:0">
+<li><b>Media ≈ Mediana</b> → datos simétricos.</li>
+<li><b>Media &gt; Mediana</b> → cola a la <b>derecha</b>.</li>
+<li><b>Media &lt; Mediana</b> → cola a la <b>izquierda</b>.</li>
+</ul>
+</div>
+</div>
+
+<h2 id="dispersion">3. Medidas de dispersión <span class="badge">Clase 2</span></h2>
+
+<div class="grid2">
+<div class="card formula">
+<h4>Rango</h4>
+$$R = x_{máx} - x_{mín}$$
+<p>Muy sensible a outliers.</p>
+</div>
+<div class="card formula">
+<h4>Cuartiles e IQR</h4>
+<p>Q₁ = percentil 25, Q₂ = mediana, Q₃ = percentil 75.</p>
+$$RIQ = Q_3 - Q_1$$
+<p>El RIQ mide la dispersión del <b>50% central</b> y es <b>robusto</b>.</p>
+</div>
+<div class="card formula">
+<h4>Varianza muestral</h4>
+$$s^2 = \frac{\sum_{i=1}^{n}(x_i - \bar{x})^2}{n-1}$$
+<p>El divisor n−1 es la <b>corrección de Bessel</b> (estimador insesgado).</p>
+</div>
+<div class="card formula">
+<h4>Desvío estándar</h4>
+$$s = \sqrt{s^2}$$
+<p>Misma unidad que los datos. Ej curso: s = 0,82 s para tiempo de ciclo → "varía típicamente ±0,82 s alrededor del promedio".</p>
+</div>
+</div>
+
+<div class="card formula">
+<h4>Coeficiente de variación (CV)</h4>
+$$CV = \frac{s}{\bar{x}} \cdot 100\%$$
+<p><b>Adimensional.</b> Permite comparar variabilidad entre variables con distinta unidad o magnitud (ej: temperatura del horno vs. tiempo de ciclo).</p>
+</div>
+
+<h2 id="cuandousar">4. ¿Qué medida usar según el contexto?</h2>
+<div class="card">
+<table>
+<tr><th>Situación</th><th>Medida recomendada</th><th>Por qué</th></tr>
+<tr><td>Datos simétricos, sin outliers</td><td>Media y desv. estándar</td><td>Aprovecha toda la información</td></tr>
+<tr><td>Datos asimétricos o con outliers</td><td>Mediana e IQR</td><td>Resistentes a valores extremos</td></tr>
+<tr><td>Comparar variabilidad entre procesos distintos</td><td>Coeficiente de variación</td><td>Adimensional, independiente de la unidad</td></tr>
+<tr><td>Control de calidad en planta</td><td>Media y desv. estándar</td><td>Base para cartas de control</td></tr>
+<tr><td>Detectar valores anómalos</td><td>Q₁, Q₃ y RIQ</td><td>Permite identificar outliers</td></tr>
+</table>
+</div>
+
+<!-- ============== CLASE 3 ============== -->
+<h2 id="histograma">5. Histogramas <span class="badge">Clase 3</span></h2>
+
+<div class="card">
+<p>Representación gráfica de la distribución de una <b>variable cuantitativa continua</b>. Los datos se agrupan en intervalos (<b>bins</b>) y se muestra la frecuencia de cada uno con barras.</p>
+<h4>¿Qué mirar en un histograma?</h4>
+<ul>
+<li><b>Forma</b>: simétrica, sesgada a izquierda (cola larga a la izquierda) o sesgada a derecha (cola larga a la derecha).</li>
+<li><b>Centro</b>: dónde se concentran los datos.</li>
+<li><b>Dispersión</b>: qué tan extendidos están.</li>
+<li><b>Outliers</b>: barras aisladas en los extremos.</li>
+</ul>
+</div>
+
+<div class="card warn">⚠️ <b>Cantidad de bins</b>: pocos → se pierde detalle. Demasiados → ruido. Como guía, R usa la regla de Sturges automáticamente con <code>hist(x)</code>.</div>
+
+<h2 id="boxplot">6. Boxplots y detección de outliers <span class="badge">Clase 3</span></h2>
+
+<div class="card">
+<p>Resume la distribución en 5 números: <b>mín, Q₁, mediana, Q₃, máx</b>.</p>
+<ul>
+<li><b>Caja</b>: del Q₁ al Q₃ (contiene el 50% central).</li>
+<li><b>Línea dentro de la caja</b>: mediana.</li>
+<li><b>Bigotes</b>: hasta el valor más lejano dentro de Q₁ − 1,5·RIQ y Q₃ + 1,5·RIQ.</li>
+<li><b>Puntos sueltos</b>: outliers (fuera de los bigotes).</li>
+</ul>
+</div>
+
+<div class="card formula">
+<h4>Regla del 1,5 × IQR para outliers</h4>
+$$x \text{ es outlier si: } x < Q_1 - 1{,}5 \cdot RIQ \quad \text{o} \quad x > Q_3 + 1{,}5 \cdot RIQ$$
+</div>
+
+<div class="card tip">
+<h4>💡 Histograma vs. Boxplot</h4>
+<table style="margin-top:6px">
+<tr><th></th><th>Histograma</th><th>Boxplot</th></tr>
+<tr><td>Muestra forma completa</td><td>✅</td><td>❌</td></tr>
+<tr><td>Detecta outliers automáticamente</td><td>❌</td><td>✅</td></tr>
+<tr><td>Compara grupos</td><td>Difícil</td><td>✅ (uno por grupo)</td></tr>
+<tr><td>Variable</td><td>Continua</td><td>Continua (también discreta)</td></tr>
+</table>
+</div>
+
+<!-- ============== CALCULADORA EDA ============== -->
+<h2 id="calc">🧮 Calculadora EDA interactiva</h2>
+
+<div class="card">
+<p>Pegá tus datos (separados por coma o espacio). Calcula todas las medidas y dibuja histograma + boxplot, igual que <code>summary()</code> y <code>boxplot()</code> en R.</p>
+
+<label style="font-size:13px; color:var(--muted)">Datos:</label>
+<textarea id="dataInput" rows="3" style="width:100%; background:#0b1220; color:var(--text); border:1px solid var(--border); border-radius:6px; padding:8px; font-family:monospace; font-size:14px;">245.3, 246.7, 244.8, 247.2, 245.9, 248.1, 246.4, 249.0, 247.8, 245.5</textarea>
+
+<div class="controls">
+  <button onclick="calcularStats()" style="background:var(--accent); color:#0b1220; border:none; padding:8px 16px; border-radius:6px; font-weight:600; cursor:pointer;">Calcular</button>
+  <button onclick="cargarEjemplo()" style="background:var(--panel2); color:var(--text); border:1px solid var(--border); padding:8px 16px; border-radius:6px; cursor:pointer;">Otro ejemplo del curso</button>
+</div>
+
+<div class="stat-output" id="statOut"></div>
+
+<div class="grid2" style="margin-top:18px">
+  <div id="histoPlot" class="plot"></div>
+  <div id="boxPlot" class="plot"></div>
+</div>
+</div>
+
+<!-- ============== CLASE 4: PROBABILIDAD ============== -->
+<h2 id="prob-conceptos">7. Probabilidad — Conceptos <span class="badge">Clase 4</span></h2>
+
+<div class="card">
+<ul>
+<li><b>Experimento aleatorio</b>: proceso con resultado incierto (ej: medir defectos en una placa).</li>
+<li><b>Espacio muestral (Ω)</b>: todos los resultados posibles. Ej: Ω = {0, 1, 2, 3} defectos por placa.</li>
+<li><b>Evento</b>: subconjunto de Ω. Ej: "tener más de 1 defecto" = {2, 3}.</li>
+<li>Toda probabilidad cumple: <b>0 ≤ P(A) ≤ 1</b>, P(Ω) = 1, P(∅) = 0.</li>
+</ul>
+</div>
+
+<h3>Regla de Laplace (probabilidad clásica)</h3>
+<div class="card formula">
+$$P(A) = \frac{\text{casos favorables a } A}{\text{casos totales posibles}}$$
+<p>Aplica solo cuando <b>todos los resultados son igualmente probables</b>.</p>
+</div>
+
+<h2 id="prob-reglas">8. Reglas de probabilidad</h2>
+
+<div class="grid2">
+<div class="card formula">
+<h4>Complemento</h4>
+$$P(A^c) = 1 - P(A)$$
+</div>
+<div class="card formula">
+<h4>Suma — eventos excluyentes</h4>
+$$P(A \cup B) = P(A) + P(B)$$
+<p>(cuando <i>A ∩ B = ∅</i>)</p>
+</div>
+<div class="card formula">
+<h4>Suma — eventos no excluyentes</h4>
+$$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
+</div>
+<div class="card formula">
+<h4>Producto — eventos independientes</h4>
+$$P(A \cap B) = P(A) \cdot P(B)$$
+</div>
+</div>
+
+<h2 id="condicional">9. Probabilidad condicional y diagrama de árbol</h2>
+
+<div class="card formula">
+$$P(A|B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$
+<p>Dos eventos son <b>independientes</b> si y solo si: $P(A \cap B) = P(A) \cdot P(B)$, equivalente a $P(A|B) = P(A)$.</p>
+</div>
+
+<div class="card tip">
+<h4>Ejemplo del curso — Sensores en serie</h4>
+<p>Sensor A falla con probabilidad 0,05. Sensor B falla con 0,03. Independientes.</p>
+<ul>
+<li><b>Ambos fallen</b>: P(A∩B) = 0,05 × 0,03 = <b>0,0015</b> (0,15%)</li>
+<li><b>Al menos uno falle</b>: P(A∪B) = 0,05 + 0,03 − 0,0015 = <b>0,0785</b> (7,85%)</li>
+<li><b>Ninguno falle</b>: 0,95 × 0,97 = <b>0,9215</b> (92,15%)</li>
+</ul>
+</div>
+
+<div class="card tip">
+<h4>Ejemplo del curso — Diagrama de árbol</h4>
+<p>Sensor A detecta el 95% de las fallas. Si A detecta, B detecta con prob. 0,90. Si A no detecta, B detecta con 0,60.</p>
+<pre>           ┌─ B detecta (0,90)  →  0,95 × 0,90 = <b>0,855</b>
+A detecta ─┤
+(0,95)     └─ B no detecta (0,10) → 0,95 × 0,10 = 0,095
+
+A no det ──┬─ B detecta (0,60)  →  0,05 × 0,60 = 0,030
+(0,05)     └─ B no detecta (0,40) → 0,05 × 0,40 = <b>0,020</b></pre>
+<p><b>P(al menos uno detecte)</b> = 1 − P(ninguno) = 1 − 0,020 = <b>0,98</b></p>
+</div>
+
+<!-- ============== CLASE 5: VA DISCRETAS ============== -->
+<h2 id="va">10. Variables aleatorias discretas <span class="badge">Clase 5</span></h2>
+
+<div class="card">
+<p>Una <b>variable aleatoria (VA)</b> es una función que asigna un número real a cada resultado del espacio muestral. Es <b>discreta</b> si toma un número finito o infinito numerable de valores.</p>
+<p><b>Función de probabilidad puntual (cuantía)</b>:</p>
+$$p_X(x) = P(X = x), \quad p_X(x) \ge 0, \quad \sum_x p_X(x) = 1$$
+<p><b>Función de distribución acumulada</b> (es una función "escalera"):</p>
+$$F_X(x) = P(X \le x) = \sum_{y \le x} p_X(y)$$
+</div>
+
+<h2 id="esperanza">11. Esperanza y varianza (VA discretas)</h2>
+
+<div class="card formula">
+<h4>Esperanza (centro de gravedad)</h4>
+$$E[X] = \mu = \sum_i x_i \cdot p_X(x_i)$$
+<h4>Varianza</h4>
+$$Var(X) = \sigma^2 = \sum_i (x_i - \mu)^2 \cdot p_X(x_i) = E[X^2] - (E[X])^2$$
+$$\sigma = \sqrt{Var(X)}$$
+</div>
+
+<div class="card tip">
+<h4>Ejemplo del apunte (TV satelital)</h4>
+<p>Distribución del N° de paquetes contratados:</p>
+<table style="font-size:13px">
+<tr><th>x</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+<tr><th>p(x)</th><td>0,375</td><td>0,275</td><td>0,175</td><td>0,100</td><td>0,075</td></tr>
+</table>
+<p>$E[X] = 1·0,375 + 2·0,275 + 3·0,175 + 4·0,100 + 5·0,075 = $ <b>2,225 paquetes</b></p>
+<p>$E[X^2] = 6,525$  ⇒  $Var(X) = 6,525 - 2,225^2 = $ <b>1,5744</b>  ⇒  $\sigma ≈ 1,255$</p>
+</div>
+
+<!-- ============== BERNOULLI ============== -->
+<h2 id="bernoulli">12. Modelo Bernoulli — $X \sim Be(p)$</h2>
+
+<div class="card formula">
+<p>Un único ensayo con dos resultados: <b>éxito (1)</b> con prob. $p$, <b>fracaso (0)</b> con prob. $1-p$.</p>
+$$P(X = x) = p^x (1-p)^{1-x}, \quad x \in \{0, 1\}$$
+$$E[X] = p, \quad Var(X) = p(1-p)$$
+</div>
+
+<div class="card tip">
+<b>Ejemplo curso</b>: sensor de presencia con $p=0,95$ → $E[X] = 0,95$, $Var(X) = 0,95 · 0,05 = 0,0475$.
+</div>
+
+<!-- ============== BINOMIAL ============== -->
+<h2 id="binomial">13. Modelo Binomial — $X \sim Bi(n, p)$</h2>
+
+<div class="card formula">
+<p>Cuenta el <b>número de éxitos</b> en $n$ ensayos de Bernoulli <b>independientes</b>, con probabilidad de éxito $p$ <b>constante</b>.</p>
+$$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}, \quad k = 0, 1, \dots, n$$
+$$E[X] = np, \quad Var(X) = np(1-p)$$
+<p style="margin-top:8px;font-size:13px;color:var(--muted)">Combinatorio: $\binom{n}{k} = \dfrac{n!}{k!(n-k)!}$</p>
+</div>
+
+<div class="card">
+<h4>Gráfico interactivo</h4>
+<p>Movés <i>n</i> y <i>p</i> y ves cómo cambia la distribución.</p>
+<div class="controls">
+  <label>n (ensayos)<input type="number" id="binN" value="15" min="1" max="100" oninput="plotBinomial()"></label>
+  <label>p (prob. éxito)<input type="number" id="binP" value="0.05" min="0.01" max="0.99" step="0.01" oninput="plotBinomial()"></label>
+  <label style="justify-content:center"><span style="color:var(--accent); font-weight:600; margin-top:18px" id="binStats"></span></label>
+</div>
+<div id="binPlot" class="plot"></div>
+</div>
+
+<div class="card tip">
+<b>Ejemplo curso</b>: máquina con 2% defectos, $n=10$ piezas → $X \sim Bi(10; 0,02)$.
+<ul>
+<li>$P(X=1) = \binom{10}{1}(0,02)^1(0,98)^9 = 0,1668$ (16,68%)</li>
+<li>$P(X \ge 2) = 1 - P(X \le 1) = 1 - 0,9839 = 0,0161$ (1,61%)</li>
+<li>$E[X] = 10 · 0,02 = 0,2$ defectuosas esperadas</li>
+</ul>
+</div>
+
+<!-- ============== POISSON ============== -->
+<h2 id="poisson">14. Modelo Poisson — $X \sim P(\lambda)$</h2>
+
+<div class="card formula">
+<p>Modela el <b>número de ocurrencias</b> de un evento <b>raro</b> en un intervalo fijo (de tiempo, espacio, longitud, área…) con tasa media $\lambda > 0$.</p>
+$$P(X = k) = \frac{e^{-\lambda} \cdot \lambda^k}{k!}, \quad k = 0, 1, 2, \dots$$
+$$E[X] = Var(X) = \lambda$$
+</div>
+
+<div class="card warn">
+⚠️ <b>Si cambia el intervalo</b>: $\lambda$ se ajusta proporcionalmente. Si $\lambda = 2$ fallas/semana, en 2 semanas $\lambda' = 4$; en 3 días $\lambda' = 2 \cdot \frac{3}{7} \approx 0,857$.
+</div>
+
+<div class="card">
+<h4>Gráfico interactivo</h4>
+<div class="controls">
+  <label>λ (tasa media)<input type="number" id="poiL" value="2.5" min="0.1" max="20" step="0.1" oninput="plotPoisson()"></label>
+  <label style="justify-content:center"><span style="color:var(--accent); font-weight:600; margin-top:18px" id="poiStats"></span></label>
+</div>
+<div id="poiPlot" class="plot"></div>
+</div>
+
+<div class="card tip">
+<b>Ejemplo curso</b>: sensor con $\lambda = 3$ fallas/semana.
+<ul>
+<li>$P(X=2)$ en una semana = $\frac{e^{-3} \cdot 9}{2} = 0,2241$ (22,41%)</li>
+<li>$P(X \ge 4) = 1 - P(X \le 3) = 1 - 0,6474 = 0,3526$ (35,26%)</li>
+<li>En 2 semanas, $\lambda' = 6$ → $P(X=0) = e^{-6} = 0,00248$ (0,25%)</li>
+</ul>
+</div>
+
+<!-- ============== APROXIMACIÓN BIN-POI ============== -->
+<h2 id="bin-poi">15. Relación Binomial → Poisson</h2>
+
+<div class="card formula">
+<p>Si $X \sim Bi(n, p)$ con $n$ <b>grande</b> y $p$ <b>pequeño</b>, manteniendo $np = \lambda$ fijo, entonces $X$ se aproxima a una <b>Poisson</b> con parámetro $\lambda = np$.</p>
+<p><b>Condiciones (del apunte)</b>: $n \ge 100$, $p \le 0{,}01$ y $np \le 20$.</p>
+</div>
+
+<div class="card tip">
+<b>Ejemplo del curso</b>: $n=100$, $p=0,01$ ⇒ $\lambda = 1$.
+<ul>
+<li>Binomial: $P(X=2) = \binom{100}{2}(0,01)^2(0,99)^{98} \approx 0,1849$</li>
+<li>Poisson: $P(X=2) = \frac{e^{-1} \cdot 1^2}{2!} \approx 0,1839$</li>
+</ul>
+<p>Coinciden con error &lt; 0,1%.</p>
+</div>
+
+<!-- ============== RESUMEN MODELOS ============== -->
+<h2>16. Tabla resumen de modelos discretos</h2>
+<div class="card">
+<table>
+<tr><th>Modelo</th><th>Parámetros</th><th>Rango</th><th>E[X]</th><th>Var(X)</th><th>Cuándo se usa</th></tr>
+<tr><td><b>Bernoulli</b></td><td>p</td><td>{0, 1}</td><td>p</td><td>p(1−p)</td><td>Un único ensayo (sí/no)</td></tr>
+<tr><td><b>Binomial</b></td><td>n, p</td><td>{0,…,n}</td><td>np</td><td>np(1−p)</td><td>N° éxitos en n ensayos</td></tr>
+<tr><td><b>Poisson</b></td><td>λ</td><td>{0,1,2,…}</td><td>λ</td><td>λ</td><td>Eventos raros por unidad de tiempo/espacio</td></tr>
+</table>
+</div>
+
+<!-- ============== R CHEAT ============== -->
+<h2 id="r-cheat">17. Funciones útiles en R 🔵</h2>
+
+<div class="card r">
+<h4>Descriptiva (Clases 2-3)</h4>
+<pre><span class="cm"># Cargar datos</span>
+datos <span class="kw"><-</span> <span class="fn">read.csv</span>(<span class="str">"manufactura.csv"</span>)
+<span class="fn">str</span>(datos)        <span class="cm"># estructura</span>
+<span class="fn">summary</span>(datos)    <span class="cm"># resumen completo</span>
+
+<span class="cm"># Medidas</span>
+<span class="fn">mean</span>(datos$Tiempo_Ciclo)        <span class="cm"># media</span>
+<span class="fn">median</span>(datos$Tiempo_Ciclo)      <span class="cm"># mediana</span>
+<span class="fn">var</span>(datos$Tiempo_Ciclo)         <span class="cm"># varianza</span>
+<span class="fn">sd</span>(datos$Tiempo_Ciclo)          <span class="cm"># desv. estándar</span>
+<span class="fn">range</span>(datos$Tiempo_Ciclo)       <span class="cm"># mínimo y máximo</span>
+<span class="fn">diff</span>(<span class="fn">range</span>(datos$Tiempo_Ciclo)) <span class="cm"># rango</span>
+<span class="fn">quantile</span>(datos$Tiempo_Ciclo)    <span class="cm"># cuartiles</span>
+<span class="fn">IQR</span>(datos$Tiempo_Ciclo)         <span class="cm"># RIQ</span>
+
+<span class="cm"># Por grupos</span>
+<span class="fn">tapply</span>(datos$Defectos, datos$Componente, mean)
+<span class="fn">tapply</span>(datos$Defectos, datos$Componente, sd)</pre>
+</div>
+
+<div class="card r">
+<h4>Gráficos EDA (Clase 3)</h4>
+<pre><span class="cm"># Histograma</span>
+<span class="fn">hist</span>(datos$Tiempo_Ciclo,
+     breaks = <span class="kw">5</span>,
+     main = <span class="str">"Tiempos de Ciclo"</span>,
+     xlab = <span class="str">"Segundos"</span>,
+     col = <span class="str">"lightblue"</span>)
+
+<span class="cm"># Boxplot simple</span>
+<span class="fn">boxplot</span>(datos$Tiempo_Ciclo, col = <span class="str">"lightgreen"</span>)
+
+<span class="cm"># Boxplot por grupos (compara turnos)</span>
+<span class="fn">boxplot</span>(Tiempo_Ciclo ~ Turno, data = datos,
+        main = <span class="str">"Tiempo de ciclo por turno"</span>,
+        col = <span class="fn">c</span>(<span class="str">"lightblue"</span>, <span class="str">"lightgreen"</span>, <span class="str">"lightcoral"</span>))</pre>
+</div>
+
+<div class="card r">
+<h4>Probabilidades empíricas (Clase 4)</h4>
+<pre><span class="cm"># P(X tenga al menos 1 defecto)</span>
+<span class="fn">sum</span>(datos$Defectos > <span class="kw">0</span>) / <span class="fn">nrow</span>(datos)
+
+<span class="cm"># P(defecto | Componente == "Alpha")</span>
+<span class="fn">sum</span>(datos$Defectos[datos$Componente == <span class="str">"Alpha"</span>] > <span class="kw">0</span>) /
+  <span class="fn">sum</span>(datos$Componente == <span class="str">"Alpha"</span>)
+
+<span class="cm"># P(defecto Y turno Noche) — conjunta</span>
+<span class="fn">sum</span>(datos$Defectos > <span class="kw">0</span> & datos$Turno == <span class="str">"Noche"</span>) /
+  <span class="fn">nrow</span>(datos)</pre>
+</div>
+
+<div class="card r">
+<h4>Distribuciones discretas (Clase 5)</h4>
+<pre><span class="cm"># --- BINOMIAL --- X ~ Bi(n, p)</span>
+<span class="fn">dbinom</span>(k, n, p)         <span class="cm"># P(X = k)</span>
+<span class="fn">pbinom</span>(k, n, p)         <span class="cm"># P(X &lt;= k) acumulada</span>
+<span class="kw">1</span> - <span class="fn">pbinom</span>(k-<span class="kw">1</span>, n, p)   <span class="cm"># P(X &gt;= k)</span>
+n * p                   <span class="cm"># E[X] esperado</span>
+
+<span class="cm"># Ejemplo: 15 piezas, p=0.05</span>
+<span class="fn">dbinom</span>(<span class="kw">2</span>, <span class="kw">15</span>, <span class="kw">0.05</span>)       <span class="cm"># P(exactamente 2 defectos)</span>
+<span class="kw">1</span> - <span class="fn">pbinom</span>(<span class="kw">2</span>, <span class="kw">15</span>, <span class="kw">0.05</span>)   <span class="cm"># P(3 o más defectos)</span>
+
+<span class="cm"># --- POISSON --- X ~ P(lambda)</span>
+<span class="fn">dpois</span>(k, lambda)        <span class="cm"># P(X = k)</span>
+<span class="fn">ppois</span>(k, lambda)        <span class="cm"># P(X &lt;= k) acumulada</span>
+
+<span class="cm"># Ejemplo: lambda=2.5 fallas/semana</span>
+<span class="fn">dpois</span>(<span class="kw">3</span>, <span class="kw">2.5</span>)            <span class="cm"># P(exactamente 3 fallas)</span>
+<span class="kw">1</span> - <span class="fn">ppois</span>(<span class="kw">3</span>, <span class="kw">2.5</span>)        <span class="cm"># P(4 o más fallas)</span>
+<span class="fn">dpois</span>(<span class="kw">5</span>, <span class="kw">2.5</span> * <span class="kw">2</span>)        <span class="cm"># 2 semanas: lambda se duplica</span></pre>
+</div>
+
+<!-- ============== EJERCICIO INTEGRADOR ============== -->
+<h2 id="integrador">18. Ejercicio integrador (del apunte)</h2>
+
+<div class="card">
+<p><b>Línea de producción con 3 etapas:</b></p>
+<ol>
+<li><b>Etapa 1 (Bernoulli)</b>: sensor detecta pieza defectuosa con $p = 0,90$.<br>
+   → $E[X] = 0,90$ ; $Var(X) = 0,09$</li>
+<li><b>Etapa 2 (Binomial)</b>: lote de 15 piezas, $p_{def} = 0,05$.<br>
+   → $P(X=2) = 0,1348$ ; $P(X \ge 3) = 0,0361$ ; $E[X] = 0,75$</li>
+<li><b>Etapa 3 (Poisson)</b>: centro de control recibe 2 alarmas/hora en promedio.<br>
+   → $P(X=3) = 0,1804$ ; $P(X=0$ en media hora$) = e^{-1} = 0,3679$</li>
+</ol>
+</div>
+
+<!-- ============== ERRORES COMUNES ============== -->
+<h2 id="errores">19. Errores comunes en el parcial</h2>
+
+<div class="card warn">
+<ul>
+<li><b>Confundir media con mediana</b> en distribuciones asimétricas.</li>
+<li><b>Olvidar dividir por n−1</b> en la varianza muestral (corrección de Bessel).</li>
+<li><b>Usar Binomial cuando los ensayos NO son independientes</b> o $p$ no es constante.</li>
+<li><b>No ajustar λ cuando cambia el intervalo</b> en Poisson.</li>
+<li><b>Sumar varianzas sin verificar independencia</b> de las VA.</li>
+<li><b>Confundir P(A|B) con P(B|A)</b>.</li>
+<li><b>Mal aplicar la regla de la suma</b>: olvidar restar $P(A \cap B)$ cuando los eventos no son excluyentes.</li>
+<li><b>Olvidar el complemento</b>: $P(\text{al menos uno}) = 1 - P(\text{ninguno})$.</li>
+<li><b>Confundir frecuencia con probabilidad</b>: la frecuencia relativa es <i>estimación empírica</i> de la probabilidad.</li>
+<li><b>En boxplots</b>: confundir la línea de la caja (mediana) con la media.</li>
+</ul>
+</div>
+
+<div class="footer">
+Resumen Parcial · Estadística · Lic. en Automatización y Control · UNI. Pilar
+</div>
+
+</main>
+</div>
+
+<script>
+/* ===== Estadística ===== */
+function media(arr){return arr.reduce((a,b)=>a+b,0)/arr.length}
+function varianza(arr){const m=media(arr); return arr.reduce((a,b)=>a+(b-m)**2,0)/(arr.length-1)}
+function desv(arr){return Math.sqrt(varianza(arr))}
+function mediana(arr){const s=[...arr].sort((a,b)=>a-b); const n=s.length;
+  return n%2 ? s[(n-1)/2] : (s[n/2-1]+s[n/2])/2}
+function moda(arr){const c={}; arr.forEach(x=>c[x]=(c[x]||0)+1);
+  let max=0, mods=[]; for(const [k,v] of Object.entries(c)){
+    if(v>max){max=v; mods=[+k]} else if(v===max){mods.push(+k)}}
+  return max===1 ? '—' : mods.join(', ')}
+function percentil(arr, p){const s=[...arr].sort((a,b)=>a-b);
+  const idx=(p/100)*(s.length-1); const lo=Math.floor(idx), hi=Math.ceil(idx);
+  return lo===hi ? s[lo] : s[lo]+(idx-lo)*(s[hi]-s[lo])}
+
+function parseData(){return document.getElementById('dataInput').value
+  .split(/[\s,;]+/).filter(x=>x.length).map(Number).filter(x=>!isNaN(x))}
+
+function calcularStats(){
+  const d=parseData();
+  if(d.length<2){document.getElementById('statOut').innerHTML='<p style="color:var(--bad)">Necesito al menos 2 datos.</p>'; return}
+  const m=media(d), me=mediana(d), mo=moda(d);
+  const v=varianza(d), s=desv(d);
+  const cv=(s/m*100).toFixed(2);
+  const q1=percentil(d,25), q3=percentil(d,75), iqr=q3-q1;
+  const min=Math.min(...d), max=Math.max(...d);
+  const liInf=q1-1.5*iqr, liSup=q3+1.5*iqr;
+  const outliers=d.filter(x=>x<liInf||x>liSup);
+
+  document.getElementById('statOut').innerHTML=`
+    <div class="stat-box"><div class="label">n</div><div class="value">${d.length}</div></div>
+    <div class="stat-box"><div class="label">Media</div><div class="value">${m.toFixed(3)}</div></div>
+    <div class="stat-box"><div class="label">Mediana</div><div class="value">${me.toFixed(3)}</div></div>
+    <div class="stat-box"><div class="label">Moda</div><div class="value">${mo}</div></div>
+    <div class="stat-box"><div class="label">s (desv.)</div><div class="value">${s.toFixed(3)}</div></div>
+    <div class="stat-box"><div class="label">s² (var.)</div><div class="value">${v.toFixed(3)}</div></div>
+    <div class="stat-box"><div class="label">CV (%)</div><div class="value">${cv}</div></div>
+    <div class="stat-box"><div class="label">Mín – Máx</div><div class="value">${min} – ${max}</div></div>
+    <div class="stat-box"><div class="label">Q₁ – Q₃</div><div class="value">${q1.toFixed(2)} – ${q3.toFixed(2)}</div></div>
+    <div class="stat-box"><div class="label">IQR</div><div class="value">${iqr.toFixed(3)}</div></div>
+    <div class="stat-box"><div class="label">Rango</div><div class="value">${(max-min).toFixed(2)}</div></div>
+    <div class="stat-box"><div class="label">Outliers (1,5·IQR)</div><div class="value" style="font-size:14px">${outliers.length?outliers.join(', '):'ninguno'}</div></div>
+  `;
+  const bins=Math.max(5, Math.ceil(1+3.322*Math.log10(d.length)));
+  Plotly.newPlot('histoPlot', [{x:d, type:'histogram', nbinsx:bins, marker:{color:'#38bdf8'}}],
+    {title:{text:'Histograma', font:{color:'#e2e8f0'}}, paper_bgcolor:'#0b1220', plot_bgcolor:'#0b1220',
+     font:{color:'#e2e8f0'}, margin:{t:40,r:20,b:40,l:40},
+     xaxis:{gridcolor:'#334155'}, yaxis:{gridcolor:'#334155'}}, {responsive:true, displayModeBar:false});
+  Plotly.newPlot('boxPlot', [{y:d, type:'box', boxpoints:'all', jitter:0.3, marker:{color:'#a78bfa'}}],
+    {title:{text:'Box plot', font:{color:'#e2e8f0'}}, paper_bgcolor:'#0b1220', plot_bgcolor:'#0b1220',
+     font:{color:'#e2e8f0'}, margin:{t:40,r:20,b:40,l:40},
+     xaxis:{gridcolor:'#334155'}, yaxis:{gridcolor:'#334155'}}, {responsive:true, displayModeBar:false});
+}
+
+const ejemplos=[
+  '245.3, 246.7, 244.8, 247.2, 245.9, 248.1, 246.4, 249.0, 247.8, 245.5',
+  '12.5 13.2 11.8 12.1 13.5 12.8 11.5 12.9 13.1 12.3 11.9 13.0 12.6 12.2 11.7 13.3 12.4 12.0 11.6 13.4',
+  '2.5 2.8 3.0 2.6 2.9 3.1 2.7 2.8 3.2 2.9 3.0 2.6 2.7 2.8 3.0 2.9 3.1 2.8 2.7 2.9 3.3 2.8 2.9 3.0 2.6 2.7 2.8 3.1 2.9 3.0',
+  '45 47 46 48 47 46 49 47 46 48 52 53 51 54 52 53 52 55 53 52 38 42 41 40 39 41 40 39 42 60'
+];
+let ejIdx=0;
+function cargarEjemplo(){
+  ejIdx=(ejIdx+1)%ejemplos.length;
+  document.getElementById('dataInput').value=ejemplos[ejIdx];
+  calcularStats();
+}
+
+/* ===== Binomial ===== */
+function comb(n,k){if(k<0||k>n) return 0; if(k===0||k===n) return 1;
+  k=Math.min(k,n-k); let r=1; for(let i=0;i<k;i++) r=r*(n-i)/(i+1); return r}
+function plotBinomial(){
+  const n=+document.getElementById('binN').value;
+  const p=+document.getElementById('binP').value;
+  const xs=[], ys=[];
+  for(let k=0;k<=n;k++){xs.push(k); ys.push(comb(n,k)*Math.pow(p,k)*Math.pow(1-p,n-k))}
+  document.getElementById('binStats').textContent=`E[X]=${(n*p).toFixed(3)}  ·  Var=${(n*p*(1-p)).toFixed(3)}`;
+  Plotly.newPlot('binPlot', [{x:xs,y:ys,type:'bar',marker:{color:'#34d399'}}],
+    {title:{text:`Bi(n=${n}, p=${p})`, font:{color:'#e2e8f0'}},
+     paper_bgcolor:'#0b1220', plot_bgcolor:'#0b1220', font:{color:'#e2e8f0'},
+     margin:{t:40,r:20,b:40,l:50},
+     xaxis:{title:'k (éxitos)', gridcolor:'#334155'}, yaxis:{title:'P(X=k)', gridcolor:'#334155'}},
+    {responsive:true, displayModeBar:false});
+}
+
+/* ===== Poisson ===== */
+function plotPoisson(){
+  const L=+document.getElementById('poiL').value;
+  const xs=[], ys=[]; const kmax=Math.max(15, Math.ceil(L*3));
+  let logFact=0;
+  for(let k=0;k<=kmax;k++){
+    if(k>0) logFact+=Math.log(k);
+    ys.push(Math.exp(-L + k*Math.log(L) - logFact)); xs.push(k);
+  }
+  document.getElementById('poiStats').textContent=`E[X] = Var = λ = ${L}`;
+  Plotly.newPlot('poiPlot', [{x:xs,y:ys,type:'bar',marker:{color:'#fbbf24'}}],
+    {title:{text:`Poisson(λ=${L})`, font:{color:'#e2e8f0'}},
+     paper_bgcolor:'#0b1220', plot_bgcolor:'#0b1220', font:{color:'#e2e8f0'},
+     margin:{t:40,r:20,b:40,l:50},
+     xaxis:{title:'k (ocurrencias)', gridcolor:'#334155'}, yaxis:{title:'P(X=k)', gridcolor:'#334155'}},
+    {responsive:true, displayModeBar:false});
+}
+
+window.addEventListener('load', ()=>{
+  calcularStats();
+  plotBinomial();
+  plotPoisson();
+});
+</script>
+</body>
+</html>

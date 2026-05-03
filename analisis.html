@@ -337,34 +337,41 @@
     <li><a href="#sec1">1. Funciones de una variable</a>
       <ol>
         <li><a href="#sec1-1">1.1 Definición y dominio</a></li>
-        <li><a href="#sec1-2">1.2 Catálogo populares</a></li>
+        <li><a href="#sec1-2">1.2 Catálogo + gráficos</a></li>
+        <li><a href="#sec1-3">1.3 Trigonométricas y círculo</a></li>
       </ol>
     </li>
-    <li><a href="#sec2">2. Funciones de dos variables</a>
+    <li><a href="#sec-lim1v">2. Límites y continuidad (1 variable)</a>
       <ol>
-        <li><a href="#sec2-1">2.1 Definición</a></li>
-        <li><a href="#sec2-2">2.2 Visualización 3D</a></li>
-        <li><a href="#sec2-3">2.3 Catálogo 3D</a></li>
+        <li><a href="#sec-lim1v-1">2.1 Idea de límite</a></li>
+        <li><a href="#sec-lim1v-2">2.2 Álgebra de límites</a></li>
+        <li><a href="#sec-lim1v-3">2.3 Las 3 leyes de continuidad</a></li>
+        <li><a href="#sec-lim1v-4">2.4 Ejercicios</a></li>
       </ol>
     </li>
-    <li><a href="#sec3">3. Cálculo de dominios</a>
+    <li><a href="#sec2">3. Funciones de dos variables</a>
       <ol>
-        <li><a href="#sec3-1">3.1 Reglas básicas</a></li>
-        <li><a href="#sec3-2">3.2 Ejercicios resueltos</a></li>
+        <li><a href="#sec2-1">3.1 Definición</a></li>
+        <li><a href="#sec2-2">3.2 Visualización 3D</a></li>
+        <li><a href="#sec2-3">3.3 Catálogo 3D</a></li>
       </ol>
     </li>
-    <li><a href="#sec4">4. Curvas de nivel</a>
+    <li><a href="#sec3">4. Cálculo de dominios</a>
       <ol>
-        <li><a href="#sec4-1">4.1 Concepto</a></li>
-        <li><a href="#sec4-2">4.2 Ejercicios</a></li>
+        <li><a href="#sec3-1">4.1 Reglas básicas</a></li>
+        <li><a href="#sec3-2">4.2 Ejercicios resueltos</a></li>
       </ol>
     </li>
-    <li><a href="#sec5">5. Límites y continuidad</a>
+    <li><a href="#sec-convex">5. Conjuntos convexos y no convexos</a>
       <ol>
-        <li><a href="#sec5-1">5.1 Definición</a></li>
-        <li><a href="#sec5-2">5.2 Trayectorias</a></li>
-        <li><a href="#sec5-3">5.3 Polares</a></li>
-        <li><a href="#sec5-4">5.4 Continuidad</a></li>
+        <li><a href="#sec-convex-1">5.1 Definición visual</a></li>
+        <li><a href="#sec-convex-2">5.2 Ejemplos</a></li>
+      </ol>
+    </li>
+    <li><a href="#sec4">6. Curvas de nivel</a>
+      <ol>
+        <li><a href="#sec4-1">6.1 Concepto</a></li>
+        <li><a href="#sec4-2">6.2 Ejercicios</a></li>
       </ol>
     </li>
     <li><a href="#cheat">⭐ Resumen Final</a></li>
@@ -412,7 +419,9 @@ La idea de "función" nace de modelar fenómenos donde <b>una cantidad depende d
 
 <div class="tip">Para hallar el dominio se "mira las prohibiciones": denominadores $\neq 0$, radicandos pares $\geq 0$, argumentos de log $> 0$, $\arcsin/\arccos$ con argumento en $[-1, 1]$.</div>
 
-<h3 id="sec1-2">1.2 Catálogo de funciones populares de una variable</h3>
+<h3 id="sec1-2">1.2 Catálogo de funciones populares (con gráficos)</h3>
+
+<p>Acá tenés la "galería" de las funciones que más aparecen en el parcial. Después de las tarjetas, vas a poder rotar/manipular los gráficos en GeoGebra 2D para entender la forma de cada una.</p>
 
 <div class="gallery">
 
@@ -502,9 +511,233 @@ La idea de "función" nace de modelar fenómenos donde <b>una cantidad depende d
 
 </div>
 
-<div class="origin">
-Las trigonométricas $\sin, \cos$ provienen del <b>círculo unitario</b>: si parás en el ángulo $\theta$, la coordenada $x$ del punto es $\cos\theta$ y la $y$ es $\sin\theta$. Por eso $\sin^2\theta + \cos^2\theta = 1$ (es el teorema de Pitágoras dentro del círculo de radio 1).
+<h4>📈 Gráficos interactivos de las funciones populares</h4>
+<p>Mirá cómo se ve cada familia. Podés cambiar parámetros (mover los <b>deslizadores</b>) o tipear tu propia función en la barra de entrada.</p>
+
+<div class="ggb-container" id="ggb-1v-poly" style="min-height:380px;"></div>
+<p class="ggb-caption">Polinómicas: lineal $y=mx+b$, cuadrática $y=x^2$, cúbica $y=x^3$. Notá la simetría: las pares (par grado) son simétricas respecto al eje $y$, las impares respecto al origen.</p>
+
+<div class="ggb-container" id="ggb-1v-rad" style="min-height:380px;"></div>
+<p class="ggb-caption">Raíz $y=\sqrt{x}$ (sólo $x \geq 0$) y raíz cúbica $y=\sqrt[3]{x}$ (toda $\mathbb{R}$).</p>
+
+<div class="ggb-container" id="ggb-1v-explog" style="min-height:380px;"></div>
+<p class="ggb-caption">Exponencial $y=e^x$ y logaritmo $y=\ln x$. Son <b>inversas</b>: la gráfica de una es la reflexión de la otra respecto a la recta $y=x$.</p>
+
+<div class="ggb-container" id="ggb-1v-rac" style="min-height:380px;"></div>
+<p class="ggb-caption">Racional $y=1/x$. Asíntota vertical en $x=0$ y horizontal en $y=0$. Hipérbola.</p>
+
+<div class="ggb-container" id="ggb-1v-abs" style="min-height:380px;"></div>
+<p class="ggb-caption">Valor absoluto $y=|x|$. Tiene un "pico" en el origen (no derivable allí).</p>
+
+<h3 id="sec1-3">1.3 Trigonométricas y la circunferencia trigonométrica 🌀</h3>
+
+<p>Las trigonométricas son las protagonistas del parcial. Acá las vemos <b>desde la circunferencia unitaria</b>, que es de donde nacen.</p>
+
+<h4>Círculo unitario y definición geométrica</h4>
+<div class="formula-box">
+$$\text{Círculo unitario: } x^2 + y^2 = 1$$
 </div>
+
+<p>Tomamos un punto $P$ sobre el círculo y un ángulo $\theta$ medido desde el eje $x$ positivo en sentido antihorario. <b>Por definición</b>:</p>
+
+<div class="formula-box">
+$$\cos\theta = \text{coordenada } x \text{ de } P, \qquad \sin\theta = \text{coordenada } y \text{ de } P$$
+</div>
+
+<div class="origin">
+Como el punto $P=(\cos\theta, \sin\theta)$ está sobre la circunferencia $x^2+y^2=1$, sustituyendo se obtiene la <b>identidad pitagórica</b>:
+$$\cos^2\theta + \sin^2\theta = 1$$
+Es <b>literalmente el teorema de Pitágoras</b> aplicado al triángulo rectángulo formado por el radio, la proyección horizontal y la proyección vertical.
+</div>
+
+<div class="ggb-container" id="ggb-circulo-trig" style="min-height:480px;"></div>
+<p class="ggb-caption">Circunferencia trigonométrica. <b>Movés el deslizador del ángulo $\alpha$</b> y ves cómo cambian $\sin\alpha$ (vertical), $\cos\alpha$ (horizontal) y $\tan\alpha$ (la pendiente de la recta).</p>
+
+<h4>Ángulos notables (¡los que más usás!)</h4>
+<table>
+<thead><tr><th>$\theta$ (rad)</th><th>$\theta$ (°)</th><th>$\sin\theta$</th><th>$\cos\theta$</th><th>$\tan\theta$</th></tr></thead>
+<tbody>
+<tr><td>$0$</td><td>$0°$</td><td>$0$</td><td>$1$</td><td>$0$</td></tr>
+<tr><td>$\pi/6$</td><td>$30°$</td><td>$1/2$</td><td>$\sqrt{3}/2$</td><td>$\sqrt{3}/3$</td></tr>
+<tr><td>$\pi/4$</td><td>$45°$</td><td>$\sqrt{2}/2$</td><td>$\sqrt{2}/2$</td><td>$1$</td></tr>
+<tr><td>$\pi/3$</td><td>$60°$</td><td>$\sqrt{3}/2$</td><td>$1/2$</td><td>$\sqrt{3}$</td></tr>
+<tr><td>$\pi/2$</td><td>$90°$</td><td>$1$</td><td>$0$</td><td>no existe</td></tr>
+<tr><td>$\pi$</td><td>$180°$</td><td>$0$</td><td>$-1$</td><td>$0$</td></tr>
+<tr><td>$3\pi/2$</td><td>$270°$</td><td>$-1$</td><td>$0$</td><td>no existe</td></tr>
+<tr><td>$2\pi$</td><td>$360°$</td><td>$0$</td><td>$1$</td><td>$0$</td></tr>
+</tbody>
+</table>
+
+<h4>Propiedades clave que se desprenden del círculo</h4>
+<ul>
+  <li><b>Periodicidad:</b> $\sin(\theta + 2\pi) = \sin\theta$, $\cos(\theta + 2\pi) = \cos\theta$ — al dar la vuelta completa volvés al mismo punto.</li>
+  <li><b>Paridad:</b> $\cos(-\theta)=\cos\theta$ (par), $\sin(-\theta)=-\sin\theta$ (impar) — reflejar el ángulo respecto al eje $x$ deja $x$ igual e invierte $y$.</li>
+  <li><b>Imagen acotada:</b> $-1 \leq \sin\theta, \cos\theta \leq 1$ — el punto está sobre el círculo de radio 1.</li>
+  <li><b>Identidad pitagórica:</b> $\sin^2\theta + \cos^2\theta = 1$.</li>
+  <li><b>Tangente:</b> $\tan\theta = \dfrac{\sin\theta}{\cos\theta}$. Geométricamente, es la longitud del segmento tangente al círculo cortado por la recta que pasa por el origen y $P$. <b>No existe</b> donde $\cos\theta=0$, es decir en $\theta = \pi/2 + k\pi$.</li>
+</ul>
+
+<h4>Identidades fundamentales que salen del círculo</h4>
+<div class="formula-box">
+$$\sin^2\theta + \cos^2\theta = 1$$
+$$\sin(2\theta) = 2\sin\theta\cos\theta$$
+$$\cos(2\theta) = \cos^2\theta - \sin^2\theta = 1 - 2\sin^2\theta = 2\cos^2\theta - 1$$
+$$\sin(\theta\pm\varphi) = \sin\theta\cos\varphi \pm \cos\theta\sin\varphi$$
+$$\cos(\theta\pm\varphi) = \cos\theta\cos\varphi \mp \sin\theta\sin\varphi$$
+</div>
+
+<h4>Gráfico de las funciones trigonométricas</h4>
+<div class="ggb-container" id="ggb-trig-graf" style="min-height:400px;"></div>
+<p class="ggb-caption">$\sin x$ (azul), $\cos x$ (rojo) y $\tan x$ (verde, con asíntotas). Notá que coseno = seno desplazado $\pi/2$ a la izquierda.</p>
+
+<div class="tip">El truco para recordar valores notables: pensá <b>siempre en el círculo</b>. Si te piden $\sin(3\pi/4)$, ubicá el ángulo (segundo cuadrante, a 45° del eje $y$ negativo), y leé la coordenada $y$ del punto. Te ahorrás memorizar.</div>
+
+<div class="example">
+<h4>Ejemplo · Usar el círculo para resolver $\sin(7\pi/6)$</h4>
+<div class="step"><b>Paso 1.</b> $7\pi/6 = \pi + \pi/6$ ⇒ está en el <b>tercer cuadrante</b>, a $\pi/6$ del eje $x$ negativo.</div>
+<div class="step"><b>Paso 2.</b> En el tercer cuadrante, $\sin < 0$.</div>
+<div class="step"><b>Paso 3.</b> El "valor de referencia" es $\sin(\pi/6) = 1/2$.</div>
+<div class="step"><b>Paso 4.</b> Resultado: $\sin(7\pi/6) = -1/2$.</div>
+</div>
+
+</section>
+
+<hr/>
+
+<!-- ============ SECCIÓN LÍMITES Y CONTINUIDAD 1V ============ -->
+<section id="sec-lim1v">
+<h2>2. Límites y continuidad en una variable 🎯</h2>
+
+<h3 id="sec-lim1v-1">2.1 Idea intuitiva de límite</h3>
+<p>Decir $\displaystyle\lim_{x\to a} f(x) = L$ significa que <b>cuando $x$ se acerca a $a$ (sin tocarlo)</b>, los valores $f(x)$ se acercan a $L$ tanto como uno quiera.</p>
+
+<div class="formula-box">
+$$\lim_{x \to a} f(x) = L \;\Longleftrightarrow\; \forall \varepsilon>0,\; \exists \delta>0\;:\; 0 < |x - a| < \delta \implies |f(x) - L| < \varepsilon$$
+</div>
+
+<div class="origin">
+La definición $\varepsilon$-$\delta$ formaliza la idea de "tan cerca como uno quiera": <b>vos elegís</b> qué tan cerca de $L$ debe estar $f(x)$ (el $\varepsilon$), y <b>yo te garantizo</b> que existe una distancia $\delta$ a $a$ donde eso se cumple. La condición $0<|x-a|$ excluye el punto $a$ mismo: el límite habla del comportamiento <b>cerca</b> de $a$, no <b>en</b> $a$.
+</div>
+
+<h4>Límites laterales</h4>
+<div class="formula-box">
+$$\lim_{x \to a^-} f(x) = L_1 \quad (\text{por la izquierda}), \qquad \lim_{x \to a^+} f(x) = L_2 \quad (\text{por la derecha})$$
+</div>
+<p>El límite (bilateral) <b>existe sólo si los dos laterales existen y son iguales</b>: $L_1 = L_2 = L$.</p>
+
+<div class="example">
+<h4>Ejemplo · Límite que no existe por laterales distintos</h4>
+<p>Sea $f(x) = \dfrac{|x|}{x}$ (la función "signo"). Entonces $f(x) = 1$ si $x>0$ y $f(x)=-1$ si $x<0$.</p>
+<div class="step">$\lim_{x\to 0^+} f(x) = 1$.</div>
+<div class="step">$\lim_{x\to 0^-} f(x) = -1$.</div>
+<div class="step">Como $1 \neq -1$, $\lim_{x\to 0} f(x)$ <b>no existe</b>.</div>
+</div>
+
+<h3 id="sec-lim1v-2">2.2 Álgebra de límites</h3>
+<p>Si $\lim_{x\to a} f(x) = L$ y $\lim_{x\to a} g(x) = M$ (ambos finitos), valen:</p>
+<div class="formula-box">
+$$\lim_{x\to a}\bigl[f(x) \pm g(x)\bigr] = L \pm M$$
+$$\lim_{x\to a}\bigl[f(x) \cdot g(x)\bigr] = L \cdot M$$
+$$\lim_{x\to a}\frac{f(x)}{g(x)} = \frac{L}{M} \quad (\text{si } M \neq 0)$$
+$$\lim_{x\to a}\bigl[c \cdot f(x)\bigr] = c \cdot L$$
+$$\lim_{x\to a}\bigl[f(x)\bigr]^n = L^n$$
+</div>
+
+<h4>Límites notables (memorizar)</h4>
+<div class="formula-box">
+$$\lim_{x\to 0}\frac{\sin x}{x} = 1 \qquad \lim_{x\to 0}\frac{1-\cos x}{x^2} = \frac{1}{2}$$
+$$\lim_{x\to 0}\frac{e^x - 1}{x} = 1 \qquad \lim_{x\to 0}\frac{\ln(1+x)}{x} = 1$$
+$$\lim_{x\to \infty}\left(1+\frac{1}{x}\right)^x = e$$
+</div>
+
+<div class="origin">
+$\lim_{x\to 0}\sin(x)/x=1$ se justifica geométricamente: en el círculo unitario, para ángulos pequeños, la longitud del arco (que es $x$ en radianes) y la del segmento opuesto (que es $\sin x$) son casi iguales. El cociente tiende a 1.
+</div>
+
+<h4>Indeterminaciones más comunes</h4>
+<p>Cuando aplicar las reglas da una expresión sin sentido aritmético, hay que <b>levantar la indeterminación</b> (factorizar, racionalizar, usar L'Hôpital, equivalentes, etc.):</p>
+<div class="formula-box">
+$$\frac{0}{0}, \quad \frac{\infty}{\infty}, \quad 0 \cdot \infty, \quad \infty - \infty, \quad 0^0, \quad 1^\infty, \quad \infty^0$$
+</div>
+
+<div class="example">
+<h4>Ejemplo · Indeterminación 0/0 (factorizar)</h4>
+<p>Calculá $\displaystyle\lim_{x\to 2}\frac{x^2-4}{x-2}$.</p>
+<div class="step"><b>Paso 1.</b> Sustituir directo: $\frac{0}{0}$ — indeterminado.</div>
+<div class="step"><b>Paso 2.</b> Factorizar el numerador: $x^2-4=(x-2)(x+2)$.</div>
+<div class="step"><b>Paso 3.</b> Simplificar: $\dfrac{(x-2)(x+2)}{x-2} = x+2$ (válido para $x\neq 2$).</div>
+<div class="step"><b>Paso 4.</b> Tomar límite: $\lim_{x\to 2}(x+2) = 4$.</div>
+<div class="formula-box">$$\boxed{\;\lim_{x\to 2}\frac{x^2-4}{x-2} = 4\;}$$</div>
+</div>
+
+<div class="example">
+<h4>Ejemplo · Racionalización</h4>
+<p>Calculá $\displaystyle\lim_{x\to 0}\frac{\sqrt{x+1}-1}{x}$.</p>
+<div class="step"><b>Paso 1.</b> $0/0$.</div>
+<div class="step"><b>Paso 2.</b> Multiplico arriba y abajo por el conjugado $\sqrt{x+1}+1$:</div>
+<div class="step">$\dfrac{(\sqrt{x+1}-1)(\sqrt{x+1}+1)}{x(\sqrt{x+1}+1)}=\dfrac{(x+1)-1}{x(\sqrt{x+1}+1)}=\dfrac{x}{x(\sqrt{x+1}+1)}=\dfrac{1}{\sqrt{x+1}+1}$.</div>
+<div class="step"><b>Paso 3.</b> Tomar límite: $\dfrac{1}{1+1}=\dfrac{1}{2}$.</div>
+</div>
+
+<h3 id="sec-lim1v-3">2.3 Continuidad: las TRES leyes 🔑</h3>
+<p>Una función $f$ es <b>continua en $x = a$</b> si y sólo si se cumplen las <b>tres condiciones</b> simultáneamente:</p>
+
+<div class="formula-box" style="font-size:17px;">
+<b>Ley 1:</b> $f(a)$ está definida (es decir, $a \in \text{Dom}(f)$).<br/><br/>
+<b>Ley 2:</b> $\displaystyle\lim_{x\to a} f(x)$ existe (límites laterales coinciden y son finitos).<br/><br/>
+<b>Ley 3:</b> $\displaystyle\lim_{x\to a} f(x) = f(a)$.
+</div>
+
+<div class="origin">
+La idea intuitiva es <b>"poder dibujar la función sin levantar el lápiz"</b> al pasar por $x=a$. Cada ley elimina un tipo de "ruptura": la 1 evita huecos (puntos sin valor), la 2 evita saltos (cuando los laterales discrepan), y la 3 evita "puntos fuera de lugar" (cuando el límite va a un lado pero $f(a)$ vale otra cosa).
+</div>
+
+<h4>Tipos de discontinuidad</h4>
+<table>
+<thead><tr><th>Tipo</th><th>Qué falla</th><th>Ejemplo</th></tr></thead>
+<tbody>
+<tr><td><b>Evitable</b></td><td>El límite existe pero $f(a)$ no, o no coincide.</td><td>$f(x)=\frac{x^2-1}{x-1}$ en $x=1$ (se "tapa" definiendo $f(1)=2$).</td></tr>
+<tr><td><b>De salto (1ª especie)</b></td><td>Límites laterales existen pero son distintos.</td><td>$f(x)=\frac{|x|}{x}$ en $x=0$.</td></tr>
+<tr><td><b>Esencial (2ª especie)</b></td><td>Algún límite lateral no existe o es $\pm\infty$.</td><td>$f(x)=\sin(1/x)$ o $1/x$ en $x=0$.</td></tr>
+</tbody>
+</table>
+
+<h4>Reglas prácticas (composición continua)</h4>
+<ul>
+  <li>Polinomios ⇒ continuos en todo $\mathbb{R}$.</li>
+  <li>Funciones racionales ⇒ continuas donde el denominador no se anula.</li>
+  <li>Raíces, exp, log, trig ⇒ continuas en su dominio natural.</li>
+  <li>Suma/resta/producto/cociente/composición de continuas ⇒ continua (en el dominio común).</li>
+</ul>
+
+<h3 id="sec-lim1v-4">2.4 Ejercicios resueltos paso a paso</h3>
+
+<div class="example">
+<h4>Ejercicio 1 · Estudiar continuidad de una función a trozos</h4>
+<p>Dada $f(x)=\begin{cases} x^2 + 1 & x < 1 \\ 3 & x = 1 \\ 2x & x > 1 \end{cases}$, ¿es continua en $x=1$?</p>
+<div class="step"><b>Ley 1:</b> $f(1) = 3$. ✓ Definida.</div>
+<div class="step"><b>Ley 2:</b> $\lim_{x\to 1^-}(x^2+1)=2$ y $\lim_{x\to 1^+}(2x)=2$. Como ambos laterales valen $2$, el límite existe y vale $2$. ✓</div>
+<div class="step"><b>Ley 3:</b> ¿$\lim = f(1)$? $2 \neq 3$. ✗ <b>Falla.</b></div>
+<div class="formula-box">$$\boxed{\;f \text{ es discontinua en } x=1 \text{ (evitable: si redefinís } f(1)=2 \text{ queda continua)}.\;}$$</div>
+</div>
+
+<div class="example">
+<h4>Ejercicio 2 · Hallar $k$ para que $f$ sea continua</h4>
+<p>$f(x)=\begin{cases}\dfrac{\sin(3x)}{x} & x \neq 0 \\ k & x = 0\end{cases}$. ¿Qué valor de $k$ la hace continua en $0$?</p>
+<div class="step"><b>Ley 1:</b> Necesitamos $f(0)$ definida ⇒ vamos a elegir $k$.</div>
+<div class="step"><b>Ley 2:</b> $\lim_{x\to 0}\dfrac{\sin 3x}{x}=\lim_{x\to 0}\dfrac{\sin 3x}{3x}\cdot 3 = 1\cdot 3 = 3$.</div>
+<div class="step"><b>Ley 3:</b> Para que el límite sea $f(0)$, debemos elegir $k=3$.</div>
+<div class="formula-box">$$\boxed{\;k = 3\;}$$</div>
+</div>
+
+<div class="example">
+<h4>Ejercicio 3 · Salto</h4>
+<p>$f(x)=\dfrac{x}{|x|}$ en $x=0$.</p>
+<div class="step"><b>Ley 1:</b> $f(0)$ <b>no existe</b> (división por 0).</div>
+<div class="step">Falla la primera ley ⇒ <b>discontinua</b>. Además, los laterales son $1$ y $-1$ ⇒ <b>discontinuidad de salto</b>.</div>
+</div>
+
+<div class="warning">Cuando una función está definida a trozos y te piden continuidad, <b>siempre</b> chequeá las tres leyes <b>en cada punto donde cambia la fórmula</b>. Es el error más común olvidarse uno.</div>
 
 </section>
 
@@ -512,7 +745,7 @@ Las trigonométricas $\sin, \cos$ provienen del <b>círculo unitario</b>: si par
 
 <!-- ============ SECCIÓN 2 ============ -->
 <section id="sec2">
-<h2>2. Funciones de dos variables 🌐</h2>
+<h2>3. Funciones de dos variables 🌐</h2>
 
 <h3 id="sec2-1">2.1 Definición intuitiva y formal</h3>
 <p>Una función de dos variables es una regla que <b>a cada par ordenado $(x, y)$</b> de un conjunto $D$ del plano le asigna <b>un único número real</b> $z = f(x, y)$.</p>
@@ -586,7 +819,7 @@ $$\text{Gráfico}(f) = \{(x, y, z) \in \mathbb{R}^3 \;:\; (x, y) \in D \text{ y 
 
 <!-- ============ SECCIÓN 3 ============ -->
 <section id="sec3">
-<h2>3. Cálculo de dominios en dos variables 🗺️</h2>
+<h2>4. Cálculo de dominios en dos variables 🗺️</h2>
 
 <h3 id="sec3-1">3.1 Las tres reglas de oro</h3>
 <p>El <b>dominio natural</b> de $f(x, y)$ es el conjunto de todos los puntos $(x, y) \in \mathbb{R}^2$ donde la fórmula <b>tiene sentido como número real</b>. Sólo hay que cuidar tres "prohibiciones":</p>
@@ -687,9 +920,117 @@ $$\text{Gráfico}(f) = \{(x, y, z) \in \mathbb{R}^3 \;:\; (x, y) \in D \text{ y 
 
 <hr/>
 
+<!-- ============ SECCIÓN CONJUNTOS CONVEXOS ============ -->
+<section id="sec-convex">
+<h2>5. Conjuntos convexos y no convexos 🔺</h2>
+
+<h3 id="sec-convex-1">5.1 Definición visual</h3>
+<p>Un conjunto $C \subseteq \mathbb{R}^n$ es <b>convexo</b> si <b>cualquier segmento</b> que une dos puntos de $C$ <b>está totalmente contenido en $C$</b>.</p>
+
+<div class="formula-box">
+$$C \text{ es convexo} \iff \forall\, P, Q \in C,\; \forall\, t \in [0,1] : \; tP + (1-t)Q \in C$$
+</div>
+
+<div class="origin">
+La expresión $tP + (1-t)Q$ con $t \in [0,1]$ recorre el <b>segmento</b> que va de $Q$ (cuando $t=0$) a $P$ (cuando $t=1$). Pedir que ese segmento esté en $C$ es decir: <b>"no podés salirte" del conjunto al ir en línea recta entre dos puntos cualesquiera</b>.
+</div>
+
+<div class="tip">Test mental: imaginá que tirás una "goma elástica" entre dos puntos del conjunto. Si la goma siempre se queda adentro ⇒ convexo. Si en algún caso se sale ⇒ no convexo.</div>
+
+<h4>Diagrama: convexo vs. no convexo</h4>
+<div style="background:white; padding:20px; border-radius:8px; margin:14px 0; text-align:center;">
+<svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg" style="max-width:100%; height:auto;">
+  <!-- Disco convexo -->
+  <circle cx="120" cy="140" r="80" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+  <circle cx="90" cy="120" r="4" fill="#1e40af"/>
+  <circle cx="150" cy="170" r="4" fill="#1e40af"/>
+  <line x1="90" y1="120" x2="150" y2="170" stroke="#1e40af" stroke-width="2"/>
+  <text x="85" y="115" font-size="13" fill="#1e40af">P</text>
+  <text x="155" y="180" font-size="13" fill="#1e40af">Q</text>
+  <text x="120" y="245" text-anchor="middle" font-size="14" fill="#0f172a" font-weight="bold">Disco · CONVEXO ✅</text>
+  <text x="120" y="265" text-anchor="middle" font-size="11" fill="#475569">El segmento queda dentro</text>
+
+  <!-- Anillo no convexo -->
+  <circle cx="350" cy="140" r="80" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+  <circle cx="350" cy="140" r="35" fill="white" stroke="#dc2626" stroke-width="2"/>
+  <circle cx="290" cy="130" r="4" fill="#7f1d1d"/>
+  <circle cx="410" cy="150" r="4" fill="#7f1d1d"/>
+  <line x1="290" y1="130" x2="410" y2="150" stroke="#7f1d1d" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="280" y="125" font-size="13" fill="#7f1d1d">P</text>
+  <text x="415" y="160" font-size="13" fill="#7f1d1d">Q</text>
+  <text x="350" y="245" text-anchor="middle" font-size="14" fill="#0f172a" font-weight="bold">Anillo · NO convexo ❌</text>
+  <text x="350" y="265" text-anchor="middle" font-size="11" fill="#475569">El segmento atraviesa el agujero</text>
+
+  <!-- Estrella no convexa -->
+  <polygon points="580,80 600,130 660,130 612,160 632,215 580,180 528,215 548,160 500,130 560,130"
+           fill="#fde68a" stroke="#d97706" stroke-width="2"/>
+  <circle cx="528" cy="215" r="4" fill="#7c2d12"/>
+  <circle cx="632" cy="215" r="4" fill="#7c2d12"/>
+  <line x1="528" y1="215" x2="632" y2="215" stroke="#7c2d12" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="515" y="232" font-size="13" fill="#7c2d12">P</text>
+  <text x="638" y="232" font-size="13" fill="#7c2d12">Q</text>
+  <text x="580" y="248" text-anchor="middle" font-size="14" fill="#0f172a" font-weight="bold">Estrella · NO convexo ❌</text>
+  <text x="580" y="265" text-anchor="middle" font-size="11" fill="#475569">El segmento sale por las puntas</text>
+</svg>
+</div>
+
+<h3 id="sec-convex-2">5.2 Catálogo de ejemplos típicos</h3>
+
+<table>
+<thead><tr><th>Conjunto</th><th>¿Convexo?</th><th>Por qué</th></tr></thead>
+<tbody>
+<tr><td>$\mathbb{R}^n$ (todo el espacio)</td><td>✅ Sí</td><td>Cualquier segmento está dentro.</td></tr>
+<tr><td>Conjunto vacío $\emptyset$</td><td>✅ Sí</td><td>Por convención (no hay pares de puntos que verificar).</td></tr>
+<tr><td>Un punto $\{P\}$</td><td>✅ Sí</td><td>Trivial.</td></tr>
+<tr><td>Recta o segmento</td><td>✅ Sí</td><td>Cualquier subsegmento está dentro.</td></tr>
+<tr><td>Semiplano $\{ax+by \leq c\}$</td><td>✅ Sí</td><td>La desigualdad lineal preserva combinaciones convexas.</td></tr>
+<tr><td>Disco $\{x^2+y^2 \leq R^2\}$</td><td>✅ Sí</td><td>Cualquier cuerda está adentro.</td></tr>
+<tr><td>Cuadrado, rectángulo, triángulo</td><td>✅ Sí</td><td>Polígonos sin "entrantes".</td></tr>
+<tr><td>Elipse (interior)</td><td>✅ Sí</td><td>Es la imagen lineal de un disco.</td></tr>
+<tr><td>Bola en $\mathbb{R}^n$</td><td>✅ Sí</td><td>Generalización del disco.</td></tr>
+<tr><td>Anillo $\{r \leq \sqrt{x^2+y^2} \leq R\}$</td><td>❌ No</td><td>Una cuerda diametral cruza el agujero central.</td></tr>
+<tr><td>Estrella, polígono cóncavo</td><td>❌ No</td><td>Tiene "entrantes" donde el segmento se sale.</td></tr>
+<tr><td>Unión de dos discos disjuntos</td><td>❌ No</td><td>Un punto en cada uno: el segmento sale del conjunto.</td></tr>
+<tr><td>$\{(x,y): xy \geq 1\}$</td><td>❌ No</td><td>Tiene dos ramas hiperbólicas separadas.</td></tr>
+<tr><td>Circunferencia (sólo el borde)</td><td>❌ No</td><td>Una cuerda atraviesa el interior, que no pertenece al conjunto.</td></tr>
+</tbody>
+</table>
+
+<h4>Propiedades importantes</h4>
+<ul>
+  <li>La <b>intersección</b> de convexos es convexa. <span class="badge">Útil</span></li>
+  <li>La <b>unión</b> de convexos en general <b>NO</b> es convexa.</li>
+  <li>Toda <b>bola abierta o cerrada</b> en $\mathbb{R}^n$ es convexa.</li>
+  <li>Todo conjunto <b>definido por desigualdades lineales</b> $\{Ax \leq b\}$ es convexo (poliedro).</li>
+</ul>
+
+<div class="example">
+<h4>Ejercicio · Determinar si un conjunto es convexo</h4>
+<p>¿Es convexo $C = \{(x,y) : x^2 + y^2 \leq 4 \text{ y } y \geq 0\}$?</p>
+<div class="step"><b>Paso 1.</b> Reescribir como intersección: $C = \{x^2+y^2 \leq 4\} \cap \{y \geq 0\}$.</div>
+<div class="step"><b>Paso 2.</b> El primero es un disco (convexo). El segundo es un semiplano (convexo).</div>
+<div class="step"><b>Paso 3.</b> Intersección de convexos ⇒ convexo. ✅</div>
+<div class="formula-box">$$\boxed{\;C \text{ es convexo (semidisco superior)}.\;}$$</div>
+</div>
+
+<div class="example">
+<h4>Ejercicio · Mostrar que NO es convexo</h4>
+<p>¿Es convexo $D = \{(x,y) : 1 \leq x^2 + y^2 \leq 4\}$ (anillo)?</p>
+<div class="step"><b>Paso 1.</b> Tomar dos puntos opuestos del anillo: $P = (2, 0)$ y $Q = (-2, 0)$. Ambos cumplen $x^2+y^2=4$.</div>
+<div class="step"><b>Paso 2.</b> El segmento entre ellos es el diámetro horizontal, que pasa por el origen $(0,0)$.</div>
+<div class="step"><b>Paso 3.</b> Pero $(0,0)$ tiene $x^2+y^2 = 0 < 1$, así que <b>no</b> está en $D$.</div>
+<div class="step"><b>Paso 4.</b> Por lo tanto, $D$ <b>no es convexo</b>. ❌</div>
+</div>
+
+<div class="warning">¿Por qué te lo preguntan en un parcial de Análisis II/III? Porque la <b>convexidad del dominio</b> es un requisito en muchos teoremas (extremos absolutos, integrales múltiples, conexidad por arcos). Saber identificarla rápido te ahorra problemas en otros ejercicios.</div>
+
+</section>
+
+<hr/>
+
 <!-- ============ SECCIÓN 4 ============ -->
 <section id="sec4">
-<h2>4. Curvas de nivel 🗻</h2>
+<h2>6. Curvas de nivel 🗻</h2>
 
 <h3 id="sec4-1">4.1 ¿Qué son y para qué sirven?</h3>
 <p>Una <b>curva de nivel</b> de la función $f(x,y)$ es el conjunto de puntos del plano donde la función toma un valor <b>constante</b> $k$:</p>
@@ -766,120 +1107,6 @@ $$C_k = \{(x, y) \in D : f(x, y) = k\}$$
 
 <hr/>
 
-<!-- ============ SECCIÓN 5 ============ -->
-<section id="sec5">
-<h2>5. Límites y continuidad en dos variables 🔍</h2>
-
-<h3 id="sec5-1">5.1 La gran diferencia con una variable</h3>
-<p>En una variable, "tender a $a$" significa acercarse por la <b>izquierda o por la derecha</b> (sólo dos direcciones). En dos variables, $(x,y) \to (a,b)$ significa acercarse al punto <b>por infinitos caminos posibles</b>: rectas, parábolas, espirales, etc.</p>
-
-<div class="formula-box">
-$$\lim_{(x,y)\to(a,b)} f(x,y) = L \;\Longleftrightarrow\; \forall \varepsilon>0,\; \exists\, \delta>0\;:\; 0 < \sqrt{(x-a)^2+(y-b)^2} < \delta \implies |f(x,y) - L| < \varepsilon$$
-</div>
-
-<div class="origin">
-La definición es la misma idea de "$\varepsilon$-$\delta$" de una variable, pero la <b>distancia</b> $|x-a|$ se reemplaza por la distancia euclidiana en el plano $\sqrt{(x-a)^2+(y-b)^2}$. Es decir: si te acercás al punto $(a,b)$ <b>por cualquier dirección</b> y te quedás a distancia $<\delta$, los valores de $f$ caen a distancia $<\varepsilon$ de $L$.
-</div>
-
-<div class="warning">Para que el límite exista, el valor $L$ debe ser <b>el mismo sin importar el camino</b> por el que nos acerquemos. Si encontramos <b>dos caminos con valores distintos</b>, el límite NO existe.</div>
-
-<h3 id="sec5-2">5.2 Método 1 · Trayectorias (para mostrar que NO existe)</h3>
-<p>Esta es la técnica estándar para <b>refutar</b> la existencia de un límite:</p>
-<ol>
-  <li>Acercate por la <b>recta</b> $y = mx$ (o $y = 0$, $x = 0$, $y = x$, etc.).</li>
-  <li>Calculá $\lim_{x\to 0} f(x, mx)$ y observá si depende de $m$. Si depende, ¡<b>listo</b>! El límite no existe.</li>
-  <li>Si no, probá con <b>parábolas</b> $y = mx^2$ o curvas más exóticas.</li>
-</ol>
-
-<div class="example">
-<h4>Ejemplo clásico · El cociente $\dfrac{xy}{x^2+y^2}$ en $(0,0)$</h4>
-<p>Calculá (si existe) $\displaystyle \lim_{(x,y)\to(0,0)} \frac{xy}{x^2+y^2}$.</p>
-<div class="step"><b>Camino 1:</b> $y=0$. $f(x,0)=0$ para todo $x \neq 0$. Límite = $0$.</div>
-<div class="step"><b>Camino 2:</b> $y=x$. $f(x,x)=\dfrac{x\cdot x}{x^2+x^2}=\dfrac{x^2}{2x^2}=\dfrac{1}{2}$. Límite = $1/2$.</div>
-<div class="step"><b>Conclusión:</b> Dos caminos dan valores distintos ($0$ y $1/2$). El límite <b>no existe</b>.</div>
-</div>
-
-<div class="example">
-<h4>Ejemplo · $\dfrac{x^2 y}{x^4 + y^2}$ en $(0,0)$</h4>
-<div class="step"><b>Por rectas $y = mx$:</b> $\dfrac{x^2 (mx)}{x^4 + m^2 x^2} = \dfrac{mx^3}{x^2(x^2+m^2)} = \dfrac{mx}{x^2+m^2} \to 0$.</div>
-<div class="step">Todas las rectas dan 0. <b>Cuidado, no concluyas todavía.</b></div>
-<div class="step"><b>Por la parábola $y=x^2$:</b> $\dfrac{x^2\cdot x^2}{x^4+x^4}=\dfrac{x^4}{2x^4}=\dfrac{1}{2}$.</div>
-<div class="step">¡Encontramos un camino con valor distinto! El límite <b>no existe</b>.</div>
-</div>
-
-<div class="tip">Cuando todas las rectas dan el mismo valor, <b>siempre probá con parábolas</b> o curvas tipo $y = x^k$ antes de concluir que existe.</div>
-
-<h3 id="sec5-3">5.3 Método 2 · Coordenadas polares (para mostrar que SÍ existe)</h3>
-<p>Acercarse al origen es equivalente a hacer $r \to 0$ en polares. Cambio de variable:</p>
-<div class="formula-box">
-$$x = r\cos\theta, \quad y = r\sin\theta, \quad r=\sqrt{x^2+y^2}$$
-</div>
-<p>Sustituís en $f$ y mirás $\lim_{r\to 0^+} f(r\cos\theta, r\sin\theta)$.</p>
-
-<div class="origin">
-$x^2+y^2=r^2$ y los <b>infinitos caminos</b> al origen quedan parametrizados por la dirección $\theta$. Si el límite resulta $L$ <b>independiente de $\theta$</b>, todos los caminos dan lo mismo y el límite existe.
-</div>
-
-<div class="warning">Que el límite no dependa de $\theta$ <b>no alcanza</b> si en el camino aparece $r$ multiplicado por algo no acotado en $\theta$. La regla rigurosa: hay que poder <b>acotar</b> $|f(r\cos\theta, r\sin\theta) - L| \leq g(r)$ con $g(r)\to 0$ <b>uniformemente</b> en $\theta$.</div>
-
-<div class="example">
-<h4>Ejemplo · $\dfrac{x^2 y}{x^2+y^2}$ en $(0,0)$</h4>
-<div class="step"><b>Polares:</b> $\dfrac{r^2\cos^2\theta\cdot r\sin\theta}{r^2}=r\cos^2\theta\sin\theta$.</div>
-<div class="step"><b>Acotación:</b> $|r\cos^2\theta\sin\theta| \leq r \cdot 1 \cdot 1 = r$.</div>
-<div class="step">Como $r \to 0$, por <b>sandwich</b> el límite es $0$.</div>
-<div class="formula-box">$$\boxed{\;\lim_{(x,y)\to(0,0)} \frac{x^2 y}{x^2+y^2} = 0\;}$$</div>
-</div>
-
-<h3 id="sec5-4">5.4 Continuidad</h3>
-<p>$f(x,y)$ es <b>continua</b> en $(a,b)$ si se cumplen las tres condiciones:</p>
-<ol>
-  <li>$f(a,b)$ está <b>definida</b>.</li>
-  <li>$\displaystyle\lim_{(x,y)\to(a,b)} f(x,y)$ <b>existe</b>.</li>
-  <li>Ese límite <b>es igual a</b> $f(a,b)$.</li>
-</ol>
-<div class="formula-box">
-$$\lim_{(x,y)\to(a,b)} f(x,y) = f(a,b)$$
-</div>
-
-<div class="origin">
-La idea es la misma que en una variable: <b>no hay saltos ni huecos</b>. Si pudieras "dibujar" la superficie sin levantar el lápiz al pasar por $(a,b,f(a,b))$, $f$ es continua ahí.
-</div>
-
-<h4>Reglas prácticas de continuidad</h4>
-<ul>
-  <li><b>Polinomios</b> en $x$ e $y$ ⇒ continuos en todo $\mathbb{R}^2$.</li>
-  <li><b>Sumas, restas, productos</b> de funciones continuas ⇒ continuas.</li>
-  <li><b>Cocientes</b> de continuas ⇒ continuos donde el denominador no se anula.</li>
-  <li><b>Composición</b> de continuas ⇒ continua.</li>
-  <li>Las funciones <b>elementales</b> (exp, log, trig, raíces) son continuas en su dominio natural.</li>
-</ul>
-
-<div class="example">
-<h4>Ejercicio · Función definida a trozos</h4>
-<p>Estudiá la continuidad en $(0,0)$ de $f(x,y)=\begin{cases}\dfrac{xy^2}{x^2+y^2} & (x,y)\neq(0,0) \\ 0 & (x,y)=(0,0)\end{cases}$</p>
-<div class="step"><b>Paso 1.</b> $f(0,0)=0$ está definido. ✓</div>
-<div class="step"><b>Paso 2.</b> Calculo el límite con polares: $\dfrac{r\cos\theta \cdot r^2\sin^2\theta}{r^2}=r\cos\theta\sin^2\theta$.</div>
-<div class="step"><b>Paso 3.</b> $|r\cos\theta\sin^2\theta|\leq r \to 0$. Entonces $\lim = 0$. ✓</div>
-<div class="step"><b>Paso 4.</b> $\lim = 0 = f(0,0)$. ✓</div>
-<div class="formula-box">$$\boxed{\;f \text{ es continua en } (0,0).\;}$$</div>
-</div>
-
-<div class="example">
-<h4>Ejercicio · Discontinuidad</h4>
-<p>Estudiá $g(x,y)=\begin{cases}\dfrac{xy}{x^2+y^2} & (x,y)\neq(0,0)\\ 0 & (x,y)=(0,0)\end{cases}$</p>
-<div class="step">$g(0,0)=0$ definido. ✓</div>
-<div class="step">Pero ya vimos que el <b>límite no existe</b> (camino $y=x$ da $1/2$, camino $y=0$ da $0$).</div>
-<div class="step">Falla la condición 2.</div>
-<div class="formula-box">$$\boxed{\;g \text{ es discontinua en } (0,0).\;}$$</div>
-</div>
-
-<h4>Estrategia de parcial</h4>
-<div class="tip">Si te piden estudiar un límite "raro" (cocientes con $x^2+y^2$, etc.), <b>primero probá rectas $y=mx$</b>. Si dependen de $m$ ⇒ no existe. Si todas dan lo mismo, probá parábolas $y=x^2$. Si todavía dan lo mismo, intentá <b>polares con sandwich</b> para demostrar que existe.</div>
-
-</section>
-
-<hr/>
-
 <!-- ============ HOJA RESUMEN ============ -->
 <section id="cheat">
 <h2>⭐ Hoja resumen (cheat sheet) — Lleva esto al parcial mentalmente</h2>
@@ -889,18 +1116,26 @@ La idea es la misma que en una variable: <b>no hay saltos ni huecos</b>. Si pudi
 <h3>🗺️ Mapa mental del tema</h3>
 <div class="mindmap">
   <div class="mindmap-row">
-    <span class="mm-node">FUNCIÓN</span>
+    <span class="mm-node">FUNCIÓN 1v: $f(x)$</span>
     <span class="mm-arrow">→</span>
-    <span class="mm-node">1 variable: $f(x)$</span>
-    <span class="mm-arrow">→</span>
-    <span class="mm-node">Gráfico = curva en $\mathbb{R}^2$</span>
+    <span class="mm-node">Curva en $\mathbb{R}^2$</span>
+  </div>
+  <div class="mindmap-row" style="margin-left:24px;">
+    <span class="mm-arrow">↳</span>
+    <span class="mm-node">Trigonométricas → círculo unitario</span>
+  </div>
+  <div class="mindmap-row" style="margin-left:24px;">
+    <span class="mm-arrow">↳</span>
+    <span class="mm-node">Límite: laterales coinciden</span>
+  </div>
+  <div class="mindmap-row" style="margin-left:24px;">
+    <span class="mm-arrow">↳</span>
+    <span class="mm-node">Continuidad: 3 leyes (definida, lim existe, coinciden)</span>
   </div>
   <div class="mindmap-row">
-    <span class="mm-node">FUNCIÓN</span>
+    <span class="mm-node">FUNCIÓN 2v: $f(x,y)$</span>
     <span class="mm-arrow">→</span>
-    <span class="mm-node">2 variables: $f(x,y)$</span>
-    <span class="mm-arrow">→</span>
-    <span class="mm-node">Gráfico = superficie en $\mathbb{R}^3$</span>
+    <span class="mm-node">Superficie en $\mathbb{R}^3$</span>
   </div>
   <div class="mindmap-row" style="margin-left:24px;">
     <span class="mm-arrow">↳</span>
@@ -910,13 +1145,10 @@ La idea es la misma que en una variable: <b>no hay saltos ni huecos</b>. Si pudi
     <span class="mm-arrow">↳</span>
     <span class="mm-node">Curvas de nivel = "mapa topográfico"</span>
   </div>
-  <div class="mindmap-row" style="margin-left:24px;">
-    <span class="mm-arrow">↳</span>
-    <span class="mm-node">Límite: existe $\Leftrightarrow$ todos los caminos dan el mismo valor</span>
-  </div>
-  <div class="mindmap-row" style="margin-left:24px;">
-    <span class="mm-arrow">↳</span>
-    <span class="mm-node">Continuidad: $\lim_{(x,y)\to(a,b)} f = f(a,b)$</span>
+  <div class="mindmap-row">
+    <span class="mm-node">CONJUNTO CONVEXO</span>
+    <span class="mm-arrow">→</span>
+    <span class="mm-node">Segmento $PQ$ siempre adentro</span>
   </div>
 </div>
 
@@ -947,26 +1179,39 @@ La idea es la misma que en una variable: <b>no hay saltos ni huecos</b>. Si pudi
 </div>
 
 <div class="cheat-card">
-  <h4>Límite: definición</h4>
-  <p>$\lim_{(x,y)\to(a,b)} f = L$ si $\forall \varepsilon, \exists \delta$ tal que $\sqrt{(x-a)^2+(y-b)^2}<\delta \Rightarrow |f-L|<\varepsilon$.</p>
+  <h4>Límite (1 variable)</h4>
+  <p>$\lim_{x\to a} f(x)=L$: $f(x)$ se acerca a $L$ cuando $x\to a$.</p>
+  <p>Existe $\Leftrightarrow$ <b>laterales coinciden</b>: $\lim_{x\to a^-}=\lim_{x\to a^+}=L$.</p>
 </div>
 
 <div class="cheat-card">
-  <h4>Refutar un límite</h4>
-  <p>Probá rectas $y=mx$. Si depende de $m$ ⇒ NO existe.</p>
-  <p>Si todas dan lo mismo, probá parábolas $y=mx^2$. Si una da distinto ⇒ NO existe.</p>
+  <h4>Las 3 LEYES de continuidad</h4>
+  <p><b>1.</b> $f(a)$ está definida.<br/><b>2.</b> $\lim_{x\to a} f(x)$ existe.<br/><b>3.</b> $\lim = f(a)$.</p>
+  <p>Las 3 deben cumplirse a la vez.</p>
 </div>
 
 <div class="cheat-card">
-  <h4>Confirmar un límite</h4>
-  <p>Polares: $x=r\cos\theta$, $y=r\sin\theta$.</p>
-  <p>Acotá $|f(r,\theta)-L|\leq g(r)$ con $g(r)\to 0$. Sandwich.</p>
+  <h4>Tipos de discontinuidad</h4>
+  <p><b>Evitable:</b> lim existe pero $\neq f(a)$.<br/><b>De salto:</b> laterales distintos.<br/><b>Esencial:</b> algún lateral $=\pm\infty$ o no existe.</p>
 </div>
 
 <div class="cheat-card">
-  <h4>Continuidad</h4>
-  <p>$f$ continua en $(a,b)$:<br/>1) $f(a,b)$ existe<br/>2) $\lim$ existe<br/>3) coinciden</p>
-  <p>Polinomios y composiciones de elementales son continuos en su dominio.</p>
+  <h4>Límites notables</h4>
+  <p>$\lim_{x\to 0}\frac{\sin x}{x}=1$<br/>$\lim_{x\to 0}\frac{e^x-1}{x}=1$<br/>$\lim_{x\to 0}\frac{\ln(1+x)}{x}=1$<br/>$\lim_{x\to\infty}(1+1/x)^x=e$</p>
+</div>
+
+<div class="cheat-card">
+  <h4>Trigonometría: círculo unitario</h4>
+  <p>Punto $P=(\cos\theta, \sin\theta)$ en $x^2+y^2=1$.</p>
+  <p>$\sin^2\theta+\cos^2\theta=1$, $\tan\theta=\sin/\cos$.</p>
+  <p>$\sin$ impar, $\cos$ par. Periodo $2\pi$.</p>
+</div>
+
+<div class="cheat-card">
+  <h4>Conjunto convexo</h4>
+  <p>$C$ convexo $\Leftrightarrow$ todo segmento $PQ$ con $P,Q\in C$ está en $C$.</p>
+  <p>✅ Disco, semiplano, polígono convexo, bola.<br/>❌ Anillo, estrella, unión disjunta.</p>
+  <p><b>Intersección de convexos = convexo.</b></p>
 </div>
 
 <div class="cheat-card">
@@ -986,7 +1231,12 @@ La idea es la misma que en una variable: <b>no hay saltos ni huecos</b>. Si pudi
 
 <div class="cheat-card">
   <h4>Errores frecuentes 🚨</h4>
-  <p>• Olvidar restricciones extras (ej. denom)<br/>• Confundir curva de nivel (2D) con traza (3D)<br/>• Concluir existencia del límite sólo con rectas<br/>• No verificar las 3 condiciones de continuidad</p>
+  <p>• Olvidar restricciones extras (ej. denom)<br/>• Confundir curva de nivel (2D) con traza (3D)<br/>• No verificar las 3 leyes de continuidad<br/>• Confundir convexidad con conexidad</p>
+</div>
+
+<div class="cheat-card">
+  <h4>Levantar indeterminaciones</h4>
+  <p>$0/0$: factorizar, racionalizar, L'Hôpital, equivalentes.<br/>$\infty/\infty$: dividir por mayor potencia, L'Hôpital.<br/>$\infty-\infty$: factor común, conjugado.<br/>$1^\infty$: usar $e^{\ln(...)}$.</p>
 </div>
 
 </div>
@@ -1006,15 +1256,22 @@ La idea es la misma que en una variable: <b>no hay saltos ni huecos</b>. Si pudi
 </tbody>
 </table>
 
-<h3>🎯 Diagrama de flujo: ¿existe el límite?</h3>
+<h3>🎯 Diagrama de flujo: ¿es continua $f$ en $x=a$?</h3>
 <div class="mindmap">
-  <div class="mindmap-row"><span class="mm-node">¿Lo puedo evaluar directo?</span><span class="mm-arrow">→ SÍ →</span><span class="mm-node">Listo, ese es el valor</span></div>
-  <div class="mindmap-row" style="margin-left:24px;"><span class="mm-arrow">→ NO (indeterminado) →</span></div>
-  <div class="mindmap-row" style="margin-left:48px;"><span class="mm-node">Pruebo rectas $y=mx$</span><span class="mm-arrow">→ DEPENDEN de $m$ →</span><span class="mm-node">No existe</span></div>
-  <div class="mindmap-row" style="margin-left:48px;"><span class="mm-arrow">→ Todas iguales →</span></div>
-  <div class="mindmap-row" style="margin-left:72px;"><span class="mm-node">Pruebo parábola $y=x^2$</span><span class="mm-arrow">→ Distinto →</span><span class="mm-node">No existe</span></div>
-  <div class="mindmap-row" style="margin-left:72px;"><span class="mm-arrow">→ Igual →</span></div>
-  <div class="mindmap-row" style="margin-left:96px;"><span class="mm-node">Polares + sandwich</span><span class="mm-arrow">→</span><span class="mm-node">Existe = el valor común</span></div>
+  <div class="mindmap-row"><span class="mm-node">¿$f(a)$ está definida?</span><span class="mm-arrow">→ NO →</span><span class="mm-node">Discontinua (Ley 1 falla)</span></div>
+  <div class="mindmap-row" style="margin-left:24px;"><span class="mm-arrow">→ SÍ →</span></div>
+  <div class="mindmap-row" style="margin-left:48px;"><span class="mm-node">¿$\lim_{x\to a^-}=\lim_{x\to a^+}$?</span><span class="mm-arrow">→ NO →</span><span class="mm-node">Discontinua de salto</span></div>
+  <div class="mindmap-row" style="margin-left:48px;"><span class="mm-arrow">→ SÍ →</span></div>
+  <div class="mindmap-row" style="margin-left:72px;"><span class="mm-node">¿Algún lateral $=\pm\infty$?</span><span class="mm-arrow">→ SÍ →</span><span class="mm-node">Discontinua esencial</span></div>
+  <div class="mindmap-row" style="margin-left:72px;"><span class="mm-arrow">→ NO →</span></div>
+  <div class="mindmap-row" style="margin-left:96px;"><span class="mm-node">¿$\lim = f(a)$?</span><span class="mm-arrow">→ NO →</span><span class="mm-node">Discontinua evitable</span></div>
+  <div class="mindmap-row" style="margin-left:96px;"><span class="mm-arrow">→ SÍ →</span><span class="mm-node">✅ CONTINUA</span></div>
+</div>
+
+<h3>🔺 Convexo vs. no convexo</h3>
+<div class="mindmap">
+  <div class="mindmap-row"><span class="mm-node">Tomar $P, Q \in C$</span><span class="mm-arrow">→</span><span class="mm-node">Trazar segmento</span><span class="mm-arrow">→</span><span class="mm-node">¿Está adentro siempre?</span></div>
+  <div class="mindmap-row" style="margin-left:48px;"><span class="mm-arrow">SÍ → CONVEXO ✅</span><span style="margin-left:24px;" class="mm-arrow">NO → NO convexo ❌</span></div>
 </div>
 
 <h3>📝 Checklist para el día del parcial</h3>
@@ -1022,8 +1279,10 @@ La idea es la misma que en una variable: <b>no hay saltos ni huecos</b>. Si pudi
   <li>📌 ¿Identifiqué <b>todas</b> las restricciones del dominio? (raíces, logs, denominadores)</li>
   <li>📌 ¿Dibujé el dominio en el plano $(x,y)$ con bordes correctos (continuos / punteados)?</li>
   <li>📌 Para curvas de nivel: ¿probé varios valores de $k$ y reconocí el tipo de curva?</li>
-  <li>📌 Para límites: ¿probé al menos una recta y una parábola antes de afirmar nada?</li>
-  <li>📌 Para continuidad: ¿chequée las 3 condiciones por separado?</li>
+  <li>📌 Para continuidad en 1v: ¿verifiqué las <b>3 leyes</b> en cada punto crítico?</li>
+  <li>📌 Para límites: ¿chequée laterales? ¿levanté indeterminaciones?</li>
+  <li>📌 Para convexidad: ¿probé con dos puntos extremos? ¿usé "intersección de convexos = convexo"?</li>
+  <li>📌 Para trigonométricas: ¿usé el círculo unitario para los valores notables?</li>
   <li>📌 ¿Justifiqué cada paso, incluso los "obvios"?</li>
 </ol>
 
@@ -1085,7 +1344,30 @@ function ggbInjectMulti(id, commands, height) {
   applet.inject(id);
 }
 
+// Gráficos 2D (graphing)
+function ggbInject2D(id, commands, height) {
+  height = height || 360;
+  var params = {
+    appName: "graphing",
+    width: 760,
+    height: height,
+    showToolBar: true,
+    showAlgebraInput: true,
+    showMenuBar: false,
+    showResetIcon: true,
+    enableShiftDragZoom: true,
+    language: "es",
+    appletOnLoad: function(api) {
+      commands.forEach(function(c){ api.evalCommand(c); });
+      api.setGridVisible(true);
+    }
+  };
+  var applet = new GGBApplet(params, true);
+  applet.inject(id);
+}
+
 window.addEventListener("load", function() {
+  // 3D
   ggbInject("ggb-paraboloide", "f(x,y)=x^2+y^2");
   ggbInject("ggb-plano", "g(x,y)=0.5x+0.3y+1");
   ggbInject("ggb-silla", "h(x,y)=x^2-y^2");
@@ -1097,6 +1379,56 @@ window.addEventListener("load", function() {
     "c3: x^2+y^2=3",
     "c4: x^2+y^2=4"
   ]);
+
+  // 2D - funciones de una variable
+  ggbInject2D("ggb-1v-poly", [
+    "f(x)=2x+1",
+    "g(x)=x^2",
+    "h(x)=x^3"
+  ]);
+  ggbInject2D("ggb-1v-rad", [
+    "f(x)=sqrt(x)",
+    "g(x)=cbrt(x)"
+  ]);
+  ggbInject2D("ggb-1v-explog", [
+    "f(x)=exp(x)",
+    "g(x)=ln(x)",
+    "y=x"
+  ]);
+  ggbInject2D("ggb-1v-rac", [
+    "f(x)=1/x"
+  ]);
+  ggbInject2D("ggb-1v-abs", [
+    "f(x)=abs(x)"
+  ]);
+
+  // Circunferencia trigonométrica con deslizador interactivo
+  ggbInject2D("ggb-circulo-trig", [
+    "circulo: x^2+y^2=1",
+    "alfa=Slider[0,2pi,0.01,1,200]",
+    "SetValue[alfa,pi/4]",
+    "P=(cos(alfa),sin(alfa))",
+    "SetCaption[P,\"P=(cos α, sin α)\"]",
+    "ShowLabel[P,true]",
+    "SegX=Segment[(0,0),(cos(alfa),0)]",
+    "SegY=Segment[(cos(alfa),0),P]",
+    "Radio=Segment[(0,0),P]",
+    "SetColor[SegX,1,0,0]",
+    "SetColor[SegY,0,0,1]",
+    "SetColor[Radio,0.5,0.5,0.5]",
+    "TextoCos=Text[\"cos α = \"+(Round(cos(alfa)*100)/100),(0.1,-0.15)]",
+    "TextoSin=Text[\"sin α = \"+(Round(sin(alfa)*100)/100),(cos(alfa)+0.05,sin(alfa)/2)]"
+  ], 460);
+
+  // Gráfico de funciones trigonométricas
+  ggbInject2D("ggb-trig-graf", [
+    "f(x)=sin(x)",
+    "g(x)=cos(x)",
+    "h(x)=tan(x)",
+    "SetColor[f,0,0,1]",
+    "SetColor[g,1,0,0]",
+    "SetColor[h,0,0.6,0]"
+  ], 380);
 });
 </script>
 

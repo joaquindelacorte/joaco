@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Resumen Parcial · Análisis Matemático I</title>
+
+<!-- MathJax para fórmulas -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- GeoGebra para gráficos 3D interactivos -->
+<script src="https://www.geogebra.org/apps/deployggb.js"></script>
+
+<style>
+  :root {
+    --bg: #0f172a;
+    --panel: #1e293b;
+    --panel-2: #334155;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-2: #fbbf24;
+    --good: #4ade80;
+    --warn: #f87171;
+    --code-bg: #0b1220;
+    --border: #334155;
+    --formula-bg: #1e3a5f;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.65;
+    font-size: 16px;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: 100vh;
+  }
+  /* Sidebar */
+  aside.toc {
+    background: var(--panel);
+    padding: 24px 18px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+  }
+  aside.toc h2 {
+    margin: 0 0 12px 0;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent);
+  }
+  aside.toc ol { padding-left: 18px; margin: 0; }
+  aside.toc ol li { margin: 6px 0; }
+  aside.toc ol li a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 14px;
+    display: block;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: all .2s;
+  }
+  aside.toc ol li a:hover { background: var(--panel-2); color: var(--accent); }
+  aside.toc ol ol { margin-top: 4px; padding-left: 16px; }
+  aside.toc ol ol li a { font-size: 13px; color: var(--muted); }
+
+  /* Main */
+  main {
+    padding: 36px 48px 80px;
+    max-width: 1100px;
+  }
+  header.hero {
+    background: linear-gradient(135deg, #1e3a8a 0%, #0c4a6e 100%);
+    padding: 38px 36px;
+    border-radius: 12px;
+    margin-bottom: 36px;
+    border: 1px solid #1e40af;
+  }
+  header.hero h1 {
+    margin: 0 0 8px;
+    font-size: 32px;
+    color: white;
+  }
+  header.hero p { margin: 0; color: #cbd5e1; font-size: 17px; }
+
+  h1, h2, h3, h4 { color: var(--accent); margin-top: 38px; }
+  h2 {
+    font-size: 26px;
+    border-bottom: 2px solid var(--panel-2);
+    padding-bottom: 10px;
+  }
+  h3 { font-size: 20px; color: var(--accent-2); }
+  h4 { font-size: 17px; color: var(--text); }
+
+  /* Boxes */
+  .formula-box {
+    background: var(--formula-bg);
+    border-left: 4px solid var(--accent);
+    padding: 14px 18px;
+    margin: 16px 0;
+    border-radius: 0 8px 8px 0;
+    overflow-x: auto;
+  }
+  .origin {
+    background: #312e81;
+    border-left: 4px solid #a78bfa;
+    padding: 12px 18px;
+    margin: 14px 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 14.5px;
+  }
+  .origin::before {
+    content: "🔍 De dónde sale: ";
+    font-weight: 600;
+    color: #c4b5fd;
+  }
+  .tip {
+    background: #064e3b;
+    border-left: 4px solid var(--good);
+    padding: 12px 18px;
+    margin: 14px 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 14.5px;
+  }
+  .tip::before {
+    content: "💡 Truco: ";
+    font-weight: 600;
+    color: var(--good);
+  }
+  .warning {
+    background: #7f1d1d;
+    border-left: 4px solid var(--warn);
+    padding: 12px 18px;
+    margin: 14px 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 14.5px;
+  }
+  .warning::before {
+    content: "⚠️ Cuidado: ";
+    font-weight: 600;
+    color: #fca5a5;
+  }
+  .example {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin: 18px 0;
+  }
+  .example h4 {
+    margin-top: 0;
+    color: var(--accent-2);
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: 6px;
+  }
+  .step {
+    background: rgba(56, 189, 248, 0.08);
+    border-left: 3px solid var(--accent);
+    padding: 8px 14px;
+    margin: 8px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .step b { color: var(--accent); }
+
+  /* Tables */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 16px 0;
+    background: var(--panel);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  th, td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: var(--panel-2);
+    color: var(--accent);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  tr:last-child td { border-bottom: none; }
+
+  /* GeoGebra */
+  .ggb-container {
+    background: white;
+    border-radius: 10px;
+    padding: 8px;
+    margin: 18px 0;
+    border: 1px solid var(--border);
+    min-height: 420px;
+  }
+  .ggb-caption {
+    color: var(--muted);
+    font-size: 13px;
+    margin: -10px 0 18px 0;
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* Function gallery cards */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin: 18px 0;
+  }
+  .card {
+    background: var(--panel);
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .card h4 { margin: 0 0 8px 0; color: var(--accent); }
+  .card .domain { color: var(--good); font-size: 13px; }
+  .card .tag {
+    display: inline-block;
+    background: var(--panel-2);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    margin-right: 4px;
+  }
+
+  /* Cheat sheet */
+  .cheat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 14px;
+    margin-top: 18px;
+  }
+  .cheat-card {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    padding: 16px 18px;
+    border-radius: 10px;
+    border-top: 3px solid var(--accent);
+  }
+  .cheat-card h4 {
+    margin: 0 0 10px;
+    color: var(--accent-2);
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Buttons */
+  .interactive-btn {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    margin: 8px 4px;
+    transition: all .2s;
+  }
+  .interactive-btn:hover { background: var(--accent-2); }
+
+  code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "SF Mono", Monaco, Consolas, monospace;
+    font-size: 14px;
+    color: #fbbf24;
+  }
+
+  ul, ol { padding-left: 22px; }
+  ul li, ol li { margin: 4px 0; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    aside.toc { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+    main { padding: 20px; }
+  }
+
+  /* Mind map */
+  .mindmap {
+    background: var(--panel);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 18px 0;
+  }
+  .mindmap-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 6px 0;
+    align-items: center;
+  }
+  .mm-node {
+    background: var(--panel-2);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+  }
+  .mm-arrow { color: var(--accent); font-weight: bold; }
+
+  .badge { background: var(--accent); color: var(--bg); padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<aside class="toc">
+  <h2>📚 Índice</h2>
+  <ol>
+    <li><a href="#intro">Introducción</a></li>
+    <li><a href="#sec1">1. Funciones de una variable</a>
+      <ol>
+        <li><a href="#sec1-1">1.1 Definición y dominio</a></li>
+        <li><a href="#sec1-2">1.2 Catálogo + gráficos</a></li>
+        <li><a href="#sec1-3">1.3 Trigonométricas y círculo</a></li>
+      </ol>
+    </li>
+    <li><a href="#sec-lim1v">2. Límites y continuidad (1 variable)</a>
+      <ol>
+        <li><a href="#sec-lim1v-1">2.1 Idea de límite</a></li>
+        <li><a href="#sec-lim1v-2">2.2 Álgebra de límites</a></li>
+        <li><a href="#sec-lim1v-3">2.3 Las 3 leyes de continuidad</a></li>
+        <li><a href="#sec-lim1v-4">2.4 Ejercicios</a></li>
+      </ol>
+    </li>
+    <li><a href="#sec2">3. Funciones de dos variables</a>
+      <ol>
+        <li><a href="#sec2-1">3.1 Definición</a></li>
+        <li><a href="#sec2-2">3.2 Visualización 3D</a></li>
+        <li><a href="#sec2-3">3.3 Catálogo 3D</a></li>
+      </ol>
+    </li>
+    <li><a href="#sec3">4. Cálculo de dominios</a>
+      <ol>
+        <li><a href="#sec3-1">4.1 Reglas básicas</a></li>
+        <li><a href="#sec3-2">4.2 Ejercicios resueltos</a></li>
+      </ol>
+    </li>
+    <li><a href="#sec-convex">5. Conjuntos convexos y no convexos</a>
+      <ol>
+        <li><a href="#sec-convex-1">5.1 Definición visual</a></li>
+        <li><a href="#sec-convex-2">5.2 Ejemplos</a></li>
+      </ol>
+    </li>
+    <li><a href="#sec4">6. Curvas de nivel</a>
+      <ol>
+        <li><a href="#sec4-1">6.1 Concepto</a></li>
+        <li><a href="#sec4-2">6.2 Ejercicios</a></li>
+      </ol>
+    </li>
+    <li><a href="#cheat">⭐ Resumen Final</a></li>
+  </ol>
+</aside>
+
+<main>
+
+<header class="hero">
+  <h1>📐 Resumen Parcial · Análisis Matemático I</h1>
+  <p>Funciones de una y dos variables, dominios, curvas de nivel, límites y continuidad. De lo básico a lo complejo, con explicaciones del origen de las fórmulas y gráficos 3D interactivos.</p>
+</header>
+
+<section id="intro">
+<h2>🎯 Cómo usar este resumen</h2>
+<p>Este resumen está diseñado para <b>maximizar tu comprensión</b>. Cada concepto se presenta así:</p>
+<ul>
+  <li>📖 <b>Definición intuitiva</b> antes de la formal.</li>
+  <li>🔍 <b>De dónde sale la fórmula</b>: el razonamiento detrás de cada expresión.</li>
+  <li>📊 <b>Ejemplos visuales 3D</b> que podés rotar y manipular en GeoGebra.</li>
+  <li>✏️ <b>Ejercicios paso a paso</b> tipo parcial.</li>
+  <li>💡 <b>Trucos</b> y ⚠️ <b>errores frecuentes</b>.</li>
+</ul>
+<p>Al final hay una <a href="#cheat" style="color:var(--accent-2)"><b>hoja resumen</b></a> con todas las fórmulas para repaso rápido.</p>
+</section>
+
+<!-- ============ SECCIÓN 1 ============ -->
+<section id="sec1">
+<h2>1. Funciones de una variable (repaso esencial)</h2>
+
+<h3 id="sec1-1">1.1 Definición y dominio</h3>
+<p>Una <b>función</b> $f$ de una variable real es una regla que a cada número $x$ de un conjunto $D$ (el <b>dominio</b>) le asigna <b>uno y solo un</b> número real $y = f(x)$.</p>
+
+<div class="formula-box">
+$$f: D \subseteq \mathbb{R} \to \mathbb{R}, \quad x \mapsto y = f(x)$$
+</div>
+
+<div class="origin">
+La idea de "función" nace de modelar fenómenos donde <b>una cantidad depende de otra</b>: la posición depende del tiempo, la temperatura del lugar, etc. Para que el modelo sea predictivo, exigimos que a cada entrada le corresponda una sola salida.
+</div>
+
+<p><b>Dominio natural</b>: todos los $x$ donde la fórmula <b>tiene sentido</b> (no divide por cero, no toma raíces pares de negativos, no toma log de no-positivos, etc.).</p>
+
+<p><b>Imagen (recorrido)</b>: el conjunto de valores $f(x)$ que efectivamente toma la función.</p>
+
+<div class="tip">Para hallar el dominio se "mira las prohibiciones": denominadores $\neq 0$, radicandos pares $\geq 0$, argumentos de log $> 0$, $\arcsin/\arccos$ con argumento en $[-1, 1]$.</div>
+
+<h3 id="sec1-2">1.2 Catálogo de funciones populares (con gráficos)</h3>
+
+<p>Acá tenés la "galería" de las funciones que más aparecen en el parcial. Después de las tarjetas, vas a poder rotar/manipular los gráficos en GeoGebra 2D para entender la forma de cada una.</p>
+
+<div class="gallery">
+
+<div class="card">
+  <h4>Constante</h4>
+  <p>$f(x) = c$</p>
+  <p class="domain">Dom: $\mathbb{R}$ — Img: $\{c\}$</p>
+  <p>Recta horizontal. Su gráfico no varía con $x$.</p>
+</div>
+
+<div class="card">
+  <h4>Lineal / Afín</h4>
+  <p>$f(x) = mx + b$</p>
+  <p class="domain">Dom: $\mathbb{R}$ — Img: $\mathbb{R}$ (si $m\neq 0$)</p>
+  <p>$m$ = pendiente (sale del cociente $\Delta y / \Delta x$). $b$ = ordenada al origen.</p>
+</div>
+
+<div class="card">
+  <h4>Cuadrática</h4>
+  <p>$f(x) = ax^2 + bx + c$</p>
+  <p class="domain">Dom: $\mathbb{R}$ — Img: depende del signo de $a$</p>
+  <p>Parábola. Vértice en $x_v = -b/(2a)$ (sale de completar cuadrados).</p>
+</div>
+
+<div class="card">
+  <h4>Polinómica</h4>
+  <p>$f(x) = a_n x^n + \cdots + a_0$</p>
+  <p class="domain">Dom: $\mathbb{R}$</p>
+  <p>El grado $n$ marca el comportamiento en $\pm\infty$ y la cantidad máxima de raíces.</p>
+</div>
+
+<div class="card">
+  <h4>Racional</h4>
+  <p>$f(x) = \dfrac{P(x)}{Q(x)}$</p>
+  <p class="domain">Dom: $\{x : Q(x) \neq 0\}$</p>
+  <p>Las raíces de $Q$ generan asíntotas verticales o agujeros.</p>
+</div>
+
+<div class="card">
+  <h4>Raíz cuadrada</h4>
+  <p>$f(x) = \sqrt{x}$</p>
+  <p class="domain">Dom: $[0, +\infty)$ — Img: $[0, +\infty)$</p>
+  <p>Inversa de $x^2$ restringida a $x\geq 0$.</p>
+</div>
+
+<div class="card">
+  <h4>Raíz $n$-ésima</h4>
+  <p>$f(x) = \sqrt[n]{x}$</p>
+  <p class="domain">Si $n$ par: Dom $= [0,\infty)$. Si $n$ impar: $\mathbb{R}$.</p>
+  <p>Los radicandos negativos sólo se aceptan en raíces impares.</p>
+</div>
+
+<div class="card">
+  <h4>Exponencial</h4>
+  <p>$f(x) = a^x$, $a>0$, $a\neq 1$</p>
+  <p class="domain">Dom: $\mathbb{R}$ — Img: $(0, +\infty)$</p>
+  <p>Sale del límite $e = \lim_{n\to\infty}(1+1/n)^n$. Crece (o decrece) multiplicativamente.</p>
+</div>
+
+<div class="card">
+  <h4>Logaritmo</h4>
+  <p>$f(x) = \log_a(x)$</p>
+  <p class="domain">Dom: $(0, +\infty)$ — Img: $\mathbb{R}$</p>
+  <p>Inversa de la exponencial: $a^{\log_a x} = x$.</p>
+</div>
+
+<div class="card">
+  <h4>Seno y coseno</h4>
+  <p>$\sin x$, $\cos x$</p>
+  <p class="domain">Dom: $\mathbb{R}$ — Img: $[-1, 1]$</p>
+  <p>Salen del círculo unitario: $(\cos\theta, \sin\theta)$ es el punto en el círculo a ángulo $\theta$.</p>
+</div>
+
+<div class="card">
+  <h4>Tangente</h4>
+  <p>$\tan x = \sin x / \cos x$</p>
+  <p class="domain">Dom: $\{x \neq \pi/2 + k\pi\}$</p>
+  <p>Asíntotas donde $\cos x = 0$.</p>
+</div>
+
+<div class="card">
+  <h4>Valor absoluto</h4>
+  <p>$f(x) = |x|$</p>
+  <p class="domain">Dom: $\mathbb{R}$ — Img: $[0, +\infty)$</p>
+  <p>"Distancia al cero". Útil en funciones partidas.</p>
+</div>
+
+</div>
+
+<h4>📈 Gráficos interactivos de las funciones populares</h4>
+<p>Mirá cómo se ve cada familia. Podés cambiar parámetros (mover los <b>deslizadores</b>) o tipear tu propia función en la barra de entrada.</p>
+
+<div class="ggb-container" id="ggb-1v-poly" style="min-height:380px;"></div>
+<p class="ggb-caption">Polinómicas: lineal $y=mx+b$, cuadrática $y=x^2$, cúbica $y=x^3$. Notá la simetría: las pares (par grado) son simétricas respecto al eje $y$, las impares respecto al origen.</p>
+
+<div class="ggb-container" id="ggb-1v-rad" style="min-height:380px;"></div>
+<p class="ggb-caption">Raíz $y=\sqrt{x}$ (sólo $x \geq 0$) y raíz cúbica $y=\sqrt[3]{x}$ (toda $\mathbb{R}$).</p>
+
+<div class="ggb-container" id="ggb-1v-explog" style="min-height:380px;"></div>
+<p class="ggb-caption">Exponencial $y=e^x$ y logaritmo $y=\ln x$. Son <b>inversas</b>: la gráfica de una es la reflexión de la otra respecto a la recta $y=x$.</p>
+
+<div class="ggb-container" id="ggb-1v-rac" style="min-height:380px;"></div>
+<p class="ggb-caption">Racional $y=1/x$. Asíntota vertical en $x=0$ y horizontal en $y=0$. Hipérbola.</p>
+
+<div class="ggb-container" id="ggb-1v-abs" style="min-height:380px;"></div>
+<p class="ggb-caption">Valor absoluto $y=|x|$. Tiene un "pico" en el origen (no derivable allí).</p>
+
+<h3 id="sec1-3">1.3 Trigonométricas y la circunferencia trigonométrica 🌀</h3>
+
+<p>Las trigonométricas son las protagonistas del parcial. Acá las vemos <b>desde la circunferencia unitaria</b>, que es de donde nacen.</p>
+
+<h4>Círculo unitario y definición geométrica</h4>
+<div class="formula-box">
+$$\text{Círculo unitario: } x^2 + y^2 = 1$$
+</div>
+
+<p>Tomamos un punto $P$ sobre el círculo y un ángulo $\theta$ medido desde el eje $x$ positivo en sentido antihorario. <b>Por definición</b>:</p>
+
+<div class="formula-box">
+$$\cos\theta = \text{coordenada } x \text{ de } P, \qquad \sin\theta = \text{coordenada } y \text{ de } P$$
+</div>
+
+<div class="origin">
+Como el punto $P=(\cos\theta, \sin\theta)$ está sobre la circunferencia $x^2+y^2=1$, sustituyendo se obtiene la <b>identidad pitagórica</b>:
+$$\cos^2\theta + \sin^2\theta = 1$$
+Es <b>literalmente el teorema de Pitágoras</b> aplicado al triángulo rectángulo formado por el radio, la proyección horizontal y la proyección vertical.
+</div>
+
+<div class="ggb-container" id="ggb-circulo-trig" style="min-height:480px;"></div>
+<p class="ggb-caption">Circunferencia trigonométrica. <b>Movés el deslizador del ángulo $\alpha$</b> y ves cómo cambian $\sin\alpha$ (vertical), $\cos\alpha$ (horizontal) y $\tan\alpha$ (la pendiente de la recta).</p>
+
+<h4>Ángulos notables (¡los que más usás!)</h4>
+<table>
+<thead><tr><th>$\theta$ (rad)</th><th>$\theta$ (°)</th><th>$\sin\theta$</th><th>$\cos\theta$</th><th>$\tan\theta$</th></tr></thead>
+<tbody>
+<tr><td>$0$</td><td>$0°$</td><td>$0$</td><td>$1$</td><td>$0$</td></tr>
+<tr><td>$\pi/6$</td><td>$30°$</td><td>$1/2$</td><td>$\sqrt{3}/2$</td><td>$\sqrt{3}/3$</td></tr>
+<tr><td>$\pi/4$</td><td>$45°$</td><td>$\sqrt{2}/2$</td><td>$\sqrt{2}/2$</td><td>$1$</td></tr>
+<tr><td>$\pi/3$</td><td>$60°$</td><td>$\sqrt{3}/2$</td><td>$1/2$</td><td>$\sqrt{3}$</td></tr>
+<tr><td>$\pi/2$</td><td>$90°$</td><td>$1$</td><td>$0$</td><td>no existe</td></tr>
+<tr><td>$\pi$</td><td>$180°$</td><td>$0$</td><td>$-1$</td><td>$0$</td></tr>
+<tr><td>$3\pi/2$</td><td>$270°$</td><td>$-1$</td><td>$0$</td><td>no existe</td></tr>
+<tr><td>$2\pi$</td><td>$360°$</td><td>$0$</td><td>$1$</td><td>$0$</td></tr>
+</tbody>
+</table>
+
+<h4>Propiedades clave que se desprenden del círculo</h4>
+<ul>
+  <li><b>Periodicidad:</b> $\sin(\theta + 2\pi) = \sin\theta$, $\cos(\theta + 2\pi) = \cos\theta$ — al dar la vuelta completa volvés al mismo punto.</li>
+  <li><b>Paridad:</b> $\cos(-\theta)=\cos\theta$ (par), $\sin(-\theta)=-\sin\theta$ (impar) — reflejar el ángulo respecto al eje $x$ deja $x$ igual e invierte $y$.</li>
+  <li><b>Imagen acotada:</b> $-1 \leq \sin\theta, \cos\theta \leq 1$ — el punto está sobre el círculo de radio 1.</li>
+  <li><b>Identidad pitagórica:</b> $\sin^2\theta + \cos^2\theta = 1$.</li>
+  <li><b>Tangente:</b> $\tan\theta = \dfrac{\sin\theta}{\cos\theta}$. Geométricamente, es la longitud del segmento tangente al círculo cortado por la recta que pasa por el origen y $P$. <b>No existe</b> donde $\cos\theta=0$, es decir en $\theta = \pi/2 + k\pi$.</li>
+</ul>
+
+<h4>Identidades fundamentales que salen del círculo</h4>
+<div class="formula-box">
+$$\sin^2\theta + \cos^2\theta = 1$$
+$$\sin(2\theta) = 2\sin\theta\cos\theta$$
+$$\cos(2\theta) = \cos^2\theta - \sin^2\theta = 1 - 2\sin^2\theta = 2\cos^2\theta - 1$$
+$$\sin(\theta\pm\varphi) = \sin\theta\cos\varphi \pm \cos\theta\sin\varphi$$
+$$\cos(\theta\pm\varphi) = \cos\theta\cos\varphi \mp \sin\theta\sin\varphi$$
+</div>
+
+<h4>Gráfico de las funciones trigonométricas</h4>
+<div class="ggb-container" id="ggb-trig-graf" style="min-height:400px;"></div>
+<p class="ggb-caption">$\sin x$ (azul), $\cos x$ (rojo) y $\tan x$ (verde, con asíntotas). Notá que coseno = seno desplazado $\pi/2$ a la izquierda.</p>
+
+<div class="tip">El truco para recordar valores notables: pensá <b>siempre en el círculo</b>. Si te piden $\sin(3\pi/4)$, ubicá el ángulo (segundo cuadrante, a 45° del eje $y$ negativo), y leé la coordenada $y$ del punto. Te ahorrás memorizar.</div>
+
+<div class="example">
+<h4>Ejemplo · Usar el círculo para resolver $\sin(7\pi/6)$</h4>
+<div class="step"><b>Paso 1.</b> $7\pi/6 = \pi + \pi/6$ ⇒ está en el <b>tercer cuadrante</b>, a $\pi/6$ del eje $x$ negativo.</div>
+<div class="step"><b>Paso 2.</b> En el tercer cuadrante, $\sin < 0$.</div>
+<div class="step"><b>Paso 3.</b> El "valor de referencia" es $\sin(\pi/6) = 1/2$.</div>
+<div class="step"><b>Paso 4.</b> Resultado: $\sin(7\pi/6) = -1/2$.</div>
+</div>
+
+</section>
+
+<hr/>
+
+<!-- ============ SECCIÓN LÍMITES Y CONTINUIDAD 1V ============ -->
+<section id="sec-lim1v">
+<h2>2. Límites y continuidad en una variable 🎯</h2>
+
+<h3 id="sec-lim1v-1">2.1 Idea intuitiva de límite</h3>
+<p>Decir $\displaystyle\lim_{x\to a} f(x) = L$ significa que <b>cuando $x$ se acerca a $a$ (sin tocarlo)</b>, los valores $f(x)$ se acercan a $L$ tanto como uno quiera.</p>
+
+<div class="formula-box">
+$$\lim_{x \to a} f(x) = L \;\Longleftrightarrow\; \forall \varepsilon>0,\; \exists \delta>0\;:\; 0 < |x - a| < \delta \implies |f(x) - L| < \varepsilon$$
+</div>
+
+<div class="origin">
+La definición $\varepsilon$-$\delta$ formaliza la idea de "tan cerca como uno quiera": <b>vos elegís</b> qué tan cerca de $L$ debe estar $f(x)$ (el $\varepsilon$), y <b>yo te garantizo</b> que existe una distancia $\delta$ a $a$ donde eso se cumple. La condición $0<|x-a|$ excluye el punto $a$ mismo: el límite habla del comportamiento <b>cerca</b> de $a$, no <b>en</b> $a$.
+</div>
+
+<h4>Límites laterales</h4>
+<div class="formula-box">
+$$\lim_{x \to a^-} f(x) = L_1 \quad (\text{por la izquierda}), \qquad \lim_{x \to a^+} f(x) = L_2 \quad (\text{por la derecha})$$
+</div>
+<p>El límite (bilateral) <b>existe sólo si los dos laterales existen y son iguales</b>: $L_1 = L_2 = L$.</p>
+
+<div class="example">
+<h4>Ejemplo · Límite que no existe por laterales distintos</h4>
+<p>Sea $f(x) = \dfrac{|x|}{x}$ (la función "signo"). Entonces $f(x) = 1$ si $x>0$ y $f(x)=-1$ si $x<0$.</p>
+<div class="step">$\lim_{x\to 0^+} f(x) = 1$.</div>
+<div class="step">$\lim_{x\to 0^-} f(x) = -1$.</div>
+<div class="step">Como $1 \neq -1$, $\lim_{x\to 0} f(x)$ <b>no existe</b>.</div>
+</div>
+
+<h3 id="sec-lim1v-2">2.2 Álgebra de límites</h3>
+<p>Si $\lim_{x\to a} f(x) = L$ y $\lim_{x\to a} g(x) = M$ (ambos finitos), valen:</p>
+<div class="formula-box">
+$$\lim_{x\to a}\bigl[f(x) \pm g(x)\bigr] = L \pm M$$
+$$\lim_{x\to a}\bigl[f(x) \cdot g(x)\bigr] = L \cdot M$$
+$$\lim_{x\to a}\frac{f(x)}{g(x)} = \frac{L}{M} \quad (\text{si } M \neq 0)$$
+$$\lim_{x\to a}\bigl[c \cdot f(x)\bigr] = c \cdot L$$
+$$\lim_{x\to a}\bigl[f(x)\bigr]^n = L^n$$
+</div>
+
+<h4>Límites notables (memorizar)</h4>
+<div class="formula-box">
+$$\lim_{x\to 0}\frac{\sin x}{x} = 1 \qquad \lim_{x\to 0}\frac{1-\cos x}{x^2} = \frac{1}{2}$$
+$$\lim_{x\to 0}\frac{e^x - 1}{x} = 1 \qquad \lim_{x\to 0}\frac{\ln(1+x)}{x} = 1$$
+$$\lim_{x\to \infty}\left(1+\frac{1}{x}\right)^x = e$$
+</div>
+
+<div class="origin">
+$\lim_{x\to 0}\sin(x)/x=1$ se justifica geométricamente: en el círculo unitario, para ángulos pequeños, la longitud del arco (que es $x$ en radianes) y la del segmento opuesto (que es $\sin x$) son casi iguales. El cociente tiende a 1.
+</div>
+
+<h4>Indeterminaciones más comunes</h4>
+<p>Cuando aplicar las reglas da una expresión sin sentido aritmético, hay que <b>levantar la indeterminación</b> (factorizar, racionalizar, usar L'Hôpital, equivalentes, etc.):</p>
+<div class="formula-box">
+$$\frac{0}{0}, \quad \frac{\infty}{\infty}, \quad 0 \cdot \infty, \quad \infty - \infty, \quad 0^0, \quad 1^\infty, \quad \infty^0$$
+</div>
+
+<div class="example">
+<h4>Ejemplo · Indeterminación 0/0 (factorizar)</h4>
+<p>Calculá $\displaystyle\lim_{x\to 2}\frac{x^2-4}{x-2}$.</p>
+<div class="step"><b>Paso 1.</b> Sustituir directo: $\frac{0}{0}$ — indeterminado.</div>
+<div class="step"><b>Paso 2.</b> Factorizar el numerador: $x^2-4=(x-2)(x+2)$.</div>
+<div class="step"><b>Paso 3.</b> Simplificar: $\dfrac{(x-2)(x+2)}{x-2} = x+2$ (válido para $x\neq 2$).</div>
+<div class="step"><b>Paso 4.</b> Tomar límite: $\lim_{x\to 2}(x+2) = 4$.</div>
+<div class="formula-box">$$\boxed{\;\lim_{x\to 2}\frac{x^2-4}{x-2} = 4\;}$$</div>
+</div>
+
+<div class="example">
+<h4>Ejemplo · Racionalización</h4>
+<p>Calculá $\displaystyle\lim_{x\to 0}\frac{\sqrt{x+1}-1}{x}$.</p>
+<div class="step"><b>Paso 1.</b> $0/0$.</div>
+<div class="step"><b>Paso 2.</b> Multiplico arriba y abajo por el conjugado $\sqrt{x+1}+1$:</div>
+<div class="step">$\dfrac{(\sqrt{x+1}-1)(\sqrt{x+1}+1)}{x(\sqrt{x+1}+1)}=\dfrac{(x+1)-1}{x(\sqrt{x+1}+1)}=\dfrac{x}{x(\sqrt{x+1}+1)}=\dfrac{1}{\sqrt{x+1}+1}$.</div>
+<div class="step"><b>Paso 3.</b> Tomar límite: $\dfrac{1}{1+1}=\dfrac{1}{2}$.</div>
+</div>
+
+<h3 id="sec-lim1v-3">2.3 Continuidad: las TRES leyes 🔑</h3>
+<p>Una función $f$ es <b>continua en $x = a$</b> si y sólo si se cumplen las <b>tres condiciones</b> simultáneamente:</p>
+
+<div class="formula-box" style="font-size:17px;">
+<b>Ley 1:</b> $f(a)$ está definida (es decir, $a \in \text{Dom}(f)$).<br/><br/>
+<b>Ley 2:</b> $\displaystyle\lim_{x\to a} f(x)$ existe (límites laterales coinciden y son finitos).<br/><br/>
+<b>Ley 3:</b> $\displaystyle\lim_{x\to a} f(x) = f(a)$.
+</div>
+
+<div class="origin">
+La idea intuitiva es <b>"poder dibujar la función sin levantar el lápiz"</b> al pasar por $x=a$. Cada ley elimina un tipo de "ruptura": la 1 evita huecos (puntos sin valor), la 2 evita saltos (cuando los laterales discrepan), y la 3 evita "puntos fuera de lugar" (cuando el límite va a un lado pero $f(a)$ vale otra cosa).
+</div>
+
+<h4>Tipos de discontinuidad</h4>
+<table>
+<thead><tr><th>Tipo</th><th>Qué falla</th><th>Ejemplo</th></tr></thead>
+<tbody>
+<tr><td><b>Evitable</b></td><td>El límite existe pero $f(a)$ no, o no coincide.</td><td>$f(x)=\frac{x^2-1}{x-1}$ en $x=1$ (se "tapa" definiendo $f(1)=2$).</td></tr>
+<tr><td><b>De salto (1ª especie)</b></td><td>Límites laterales existen pero son distintos.</td><td>$f(x)=\frac{|x|}{x}$ en $x=0$.</td></tr>
+<tr><td><b>Esencial (2ª especie)</b></td><td>Algún límite lateral no existe o es $\pm\infty$.</td><td>$f(x)=\sin(1/x)$ o $1/x$ en $x=0$.</td></tr>
+</tbody>
+</table>
+
+<h4>Reglas prácticas (composición continua)</h4>
+<ul>
+  <li>Polinomios ⇒ continuos en todo $\mathbb{R}$.</li>
+  <li>Funciones racionales ⇒ continuas donde el denominador no se anula.</li>
+  <li>Raíces, exp, log, trig ⇒ continuas en su dominio natural.</li>
+  <li>Suma/resta/producto/cociente/composición de continuas ⇒ continua (en el dominio común).</li>
+</ul>
+
+<h3 id="sec-lim1v-4">2.4 Ejercicios resueltos paso a paso</h3>
+
+<div class="example">
+<h4>Ejercicio 1 · Estudiar continuidad de una función a trozos</h4>
+<p>Dada $f(x)=\begin{cases} x^2 + 1 & x < 1 \\ 3 & x = 1 \\ 2x & x > 1 \end{cases}$, ¿es continua en $x=1$?</p>
+<div class="step"><b>Ley 1:</b> $f(1) = 3$. ✓ Definida.</div>
+<div class="step"><b>Ley 2:</b> $\lim_{x\to 1^-}(x^2+1)=2$ y $\lim_{x\to 1^+}(2x)=2$. Como ambos laterales valen $2$, el límite existe y vale $2$. ✓</div>
+<div class="step"><b>Ley 3:</b> ¿$\lim = f(1)$? $2 \neq 3$. ✗ <b>Falla.</b></div>
+<div class="formula-box">$$\boxed{\;f \text{ es discontinua en } x=1 \text{ (evitable: si redefinís } f(1)=2 \text{ queda continua)}.\;}$$</div>
+</div>
+
+<div class="example">
+<h4>Ejercicio 2 · Hallar $k$ para que $f$ sea continua</h4>
+<p>$f(x)=\begin{cases}\dfrac{\sin(3x)}{x} & x \neq 0 \\ k & x = 0\end{cases}$. ¿Qué valor de $k$ la hace continua en $0$?</p>
+<div class="step"><b>Ley 1:</b> Necesitamos $f(0)$ definida ⇒ vamos a elegir $k$.</div>
+<div class="step"><b>Ley 2:</b> $\lim_{x\to 0}\dfrac{\sin 3x}{x}=\lim_{x\to 0}\dfrac{\sin 3x}{3x}\cdot 3 = 1\cdot 3 = 3$.</div>
+<div class="step"><b>Ley 3:</b> Para que el límite sea $f(0)$, debemos elegir $k=3$.</div>
+<div class="formula-box">$$\boxed{\;k = 3\;}$$</div>
+</div>
+
+<div class="example">
+<h4>Ejercicio 3 · Salto</h4>
+<p>$f(x)=\dfrac{x}{|x|}$ en $x=0$.</p>
+<div class="step"><b>Ley 1:</b> $f(0)$ <b>no existe</b> (división por 0).</div>
+<div class="step">Falla la primera ley ⇒ <b>discontinua</b>. Además, los laterales son $1$ y $-1$ ⇒ <b>discontinuidad de salto</b>.</div>
+</div>
+
+<div class="warning">Cuando una función está definida a trozos y te piden continuidad, <b>siempre</b> chequeá las tres leyes <b>en cada punto donde cambia la fórmula</b>. Es el error más común olvidarse uno.</div>
+
+</section>
+
+<hr/>
+
+<!-- ============ SECCIÓN 2 ============ -->
+<section id="sec2">
+<h2>3. Funciones de dos variables 🌐</h2>
+
+<h3 id="sec2-1">2.1 Definición intuitiva y formal</h3>
+<p>Una función de dos variables es una regla que <b>a cada par ordenado $(x, y)$</b> de un conjunto $D$ del plano le asigna <b>un único número real</b> $z = f(x, y)$.</p>
+
+<div class="formula-box">
+$$f: D \subseteq \mathbb{R}^2 \to \mathbb{R}, \quad (x, y) \mapsto z = f(x, y)$$
+</div>
+
+<div class="origin">
+La idea aparece cuando una magnitud depende de <b>dos cantidades a la vez</b>: la temperatura en un punto del plano depende de la latitud y longitud; el área de un rectángulo depende de su base y altura ($A(b,h) = b \cdot h$); la presión de un gas depende del volumen y la temperatura. Necesitamos $\mathbb{R}^2$ como dominio para describir el "tablero" donde cada cuadradito tiene un valor.
+</div>
+
+<h4>¿Cómo "se ve" una función de dos variables?</h4>
+<p>El gráfico es un <b>conjunto de puntos en $\mathbb{R}^3$</b>:</p>
+<div class="formula-box">
+$$\text{Gráfico}(f) = \{(x, y, z) \in \mathbb{R}^3 \;:\; (x, y) \in D \text{ y } z = f(x, y)\}$$
+</div>
+<p>Es decir: por cada punto $(x,y)$ del piso (el dominio), levantamos un valor $z$. El resultado es una <b>superficie</b> en el espacio.</p>
+
+<div class="tip">Pensá en el dominio como un "mapa" en el suelo, y la función te dice qué altura tiene la superficie sobre cada punto del mapa. Como un terreno montañoso visto desde arriba.</div>
+
+<h3 id="sec2-2">2.2 Visualización 3D interactiva</h3>
+<p>Abajo tenés una superficie real para que la <b>rotes con el mouse</b> y entiendas cómo "vive" en 3D. Probá cambiar la fórmula tipeando en el cuadro de entrada de GeoGebra (por ejemplo: <code>f(x,y)=sin(x)*cos(y)</code>).</p>
+
+<div class="ggb-container" id="ggb-paraboloide"></div>
+<p class="ggb-caption">Paraboloide $z = x^2 + y^2$. Rotá la vista arrastrando con el mouse.</p>
+
+<h3 id="sec2-3">2.3 Catálogo de funciones de dos variables populares</h3>
+<p>Estas son las superficies que aparecen una y otra vez en los parciales. Conocerlas de memoria te ahorra muchísimo tiempo.</p>
+
+<h4>🟢 Plano</h4>
+<div class="formula-box">$$z = ax + by + c$$</div>
+<p><b>Dominio:</b> $\mathbb{R}^2$. La superficie es un plano inclinado. Si $a=b=0$ queda el plano horizontal $z=c$.</p>
+<div class="origin">Sale de generalizar la recta $y = mx + b$ a una variable más: si $z$ depende linealmente de $x$ e $y$, debe ser combinación lineal de ambas.</div>
+<div class="ggb-container" id="ggb-plano"></div>
+<p class="ggb-caption">Plano $z = 0.5x + 0.3y + 1$.</p>
+
+<h4>🔵 Paraboloide elíptico</h4>
+<div class="formula-box">$$z = \frac{x^2}{a^2} + \frac{y^2}{b^2}$$</div>
+<p><b>Dominio:</b> $\mathbb{R}^2$. <b>Imagen:</b> $[0, \infty)$. Forma de "copa" abierta hacia arriba. Si $a=b$ es de revolución (rotando $z=x^2$ alrededor del eje $z$).</p>
+<div class="origin">Es la versión 3D de la parábola. Si fijás $y=0$ obtenés $z=x^2/a^2$ (parábola en el plano $xz$). Lo mismo con $x=0$. La superficie es la "envolvente" de todas esas parábolas.</div>
+
+<h4>🟣 Paraboloide hiperbólico (silla de montar)</h4>
+<div class="formula-box">$$z = \frac{x^2}{a^2} - \frac{y^2}{b^2}$$</div>
+<p><b>Dominio:</b> $\mathbb{R}^2$. La superficie sube en una dirección y baja en la perpendicular: por eso se llama "silla". El origen $(0,0,0)$ es un <b>punto silla</b> (no es máximo ni mínimo local).</p>
+<div class="ggb-container" id="ggb-silla"></div>
+<p class="ggb-caption">Silla de montar $z = x^2 - y^2$. Mirala desde varios ángulos.</p>
+
+<h4>🟡 Cono</h4>
+<div class="formula-box">$$z = \sqrt{x^2 + y^2}$$</div>
+<p><b>Dominio:</b> $\mathbb{R}^2$. <b>Imagen:</b> $[0, \infty)$. Es la mitad superior de un cono doble. La punta (vértice) está en el origen y la superficie no es suave allí.</p>
+<div class="origin">Si llamás $r=\sqrt{x^2+y^2}$ a la distancia al eje $z$, la ecuación dice $z=r$: la altura es igual a la distancia al eje, lo que genera un cono de 45°.</div>
+
+<h4>🔴 Semiesfera (esfera vista como función)</h4>
+<div class="formula-box">$$z = \sqrt{R^2 - x^2 - y^2}$$</div>
+<p><b>Dominio:</b> $\{(x,y) : x^2 + y^2 \leq R^2\}$ (disco de radio $R$). <b>Imagen:</b> $[0, R]$.</p>
+<div class="origin">Despejando $z$ de la esfera $x^2+y^2+z^2=R^2$ obtenés dos hojas: $z=+\sqrt{\cdots}$ (semiesfera norte) y $z=-\sqrt{\cdots}$ (sur). Cada una es función; la esfera completa NO es función (un mismo $(x,y)$ tendría dos $z$).</div>
+<div class="ggb-container" id="ggb-semiesfera"></div>
+<p class="ggb-caption">Semiesfera $z = \sqrt{4 - x^2 - y^2}$ (radio 2).</p>
+
+<h4>🟠 Cilindro parabólico</h4>
+<div class="formula-box">$$z = x^2 \quad (\text{no aparece } y)$$</div>
+<p><b>Dominio:</b> $\mathbb{R}^2$. Como no aparece $y$, la sección con cualquier plano $y=k$ es la misma parábola $z=x^2$. La superficie es una "extrusión" de esa parábola a lo largo del eje $y$.</p>
+
+<h4>🟤 Funciones con logaritmo o raíz</h4>
+<p>Por ejemplo $f(x,y) = \ln(x+y)$ o $f(x,y)=\sqrt{1-x^2-y^2}$. La forma es menos importante; lo que cuenta en el parcial es el <b>cálculo del dominio</b> (sec. 3).</p>
+
+</section>
+
+<hr/>
+
+<!-- ============ SECCIÓN 3 ============ -->
+<section id="sec3">
+<h2>4. Cálculo de dominios en dos variables 🗺️</h2>
+
+<h3 id="sec3-1">3.1 Las tres reglas de oro</h3>
+<p>El <b>dominio natural</b> de $f(x, y)$ es el conjunto de todos los puntos $(x, y) \in \mathbb{R}^2$ donde la fórmula <b>tiene sentido como número real</b>. Sólo hay que cuidar tres "prohibiciones":</p>
+
+<table>
+<thead><tr><th>Operación</th><th>Restricción</th><th>Por qué</th></tr></thead>
+<tbody>
+<tr><td>$\dfrac{\text{algo}}{g(x,y)}$</td><td>$g(x,y) \neq 0$</td><td>No se divide por cero.</td></tr>
+<tr><td>$\sqrt[\text{par}]{g(x,y)}$ (raíz par)</td><td>$g(x,y) \geq 0$</td><td>No hay raíz par real de números negativos.</td></tr>
+<tr><td>$\ln(g(x,y))$, $\log(g(x,y))$</td><td>$g(x,y) > 0$</td><td>El log sólo está definido para argumentos positivos.</td></tr>
+<tr><td>$\arcsin(g)$, $\arccos(g)$</td><td>$-1 \leq g \leq 1$</td><td>Su imagen está restringida a $[-1,1]$.</td></tr>
+<tr><td>$\tan(g)$</td><td>$g \neq \pi/2 + k\pi$</td><td>Donde $\cos g = 0$ hay asíntota.</td></tr>
+</tbody>
+</table>
+
+<div class="tip">Si la función combina varias operaciones, el dominio es la <b>intersección</b> de todas las restricciones (todas se deben cumplir a la vez).</div>
+
+<h4>Receta universal para hallar el dominio</h4>
+<ol>
+  <li>Identificá <b>cada operación riesgosa</b> en la fórmula.</li>
+  <li>Escribí la <b>desigualdad o ecuación</b> que debe cumplir el argumento.</li>
+  <li>Resolvé en el plano $(x, y)$ y <b>graficá la región</b>.</li>
+  <li>Si hay varias restricciones: hacé la <b>intersección</b> (todas juntas).</li>
+  <li>Decidí si los bordes son <b>incluidos</b> ($\leq, \geq$, línea continua) o <b>excluidos</b> ($<, >$, línea punteada).</li>
+</ol>
+
+<h3 id="sec3-2">3.2 Ejercicios resueltos paso a paso</h3>
+
+<div class="example">
+<h4>Ejercicio 1 · Raíz cuadrada</h4>
+<p>Hallá el dominio de $f(x, y) = \sqrt{9 - x^2 - y^2}$.</p>
+<div class="step"><b>Paso 1.</b> Hay una raíz <b>par</b> (índice 2). Restricción: el radicando $\geq 0$.</div>
+<div class="step"><b>Paso 2.</b> Planteo: $9 - x^2 - y^2 \geq 0$.</div>
+<div class="step"><b>Paso 3.</b> Despejo: $x^2 + y^2 \leq 9$.</div>
+<div class="step"><b>Paso 4.</b> Reconozco la región: <b>disco cerrado</b> centrado en el origen, radio $3$.</div>
+<div class="step"><b>Paso 5.</b> Como la desigualdad es $\leq$, el borde (la circunferencia $x^2+y^2=9$) <b>está incluido</b>.</div>
+<div class="formula-box">$$\boxed{\;\text{Dom}(f) = \{(x,y)\in\mathbb{R}^2 : x^2+y^2 \leq 9\}\;}$$</div>
+<p><i>(Es el dominio típico de una semiesfera de radio 3.)</i></p>
+</div>
+
+<div class="example">
+<h4>Ejercicio 2 · Logaritmo</h4>
+<p>Hallá el dominio de $f(x, y) = \ln(x - y^2)$.</p>
+<div class="step"><b>Paso 1.</b> Hay un logaritmo. Restricción: argumento $> 0$.</div>
+<div class="step"><b>Paso 2.</b> Planteo: $x - y^2 > 0 \Rightarrow x > y^2$.</div>
+<div class="step"><b>Paso 3.</b> La curva $x = y^2$ es una <b>parábola horizontal</b> (abre hacia la derecha).</div>
+<div class="step"><b>Paso 4.</b> "$x > y^2$" significa los puntos a la <b>derecha</b> de esa parábola (sin incluirla, por ser desigualdad estricta).</div>
+<div class="formula-box">$$\boxed{\;\text{Dom}(f) = \{(x,y) : x > y^2\}\;}$$</div>
+<div class="warning">Borde excluido: graficá la parábola con línea <b>punteada</b>.</div>
+</div>
+
+<div class="example">
+<h4>Ejercicio 3 · Combinación de raíz y denominador</h4>
+<p>Hallá el dominio de $f(x, y) = \dfrac{\sqrt{y - x}}{x^2 + y^2 - 1}$.</p>
+<div class="step"><b>Paso 1.</b> Dos restricciones: (a) raíz par $\Rightarrow y - x \geq 0$; (b) denominador $\neq 0 \Rightarrow x^2 + y^2 \neq 1$.</div>
+<div class="step"><b>Paso 2.</b> (a) $y \geq x$: semiplano sobre la recta $y = x$ (incluida).</div>
+<div class="step"><b>Paso 3.</b> (b) $x^2 + y^2 \neq 1$: todo el plano salvo la circunferencia unitaria.</div>
+<div class="step"><b>Paso 4.</b> Intersección: el semiplano $y \geq x$ <b>menos</b> los puntos de esa circunferencia que están en él.</div>
+<div class="formula-box">$$\boxed{\;\text{Dom}(f) = \{(x,y) : y \geq x \text{ y } x^2 + y^2 \neq 1\}\;}$$</div>
+<div class="tip">Cuando aparecen dos restricciones, dibujalas con dos colores distintos y marcá la zona común.</div>
+</div>
+
+<div class="example">
+<h4>Ejercicio 4 · Logaritmo y raíz juntos (parcial clásico)</h4>
+<p>Hallá el dominio de $f(x, y) = \sqrt{4 - x^2 - y^2} + \ln(x + y)$.</p>
+<div class="step"><b>Paso 1.</b> (a) Raíz: $4 - x^2 - y^2 \geq 0 \Rightarrow x^2 + y^2 \leq 4$ (disco cerrado de radio 2).</div>
+<div class="step"><b>Paso 2.</b> (b) Log: $x + y > 0 \Rightarrow y > -x$ (semiplano sobre la recta $y = -x$, sin incluirla).</div>
+<div class="step"><b>Paso 3.</b> Intersección: <b>media-luna</b> = porción del disco que queda por encima de la recta $y = -x$.</div>
+<div class="formula-box">$$\boxed{\;\text{Dom}(f) = \{(x,y) : x^2+y^2 \leq 4 \text{ y } x+y > 0\}\;}$$</div>
+<div class="warning">El diámetro del disco que está sobre la recta $y=-x$ <b>no</b> pertenece (por la desigualdad estricta del log), pero el resto del borde circular <b>sí</b>.</div>
+</div>
+
+<div class="example">
+<h4>Ejercicio 5 · Función con doble raíz</h4>
+<p>Hallá el dominio de $f(x,y)=\sqrt{x}+\sqrt{y-1}$.</p>
+<div class="step"><b>Paso 1.</b> $\sqrt{x}$ pide $x \geq 0$.</div>
+<div class="step"><b>Paso 2.</b> $\sqrt{y-1}$ pide $y \geq 1$.</div>
+<div class="step"><b>Paso 3.</b> Intersección: cuadrante $\{x \geq 0\} \cap \{y \geq 1\}$.</div>
+<div class="formula-box">$$\boxed{\;\text{Dom}(f) = \{(x,y) : x \geq 0 \text{ y } y \geq 1\}\;}$$</div>
+<p>Es el "rectángulo infinito" delimitado por las rectas $x=0$ (eje $y$) e $y=1$ (incluidas).</p>
+</div>
+
+<h4>Tabla resumen: dominios típicos según la función</h4>
+<table>
+<thead><tr><th>Fórmula típica</th><th>Restricción</th><th>Dominio (forma de la región)</th></tr></thead>
+<tbody>
+<tr><td>$\sqrt{R^2 - x^2 - y^2}$</td><td>$x^2+y^2 \leq R^2$</td><td>Disco cerrado de radio $R$</td></tr>
+<tr><td>$\sqrt{x^2+y^2 - R^2}$</td><td>$x^2+y^2 \geq R^2$</td><td>Exterior cerrado del disco</td></tr>
+<tr><td>$\ln(R^2 - x^2 - y^2)$</td><td>$x^2+y^2 < R^2$</td><td>Disco abierto (sin borde)</td></tr>
+<tr><td>$\dfrac{1}{x^2+y^2}$</td><td>$x^2+y^2 \neq 0$</td><td>Plano sin el origen</td></tr>
+<tr><td>$\dfrac{1}{y-x}$</td><td>$y \neq x$</td><td>Plano sin la recta $y=x$</td></tr>
+<tr><td>$\sqrt{xy}$</td><td>$xy \geq 0$</td><td>Cuadrantes I y III (incluyendo ejes)</td></tr>
+<tr><td>$\ln(y - x^2)$</td><td>$y > x^2$</td><td>Interior de la parábola $y=x^2$</td></tr>
+</tbody>
+</table>
+
+</section>
+
+<hr/>
+
+<!-- ============ SECCIÓN CONJUNTOS CONVEXOS ============ -->
+<section id="sec-convex">
+<h2>5. Conjuntos convexos y no convexos 🔺</h2>
+
+<h3 id="sec-convex-1">5.1 Definición visual</h3>
+<p>Un conjunto $C \subseteq \mathbb{R}^n$ es <b>convexo</b> si <b>cualquier segmento</b> que une dos puntos de $C$ <b>está totalmente contenido en $C$</b>.</p>
+
+<div class="formula-box">
+$$C \text{ es convexo} \iff \forall\, P, Q \in C,\; \forall\, t \in [0,1] : \; tP + (1-t)Q \in C$$
+</div>
+
+<div class="origin">
+La expresión $tP + (1-t)Q$ con $t \in [0,1]$ recorre el <b>segmento</b> que va de $Q$ (cuando $t=0$) a $P$ (cuando $t=1$). Pedir que ese segmento esté en $C$ es decir: <b>"no podés salirte" del conjunto al ir en línea recta entre dos puntos cualesquiera</b>.
+</div>
+
+<div class="tip">Test mental: imaginá que tirás una "goma elástica" entre dos puntos del conjunto. Si la goma siempre se queda adentro ⇒ convexo. Si en algún caso se sale ⇒ no convexo.</div>
+
+<h4>Diagrama: convexo vs. no convexo</h4>
+<div style="background:white; padding:20px; border-radius:8px; margin:14px 0; text-align:center;">
+<svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg" style="max-width:100%; height:auto;">
+  <!-- Disco convexo -->
+  <circle cx="120" cy="140" r="80" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+  <circle cx="90" cy="120" r="4" fill="#1e40af"/>
+  <circle cx="150" cy="170" r="4" fill="#1e40af"/>
+  <line x1="90" y1="120" x2="150" y2="170" stroke="#1e40af" stroke-width="2"/>
+  <text x="85" y="115" font-size="13" fill="#1e40af">P</text>
+  <text x="155" y="180" font-size="13" fill="#1e40af">Q</text>
+  <text x="120" y="245" text-anchor="middle" font-size="14" fill="#0f172a" font-weight="bold">Disco · CONVEXO ✅</text>
+  <text x="120" y="265" text-anchor="middle" font-size="11" fill="#475569">El segmento queda dentro</text>
+
+  <!-- Anillo no convexo -->
+  <circle cx="350" cy="140" r="80" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+  <circle cx="350" cy="140" r="35" fill="white" stroke="#dc2626" stroke-width="2"/>
+  <circle cx="290" cy="130" r="4" fill="#7f1d1d"/>
+  <circle cx="410" cy="150" r="4" fill="#7f1d1d"/>
+  <line x1="290" y1="130" x2="410" y2="150" stroke="#7f1d1d" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="280" y="125" font-size="13" fill="#7f1d1d">P</text>
+  <text x="415" y="160" font-size="13" fill="#7f1d1d">Q</text>
+  <text x="350" y="245" text-anchor="middle" font-size="14" fill="#0f172a" font-weight="bold">Anillo · NO convexo ❌</text>
+  <text x="350" y="265" text-anchor="middle" font-size="11" fill="#475569">El segmento atraviesa el agujero</text>
+
+  <!-- Estrella no convexa -->
+  <polygon points="580,80 600,130 660,130 612,160 632,215 580,180 528,215 548,160 500,130 560,130"
+           fill="#fde68a" stroke="#d97706" stroke-width="2"/>
+  <circle cx="528" cy="215" r="4" fill="#7c2d12"/>
+  <circle cx="632" cy="215" r="4" fill="#7c2d12"/>
+  <line x1="528" y1="215" x2="632" y2="215" stroke="#7c2d12" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="515" y="232" font-size="13" fill="#7c2d12">P</text>
+  <text x="638" y="232" font-size="13" fill="#7c2d12">Q</text>
+  <text x="580" y="248" text-anchor="middle" font-size="14" fill="#0f172a" font-weight="bold">Estrella · NO convexo ❌</text>
+  <text x="580" y="265" text-anchor="middle" font-size="11" fill="#475569">El segmento sale por las puntas</text>
+</svg>
+</div>
+
+<h3 id="sec-convex-2">5.2 Catálogo de ejemplos típicos</h3>
+
+<table>
+<thead><tr><th>Conjunto</th><th>¿Convexo?</th><th>Por qué</th></tr></thead>
+<tbody>
+<tr><td>$\mathbb{R}^n$ (todo el espacio)</td><td>✅ Sí</td><td>Cualquier segmento está dentro.</td></tr>
+<tr><td>Conjunto vacío $\emptyset$</td><td>✅ Sí</td><td>Por convención (no hay pares de puntos que verificar).</td></tr>
+<tr><td>Un punto $\{P\}$</td><td>✅ Sí</td><td>Trivial.</td></tr>
+<tr><td>Recta o segmento</td><td>✅ Sí</td><td>Cualquier subsegmento está dentro.</td></tr>
+<tr><td>Semiplano $\{ax+by \leq c\}$</td><td>✅ Sí</td><td>La desigualdad lineal preserva combinaciones convexas.</td></tr>
+<tr><td>Disco $\{x^2+y^2 \leq R^2\}$</td><td>✅ Sí</td><td>Cualquier cuerda está adentro.</td></tr>
+<tr><td>Cuadrado, rectángulo, triángulo</td><td>✅ Sí</td><td>Polígonos sin "entrantes".</td></tr>
+<tr><td>Elipse (interior)</td><td>✅ Sí</td><td>Es la imagen lineal de un disco.</td></tr>
+<tr><td>Bola en $\mathbb{R}^n$</td><td>✅ Sí</td><td>Generalización del disco.</td></tr>
+<tr><td>Anillo $\{r \leq \sqrt{x^2+y^2} \leq R\}$</td><td>❌ No</td><td>Una cuerda diametral cruza el agujero central.</td></tr>
+<tr><td>Estrella, polígono cóncavo</td><td>❌ No</td><td>Tiene "entrantes" donde el segmento se sale.</td></tr>
+<tr><td>Unión de dos discos disjuntos</td><td>❌ No</td><td>Un punto en cada uno: el segmento sale del conjunto.</td></tr>
+<tr><td>$\{(x,y): xy \geq 1\}$</td><td>❌ No</td><td>Tiene dos ramas hiperbólicas separadas.</td></tr>
+<tr><td>Circunferencia (sólo el borde)</td><td>❌ No</td><td>Una cuerda atraviesa el interior, que no pertenece al conjunto.</td></tr>
+</tbody>
+</table>
+
+<h4>Propiedades importantes</h4>
+<ul>
+  <li>La <b>intersección</b> de convexos es convexa. <span class="badge">Útil</span></li>
+  <li>La <b>unión</b> de convexos en general <b>NO</b> es convexa.</li>
+  <li>Toda <b>bola abierta o cerrada</b> en $\mathbb{R}^n$ es convexa.</li>
+  <li>Todo conjunto <b>definido por desigualdades lineales</b> $\{Ax \leq b\}$ es convexo (poliedro).</li>
+</ul>
+
+<div class="example">
+<h4>Ejercicio · Determinar si un conjunto es convexo</h4>
+<p>¿Es convexo $C = \{(x,y) : x^2 + y^2 \leq 4 \text{ y } y \geq 0\}$?</p>
+<div class="step"><b>Paso 1.</b> Reescribir como intersección: $C = \{x^2+y^2 \leq 4\} \cap \{y \geq 0\}$.</div>
+<div class="step"><b>Paso 2.</b> El primero es un disco (convexo). El segundo es un semiplano (convexo).</div>
+<div class="step"><b>Paso 3.</b> Intersección de convexos ⇒ convexo. ✅</div>
+<div class="formula-box">$$\boxed{\;C \text{ es convexo (semidisco superior)}.\;}$$</div>
+</div>
+
+<div class="example">
+<h4>Ejercicio · Mostrar que NO es convexo</h4>
+<p>¿Es convexo $D = \{(x,y) : 1 \leq x^2 + y^2 \leq 4\}$ (anillo)?</p>
+<div class="step"><b>Paso 1.</b> Tomar dos puntos opuestos del anillo: $P = (2, 0)$ y $Q = (-2, 0)$. Ambos cumplen $x^2+y^2=4$.</div>
+<div class="step"><b>Paso 2.</b> El segmento entre ellos es el diámetro horizontal, que pasa por el origen $(0,0)$.</div>
+<div class="step"><b>Paso 3.</b> Pero $(0,0)$ tiene $x^2+y^2 = 0 < 1$, así que <b>no</b> está en $D$.</div>
+<div class="step"><b>Paso 4.</b> Por lo tanto, $D$ <b>no es convexo</b>. ❌</div>
+</div>
+
+<div class="warning">¿Por qué te lo preguntan en un parcial de Análisis II/III? Porque la <b>convexidad del dominio</b> es un requisito en muchos teoremas (extremos absolutos, integrales múltiples, conexidad por arcos). Saber identificarla rápido te ahorra problemas en otros ejercicios.</div>
+
+</section>
+
+<hr/>
+
+<!-- ============ SECCIÓN 4 ============ -->
+<section id="sec4">
+<h2>6. Curvas de nivel 🗻</h2>
+
+<h3 id="sec4-1">4.1 ¿Qué son y para qué sirven?</h3>
+<p>Una <b>curva de nivel</b> de la función $f(x,y)$ es el conjunto de puntos del plano donde la función toma un valor <b>constante</b> $k$:</p>
+
+<div class="formula-box">
+$$C_k = \{(x, y) \in D : f(x, y) = k\}$$
+</div>
+
+<div class="origin">
+<b>Idea visual</b>: si la superficie $z=f(x,y)$ es una montaña, las curvas de nivel son lo que ves en un <b>mapa topográfico</b>: líneas que conectan puntos a la misma altura. Geométricamente, surgen de <b>cortar la superficie con un plano horizontal</b> $z=k$ y <b>proyectar</b> esa intersección al plano $xy$.
+</div>
+
+<div class="tip">Las curvas de nivel son la herramienta principal para "leer" una superficie sin tener que dibujarla en 3D. Si sabés interpretarlas, sabés cómo se ve la función.</div>
+
+<h4>Cómo leer las curvas de nivel</h4>
+<ul>
+  <li>Curvas <b>cercanas entre sí</b> ⇒ pendiente fuerte (la función crece o decrece rápido).</li>
+  <li>Curvas <b>muy separadas</b> ⇒ pendiente suave.</li>
+  <li>Curvas <b>cerradas que se contraen</b> ⇒ máximo o mínimo local en el centro.</li>
+  <li>Curvas que <b>se cruzan en un punto</b> ⇒ punto silla.</li>
+</ul>
+
+<h4>Receta para hallarlas</h4>
+<ol>
+  <li>Escribí $f(x,y) = k$.</li>
+  <li>Despejá la relación entre $x$ e $y$.</li>
+  <li>Reconocé la curva (recta, parábola, circunferencia, hipérbola, etc.).</li>
+  <li>Repetí para varios valores de $k$ (ej. $k=-2,-1,0,1,2$) y dibujalas todas en el mismo plano.</li>
+</ol>
+
+<h3 id="sec4-2">4.2 Ejemplos resueltos clásicos</h3>
+
+<div class="example">
+<h4>Ejemplo 1 · Paraboloide $f(x,y)=x^2+y^2$</h4>
+<div class="step"><b>Curva de nivel $k$:</b> $x^2 + y^2 = k$.</div>
+<div class="step">Si $k < 0$: <b>no hay curva</b> (suma de cuadrados nunca es negativa).</div>
+<div class="step">Si $k = 0$: solo el punto $(0, 0)$.</div>
+<div class="step">Si $k > 0$: <b>circunferencia</b> centrada en el origen, radio $\sqrt{k}$.</div>
+<p>Cuanto mayor $k$, más grande el círculo. Las circunferencias <b>se separan</b> a medida que crece $k$, lo que indica que la pendiente del paraboloide es <b>menor cerca del vértice</b> y mayor lejos. ✅</p>
+</div>
+
+<div class="example">
+<h4>Ejemplo 2 · Silla $f(x,y)=x^2-y^2$</h4>
+<div class="step"><b>$k=0$:</b> $x^2 = y^2 \Rightarrow y = \pm x$. <b>Dos rectas</b> que se cruzan en el origen.</div>
+<div class="step"><b>$k>0$:</b> $x^2 - y^2 = k$ es una <b>hipérbola</b> con eje real sobre el eje $x$.</div>
+<div class="step"><b>$k<0$:</b> $y^2 - x^2 = -k > 0$ es una <b>hipérbola</b> con eje real sobre el eje $y$.</div>
+<p>El "cruce" de las rectas en $k=0$ es la firma del <b>punto silla</b>. 🎢</p>
+</div>
+
+<div class="example">
+<h4>Ejemplo 3 · Plano $f(x,y)=2x+3y$</h4>
+<div class="step"><b>Curva de nivel $k$:</b> $2x + 3y = k$.</div>
+<div class="step">Es una familia de <b>rectas paralelas</b> entre sí (mismo coeficiente en $x$ e $y$, distinto término independiente).</div>
+<p>En general, las curvas de nivel de cualquier <b>plano</b> son <b>rectas paralelas equiespaciadas</b>.</p>
+</div>
+
+<div class="example">
+<h4>Ejemplo 4 · Cono $f(x,y)=\sqrt{x^2+y^2}$</h4>
+<div class="step"><b>Curva de nivel $k$:</b> $\sqrt{x^2+y^2} = k$.</div>
+<div class="step">Si $k<0$: imposible (la raíz es $\geq 0$).</div>
+<div class="step">Si $k=0$: el origen.</div>
+<div class="step">Si $k>0$: $x^2+y^2 = k^2$ ⇒ <b>circunferencia</b> de radio $k$.</div>
+<p>A diferencia del paraboloide, las circunferencias del cono están <b>equiespaciadas</b> (cuando $k$ aumenta de a 1, el radio también aumenta de a 1). Eso refleja la pendiente <b>constante</b> del cono.</p>
+</div>
+
+<h4>Visualización 3D + curvas de nivel</h4>
+<p>Mirá cómo se ve un paraboloide con su mapa de curvas de nivel "dibujado" en el piso. Podés rotar la vista para ver cómo cada curva surge de cortar la superficie con un plano horizontal.</p>
+<div class="ggb-container" id="ggb-curvas"></div>
+<p class="ggb-caption">Paraboloide $z=x^2+y^2$ junto con sus curvas de nivel $z=1, 2, 3, 4$.</p>
+
+<div class="warning">No confundas la <b>curva de nivel</b> (en el plano $xy$, en 2D) con la <b>traza</b> (en el espacio, en 3D). La traza es la intersección de la superficie con un plano. La curva de nivel es la <b>sombra de la traza horizontal</b> proyectada al piso.</div>
+
+</section>
+
+<hr/>
+
+<!-- ============ HOJA RESUMEN ============ -->
+<section id="cheat">
+<h2>⭐ Hoja resumen (cheat sheet) — Lleva esto al parcial mentalmente</h2>
+
+<p>Esta es la página de repaso rápido. Si entendiste todo lo anterior, con estas tarjetas alcanza para refrescar minutos antes del parcial.</p>
+
+<h3>🗺️ Mapa mental del tema</h3>
+<div class="mindmap">
+  <div class="mindmap-row">
+    <span class="mm-node">FUNCIÓN 1v: $f(x)$</span>
+    <span class="mm-arrow">→</span>
+    <span class="mm-node">Curva en $\mathbb{R}^2$</span>
+  </div>
+  <div class="mindmap-row" style="margin-left:24px;">
+    <span class="mm-arrow">↳</span>
+    <span class="mm-node">Trigonométricas → círculo unitario</span>
+  </div>
+  <div class="mindmap-row" style="margin-left:24px;">
+    <span class="mm-arrow">↳</span>
+    <span class="mm-node">Límite: laterales coinciden</span>
+  </div>
+  <div class="mindmap-row" style="margin-left:24px;">
+    <span class="mm-arrow">↳</span>
+    <span class="mm-node">Continuidad: 3 leyes (definida, lim existe, coinciden)</span>
+  </div>
+  <div class="mindmap-row">
+    <span class="mm-node">FUNCIÓN 2v: $f(x,y)$</span>
+    <span class="mm-arrow">→</span>
+    <span class="mm-node">Superficie en $\mathbb{R}^3$</span>
+  </div>
+  <div class="mindmap-row" style="margin-left:24px;">
+    <span class="mm-arrow">↳</span>
+    <span class="mm-node">Dominio = región del plano</span>
+  </div>
+  <div class="mindmap-row" style="margin-left:24px;">
+    <span class="mm-arrow">↳</span>
+    <span class="mm-node">Curvas de nivel = "mapa topográfico"</span>
+  </div>
+  <div class="mindmap-row">
+    <span class="mm-node">CONJUNTO CONVEXO</span>
+    <span class="mm-arrow">→</span>
+    <span class="mm-node">Segmento $PQ$ siempre adentro</span>
+  </div>
+</div>
+
+<h3>📋 Fórmulas y conceptos clave</h3>
+<div class="cheat-grid">
+
+<div class="cheat-card">
+  <h4>Definición función 2v</h4>
+  <p>$f: D\subseteq\mathbb{R}^2 \to \mathbb{R}$<br/>$(x,y)\mapsto z=f(x,y)$</p>
+  <p>Gráfico = superficie en $\mathbb{R}^3$</p>
+</div>
+
+<div class="cheat-card">
+  <h4>Reglas de dominio</h4>
+  <p>• Denom $\neq 0$<br/>• Raíz par: radicando $\geq 0$<br/>• $\ln$: argumento $> 0$<br/>• $\arcsin/\arccos$: argumento $\in [-1,1]$</p>
+  <p>Dominio = <b>intersección</b> de restricciones.</p>
+</div>
+
+<div class="cheat-card">
+  <h4>Curvas de nivel</h4>
+  <p>$C_k = \{(x,y) : f(x,y)=k\}$</p>
+  <p>Sirven para "ver" la superficie sin dibujarla en 3D. Cuanto más juntas, más empinada la pendiente.</p>
+</div>
+
+<div class="cheat-card">
+  <h4>Superficies tipo</h4>
+  <p>• $z=ax+by+c$: plano<br/>• $z=x^2+y^2$: paraboloide<br/>• $z=x^2-y^2$: silla<br/>• $z=\sqrt{x^2+y^2}$: cono<br/>• $z=\sqrt{R^2-x^2-y^2}$: semiesfera</p>
+</div>
+
+<div class="cheat-card">
+  <h4>Límite (1 variable)</h4>
+  <p>$\lim_{x\to a} f(x)=L$: $f(x)$ se acerca a $L$ cuando $x\to a$.</p>
+  <p>Existe $\Leftrightarrow$ <b>laterales coinciden</b>: $\lim_{x\to a^-}=\lim_{x\to a^+}=L$.</p>
+</div>
+
+<div class="cheat-card">
+  <h4>Las 3 LEYES de continuidad</h4>
+  <p><b>1.</b> $f(a)$ está definida.<br/><b>2.</b> $\lim_{x\to a} f(x)$ existe.<br/><b>3.</b> $\lim = f(a)$.</p>
+  <p>Las 3 deben cumplirse a la vez.</p>
+</div>
+
+<div class="cheat-card">
+  <h4>Tipos de discontinuidad</h4>
+  <p><b>Evitable:</b> lim existe pero $\neq f(a)$.<br/><b>De salto:</b> laterales distintos.<br/><b>Esencial:</b> algún lateral $=\pm\infty$ o no existe.</p>
+</div>
+
+<div class="cheat-card">
+  <h4>Límites notables</h4>
+  <p>$\lim_{x\to 0}\frac{\sin x}{x}=1$<br/>$\lim_{x\to 0}\frac{e^x-1}{x}=1$<br/>$\lim_{x\to 0}\frac{\ln(1+x)}{x}=1$<br/>$\lim_{x\to\infty}(1+1/x)^x=e$</p>
+</div>
+
+<div class="cheat-card">
+  <h4>Trigonometría: círculo unitario</h4>
+  <p>Punto $P=(\cos\theta, \sin\theta)$ en $x^2+y^2=1$.</p>
+  <p>$\sin^2\theta+\cos^2\theta=1$, $\tan\theta=\sin/\cos$.</p>
+  <p>$\sin$ impar, $\cos$ par. Periodo $2\pi$.</p>
+</div>
+
+<div class="cheat-card">
+  <h4>Conjunto convexo</h4>
+  <p>$C$ convexo $\Leftrightarrow$ todo segmento $PQ$ con $P,Q\in C$ está en $C$.</p>
+  <p>✅ Disco, semiplano, polígono convexo, bola.<br/>❌ Anillo, estrella, unión disjunta.</p>
+  <p><b>Intersección de convexos = convexo.</b></p>
+</div>
+
+<div class="cheat-card">
+  <h4>Funciones 1v populares</h4>
+  <p>Lineal, cuadrática, polinómica, racional, raíz, exponencial $a^x$, log $\log_a x$, trigonométricas $\sin, \cos, \tan$, valor absoluto.</p>
+</div>
+
+<div class="cheat-card">
+  <h4>Funciones 2v populares</h4>
+  <p>Plano, paraboloide elíptico, silla (paraboloide hiperbólico), cono, semiesfera, cilindros parabólicos.</p>
+</div>
+
+<div class="cheat-card">
+  <h4>Curvas de nivel típicas</h4>
+  <p>• Paraboloide → circunferencias<br/>• Silla → hipérbolas (y rectas en $k=0$)<br/>• Plano → rectas paralelas<br/>• Cono → circunferencias equiespaciadas</p>
+</div>
+
+<div class="cheat-card">
+  <h4>Errores frecuentes 🚨</h4>
+  <p>• Olvidar restricciones extras (ej. denom)<br/>• Confundir curva de nivel (2D) con traza (3D)<br/>• No verificar las 3 leyes de continuidad<br/>• Confundir convexidad con conexidad</p>
+</div>
+
+<div class="cheat-card">
+  <h4>Levantar indeterminaciones</h4>
+  <p>$0/0$: factorizar, racionalizar, L'Hôpital, equivalentes.<br/>$\infty/\infty$: dividir por mayor potencia, L'Hôpital.<br/>$\infty-\infty$: factor común, conjugado.<br/>$1^\infty$: usar $e^{\ln(...)}$.</p>
+</div>
+
+</div>
+
+<h3>🧮 Tabla maestra de dominios</h3>
+<table>
+<thead><tr><th>Función</th><th>Restricción</th><th>Dominio</th></tr></thead>
+<tbody>
+<tr><td>$\sqrt{R^2-x^2-y^2}$</td><td>$x^2+y^2\leq R^2$</td><td>Disco cerrado</td></tr>
+<tr><td>$\ln(R^2-x^2-y^2)$</td><td>$x^2+y^2<R^2$</td><td>Disco abierto</td></tr>
+<tr><td>$\dfrac{1}{x^2+y^2-R^2}$</td><td>$x^2+y^2\neq R^2$</td><td>Plano sin la circunferencia</td></tr>
+<tr><td>$\sqrt{x^2+y^2-R^2}$</td><td>$x^2+y^2\geq R^2$</td><td>Exterior cerrado</td></tr>
+<tr><td>$\ln(y-x^2)$</td><td>$y>x^2$</td><td>Interior de la parábola</td></tr>
+<tr><td>$\sqrt{y-x}$</td><td>$y\geq x$</td><td>Semiplano sobre la recta $y=x$</td></tr>
+<tr><td>$\dfrac{1}{xy}$</td><td>$x\neq 0,\; y\neq 0$</td><td>Plano sin los ejes</td></tr>
+<tr><td>$\sqrt{xy}$</td><td>$xy\geq 0$</td><td>Cuadrantes I y III + ejes</td></tr>
+</tbody>
+</table>
+
+<h3>🎯 Diagrama de flujo: ¿es continua $f$ en $x=a$?</h3>
+<div class="mindmap">
+  <div class="mindmap-row"><span class="mm-node">¿$f(a)$ está definida?</span><span class="mm-arrow">→ NO →</span><span class="mm-node">Discontinua (Ley 1 falla)</span></div>
+  <div class="mindmap-row" style="margin-left:24px;"><span class="mm-arrow">→ SÍ →</span></div>
+  <div class="mindmap-row" style="margin-left:48px;"><span class="mm-node">¿$\lim_{x\to a^-}=\lim_{x\to a^+}$?</span><span class="mm-arrow">→ NO →</span><span class="mm-node">Discontinua de salto</span></div>
+  <div class="mindmap-row" style="margin-left:48px;"><span class="mm-arrow">→ SÍ →</span></div>
+  <div class="mindmap-row" style="margin-left:72px;"><span class="mm-node">¿Algún lateral $=\pm\infty$?</span><span class="mm-arrow">→ SÍ →</span><span class="mm-node">Discontinua esencial</span></div>
+  <div class="mindmap-row" style="margin-left:72px;"><span class="mm-arrow">→ NO →</span></div>
+  <div class="mindmap-row" style="margin-left:96px;"><span class="mm-node">¿$\lim = f(a)$?</span><span class="mm-arrow">→ NO →</span><span class="mm-node">Discontinua evitable</span></div>
+  <div class="mindmap-row" style="margin-left:96px;"><span class="mm-arrow">→ SÍ →</span><span class="mm-node">✅ CONTINUA</span></div>
+</div>
+
+<h3>🔺 Convexo vs. no convexo</h3>
+<div class="mindmap">
+  <div class="mindmap-row"><span class="mm-node">Tomar $P, Q \in C$</span><span class="mm-arrow">→</span><span class="mm-node">Trazar segmento</span><span class="mm-arrow">→</span><span class="mm-node">¿Está adentro siempre?</span></div>
+  <div class="mindmap-row" style="margin-left:48px;"><span class="mm-arrow">SÍ → CONVEXO ✅</span><span style="margin-left:24px;" class="mm-arrow">NO → NO convexo ❌</span></div>
+</div>
+
+<h3>📝 Checklist para el día del parcial</h3>
+<ol>
+  <li>📌 ¿Identifiqué <b>todas</b> las restricciones del dominio? (raíces, logs, denominadores)</li>
+  <li>📌 ¿Dibujé el dominio en el plano $(x,y)$ con bordes correctos (continuos / punteados)?</li>
+  <li>📌 Para curvas de nivel: ¿probé varios valores de $k$ y reconocí el tipo de curva?</li>
+  <li>📌 Para continuidad en 1v: ¿verifiqué las <b>3 leyes</b> en cada punto crítico?</li>
+  <li>📌 Para límites: ¿chequée laterales? ¿levanté indeterminaciones?</li>
+  <li>📌 Para convexidad: ¿probé con dos puntos extremos? ¿usé "intersección de convexos = convexo"?</li>
+  <li>📌 Para trigonométricas: ¿usé el círculo unitario para los valores notables?</li>
+  <li>📌 ¿Justifiqué cada paso, incluso los "obvios"?</li>
+</ol>
+
+<div class="tip">Antes de entregar: releé las soluciones y verificá <b>signos, desigualdades estrictas vs. no estrictas, e inclusión de los bordes</b>. Suelen ser la mayor fuente de errores.</div>
+
+<h3>💪 Mensaje final</h3>
+<p>Si llegaste hasta acá, dominás los puntos clave del parcial: <b>funciones</b>, <b>dominios</b>, <b>curvas de nivel</b>, <b>límites</b> y <b>continuidad</b>. Lo que falta es práctica: andá a un par de parciales viejos y resolvé al menos 3 ejercicios de cada tipo. <b>¡Mucho éxito!</b> 🎓</p>
+
+<p style="text-align:center; margin-top:30px; color:var(--muted); font-size:13px;">— Resumen generado para estudiar análisis matemático I —</p>
+
+</section>
+
+</main>
+</div>
+
+<!-- ===== SCRIPTS DE GEOGEBRA ===== -->
+<script>
+function ggbInject(id, command, height) {
+  height = height || 380;
+  var params = {
+    appName: "3d",
+    width: 760,
+    height: height,
+    showToolBar: true,
+    showAlgebraInput: true,
+    showMenuBar: false,
+    showResetIcon: true,
+    enableShiftDragZoom: true,
+    language: "es",
+    appletOnLoad: function(api) {
+      api.evalCommand(command);
+      api.setAxesVisible(true, true, true);
+      api.setGridVisible(true);
+    }
+  };
+  var applet = new GGBApplet(params, true);
+  applet.inject(id);
+}
+
+function ggbInjectMulti(id, commands, height) {
+  height = height || 380;
+  var params = {
+    appName: "3d",
+    width: 760,
+    height: height,
+    showToolBar: true,
+    showAlgebraInput: true,
+    showMenuBar: false,
+    showResetIcon: true,
+    enableShiftDragZoom: true,
+    language: "es",
+    appletOnLoad: function(api) {
+      commands.forEach(function(c){ api.evalCommand(c); });
+      api.setAxesVisible(true, true, true);
+      api.setGridVisible(true);
+    }
+  };
+  var applet = new GGBApplet(params, true);
+  applet.inject(id);
+}
+
+// Gráficos 2D (graphing)
+function ggbInject2D(id, commands, height) {
+  height = height || 360;
+  var params = {
+    appName: "graphing",
+    width: 760,
+    height: height,
+    showToolBar: true,
+    showAlgebraInput: true,
+    showMenuBar: false,
+    showResetIcon: true,
+    enableShiftDragZoom: true,
+    language: "es",
+    appletOnLoad: function(api) {
+      commands.forEach(function(c){ api.evalCommand(c); });
+      api.setGridVisible(true);
+    }
+  };
+  var applet = new GGBApplet(params, true);
+  applet.inject(id);
+}
+
+window.addEventListener("load", function() {
+  // 3D
+  ggbInject("ggb-paraboloide", "f(x,y)=x^2+y^2");
+  ggbInject("ggb-plano", "g(x,y)=0.5x+0.3y+1");
+  ggbInject("ggb-silla", "h(x,y)=x^2-y^2");
+  ggbInject("ggb-semiesfera", "s(x,y)=sqrt(4-x^2-y^2)");
+  ggbInjectMulti("ggb-curvas", [
+    "f(x,y)=x^2+y^2",
+    "c1: x^2+y^2=1",
+    "c2: x^2+y^2=2",
+    "c3: x^2+y^2=3",
+    "c4: x^2+y^2=4"
+  ]);
+
+  // 2D - funciones de una variable
+  ggbInject2D("ggb-1v-poly", [
+    "f(x)=2x+1",
+    "g(x)=x^2",
+    "h(x)=x^3"
+  ]);
+  ggbInject2D("ggb-1v-rad", [
+    "f(x)=sqrt(x)",
+    "g(x)=cbrt(x)"
+  ]);
+  ggbInject2D("ggb-1v-explog", [
+    "f(x)=exp(x)",
+    "g(x)=ln(x)",
+    "y=x"
+  ]);
+  ggbInject2D("ggb-1v-rac", [
+    "f(x)=1/x"
+  ]);
+  ggbInject2D("ggb-1v-abs", [
+    "f(x)=abs(x)"
+  ]);
+
+  // Circunferencia trigonométrica con deslizador interactivo
+  ggbInject2D("ggb-circulo-trig", [
+    "circulo: x^2+y^2=1",
+    "alfa=Slider[0,2pi,0.01,1,200]",
+    "SetValue[alfa,pi/4]",
+    "P=(cos(alfa),sin(alfa))",
+    "SetCaption[P,\"P=(cos α, sin α)\"]",
+    "ShowLabel[P,true]",
+    "SegX=Segment[(0,0),(cos(alfa),0)]",
+    "SegY=Segment[(cos(alfa),0),P]",
+    "Radio=Segment[(0,0),P]",
+    "SetColor[SegX,1,0,0]",
+    "SetColor[SegY,0,0,1]",
+    "SetColor[Radio,0.5,0.5,0.5]",
+    "TextoCos=Text[\"cos α = \"+(Round(cos(alfa)*100)/100),(0.1,-0.15)]",
+    "TextoSin=Text[\"sin α = \"+(Round(sin(alfa)*100)/100),(cos(alfa)+0.05,sin(alfa)/2)]"
+  ], 460);
+
+  // Gráfico de funciones trigonométricas
+  ggbInject2D("ggb-trig-graf", [
+    "f(x)=sin(x)",
+    "g(x)=cos(x)",
+    "h(x)=tan(x)",
+    "SetColor[f,0,0,1]",
+    "SetColor[g,1,0,0]",
+    "SetColor[h,0,0.6,0]"
+  ], 380);
+});
+</script>
+
+</body>
+</html>

@@ -513,18 +513,45 @@ $$P(A^c) = 1 - P(A)$$
 <p>Truco: <b>P(al menos uno) = 1 − P(ninguno)</b>.</p>
 </div>
 <div class="card formula">
-<h4>Suma</h4>
+<h4>Suma — eventos NO excluyentes</h4>
 $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
-<p>Si A y B son <b>excluyentes</b>: $P(A \cap B) = 0$.</p>
+<p style="font-size:13px; color:var(--muted)">
+  <b>$P(A \cup B)$</b>: prob. de que ocurra A, B, o ambos ·
+  <b>$P(A \cap B)$</b>: se resta porque si no se contaría dos veces la intersección.
+</p>
+</div>
+<div class="card formula">
+<h4>Suma — eventos excluyentes (mutuamente exclusivos)</h4>
+$$P(A \cup B) = P(A) + P(B)$$
+<p style="font-size:13px; color:var(--muted)">
+  Cuando A y B <b>no pueden ocurrir juntos</b> ($P(A \cap B) = 0$), la intersección desaparece y la suma es directa.
+  Ejemplo: sacar cara o cruz en una moneda.
+</p>
 </div>
 <div class="card formula">
 <h4>Producto (independientes)</h4>
 $$P(A \cap B) = P(A) \cdot P(B)$$
+<p style="font-size:13px; color:var(--muted)">
+  Solo válido si A y B son <b>independientes</b> (que pase uno no afecta al otro).
+  Ejemplo: dos sensores que fallan de forma independiente.
+</p>
+</div>
+<div class="card formula">
+<h4>Independencia</h4>
+$$A \text{ y } B \text{ son independientes} \iff P(A \cap B) = P(A) \times P(B)$$
+<p style="font-size:13px; color:var(--muted)">
+  Equivalentemente: $P(A|B) = P(A)$ (saber que ocurrió B no cambia la prob. de A).
+  Si esta igualdad <b>no</b> se cumple, los eventos son <b>dependientes</b>.
+</p>
 </div>
 <div class="card formula">
 <h4>Condicional</h4>
-$$P(A|B) = \frac{P(A \cap B)}{P(B)}$$
-<p>Independencia ⇔ $P(A|B) = P(A)$.</p>
+$$P(A|B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$
+<p style="font-size:13px; color:var(--muted)">
+  <b>$P(A|B)$</b>: prob. de A <em>dado que</em> B ya ocurrió ·
+  <b>$P(A \cap B)$</b>: prob. de que ocurran ambos ·
+  <b>$P(B)$</b>: "achica el espacio muestral" al universo donde B es verdadero.
+</p>
 </div>
 </div>
 
@@ -572,10 +599,21 @@ $$F_X(x) = P(X \le x)$$
 
 <div class="card formula">
 <h4>Esperanza (centro de gravedad)</h4>
-$$E[X] = \mu = \sum x_i \cdot p_X(x_i)$$
+$$E[X] = \mu = \sum_x x \cdot P(X = x)$$
+<p style="font-size:13px; color:var(--muted)">
+  <b>$x$</b>: cada valor posible de la variable ·
+  <b>$P(X=x)$</b>: probabilidad de que tome ese valor ·
+  sumás el valor ponderado por su probabilidad para todos los valores posibles.
+</p>
 <h4>Varianza</h4>
 $$Var(X) = E[X^2] - (E[X])^2$$
+$$E[X^2] = \sum_x x^2 \cdot P(X = x)$$
 $$\sigma = \sqrt{Var(X)}$$
+<p style="font-size:13px; color:var(--muted)">
+  <b>$E[X^2]$</b>: esperanza del cuadrado (calculás igual que E[X] pero elevando cada $x$ al cuadrado) ·
+  <b>$(E[X])^2$</b>: cuadrado de la media ·
+  la diferencia mide cuánto se "dispersan" los valores alrededor del centro.
+</p>
 </div>
 
 <details class="reveal">

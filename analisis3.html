@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análisis I · 15 minutos para el parcial</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']], processEscapes: true },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+:root {
+  --bg: #0f172a;
+  --panel: #1e293b;
+  --panel2: #273449;
+  --border: #334155;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --accent: #38bdf8;
+  --accent2: #a78bfa;
+  --good: #34d399;
+  --warn: #fbbf24;
+  --bad: #f87171;
+  --pink: #ec4899;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── Layout ── */
+.layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+
+nav {
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  padding: 20px 14px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+nav .logo { font-weight: 700; font-size: 15px; color: white; margin-bottom: 4px; }
+nav .logo small { display: block; color: var(--muted); font-size: 11px; font-weight: 400; margin-top: 2px; }
+nav .timer-total {
+  margin: 10px 0 16px;
+  background: var(--panel2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--warn);
+  font-weight: 600;
+}
+nav a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text);
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin: 2px 0;
+  transition: background .15s;
+}
+nav a:hover { background: var(--panel2); color: var(--accent); }
+nav a .t { font-size: 11px; color: var(--muted); }
+nav .sep { font-size: 10px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin: 12px 4px 4px; }
+
+main { padding: 28px 44px 80px; max-width: 860px; }
+
+/* ── Hero ── */
+.hero {
+  background: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin-bottom: 32px;
+  border: 1px solid #3730a3;
+}
+.hero h1 { font-size: 26px; color: white; margin-bottom: 6px; }
+.hero p { color: #c7d2fe; font-size: 14px; }
+.hero .badges { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.badge.time { background: #fef08a22; color: var(--warn); border: 1px solid #fef08a44; }
+.badge.topics { background: #86efac22; color: var(--good); border: 1px solid #86efac44; }
+.badge.level { background: #f9a8d422; color: var(--pink); border: 1px solid #f9a8d444; }
+
+/* ── Sección ── */
+section { margin-bottom: 44px; }
+.sec-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.sec-header h2 { font-size: 19px; color: var(--accent); flex: 1; }
+.min-badge {
+  background: var(--warn);
+  color: #0b1220;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+h3 { font-size: 15px; color: var(--accent2); margin: 18px 0 8px; }
+
+/* ── Cards ── */
+.box {
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 10px 0;
+  font-size: 14px;
+}
+.box.formula { background: var(--panel2); border-left: 4px solid var(--accent2); }
+.box.trick   { background: #132b1a; border-left: 4px solid var(--good); }
+.box.warn    { background: #2a1a0a; border-left: 4px solid var(--warn); }
+.box.exam    { background: #1a1030; border-left: 4px solid var(--pink); }
+
+.box .label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  opacity: .7;
+}
+.box.formula .label { color: var(--accent2); }
+.box.trick .label   { color: var(--good); }
+.box.warn .label    { color: var(--warn); }
+.box.exam .label    { color: var(--pink); }
+
+/* ── Grid ── */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+/* ── Tabla ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 13px; }
+th, td { border: 1px solid var(--border); padding: 7px 10px; text-align: left; }
+th { background: var(--panel2); color: var(--accent); font-size: 12px; }
+
+/* ── Flujo ── */
+.flow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0;
+  font-size: 13px;
+}
+.flow-step {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 12px;
+}
+.flow-arrow { color: var(--muted); font-size: 16px; }
+
+/* ── Checklist ── */
+.checklist { list-style: none; padding: 0; }
+.checklist li {
+  padding: 8px 0 8px 28px;
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.checklist li::before {
+  content: "□";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-size: 16px;
+}
+
+/* ── Función mini-card ── */
+.fn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; margin: 10px 0; }
+.fn-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+.fn-card .fn-name { color: var(--accent); font-weight: 600; margin-bottom: 4px; font-size: 12px; }
+.fn-card .fn-formula { color: white; margin-bottom: 4px; }
+.fn-card .fn-dom { color: var(--good); font-size: 12px; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  nav { position: static; height: auto; }
+  main { padding: 20px 20px 60px; }
+  .grid2, .grid3 { grid-template-columns: 1fr; }
+}
+
+/* ── Final ── */
+.final-box {
+  background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+  border: 1px solid #10b981;
+  border-radius: 12px;
+  padding: 24px 28px;
+  text-align: center;
+}
+.final-box h2 { color: var(--good); font-size: 22px; margin-bottom: 8px; }
+.final-box p { color: #a7f3d0; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── SIDEBAR ── -->
+<nav>
+  <div class="logo">Análisis Mat. I<small>Guía de 15 minutos</small></div>
+  <div class="timer-total">⏱ 15 min · 6 temas · 1 parcial</div>
+
+  <div class="sep">Temas</div>
+  <a href="#fn1v">1. Funciones 1 variable <span class="t">2 min</span></a>
+  <a href="#limites">2. Límites y continuidad <span class="t">3 min</span></a>
+  <a href="#fn2v">3. Funciones 2 variables <span class="t">2 min</span></a>
+  <a href="#dominios">4. Dominios en 2 vars <span class="t">3 min</span></a>
+  <a href="#convexos">5. Conjuntos convexos <span class="t">2 min</span></a>
+  <a href="#curvas">6. Curvas de nivel <span class="t">2 min</span></a>
+  <a href="#checklist">✅ Checklist final <span class="t">1 min</span></a>
+
+  <div class="sep" style="margin-top:20px">Otros apuntes</div>
+  <a href="analisis2.html">← Análisis completo v2</a>
+  <a href="index.html">← Inicio</a>
+</nav>
+
+<!-- ── MAIN ── -->
+<main>
+
+  <div class="hero">
+    <h1>⚡ Análisis Mat. I — 15 minutos</h1>
+    <p>Todo lo esencial para el parcial. Sin relleno. Una lectura activa y estás listo.</p>
+    <div class="badges">
+      <span class="badge time">⏱ 15 minutos</span>
+      <span class="badge topics">6 temas clave</span>
+      <span class="badge level">Nivel parcial</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       1. FUNCIONES DE UNA VARIABLE
+  ══════════════════════════════════════════ -->
+  <section id="fn1v">
+    <div class="sec-header">
+      <h2>1. Funciones de una variable</h2>
+      <span class="min-badge">2 min</span>
+    </div>
+
+    <div class="box formula">
+      <div class="label">Definición</div>
+      <p>$f: A \subseteq \mathbb{R} \to \mathbb{R}$ asigna a cada $x \in A$ <strong>exactamente un</strong> valor $f(x)$. El <strong>dominio</strong> es el conjunto de $x$ válidos. La <strong>imagen</strong> es el conjunto de valores que toma $f$.</p>
+    </div>
+
+    <div class="box trick">
+      <div class="label">Reglas de dominio (una variable)</div>
+      <p>
+        <strong>Raíz par</strong> $\sqrt[n]{g(x)}$ → $g(x) \geq 0$ &nbsp;·&nbsp;
+        <strong>Logaritmo</strong> $\ln(g(x))$ → $g(x) > 0$ &nbsp;·&nbsp;
+        <strong>Denominador</strong> $\frac{1}{g(x)}$ → $g(x) \neq 0$
+      </p>
+    </div>
+
+    <h3>Catálogo rápido</h3>
+    <div class="fn-grid">
+      <div class="fn-card">
+        <div class="fn-name">Lineal</div>
+        <div class="fn-formula">$f(x) = mx + b$</div>
+        <div class="fn-dom">Dom: $\mathbb{R}$</div>
+      </div>
+      <div class="fn-card">
+        <div class="fn-name">Cuadrática</div>
+        <div class="fn-formula">$f(x) = ax^2 + bx + c$</div>
+        <div class="fn-dom">Dom: $\mathbb{R}$</div>
+      </div>
+      <div class="fn-card">
+        <div class="fn-name">Raíz cuadrada</div>
+        <div class="fn-formula">$f(x) = \sqrt{x}$</div>
+        <div class="fn-dom">Dom: $[0, +\infty)$</div>
+      </div>
+      <div class="fn-card">
+        <div class="fn-name">Logaritmo</div>
+        <div class="fn-formula">$f(x) = \ln(x)$</div>
+        <div class="fn-dom">Dom: $(0, +\infty)$</div>
+      </div>
+      <div class="fn-card">
+        <div class="fn-name">Exponencial</div>
+        <div class="fn-formula">$f(x) = e^x$</div>
+        <div class="fn-dom">Dom: $\mathbb{R}$, Img: $(0,\infty)$</div>
+      </div>
+      <div class="fn-card">
+        <div class="fn-name">Valor absoluto</div>
+        <div class="fn-formula">$f(x) = |x|$</div>
+        <div class="fn-dom">Dom: $\mathbb{R}$, Img: $[0,\infty)$</div>
+      </div>
+      <div class="fn-card">
+        <div class="fn-name">Racional</div>
+        <div class="fn-formula">$f(x) = \frac{P(x)}{Q(x)}$</div>
+        <div class="fn-dom">Dom: $Q(x) \neq 0$</div>
+      </div>
+      <div class="fn-card">
+        <div class="fn-name">Seno / Coseno</div>
+        <div class="fn-formula">$\sin x, \cos x$</div>
+        <div class="fn-dom">Dom: $\mathbb{R}$, Img: $[-1,1]$</div>
+      </div>
+      <div class="fn-card">
+        <div class="fn-name">Tangente</div>
+        <div class="fn-formula">$\tan x = \frac{\sin x}{\cos x}$</div>
+        <div class="fn-dom">Dom: $x \neq \frac{\pi}{2}+k\pi$</div>
+      </div>
+    </div>
+
+    <div class="box exam">
+      <div class="label">Lo que toma el parcial</div>
+      <p>Calcular el dominio de funciones que combinan raíz + logaritmo + denominador. <strong>Resolvé cada restricción por separado y luego hacés la intersección.</strong></p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       2. LÍMITES Y CONTINUIDAD
+  ══════════════════════════════════════════ -->
+  <section id="limites">
+    <div class="sec-header">
+      <h2>2. Límites y continuidad</h2>
+      <span class="min-badge">3 min</span>
+    </div>
+
+    <div class="box formula">
+      <div class="label">Límite intuitivo</div>
+      <p>$\displaystyle\lim_{x \to a} f(x) = L$ significa que $f(x)$ se <strong>acerca</strong> a $L$ cuando $x$ se acerca a $a$ (sin importar si $f(a)$ está definida).</p>
+    </div>
+
+    <h3>Álgebra de límites</h3>
+    <div class="grid2">
+      <div class="box formula">
+        <div class="label">Suma / resta</div>
+        <p>$\lim (f \pm g) = \lim f \pm \lim g$</p>
+      </div>
+      <div class="box formula">
+        <div class="label">Producto</div>
+        <p>$\lim (f \cdot g) = \lim f \cdot \lim g$</p>
+      </div>
+      <div class="box formula">
+        <div class="label">Cociente</div>
+        <p>$\lim \dfrac{f}{g} = \dfrac{\lim f}{\lim g}$, si $\lim g \neq 0$</p>
+      </div>
+      <div class="box formula">
+        <div class="label">Compuesta</div>
+        <p>$\lim f(g(x)) = f\!\left(\lim g(x)\right)$ si $f$ es continua</p>
+      </div>
+    </div>
+
+    <div class="box warn">
+      <div class="label">Indeterminaciones — ¿qué hacer?</div>
+      <table>
+        <tr><th>Forma</th><th>Técnica</th></tr>
+        <tr><td>$\frac{0}{0}$</td><td>Factorizá y cancelá</td></tr>
+        <tr><td>$\frac{\infty}{\infty}$</td><td>Dividí por la mayor potencia</td></tr>
+        <tr><td>$\infty - \infty$</td><td>Sacá factor común o multiplicá por conjugado</td></tr>
+        <tr><td>$0 \cdot \infty$</td><td>Reescribí como cociente $\frac{0}{1/\infty}$</td></tr>
+      </table>
+    </div>
+
+    <h3>Las 3 leyes de continuidad en $x = a$</h3>
+    <div class="flow">
+      <div class="flow-step">① $f(a)$ existe</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">② $\lim_{x\to a} f(x)$ existe</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">③ $\lim_{x\to a} f(x) = f(a)$</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step" style="color:var(--good)">✓ Continua</div>
+    </div>
+    <p style="font-size:13px; color:var(--muted); margin-top:6px">Si falla <strong>cualquiera</strong> de las tres → discontinua en $a$.</p>
+
+    <div class="box trick">
+      <div class="label">Truco: funciones partidas</div>
+      <p>En los "puntos de corte" (donde cambia la fórmula) verificás las 3 leyes. En el resto del dominio las funciones elementales son siempre continuas.</p>
+    </div>
+
+    <div class="box exam">
+      <div class="label">Tipo de ejercicio del parcial</div>
+      <p>Te dan $f(x) = \begin{cases} g(x) & x \leq a \\ h(x) & x > a \end{cases}$ y piden: ¿es continua en $x = a$? → Calculás límite lateral izquierdo, derecho, y $f(a)$, y verificás si coinciden.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       3. FUNCIONES DE DOS VARIABLES
+  ══════════════════════════════════════════ -->
+  <section id="fn2v">
+    <div class="sec-header">
+      <h2>3. Funciones de dos variables</h2>
+      <span class="min-badge">2 min</span>
+    </div>
+
+    <div class="box formula">
+      <div class="label">Definición</div>
+      <p>$f: D \subseteq \mathbb{R}^2 \to \mathbb{R}$ asigna a cada punto $(x, y)$ del dominio $D$ un único número real. El dominio ahora es una <strong>región del plano</strong>.</p>
+    </div>
+
+    <h3>Superficies típicas del parcial</h3>
+    <table>
+      <tr><th>Nombre</th><th>Fórmula</th><th>Forma</th></tr>
+      <tr><td>Plano</td><td>$f(x,y) = ax + by + c$</td><td>Plano inclinado</td></tr>
+      <tr><td>Paraboloide elíptico</td><td>$f(x,y) = x^2 + y^2$</td><td>Cuenco hacia arriba</td></tr>
+      <tr><td>Paraboloide hiperbólico</td><td>$f(x,y) = x^2 - y^2$</td><td>Silla de montar</td></tr>
+      <tr><td>Cono</td><td>$f(x,y) = \sqrt{x^2 + y^2}$</td><td>Embudo</td></tr>
+      <tr><td>Semiesfera</td><td>$f(x,y) = \sqrt{R^2 - x^2 - y^2}$</td><td>Media naranja</td></tr>
+    </table>
+
+    <div class="box trick">
+      <div class="label">Memoria rápida</div>
+      <p><strong>Suma de cuadrados</strong> → cuenco (paraboloide) · <strong>Resta de cuadrados</strong> → silla · <strong>Raíz de suma</strong> → cono o semiesfera (según si tiene $R^2$)</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       4. DOMINIOS EN DOS VARIABLES
+  ══════════════════════════════════════════ -->
+  <section id="dominios">
+    <div class="sec-header">
+      <h2>4. Dominios en dos variables</h2>
+      <span class="min-badge">3 min</span>
+    </div>
+
+    <div class="box formula">
+      <div class="label">Las 3 reglas de oro (igual que en 1 variable)</div>
+      <div class="grid3" style="margin-top:8px">
+        <div style="text-align:center; padding:10px; background:var(--panel); border-radius:6px">
+          <div style="color:var(--warn); font-weight:700; margin-bottom:4px">RAÍZ PAR</div>
+          <p style="font-size:13px">$\sqrt{g(x,y)}$</p>
+          <p style="color:var(--good); font-size:13px; margin-top:4px">$g(x,y) \geq 0$</p>
+        </div>
+        <div style="text-align:center; padding:10px; background:var(--panel); border-radius:6px">
+          <div style="color:var(--warn); font-weight:700; margin-bottom:4px">LOGARITMO</div>
+          <p style="font-size:13px">$\ln(g(x,y))$</p>
+          <p style="color:var(--good); font-size:13px; margin-top:4px">$g(x,y) > 0$</p>
+        </div>
+        <div style="text-align:center; padding:10px; background:var(--panel); border-radius:6px">
+          <div style="color:var(--warn); font-weight:700; margin-bottom:4px">DENOMINADOR</div>
+          <p style="font-size:13px">$\frac{1}{g(x,y)}$</p>
+          <p style="color:var(--good); font-size:13px; margin-top:4px">$g(x,y) \neq 0$</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Tabla de regiones típicas</h3>
+    <table>
+      <tr><th>Restricción</th><th>Curva frontera</th><th>Región</th><th>Frontera incluida</th></tr>
+      <tr><td>$x^2 + y^2 \leq r^2$</td><td>Circunferencia radio $r$</td><td>Disco</td><td>Sí (línea continua)</td></tr>
+      <tr><td>$x^2 + y^2 < r^2$</td><td>Circunferencia radio $r$</td><td>Disco abierto</td><td>No (línea punteada)</td></tr>
+      <tr><td>$y \geq x^2$</td><td>Parábola</td><td>Arriba de la parábola</td><td>Sí</td></tr>
+      <tr><td>$y > 0$</td><td>Eje $x$</td><td>Semiplano superior</td><td>No</td></tr>
+      <tr><td>$x^2 - y^2 \geq 0$</td><td>Rectas $y = \pm x$</td><td>Fuera de la silla</td><td>Sí</td></tr>
+    </table>
+
+    <div class="box exam">
+      <div class="label">Procedimiento paso a paso</div>
+      <ol style="padding-left:18px; font-size:14px; display:flex; flex-direction:column; gap:6px; margin-top:6px">
+        <li>Identificar <strong>cada restricción</strong> (raíz, log, denominador)</li>
+        <li>Para cada una, plantear la <strong>desigualdad correspondiente</strong></li>
+        <li>Resolver cada desigualdad → obtenés una <strong>región</strong></li>
+        <li>El dominio es la <strong>intersección</strong> de todas las regiones</li>
+        <li>Dibujar con bordes continuos (≤) o punteados (&lt;)</li>
+      </ol>
+    </div>
+
+    <div class="box trick">
+      <div class="label">Ejemplo rápido: $f(x,y) = \ln(4 - x^2 - y^2)$</div>
+      <p>Restricción: $4 - x^2 - y^2 > 0$ → $x^2 + y^2 < 4$ → <strong>disco abierto</strong> de radio 2, sin incluir la frontera.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       5. CONJUNTOS CONVEXOS
+  ══════════════════════════════════════════ -->
+  <section id="convexos">
+    <div class="sec-header">
+      <h2>5. Conjuntos convexos</h2>
+      <span class="min-badge">2 min</span>
+    </div>
+
+    <div class="box formula">
+      <div class="label">Definición</div>
+      <p>Un conjunto $C$ es <strong>convexo</strong> si para todo par de puntos $P, Q \in C$, el segmento $\overline{PQ}$ está <strong>completamente dentro</strong> de $C$.</p>
+    </div>
+
+    <div class="grid2">
+      <div class="box trick">
+        <div class="label">Conjuntos CONVEXOS</div>
+        <p>Disco · Semiplano · Rectángulo · Recta · Todo $\mathbb{R}^2$ · Intersección de convexos</p>
+        <p style="margin-top:6px; font-size:13px; color:var(--muted)">Regla: los "redondos sin huecos" son convexos.</p>
+      </div>
+      <div class="box warn">
+        <div class="label">Conjuntos NO convexos</div>
+        <p>Anillo (corona circular) · Estrella · Letra C · Unión de dos discos separados</p>
+        <p style="margin-top:6px; font-size:13px; color:var(--muted)">Regla: si tiene "curva hacia adentro" o hueco → no convexo.</p>
+      </div>
+    </div>
+
+    <div class="box exam">
+      <div class="label">Truco del parcial</div>
+      <p>Tomás dos puntos <strong>extremos</strong> del conjunto. Si el segmento entre ellos sale del conjunto → NO convexo. La intersección de convexos siempre es convexa.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       6. CURVAS DE NIVEL
+  ══════════════════════════════════════════ -->
+  <section id="curvas">
+    <div class="sec-header">
+      <h2>6. Curvas de nivel</h2>
+      <span class="min-badge">2 min</span>
+    </div>
+
+    <div class="box formula">
+      <div class="label">Definición</div>
+      <p>La curva de nivel $k$ de $f(x,y)$ es el conjunto de puntos donde $f(x,y) = k$. Es como "cortar" la superficie con el plano horizontal $z = k$ y proyectar la curva en el plano $xy$.</p>
+      <p style="margin-top:8px">$$C_k = \{(x,y) \in D \mid f(x,y) = k\}$$</p>
+    </div>
+
+    <h3>Curvas de nivel según la superficie</h3>
+    <table>
+      <tr><th>Función</th><th>Curva de nivel $f=k$</th><th>Forma</th></tr>
+      <tr><td>$f = x^2 + y^2$</td><td>$x^2 + y^2 = k$</td><td>Circunferencias concéntricas ($k>0$)</td></tr>
+      <tr><td>$f = x^2 - y^2$</td><td>$x^2 - y^2 = k$</td><td>Hipérbolas (silla de montar)</td></tr>
+      <tr><td>$f = ax + by + c$</td><td>$ax + by = k - c$</td><td>Rectas paralelas</td></tr>
+      <tr><td>$f = \sqrt{x^2+y^2}$</td><td>$x^2 + y^2 = k^2$</td><td>Circunferencias ($k \geq 0$)</td></tr>
+    </table>
+
+    <div class="box trick">
+      <div class="label">Cómo resolverlo en el parcial</div>
+      <ol style="padding-left:18px; font-size:14px; margin-top:6px; display:flex; flex-direction:column; gap:5px">
+        <li>Igualás $f(x,y) = k$ (con un valor numérico específico)</li>
+        <li>Simplificás la ecuación → reconocés el tipo de curva</li>
+        <li>Describís la curva: circunferencia de radio $\sqrt{k}$, recta de pendiente..., etc.</li>
+        <li>Aclarar para qué valores de $k$ existe la curva (ej: $k \geq 0$ para paraboloide)</li>
+      </ol>
+    </div>
+
+    <div class="box exam">
+      <div class="label">Ejemplo: $f(x,y) = x^2 + y^2$, curva de nivel $k = 4$</div>
+      <p>$x^2 + y^2 = 4$ → <strong>circunferencia de radio 2</strong> centrada en el origen. Las curvas de nivel son círculos que crecen a medida que $k$ aumenta.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       CHECKLIST FINAL
+  ══════════════════════════════════════════ -->
+  <section id="checklist">
+    <div class="sec-header">
+      <h2>✅ Checklist — día del parcial</h2>
+      <span class="min-badge">1 min</span>
+    </div>
+
+    <ul class="checklist">
+      <li>Identificar <strong>todas</strong> las restricciones del dominio: raíces, logaritmos, denominadores</li>
+      <li>Resolver cada restricción por separado y luego <strong>intersectar</strong> las regiones</li>
+      <li>Dibujar el dominio con borde <strong>continuo</strong> (≤ o ≥) o <strong>punteado</strong> (< o >)</li>
+      <li>Para continuidad: verificar las <strong>3 leyes</strong> en cada punto crítico (cambio de fórmula)</li>
+      <li>Para límites: identificar la forma de indeterminación y aplicar la técnica correcta</li>
+      <li>Para curvas de nivel: igualar a $k$ y reconocer el tipo de curva (círculo, recta, hipérbola)</li>
+      <li>Para convexidad: trazar un segmento entre dos puntos extremos, verificar si queda adentro</li>
+      <li>Verificar signos de desigualdad — <strong>estricto vs. no estricto</strong> es la trampa más común</li>
+    </ul>
+
+    <div style="margin-top:20px" class="box warn">
+      <div class="label">Errores más frecuentes</div>
+      <ul style="padding-left:18px; font-size:14px; display:flex; flex-direction:column; gap:5px; margin-top:4px">
+        <li>Olvidar que el logaritmo exige <strong>estrictamente mayor que cero</strong> (no ≥)</li>
+        <li>Olvidar incluir la condición del denominador cuando hay raíz <strong>y</strong> denominador juntos</li>
+        <li>Confundir "curva de nivel" con "gráfico de la función" — son cosas distintas</li>
+        <li>Decir que una función es continua en un punto sin verificar las 3 condiciones</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── FINAL ── -->
+  <div class="final-box">
+    <h2>¡Listo para el parcial! 🎓</h2>
+    <p>Si leíste todo esto, tenés los conceptos. Lo que falta es práctica: tomá 2 o 3 ejercicios de cada tema y resolvelos. El parcial no trae sorpresas si dominás dominios, continuidad y curvas de nivel.</p>
+    <p style="margin-top:10px"><a href="analisis2.html" style="color:#6ee7b7">Ver versión completa con ejercicios →</a></p>
+  </div>
+
+</main>
+</div>
+</body>
+</html>

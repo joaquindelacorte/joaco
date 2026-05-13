@@ -146,7 +146,9 @@ td code{background:#0b1220;padding:1px 5px;border-radius:3px;font-size:12px;colo
   <div class="brand">Estadística<small>Parcial 1 · Ejercicios resueltos</small></div>
 
   <div class="nav-section">Referencia rápida</div>
-  <a href="#cheatsheet">📋 Cheat sheet</a>
+  <a href="#cheatsheet">📋 Cheat sheet visual</a>
+  <a href="#como-hacer">🔨 Cómo construir</a>
+  <a href="#como-riq">📐 Cómo calcular RIQ</a>
 
   <div class="nav-section">Ejercicios del parcial</div>
   <a href="#ej1" id="nav1"><span class="num">1</span> Clasificación de variables</a>
@@ -178,50 +180,475 @@ td code{background:#0b1220;padding:1px 5px;border-radius:3px;font-size:12px;colo
   <div class="section" id="cheatsheet">
     <div class="section-header">
       <span class="section-num">REF</span>
-      <h2>Cheat sheet — todas las fórmulas</h2>
+      <h2>Cheat sheet visual — de dónde sale cada valor</h2>
     </div>
 
-    <div class="ref-grid">
-      <div class="card formula">
-        <h4>Medidas de posición</h4>
-        <div class="cheat"><span class="name">Media</span><span class="eq">x̄ = Σxᵢ / n</span></div>
-        <div class="cheat"><span class="name">Mediana (n par)</span><span class="eq">(x[n/2] + x[n/2+1]) / 2</span></div>
-        <div class="cheat"><span class="name">Rango</span><span class="eq">R = xmáx − xmín</span></div>
+    <!-- MEDIA -->
+    <div class="card formula" style="margin-bottom:14px">
+      <h4>Media aritmética</h4>
+      <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin:10px 0">
+        <div style="font-size:22px;font-weight:700;color:var(--accent);white-space:nowrap">x̄ = Σxᵢ / n</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <span style="background:#0b1220;border:1px solid var(--accent);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--accent);font-weight:700">x̄</span> = resultado: la media</span>
+          <span style="background:#0b1220;border:1px solid var(--accent2);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--accent2);font-weight:700">Σxᵢ</span> = suma de todos los datos</span>
+          <span style="background:#0b1220;border:1px solid var(--good);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--good);font-weight:700">n</span> = cantidad de datos</span>
+        </div>
       </div>
-      <div class="card formula">
-        <h4>Dispersión</h4>
-        <div class="cheat"><span class="name">Desvío estándar</span><span class="eq">s = √[ Σ(xᵢ−x̄)² / (n−1) ]</span></div>
-        <div class="cheat"><span class="name">RIQ</span><span class="eq">RIQ = Q3 − Q1</span></div>
-        <div class="cheat"><span class="name">Límite inf. outlier</span><span class="eq">Q1 − 1.5·RIQ</span></div>
-        <div class="cheat"><span class="name">Límite sup. outlier</span><span class="eq">Q3 + 1.5·RIQ</span></div>
+      <div style="background:#0b1220;border-radius:6px;padding:8px 12px;font-size:13px;color:var(--muted)">
+        Ej: datos = {12,3 · 12,8 · 13,1 · 12,5 · 15,2} → Σ = 65,9 · n = 5 → <strong style="color:var(--yellow)">x̄ = 65,9 / 5 = 13,18</strong>
       </div>
-      <div class="card formula">
-        <h4>Probabilidad</h4>
-        <div class="cheat"><span class="name">Unión</span><span class="eq">P(A∪B) = P(A)+P(B)−P(A∩B)</span></div>
-        <div class="cheat"><span class="name">Condicional</span><span class="eq">P(A|B) = P(A∩B) / P(B)</span></div>
-        <div class="cheat"><span class="name">Independencia</span><span class="eq">P(A∩B) = P(A)·P(B)</span></div>
+    </div>
+
+    <!-- DESVÍO ESTÁNDAR -->
+    <div class="card formula" style="margin-bottom:14px">
+      <h4>Desvío estándar (muestra)</h4>
+      <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin:10px 0">
+        <div style="font-size:20px;font-weight:700;color:var(--accent);white-space:nowrap">s = √[ Σ(xᵢ − x̄)² / (n−1) ]</div>
       </div>
-      <div class="card formula">
-        <h4>Variable aleatoria discreta</h4>
-        <div class="cheat"><span class="name">Esperanza</span><span class="eq">E[X] = Σ xᵢ·P(xᵢ)</span></div>
-        <div class="cheat"><span class="name">Varianza</span><span class="eq">Var(X) = E[X²] − (E[X])²</span></div>
-        <div class="cheat"><span class="name">E[X²]</span><span class="eq">Σ xᵢ²·P(xᵢ)</span></div>
-        <div class="cheat"><span class="name">Desvío</span><span class="eq">σ = √Var(X)</span></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin:8px 0">
+        <span style="background:#0b1220;border:1px solid var(--accent2);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--accent2);font-weight:700">xᵢ − x̄</span> = diferencia de cada dato con la media</span>
+        <span style="background:#0b1220;border:1px solid var(--warn);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--warn);font-weight:700">(xᵢ − x̄)²</span> = se eleva al cuadrado para que no se cancelen + y −</span>
+        <span style="background:#0b1220;border:1px solid var(--good);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--good);font-weight:700">n−1</span> = se usa n−1 (no n) porque es muestra, no población</span>
       </div>
-      <div class="card formula">
-        <h4>Distribución Binomial — X ~ B(n,p)</h4>
-        <div class="cheat"><span class="name">P(X = k)</span><span class="eq">C(n,k) · pᵏ · (1−p)ⁿ⁻ᵏ</span></div>
-        <div class="cheat"><span class="name">C(n,k)</span><span class="eq">n! / (k!·(n−k)!)</span></div>
-        <div class="cheat"><span class="name">Media</span><span class="eq">E[X] = n·p</span></div>
-        <div class="cheat"><span class="name">Desvío</span><span class="eq">σ = √(n·p·(1−p))</span></div>
+      <div style="background:#0b1220;border-radius:6px;padding:8px 12px;font-size:12px;color:var(--muted)">
+        Proceso: 1) calcular x̄ → 2) restar x̄ a cada dato → 3) elevar al cuadrado cada diferencia → 4) sumar todo → 5) dividir por (n−1) → 6) raíz cuadrada
       </div>
-      <div class="card formula">
-        <h4>Cuándo usar binomial</h4>
-        <div class="cheat"><span class="name">✓ n ensayos fijos</span><span class="eq">—</span></div>
-        <div class="cheat"><span class="name">✓ 2 resultados</span><span class="eq">éxito / fracaso</span></div>
-        <div class="cheat"><span class="name">✓ p constante</span><span class="eq">igual en cada ensayo</span></div>
-        <div class="cheat"><span class="name">✓ Independientes</span><span class="eq">un ensayo no afecta otro</span></div>
+    </div>
+
+    <!-- RIQ Y OUTLIERS -->
+    <div class="card formula" style="margin-bottom:14px">
+      <h4>RIQ y detección de outliers</h4>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin:8px 0">
+        <span style="background:#0b1220;border:1px solid var(--accent);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--accent);font-weight:700">Q1</span> = mediana de la mitad inferior</span>
+        <span style="background:#0b1220;border:1px solid var(--accent);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--accent);font-weight:700">Q3</span> = mediana de la mitad superior</span>
+        <span style="background:#0b1220;border:1px solid var(--accent2);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--accent2);font-weight:700">RIQ</span> = Q3 − Q1</span>
       </div>
+      <!-- Diagrama visual de límites -->
+      <div style="margin:12px 0;padding:14px;background:#0b1220;border-radius:8px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:10px;text-align:center">Regla de los bigotes (1,5 × RIQ)</div>
+        <svg viewBox="0 0 520 70" style="width:100%;display:block">
+          <line x1="30" y1="38" x2="490" y2="38" stroke="#334155" stroke-width="2"/>
+          <line x1="80" y1="24" x2="80" y2="52" stroke="#f87171" stroke-width="2"/>
+          <text x="80" y="18" fill="#f87171" font-size="10" text-anchor="middle">Q1−1.5·RIQ</text>
+          <text x="80" y="64" fill="#f87171" font-size="10" text-anchor="middle">Límite inf.</text>
+          <rect x="190" y="22" width="140" height="32" fill="none" stroke="#38bdf8" stroke-width="2" rx="2"/>
+          <line x1="190" y1="22" x2="190" y2="54" stroke="#38bdf8" stroke-width="2"/>
+          <text x="190" y="16" fill="#38bdf8" font-size="10" text-anchor="middle">Q1</text>
+          <line x1="260" y1="22" x2="260" y2="54" stroke="#fde68a" stroke-width="2" stroke-dasharray="3"/>
+          <text x="260" y="68" fill="#fde68a" font-size="9" text-anchor="middle">mediana</text>
+          <line x1="330" y1="22" x2="330" y2="54" stroke="#38bdf8" stroke-width="2"/>
+          <text x="330" y="16" fill="#38bdf8" font-size="10" text-anchor="middle">Q3</text>
+          <line x1="440" y1="24" x2="440" y2="52" stroke="#f87171" stroke-width="2"/>
+          <text x="440" y="18" fill="#f87171" font-size="10" text-anchor="middle">Q3+1.5·RIQ</text>
+          <text x="440" y="64" fill="#f87171" font-size="10" text-anchor="middle">Límite sup.</text>
+          <circle cx="490" cy="38" r="5" fill="#f87171"/>
+          <text x="490" y="18" fill="#f87171" font-size="10" text-anchor="middle">outlier</text>
+          <line x1="80" y1="38" x2="190" y2="38" stroke="#64748b" stroke-width="1.5"/>
+          <line x1="330" y1="38" x2="440" y2="38" stroke="#64748b" stroke-width="1.5"/>
+        </svg>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px;padding:0 6px">
+          <span style="color:#f87171">↑ Outlier si cae acá</span>
+          <span style="color:#38bdf8">← Caja = 50% central de los datos →</span>
+          <span style="color:#f87171">Outlier si cae acá ↑</span>
+        </div>
+      </div>
+      <div style="background:#143526;border-radius:6px;padding:8px 12px;font-size:13px">
+        <strong style="color:var(--good)">Regla:</strong> Todo valor fuera de [Q1−1,5·RIQ ; Q3+1,5·RIQ] es outlier
+      </div>
+    </div>
+
+    <!-- PROBABILIDAD -->
+    <div class="card formula" style="margin-bottom:14px">
+      <h4>Probabilidad — de dónde sale cada cosa</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0">
+        <div style="background:#0b1220;border-radius:8px;padding:10px 14px">
+          <div style="font-size:16px;font-weight:700;color:var(--accent);margin-bottom:6px">P(A∪B) = P(A)+P(B)−P(A∩B)</div>
+          <div style="font-size:12px;color:var(--muted)"><span style="color:var(--accent2)">P(A∪B)</span> = prob de que ocurra A <em>o</em> B (al menos uno)<br>
+          Se resta P(A∩B) para no contar dos veces la intersección</div>
+        </div>
+        <div style="background:#0b1220;border-radius:8px;padding:10px 14px">
+          <div style="font-size:16px;font-weight:700;color:var(--accent);margin-bottom:6px">P(A|B) = P(A∩B) / P(B)</div>
+          <div style="font-size:12px;color:var(--muted)"><span style="color:var(--accent2)">P(A|B)</span> = prob de A <em>dado que ya ocurrió</em> B<br>
+          <span style="color:var(--accent2)">P(A∩B)</span> = casos donde ocurren los dos / total<br>
+          <span style="color:var(--accent2)">P(B)</span> = denominador = el universo se "achica" a B</div>
+        </div>
+        <div style="background:#0b1220;border-radius:8px;padding:10px 14px">
+          <div style="font-size:16px;font-weight:700;color:var(--accent);margin-bottom:6px">Independencia: P(A∩B) = P(A)·P(B)</div>
+          <div style="font-size:12px;color:var(--muted)">Si esto se cumple → A y B no se afectan entre sí<br>
+          Si <strong>no</strong> se cumple → NO son independientes</div>
+        </div>
+        <div style="background:#0b1220;border-radius:8px;padding:10px 14px">
+          <div style="font-size:16px;font-weight:700;color:var(--accent);margin-bottom:6px">P(A) = casos favorables / total</div>
+          <div style="font-size:12px;color:var(--muted)">Ej: P(M) = unidades con falla M / total<br>
+          Siempre incluye <em>todos</em> los que tienen M, incluso los que también tienen E</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BINOMIAL -->
+    <div class="card formula" style="margin-bottom:14px">
+      <h4>Binomial — X ~ B(n, p)</h4>
+      <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;margin:10px 0">
+        <div style="font-size:20px;font-weight:700;color:var(--accent)">P(X=k) = C(n,k) · p<sup>k</sup> · (1−p)<sup>n−k</sup></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin:8px 0">
+        <span style="background:#0b1220;border:1px solid var(--accent);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--accent);font-weight:700">n</span> = total de ensayos (piezas, intentos…)</span>
+        <span style="background:#0b1220;border:1px solid var(--pink);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--pink);font-weight:700">k</span> = cantidad de éxitos que busco</span>
+        <span style="background:#0b1220;border:1px solid var(--good);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--good);font-weight:700">p</span> = probabilidad de éxito en cada ensayo</span>
+        <span style="background:#0b1220;border:1px solid var(--warn);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--warn);font-weight:700">C(n,k)</span> = n!/(k!·(n−k)!) = "combinatorio"</span>
+        <span style="background:#0b1220;border:1px solid var(--accent2);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--accent2);font-weight:700">(1−p)^(n−k)</span> = prob de los fracasos restantes</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+        <div style="background:#143526;border-radius:6px;padding:8px 12px;font-size:13px">
+          <strong style="color:var(--good)">E[X] = n·p</strong> — esperanza: cuántos éxitos espero en promedio
+        </div>
+        <div style="background:#143526;border-radius:6px;padding:8px 12px;font-size:13px">
+          <strong style="color:var(--good)">σ = √(n·p·(1−p))</strong> — dispersión esperada
+        </div>
+      </div>
+    </div>
+
+    <!-- VAR ALEATORIA -->
+    <div class="card formula">
+      <h4>Variable aleatoria discreta</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0">
+        <div style="background:#0b1220;border-radius:8px;padding:10px 14px">
+          <div style="font-size:15px;font-weight:700;color:var(--accent);margin-bottom:6px">E[X] = Σ xᵢ · P(xᵢ)</div>
+          <div style="font-size:12px;color:var(--muted)">Multiplicar cada valor posible por su probabilidad y sumar todo.<br>
+          <span style="color:var(--accent2)">xᵢ</span> = el valor (0, 1, 2…) · <span style="color:var(--good)">P(xᵢ)</span> = su prob</div>
+        </div>
+        <div style="background:#0b1220;border-radius:8px;padding:10px 14px">
+          <div style="font-size:15px;font-weight:700;color:var(--accent);margin-bottom:6px">Var(X) = E[X²] − (E[X])²</div>
+          <div style="font-size:12px;color:var(--muted)">1° calcular <span style="color:var(--accent2)">E[X²] = Σ xᵢ² · P(xᵢ)</span> (igual que E[X] pero con xᵢ²)<br>
+          2° restar el cuadrado de la esperanza<br>
+          3° <span style="color:var(--good)">σ = √Var(X)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ CÓMO CONSTRUIR HISTOGRAMA ═══════════════ -->
+  <div class="section" id="como-hacer">
+    <div class="section-header">
+      <span class="section-num">GUÍA</span>
+      <h2>Cómo construir un histograma desde cero</h2>
+    </div>
+
+    <div class="card key">
+      Un histograma divide los datos en <strong>intervalos (clases)</strong> y muestra cuántos datos caen en cada uno. No confundir con gráfico de barras: las barras se tocan porque los datos son continuos.
+    </div>
+
+    <h3>Paso a paso con ejemplo real</h3>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:12px">Usamos los datos de temperatura del Ejercicio 7: 30 placas entre 244°C y 250°C</p>
+
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <strong>Ordenar los datos y encontrar mín y máx</strong><br>
+          <div class="data-row">mín = 244°C · máx = 250°C</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <strong>Calcular el rango total</strong><br>
+          <div style="background:#0b1220;padding:8px 14px;border-radius:6px;border:1px solid var(--border);margin:6px 0;font-size:14px">
+            Rango = máx − mín = 250 − 244 = <span class="val-accent">6°C</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <strong>Elegir la cantidad de clases (k)</strong><br>
+          <div style="background:#0b1220;padding:8px 14px;border-radius:6px;border:1px solid var(--border);margin:6px 0;font-size:14px">
+            Regla práctica: <span class="val-accent">k ≈ √n</span> = √30 ≈ 5,5 → usar <strong style="color:var(--good)">6 o 7 clases</strong>
+          </div>
+          <span style="font-size:12px;color:var(--muted)">También podés usar la regla de Sturges: k = 1 + 3,322·log(n)</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <strong>Calcular el ancho de cada clase (h)</strong><br>
+          <div style="background:#0b1220;padding:8px 14px;border-radius:6px;border:1px solid var(--border);margin:6px 0;font-size:14px">
+            h = Rango / k = 6 / 6 = <span class="val-accent">1°C por clase</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-n">5</div>
+        <div class="step-body">
+          <strong>Definir los intervalos y contar frecuencias</strong>
+          <table style="margin-top:8px">
+            <thead><tr><th>Clase (intervalo)</th><th>Datos que caen ahí</th><th>Frecuencia (f)</th><th>f/n (%)</th></tr></thead>
+            <tbody>
+              <tr><td>[244 – 245)</td><td>244, 244, 244</td><td class="val-accent">3</td><td>10%</td></tr>
+              <tr><td>[245 – 246)</td><td>245, 245</td><td class="val-accent">2</td><td>7%</td></tr>
+              <tr><td>[246 – 247)</td><td>246, 246, 246, 246</td><td class="val-accent">4</td><td>13%</td></tr>
+              <tr><td>[247 – 248)</td><td>247 ×6</td><td class="val-accent" style="color:var(--good)">6 ← pico</td><td>20%</td></tr>
+              <tr><td>[248 – 249)</td><td>248 ×5</td><td class="val-accent">5</td><td>17%</td></tr>
+              <tr><td>[249 – 250)</td><td>249</td><td class="val-accent">1</td><td>3%</td></tr>
+              <tr><td>[250 – 251)</td><td>250</td><td class="val-accent">1</td><td>3%</td></tr>
+              <tr style="background:var(--panel2)"><th colspan="2">Total</th><td><strong>30</strong></td><td>100%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-n">6</div>
+        <div class="step-body">
+          <strong>Dibujar las barras — altura = frecuencia, ancho = clase</strong>
+          <div style="background:#0b1220;border-radius:8px;padding:16px;margin:10px 0;border:1px solid var(--border)">
+            <svg viewBox="0 0 560 220" style="width:100%;display:block">
+              <line x1="55" y1="185" x2="520" y2="185" stroke="#334155" stroke-width="1.5"/>
+              <line x1="55" y1="10" x2="55" y2="190" stroke="#334155" stroke-width="1.5"/>
+              <text x="48" y="188" fill="#94a3b8" font-size="10" text-anchor="end">0</text>
+              <text x="48" y="158" fill="#94a3b8" font-size="10" text-anchor="end">2</text>
+              <text x="48" y="128" fill="#94a3b8" font-size="10" text-anchor="end">4</text>
+              <text x="48" y="98" fill="#94a3b8" font-size="10" text-anchor="end">6</text>
+              <line x1="55" y1="158" x2="520" y2="158" stroke="#1e293b" stroke-width="1"/>
+              <line x1="55" y1="128" x2="520" y2="128" stroke="#1e293b" stroke-width="1"/>
+              <line x1="55" y1="98" x2="520" y2="98" stroke="#1e293b" stroke-width="1"/>
+              <rect x="55" y="140" width="65" height="45" fill="#60a5fa" opacity="0.8" stroke="#1e40af" stroke-width="1"/>
+              <text x="87" y="135" fill="#e2e8f0" font-size="12" text-anchor="middle" font-weight="bold">3</text>
+              <rect x="120" y="155" width="65" height="30" fill="#60a5fa" opacity="0.8" stroke="#1e40af" stroke-width="1"/>
+              <text x="152" y="150" fill="#e2e8f0" font-size="12" text-anchor="middle" font-weight="bold">2</text>
+              <rect x="185" y="125" width="65" height="60" fill="#60a5fa" opacity="0.85" stroke="#1e40af" stroke-width="1"/>
+              <text x="217" y="120" fill="#e2e8f0" font-size="12" text-anchor="middle" font-weight="bold">4</text>
+              <rect x="250" y="95" width="65" height="90" fill="#38bdf8" opacity="0.95" stroke="#0284c7" stroke-width="2"/>
+              <text x="282" y="90" fill="white" font-size="13" text-anchor="middle" font-weight="bold">6 ← MODA</text>
+              <line x1="282" y1="10" x2="282" y2="185" stroke="#f87171" stroke-width="1.5" stroke-dasharray="5,3"/>
+              <text x="286" y="22" fill="#f87171" font-size="10">247°C óptimo</text>
+              <rect x="315" y="110" width="65" height="75" fill="#60a5fa" opacity="0.85" stroke="#1e40af" stroke-width="1"/>
+              <text x="347" y="105" fill="#e2e8f0" font-size="12" text-anchor="middle" font-weight="bold">5</text>
+              <rect x="380" y="170" width="65" height="15" fill="#60a5fa" opacity="0.7" stroke="#1e40af" stroke-width="1"/>
+              <text x="412" y="165" fill="#e2e8f0" font-size="11" text-anchor="middle">1</text>
+              <rect x="445" y="170" width="65" height="15" fill="#60a5fa" opacity="0.7" stroke="#1e40af" stroke-width="1"/>
+              <text x="477" y="165" fill="#e2e8f0" font-size="11" text-anchor="middle">1</text>
+              <text x="87" y="200" fill="#94a3b8" font-size="10" text-anchor="middle">244</text>
+              <text x="152" y="200" fill="#94a3b8" font-size="10" text-anchor="middle">245</text>
+              <text x="217" y="200" fill="#94a3b8" font-size="10" text-anchor="middle">246</text>
+              <text x="282" y="200" fill="#94a3b8" font-size="10" text-anchor="middle">247</text>
+              <text x="347" y="200" fill="#94a3b8" font-size="10" text-anchor="middle">248</text>
+              <text x="412" y="200" fill="#94a3b8" font-size="10" text-anchor="middle">249</text>
+              <text x="477" y="200" fill="#94a3b8" font-size="10" text-anchor="middle">250</text>
+              <text x="290" y="215" fill="#94a3b8" font-size="11" text-anchor="middle">Temperatura (°C)</text>
+              <text x="14" y="100" fill="#94a3b8" font-size="11" text-anchor="middle" transform="rotate(-90,14,100)">Frecuencia</text>
+              <path d="M 120 175 L 120 195" stroke="#a78bfa" stroke-width="1" stroke-dasharray="2"/>
+              <text x="120" y="215" fill="#a78bfa" font-size="9" text-anchor="middle">sin espacio</text>
+            </svg>
+            <p style="font-size:12px;color:var(--muted);margin-top:6px;text-align:center">Las barras se tocan → datos continuos. Si hubiera espacio → gráfico de barras (datos discretos/cuali)</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-n">7</div>
+        <div class="step-body">
+          <strong>Leer la forma de la distribución</strong>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0">
+            <div style="background:#0b1220;border-radius:6px;padding:10px;text-align:center;border:1px solid var(--border)">
+              <svg viewBox="0 0 80 50" style="width:80px">
+                <rect x="5" y="35" width="12" height="10" fill="#60a5fa"/>
+                <rect x="18" y="25" width="12" height="20" fill="#60a5fa"/>
+                <rect x="31" y="10" width="12" height="35" fill="#38bdf8"/>
+                <rect x="44" y="25" width="12" height="20" fill="#60a5fa"/>
+                <rect x="57" y="35" width="12" height="10" fill="#60a5fa"/>
+              </svg>
+              <div style="font-size:11px;color:var(--good);margin-top:4px">Simétrica</div>
+              <div style="font-size:10px;color:var(--muted)">media ≈ mediana</div>
+            </div>
+            <div style="background:#0b1220;border-radius:6px;padding:10px;text-align:center;border:1px solid var(--border)">
+              <svg viewBox="0 0 80 50" style="width:80px">
+                <rect x="5" y="10" width="12" height="35" fill="#38bdf8"/>
+                <rect x="18" y="20" width="12" height="25" fill="#60a5fa"/>
+                <rect x="31" y="28" width="12" height="17" fill="#60a5fa"/>
+                <rect x="44" y="33" width="12" height="12" fill="#60a5fa"/>
+                <rect x="57" y="38" width="12" height="7" fill="#60a5fa"/>
+              </svg>
+              <div style="font-size:11px;color:var(--warn);margin-top:4px">Asimétrica izq.</div>
+              <div style="font-size:10px;color:var(--muted)">cola a la izquierda<br>media &lt; mediana</div>
+            </div>
+            <div style="background:#0b1220;border-radius:6px;padding:10px;text-align:center;border:1px solid var(--border)">
+              <svg viewBox="0 0 80 50" style="width:80px">
+                <rect x="5" y="38" width="12" height="7" fill="#60a5fa"/>
+                <rect x="18" y="33" width="12" height="12" fill="#60a5fa"/>
+                <rect x="31" y="28" width="12" height="17" fill="#60a5fa"/>
+                <rect x="44" y="20" width="12" height="25" fill="#60a5fa"/>
+                <rect x="57" y="10" width="12" height="35" fill="#38bdf8"/>
+              </svg>
+              <div style="font-size:11px;color:var(--bad);margin-top:4px">Asimétrica der.</div>
+              <div style="font-size:10px;color:var(--muted)">cola a la derecha<br>media &gt; mediana</div>
+            </div>
+          </div>
+          <div class="card tip" style="margin-top:8px">
+            <strong>Truco:</strong> La cola apunta hacia donde está el outlier o los datos extremos. Si la cola va a la derecha → hay valores muy grandes que "tiran" la media hacia arriba.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════ CÓMO CALCULAR RIQ ═══════════════ -->
+  <div class="section" id="como-riq">
+    <div class="section-header">
+      <span class="section-num">GUÍA</span>
+      <h2>Cómo calcular Q1, Q3 y detectar outliers</h2>
+    </div>
+
+    <div class="card key">
+      El RIQ mide el rango del 50% central de los datos. Es más robusto que el rango total porque ignora los extremos.
+    </div>
+
+    <h3>Paso a paso con los datos del Ejercicio 2</h3>
+    <div class="data-row">Datos ordenados: 12,3 · 12,5 · 12,7 · 12,8 · 12,9 · 13,0 · 13,1 · 13,2 · 13,4 · <span class="highlight">15,2</span></div>
+    <p style="font-size:13px;color:var(--muted);margin:6px 0">n = 10 datos</p>
+
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <strong>Dividir en mitad inferior y mitad superior</strong>
+          <div style="margin:10px 0;background:#0b1220;border-radius:8px;padding:14px;border:1px solid var(--border)">
+            <svg viewBox="0 0 540 90" style="width:100%;display:block">
+              <text x="10" y="20" fill="#94a3b8" font-size="10">Mitad inferior →</text>
+              <g>
+                <rect x="10" y="28" width="46" height="26" rx="5" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+                <text x="33" y="45" fill="#38bdf8" font-size="12" text-anchor="middle" font-weight="bold">12,3</text>
+                <text x="33" y="20" fill="#94a3b8" font-size="9" text-anchor="middle">pos 1</text>
+              </g>
+              <g>
+                <rect x="62" y="28" width="46" height="26" rx="5" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+                <text x="85" y="45" fill="#38bdf8" font-size="12" text-anchor="middle" font-weight="bold">12,5</text>
+                <text x="85" y="20" fill="#94a3b8" font-size="9" text-anchor="middle">pos 2</text>
+              </g>
+              <g>
+                <rect x="114" y="28" width="46" height="26" rx="5" fill="#0f3052" stroke="#38bdf8" stroke-width="2.5"/>
+                <text x="137" y="45" fill="white" font-size="12" text-anchor="middle" font-weight="bold">12,7</text>
+                <text x="137" y="20" fill="#38bdf8" font-size="9" text-anchor="middle" font-weight="bold">Q1 ↓</text>
+              </g>
+              <g>
+                <rect x="166" y="28" width="46" height="26" rx="5" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+                <text x="189" y="45" fill="#38bdf8" font-size="12" text-anchor="middle" font-weight="bold">12,8</text>
+                <text x="189" y="20" fill="#94a3b8" font-size="9" text-anchor="middle">pos 4</text>
+              </g>
+              <g>
+                <rect x="218" y="28" width="46" height="26" rx="5" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+                <text x="241" y="45" fill="#38bdf8" font-size="12" text-anchor="middle" font-weight="bold">12,9</text>
+                <text x="241" y="20" fill="#94a3b8" font-size="9" text-anchor="middle">pos 5</text>
+              </g>
+              <line x1="275" y1="15" x2="275" y2="75" stroke="#fde68a" stroke-width="2" stroke-dasharray="4"/>
+              <text x="275" y="85" fill="#fde68a" font-size="9" text-anchor="middle">mediana</text>
+              <text x="285" y="20" fill="#94a3b8" font-size="10">← Mitad superior</text>
+              <g>
+                <rect x="285" y="28" width="46" height="26" rx="5" fill="#1e293b" stroke="#a78bfa" stroke-width="1.5"/>
+                <text x="308" y="45" fill="#a78bfa" font-size="12" text-anchor="middle" font-weight="bold">13,0</text>
+                <text x="308" y="20" fill="#94a3b8" font-size="9" text-anchor="middle">pos 6</text>
+              </g>
+              <g>
+                <rect x="337" y="28" width="46" height="26" rx="5" fill="#1e293b" stroke="#a78bfa" stroke-width="1.5"/>
+                <text x="360" y="45" fill="#a78bfa" font-size="12" text-anchor="middle" font-weight="bold">13,1</text>
+                <text x="360" y="20" fill="#94a3b8" font-size="9" text-anchor="middle">pos 7</text>
+              </g>
+              <g>
+                <rect x="389" y="28" width="46" height="26" rx="5" fill="#2d1a4a" stroke="#a78bfa" stroke-width="2.5"/>
+                <text x="412" y="45" fill="white" font-size="12" text-anchor="middle" font-weight="bold">13,2</text>
+                <text x="412" y="20" fill="#a78bfa" font-size="9" text-anchor="middle" font-weight="bold">Q3 ↓</text>
+              </g>
+              <g>
+                <rect x="441" y="28" width="46" height="26" rx="5" fill="#1e293b" stroke="#a78bfa" stroke-width="1.5"/>
+                <text x="464" y="45" fill="#a78bfa" font-size="12" text-anchor="middle" font-weight="bold">13,4</text>
+                <text x="464" y="20" fill="#94a3b8" font-size="9" text-anchor="middle">pos 9</text>
+              </g>
+              <g>
+                <rect x="488" y="28" width="46" height="26" rx="5" fill="#3a1c1c" stroke="#f87171" stroke-width="2"/>
+                <text x="511" y="45" fill="#f87171" font-size="12" text-anchor="middle" font-weight="bold">15,2</text>
+                <text x="511" y="20" fill="#f87171" font-size="9" text-anchor="middle">pos 10</text>
+              </g>
+            </svg>
+            <p style="font-size:12px;color:var(--muted);margin-top:8px;text-align:center">Q1 = mediana de los 5 valores inferiores = posición central = <strong style="color:#38bdf8">12,7</strong> &nbsp;|&nbsp; Q3 = mediana de los 5 superiores = <strong style="color:#a78bfa">13,2</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <strong>Calcular RIQ</strong>
+          <div style="background:#0b1220;padding:10px 14px;border-radius:6px;border:1px solid var(--border);margin:8px 0;font-size:15px">
+            RIQ = Q3 − Q1 = <span style="color:#a78bfa;font-weight:700">13,2</span> − <span style="color:#38bdf8;font-weight:700">12,7</span> = <strong class="val-good">0,5</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <strong>Calcular los límites de la "cerca"</strong>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0">
+            <div style="background:#0b1220;padding:10px;border-radius:6px;border:1px solid var(--bad)">
+              <div style="font-size:12px;color:var(--muted);margin-bottom:4px">Límite inferior</div>
+              <div style="font-size:14px">Q1 − 1,5 × RIQ</div>
+              <div style="font-size:14px">= 12,7 − 1,5 × 0,5</div>
+              <div style="font-size:14px">= 12,7 − 0,75</div>
+              <div style="font-size:16px;font-weight:700;color:var(--good);margin-top:4px">= 11,95</div>
+            </div>
+            <div style="background:#0b1220;padding:10px;border-radius:6px;border:1px solid var(--bad)">
+              <div style="font-size:12px;color:var(--muted);margin-bottom:4px">Límite superior</div>
+              <div style="font-size:14px">Q3 + 1,5 × RIQ</div>
+              <div style="font-size:14px">= 13,2 + 1,5 × 0,5</div>
+              <div style="font-size:14px">= 13,2 + 0,75</div>
+              <div style="font-size:16px;font-weight:700;color:var(--good);margin-top:4px">= 13,95</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <strong>Verificar cada dato contra los límites</strong>
+          <div style="background:#0b1220;border-radius:8px;padding:16px;margin:10px 0;border:1px solid var(--border)">
+            <svg viewBox="0 0 540 80" style="width:100%;display:block">
+              <line x1="30" y1="45" x2="510" y2="45" stroke="#334155" stroke-width="2"/>
+              <rect x="105" y="30" width="310" height="30" fill="#143526" opacity="0.6" rx="4"/>
+              <text x="260" y="26" fill="#34d399" font-size="10" text-anchor="middle">zona segura [11,95 — 13,95]</text>
+              <line x1="105" y1="25" x2="105" y2="65" stroke="#f87171" stroke-width="2"/>
+              <text x="105" y="20" fill="#f87171" font-size="10" text-anchor="middle">11,95</text>
+              <line x1="415" y1="25" x2="415" y2="65" stroke="#f87171" stroke-width="2"/>
+              <text x="415" y="20" fill="#f87171" font-size="10" text-anchor="middle">13,95</text>
+              <circle cx="115" cy="45" r="5" fill="#38bdf8"/><text x="115" y="70" fill="#94a3b8" font-size="8" text-anchor="middle">12,3</text>
+              <circle cx="137" cy="45" r="5" fill="#38bdf8"/><text x="137" y="70" fill="#94a3b8" font-size="8" text-anchor="middle">12,5</text>
+              <circle cx="158" cy="45" r="6" fill="#38bdf8" stroke="#fde68a" stroke-width="2"/><text x="158" y="70" fill="#fde68a" font-size="8" text-anchor="middle">Q1=12,7</text>
+              <circle cx="169" cy="45" r="5" fill="#38bdf8"/>
+              <circle cx="180" cy="45" r="5" fill="#38bdf8"/>
+              <circle cx="190" cy="45" r="5" fill="#a78bfa"/>
+              <line x1="185" y1="33" x2="185" y2="57" stroke="#fde68a" stroke-width="1.5" stroke-dasharray="3"/>
+              <circle cx="201" cy="45" r="5" fill="#a78bfa"/>
+              <circle cx="212" cy="45" r="6" fill="#a78bfa" stroke="#fde68a" stroke-width="2"/><text x="212" y="70" fill="#fde68a" font-size="8" text-anchor="middle">Q3=13,2</text>
+              <circle cx="234" cy="45" r="5" fill="#a78bfa"/>
+              <circle cx="424" cy="45" r="7" fill="#f87171" stroke="white" stroke-width="1.5"/>
+              <text x="424" y="18" fill="#f87171" font-size="10" text-anchor="middle" font-weight="bold">15,2</text>
+              <text x="424" y="70" fill="#f87171" font-size="9" text-anchor="middle">OUTLIER</text>
+            </svg>
+          </div>
+          <div class="card answer">
+            15,2 &gt; 13,95 → <strong class="val-bad">ES OUTLIER ✓</strong><br>
+            El resto de los datos está dentro del rango [11,95 ; 13,95] → no son outliers
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 

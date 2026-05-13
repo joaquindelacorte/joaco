@@ -260,53 +260,175 @@ td code{background:#0b1220;padding:1px 5px;border-radius:3px;font-size:12px;colo
       </div>
     </div>
 
-    <!-- PROBABILIDAD -->
+    <!-- PROBABILIDAD CON DIAGRAMAS DE VENN -->
     <div class="card formula" style="margin-bottom:14px">
-      <h4>Probabilidad — de dónde sale cada cosa</h4>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0">
-        <div style="background:#0b1220;border-radius:8px;padding:10px 14px">
-          <div style="font-size:16px;font-weight:700;color:var(--accent);margin-bottom:6px">P(A∪B) = P(A)+P(B)−P(A∩B)</div>
-          <div style="font-size:12px;color:var(--muted)"><span style="color:var(--accent2)">P(A∪B)</span> = prob de que ocurra A <em>o</em> B (al menos uno)<br>
-          Se resta P(A∩B) para no contar dos veces la intersección</div>
+      <h4>Probabilidad — diagramas de Venn</h4>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin:10px 0">
+
+        <!-- P(A) -->
+        <div style="background:#0b1220;border-radius:8px;padding:10px 12px;text-align:center">
+          <svg viewBox="0 0 120 80" style="width:100%;max-width:120px;display:block;margin:0 auto">
+            <rect x="2" y="2" width="116" height="76" rx="6" fill="none" stroke="#334155" stroke-width="1.5"/>
+            <circle cx="45" cy="40" r="28" fill="#1e3a5f" stroke="#38bdf8" stroke-width="2"/>
+            <circle cx="75" cy="40" r="28" fill="none" stroke="#334155" stroke-width="1.5"/>
+            <text x="34" y="38" fill="#38bdf8" font-size="13" font-weight="700">A</text>
+            <text x="70" y="38" fill="#64748b" font-size="13" font-weight="700">B</text>
+            <text x="60" y="73" fill="#94a3b8" font-size="8" text-anchor="middle">S (espacio muestral)</text>
+          </svg>
+          <div style="font-size:13px;font-weight:700;color:var(--accent);margin:4px 0">P(A)</div>
+          <div style="font-size:11px;color:var(--muted)">Solo el círculo A</div>
         </div>
-        <div style="background:#0b1220;border-radius:8px;padding:10px 14px">
-          <div style="font-size:16px;font-weight:700;color:var(--accent);margin-bottom:6px">P(A|B) = P(A∩B) / P(B)</div>
-          <div style="font-size:12px;color:var(--muted)"><span style="color:var(--accent2)">P(A|B)</span> = prob de A <em>dado que ya ocurrió</em> B<br>
-          <span style="color:var(--accent2)">P(A∩B)</span> = casos donde ocurren los dos / total<br>
-          <span style="color:var(--accent2)">P(B)</span> = denominador = el universo se "achica" a B</div>
+
+        <!-- P(Aᶜ) complemento -->
+        <div style="background:#0b1220;border-radius:8px;padding:10px 12px;text-align:center">
+          <svg viewBox="0 0 120 80" style="width:100%;max-width:120px;display:block;margin:0 auto">
+            <rect x="2" y="2" width="116" height="76" rx="6" fill="#1e3a5f" stroke="#38bdf8" stroke-width="1.5"/>
+            <circle cx="45" cy="40" r="28" fill="#0b1220" stroke="#38bdf8" stroke-width="2"/>
+            <circle cx="75" cy="40" r="28" fill="#1e3a5f" stroke="#334155" stroke-width="1.5"/>
+            <text x="34" y="38" fill="#64748b" font-size="13" font-weight="700">A</text>
+            <text x="70" y="38" fill="#38bdf8" font-size="11" font-weight="700">Aᶜ</text>
+            <text x="60" y="73" fill="#94a3b8" font-size="8" text-anchor="middle">P(Aᶜ) = 1 − P(A)</text>
+          </svg>
+          <div style="font-size:13px;font-weight:700;color:var(--accent);margin:4px 0">P(Aᶜ) = 1 − P(A)</div>
+          <div style="font-size:11px;color:var(--muted)">Todo lo que NO es A</div>
         </div>
-        <div style="background:#0b1220;border-radius:8px;padding:10px 14px">
-          <div style="font-size:16px;font-weight:700;color:var(--accent);margin-bottom:6px">Independencia: P(A∩B) = P(A)·P(B)</div>
-          <div style="font-size:12px;color:var(--muted)">Si esto se cumple → A y B no se afectan entre sí<br>
-          Si <strong>no</strong> se cumple → NO son independientes</div>
+
+        <!-- P(A∩B) intersección -->
+        <div style="background:#0b1220;border-radius:8px;padding:10px 12px;text-align:center">
+          <svg viewBox="0 0 120 80" style="width:100%;max-width:120px;display:block;margin:0 auto">
+            <rect x="2" y="2" width="116" height="76" rx="6" fill="none" stroke="#334155" stroke-width="1.5"/>
+            <circle cx="45" cy="40" r="28" fill="none" stroke="#38bdf8" stroke-width="2"/>
+            <circle cx="75" cy="40" r="28" fill="none" stroke="#a78bfa" stroke-width="2"/>
+            <clipPath id="capB"><circle cx="75" cy="40" r="28"/></clipPath>
+            <circle cx="45" cy="40" r="28" fill="#2d4a6e" clip-path="url(#capB)"/>
+            <text x="28" y="38" fill="#38bdf8" font-size="13" font-weight="700">A</text>
+            <text x="85" y="38" fill="#a78bfa" font-size="13" font-weight="700">B</text>
+            <text x="60" y="73" fill="#94a3b8" font-size="8" text-anchor="middle">A y B simultáneamente</text>
+          </svg>
+          <div style="font-size:13px;font-weight:700;color:var(--accent);margin:4px 0">P(A∩B)</div>
+          <div style="font-size:11px;color:var(--muted)">Zona donde se superponen</div>
         </div>
-        <div style="background:#0b1220;border-radius:8px;padding:10px 14px">
-          <div style="font-size:16px;font-weight:700;color:var(--accent);margin-bottom:6px">P(A) = casos favorables / total</div>
-          <div style="font-size:12px;color:var(--muted)">Ej: P(M) = unidades con falla M / total<br>
-          Siempre incluye <em>todos</em> los que tienen M, incluso los que también tienen E</div>
+
+        <!-- P(A∪B) unión -->
+        <div style="background:#0b1220;border-radius:8px;padding:10px 12px;text-align:center">
+          <svg viewBox="0 0 120 80" style="width:100%;max-width:120px;display:block;margin:0 auto">
+            <rect x="2" y="2" width="116" height="76" rx="6" fill="none" stroke="#334155" stroke-width="1.5"/>
+            <circle cx="45" cy="40" r="28" fill="#1e3a5f" stroke="#38bdf8" stroke-width="2"/>
+            <circle cx="75" cy="40" r="28" fill="#2d1a4a" stroke="#a78bfa" stroke-width="2"/>
+            <clipPath id="capA2"><circle cx="45" cy="40" r="28"/></clipPath>
+            <circle cx="75" cy="40" r="28" fill="#2d4a6e" clip-path="url(#capA2)"/>
+            <text x="28" y="38" fill="#38bdf8" font-size="13" font-weight="700">A</text>
+            <text x="85" y="38" fill="#a78bfa" font-size="13" font-weight="700">B</text>
+            <text x="60" y="73" fill="#94a3b8" font-size="8" text-anchor="middle">A o B (al menos uno)</text>
+          </svg>
+          <div style="font-size:13px;font-weight:700;color:var(--accent);margin:4px 0">P(A∪B)</div>
+          <div style="font-size:11px;color:var(--muted)">= P(A)+P(B)−P(A∩B)</div>
         </div>
+
+        <!-- P(A|B) condicional -->
+        <div style="background:#0b1220;border-radius:8px;padding:10px 12px;text-align:center">
+          <svg viewBox="0 0 120 80" style="width:100%;max-width:120px;display:block;margin:0 auto">
+            <rect x="2" y="2" width="116" height="76" rx="6" fill="none" stroke="#334155" stroke-width="1.5"/>
+            <circle cx="45" cy="40" r="28" fill="none" stroke="#334155" stroke-width="1.5"/>
+            <circle cx="75" cy="40" r="28" fill="#1a2c1a" stroke="#34d399" stroke-width="2.5"/>
+            <clipPath id="capB2"><circle cx="75" cy="40" r="28"/></clipPath>
+            <circle cx="45" cy="40" r="28" fill="#34d399" opacity="0.35" clip-path="url(#capB2)"/>
+            <text x="28" y="38" fill="#64748b" font-size="13" font-weight="700">A</text>
+            <text x="85" y="38" fill="#34d399" font-size="13" font-weight="700">B</text>
+            <text x="60" y="73" fill="#94a3b8" font-size="8" text-anchor="middle">universo = B</text>
+          </svg>
+          <div style="font-size:13px;font-weight:700;color:var(--accent);margin:4px 0">P(A|B)</div>
+          <div style="font-size:11px;color:var(--muted)">Dentro de B, ¿qué parte es A?<br>= P(A∩B) / P(B)</div>
+        </div>
+
+        <!-- Mutuamente excluyentes -->
+        <div style="background:#0b1220;border-radius:8px;padding:10px 12px;text-align:center">
+          <svg viewBox="0 0 120 80" style="width:100%;max-width:120px;display:block;margin:0 auto">
+            <rect x="2" y="2" width="116" height="76" rx="6" fill="none" stroke="#334155" stroke-width="1.5"/>
+            <circle cx="33" cy="40" r="24" fill="#1e3a5f" stroke="#38bdf8" stroke-width="2"/>
+            <circle cx="87" cy="40" r="24" fill="#2d1a4a" stroke="#a78bfa" stroke-width="2"/>
+            <text x="33" y="44" fill="#38bdf8" font-size="13" font-weight="700" text-anchor="middle">A</text>
+            <text x="87" y="44" fill="#a78bfa" font-size="13" font-weight="700" text-anchor="middle">B</text>
+            <text x="60" y="73" fill="#94a3b8" font-size="8" text-anchor="middle">P(A∩B) = 0</text>
+          </svg>
+          <div style="font-size:13px;font-weight:700;color:var(--warn);margin:4px 0">Mutuamente excluyentes</div>
+          <div style="font-size:11px;color:var(--muted)">No se superponen<br>P(A∪B) = P(A)+P(B)</div>
+        </div>
+
+        <!-- Independientes -->
+        <div style="background:#0b1220;border-radius:8px;padding:10px 12px;text-align:center">
+          <svg viewBox="0 0 120 80" style="width:100%;max-width:120px;display:block;margin:0 auto">
+            <rect x="2" y="2" width="116" height="76" rx="6" fill="none" stroke="#334155" stroke-width="1.5"/>
+            <circle cx="45" cy="40" r="28" fill="#1e3a5f" stroke="#38bdf8" stroke-width="2"/>
+            <circle cx="75" cy="40" r="28" fill="#2d1a4a" stroke="#a78bfa" stroke-width="2"/>
+            <clipPath id="capInd"><circle cx="75" cy="40" r="28"/></clipPath>
+            <circle cx="45" cy="40" r="28" fill="#2d4a6e" clip-path="url(#capInd)"/>
+            <line x1="58" y1="20" x2="62" y2="60" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3"/>
+            <text x="28" y="38" fill="#38bdf8" font-size="13" font-weight="700">A</text>
+            <text x="85" y="38" fill="#a78bfa" font-size="13" font-weight="700">B</text>
+            <text x="60" y="73" fill="#94a3b8" font-size="8" text-anchor="middle">P(A∩B)=P(A)·P(B)</text>
+          </svg>
+          <div style="font-size:13px;font-weight:700;color:var(--good);margin:4px 0">Independientes</div>
+          <div style="font-size:11px;color:var(--muted)">Se superponen pero no se influyen<br>P(A|B) = P(A)</div>
+        </div>
+
       </div>
+      <!-- Tabla resumen -->
+      <table style="margin-top:6px;font-size:13px">
+        <thead><tr><th>Operación</th><th>Fórmula</th><th>En palabras</th></tr></thead>
+        <tbody>
+          <tr><td>P(A)</td><td style="color:var(--yellow)">casos favorables / total</td><td style="color:var(--muted)">Regla de Laplace</td></tr>
+          <tr><td>P(Aᶜ)</td><td style="color:var(--yellow)">1 − P(A)</td><td style="color:var(--muted)">Complemento — todo lo que NO es A</td></tr>
+          <tr><td>P(A∪B)</td><td style="color:var(--yellow)">P(A)+P(B)−P(A∩B)</td><td style="color:var(--muted)">A <strong>o</strong> B (al menos uno). Se resta la intersección para no contarla doble</td></tr>
+          <tr><td>P(A∩B)</td><td style="color:var(--yellow)">P(A|B)·P(B)</td><td style="color:var(--muted)">A <strong>y</strong> B a la vez</td></tr>
+          <tr><td>P(A|B)</td><td style="color:var(--yellow)">P(A∩B) / P(B)</td><td style="color:var(--muted)">A dado B — universo se achica a B</td></tr>
+          <tr><td>Independencia</td><td style="color:var(--yellow)">P(A∩B) = P(A)·P(B)</td><td style="color:var(--muted)">Si se cumple → saber B no cambia prob de A</td></tr>
+          <tr><td>Excl. mutuos</td><td style="color:var(--yellow)">P(A∩B) = 0</td><td style="color:var(--muted)">No pueden ocurrir juntos → P(A∪B)=P(A)+P(B)</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- BINOMIAL -->
     <div class="card formula" style="margin-bottom:14px">
       <h4>Binomial — X ~ B(n, p)</h4>
-      <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;margin:10px 0">
-        <div style="font-size:20px;font-weight:700;color:var(--accent)">P(X=k) = C(n,k) · p<sup>k</sup> · (1−p)<sup>n−k</sup></div>
+
+      <!-- Condiciones -->
+      <div style="background:#0b1220;border:1px solid var(--warn);border-radius:8px;padding:10px 14px;margin:10px 0">
+        <div style="font-size:12px;font-weight:700;color:var(--warn);margin-bottom:8px;letter-spacing:.5px">✓ CONDICIONES — deben cumplirse las 4</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <div style="display:flex;gap:8px;align-items:flex-start;font-size:13px">
+            <span style="color:var(--good);font-weight:700;flex-shrink:0">1.</span>
+            <span><strong style="color:var(--text)">n fijo y conocido</strong><br><span style="color:var(--muted);font-size:11px">Ej: "se inspeccionan 25 piezas"</span></span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:flex-start;font-size:13px">
+            <span style="color:var(--good);font-weight:700;flex-shrink:0">2.</span>
+            <span><strong style="color:var(--text)">Solo 2 resultados</strong><br><span style="color:var(--muted);font-size:11px">éxito (defecto) / fracaso (ok)</span></span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:flex-start;font-size:13px">
+            <span style="color:var(--good);font-weight:700;flex-shrink:0">3.</span>
+            <span><strong style="color:var(--text)">p constante</strong><br><span style="color:var(--muted);font-size:11px">igual probabilidad en cada ensayo</span></span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:flex-start;font-size:13px">
+            <span style="color:var(--good);font-weight:700;flex-shrink:0">4.</span>
+            <span><strong style="color:var(--text)">Ensayos independientes</strong><br><span style="color:var(--muted);font-size:11px">una pieza no afecta a la siguiente</span></span>
+          </div>
+        </div>
       </div>
+
+      <div style="font-size:20px;font-weight:700;color:var(--accent);margin:10px 0">P(X=k) = C(n,k) · p<sup>k</sup> · (1−p)<sup>n−k</sup></div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin:8px 0">
-        <span style="background:#0b1220;border:1px solid var(--accent);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--accent);font-weight:700">n</span> = total de ensayos (piezas, intentos…)</span>
-        <span style="background:#0b1220;border:1px solid var(--pink);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--pink);font-weight:700">k</span> = cantidad de éxitos que busco</span>
-        <span style="background:#0b1220;border:1px solid var(--good);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--good);font-weight:700">p</span> = probabilidad de éxito en cada ensayo</span>
-        <span style="background:#0b1220;border:1px solid var(--warn);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--warn);font-weight:700">C(n,k)</span> = n!/(k!·(n−k)!) = "combinatorio"</span>
-        <span style="background:#0b1220;border:1px solid var(--accent2);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--accent2);font-weight:700">(1−p)^(n−k)</span> = prob de los fracasos restantes</span>
+        <span style="background:#0b1220;border:1px solid var(--accent);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--accent);font-weight:700">n</span> = total de ensayos</span>
+        <span style="background:#0b1220;border:1px solid var(--pink);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--pink);font-weight:700">k</span> = éxitos que busco</span>
+        <span style="background:#0b1220;border:1px solid var(--good);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--good);font-weight:700">p</span> = prob de éxito por ensayo</span>
+        <span style="background:#0b1220;border:1px solid var(--warn);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--warn);font-weight:700">C(n,k)</span> = n!/(k!·(n−k)!)</span>
+        <span style="background:#0b1220;border:1px solid var(--accent2);border-radius:6px;padding:4px 10px;font-size:13px"><span style="color:var(--accent2);font-weight:700">(1−p)^(n−k)</span> = prob de los fracasos</span>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
         <div style="background:#143526;border-radius:6px;padding:8px 12px;font-size:13px">
-          <strong style="color:var(--good)">E[X] = n·p</strong> — esperanza: cuántos éxitos espero en promedio
+          <strong style="color:var(--good)">E[X] = n·p</strong> — cuántos éxitos en promedio
         </div>
         <div style="background:#143526;border-radius:6px;padding:8px 12px;font-size:13px">
-          <strong style="color:var(--good)">σ = √(n·p·(1−p))</strong> — dispersión esperada
+          <strong style="color:var(--good)">σ = √(n·p·(1−p))</strong> — dispersión
         </div>
       </div>
     </div>
@@ -314,15 +436,31 @@ td code{background:#0b1220;padding:1px 5px;border-radius:3px;font-size:12px;colo
     <!-- VAR ALEATORIA -->
     <div class="card formula" style="margin-bottom:14px">
       <h4>Variable aleatoria discreta</h4>
+
+      <!-- Condiciones -->
+      <div style="background:#0b1220;border:1px solid var(--accent2);border-radius:8px;padding:10px 14px;margin:10px 0">
+        <div style="font-size:12px;font-weight:700;color:var(--accent2);margin-bottom:8px;letter-spacing:.5px">✓ CONDICIONES para que sea distribución válida</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap">
+          <div style="display:flex;gap:8px;align-items:center;font-size:13px">
+            <span style="color:var(--good);font-weight:700">1.</span>
+            <span><strong style="color:var(--text)">Σ P(xᵢ) = 1</strong> <span style="color:var(--muted)">— la suma de todas las probabilidades debe ser exactamente 1</span></span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;font-size:13px">
+            <span style="color:var(--good);font-weight:700">2.</span>
+            <span><strong style="color:var(--text)">0 ≤ P(xᵢ) ≤ 1</strong> <span style="color:var(--muted)">— ninguna probabilidad puede ser negativa ni mayor a 1</span></span>
+          </div>
+        </div>
+      </div>
+
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0">
         <div style="background:#0b1220;border-radius:8px;padding:10px 14px">
           <div style="font-size:15px;font-weight:700;color:var(--accent);margin-bottom:6px">E[X] = Σ xᵢ · P(xᵢ)</div>
-          <div style="font-size:12px;color:var(--muted)">Multiplicar cada valor posible por su probabilidad y sumar todo.<br>
-          <span style="color:var(--accent2)">xᵢ</span> = el valor (0, 1, 2…) · <span style="color:var(--good)">P(xᵢ)</span> = su prob</div>
+          <div style="font-size:12px;color:var(--muted)">Multiplicar cada valor por su probabilidad y sumar.<br>
+          <span style="color:var(--accent2)">xᵢ</span> = valor (0,1,2…) · <span style="color:var(--good)">P(xᵢ)</span> = su prob</div>
         </div>
         <div style="background:#0b1220;border-radius:8px;padding:10px 14px">
           <div style="font-size:15px;font-weight:700;color:var(--accent);margin-bottom:6px">Var(X) = E[X²] − (E[X])²</div>
-          <div style="font-size:12px;color:var(--muted)">1° calcular <span style="color:var(--accent2)">E[X²] = Σ xᵢ² · P(xᵢ)</span> (igual que E[X] pero con xᵢ²)<br>
+          <div style="font-size:12px;color:var(--muted)">1° <span style="color:var(--accent2)">E[X²] = Σ xᵢ² · P(xᵢ)</span><br>
           2° restar el cuadrado de la esperanza<br>
           3° <span style="color:var(--good)">σ = √Var(X)</span></div>
         </div>

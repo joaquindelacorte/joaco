@@ -160,6 +160,9 @@ td code{background:#0b1220;padding:1px 5px;border-radius:3px;font-size:12px;colo
   <a href="#ej7" id="nav7"><span class="num">7</span> Lectura de histograma</a>
   <a href="#ej8" id="nav8"><span class="num">8</span> Binomial integrador</a>
 
+  <div class="nav-section">Práctica</div>
+  <a href="#quiz">🎯 Quiz (20 preguntas)</a>
+
   <div class="nav-section">Progreso</div>
   <label class="nav-check"><input type="checkbox" onchange="markDone(1,this)"> Ej 1 listo</label>
   <label class="nav-check"><input type="checkbox" onchange="markDone(2,this)"> Ej 2 listo</label>
@@ -309,7 +312,7 @@ td code{background:#0b1220;padding:1px 5px;border-radius:3px;font-size:12px;colo
     </div>
 
     <!-- VAR ALEATORIA -->
-    <div class="card formula">
+    <div class="card formula" style="margin-bottom:14px">
       <h4>Variable aleatoria discreta</h4>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0">
         <div style="background:#0b1220;border-radius:8px;padding:10px 14px">
@@ -322,6 +325,53 @@ td code{background:#0b1220;padding:1px 5px;border-radius:3px;font-size:12px;colo
           <div style="font-size:12px;color:var(--muted)">1° calcular <span style="color:var(--accent2)">E[X²] = Σ xᵢ² · P(xᵢ)</span> (igual que E[X] pero con xᵢ²)<br>
           2° restar el cuadrado de la esperanza<br>
           3° <span style="color:var(--good)">σ = √Var(X)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BERNOULLI -->
+    <div class="card formula" style="margin-bottom:14px">
+      <h4>Distribución de Bernoulli — X ~ Bi(1, p) &nbsp;<span style="font-size:11px;color:var(--muted);font-weight:400">caso especial de binomial con n=1</span></h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0">
+        <div style="background:#0b1220;border-radius:8px;padding:10px 14px">
+          <div style="font-size:13px;margin-bottom:6px"><span style="color:var(--accent);font-weight:700">P(X=1) = p</span> &nbsp; <span style="color:var(--muted)">éxito</span><br>
+          <span style="color:var(--accent);font-weight:700">P(X=0) = 1−p</span> &nbsp; <span style="color:var(--muted)">fracaso</span></div>
+          <div style="font-size:12px;color:var(--muted)">Solo 2 resultados posibles: ocurre (1) o no ocurre (0)</div>
+        </div>
+        <div style="background:#0b1220;border-radius:8px;padding:10px 14px">
+          <div style="font-size:13px;margin-bottom:6px"><span style="color:var(--good);font-weight:700">E[X] = p</span><br>
+          <span style="color:var(--good);font-weight:700">Var(X) = p·(1−p)</span></div>
+          <div style="font-size:12px;color:var(--muted)">Ej: moneda justa (p=0,5) → E[X]=0,5 · Var=0,25<br>Ej: defecto (p=0,03) → E[X]=0,03 · Var=0,0291</div>
+        </div>
+      </div>
+      <div style="background:#143526;border-radius:6px;padding:8px 12px;font-size:12px">
+        <strong style="color:var(--good)">Binomial = n ensayos de Bernoulli independientes.</strong> Si X~Bi(n,p), cada ensayo individual es Bernoulli(p).
+      </div>
+    </div>
+
+    <!-- LAPLACE + COMPLEMENTO + EXCLUYENTES -->
+    <div class="card formula">
+      <h4>Reglas de probabilidad que faltan</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:10px 0">
+        <div style="background:#0b1220;border-radius:8px;padding:10px 14px">
+          <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px">Regla de Laplace</div>
+          <div style="font-size:16px;font-weight:700;color:var(--yellow);margin-bottom:6px">P(A) = #A / #S</div>
+          <div style="font-size:12px;color:var(--muted)"><span style="color:var(--accent2)">#A</span> = casos favorables a A<br>
+          <span style="color:var(--accent2)">#S</span> = total de casos posibles (espacio muestral)<br>
+          Requiere que todos los casos sean <em>igualmente probables</em></div>
+        </div>
+        <div style="background:#0b1220;border-radius:8px;padding:10px 14px">
+          <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px">Regla del complemento</div>
+          <div style="font-size:16px;font-weight:700;color:var(--yellow);margin-bottom:6px">P(Aᶜ) = 1 − P(A)</div>
+          <div style="font-size:12px;color:var(--muted)"><span style="color:var(--accent2)">Aᶜ</span> = "no A" = todo lo que NO es A<br>
+          Súper útil para P(X≥k): calcular 1−P(X≤k−1) en lugar de sumar infinitos términos</div>
+        </div>
+        <div style="background:#0b1220;border-radius:8px;padding:10px 14px">
+          <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px">Suma — mutuamente excluyentes</div>
+          <div style="font-size:16px;font-weight:700;color:var(--yellow);margin-bottom:6px">P(A∪B) = P(A)+P(B)</div>
+          <div style="font-size:12px;color:var(--muted)">Cuando A y B <em>no pueden ocurrir juntos</em> → P(A∩B)=0<br>
+          Ej: "cara" y "cruz" en una moneda.<br>
+          <span style="color:var(--bad)">Si NO son excluyentes</span> → restar P(A∩B)</div>
         </div>
       </div>
     </div>
@@ -1258,6 +1308,27 @@ td code{background:#0b1220;padding:1px 5px;border-radius:3px;font-size:12px;colo
     </div>
   </div>
 
+  <!-- ═══════════════ QUIZ ═══════════════ -->
+  <div class="section" id="quiz">
+    <div class="section-header">
+      <span class="section-num">QUIZ</span>
+      <h2>Quiz de práctica — 20 preguntas</h2>
+    </div>
+
+    <div class="card key" style="margin-bottom:18px">
+      Elegí una opción por pregunta. Al final hacé clic en <strong>Ver resultado</strong> para ver el puntaje y las explicaciones de las respuestas incorrectas.
+    </div>
+
+    <div id="quiz-form"></div>
+
+    <div style="margin:24px 0;display:flex;gap:12px;flex-wrap:wrap">
+      <button class="toggle-btn" onclick="submitQuiz()" style="background:var(--accent);color:#0b1220;font-weight:700;padding:10px 24px;font-size:15px">Ver resultado</button>
+      <button class="toggle-btn" onclick="resetQuiz()">Reiniciar</button>
+    </div>
+
+    <div id="quiz-result" style="display:none"></div>
+  </div>
+
   <!-- ═══════════════ FOOTER ═══════════════ -->
   <div style="border-top:1px solid var(--border);padding-top:20px;margin-top:20px;color:var(--muted);font-size:13px">
     Estadística · Automatización y Control · <a href="index.html" style="color:var(--accent)">← Volver al inicio</a>
@@ -1267,8 +1338,241 @@ td code{background:#0b1220;padding:1px 5px;border-radius:3px;font-size:12px;colo
 </div>
 
 <script>
-// Mark done en sidebar
+// ── QUIZ DATA ──
+const QUIZ = [
+  {
+    q: "La temperatura del horno (°C) es una variable:",
+    opts: ["Cualitativa nominal","Cuantitativa continua","Cuantitativa discreta","Cualitativa ordinal"],
+    a: 1,
+    exp: "La temperatura puede tomar cualquier valor real (ej: 243,7°C), no solo enteros. Por eso es <strong>cuantitativa continua</strong>. Si fueran solo enteros sería discreta; si fuera una categoría sería cualitativa."
+  },
+  {
+    q: "El código del operario (OP-001, OP-002, OP-003) es:",
+    opts: ["Cuantitativa discreta, porque son números","Cualitativa ordinal, porque tienen orden numérico","Cualitativa nominal","Cuantitativa continua"],
+    a: 2,
+    exp: "Los códigos son <strong>etiquetas sin orden ni distancia matemática</strong>. OP-002 no es 'el doble' de OP-001. No tiene sentido sumarlos ni ordenarlos → cualitativa nominal."
+  },
+  {
+    q: "Datos ordenados: {12,3; 12,5; 12,7; 12,8; 12,9; 13,0; 13,1; 13,2; 13,4; 15,2} (n=10). La mediana es:",
+    opts: ["12,9","12,95","13,0","13,11"],
+    a: 1,
+    exp: "Con n=10 (par), la mediana = promedio de posición n/2 y n/2+1 = posición 5 y 6. Pos 5 = 12,9 · Pos 6 = 13,0. <strong>Mediana = (12,9 + 13,0) / 2 = 12,95</strong>. El 13,11 es la media, no la mediana."
+  },
+  {
+    q: "Con Q1=12,7 · Q3=13,2 · RIQ=0,5, el límite superior para detectar outliers es:",
+    opts: ["13,70","14,20","13,95","14,45"],
+    a: 2,
+    exp: "<strong>Límite sup = Q3 + 1,5 × RIQ = 13,2 + 1,5 × 0,5 = 13,2 + 0,75 = 13,95</strong>. El 13,70 sería Q3 + 1×RIQ (incorrecto). El factor siempre es 1,5, no 1 ni 2."
+  },
+  {
+    q: "¿Por qué la media (13,11) es mayor que la mediana (12,95) en ese conjunto de datos?",
+    opts: ["Hay más datos por encima de la media que por debajo","La distribución es asimétrica hacia la izquierda","El outlier 15,2 tira la media hacia arriba pero no afecta la mediana","Error de cálculo; deberían ser iguales"],
+    a: 2,
+    exp: "La media suma <em>todos</em> los valores, por eso un outlier grande la arrastra hacia arriba. La mediana solo depende de las posiciones centrales → <strong>es robusta a outliers</strong>. Cuando media > mediana hay sesgo a la derecha."
+  },
+  {
+    q: "800 unidades: 120 tienen SOLO falla mecánica (M) y 20 tienen AMBAS fallas. P(M) es:",
+    opts: ["120/800 = 0,150","140/800 = 0,175","20/800 = 0,025","160/800 = 0,200"],
+    a: 1,
+    exp: "<strong>P(M) incluye TODAS las que tienen falla mecánica</strong> = las de solo M + las de ambas = 120 + 20 = 140. Dividido 800 = 0,175. Error frecuente: usar solo los 120 de 'solo M'."
+  },
+  {
+    q: "P(M|E) = 0,20. ¿Cuál es la interpretación correcta?",
+    opts: ["El 20% del total de unidades tiene falla mecánica","Si una unidad tiene falla mecánica, la prob de que también tenga eléctrica es 20%","Si una unidad tiene falla eléctrica, la prob de que también tenga mecánica es 20%","La falla mecánica ocurre 20 veces más que la eléctrica"],
+    a: 2,
+    exp: "P(M|E) = 'probabilidad de M <strong>dado que ya ocurrió E</strong>'. El | se lee 'dado'. Acá E es la condición → el universo se achica a las unidades con falla eléctrica, y dentro de ese universo el 20% también tiene M."
+  },
+  {
+    q: "Para verificar si M y E son independientes con P(M)=0,175, P(E)=0,125, P(M∩E)=0,025, ¿qué se hace?",
+    opts: ["Verificar que P(M|E) = 1","Calcular P(M)·P(E) y comparar con P(M∩E)","Verificar que P(M∪E) = 1","Comprobar que P(M∩E) = 0"],
+    a: 1,
+    exp: "Condición de independencia: <strong>P(A∩B) = P(A)·P(B)</strong>. Acá: 0,175 × 0,125 = 0,021875 ≠ 0,025 → <strong>NO son independientes</strong>. Si P(M∩E)=0 significaría que son mutuamente excluyentes, no independientes."
+  },
+  {
+    q: "Regla del complemento: P(Aᶜ) = 1 − P(A). ¿Para qué sirve en distribuciones binomiales?",
+    opts: ["Para calcular la media más rápido","Para calcular P(X≥k) como 1−P(X≤k−1) sin sumar infinitos términos","Para verificar que la distribución es válida","Solo sirve en distribuciones discretas con menos de 5 valores"],
+    a: 1,
+    exp: "P(X≥3) = 1 − P(X≤2) es <strong>el truco fundamental</strong>. Sumar P(3)+P(4)+P(5)+... requiere infinitas operaciones. En cambio calcular solo P(0)+P(1)+P(2) y restar de 1 es rápido y exacto."
+  },
+  {
+    q: "Distribución de alarmas: P(0)=0,10 · P(1)=0,20 · P(2)=0,35 · P(3)=0,25 · P(4)=0,10. E[X] es:",
+    opts: ["2,00","1,95","2,05","2,10"],
+    a: 2,
+    exp: "E[X] = 0×0,10 + 1×0,20 + 2×0,35 + 3×0,25 + 4×0,10 = 0 + 0,20 + 0,70 + 0,75 + 0,40 = <strong>2,05</strong>. Error frecuente: calcular la media simple de {0,1,2,3,4} = 2,0 (eso no tiene en cuenta las probabilidades)."
+  },
+  {
+    q: "Con E[X]=2,05 y E[X²]=5,45, la varianza Var(X) es:",
+    opts: ["3,40","4,20","1,40","1,2475"],
+    a: 3,
+    exp: "Var(X) = E[X²] − (E[X])² = 5,45 − (2,05)² = 5,45 − 4,2025 = <strong>1,2475</strong>. Atención: (2,05)² = 4,2025, no 4,10. El error más común es calcular mal el cuadrado de la esperanza."
+  },
+  {
+    q: "Para X~Bernoulli(p=0,3), la varianza Var(X) es:",
+    opts: ["0,30","0,09","0,21","0,70"],
+    a: 2,
+    exp: "Para Bernoulli: <strong>Var(X) = p·(1−p) = 0,3 × 0,7 = 0,21</strong>. No confundir: 0,30 es E[X], 0,09 es p², 0,70 es (1−p). La varianza es siempre p·(1−p)."
+  },
+  {
+    q: "X~Binomial(n=25, p=0,03). El desvío estándar σ es aproximadamente:",
+    opts: ["0,75 (la media)","0,7275 (la varianza)","0,853","0,03 (la probabilidad)"],
+    a: 2,
+    exp: "σ = √(n·p·(1−p)) = √(25×0,03×0,97) = √0,7275 ≈ <strong>0,853</strong>. El 0,75 es la <em>media</em> (n·p). El 0,7275 es la <em>varianza</em>. El desvío es la raíz de la varianza."
+  },
+  {
+    q: "El combinatorio C(50,2) = 50!/(2!×48!) vale:",
+    opts: ["100","2.500","50","1.225"],
+    a: 3,
+    exp: "C(50,2) = (50×49)/(2×1) = 2450/2 = <strong>1225</strong>. Atajo: C(n,2) = n×(n−1)/2 siempre. El 100 sería 2×50, el 2500 sería 50² − no tienen sentido combinatorio."
+  },
+  {
+    q: "Para calcular P(X≥3) en una binomial, la estrategia correcta es:",
+    opts: ["Sumar P(3)+P(4)+P(5)+... hasta que los términos sean 0","Multiplicar P(3)×P(4)×P(5)","Calcular 1 − [P(0)+P(1)+P(2)]","Dividir E[X] por n"],
+    a: 2,
+    exp: "<strong>Complemento:</strong> P(X≥3) = 1 − P(X≤2) = 1 − [P(0)+P(1)+P(2)]. Una binomial puede tomar valores hasta n, así que sumar desde 3 hasta n puede ser muchos términos. El complemento siempre requiere solo calcular los primeros k términos."
+  },
+  {
+    q: "Un histograma con la cola hacia la derecha (asimétrico positivo) indica:",
+    opts: ["Media < Mediana","Media ≈ Mediana (distribución simétrica)","Media > Mediana","No se puede saber sin los datos exactos"],
+    a: 2,
+    exp: "La cola derecha = valores muy grandes. Esos valores <strong>arrastran la media hacia arriba</strong> pero no afectan la mediana (que depende de posiciones, no de valores absolutos). Regla: la media va en la dirección de la cola."
+  },
+  {
+    q: "Para n=36 datos, la cantidad de clases recomendada con la regla √n es:",
+    opts: ["4","9","6","12"],
+    a: 2,
+    exp: "k ≈ √n = √36 = <strong>6 clases</strong>. Con menos clases el histograma pierde detalle (todo aplastado). Con más queda muy 'picado' y difícil de leer. √n es la regla más simple y práctica."
+  },
+  {
+    q: "En un boxplot, la caja (rectángulo) representa:",
+    opts: ["El 25% de los datos con mayor valor","El 75% de los datos desde el mínimo","El rango completo de los datos","El 50% central de los datos, de Q1 a Q3"],
+    a: 3,
+    exp: "Los bordes de la caja son <strong>Q1 (percentil 25) y Q3 (percentil 75)</strong>. Entre ellos está exactamente el 50% central. El ancho de la caja = RIQ = medida de dispersión del centro. Caja angosta → datos más concentrados."
+  },
+  {
+    q: "Para elegir el lote con MÁXIMA ESTABILIDAD en un boxplot comparativo, se elige el que tiene:",
+    opts: ["Mediana más alta","Mayor cantidad de outliers","Caja más angosta y bigotes más cortos","Mayor rango entre mínimo y máximo"],
+    a: 2,
+    exp: "Estabilidad = <strong>baja variabilidad</strong>. La caja angosta → RIQ pequeño → el 50% central tiene poca dispersión. Los bigotes cortos → pocos valores extremos. La mediana alta indica promedio alto, no estabilidad."
+  },
+  {
+    q: "X~B(50, 0,02), E[X]=1, σ≈0,99. Si se observan 5 piezas defectuosas, ¿cuántos desvíos estándar se aleja del valor esperado?",
+    opts: ["Aproximadamente 2 desvíos","Exactamente 5 desvíos","Aproximadamente 4 desvíos","Menos de 1 desvío"],
+    a: 2,
+    exp: "z = (observado − esperado) / σ = (5 − 1) / 0,99 ≈ <strong>4,04 desvíos</strong>. Valores a más de 3σ tienen probabilidad &lt;0,3% → es evidencia fuerte de descontrol. Se recomienda detener producción e investigar."
+  }
+];
+
+// ── Render quiz ──
+function buildQuiz() {
+  const form = document.getElementById('quiz-form');
+  form.innerHTML = QUIZ.map((q, i) => `
+    <div class="quiz-item" id="qi${i}" style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin:12px 0">
+      <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:12px">
+        <span style="background:var(--panel2);color:var(--accent);font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;flex-shrink:0;margin-top:2px">P${i+1}</span>
+        <div style="font-size:14.5px;font-weight:500;line-height:1.5">${q.q}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        ${q.opts.map((o, j) => `
+          <label id="lbl${i}_${j}" style="display:flex;align-items:flex-start;gap:10px;background:#0b1220;border:2px solid var(--border);border-radius:7px;padding:9px 14px;cursor:pointer;transition:border-color .15s;font-size:13.5px">
+            <input type="radio" name="q${i}" value="${j}" style="accent-color:var(--accent);margin-top:2px;flex-shrink:0">
+            <span>${o}</span>
+          </label>
+        `).join('')}
+      </div>
+      <div id="fb${i}" style="display:none;margin-top:10px"></div>
+    </div>
+  `).join('');
+}
+
+function submitQuiz() {
+  let score = 0;
+  const wrongs = [];
+
+  QUIZ.forEach((q, i) => {
+    const sel = document.querySelector(`input[name="q${i}"]:checked`);
+    const chosen = sel ? parseInt(sel.value) : -1;
+    const correct = q.a;
+    const item = document.getElementById('qi' + i);
+    const fb = document.getElementById('fb' + i);
+
+    // Deshabilitar opciones
+    document.querySelectorAll(`input[name="q${i}"]`).forEach(r => r.disabled = true);
+
+    // Colorear opciones
+    q.opts.forEach((_, j) => {
+      const lbl = document.getElementById(`lbl${i}_${j}`);
+      if (j === correct) {
+        lbl.style.borderColor = 'var(--good)';
+        lbl.style.background = '#0d1f16';
+      } else if (j === chosen && chosen !== correct) {
+        lbl.style.borderColor = 'var(--bad)';
+        lbl.style.background = '#1f0d0d';
+      }
+    });
+
+    if (chosen === correct) {
+      score++;
+      item.style.borderColor = 'var(--good)';
+    } else {
+      item.style.borderColor = 'var(--bad)';
+      wrongs.push(i);
+      fb.style.display = 'block';
+      fb.innerHTML = `<div style="background:#1a0d18;border-left:3px solid var(--pink);border-radius:6px;padding:10px 14px;font-size:13px;line-height:1.55">
+        <strong style="color:var(--pink)">Por qué es incorrecta tu respuesta:</strong><br>
+        ${chosen === -1 ? '<em style="color:var(--muted)">No respondiste esta pregunta.</em><br>' : ''}
+        ${q.exp}
+      </div>`;
+    }
+  });
+
+  // Resultado final
+  const pct = Math.round((score / QUIZ.length) * 100);
+  const color = pct >= 80 ? 'var(--good)' : pct >= 60 ? 'var(--warn)' : 'var(--bad)';
+  const msg = pct >= 80 ? '¡Listo para el parcial!' : pct >= 60 ? 'Bien, repasá los temas marcados en rojo.' : 'Repasá los ejercicios antes del parcial.';
+
+  const result = document.getElementById('quiz-result');
+  result.style.display = 'block';
+
+  // Gauge SVG
+  const angle = (score / QUIZ.length) * 180;
+  const rad = angle * Math.PI / 180;
+  const cx = 110, cy = 90, r = 70;
+  const ex = cx + r * Math.cos(Math.PI - rad);
+  const ey = cy - r * Math.sin(Math.PI - rad);
+
+  result.innerHTML = `
+    <div style="background:var(--panel);border:2px solid ${color};border-radius:12px;padding:24px 28px;margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:28px;flex-wrap:wrap">
+        <svg viewBox="0 0 220 100" style="width:180px;flex-shrink:0">
+          <path d="M 40 90 A 70 70 0 0 1 180 90" fill="none" stroke="var(--border)" stroke-width="14" stroke-linecap="round"/>
+          <path d="M 40 90 A 70 70 0 0 1 ${ex.toFixed(1)} ${ey.toFixed(1)}" fill="none" stroke="${color}" stroke-width="14" stroke-linecap="round"/>
+          <text x="110" y="80" fill="white" font-size="28" font-weight="700" text-anchor="middle">${score}/${QUIZ.length}</text>
+          <text x="110" y="97" fill="${color}" font-size="13" font-weight="600" text-anchor="middle">${pct}%</text>
+        </svg>
+        <div>
+          <div style="font-size:22px;font-weight:700;color:${color};margin-bottom:6px">${msg}</div>
+          <div style="font-size:14px;color:var(--muted)">
+            ✓ Correctas: <strong style="color:var(--good)">${score}</strong> &nbsp;|&nbsp;
+            ✗ Incorrectas: <strong style="color:var(--bad)">${QUIZ.length - score}</strong>
+          </div>
+          ${wrongs.length > 0 ? `<div style="margin-top:10px;font-size:13px;color:var(--muted)">Preguntas a repasar: ${wrongs.map(w => `<span style="background:var(--panel2);color:var(--bad);padding:2px 7px;border-radius:4px;margin:2px;display:inline-block">P${w+1}</span>`).join('')}</div>` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+
+  result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetQuiz() {
+  document.getElementById('quiz-result').style.display = 'none';
+  buildQuiz();
+  document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ── Mark done en sidebar ──
 function markDone(n, checkbox) {
+
   const link = document.getElementById('nav' + n);
   if (checkbox.checked) {
     link.classList.add('done');
@@ -1294,6 +1598,8 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.3 });
 
 sections.forEach(s => observer.observe(s));
+
+buildQuiz();
 </script>
 </body>
 </html>

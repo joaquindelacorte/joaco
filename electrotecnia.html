@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Electrotecnia — Resumen Parcial</title>
+<style>
+:root{
+  --blue:#1a4e8a;--blue-lt:#2d6abf;--blue-bg:#e8f0fb;
+  --green:#15803d;--green-bg:#dcfce7;
+  --orange:#c05c00;--orange-bg:#fff3e0;
+  --red:#b91c1c;--red-bg:#fee2e2;
+  --purple:#7c3aed;--purple-bg:#ede9fe;
+  --yellow:#d97706;--yellow-bg:#fef9c3;
+  --gray:#374151;--gray-lt:#6b7280;
+  --bg:#f1f5f9;--card:#fff;--border:#e2e8f0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:var(--blue);display:flex;align-items:center;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.brand{color:#fff;font-size:1.05rem;font-weight:800;padding:.8rem 1.2rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.2)}
+.tabs{display:flex;overflow-x:auto;flex:1}
+.tab-btn{padding:.75rem 1.1rem;border:none;background:transparent;color:rgba(255,255,255,.75);font-size:.85rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tab-btn.active{color:#fff;border-bottom-color:#7dd3fc}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#0f2d5a 0%,var(--blue-lt) 100%);color:#fff;text-align:center;padding:2.5rem 1rem 2rem}
+.hero h1{font-size:2.2rem;font-weight:900;letter-spacing:-.5px}
+.hero p{opacity:.8;margin-top:.4rem}
+.badges{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.25rem .85rem;font-size:.78rem;font-weight:700}
+
+/* LAYOUT */
+.page{display:none}.page.active{display:block}
+.container{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+
+/* SECTION TITLE */
+.stitle{display:flex;align-items:center;gap:.6rem;font-size:1.25rem;font-weight:800;color:var(--blue);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid var(--blue-bg)}
+.stitle .ico{font-size:1.2rem}
+
+/* CARDS */
+.grid{display:grid;gap:1.1rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;box-shadow:0 1px 4px rgba(0,0,0,.05);transition:.2s}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.card h3{font-size:.97rem;font-weight:700;margin-bottom:.5rem;color:var(--blue)}
+.card p,.card li{font-size:.9rem;color:var(--gray)}
+.card.bl{border-left:4px solid var(--blue);background:var(--blue-bg)}
+.card.gr{border-left:4px solid var(--green);background:var(--green-bg)}
+.card.or{border-left:4px solid var(--orange);background:var(--orange-bg)}
+.card.re{border-left:4px solid var(--red);background:var(--red-bg)}
+.card.pu{border-left:4px solid var(--purple);background:var(--purple-bg)}
+
+/* FORMULA */
+.fbox{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1rem 1.3rem;font-family:'Courier New',monospace;text-align:center;margin:.7rem 0;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.fbox .big{font-size:1.35rem;font-weight:700;color:#7dd3fc;display:block;margin-bottom:.25rem}
+.fbox .sub{font-size:.82rem;color:#94a3b8;display:block;margin-top:.2rem}
+.fbox .unit{font-size:.78rem;color:#64748b;display:block;margin-top:.3rem}
+
+/* TABLE */
+.twrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th{background:var(--blue);color:#fff;padding:.65rem 1rem;text-align:left;font-weight:600}
+td{padding:.6rem 1rem;border-bottom:1px solid var(--border)}
+tr:last-child td{border:none}
+tr:nth-child(even) td{background:var(--blue-bg)}
+
+/* TIP */
+.tip{display:flex;gap:.7rem;align-items:flex-start;background:#fffbeb;border:1px solid #fbbf24;border-radius:10px;padding:.85rem 1.1rem;margin:.7rem 0;font-size:.88rem}
+.note{background:var(--blue-bg);border-left:4px solid var(--blue);border-radius:0 8px 8px 0;padding:.75rem 1rem;font-size:.9rem;margin:.7rem 0;color:var(--blue)}
+
+/* ACCORDION */
+details{border:1px solid var(--border);border-radius:10px;margin-bottom:.7rem;overflow:hidden}
+details summary{padding:.9rem 1.1rem;cursor:pointer;font-weight:600;font-size:.92rem;background:var(--card);list-style:none;display:flex;justify-content:space-between;align-items:center;user-select:none}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:'＋';color:var(--blue-lt)}
+details[open] summary::after{content:'－'}
+details[open] summary{background:var(--blue-bg);color:var(--blue)}
+.dbody{padding:1.1rem;background:var(--card);border-top:1px solid var(--border);font-size:.9rem;line-height:1.7}
+
+/* CHEAT DARK */
+.cheat{background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 100%);color:#e2e8f0;border-radius:14px;padding:1.8rem;margin:1rem 0}
+.cheat h2{color:#7dd3fc;font-size:1.1rem;margin-bottom:1.1rem;text-align:center}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.9rem}
+.citem{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:.85rem;text-align:center}
+.citem .lbl{font-size:.72rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.25rem}
+.citem .cf{font-family:'Courier New',monospace;font-size:1rem;color:#7dd3fc;font-weight:700}
+.citem .cu{font-size:.72rem;color:#64748b;margin-top:.2rem}
+
+/* LAW CARDS */
+.lawcard{border-radius:12px;padding:1.3rem;border:2px solid}
+.kvl{border-color:var(--blue);background:var(--blue-bg)}
+.kcl{border-color:var(--green);background:var(--green-bg)}
+.lawcard h3{font-size:.97rem;font-weight:700;margin-bottom:.5rem}
+.kvl h3{color:var(--blue)}.kcl h3{color:var(--green)}
+
+/* ══════════ QUIZ ══════════ */
+#quiz-container{max-width:720px;margin:0 auto}
+.quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:gap}
+.quiz-score-display{font-weight:700;font-size:1rem;color:var(--blue)}
+.progress-bar-wrap{background:var(--border);border-radius:2rem;height:8px;margin-bottom:1.5rem;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--blue-lt),#38bdf8);border-radius:2rem;transition:width .4s ease}
+
+.quiz-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.quiz-card .q-num{font-size:.8rem;font-weight:700;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem}
+.quiz-card .q-text{font-size:1.05rem;font-weight:600;color:var(--gray);margin-bottom:1.3rem;line-height:1.5}
+.quiz-card .hint{font-size:.82rem;font-family:'Courier New',monospace;background:#f1f5f9;border-radius:6px;padding:.4rem .7rem;color:var(--blue);display:inline-block;margin-bottom:1rem}
+
+.options{display:grid;gap:.65rem}
+.opt-btn{padding:.85rem 1.1rem;border:2px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;font-size:.9rem;text-align:left;transition:.2s;font-weight:500;color:var(--gray)}
+.opt-btn:hover:not(:disabled){border-color:var(--blue-lt);background:var(--blue-bg);color:var(--blue)}
+.opt-btn.correct{border-color:var(--green);background:var(--green-bg);color:var(--green);font-weight:700}
+.opt-btn.wrong{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+.opt-btn:disabled{cursor:default}
+
+.feedback-box{margin-top:1.1rem;padding:.9rem 1.1rem;border-radius:10px;font-size:.9rem;line-height:1.6;display:none}
+.feedback-box.show{display:block}
+.feedback-box.ok{background:var(--green-bg);border:1px solid var(--green);color:var(--green)}
+.feedback-box.ko{background:var(--red-bg);border:1px solid var(--red);color:var(--red)}
+
+.quiz-nav{display:flex;justify-content:flex-end;margin-top:1.2rem}
+.btn-next{padding:.75rem 1.8rem;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:700;cursor:pointer;transition:.2s}
+.btn-next:hover{background:var(--blue-lt)}
+.btn-next:disabled{opacity:.4;cursor:default}
+
+.result-card{background:var(--card);border-radius:16px;padding:2.5rem;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+.result-card .emoji{font-size:4rem;display:block;margin-bottom:.8rem}
+.result-card h2{font-size:1.6rem;font-weight:800;color:var(--blue);margin-bottom:.5rem}
+.result-card .score-big{font-size:3rem;font-weight:900;color:var(--blue);display:block;margin:.5rem 0}
+.result-card p{color:var(--gray-lt);font-size:.95rem;margin-bottom:1.3rem}
+.result-detail{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin:1rem 0;max-width:380px;margin-inline:auto}
+.rstat{border-radius:10px;padding:.8rem;font-weight:700;font-size:1rem}
+.rstat.ok{background:var(--green-bg);color:var(--green)}
+.rstat.ko{background:var(--red-bg);color:var(--red)}
+.btn-retry{padding:.8rem 2rem;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:.5rem}
+
+/* ══════════ EJERCICIOS ══════════ */
+.ej-card{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:1.2rem;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.ej-header{padding:1.1rem 1.4rem;background:linear-gradient(90deg,var(--blue-bg),#f8fafc);border-bottom:1px solid var(--border);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.ej-header h3{font-size:.97rem;font-weight:700;color:var(--blue)}
+.ej-badge{font-size:.72rem;font-weight:700;padding:.25rem .7rem;border-radius:2rem;background:var(--blue);color:#fff;flex-shrink:0}
+.ej-body{padding:1.3rem 1.4rem;display:none}
+.ej-body.open{display:block}
+.ej-enunciado{background:#f8fafc;border-radius:10px;padding:1rem 1.2rem;border-left:4px solid var(--blue);margin-bottom:1rem;font-size:.92rem}
+.ej-enunciado strong{color:var(--blue)}
+.step{display:flex;gap:.8rem;margin-bottom:.8rem;align-items:flex-start}
+.step-num{background:var(--blue);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;flex-shrink:0;margin-top:.1rem}
+.step-body{font-size:.9rem;line-height:1.7}
+.step-body .formula-inline{font-family:'Courier New',monospace;background:#f1f5f9;padding:.15rem .5rem;border-radius:4px;color:var(--blue);font-weight:700}
+.result-box{background:linear-gradient(90deg,#0f172a,#1e3a5f);color:#7dd3fc;border-radius:10px;padding:.85rem 1.2rem;font-family:'Courier New',monospace;font-size:1.05rem;font-weight:700;text-align:center;margin-top:.8rem}
+.show-sol-btn{padding:.55rem 1.2rem;background:transparent;border:2px solid var(--blue);color:var(--blue);border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;transition:.2s;margin-top:.5rem}
+.show-sol-btn:hover{background:var(--blue);color:#fff}
+
+/* ══════════ JUEGOS ══════════ */
+/* Flashcards */
+.flashcard-wrap{perspective:900px;max-width:520px;margin:0 auto 1.5rem;height:220px;cursor:pointer}
+.flashcard{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.flashcard.flipped{transform:rotateY(180deg)}
+.fc-front,.fc-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.12)}
+.fc-front{background:linear-gradient(135deg,var(--blue),var(--blue-lt));color:#fff}
+.fc-front .fc-label{font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;opacity:.7;margin-bottom:.5rem}
+.fc-front .fc-content{font-size:1.2rem;font-weight:700}
+.fc-back{background:var(--card);border:2px solid var(--blue);transform:rotateY(180deg);color:var(--gray)}
+.fc-back .fc-answer{font-size:.95rem;line-height:1.6}
+.fc-back .fc-formula{font-family:'Courier New',monospace;font-size:1.15rem;color:var(--blue);font-weight:700;display:block;margin-top:.5rem}
+.fc-controls{display:flex;justify-content:center;align-items:center;gap:1rem;max-width:520px;margin:0 auto}
+.fc-btn{padding:.55rem 1.4rem;border:2px solid var(--border);border-radius:8px;background:var(--card);cursor:pointer;font-weight:700;font-size:.88rem;transition:.2s;color:var(--gray)}
+.fc-btn:hover{border-color:var(--blue);color:var(--blue)}
+.fc-counter{font-size:.85rem;color:var(--gray-lt);font-weight:600;min-width:60px;text-align:center}
+
+/* Matching Game */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;max-width:780px;margin:0 auto}
+.match-col h4{font-size:.82rem;font-weight:700;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.7rem;text-align:center}
+.match-item{padding:.7rem 1rem;border:2px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;font-size:.88rem;font-weight:600;text-align:center;transition:.2s;margin-bottom:.5rem;user-select:none}
+.match-item:hover:not(.matched):not(.selected-wrong){border-color:var(--blue-lt);background:var(--blue-bg)}
+.match-item.selected{border-color:var(--blue);background:var(--blue-bg);color:var(--blue);transform:scale(1.02)}
+.match-item.matched{border-color:var(--green);background:var(--green-bg);color:var(--green);cursor:default}
+.match-item.selected-wrong{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+.match-item.formula-item{font-family:'Courier New',monospace;font-size:.83rem}
+.match-status{text-align:center;margin-top:1rem;font-weight:700;font-size:.95rem;min-height:1.5rem}
+.match-status.win{color:var(--green)}
+.match-status.err{color:var(--red)}
+.btn-reset{padding:.55rem 1.4rem;border:2px solid var(--border);border-radius:8px;background:var(--card);cursor:pointer;font-weight:700;font-size:.85rem;transition:.2s;color:var(--gray);display:block;margin:.8rem auto 0}
+.btn-reset:hover{border-color:var(--blue);color:var(--blue)}
+
+/* Fill-in */
+.fill-wrap{max-width:680px;margin:0 auto}
+.fill-q{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin-bottom:.9rem;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.fill-q .fq-text{font-size:.95rem;margin-bottom:.8rem;line-height:1.7}
+.fill-input{border:2px solid var(--border);border-radius:8px;padding:.55rem .85rem;font-size:.95rem;font-family:'Courier New',monospace;width:140px;text-align:center;transition:.2s;color:var(--gray)}
+.fill-input:focus{outline:none;border-color:var(--blue-lt)}
+.fill-input.correct{border-color:var(--green);background:var(--green-bg);color:var(--green)}
+.fill-input.wrong{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+.fill-check-btn{padding:.55rem 1.1rem;background:var(--blue);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.88rem;font-weight:700;margin-left:.6rem}
+.fill-feedback{font-size:.82rem;margin-top:.5rem;min-height:1.2rem;font-weight:600}
+.fill-feedback.ok{color:var(--green)}.fill-feedback.ko{color:var(--red)}
+
+/* Confetti */
+.confetti-piece{position:fixed;width:10px;height:10px;border-radius:2px;animation:fall linear forwards;pointer-events:none;z-index:9999}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+@media(max-width:640px){
+  .hero h1{font-size:1.7rem}
+  .match-grid{grid-template-columns:1fr}
+  nav{flex-direction:column}
+  .brand{text-align:center;border:none;border-bottom:1px solid rgba(255,255,255,.2)}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">⚡ Electrotecnia</div>
+  <div class="tabs">
+    <button class="tab-btn active"  onclick="showPage('u1',this)">📖 U1 · Fundamentos</button>
+    <button class="tab-btn"         onclick="showPage('u2',this)">🔗 U2 · Circuitos CC</button>
+    <button class="tab-btn"         onclick="showPage('ejercicios',this)">✏️ Ejercicios</button>
+    <button class="tab-btn"         onclick="showPage('juegos',this)">🎮 Juegos</button>
+    <button class="tab-btn"         onclick="showPage('quiz',this)">🧠 Quiz</button>
+    <button class="tab-btn"         onclick="showPage('cheatsheet',this)">📋 Fórmulas</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>Electrotecnia — Parcial</h1>
+  <p>Tecnicatura en Automatización y Control · Universidad Nacional de Pilar</p>
+  <div class="badges">
+    <span class="badge">U1: Electricidad</span>
+    <span class="badge">U2: Circuitos CC</span>
+    <span class="badge">Kirchhoff</span>
+    <span class="badge">Quiz interactivo</span>
+    <span class="badge">Juegos de práctica</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════ U1 ═══════════════════════ -->
+<div id="u1" class="page active"><div class="container">
+
+  <div class="stitle"><span class="ico">⚛️</span>Naturaleza de la Electricidad</div>
+  <div class="grid g3">
+    <div class="card bl"><h3>Materia</h3><p>Todo lo que se puede ver, medir o tocar. Existe en estado sólido, líquido o gaseoso. La porción mínima es la <strong>molécula</strong>, formada por <strong>átomos</strong>.</p></div>
+    <div class="card bl"><h3>Átomo</h3><p><strong>Núcleo:</strong> protones (+) y neutrones (neutros).<br><strong>Órbitas:</strong> electrones (−). En equilibrio: protones = electrones → carga neta = 0.</p></div>
+    <div class="card bl"><h3>Carga Eléctrica</h3><p>Positiva: déficit de electrones. Negativa: exceso de electrones. Unidad: <strong>Coulomb [C]</strong>.<br>⊕+⊕ → repulsión | ⊕+⊖ → atracción.</p></div>
+  </div>
+
+  <div class="stitle"><span class="ico">⚡</span>Corriente Eléctrica</div>
+  <div class="grid g2">
+    <div>
+      <div class="card"><h3>Definición</h3><p>Flujo de electrones que circulan a través de un conductor en un trayecto <strong>cerrado (circuito)</strong>. Ocurre cuando los electrones libres (órbitas externas) se desplazan entre átomos por desequilibrio electrostático.</p></div>
+      <div class="twrap" style="margin-top:.8rem"><table><thead><tr><th>Prefijo</th><th>Nombre</th><th>Símbolo</th><th>En Amperes</th></tr></thead><tbody><tr><td>Submúltiplo</td><td>Miliamper</td><td>mA</td><td>0,001 A</td></tr><tr><td>Fundamental</td><td>Amper</td><td>A</td><td>1 A</td></tr><tr><td>Múltiplo</td><td>Kiloamper</td><td>kA</td><td>1 000 A</td></tr></tbody></table></div>
+    </div>
+    <div>
+      <div class="fbox"><span class="big">I = Q / t</span><span class="sub">Símbolo: I | Unidad: Amper [A]</span><span class="unit">1 A = 1 C / 1 s → transporte de 1 C en 1 segundo</span></div>
+      <div class="tip"><span>💡</span><span>La corriente convencional va del + al −. La corriente real (electrones) va del − al +.</span></div>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">🔋</span>Diferencia de Potencial</div>
+  <div class="grid g2">
+    <div>
+      <div class="card gr"><h3>Definición</h3><p>Energía (W) puesta en juego para trasladar una carga (q) de un punto A hacia un punto B. U = U<sub>B</sub> − U<sub>A</sub></p></div>
+      <div class="card" style="margin-top:.8rem"><h3>Fuentes de tensión continua</h3><ul style="margin-left:1.2rem;font-size:.9rem;line-height:2"><li>Pilas / baterías (reacción química)</li><li>Generadores / dínamos</li><li>Celdas solares</li><li>Fuentes electrónicas reguladas</li></ul></div>
+    </div>
+    <div>
+      <div class="fbox"><span class="big">U = W / q</span><span class="sub">V = J / C = Joule / Coulomb</span><span class="unit">Símbolo: U | Unidad: Volt [V]</span></div>
+      <div class="twrap" style="margin-top:.8rem"><table><thead><tr><th>Prefijo</th><th>Nombre</th><th>Símbolo</th><th>En Volt</th></tr></thead><tbody><tr><td>Submúltiplo</td><td>Milivolt</td><td>mV</td><td>0,001 V</td></tr><tr><td>Fundamental</td><td>Volt</td><td>V</td><td>1 V</td></tr><tr><td>Múltiplo</td><td>Kilovolt</td><td>kV</td><td>1 000 V</td></tr></tbody></table></div>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">🔌</span>Resistencia, Resistividad y Conductancia</div>
+  <div class="grid g2" style="margin-bottom:.8rem">
+    <div class="card or"><h3>Resistencia (R)</h3><p>Oposición que presentan los materiales a la circulación de corriente. Unidad: <strong>Ohm [Ω]</strong>.</p></div>
+    <div class="card or"><h3>Conductancia (G)</h3><p>Capacidad del material para dejar pasar la corriente. Es el inverso de R. Unidad: <strong>Siemens [S]</strong>.</p></div>
+  </div>
+  <div class="grid g2">
+    <div>
+      <div class="fbox"><span class="big">R = ρ · l / S</span><span class="sub">G = 1 / R</span><span class="unit">ρ [Ω·mm²/m] | l [m] | S [mm²]</span></div>
+      <div class="tip"><span>📌</span><span>Cobre (Cu): ρ = 1/58 ≈ 0,0172 Ω·mm²/m<br>Aluminio (Al): ρ = 1/35 ≈ 0,0286 Ω·mm²/m</span></div>
+    </div>
+    <div class="twrap">
+      <table><thead><tr><th>Material</th><th>Tipo</th><th>Característica</th></tr></thead>
+      <tbody>
+        <tr><td>Cobre, Aluminio</td><td>Conductor</td><td>Poca resistencia al paso de corriente</td></tr>
+        <tr><td>PVC, Caucho</td><td>Aislante</td><td>Mucha resistencia al paso de corriente</td></tr>
+        <tr><td>Vidrio, Cerámica</td><td>Dieléctrico</td><td>Alta R + almacena energía eléctrica</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">📐</span>Ley de Ohm</div>
+  <div class="grid g2">
+    <div class="card bl"><h3>Enunciado (Georg S. Ohm, 1827)</h3><p>La intensidad de corriente es <strong>directamente proporcional a la tensión</strong> e <strong>inversamente proporcional a la resistencia</strong> del circuito.</p><div class="tip" style="margin-top:.8rem"><span>💡</span><span>Triángulo: U arriba, I y R abajo. Tapá la incógnita para ver la fórmula.</span></div></div>
+    <div class="fbox" style="align-self:start"><span class="big">I = U / R</span><span class="sub">U = I × R &nbsp;|&nbsp; R = U / I</span><span class="unit">Amper = Volt / Ohm</span></div>
+  </div>
+
+  <div class="stitle"><span class="ico">🌡️</span>Variación de la Resistencia con la Temperatura</div>
+  <div class="grid g2">
+    <div class="card"><h3>Concepto</h3><p>Al aumentar la temperatura, la resistencia de los conductores metálicos <strong>aumenta</strong> (α positivo). La temperatura de referencia es <strong>20°C</strong>.</p><p style="margin-top:.6rem;font-size:.88rem;color:var(--gray-lt)">α = coeficiente de temperatura [1/K]<br>ΔT = variación de temperatura<br>R₂₀ = resistencia a 20°C</p></div>
+    <div class="fbox" style="align-self:start"><span class="big">RT = R₂₀ · (1 + ΔT · α)</span><span class="sub">ΔT = Tf − Ti &nbsp;|&nbsp; ΔR = R₂₀ · ΔT · α</span><span class="unit">RT = resistencia final [Ω]</span></div>
+  </div>
+
+</div></div>
+
+<!-- ═══════════════════════ U2 ═══════════════════════ -->
+<div id="u2" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">⚡</span>Energía, Potencia y Ley de Joule</div>
+  <div class="grid g3">
+    <div class="card bl"><h3>Energía Eléctrica (W)</h3>
+      <div class="fbox" style="padding:.7rem"><span class="big" style="font-size:1.1rem">W = U · I · t</span><span class="unit">Joule [J] = V·A·s</span></div>
+      <p style="font-size:.85rem;margin-top:.5rem">4 propiedades: se <strong>transforma</strong>, se <strong>conserva</strong>, se <strong>transfiere</strong> y se <strong>degrada</strong>.</p></div>
+    <div class="card gr"><h3>Potencia (P)</h3>
+      <div class="fbox" style="padding:.7rem;background:#0a1f0a"><span class="big" style="font-size:1.1rem;color:#6ee7b7">P = U × I</span><span class="unit">Watt [W] = V·A</span></div>
+      <p style="font-size:.85rem;margin-top:.5rem">Energía desarrollada por unidad de tiempo.</p></div>
+    <div class="card or"><h3>Ley de Joule (Q)</h3>
+      <div class="fbox" style="padding:.7rem;background:#2a1500"><span class="big" style="font-size:1.1rem;color:#fed7aa">Q = I² · R · t</span><span class="unit">Joule [J]</span></div>
+      <p style="font-size:.85rem;margin-top:.5rem">La energía eléctrica al pasar por un conductor se convierte en <strong>calor</strong>.</p></div>
+  </div>
+
+  <div class="stitle"><span class="ico">🧩</span>Asociación de Resistencias</div>
+  <div class="grid g3">
+    <div class="card bl"><h3>En Serie</h3>
+      <p style="margin-bottom:.5rem;font-size:.88rem">Un solo camino. <strong>Misma corriente</strong> en todos los elementos.</p>
+      <div class="fbox" style="padding:.7rem"><span class="big" style="font-size:1rem">Rt = R1 + R2 + R3</span><span class="sub">U = U1 + U2 &nbsp;|&nbsp; I es igual</span></div>
+      <p style="font-size:.82rem;margin-top:.5rem;color:var(--blue)">R total <strong>aumenta</strong> al agregar más.</p></div>
+    <div class="card gr"><h3>En Paralelo</h3>
+      <p style="margin-bottom:.5rem;font-size:.88rem">Ramas paralelas. <strong>Misma tensión</strong> en todos los elementos.</p>
+      <div class="fbox" style="padding:.7rem;background:#0a1f0a"><span class="big" style="font-size:.9rem;color:#6ee7b7">1/Rt = 1/R1 + 1/R2</span><span class="sub">Rt = (R1×R2)/(R1+R2)</span><span class="sub">I_T = I1 + I2</span></div>
+      <p style="font-size:.82rem;margin-top:.5rem;color:var(--green)">R total <strong>disminuye</strong> al agregar más.</p></div>
+    <div class="card or"><h3>Mixta</h3>
+      <p style="margin-bottom:.5rem;font-size:.88rem">Combinación de serie y paralelo. Se simplifica paso a paso.</p>
+      <div class="fbox" style="padding:.7rem;background:#2a1500"><span class="sub">1. Rs = R2 + R3</span><span class="sub">2. RT = 1/(1/R1 + 1/Rs)</span></div>
+      <p style="font-size:.82rem;margin-top:.5rem;color:var(--orange)">Resolver de adentro hacia afuera.</p></div>
+  </div>
+
+  <div class="stitle"><span class="ico">🔭</span>Instrumentos de Medición</div>
+  <div class="grid g3">
+    <div class="card"><h3>⊙ Amperímetro</h3><p>Mide <strong>corriente (I)</strong>. Conexión: <strong>serie</strong>. R interna ≈ 0 Ω para no afectar el circuito.</p></div>
+    <div class="card"><h3>⊙ Voltímetro</h3><p>Mide <strong>tensión (U)</strong>. Conexión: <strong>paralelo</strong>. R interna ≈ ∞ Ω para no derivar corriente.</p></div>
+    <div class="card"><h3>⊙ Wattímetro</h3><p>Mide <strong>potencia (P)</strong> = U × I. Combina ambas mediciones internamente.</p></div>
+  </div>
+  <div class="tip"><span>🧠</span><span><strong>Mnemotecnia:</strong> <em>A</em>mperímetro en <em>S</em>erie (A-S). <em>V</em>oltímetro en para<em>L</em>elo (V-L).</span></div>
+
+  <div class="stitle"><span class="ico">⚖️</span>Leyes de Kirchhoff</div>
+  <div class="grid g2">
+    <div class="lawcard kvl">
+      <h3>LKT — Ley de Tensiones (2ª Ley)</h3>
+      <p style="font-size:.9rem;margin-bottom:.7rem">La suma algebraica de todas las tensiones en una malla cerrada es igual a cero.</p>
+      <div class="fbox" style="background:#0f172a"><span class="big">U = U₁ + U₂</span><span class="sub">0 = U₁ + U₂ − U</span></div>
+      <p style="font-size:.82rem;margin-top:.5rem;color:var(--blue)">→ Aplica a circuitos en <strong>serie</strong>. La fuente entrega, las R consumen.</p>
+    </div>
+    <div class="lawcard kcl">
+      <h3>LKC — Ley de Corrientes (1ª Ley)</h3>
+      <p style="font-size:.9rem;margin-bottom:.7rem">La suma de corrientes que entran a un nodo es igual a la suma de las que salen.</p>
+      <div class="fbox" style="background:#0a1f0a"><span class="big" style="color:#6ee7b7">I_total = I₁ + I₂</span></div>
+      <p style="font-size:.82rem;margin-top:.5rem;color:var(--green)">→ Aplica a circuitos en <strong>paralelo</strong>. La corriente se divide en los nodos.</p>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">📊</span>Comparativa Serie vs. Paralelo</div>
+  <div class="twrap">
+    <table><thead><tr><th>Característica</th><th>Serie</th><th>Paralelo</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Corriente</strong></td><td>Igual en todos (I₁ = I₂ = I)</td><td>Se divide (I_T = I₁ + I₂)</td></tr>
+      <tr><td><strong>Tensión</strong></td><td>Se divide (U = U₁ + U₂)</td><td>Igual en todos (U₁ = U₂ = U)</td></tr>
+      <tr><td><strong>R total</strong></td><td>Rt = R₁ + R₂ (mayor)</td><td>Rt = R₁R₂/(R₁+R₂) (menor)</td></tr>
+      <tr><td><strong>Fallo de 1 elemento</strong></td><td>Circuito se interrumpe</td><td>Los demás siguen funcionando</td></tr>
+      <tr><td><strong>Ley de Kirchhoff</strong></td><td>LKT — tensiones</td><td>LKC — corrientes</td></tr>
+      <tr><td><strong>Ejemplo</strong></td><td>Guirnaldas antiguas, fusibles</td><td>Tomacorrientes del hogar</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="stitle"><span class="ico">🔬</span>Teoremas de Análisis</div>
+  <div class="grid g2">
+    <details><summary>Teorema de Thévenin</summary><div class="dbody">
+      <p>Cualquier red lineal vista desde dos terminales = fuente <strong>V_th</strong> en serie con <strong>R_th</strong>.</p>
+      <ol style="margin-left:1.2rem;line-height:2.2;margin-top:.6rem">
+        <li>Retirar la carga de terminales A-B.</li>
+        <li>Calcular <strong>V_th</strong> = tensión en circuito abierto entre A-B.</li>
+        <li>Apagar fuentes (V→cortocircuito, I→abierto).</li>
+        <li>Calcular <strong>R_th</strong> = resistencia vista desde A-B.</li>
+        <li>I_carga = V_th / (R_th + R_carga).</li>
+      </ol>
+    </div></details>
+    <details><summary>Teorema de Norton + Máxima Transferencia de Potencia</summary><div class="dbody">
+      <p>Equivalente dual de Thévenin: fuente <strong>I_N</strong> en paralelo con <strong>R_N</strong>.</p>
+      <div class="fbox" style="margin:.7rem 0"><span class="big" style="font-size:1rem">I_N = V_th / R_th &nbsp;|&nbsp; R_N = R_th</span></div>
+      <p><strong>Máxima transferencia:</strong> se logra cuando <strong>R_carga = R_th</strong>.</p>
+      <div class="fbox"><span class="big" style="font-size:1rem">P_max = V_th² / (4·R_th)</span></div>
+    </div></details>
+  </div>
+
+</div></div>
+
+<!-- ═══════════════════════ EJERCICIOS ═══════════════════════ -->
+<div id="ejercicios" class="page"><div class="container">
+  <div class="stitle"><span class="ico">✏️</span>Ejercicios Resueltos Paso a Paso</div>
+  <p style="margin-bottom:1.5rem;color:var(--gray-lt);font-size:.92rem">Intentá resolver cada ejercicio antes de ver la solución.</p>
+
+  <!-- EJ 1 -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)">
+      <h3>Ejercicio 1 — Ley de Ohm: encontrar la corriente</h3>
+      <span class="ej-badge">U1 · Básico</span>
+    </div>
+    <div class="ej-body">
+      <div class="ej-enunciado">Un circuito tiene una <strong>resistencia de 47 Ω</strong> conectada a una <strong>fuente de 12 V</strong>. ¿Cuál es la corriente que circula?</div>
+      <button class="show-sol-btn" onclick="toggleSol(this)">Ver solución paso a paso ▾</button>
+      <div class="sol" style="display:none;margin-top:1rem">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Identificar datos:</strong> U = 12 V | R = 47 Ω | I = ?</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Fórmula:</strong> Ley de Ohm → <span class="formula-inline">I = U / R</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Reemplazar:</strong> <span class="formula-inline">I = 12 V / 47 Ω</span></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Calcular:</strong> I = 0,255 A = 255 mA</div></div>
+        <div class="result-box">✅ I = 0,255 A ≈ 255 mA</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 2 -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)">
+      <h3>Ejercicio 2 — Resistencias en serie</h3>
+      <span class="ej-badge">U2 · Básico</span>
+    </div>
+    <div class="ej-body">
+      <div class="ej-enunciado">Se tienen tres resistencias: <strong>R1 = 10 Ω, R2 = 22 Ω, R3 = 33 Ω</strong> conectadas en <strong>serie</strong> a una fuente de <strong>24 V</strong>.<br>Calcular: a) Resistencia total b) Corriente del circuito c) Tensión en cada resistencia.</div>
+      <button class="show-sol-btn" onclick="toggleSol(this)">Ver solución paso a paso ▾</button>
+      <div class="sol" style="display:none;margin-top:1rem">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>a) Resistencia total:</strong><br><span class="formula-inline">Rt = R1 + R2 + R3 = 10 + 22 + 33 = 65 Ω</span></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>b) Corriente:</strong><br><span class="formula-inline">I = U / Rt = 24 V / 65 Ω = 0,369 A</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><strong>c) Tensiones (I es igual en todos):</strong><br><span class="formula-inline">U1 = I × R1 = 0,369 × 10 = 3,69 V</span><br><span class="formula-inline">U2 = I × R2 = 0,369 × 22 = 8,12 V</span><br><span class="formula-inline">U3 = I × R3 = 0,369 × 33 = 12,18 V</span></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Verificación LKT:</strong> <span class="formula-inline">3,69 + 8,12 + 12,18 ≈ 24 V ✓</span></div></div>
+        <div class="result-box">✅ Rt = 65 Ω | I ≈ 369 mA | U1=3,69V | U2=8,12V | U3=12,18V</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 3 -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)">
+      <h3>Ejercicio 3 — Resistencias en paralelo</h3>
+      <span class="ej-badge">U2 · Medio</span>
+    </div>
+    <div class="ej-body">
+      <div class="ej-enunciado"><strong>R1 = 100 Ω</strong> y <strong>R2 = 150 Ω</strong> en <strong>paralelo</strong>, alimentadas por <strong>12 V</strong>.<br>Calcular: a) Resistencia equivalente b) Corriente total c) Corriente por cada rama.</div>
+      <button class="show-sol-btn" onclick="toggleSol(this)">Ver solución paso a paso ▾</button>
+      <div class="sol" style="display:none;margin-top:1rem">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>a) Rt (fórmula de 2 resistencias):</strong><br><span class="formula-inline">Rt = (R1 × R2) / (R1 + R2) = (100 × 150) / (100 + 150)</span><br><span class="formula-inline">Rt = 15 000 / 250 = 60 Ω</span></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>b) Corriente total:</strong><br><span class="formula-inline">It = U / Rt = 12 / 60 = 0,2 A = 200 mA</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><strong>c) Corriente por rama (misma U = 12 V):</strong><br><span class="formula-inline">I1 = U / R1 = 12 / 100 = 0,12 A = 120 mA</span><br><span class="formula-inline">I2 = U / R2 = 12 / 150 = 0,08 A = 80 mA</span></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Verificación LKC:</strong> <span class="formula-inline">120 mA + 80 mA = 200 mA = It ✓</span></div></div>
+        <div class="result-box">✅ Rt = 60 Ω | It = 200 mA | I1 = 120 mA | I2 = 80 mA</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 4 -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)">
+      <h3>Ejercicio 4 — Circuito mixto</h3>
+      <span class="ej-badge">U2 · Avanzado</span>
+    </div>
+    <div class="ej-body">
+      <div class="ej-enunciado"><strong>R1 = 20 Ω</strong> en paralelo con la serie de <strong>R2 = 30 Ω</strong> y <strong>R3 = 10 Ω</strong>. Fuente: <strong>100 V</strong>.<br>Calcular: a) Rt b) Corriente total c) Corriente por cada rama.</div>
+      <button class="show-sol-btn" onclick="toggleSol(this)">Ver solución paso a paso ▾</button>
+      <div class="sol" style="display:none;margin-top:1rem">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>a) Simplificar la rama serie:</strong><br><span class="formula-inline">Rs = R2 + R3 = 30 + 10 = 40 Ω</span></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>b) R1 en paralelo con Rs:</strong><br><span class="formula-inline">Rt = (R1 × Rs) / (R1 + Rs) = (20 × 40) / (20 + 40) = 800 / 60 ≈ 13,33 Ω</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><strong>c) Corriente total:</strong><br><span class="formula-inline">It = U / Rt = 100 / 13,33 ≈ 7,5 A</span></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><strong>d) Corrientes por rama (misma U = 100 V):</strong><br><span class="formula-inline">I1 = 100 / R1 = 100 / 20 = 5 A</span><br><span class="formula-inline">I2 = 100 / Rs = 100 / 40 = 2,5 A</span></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Verificación LKC:</strong> <span class="formula-inline">5 + 2,5 = 7,5 A = It ✓</span></div></div>
+        <div class="result-box">✅ Rt ≈ 13,33 Ω | It = 7,5 A | I_R1 = 5 A | I_(R2+R3) = 2,5 A</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 5 -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)">
+      <h3>Ejercicio 5 — Ley de Joule: calor disipado</h3>
+      <span class="ej-badge">U2 · Medio</span>
+    </div>
+    <div class="ej-body">
+      <div class="ej-enunciado">Una resistencia de <strong>10 Ω</strong> conduce una corriente de <strong>3 A</strong> durante <strong>5 minutos</strong>. ¿Cuánto calor disipa?</div>
+      <button class="show-sol-btn" onclick="toggleSol(this)">Ver solución paso a paso ▾</button>
+      <div class="sol" style="display:none;margin-top:1rem">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Datos:</strong> I = 3 A | R = 10 Ω | t = 5 min = 300 s</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Fórmula:</strong> <span class="formula-inline">Q = I² · R · t</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Reemplazar:</strong> <span class="formula-inline">Q = (3)² × 10 × 300 = 9 × 10 × 300</span></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Calcular:</strong> Q = 27 000 J = 27 kJ</div></div>
+        <div class="result-box">✅ Q = 27 000 J = 27 kJ</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 6 -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)">
+      <h3>Ejercicio 6 — Resistividad: longitud de un cable</h3>
+      <span class="ej-badge">U1 · Medio</span>
+    </div>
+    <div class="ej-body">
+      <div class="ej-enunciado">Un cable de <strong>cobre</strong> tiene sección <strong>2,5 mm²</strong>. ¿Qué longitud máxima puede tener si se requiere que su resistencia no supere <strong>0,5 Ω</strong>? (ρ_Cu = 1/58 Ω·mm²/m)</div>
+      <button class="show-sol-btn" onclick="toggleSol(this)">Ver solución paso a paso ▾</button>
+      <div class="sol" style="display:none;margin-top:1rem">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Datos:</strong> R = 0,5 Ω | S = 2,5 mm² | ρ = 1/58 Ω·mm²/m</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Fórmula:</strong> <span class="formula-inline">R = ρ · l / S</span> → despejar l → <span class="formula-inline">l = R · S / ρ</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Reemplazar:</strong> <span class="formula-inline">l = 0,5 × 2,5 / (1/58)</span></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Calcular:</strong> <span class="formula-inline">l = 0,5 × 2,5 × 58 = 72,5 m</span></div></div>
+        <div class="result-box">✅ Longitud máxima = 72,5 m</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 7 -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)">
+      <h3>Ejercicio 7 — Variación de resistencia con temperatura</h3>
+      <span class="ej-badge">U1 · Avanzado</span>
+    </div>
+    <div class="ej-body">
+      <div class="ej-enunciado">Un bobinado de cobre tiene resistencia <strong>R₂₀ = 50 Ω</strong> a 20°C. Si la temperatura sube a <strong>80°C</strong>, ¿cuál será la nueva resistencia? (α_Cu = 0,00393 /K)</div>
+      <button class="show-sol-btn" onclick="toggleSol(this)">Ver solución paso a paso ▾</button>
+      <div class="sol" style="display:none;margin-top:1rem">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Datos:</strong> R₂₀ = 50 Ω | Ti = 20°C | Tf = 80°C | α = 0,00393 /K</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>ΔT:</strong> <span class="formula-inline">ΔT = Tf − Ti = 80 − 20 = 60 K</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Fórmula:</strong> <span class="formula-inline">RT = R₂₀ · (1 + ΔT · α)</span></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Calcular:</strong><br><span class="formula-inline">RT = 50 × (1 + 60 × 0,00393)</span><br><span class="formula-inline">RT = 50 × (1 + 0,2358) = 50 × 1,2358 = 61,79 Ω</span></div></div>
+        <div class="result-box">✅ RT = 61,79 Ω (aumentó 11,79 Ω por el aumento de temperatura)</div>
+      </div>
+    </div>
+  </div>
+
+</div></div>
+
+<!-- ═══════════════════════ JUEGOS ═══════════════════════ -->
+<div id="juegos" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">🃏</span>Flashcards — Conceptos Clave</div>
+  <p style="margin-bottom:1.2rem;color:var(--gray-lt);font-size:.9rem">Hacé click en la tarjeta para revelar la respuesta.</p>
+
+  <div class="flashcard-wrap" onclick="flipCard()">
+    <div class="flashcard" id="fc">
+      <div class="fc-front"><div class="fc-label">¿Qué es...?</div><div class="fc-content" id="fc-q"></div></div>
+      <div class="fc-back"><div id="fc-a" class="fc-answer"></div><div id="fc-f" class="fc-formula"></div></div>
+    </div>
+  </div>
+  <div class="fc-controls">
+    <button class="fc-btn" onclick="prevCard()">← Anterior</button>
+    <span class="fc-counter" id="fc-count"></span>
+    <button class="fc-btn" onclick="nextCard()">Siguiente →</button>
+  </div>
+
+  <div class="stitle" style="margin-top:3rem"><span class="ico">🔗</span>Juego de Asociación — Une la magnitud con su fórmula</div>
+  <p style="margin-bottom:1.2rem;color:var(--gray-lt);font-size:.9rem">Hacé click en una magnitud y luego en su fórmula correspondiente.</p>
+
+  <div class="match-grid">
+    <div>
+      <h4>Magnitud</h4>
+      <div id="match-left"></div>
+    </div>
+    <div>
+      <h4>Fórmula / Unidad</h4>
+      <div id="match-right"></div>
+    </div>
+  </div>
+  <div class="match-status" id="match-status"></div>
+  <button class="btn-reset" onclick="initMatch()">🔄 Reiniciar juego</button>
+
+  <div class="stitle" style="margin-top:3rem"><span class="ico">⌨️</span>Completá la Fórmula</div>
+  <p style="margin-bottom:1.2rem;color:var(--gray-lt);font-size:.9rem">Escribí el valor correcto en cada hueco y presioná Verificar.</p>
+  <div class="fill-wrap" id="fill-wrap"></div>
+
+</div></div>
+
+<!-- ═══════════════════════ QUIZ ═══════════════════════ -->
+<div id="quiz" class="page"><div class="container">
+  <div class="stitle"><span class="ico">🧠</span>Quiz Interactivo — 15 Preguntas</div>
+  <div id="quiz-container">
+    <div class="quiz-header">
+      <div class="quiz-score-display">Puntos: <span id="q-score">0</span> / <span id="q-total">15</span></div>
+      <div style="font-size:.85rem;color:var(--gray-lt)">Pregunta <span id="q-cur">1</span> de 15</div>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="q-progress" style="width:0%"></div></div>
+    <div id="quiz-area"></div>
+  </div>
+</div></div>
+
+<!-- ═══════════════════════ CHEAT SHEET ═══════════════════════ -->
+<div id="cheatsheet" class="page"><div class="container">
+  <div class="cheat">
+    <h2>⚡ FÓRMULAS RÁPIDAS — ELECTROTECNIA</h2>
+    <div class="cgrid">
+      <div class="citem"><div class="lbl">Corriente</div><div class="cf">I = Q / t</div><div class="cu">Ampere [A] = C/s</div></div>
+      <div class="citem"><div class="lbl">Tensión</div><div class="cf">U = W / q</div><div class="cu">Volt [V] = J/C</div></div>
+      <div class="citem"><div class="lbl">Ley de Ohm</div><div class="cf">I = U / R</div><div class="cu">A = V / Ω</div></div>
+      <div class="citem"><div class="lbl">Resistividad</div><div class="cf">R = ρ · l / S</div><div class="cu">Ω·mm²/m · m/mm²</div></div>
+      <div class="citem"><div class="lbl">Conductancia</div><div class="cf">G = 1 / R</div><div class="cu">Siemens [S]</div></div>
+      <div class="citem"><div class="lbl">R con temperatura</div><div class="cf">RT = R₂₀(1+ΔT·α)</div><div class="cu">α [1/K]</div></div>
+      <div class="citem"><div class="lbl">Potencia</div><div class="cf">P = U × I</div><div class="cu">Watt [W] = V·A</div></div>
+      <div class="citem"><div class="lbl">Energía eléctrica</div><div class="cf">W = U · I · t</div><div class="cu">Joule [J] = W·s</div></div>
+      <div class="citem"><div class="lbl">Efecto Joule</div><div class="cf">Q = I² · R · t</div><div class="cu">Joule [J]</div></div>
+      <div class="citem"><div class="lbl">R Serie</div><div class="cf">Rt = R1+R2+…</div><div class="cu">I igual en todos</div></div>
+      <div class="citem"><div class="lbl">R Paralelo</div><div class="cf">1/Rt = Σ 1/Rn</div><div class="cu">U igual en todos</div></div>
+      <div class="citem"><div class="lbl">2 R en paralelo</div><div class="cf">Rt = R1·R2/(R1+R2)</div><div class="cu">Atajo</div></div>
+      <div class="citem"><div class="lbl">Kirchhoff (LKT)</div><div class="cf">Σ U_malla = 0</div><div class="cu">Circuito serie</div></div>
+      <div class="citem"><div class="lbl">Kirchhoff (LKC)</div><div class="cf">Σ I_nodo = 0</div><div class="cu">Nodo / paralelo</div></div>
+      <div class="citem"><div class="lbl">Máx. transferencia</div><div class="cf">R_L = R_th</div><div class="cu">P = Vth²/4Rth</div></div>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">📌</span>Datos de Referencia</div>
+  <div class="grid g2">
+    <div class="twrap"><table><thead><tr><th>Material</th><th>ρ [Ω·mm²/m]</th><th>Tipo</th></tr></thead><tbody>
+      <tr><td>Cobre (Cu)</td><td>1/58 ≈ 0,0172</td><td>Conductor</td></tr>
+      <tr><td>Aluminio (Al)</td><td>1/35 ≈ 0,0286</td><td>Conductor</td></tr>
+      <tr><td>Hierro (Fe)</td><td>≈ 0,1</td><td>Conductor</td></tr>
+      <tr><td>Caucho / PVC</td><td>10¹²–10¹⁴</td><td>Aislante</td></tr>
+    </tbody></table></div>
+    <div class="twrap"><table><thead><tr><th>Magnitud</th><th>Unidad</th><th>mili</th><th>kilo</th><th>mega</th></tr></thead><tbody>
+      <tr><td>Corriente</td><td>A</td><td>mA</td><td>kA</td><td>—</td></tr>
+      <tr><td>Tensión</td><td>V</td><td>mV</td><td>kV</td><td>MV</td></tr>
+      <tr><td>Resistencia</td><td>Ω</td><td>mΩ</td><td>kΩ</td><td>MΩ</td></tr>
+      <tr><td>Potencia</td><td>W</td><td>mW</td><td>kW</td><td>MW</td></tr>
+      <tr><td>Energía</td><td>J</td><td>mJ</td><td>kJ</td><td>MJ</td></tr>
+    </tbody></table></div>
+  </div>
+
+</div></div>
+
+<script>
+// ══════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════
+function showPage(id, btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function toggleEj(header){
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+function toggleSol(btn){
+  const sol = btn.nextElementSibling;
+  sol.style.display = sol.style.display==='none' ? 'block' : 'none';
+  btn.textContent = sol.style.display==='none' ? 'Ver solución paso a paso ▾' : 'Ocultar solución ▴';
+}
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-.5) }
+
+// ══════════════════════════════════════════
+//  FLASHCARDS
+// ══════════════════════════════════════════
+const cards = [
+  {q:'Corriente Eléctrica',     a:'Flujo de electrones en un circuito cerrado.',  f:'I = Q / t  [Ampere]'},
+  {q:'Diferencia de Potencial', a:'Energía para trasladar una carga de A a B.',   f:'U = W / q  [Volt]'},
+  {q:'Resistencia',             a:'Oposición al paso de la corriente eléctrica.',  f:'R = ρ·l/S  [Ohm]'},
+  {q:'Conductancia',            a:'Capacidad del material para dejar pasar corriente.', f:'G = 1/R  [Siemens]'},
+  {q:'Ley de Ohm',              a:'La corriente es proporcional a la tensión e inversamente proporcional a la resistencia.', f:'I = U / R'},
+  {q:'Efecto Joule',            a:'Al pasar corriente por un conductor se genera calor.', f:'Q = I²·R·t  [Joule]'},
+  {q:'Potencia Eléctrica',      a:'Energía desarrollada por unidad de tiempo.',   f:'P = U × I  [Watt]'},
+  {q:'Energía Eléctrica',       a:'Trabajo realizado al mover una carga en un circuito.', f:'W = U·I·t  [Joule]'},
+  {q:'Resistencias en Serie',   a:'Misma corriente; la tensión se reparte; R total aumenta.', f:'Rt = R1+R2+R3'},
+  {q:'Resistencias en Paralelo',a:'Misma tensión; la corriente se divide; R total disminuye.', f:'1/Rt = 1/R1 + 1/R2'},
+  {q:'Ley de Kirchhoff (LKT)',  a:'La suma de tensiones en una malla cerrada es igual a cero.', f:'Σ V_malla = 0'},
+  {q:'Ley de Kirchhoff (LKC)',  a:'La suma de corrientes en un nodo es igual a cero.', f:'I_entrada = I_salida'},
+  {q:'Resistividad (ρ)',        a:'Propiedad del material que indica su oposición al paso de corriente.', f:'ρ_Cu = 1/58  ρ_Al = 1/35'},
+  {q:'Variación de R con T',   a:'La resistencia de los conductores aumenta con la temperatura.', f:'RT = R₂₀·(1 + ΔT·α)'},
+  {q:'Amperímetro',             a:'Instrumento que mide corriente. Se conecta en SERIE.', f:'R_interna ≈ 0 Ω'},
+  {q:'Voltímetro',              a:'Instrumento que mide tensión. Se conecta en PARALELO.', f:'R_interna ≈ ∞ Ω'},
+];
+let fcIdx=0, fcFlipped=false;
+function renderCard(){
+  document.getElementById('fc').classList.remove('flipped');
+  fcFlipped=false;
+  setTimeout(()=>{
+    document.getElementById('fc-q').textContent = cards[fcIdx].q;
+    document.getElementById('fc-a').textContent = cards[fcIdx].a;
+    document.getElementById('fc-f').textContent = cards[fcIdx].f;
+    document.getElementById('fc-count').textContent = `${fcIdx+1} / ${cards.length}`;
+  },fcFlipped?250:0);
+}
+function flipCard(){
+  fcFlipped=!fcFlipped;
+  document.getElementById('fc').classList.toggle('flipped',fcFlipped);
+}
+function nextCard(){ fcIdx=(fcIdx+1)%cards.length; renderCard(); }
+function prevCard(){ fcIdx=(fcIdx-1+cards.length)%cards.length; renderCard(); }
+renderCard();
+
+// ══════════════════════════════════════════
+//  MATCHING GAME
+// ══════════════════════════════════════════
+const matchPairs = [
+  {left:'Corriente (I)',          right:'I = Q / t  [A]'},
+  {left:'Tensión (U)',            right:'U = W / q  [V]'},
+  {left:'Ley de Ohm',            right:'I = U / R'},
+  {left:'Potencia (P)',           right:'P = U × I  [W]'},
+  {left:'Efecto Joule (Q)',       right:'Q = I²·R·t  [J]'},
+  {left:'Energía eléctrica (W)',  right:'W = U·I·t  [J]'},
+  {left:'R en Serie',             right:'Rt = R1+R2+R3'},
+  {left:'R en Paralelo',         right:'Rt = R1·R2/(R1+R2)'},
+];
+let matchSelected=null, matchedCount=0;
+function initMatch(){
+  matchSelected=null; matchedCount=0;
+  document.getElementById('match-status').textContent='';
+  const shuffledLeft  = shuffle(matchPairs);
+  const shuffledRight = shuffle(matchPairs);
+  const lDiv = document.getElementById('match-left');
+  const rDiv = document.getElementById('match-right');
+  lDiv.innerHTML=''; rDiv.innerHTML='';
+  shuffledLeft.forEach(p=>{
+    const d=document.createElement('div');
+    d.className='match-item'; d.textContent=p.left;
+    d.dataset.key=p.left; d.dataset.side='left';
+    d.onclick=()=>matchClick(d);
+    lDiv.appendChild(d);
+  });
+  shuffledRight.forEach(p=>{
+    const d=document.createElement('div');
+    d.className='match-item formula-item'; d.textContent=p.right;
+    d.dataset.key=p.left; d.dataset.side='right';
+    d.onclick=()=>matchClick(d);
+    rDiv.appendChild(d);
+  });
+}
+function matchClick(el){
+  if(el.classList.contains('matched')) return;
+  if(!matchSelected){
+    document.querySelectorAll('.match-item.selected').forEach(e=>e.classList.remove('selected','selected-wrong'));
+    matchSelected=el;
+    el.classList.add('selected');
+  } else {
+    if(el===matchSelected){ matchSelected=null; el.classList.remove('selected'); return; }
+    if(el.dataset.side===matchSelected.dataset.side){
+      document.querySelectorAll('.match-item.selected').forEach(e=>e.classList.remove('selected'));
+      matchSelected=el; el.classList.add('selected'); return;
+    }
+    if(el.dataset.key===matchSelected.dataset.key){
+      [el,matchSelected].forEach(e=>{ e.classList.remove('selected'); e.classList.add('matched'); e.onclick=null; });
+      matchedCount++;
+      const st=document.getElementById('match-status');
+      if(matchedCount===matchPairs.length){ st.textContent='🎉 ¡Perfecto! Todas las parejas correctas.'; st.className='match-status win'; launchConfetti(); }
+      else { st.textContent=`✅ ¡Correcto! ${matchedCount}/${matchPairs.length} parejas.`; st.className='match-status win'; }
+    } else {
+      [el,matchSelected].forEach(e=>e.classList.add('selected-wrong'));
+      setTimeout(()=>{ [el,matchSelected].forEach(e=>e.classList.remove('selected','selected-wrong')); matchSelected=null; },700);
+      document.getElementById('match-status').textContent='❌ Eso no coincide, intentá de nuevo.';
+      document.getElementById('match-status').className='match-status err';
+      return;
+    }
+    matchSelected=null;
+  }
+}
+initMatch();
+
+// ══════════════════════════════════════════
+//  FILL IN THE BLANK
+// ══════════════════════════════════════════
+const fillQs = [
+  {before:'La unidad de corriente eléctrica es el',  after:'.',    answer:'Amper',   hint:'Símbolo: A'},
+  {before:'La unidad de tensión eléctrica es el',    after:'.',    answer:'Volt',    hint:'Símbolo: V'},
+  {before:'La unidad de resistencia es el',          after:'.',    answer:'Ohm',     hint:'Símbolo: Ω'},
+  {before:'La conductancia se mide en',              after:'.',    answer:'Siemens', hint:'G = 1/R'},
+  {before:'El amperímetro se conecta en',            after:' con el elemento.', answer:'serie', hint:'Mide I'},
+  {before:'El voltímetro se conecta en',             after:' al elemento.',     answer:'paralelo', hint:'Mide U'},
+  {before:'En un circuito serie la',                 after:' es igual en todos los elementos.', answer:'corriente', hint:'LKC'},
+  {before:'En un circuito paralelo la',              after:' es igual en todos los elementos.', answer:'tensión',   hint:'LKT'},
+  {before:'La resistividad del cobre es 1/',         after:' [Ω·mm²/m].', answer:'58', hint:'Cu'},
+  {before:'La ley de Joule dice que Q =',            after:'·R·t', answer:'I²', hint:'efecto térmico'},
+];
+function initFill(){
+  const wrap = document.getElementById('fill-wrap');
+  wrap.innerHTML='';
+  fillQs.forEach((q,i)=>{
+    wrap.innerHTML+=`
+    <div class="fill-q">
+      <div class="fq-text">${q.before} <input class="fill-input" id="fi-${i}" placeholder="?" autocomplete="off"/> ${q.after}
+        <button class="fill-check-btn" onclick="checkFill(${i},'${q.answer}')">Verificar</button>
+      </div>
+      <div class="fill-feedback" id="ff-${i}"></div>
+    </div>`;
+  });
+}
+function checkFill(i, answer){
+  const inp = document.getElementById(`fi-${i}`);
+  const fb  = document.getElementById(`ff-${i}`);
+  const val = inp.value.trim().toLowerCase();
+  if(val===answer.toLowerCase()){
+    inp.classList.add('correct'); inp.classList.remove('wrong');
+    fb.textContent='✅ ¡Correcto!'; fb.className='fill-feedback ok';
+    inp.disabled=true;
+  } else {
+    inp.classList.add('wrong'); inp.classList.remove('correct');
+    fb.textContent=`❌ No es correcto. Pista: ${fillQs[i].hint}`; fb.className='fill-feedback ko';
+    setTimeout(()=>{ inp.classList.remove('wrong'); inp.value=''; },1200);
+  }
+}
+initFill();
+
+// ══════════════════════════════════════════
+//  QUIZ
+// ══════════════════════════════════════════
+const allQuestions = [
+  {t:'¿Qué mide la corriente eléctrica?', h:null, opts:['La energía almacenada en un circuito','El flujo de electrones por unidad de tiempo','La oposición al paso de la corriente','La diferencia de potencial entre dos puntos'], c:1, exp:'La corriente I = Q/t mide el flujo de carga (electrones) por unidad de tiempo. Unidad: Ampere.'},
+  {t:'¿Cuál es la fórmula de la Ley de Ohm?', h:'I = ?', opts:['I = U × R','I = R / U','I = U / R','I = U + R'], c:2, exp:'La Ley de Ohm establece I = U / R. La corriente es directamente proporcional a la tensión e inversamente a la resistencia.'},
+  {t:'En un circuito en serie con R1=10 Ω y R2=20 Ω, la resistencia total es:', h:'Rt = R1 + R2', opts:['10 Ω','20 Ω','30 Ω','200 Ω'], c:2, exp:'En serie, Rt = R1 + R2 = 10 + 20 = 30 Ω. La resistencia total siempre es mayor que cualquier resistencia individual.'},
+  {t:'En un circuito en paralelo con R1=10 Ω y R2=10 Ω, la resistencia equivalente es:', h:'Rt = R1·R2 / (R1+R2)', opts:['20 Ω','10 Ω','5 Ω','0,1 Ω'], c:2, exp:'Rt = (10×10)/(10+10) = 100/20 = 5 Ω. En paralelo con dos R iguales, Rt = R/2.'},
+  {t:'¿Cómo se conecta el amperímetro para medir correctamente?', h:null, opts:['En paralelo con la carga','En serie con la carga','Entre los bornes de la fuente','No importa la conexión'], c:1, exp:'El amperímetro se conecta en SERIE. Tiene R interna ≈ 0 Ω para no alterar la corriente del circuito.'},
+  {t:'La Ley de Kirchhoff de Corrientes (LKC) dice que:', h:null, opts:['La suma de tensiones en una malla es 0','La corriente es igual en serie','La suma de corrientes en un nodo es 0','La resistencia total es la suma de todas'], c:2, exp:'LKC: La suma algebraica de corrientes en un nodo es cero. Lo que entra = lo que sale: I_total = I1 + I2.'},
+  {t:'La Ley de Joule establece que el calor disipado es:', h:'Q = ?', opts:['Q = U·I','Q = I²·R·t','Q = U/R','Q = I·R·t'], c:1, exp:'Q = I²·R·t. El calor es proporcional al cuadrado de la corriente, a la resistencia y al tiempo.'},
+  {t:'¿Qué es la conductancia eléctrica?', h:null, opts:['La resistencia al cuadrado','La inversa de la resistencia','La resistividad del material','La tensión dividida la corriente'], c:1, exp:'G = 1/R. La conductancia mide la facilidad del material para dejar pasar la corriente. Unidad: Siemens [S].'},
+  {t:'Si la temperatura de un conductor metálico aumenta, su resistencia:', h:'RT = R₂₀·(1 + ΔT·α)', opts:['Disminuye','Se mantiene igual','Aumenta','Se vuelve cero'], c:2, exp:'En conductores metálicos, α > 0, por lo tanto al aumentar la temperatura, la resistencia aumenta.'},
+  {t:'La potencia eléctrica se calcula como:', h:'P = ?', opts:['P = U + I','P = U / I','P = U × I','P = I² / U'], c:2, exp:'P = U × I. La potencia en Watt es el producto de la tensión por la corriente.'},
+  {t:'¿Cuál es la resistividad del cobre (Cu)?', h:'ρ [Ω·mm²/m]', opts:['1/35','1/58','58','35'], c:1, exp:'ρ_Cu = 1/58 ≈ 0,0172 Ω·mm²/m. El aluminio tiene ρ = 1/35. Menor ρ = mejor conductor.'},
+  {t:'En un circuito en paralelo, ¿qué magnitud es igual en todas las ramas?', h:null, opts:['La corriente','La resistencia','La tensión','La potencia'], c:2, exp:'En paralelo, todos los elementos tienen la misma tensión (U₁ = U₂ = U). La corriente se divide.'},
+  {t:'La Ley de Kirchhoff de Tensiones (LKT) aplica principalmente a:', h:null, opts:['Circuitos en paralelo','Circuitos en serie (mallas)','Solo a fuentes de corriente','Solo a resistencias iguales'], c:1, exp:'LKT aplica a mallas/circuitos cerrados (serie). La suma algebraica de tensiones = 0. La fuente entrega, las R consumen.'},
+  {t:'Una resistencia de 5 Ω conectada a 10 V. ¿Qué corriente circula?', h:'I = U / R', opts:['0,5 A','2 A','50 A','15 A'], c:1, exp:'I = U/R = 10/5 = 2 A. Verificación: U = I×R = 2×5 = 10 V ✓'},
+  {t:'¿Cuál es la energía eléctrica consumida por una carga de 100 W durante 2 horas?', h:'W = P × t (t en segundos)', opts:['200 J','720 000 J','200 kWh','7 200 J'], c:1, exp:'t = 2 h = 7200 s. W = P×t = 100×7200 = 720 000 J = 720 kJ. (En kWh: 100W × 2h = 0,2 kWh)'},
+];
+
+let qIdx=0, score=0, answered=false;
+function renderQuiz(){
+  const area=document.getElementById('quiz-area');
+  if(qIdx>=allQuestions.length){ showResult(); return; }
+  const q=allQuestions[qIdx];
+  const pct=Math.round((qIdx/allQuestions.length)*100);
+  document.getElementById('q-progress').style.width=pct+'%';
+  document.getElementById('q-cur').textContent=qIdx+1;
+  document.getElementById('q-score').textContent=score;
+  answered=false;
+  area.innerHTML=`
+  <div class="quiz-card">
+    <div class="q-num">Pregunta ${qIdx+1} de ${allQuestions.length}</div>
+    <div class="q-text">${q.t}</div>
+    ${q.h?`<div class="hint">${q.h}</div>`:''}
+    <div class="options" id="opts">
+      ${q.opts.map((o,i)=>`<button class="opt-btn" onclick="answerQ(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}
+    </div>
+    <div class="feedback-box" id="fb"></div>
+    <div class="quiz-nav">
+      <button class="btn-next" id="btn-next" onclick="nextQ()" disabled>Siguiente →</button>
+    </div>
+  </div>`;
+}
+function answerQ(i){
+  if(answered) return;
+  answered=true;
+  const q=allQuestions[qIdx];
+  const btns=document.querySelectorAll('.opt-btn');
+  btns.forEach(b=>b.disabled=true);
+  const fb=document.getElementById('fb');
+  if(i===q.c){
+    score++;
+    btns[i].classList.add('correct');
+    fb.className='feedback-box show ok';
+    fb.innerHTML=`✅ <strong>¡Correcto!</strong> ${q.exp}`;
+  } else {
+    btns[i].classList.add('wrong');
+    btns[q.c].classList.add('correct');
+    fb.className='feedback-box show ko';
+    fb.innerHTML=`❌ <strong>Incorrecto.</strong> La respuesta correcta es <strong>${String.fromCharCode(65+q.c)}. ${q.opts[q.c]}</strong>. ${q.exp}`;
+  }
+  document.getElementById('q-score').textContent=score;
+  document.getElementById('btn-next').disabled=false;
+}
+function nextQ(){ qIdx++; renderQuiz(); }
+function showResult(){
+  document.getElementById('q-progress').style.width='100%';
+  const pct=Math.round((score/allQuestions.length)*100);
+  const emoji = pct>=80?'🎉':pct>=60?'👍':'📚';
+  const msg   = pct>=80?'¡Excelente! Estás listo para el parcial.':pct>=60?'Bien, pero repassá algunos temas.':'Seguí estudiando, podés mejorar.';
+  document.getElementById('quiz-area').innerHTML=`
+  <div class="result-card">
+    <span class="emoji">${emoji}</span>
+    <h2>${msg}</h2>
+    <span class="score-big">${score}/${allQuestions.length}</span>
+    <p>${pct}% de respuestas correctas</p>
+    <div class="result-detail">
+      <div class="rstat ok">✅ Correctas<br><strong>${score}</strong></div>
+      <div class="rstat ko">❌ Incorrectas<br><strong>${allQuestions.length-score}</strong></div>
+    </div>
+    <button class="btn-retry" onclick="restartQuiz()">🔄 Repetir Quiz</button>
+  </div>`;
+  if(pct>=80) launchConfetti();
+}
+function restartQuiz(){ qIdx=0; score=0; renderQuiz(); }
+renderQuiz();
+
+// ══════════════════════════════════════════
+//  CONFETTI
+// ══════════════════════════════════════════
+function launchConfetti(){
+  const colors=['#1a4e8a','#38bdf8','#34d399','#fbbf24','#f87171','#a78bfa'];
+  for(let i=0;i<80;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.cssText=`left:${Math.random()*100}vw;top:-20px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${1.2+Math.random()*1.5}s;animation-delay:${Math.random()*.8}s;transform:rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(el);
+    el.addEventListener('animationend',()=>el.remove());
+  }
+}
+</script>
+</body>
+</html>

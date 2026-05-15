@@ -789,6 +789,334 @@ details[open] summary{background:var(--blue-bg);color:var(--blue)}
     </div>
   </div>
 
+  <!-- EJ 9 -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)">
+      <h3>Ejercicio 9 — Circuito con múltiples mallas y resistencia diagonal (Análisis de Mallas)</h3>
+      <span class="ej-badge">U2 · Avanzado</span>
+    </div>
+    <div class="ej-body">
+      <div class="ej-enunciado">
+        Dado el circuito con <strong>U = 27 V</strong>, <strong>R1 = 3 Ω</strong>, <strong>R2 = 6 Ω</strong>, <strong>R3 = 6 Ω</strong> y <strong>R5 = 3 Ω (diagonal entre nodos 2 y 4)</strong>.<br>
+        Determinar las corrientes de malla y las corrientes reales por cada resistencia usando el <strong>Método de Mallas (LKT)</strong>.
+      </div>
+
+      <!-- Circuito original -->
+      <div style="margin:1rem 0">
+        <div style="font-size:.78rem;font-weight:700;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem;text-align:center">Circuito con resistencia diagonal</div>
+        <svg viewBox="0 0 530 175" style="width:100%;max-width:500px;display:block;margin:0 auto;background:#fafafa;border-radius:10px;border:1px solid var(--border)">
+          <!-- Batería izquierda -->
+          <line x1="42" y1="22" x2="42" y2="55" stroke="#333" stroke-width="2"/>
+          <line x1="26" y1="55" x2="58" y2="55" stroke="#333" stroke-width="2.5"/>
+          <line x1="33" y1="64" x2="51" y2="64" stroke="#333" stroke-width="1.5"/>
+          <line x1="26" y1="73" x2="58" y2="73" stroke="#333" stroke-width="2.5"/>
+          <line x1="33" y1="82" x2="51" y2="82" stroke="#333" stroke-width="1.5"/>
+          <line x1="42" y1="82" x2="42" y2="155" stroke="#333" stroke-width="2"/>
+          <text x="63" y="63" font-size="12" fill="#1a4e8a" font-weight="bold">+</text>
+          <text x="63" y="86" font-size="12" fill="#1a4e8a" font-weight="bold">−</text>
+          <text x="12" y="78" font-size="12" fill="#c05c00" font-weight="bold" text-anchor="middle" transform="rotate(-90,12,78)">27 V</text>
+          <!-- Nodo 1 (arriba izq) y nodo 4 (abajo izq) -->
+          <circle cx="42" cy="22" r="4" fill="#1a4e8a"/>
+          <text x="42" y="10" font-size="11" fill="#1a4e8a" font-weight="bold" text-anchor="middle">① +</text>
+          <circle cx="42" cy="155" r="4" fill="#1a4e8a"/>
+          <text x="42" y="167" font-size="11" fill="#1a4e8a" font-weight="bold" text-anchor="middle">④ −</text>
+          <!-- Rail superior: 1 → R1 → 2 -->
+          <line x1="42" y1="22" x2="82" y2="22" stroke="#333" stroke-width="2"/>
+          <rect x="82" y="12" width="76" height="20" rx="4" fill="#e8f0fb" stroke="#1a4e8a" stroke-width="2"/>
+          <text x="120" y="25" font-size="11" fill="#1a4e8a" font-weight="bold" text-anchor="middle">R1 = 3 Ω</text>
+          <line x1="158" y1="22" x2="196" y2="22" stroke="#333" stroke-width="2"/>
+          <!-- Nodo 2 -->
+          <circle cx="196" cy="22" r="5" fill="#15803d"/>
+          <text x="196" y="10" font-size="11" fill="#15803d" font-weight="bold" text-anchor="middle">②</text>
+          <!-- Malla I label -->
+          <text x="118" y="90" font-size="12" fill="#1a4e8a" font-style="italic" font-weight="bold" text-anchor="middle">Malla I</text>
+          <text x="118" y="104" font-size="11" fill="#1a4e8a" text-anchor="middle">↻ I₁</text>
+          <!-- Rail superior: 2 → R2 → 3 -->
+          <line x1="196" y1="22" x2="232" y2="22" stroke="#333" stroke-width="2"/>
+          <rect x="232" y="12" width="76" height="20" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+          <text x="270" y="25" font-size="11" fill="#15803d" font-weight="bold" text-anchor="middle">R2 = 6 Ω</text>
+          <line x1="308" y1="22" x2="380" y2="22" stroke="#333" stroke-width="2"/>
+          <!-- Nodo 3 -->
+          <circle cx="380" cy="22" r="5" fill="#c05c00"/>
+          <text x="380" y="10" font-size="11" fill="#c05c00" font-weight="bold" text-anchor="middle">③</text>
+          <!-- R5 diagonal (nodo 2 → nodo 4) -->
+          <line x1="196" y1="27" x2="196" y2="155" stroke="#333" stroke-width="2"/>
+          <rect x="160" y="75" width="72" height="20" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5"/>
+          <text x="196" y="88" font-size="11" fill="#7c3aed" font-weight="bold" text-anchor="middle">R5 = 3 Ω</text>
+          <!-- Malla II label -->
+          <text x="295" y="90" font-size="12" fill="#15803d" font-style="italic" font-weight="bold" text-anchor="middle">Malla II</text>
+          <text x="295" y="104" font-size="11" fill="#15803d" text-anchor="middle">↻ I₂</text>
+          <!-- R3 vertical (nodo 3 → nodo 4) -->
+          <line x1="380" y1="27" x2="380" y2="75" stroke="#333" stroke-width="2"/>
+          <rect x="344" y="75" width="72" height="20" rx="4" fill="#fff3e0" stroke="#c05c00" stroke-width="2"/>
+          <text x="380" y="88" font-size="11" fill="#c05c00" font-weight="bold" text-anchor="middle">R3 = 6 Ω</text>
+          <line x1="380" y1="95" x2="380" y2="155" stroke="#333" stroke-width="2"/>
+          <!-- Rail inferior: 4 → → 3 -->
+          <line x1="42" y1="155" x2="380" y2="155" stroke="#333" stroke-width="2"/>
+          <!-- Nodo 4 también en x=196 y x=380 -->
+          <circle cx="196" cy="155" r="4" fill="#1a4e8a"/>
+          <circle cx="380" cy="155" r="4" fill="#1a4e8a"/>
+          <text x="196" y="167" font-size="10" fill="#1a4e8a" text-anchor="middle">④</text>
+          <text x="380" y="167" font-size="10" fill="#1a4e8a" text-anchor="middle">④</text>
+        </svg>
+      </div>
+
+      <button class="show-sol-btn" onclick="toggleSol(this)">Ver solución paso a paso ▾</button>
+      <div class="sol" style="display:none;margin-top:1rem">
+
+        <div class="step"><div class="step-num">1</div><div class="step-body">
+          <strong>Identificar mallas y asignar corrientes (sentido horario):</strong><br>
+          <em>Malla I:</em> ① → R1 → ② → R5 → ④ → (fuente) → ① | corriente <strong>I₁</strong><br>
+          <em>Malla II:</em> ② → R2 → ③ → R3 → ④ → R5 → ② | corriente <strong>I₂</strong><br>
+          <span style="font-size:.83rem;color:var(--gray-lt)">R5 es la rama compartida entre ambas mallas → lleva (I₁ − I₂).</span>
+        </div></div>
+
+        <div class="step"><div class="step-num">2</div><div class="step-body">
+          <strong>Escribir ecuación LKT para Malla I</strong> (suma de caídas = fuente):<br>
+          <span class="formula-inline">R1·I₁ + R5·(I₁ − I₂) = U</span><br>
+          <span class="formula-inline">3·I₁ + 3·(I₁ − I₂) = 27</span><br>
+          <span class="formula-inline">6·I₁ − 3·I₂ = 27 &nbsp;→&nbsp; 2·I₁ − I₂ = 9 &nbsp;···(1)</span>
+        </div></div>
+
+        <div class="step"><div class="step-num">3</div><div class="step-body">
+          <strong>Escribir ecuación LKT para Malla II</strong> (sin fuente propia = 0):<br>
+          <span class="formula-inline">R2·I₂ + R3·I₂ + R5·(I₂ − I₁) = 0</span><br>
+          <span class="formula-inline">6·I₂ + 6·I₂ + 3·(I₂ − I₁) = 0</span><br>
+          <span class="formula-inline">15·I₂ − 3·I₁ = 0 &nbsp;→&nbsp; I₁ = 5·I₂ &nbsp;···(2)</span>
+        </div></div>
+
+        <div class="step"><div class="step-num">4</div><div class="step-body">
+          <strong>Resolver el sistema de ecuaciones:</strong><br>
+          Sustituir (2) en (1): <span class="formula-inline">2·(5·I₂) − I₂ = 9 → 9·I₂ = 9</span><br>
+          <span class="formula-inline">I₂ = 1 A</span><br>
+          <span class="formula-inline">I₁ = 5·I₂ = 5 A</span>
+        </div></div>
+
+        <div class="step"><div class="step-num">5</div><div class="step-body">
+          <strong>Corrientes reales por cada rama:</strong><br>
+          <span class="formula-inline">I_R1 = I₁ = 5 A</span> (de ① a ②)<br>
+          <span class="formula-inline">I_R5 = I₁ − I₂ = 5 − 1 = 4 A</span> (de ② a ④, diagonal)<br>
+          <span class="formula-inline">I_R2 = I₂ = 1 A</span> (de ② a ③)<br>
+          <span class="formula-inline">I_R3 = I₂ = 1 A</span> (de ③ a ④)
+        </div></div>
+
+        <div class="step"><div class="step-num">6</div><div class="step-body">
+          <strong>Tensiones en cada resistencia:</strong><br>
+          <span class="formula-inline">U_R1 = 3 × 5 = 15 V</span><br>
+          <span class="formula-inline">U_R5 = 3 × 4 = 12 V</span><br>
+          <span class="formula-inline">U_R2 = 6 × 1 = 6 V</span><br>
+          <span class="formula-inline">U_R3 = 6 × 1 = 6 V</span>
+        </div></div>
+
+        <div class="step"><div class="step-num">7</div><div class="step-body">
+          <strong>Verificación LKT Malla I:</strong> <span class="formula-inline">U_R1 + U_R5 = 15 + 12 = 27 V = U ✓</span><br>
+          <strong>Verificación LKT Malla II:</strong> <span class="formula-inline">U_R2 + U_R3 − U_R5 = 6 + 6 − 12 = 0 ✓</span><br>
+          <strong>Verificación LKC en nodo ②:</strong> <span class="formula-inline">I_R1 = I_R5 + I_R2 → 5 = 4 + 1 = 5 ✓</span>
+        </div></div>
+
+        <div class="result-box">✅ I₁ = 5 A | I₂ = 1 A | I_R1=5A | I_R5=4A (diagonal) | I_R2=1A | I_R3=1A<br>U_R1=15V | U_R5=12V | U_R2=6V | U_R3=6V</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 10 -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)">
+      <h3>Ejercicio 10 — Teorema de Thévenin: circuito equivalente</h3>
+      <span class="ej-badge">U2 · Avanzado</span>
+    </div>
+    <div class="ej-body">
+      <div class="ej-enunciado">
+        Dado el circuito con <strong>U = 24 V</strong>, <strong>R1 = 6 Ω</strong> y <strong>R2 = 12 Ω</strong>, encontrar el circuito equivalente de Thévenin visto desde los terminales <strong>A-B</strong>.<br>
+        Luego verificar calculando la corriente en una carga <strong>R_L = 4 Ω</strong> conectada a A-B.
+      </div>
+
+      <!-- Circuito original -->
+      <div style="margin:1rem 0">
+        <div style="font-size:.78rem;font-weight:700;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem;text-align:center">Circuito original</div>
+        <svg viewBox="0 0 440 140" style="width:100%;max-width:420px;display:block;margin:0 auto;background:#fafafa;border-radius:10px;border:1px solid var(--border)">
+          <!-- Batería -->
+          <line x1="42" y1="20" x2="42" y2="48" stroke="#333" stroke-width="2"/>
+          <line x1="26" y1="48" x2="58" y2="48" stroke="#333" stroke-width="2.5"/>
+          <line x1="33" y1="57" x2="51" y2="57" stroke="#333" stroke-width="1.5"/>
+          <line x1="26" y1="66" x2="58" y2="66" stroke="#333" stroke-width="2.5"/>
+          <line x1="33" y1="75" x2="51" y2="75" stroke="#333" stroke-width="1.5"/>
+          <line x1="42" y1="75" x2="42" y2="120" stroke="#333" stroke-width="2"/>
+          <text x="63" y="57" font-size="12" fill="#1a4e8a" font-weight="bold">+</text>
+          <text x="63" y="79" font-size="12" fill="#1a4e8a" font-weight="bold">−</text>
+          <text x="12" y="72" font-size="12" fill="#c05c00" font-weight="bold" text-anchor="middle" transform="rotate(-90,12,72)">24 V</text>
+          <!-- Rail superior: batería → R1 → nodo M -->
+          <line x1="42" y1="20" x2="82" y2="20" stroke="#333" stroke-width="2"/>
+          <rect x="82" y="10" width="80" height="20" rx="4" fill="#e8f0fb" stroke="#1a4e8a" stroke-width="2"/>
+          <text x="122" y="23" font-size="11" fill="#1a4e8a" font-weight="bold" text-anchor="middle">R1 = 6 Ω</text>
+          <line x1="162" y1="20" x2="240" y2="20" stroke="#333" stroke-width="2"/>
+          <!-- Nodo M -->
+          <circle cx="240" cy="20" r="5" fill="#15803d"/>
+          <text x="240" y="8" font-size="10" fill="#15803d" font-weight="bold" text-anchor="middle">M</text>
+          <!-- R2 vertical (M → rail inferior) -->
+          <line x1="240" y1="25" x2="240" y2="55" stroke="#333" stroke-width="2"/>
+          <rect x="204" y="55" width="72" height="20" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+          <text x="240" y="68" font-size="11" fill="#15803d" font-weight="bold" text-anchor="middle">R2 = 12 Ω</text>
+          <line x1="240" y1="75" x2="240" y2="120" stroke="#333" stroke-width="2"/>
+          <!-- Terminal A (arriba derecha) -->
+          <line x1="240" y1="20" x2="360" y2="20" stroke="#333" stroke-width="2"/>
+          <circle cx="360" cy="20" r="6" fill="#c05c00"/>
+          <text x="380" y="24" font-size="13" fill="#c05c00" font-weight="bold">A</text>
+          <!-- Terminal B (abajo derecha) -->
+          <line x1="240" y1="120" x2="360" y2="120" stroke="#333" stroke-width="2"/>
+          <circle cx="360" cy="120" r="6" fill="#c05c00"/>
+          <text x="380" y="124" font-size="13" fill="#c05c00" font-weight="bold">B</text>
+          <!-- Línea de terminales A-B punteada -->
+          <line x1="360" y1="26" x2="360" y2="114" stroke="#c05c00" stroke-width="1.5" stroke-dasharray="5,4"/>
+          <text x="360" y="75" font-size="10" fill="#c05c00" text-anchor="middle" transform="rotate(90,360,75)">A − B (carga)</text>
+          <!-- Rail inferior -->
+          <line x1="42" y1="120" x2="240" y2="120" stroke="#333" stroke-width="2"/>
+        </svg>
+      </div>
+
+      <button class="show-sol-btn" onclick="toggleSol(this)">Ver solución paso a paso ▾</button>
+      <div class="sol" style="display:none;margin-top:1rem">
+
+        <div class="note" style="margin-bottom:1rem">📌 <strong>Método de Thévenin:</strong> 1) Calcular V_th (tensión en circuito abierto A-B). 2) Calcular R_th (resistencia vista desde A-B con fuentes apagadas). 3) Dibujar equivalente.</div>
+
+        <div class="step"><div class="step-num">1</div><div class="step-body">
+          <strong>V_th — Tensión en circuito abierto (sin carga en A-B):</strong><br>
+          Sin carga, la corriente circula solo por R1 y R2 en serie con la fuente.<br>
+          <span class="formula-inline">I = U / (R1 + R2) = 24 / (6 + 12) = 24 / 18 = 1,33 A</span><br>
+          La tensión en A-B es la caída en R2 (desde el nodo M hasta el rail −):<br>
+          <span class="formula-inline">V_th = I × R2 = 1,33 × 12 = 16 V</span>
+          <div style="margin:.8rem 0">
+            <div style="font-size:.78rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem;text-align:center">Paso 1 — Circuito abierto (hallando V_th)</div>
+            <svg viewBox="0 0 440 140" style="width:100%;max-width:400px;display:block;margin:0 auto;background:#fafafa;border-radius:10px;border:1px solid var(--border)">
+              <!-- Batería -->
+              <line x1="42" y1="20" x2="42" y2="48" stroke="#333" stroke-width="2"/>
+              <line x1="26" y1="48" x2="58" y2="48" stroke="#333" stroke-width="2.5"/>
+              <line x1="33" y1="57" x2="51" y2="57" stroke="#333" stroke-width="1.5"/>
+              <line x1="26" y1="66" x2="58" y2="66" stroke="#333" stroke-width="2.5"/>
+              <line x1="33" y1="75" x2="51" y2="75" stroke="#333" stroke-width="1.5"/>
+              <line x1="42" y1="75" x2="42" y2="120" stroke="#333" stroke-width="2"/>
+              <text x="63" y="57" font-size="12" fill="#1a4e8a" font-weight="bold">+</text>
+              <text x="63" y="79" font-size="12" fill="#1a4e8a" font-weight="bold">−</text>
+              <text x="12" y="72" font-size="11" fill="#c05c00" font-weight="bold" text-anchor="middle" transform="rotate(-90,12,72)">24 V</text>
+              <!-- R1 -->
+              <line x1="42" y1="20" x2="82" y2="20" stroke="#333" stroke-width="2"/>
+              <rect x="82" y="10" width="80" height="20" rx="4" fill="#e8f0fb" stroke="#1a4e8a" stroke-width="2"/>
+              <text x="122" y="23" font-size="11" fill="#1a4e8a" font-weight="bold" text-anchor="middle">R1 = 6 Ω</text>
+              <line x1="162" y1="20" x2="240" y2="20" stroke="#333" stroke-width="2"/>
+              <circle cx="240" cy="20" r="5" fill="#15803d"/>
+              <!-- R2 -->
+              <line x1="240" y1="25" x2="240" y2="55" stroke="#333" stroke-width="2"/>
+              <rect x="204" y="55" width="72" height="20" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+              <text x="240" y="68" font-size="11" fill="#15803d" font-weight="bold" text-anchor="middle">R2 = 12 Ω</text>
+              <line x1="240" y1="75" x2="240" y2="120" stroke="#333" stroke-width="2"/>
+              <!-- Arrow for I and value -->
+              <text x="200" y="17" font-size="10" fill="#c05c00" text-anchor="middle">→ I=1,33A</text>
+              <!-- Terminales abiertos -->
+              <line x1="240" y1="20" x2="360" y2="20" stroke="#333" stroke-width="2"/>
+              <circle cx="360" cy="20" r="6" fill="#c05c00"/>
+              <text x="378" y="24" font-size="13" fill="#c05c00" font-weight="bold">A</text>
+              <line x1="240" y1="120" x2="360" y2="120" stroke="#333" stroke-width="2"/>
+              <circle cx="360" cy="120" r="6" fill="#c05c00"/>
+              <text x="378" y="124" font-size="13" fill="#c05c00" font-weight="bold">B</text>
+              <line x1="360" y1="26" x2="360" y2="114" stroke="#c05c00" stroke-width="1.5" stroke-dasharray="5,4"/>
+              <!-- Vth label -->
+              <text x="395" y="68" font-size="12" fill="#7c3aed" font-weight="bold" text-anchor="middle">V_th</text>
+              <text x="395" y="80" font-size="12" fill="#7c3aed" font-weight="bold" text-anchor="middle">= 16V</text>
+              <line x1="42" y1="120" x2="240" y2="120" stroke="#333" stroke-width="2"/>
+            </svg>
+          </div>
+        </div></div>
+
+        <div class="step"><div class="step-num">2</div><div class="step-body">
+          <strong>R_th — Resistencia equivalente (fuente apagada = cortocircuito):</strong><br>
+          Se reemplaza la fuente U por un cortocircuito. Desde A-B se ve R1 y R2 en paralelo:<br>
+          <span class="formula-inline">R_th = R1 ∥ R2 = (R1 × R2) / (R1 + R2)</span><br>
+          <span class="formula-inline">R_th = (6 × 12) / (6 + 12) = 72 / 18 = 4 Ω</span>
+          <div style="margin:.8rem 0">
+            <div style="font-size:.78rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem;text-align:center">Paso 2 — Fuente apagada (hallando R_th)</div>
+            <svg viewBox="0 0 440 140" style="width:100%;max-width:400px;display:block;margin:0 auto;background:#fafafa;border-radius:10px;border:1px solid var(--border)">
+              <!-- Fuente reemplazada por cable (cortocircuito) -->
+              <line x1="42" y1="20" x2="42" y2="120" stroke="#888" stroke-width="2" stroke-dasharray="6,3"/>
+              <text x="42" y="75" font-size="10" fill="#888" text-anchor="middle" transform="rotate(-90,42,75)">cortocircuito</text>
+              <!-- R1 -->
+              <line x1="42" y1="20" x2="82" y2="20" stroke="#333" stroke-width="2"/>
+              <rect x="82" y="10" width="80" height="20" rx="4" fill="#e8f0fb" stroke="#1a4e8a" stroke-width="2"/>
+              <text x="122" y="23" font-size="11" fill="#1a4e8a" font-weight="bold" text-anchor="middle">R1 = 6 Ω</text>
+              <line x1="162" y1="20" x2="240" y2="20" stroke="#333" stroke-width="2"/>
+              <circle cx="240" cy="20" r="5" fill="#15803d"/>
+              <!-- R2 -->
+              <line x1="240" y1="25" x2="240" y2="55" stroke="#333" stroke-width="2"/>
+              <rect x="204" y="55" width="72" height="20" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+              <text x="240" y="68" font-size="11" fill="#15803d" font-weight="bold" text-anchor="middle">R2 = 12 Ω</text>
+              <line x1="240" y1="75" x2="240" y2="120" stroke="#333" stroke-width="2"/>
+              <!-- Terminales A-B con flecha R_th -->
+              <line x1="240" y1="20" x2="360" y2="20" stroke="#333" stroke-width="2"/>
+              <circle cx="360" cy="20" r="6" fill="#c05c00"/>
+              <text x="378" y="24" font-size="13" fill="#c05c00" font-weight="bold">A</text>
+              <line x1="240" y1="120" x2="360" y2="120" stroke="#333" stroke-width="2"/>
+              <circle cx="360" cy="120" r="6" fill="#c05c00"/>
+              <text x="378" y="124" font-size="13" fill="#c05c00" font-weight="bold">B</text>
+              <line x1="42" y1="120" x2="240" y2="120" stroke="#333" stroke-width="2"/>
+              <!-- R_th label -->
+              <text x="400" y="65" font-size="12" fill="#7c3aed" font-weight="bold" text-anchor="middle">R_th</text>
+              <text x="400" y="77" font-size="12" fill="#7c3aed" font-weight="bold" text-anchor="middle">= 4 Ω</text>
+              <text x="400" y="89" font-size="10" fill="#7c3aed" text-anchor="middle">(R1 ∥ R2)</text>
+              <line x1="360" y1="26" x2="360" y2="114" stroke="#c05c00" stroke-width="1.5" stroke-dasharray="5,4"/>
+            </svg>
+          </div>
+        </div></div>
+
+        <div class="step"><div class="step-num">3</div><div class="step-body">
+          <strong>Circuito equivalente de Thévenin:</strong><br>
+          Se reemplaza todo el circuito original por una fuente V_th en serie con R_th.
+          <div style="margin:.8rem 0">
+            <div style="font-size:.78rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem;text-align:center">Equivalente Thévenin</div>
+            <svg viewBox="0 0 440 140" style="width:100%;max-width:400px;display:block;margin:0 auto;background:#fafafa;border-radius:10px;border:1px solid var(--border)">
+              <!-- Batería Thévenin (V_th = 16V) -->
+              <line x1="60" y1="20" x2="60" y2="45" stroke="#7c3aed" stroke-width="2"/>
+              <line x1="44" y1="45" x2="76" y2="45" stroke="#7c3aed" stroke-width="2.5"/>
+              <line x1="51" y1="54" x2="69" y2="54" stroke="#7c3aed" stroke-width="1.5"/>
+              <line x1="44" y1="63" x2="76" y2="63" stroke="#7c3aed" stroke-width="2.5"/>
+              <line x1="51" y1="72" x2="69" y2="72" stroke="#7c3aed" stroke-width="1.5"/>
+              <line x1="60" y1="72" x2="60" y2="120" stroke="#7c3aed" stroke-width="2"/>
+              <text x="82" y="54" font-size="11" fill="#7c3aed" font-weight="bold">+</text>
+              <text x="82" y="77" font-size="11" fill="#7c3aed" font-weight="bold">−</text>
+              <text x="22" y="68" font-size="11" fill="#7c3aed" font-weight="bold" text-anchor="middle" transform="rotate(-90,22,68)">V_th=16V</text>
+              <!-- R_th en serie -->
+              <line x1="60" y1="20" x2="100" y2="20" stroke="#7c3aed" stroke-width="2"/>
+              <rect x="100" y="10" width="100" height="20" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5"/>
+              <text x="150" y="23" font-size="11" fill="#7c3aed" font-weight="bold" text-anchor="middle">R_th = 4 Ω</text>
+              <line x1="200" y1="20" x2="360" y2="20" stroke="#7c3aed" stroke-width="2"/>
+              <!-- Terminales A-B con R_L -->
+              <circle cx="360" cy="20" r="6" fill="#c05c00"/>
+              <text x="378" y="24" font-size="13" fill="#c05c00" font-weight="bold">A</text>
+              <line x1="60" y1="120" x2="360" y2="120" stroke="#7c3aed" stroke-width="2"/>
+              <circle cx="360" cy="120" r="6" fill="#c05c00"/>
+              <text x="378" y="124" font-size="13" fill="#c05c00" font-weight="bold">B</text>
+              <line x1="360" y1="26" x2="360" y2="114" stroke="#c05c00" stroke-width="1.5" stroke-dasharray="5,4"/>
+              <text x="415" y="75" font-size="11" fill="#c05c00" font-weight="bold" text-anchor="middle">Carga</text>
+              <text x="415" y="87" font-size="11" fill="#c05c00" text-anchor="middle">R_L</text>
+            </svg>
+          </div>
+        </div></div>
+
+        <div class="step"><div class="step-num">4</div><div class="step-body">
+          <strong>Verificación: calcular corriente con carga R_L = 4 Ω:</strong><br>
+          Con el equivalente Thévenin en serie con R_L:<br>
+          <span class="formula-inline">I_L = V_th / (R_th + R_L) = 16 / (4 + 4) = 16 / 8 = 2 A</span><br><br>
+          <strong>Verificación calculando desde el circuito original:</strong><br>
+          R2 en paralelo con R_L: <span class="formula-inline">R2∥R_L = (12×4)/(12+4) = 48/16 = 3 Ω</span><br>
+          Resistencia total: <span class="formula-inline">R_total = R1 + 3 = 6 + 3 = 9 Ω</span><br>
+          Corriente de fuente: <span class="formula-inline">I_total = 24 / 9 = 2,67 A</span><br>
+          Tensión en paralelo: <span class="formula-inline">U_par = 2,67 × 3 = 8 V</span><br>
+          Corriente por R_L: <span class="formula-inline">I_L = 8 / 4 = 2 A ✓</span>
+        </div></div>
+
+        <div class="result-box">✅ V_th = 16 V &nbsp;|&nbsp; R_th = 4 Ω (= R1 ∥ R2)<br>Con R_L = 4 Ω → I_L = 2 A (mismo resultado desde el circuito original ✓)</div>
+      </div>
+    </div>
+  </div>
+
 </div></div>
 
 <!-- ═══════════════════════ JUEGOS ═══════════════════════ -->

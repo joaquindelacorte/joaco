@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estadística · Parcial 2 — Modelos Discretos</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+
+<style>
+:root{
+  --bg:#0f172a; --panel:#1e293b; --panel2:#273449; --border:#334155;
+  --text:#e2e8f0; --muted:#94a3b8; --accent:#38bdf8; --accent2:#a78bfa;
+  --good:#34d399; --warn:#fbbf24; --bad:#f87171; --pink:#ec4899;
+  --yellow:#fde68a; --r:#1f6feb;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+     background:var(--bg); color:var(--text); line-height:1.55}
+
+.layout{display:grid; grid-template-columns:270px 1fr; min-height:100vh}
+
+/* ── Sidebar ── */
+nav.sidebar{background:var(--panel); border-right:1px solid var(--border);
+            padding:18px 14px; position:sticky; top:0; height:100vh; overflow-y:auto}
+.brand{font-weight:700; font-size:17px; color:white; margin-bottom:4px}
+.brand small{display:block; font-weight:400; color:var(--muted); font-size:11px; margin-top:2px}
+.nav-level{font-size:10px; color:var(--muted); letter-spacing:1px; text-transform:uppercase;
+           padding:14px 4px 4px}
+nav.sidebar a{display:flex; align-items:center; gap:8px; color:var(--text); text-decoration:none;
+              padding:6px 10px; border-radius:6px; font-size:13px; margin:1px 0; transition:background .15s}
+nav.sidebar a:hover,nav.sidebar a.active{background:var(--panel2); color:var(--accent)}
+
+/* ── Main ── */
+main{padding:28px 40px; max-width:980px}
+h1{font-size:30px; color:white; margin-bottom:4px}
+.subtitle{color:var(--muted); font-size:14px; margin-bottom:28px}
+h2{font-size:22px; color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:7px; margin:40px 0 14px}
+h3{font-size:17px; color:var(--accent2); margin:22px 0 8px}
+h4{font-size:14px; color:var(--yellow); margin:14px 0 6px; font-weight:600}
+p,li{font-size:14.5px}
+ul,ol{padding-left:22px; margin:6px 0}
+
+/* ── Cards ── */
+.card{background:var(--panel); border:1px solid var(--border); border-radius:10px;
+      padding:16px 20px; margin:12px 0}
+.card.formula{border-left:4px solid var(--accent2); background:var(--panel2)}
+.card.tip{border-left:4px solid var(--good)}
+.card.warn{border-left:4px solid var(--warn)}
+.card.intuition{border-left:4px solid var(--pink); background:#2a1d2e}
+.card.game{border-left:4px solid var(--accent); background:#0a1929}
+.card.answer{border-left:4px solid var(--good); background:#0d1f16}
+.card.enunciado{border-left:4px solid var(--warn); background:#1c1a0e}
+.card.key{border-left:4px solid var(--pink); background:#1a0d18}
+.card.r{border-left:4px solid var(--r); background:#0d1117}
+
+/* ── Badges ── */
+.badge{display:inline-block; padding:3px 10px; border-radius:12px;
+       font-size:12px; font-weight:600; margin-right:6px; margin-bottom:4px}
+.badge.binomial{background:#143526; color:var(--good)}
+.badge.poisson{background:#3d2e0a; color:var(--warn)}
+.badge.compare{background:#3a1c1c; color:var(--bad)}
+
+/* ── Tables ── */
+table{border-collapse:collapse; width:100%; margin:10px 0; font-size:14px}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--panel2); color:var(--accent)}
+td code{background:#0b1220; padding:1px 5px; border-radius:3px; font-size:12px; color:var(--yellow)}
+
+/* ── Formula box ── */
+.formula-box{background:#0b1220; border:1px solid var(--border); border-radius:8px;
+             padding:12px 16px; margin:8px 0; text-align:center; font-size:16px}
+
+/* ── Grid ── */
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+@media(max-width:860px){.grid2{grid-template-columns:1fr}}
+
+/* ── Steps ── */
+.steps{margin:10px 0}
+.step{display:flex; gap:12px; margin:8px 0; align-items:flex-start}
+.step-n{flex-shrink:0; width:26px; height:26px; border-radius:50%;
+        background:var(--accent2); color:#0b1220; font-size:12px; font-weight:700;
+        display:flex; align-items:center; justify-content:center}
+.step-body{flex:1; font-size:14px; padding-top:4px}
+
+/* ── Controls ── */
+.controls{display:flex; flex-wrap:wrap; gap:12px; margin:14px 0; align-items:flex-end}
+.controls label{display:flex; flex-direction:column; font-size:13px; color:var(--muted); min-width:130px}
+.controls input[type=number],.controls select{
+  background:#0b1220; color:var(--text); border:1px solid var(--border); border-radius:6px;
+  padding:6px 10px; font-size:14px; margin-top:4px}
+.controls input[type=range]{background:transparent; margin-top:4px}
+
+/* ── Stats output ── */
+.stat-output{display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));
+             gap:10px; margin-top:12px}
+.stat-box{background:#0b1220; padding:10px 12px; border-radius:8px; border:1px solid var(--border)}
+.stat-box .label{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px}
+.stat-box .value{font-size:20px; font-weight:700; color:var(--accent)}
+
+/* ── Plot ── */
+.plot{width:100%; height:320px; background:#0b1220; border-radius:8px; border:1px solid var(--border); margin-top:10px}
+.plot-sm{width:100%; height:240px; background:#0b1220; border-radius:8px; border:1px solid var(--border)}
+
+/* ── Buttons ── */
+.btn{background:var(--accent); color:#0b1220; border:none; padding:8px 18px;
+     border-radius:6px; font-weight:600; cursor:pointer; font-size:14px; transition:filter .15s}
+.btn:hover{filter:brightness(1.1)}
+.btn-2{background:var(--panel2); color:var(--text); border:1px solid var(--border);
+       padding:8px 16px; border-radius:6px; cursor:pointer; font-size:14px}
+.btn-good{background:var(--good); color:#0b1220; border:none; padding:8px 18px;
+          border-radius:6px; font-weight:600; cursor:pointer; font-size:14px}
+.btn-warn{background:var(--warn); color:#0b1220; border:none; padding:8px 18px;
+          border-radius:6px; font-weight:600; cursor:pointer; font-size:14px}
+
+/* ── Code ── */
+code{background:#0b1220; padding:2px 6px; border-radius:4px; font-size:13px; color:#fcd34d}
+pre{background:#0b1220; border:1px solid var(--border); border-radius:6px;
+    padding:12px 16px; overflow-x:auto; font-size:13px; color:#e2e8f0; line-height:1.6}
+
+/* ── Quiz ── */
+.quiz-q{background:var(--panel2); padding:14px 18px; border-radius:8px; margin:10px 0}
+.quiz-q .opts{display:flex; flex-direction:column; gap:8px; margin-top:10px}
+.quiz-q .opt{background:#0b1220; padding:10px 14px; border-radius:6px; border:2px solid transparent;
+             cursor:pointer; transition:all .15s}
+.quiz-q .opt:hover{border-color:var(--accent)}
+.quiz-q .opt.correct{background:#143526; border-color:var(--good)}
+.quiz-q .opt.wrong{background:#3a1c1c; border-color:var(--bad)}
+.quiz-feedback{margin-top:8px; font-size:13.5px; color:var(--muted); padding:8px 10px;
+               background:#0b1220; border-radius:6px; border-left:3px solid var(--accent)}
+.quiz-score{font-size:28px; font-weight:700; text-align:center; padding:16px; color:var(--accent)}
+
+/* ── Reveal ── */
+details.reveal{background:var(--panel2); border-radius:8px; padding:10px 16px; margin:10px 0;
+               border:1px solid var(--border)}
+details.reveal summary{cursor:pointer; color:var(--accent); font-weight:600; padding:4px 0; font-size:14px}
+details.reveal[open]{padding-bottom:14px}
+
+/* ── Progress bar ── */
+.progress-bar{display:flex; gap:4px; margin:14px 0}
+.progress-bar .step{flex:1; height:6px; background:var(--border); border-radius:3px}
+.progress-bar .step.done{background:var(--good)}
+
+/* ── Term tooltip ── */
+.term{border-bottom:1px dotted var(--accent); cursor:help; color:var(--accent)}
+.term:hover::after{content:attr(data-def); position:absolute; bottom:120%; left:0; min-width:240px;
+                   background:#0b1220; color:var(--text); padding:8px 12px; border-radius:6px;
+                   border:1px solid var(--accent); font-size:12.5px; font-weight:normal;
+                   z-index:10; white-space:normal; line-height:1.4; box-shadow:0 4px 12px rgba(0,0,0,0.4);
+                   position:fixed}
+
+hr{border:none; border-top:1px solid var(--border); margin:30px 0}
+.footer{margin-top:60px; padding:20px; text-align:center; color:var(--muted); font-size:12px;
+        border-top:1px solid var(--border)}
+
+/* ── Highlight ── */
+.hl-good{color:var(--good); font-weight:700}
+.hl-warn{color:var(--warn); font-weight:700}
+.hl-bad{color:var(--bad); font-weight:700}
+.hl-accent{color:var(--accent); font-weight:700}
+.hl-purple{color:var(--accent2); font-weight:700}
+
+/* ── Comparación visual ── */
+.compare-box{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:14px 0}
+.compare-cell{background:#0b1220; border:1px solid var(--border); border-radius:8px; padding:12px 14px}
+.compare-cell h4{margin:0 0 8px; font-size:13px}
+.compare-cell.left{border-top:3px solid var(--good)}
+.compare-cell.right{border-top:3px solid var(--warn)}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ════════════════ SIDEBAR ════════════════ -->
+<nav class="sidebar">
+  <div class="brand">📊 Estadística · P2<br><small>Modelos Discretos · Lic. Automatización</small></div>
+
+  <div class="nav-level">🟢 Binomial</div>
+  <a href="#intro">👋 Presentación</a>
+  <a href="#bernoulli">1. Ensayo de Bernoulli</a>
+  <a href="#binomial-teoria">2. Distribución Binomial</a>
+  <a href="#binomial-sim">🎮 Simulador Binomial</a>
+  <a href="#binomial-ej">📝 Ejercicios Binomial</a>
+
+  <div class="nav-level">🟡 Poisson</div>
+  <a href="#poisson-teoria">3. Distribución Poisson</a>
+  <a href="#poisson-sim">🎮 Simulador Poisson</a>
+  <a href="#poisson-ej">📝 Ejercicios Poisson</a>
+
+  <div class="nav-level">🔴 Comparación</div>
+  <a href="#comparacion">4. Bi vs Poisson</a>
+  <a href="#convergencia">⚡ Demo convergencia</a>
+  <a href="#cuando-usar">5. ¿Cuándo usar cada una?</a>
+
+  <div class="nav-level">🏆 Práctica</div>
+  <a href="#integradores">6. Problemas integradores</a>
+  <a href="#r-code">🔵 Código en R</a>
+  <a href="#quiz">🎓 Quiz final</a>
+  <a href="#errores">⚠️ Errores comunes</a>
+</nav>
+
+<!-- ════════════════ MAIN ════════════════ -->
+<main>
+
+<!-- ── INTRO ── -->
+<h1 id="intro">📊 Estadística — Parcial 2</h1>
+<p class="subtitle">Modelos discretos: Binomial y Poisson · Lic. en Automatización y Control · Clase 8</p>
+
+<div class="card intuition">
+<h3 style="margin-top:0">👋 ¿Qué vas a aprender acá?</h3>
+<p>En el primer parcial aprendiste a <em>describir</em> datos (medias, dispersión, boxplots) y a calcular probabilidades básicas. En el segundo parcial aparecen los <strong>modelos probabilísticos</strong>: fórmulas que te dicen exactamente cuánta probabilidad asignarle a cada resultado posible.</p>
+<p>Las dos distribuciones de hoy aparecen constantemente en automatización e industria:</p>
+<ul>
+  <li><strong>Binomial</strong> — cuando hacés <em>n</em> pruebas y cada una puede salir bien o mal. Ejemplo: 20 piezas salen de la línea; ¿cuántas estarán defectuosas?</li>
+  <li><strong>Poisson</strong> — cuando contás <em>eventos raros</em> en un intervalo de tiempo o espacio. Ejemplo: ¿cuántas fallas de sensor ocurren en un turno de 8 h?</li>
+</ul>
+</div>
+
+<!-- ── 1. BERNOULLI ── -->
+<h2 id="bernoulli">1. El ensayo de Bernoulli — el ladrillo fundamental</h2>
+
+<div class="card intuition">
+<h4>🧠 Intuición</h4>
+<p>Un <strong>ensayo de Bernoulli</strong> es cualquier experimento con exactamente dos resultados: <em>éxito</em> o <em>fracaso</em>. No importa cómo los llames: sí/no, bueno/defectuoso, detectó/no detectó, soldó bien/soldó mal.</p>
+<p>La única información que necesitás es <strong>p</strong>: la probabilidad de éxito en una sola prueba.</p>
+</div>
+
+<div class="grid2">
+<div class="card formula">
+<h4>Variable aleatoria de Bernoulli</h4>
+$$X \sim \text{Bernoulli}(p)$$
+$$P(X=1) = p \quad P(X=0) = 1-p$$
+</div>
+<div class="card formula">
+<h4>Parámetros</h4>
+$$E[X] = p$$
+$$\text{Var}(X) = p\,(1-p)$$
+</div>
+</div>
+
+<div class="card tip">
+<h4>💡 Ejemplos industriales</h4>
+<table>
+  <tr><th>Escenario</th><th>"Éxito" (X=1)</th><th>p típica</th></tr>
+  <tr><td>Sensor de temperatura falla en el turno</td><td>Falla detectada</td><td>0.10</td></tr>
+  <tr><td>Pieza sale defectuosa de línea</td><td>Defectuosa</td><td>0.02–0.05</td></tr>
+  <tr><td>Robot de soldadura hace unión perfecta</td><td>Unión correcta</td><td>0.90</td></tr>
+  <tr><td>Lote pasa control de calidad</td><td>Aprobado</td><td>0.98</td></tr>
+</table>
+</div>
+
+<!-- ── 2. BINOMIAL ── -->
+<h2 id="binomial-teoria"><span class="badge binomial">Binomial</span>2. Distribución Binomial</h2>
+
+<div class="card intuition">
+<h4>🧠 Intuición antes de la fórmula</h4>
+<p>Imaginá que revisás <strong>20 piezas</strong> de una línea donde el 5% sale defectuosa. Querés saber: ¿cuántas defectuosas esperás encontrar? ¿Qué probabilidad hay de que haya exactamente 2? ¿O 3 o más?</p>
+<p>Cuando repetís <em>n</em> ensayos de Bernoulli <strong>independientes</strong> con la <strong>misma probabilidad p</strong>, el número total de éxitos sigue una distribución <strong>Binomial</strong>.</p>
+</div>
+
+<div class="card formula">
+<h4>Función de masa de probabilidad (PMF)</h4>
+$$\boxed{P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}}$$
+<p style="margin-top:8px; font-size:13px">donde $\binom{n}{k} = \dfrac{n!}{k!\,(n-k)!}$ es el combinatorio "n elige k" → el número de formas de obtener exactamente k éxitos entre n pruebas.</p>
+</div>
+
+<div class="grid2">
+<div class="card formula">
+<h4>Parámetros</h4>
+$$X \sim Bi(n,\, p)$$
+<p><strong>n</strong> = número de ensayos (fijo)</p>
+<p><strong>p</strong> = prob. de éxito por ensayo</p>
+</div>
+<div class="card formula">
+<h4>Media y varianza</h4>
+$$E[X] = n \cdot p$$
+$$\text{Var}(X) = n \cdot p \cdot (1-p)$$
+$$\sigma = \sqrt{n\,p\,(1-p)}$$
+</div>
+</div>
+
+<div class="card tip">
+<h4>✅ Condiciones para usar Binomial</h4>
+<ol>
+  <li>Número de ensayos <strong>n fijo</strong> y conocido de antemano.</li>
+  <li>Cada ensayo tiene exactamente <strong>dos resultados</strong> posibles.</li>
+  <li>La probabilidad <strong>p es constante</strong> en todos los ensayos.</li>
+  <li>Los ensayos son <strong>independientes</strong> entre sí.</li>
+</ol>
+</div>
+
+<h3>Probabilidades acumuladas</h3>
+
+<div class="card">
+<p>Muchas veces no querés "exactamente k" sino "k o más" o "menos de k". Usás la <strong>función de distribución acumulada (CDF)</strong>:</p>
+<div class="grid2">
+<div>
+<h4>P(X ≤ k) — acumulada</h4>
+$$F(k) = P(X \le k) = \sum_{j=0}^{k} \binom{n}{j} p^j (1-p)^{n-j}$$
+<p>En R: <code>pbinom(k, n, p)</code></p>
+</div>
+<div>
+<h4>P(X ≥ k) — complemento</h4>
+$$P(X \ge k) = 1 - P(X \le k-1)$$
+<p>En R: <code>1 - pbinom(k-1, n, p)</code></p>
+</div>
+</div>
+<div class="card tip" style="margin-top:10px">
+<strong>Truco del complemento</strong>: para "al menos 1", siempre es más fácil calcular $1 - P(X=0)$.
+</div>
+</div>
+
+<!-- ── SIMULADOR BINOMIAL ── -->
+<h2 id="binomial-sim">🎮 Simulador Binomial</h2>
+
+<div class="card game">
+<h3 style="margin-top:0">Graficá la distribución Bi(n, p)</h3>
+<p>Mové los parámetros y mirá cómo cambia la forma. Notá cómo se desplaza la moda hacia np.</p>
+<div class="controls">
+  <label>n (ensayos)
+    <input type="number" id="binN" value="20" min="1" max="100" oninput="plotBinomial()">
+  </label>
+  <label>p (prob. éxito)
+    <input type="number" id="binP" value="0.05" min="0.01" max="0.99" step="0.01" oninput="plotBinomial()">
+  </label>
+  <label>k (calcular P)
+    <input type="number" id="binK" value="2" min="0" max="100" oninput="plotBinomial()">
+  </label>
+</div>
+<div id="binStats" class="stat-output"></div>
+<div id="binPlot" class="plot"></div>
+</div>
+
+<div class="card game">
+<h3 style="margin-top:0">Calculadora rápida Binomial</h3>
+<div class="controls">
+  <label>n <input type="number" id="calcN" value="20" min="1" max="500"></label>
+  <label>p <input type="number" id="calcP" value="0.05" min="0.001" max="0.999" step="0.001"></label>
+  <label>k <input type="number" id="calcK" value="2" min="0" max="500"></label>
+  <button class="btn" onclick="calcBinomial()">Calcular</button>
+</div>
+<div id="calcBinOut" style="margin-top:12px; font-size:14px; line-height:2"></div>
+</div>
+
+<!-- ── EJERCICIOS BINOMIAL ── -->
+<h2 id="binomial-ej">📝 Ejercicios de Clase — Binomial</h2>
+
+<div class="card enunciado">
+<h4>Ejercicio 1 — Máquina con 5% de defectos (resuelto en clase)</h4>
+<p>Una máquina produce piezas con 5% de probabilidad de defecto. Se toma un lote de <strong>n = 20 piezas</strong>. Sea X = número de defectuosas.</p>
+</div>
+<details class="reveal">
+<summary>Ver solución completa</summary>
+<div style="margin-top:12px">
+<p><strong>Modelo:</strong> $X \sim Bi(20;\; 0{,}05)$</p>
+<div class="steps">
+  <div class="step"><div class="step-n">1</div><div class="step-body">
+    <strong>P(X = 2):</strong><br>
+    $$P(X=2) = \binom{20}{2}(0{,}05)^2(0{,}95)^{18} = 190 \times 0{,}0025 \times 0{,}3972 \approx \mathbf{0{,}1887}$$
+    En R: <code>dbinom(2, 20, 0.05)</code> → 0.1887
+  </div></div>
+  <div class="step"><div class="step-n">2</div><div class="step-body">
+    <strong>P(X ≥ 3):</strong> complemento<br>
+    $$P(X \ge 3) = 1 - P(X \le 2) = 1 - [P(0)+P(1)+P(2)]$$
+    $$= 1 - 0{,}3585 - 0{,}3774 - 0{,}1887 = \mathbf{0{,}0754}$$
+    En R: <code>1 - pbinom(2, 20, 0.05)</code> → 0.0754
+  </div></div>
+  <div class="step"><div class="step-n">3</div><div class="step-body">
+    <strong>E[X] = n·p = 20 × 0,05 = <span class="hl-good">1 pieza defectuosa esperada</span></strong>
+  </div></div>
+</div>
+</div>
+</details>
+
+<div class="card enunciado">
+<h4>Ejercicio 2 — 8 sensores con 10% de falla</h4>
+<p>Se instalan <strong>8 sensores</strong>. Cada uno tiene probabilidad de falla de 0,10. Sea X = número de sensores que fallan.</p>
+</div>
+<details class="reveal">
+<summary>Ver solución completa</summary>
+<div style="margin-top:12px">
+<p><strong>Modelo:</strong> $X \sim Bi(8;\; 0{,}10)$, $E[X] = 8 \times 0{,}1 = 0{,}8$</p>
+<div class="steps">
+  <div class="step"><div class="step-n">1</div><div class="step-body">
+    <strong>P(X = 2):</strong>
+    $$\binom{8}{2}(0{,}1)^2(0{,}9)^6 = 28 \times 0{,}01 \times 0{,}5314 = \mathbf{0{,}1488}$$
+    <code>dbinom(2, 8, 0.1)</code>
+  </div></div>
+  <div class="step"><div class="step-n">2</div><div class="step-body">
+    <strong>P(X ≥ 3) = 1 − pbinom(2, 8, 0.1) = <span class="hl-warn">0.0381</span></strong>
+  </div></div>
+  <div class="step"><div class="step-n">3</div><div class="step-body">
+    <strong>P(X = 0) = (0,9)⁸ = <span class="hl-good">0.4305</span></strong> → 43% de probabilidad de que ninguno falle.
+  </div></div>
+</div>
+</div>
+</details>
+
+<div class="card enunciado">
+<h4>Ejercicio 3 — Control de calidad: 98% aceptables, muestra de 30</h4>
+<p>Un proceso produce 98% de piezas aceptables (2% defectuosas). Se toma una muestra de 30 piezas.</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<p><strong>Modelo:</strong> $X \sim Bi(30;\; 0{,}02)$</p>
+<div class="steps">
+  <div class="step"><div class="step-n">1</div><div class="step-body">
+    <strong>P(todas aceptables) = P(X = 0) = (0,98)³⁰ = <span class="hl-good">0.5455</span></strong>
+    <br><code>dbinom(0, 30, 0.02)</code>
+  </div></div>
+  <div class="step"><div class="step-n">2</div><div class="step-body">
+    <strong>P(exactamente 2 defectuosas):</strong>
+    $$\binom{30}{2}(0{,}02)^2(0{,}98)^{28} = 435 \times 0{,}0004 \times 0{,}5686 = \mathbf{0{,}0988}$$
+  </div></div>
+  <div class="step"><div class="step-n">3</div><div class="step-body">
+    <strong>P(≥ 3 defectuosas) = 1 − pbinom(2, 30, 0.02) = <span class="hl-bad">0.0334</span></strong>
+    <br>Solo 3,3% de probabilidad → el proceso es bastante confiable.
+  </div></div>
+</div>
+</div>
+</details>
+
+<div class="card enunciado">
+<h4>Ejercicio 4 — Robot de soldadura con 90% de precisión</h4>
+<p>Un robot de soldadura tiene 90% de probabilidad de hacer una unión perfecta. Realiza 15 soldaduras. X = soldaduras perfectas.</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<p><strong>Modelo:</strong> $X \sim Bi(15;\; 0{,}90)$, $E[X] = 13{,}5$</p>
+<div class="steps">
+  <div class="step"><div class="step-n">1</div><div class="step-body">
+    <strong>P(X = 12):</strong>
+    $$\binom{15}{12}(0{,}9)^{12}(0{,}1)^3 = 455 \times 0{,}2824 \times 0{,}001 = \mathbf{0{,}1285}$$
+  </div></div>
+  <div class="step"><div class="step-n">2</div><div class="step-body">
+    <strong>P(X ≥ 13) = 1 − pbinom(12, 15, 0.9) = <span class="hl-good">0.8159</span></strong>
+    <br>81,6% de probabilidad de al menos 13 soldaduras perfectas.
+  </div></div>
+</div>
+</div>
+</details>
+
+<!-- ── 3. POISSON ── -->
+<h2 id="poisson-teoria"><span class="badge poisson">Poisson</span>3. Distribución de Poisson</h2>
+
+<div class="card intuition">
+<h4>🧠 Intuición</h4>
+<p>La Binomial cuenta éxitos en <em>n ensayos fijos</em>. Poisson cuenta <strong>eventos raros en un intervalo continuo</strong> (tiempo, longitud, área…). No tenés "n intentos": los eventos simplemente ocurren a una tasa promedio <strong>λ</strong>.</p>
+<ul>
+  <li>Fallas de un sensor: 2 por día → λ = 2 fallas/día</li>
+  <li>Llamadas a un centro: 5 por hora → λ = 5 llamadas/hora</li>
+  <li>Defectos en una plancha: 0,8 por m² → λ = 0,8 defectos/m²</li>
+</ul>
+<p><em>Clave</em>: λ escala con el intervalo. Si hay 4 fallas/mes → en 2 meses esperás λ = 8 fallas.</p>
+</div>
+
+<div class="card formula">
+<h4>Función de masa de probabilidad (PMF)</h4>
+$$\boxed{P(X = k) = \frac{e^{-\lambda} \cdot \lambda^k}{k!}, \quad k = 0, 1, 2, \ldots}$$
+<p style="margin-top:8px; font-size:13px">$\lambda > 0$ es la <strong>tasa de ocurrencia</strong> (media de eventos en el intervalo). $e \approx 2{,}71828$.</p>
+</div>
+
+<div class="grid2">
+<div class="card formula">
+<h4>Parámetros</h4>
+$$X \sim \text{Poisson}(\lambda)$$
+<p><strong>λ</strong> = tasa media de ocurrencias en el intervalo</p>
+</div>
+<div class="card formula">
+<h4>Media y varianza — propiedad única</h4>
+$$E[X] = \lambda$$
+$$\text{Var}(X) = \lambda$$
+<p>¡En Poisson, media y varianza son <strong>iguales</strong>!</p>
+</div>
+</div>
+
+<div class="card warn">
+<h4>⚡ Cambio de intervalo (importantísimo)</h4>
+<p>Si λ = 5 eventos/hora y querés el modelo para 30 min:</p>
+$$\lambda_{30\text{min}} = 5 \times \frac{30}{60} = 2{,}5$$
+<p>Si querés para 2 horas: $\lambda_{2h} = 5 \times 2 = 10$</p>
+<p><strong>Regla:</strong> λ_nuevo = λ_original × (intervalo_nuevo / intervalo_original)</p>
+</div>
+
+<div class="card tip">
+<h4>✅ Condiciones para usar Poisson</h4>
+<ol>
+  <li>Eventos ocurren <strong>aleatoriamente</strong> en el intervalo.</li>
+  <li>La <strong>tasa es constante</strong> (proceso estable).</li>
+  <li>Los eventos son <strong>independientes</strong>.</li>
+  <li>En un intervalo muy pequeño, la prob. de dos eventos simultáneos es <strong>despreciable</strong>.</li>
+</ol>
+</div>
+
+<!-- ── SIMULADOR POISSON ── -->
+<h2 id="poisson-sim">🎮 Simulador Poisson</h2>
+
+<div class="card game">
+<h3 style="margin-top:0">Graficá la distribución Poisson(λ)</h3>
+<p>Variá λ y observá cómo se expande y desplaza la distribución. Para λ grande, se parece a una campana.</p>
+<div class="controls">
+  <label>λ (tasa media)
+    <input type="number" id="poiL" value="2" min="0.1" max="30" step="0.5" oninput="plotPoisson()">
+  </label>
+  <label>k (calcular P)
+    <input type="number" id="poiK" value="3" min="0" max="60" oninput="plotPoisson()">
+  </label>
+</div>
+<div id="poiStats" class="stat-output"></div>
+<div id="poiPlot" class="plot"></div>
+</div>
+
+<div class="card game">
+<h3 style="margin-top:0">Calculadora rápida Poisson</h3>
+<div class="controls">
+  <label>λ (tasa original) <input type="number" id="calcPoiL" value="2" min="0.01" step="0.1"></label>
+  <label>Intervalo original <input type="number" id="calcPoiT0" value="1" min="0.01" step="0.1"></label>
+  <label>Intervalo nuevo <input type="number" id="calcPoiT" value="1" min="0.01" step="0.1"></label>
+  <label>k <input type="number" id="calcPoiK" value="3" min="0"></label>
+  <button class="btn" onclick="calcPoisson()">Calcular</button>
+</div>
+<div id="calcPoiOut" style="margin-top:12px; font-size:14px; line-height:2"></div>
+</div>
+
+<!-- ── EJERCICIOS POISSON ── -->
+<h2 id="poisson-ej">📝 Ejercicios de Clase — Poisson</h2>
+
+<div class="card enunciado">
+<h4>Ejercicio 1 — Sensor con 2 fallas por día</h4>
+<p>Un sensor registra en promedio <strong>λ = 2 fallas por día</strong>. X = número de fallas en un día.</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<p><strong>Modelo:</strong> $X \sim \text{Poisson}(2)$</p>
+<div class="steps">
+  <div class="step"><div class="step-n">1</div><div class="step-body">
+    $$P(X=3) = \frac{e^{-2} \cdot 2^3}{3!} = \frac{0{,}1353 \times 8}{6} = \mathbf{0{,}1804}$$
+    <code>dpois(3, 2)</code>
+  </div></div>
+  <div class="step"><div class="step-n">2</div><div class="step-body">
+    $$P(X=0) = e^{-2} = \mathbf{0{,}1353}$$
+    <code>dpois(0, 2)</code> — 13,5% de días sin ninguna falla
+  </div></div>
+  <div class="step"><div class="step-n">3</div><div class="step-body">
+    $$P(X \ge 4) = 1 - P(X \le 3) = 1 - \text{ppois}(3, 2) = \mathbf{0{,}1429}$$
+  </div></div>
+</div>
+</div>
+</details>
+
+<div class="card enunciado">
+<h4>Ejercicio 2 — Centro de monitoreo: 5 llamadas por hora</h4>
+<p>Un centro recibe en promedio <strong>5 llamadas por hora</strong>. Se quieren calcular probabilidades para distintos intervalos.</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<div class="steps">
+  <div class="step"><div class="step-n">1</div><div class="step-body">
+    <strong>P(X = 3) en 1 hora</strong> con λ = 5:
+    $$\frac{e^{-5} \cdot 5^3}{3!} = \frac{0{,}0067 \times 125}{6} = \mathbf{0{,}1404}$$
+  </div></div>
+  <div class="step"><div class="step-n">2</div><div class="step-body">
+    <strong>P(X = 0) en 30 min:</strong> nuevo λ = 5 × 0,5 = 2,5
+    $$P(X=0) = e^{-2{,}5} = \mathbf{0{,}0821}$$
+    <code>dpois(0, 2.5)</code>
+  </div></div>
+  <div class="step"><div class="step-n">3</div><div class="step-body">
+    <strong>P(X > 6) en 1 hora = 1 − ppois(6, 5) = <span class="hl-warn">0.1334</span></strong>
+  </div></div>
+</div>
+</div>
+</details>
+
+<div class="card enunciado">
+<h4>Ejercicio 3 — 0,8 defectos por m²</h4>
+<p>Un proceso deja en promedio <strong>0,8 defectos por m²</strong>. X = defectos en una superficie dada.</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<div class="steps">
+  <div class="step"><div class="step-n">1</div><div class="step-body">
+    <strong>P(X = 1) en 1 m²</strong> con λ = 0,8:
+    $$e^{-0{,}8} \times 0{,}8 = 0{,}4493 \times 0{,}8 = \mathbf{0{,}3595}$$
+  </div></div>
+  <div class="step"><div class="step-n">2</div><div class="step-body">
+    <strong>P(X ≥ 2) en 1 m² = 1 − ppois(1, 0.8) = <span class="hl-warn">0.1912</span></strong>
+  </div></div>
+  <div class="step"><div class="step-n">3</div><div class="step-body">
+    <strong>P(X = 0) en 2 m²:</strong> λ nuevo = 0,8 × 2 = 1,6
+    $$e^{-1{,}6} = \mathbf{0{,}2019}$$
+  </div></div>
+</div>
+</div>
+</details>
+
+<div class="card enunciado">
+<h4>Ejercicio 4 — 1,2 accidentes por mes</h4>
+<p>En una planta ocurren en promedio <strong>1,2 accidentes por mes</strong>.</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<div class="steps">
+  <div class="step"><div class="step-n">1</div><div class="step-body">
+    <strong>P(X = 2) en 1 mes</strong> con λ = 1,2:
+    $$\frac{e^{-1{,}2} \times 1{,}44}{2} = \frac{0{,}3012 \times 1{,}44}{2} = \mathbf{0{,}2169}$$
+    <code>dpois(2, 1.2)</code>
+  </div></div>
+  <div class="step"><div class="step-n">2</div><div class="step-body">
+    <strong>P(X = 0) = e^{-1,2} = <span class="hl-good">0.3012</span></strong> — 30% de meses sin accidentes
+  </div></div>
+  <div class="step"><div class="step-n">3</div><div class="step-body">
+    <strong>P(X ≥ 3) en 2 meses:</strong> λ nuevo = 1,2 × 2 = 2,4
+    $$1 - \text{ppois}(2, 2{,}4) = \mathbf{0{,}4303}$$
+    <code>1 - ppois(2, 2.4)</code>
+  </div></div>
+</div>
+</div>
+</details>
+
+<!-- ── 4. COMPARACIÓN ── -->
+<h2 id="comparacion"><span class="badge compare">Comparación</span>4. Binomial vs Poisson — ¿cuándo se parecen?</h2>
+
+<div class="compare-box">
+<div class="compare-cell left">
+  <h4 style="color:var(--good)">🟢 Binomial</h4>
+  <ul>
+    <li>n ensayos <strong>fijos</strong></li>
+    <li>p conocida y constante</li>
+    <li>X ∈ {0, 1, …, n}</li>
+    <li>E[X] = np; Var = np(1−p)</li>
+  </ul>
+</div>
+<div class="compare-cell right">
+  <h4 style="color:var(--warn)">🟡 Poisson</h4>
+  <ul>
+    <li>No hay "n ensayos" fijos</li>
+    <li>Tasa λ constante en el intervalo</li>
+    <li>X ∈ {0, 1, 2, …} sin límite</li>
+    <li>E[X] = Var = λ</li>
+  </ul>
+</div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">La aproximación Bi → Poisson</h3>
+<p>Cuando $n$ es grande y $p$ es pequeño, $Bi(n,p) \approx Poisson(\lambda)$ con $\lambda = n \cdot p$.</p>
+<div class="card tip" style="margin-top:10px">
+<h4>Regla práctica para aproximar</h4>
+<ul>
+  <li>n ≥ 20 (preferiblemente n ≥ 100)</li>
+  <li>p ≤ 0,05 (preferiblemente p ≤ 0,01)</li>
+  <li>λ = n·p moderado (≤ 10 típicamente)</li>
+</ul>
+</div>
+<div class="card warn" style="margin-top:10px">
+<strong>¿Por qué funciona?</strong> Matemáticamente, cuando $n \to \infty$ y $p \to 0$ con $np = \lambda$ constante, la Binomial converge exactamente a la Poisson.
+</div>
+</div>
+
+<h3>Ejemplo: ¿es buena la aproximación?</h3>
+
+<div class="card answer">
+<h4>Caso A — Buena aproximación: n=200, p=0,01 → λ=2</h4>
+<p>Bi(200, 0,01) ≈ Poisson(2). P(X=3):</p>
+<ul>
+  <li>Binomial: <code>dbinom(3, 200, 0.01)</code> = <span class="hl-good">0.1823</span></li>
+  <li>Poisson: <code>dpois(3, 2)</code> = <span class="hl-good">0.1804</span></li>
+  <li>Diferencia: 0.0019 → ¡Muy buena!</li>
+</ul>
+</div>
+
+<div class="card" style="border-left:4px solid var(--bad)">
+<h4>Caso B — Mala aproximación: n=20, p=0,5 → λ=10</h4>
+<p>p no es pequeño → la aproximación falla. P(X=10):</p>
+<ul>
+  <li>Binomial: <code>dbinom(10, 20, 0.5)</code> = <span class="hl-warn">0.1762</span></li>
+  <li>Poisson: <code>dpois(10, 10)</code> = <span class="hl-bad">0.1251</span></li>
+  <li>Diferencia: 0.0511 → Error grande, no usar Poisson acá.</li>
+</ul>
+</div>
+
+<!-- ── DEMO CONVERGENCIA ── -->
+<h2 id="convergencia">⚡ Demo convergencia Binomial → Poisson</h2>
+
+<div class="card game">
+<h3 style="margin-top:0">Fijá λ, aumentá n → Bi se convierte en Poisson</h3>
+<p>Con λ = n·p fijo, al aumentar n (y disminuir p = λ/n), la Binomial se superpone cada vez más con la Poisson.</p>
+<div class="controls">
+  <label>λ (fijo)
+    <input type="number" id="convL" value="3" min="0.5" max="15" step="0.5" oninput="plotConvergencia()">
+  </label>
+  <label>n (ensayos)
+    <input type="number" id="convN" value="20" min="5" max="1000" oninput="plotConvergencia()">
+  </label>
+</div>
+<div id="convInfo" style="margin:8px 0; font-size:13px; color:var(--muted)"></div>
+<div id="convPlot" class="plot"></div>
+</div>
+
+<!-- ── 5. CUÁNDO USAR ── -->
+<h2 id="cuando-usar">5. ¿Cuándo usar cada distribución?</h2>
+
+<div class="card">
+<table>
+  <tr>
+    <th>Pregunta clave</th>
+    <th>Distribución</th>
+    <th>Ejemplo</th>
+  </tr>
+  <tr>
+    <td>¿Cuántas piezas defectuosas en una muestra de n?</td>
+    <td><span class="badge binomial">Binomial</span></td>
+    <td>n=20, p=0.05 → Bi(20, 0.05)</td>
+  </tr>
+  <tr>
+    <td>¿Cuántas fallas ocurren en 8 horas de turno?</td>
+    <td><span class="badge poisson">Poisson</span></td>
+    <td>3 fallas/h → λ=24 en 8h</td>
+  </tr>
+  <tr>
+    <td>¿Cuántos sensores fallan de los 50 instalados?</td>
+    <td><span class="badge binomial">Binomial</span></td>
+    <td>n=50, p conocida</td>
+  </tr>
+  <tr>
+    <td>¿Cuántos autos pasan por un puesto en 1 hora?</td>
+    <td><span class="badge poisson">Poisson</span></td>
+    <td>Tasa = eventos/tiempo</td>
+  </tr>
+  <tr>
+    <td>n grande, p muy pequeño, λ=np moderado</td>
+    <td><span class="badge compare">Bi ≈ Poisson</span></td>
+    <td>n=200, p=0.01 → Poi(2)</td>
+  </tr>
+</table>
+</div>
+
+<div class="card key">
+<h4>🔑 Clave para el parcial</h4>
+<ul>
+  <li>Si el problema dice <strong>"n pruebas"</strong> con probabilidad p → <strong>Binomial</strong></li>
+  <li>Si el problema dice <strong>"tasa de ocurrencia"</strong> o trabaja sobre intervalo de tiempo/espacio → <strong>Poisson</strong></li>
+  <li>Si el enunciado dice <strong>"n grande, p pequeño"</strong> y te pide aproximar → <strong>Poisson con λ = np</strong></li>
+  <li>Para "al menos uno": siempre usá <strong>1 − P(X=0)</strong></li>
+  <li>Para cambiar intervalo en Poisson: <strong>λ_nuevo = λ × (intervalo nuevo / original)</strong></li>
+</ul>
+</div>
+
+<!-- ── 6. PROBLEMAS INTEGRADORES ── -->
+<h2 id="integradores">6. Problemas integradores</h2>
+
+<div class="card enunciado">
+<h4>Problema 1 — Proceso con 3% de defectos, lote de 100</h4>
+<p>Un proceso tiene 3% de defectos. Se inspeccionan <strong>100 piezas</strong> y se observan 6 defectuosas. ¿Qué probabilidad hay de ver 6 o más si el proceso está bajo control?</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<p><strong>Modelo:</strong> $X \sim Bi(100;\; 0{,}03)$, $E[X] = 3$</p>
+<div class="steps">
+  <div class="step"><div class="step-n">1</div><div class="step-body">
+    $$P(X \ge 6) = 1 - P(X \le 5)$$
+    <code>1 - pbinom(5, 100, 0.03)</code> = <span class="hl-bad">0.0839</span>
+  </div></div>
+  <div class="step"><div class="step-n">2</div><div class="step-body">
+    <strong>Conclusión:</strong> 8,4% de probabilidad — no es extremadamente bajo. El proceso puede estar bajo control, se recomienda <em>monitorear</em> (no detener).
+  </div></div>
+</div>
+<div class="card tip" style="margin-top:10px">
+Criterio habitual: si P(X ≥ observado) < 5% → señal de alarma. Si < 1% → detener el proceso.
+</div>
+</div>
+</details>
+
+<div class="card enunciado">
+<h4>Problema 2 — Sensor con 2,5 fallas/semana, se observan 5</h4>
+<p>Un sensor tiene tasa de falla de <strong>2,5 por semana</strong>. En una semana ocurren 5 fallas. ¿El sensor está fallando más de lo normal?</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<p><strong>Modelo:</strong> $X \sim \text{Poisson}(2{,}5)$</p>
+<div class="steps">
+  <div class="step"><div class="step-n">1</div><div class="step-body">
+    $$P(X \ge 5) = 1 - \text{ppois}(4, 2{,}5)$$
+    <code>1 - ppois(4, 2.5)</code> = <span class="hl-warn">0.1088</span>
+  </div></div>
+  <div class="step"><div class="step-n">2</div><div class="step-body">
+    <strong>Conclusión:</strong> 10,9% de probabilidad — no es inusualmente bajo. Puede ser variación normal. Conviene registrar y hacer seguimiento.
+  </div></div>
+</div>
+</div>
+</details>
+
+<div class="card enunciado">
+<h4>Problema 3 — Integrador: 2% defectos, lote de 150 (Bi exacta vs Poisson aprox)</h4>
+<p>Proceso con 2% de defectos, muestra de 150 piezas. Se observan 5 defectuosas. Calculá P(X ≥ 5) con Binomial exacta y con Poisson aproximada. ¿Es buena la aproximación?</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<p><strong>Modelo:</strong> $X \sim Bi(150;\; 0{,}02)$, $\lambda = 150 \times 0{,}02 = 3$</p>
+<div class="steps">
+  <div class="step"><div class="step-n">1</div><div class="step-body">
+    <strong>Binomial exacta:</strong> <code>1 - pbinom(4, 150, 0.02)</code> = <span class="hl-good">0.1848</span>
+  </div></div>
+  <div class="step"><div class="step-n">2</div><div class="step-body">
+    <strong>Poisson aprox:</strong> <code>1 - ppois(4, 3)</code> = <span class="hl-warn">0.1847</span>
+  </div></div>
+  <div class="step"><div class="step-n">3</div><div class="step-body">
+    <strong>Diferencia: 0.0001 → Aproximación excelente.</strong>
+    <br>n=150 es grande, p=0,02 es pequeño → condiciones ideales para Poisson.
+  </div></div>
+</div>
+</div>
+</details>
+
+<!-- ── R CODE ── -->
+<h2 id="r-code">🔵 Código R — Referencia rápida</h2>
+
+<div class="card r">
+<h4>Binomial — funciones principales</h4>
+<pre><span style="color:#a78bfa"># Distribución Binomial: X ~ Bi(n, p)</span>
+n &lt;- 20; p &lt;- 0.05
+
+<span style="color:#94a3b8"># Probabilidad exacta P(X = k)</span>
+dbinom(k, n, p)
+
+<span style="color:#94a3b8"># Probabilidad acumulada P(X ≤ k)</span>
+pbinom(k, n, p)
+
+<span style="color:#94a3b8"># P(X ≥ k) = complemento</span>
+1 - pbinom(k-1, n, p)
+
+<span style="color:#94a3b8"># Cuantil: mínimo k tal que P(X ≤ k) ≥ prob</span>
+qbinom(prob, n, p)
+
+<span style="color:#94a3b8"># Media y varianza</span>
+cat("E[X] =", n*p, "  Var =", n*p*(1-p))</pre>
+</div>
+
+<div class="card r">
+<h4>Poisson — funciones principales</h4>
+<pre><span style="color:#a78bfa"># Distribución Poisson: X ~ Poi(lambda)</span>
+lambda &lt;- 2  <span style="color:#94a3b8"># tasa en el intervalo de interés</span>
+
+<span style="color:#94a3b8"># Probabilidad exacta P(X = k)</span>
+dpois(k, lambda)
+
+<span style="color:#94a3b8"># Acumulada P(X ≤ k)</span>
+ppois(k, lambda)
+
+<span style="color:#94a3b8"># P(X ≥ k)</span>
+1 - ppois(k-1, lambda)
+
+<span style="color:#94a3b8"># Cambio de intervalo: de 1h a 30min</span>
+lambda_nuevo &lt;- lambda * (30/60)
+
+<span style="color:#94a3b8"># Media = Varianza = lambda</span>
+cat("E[X] = Var[X] =", lambda)</pre>
+</div>
+
+<div class="card r">
+<h4>Gráfico comparativo Bi vs Poisson</h4>
+<pre>n &lt;- 200; p &lt;- 0.01; lambda &lt;- n*p
+k &lt;- 0:10
+
+prob_binom &lt;- dbinom(k, n, p)
+prob_pois  &lt;- dpois(k, lambda)
+
+barplot(rbind(prob_binom, prob_pois), beside = TRUE,
+        names.arg = k,
+        col = c("steelblue", "lightcoral"),
+        legend.text = c(paste0("Bi(",n,",",p,")"),
+                        paste0("Poi(",lambda,")")),
+        main = "Binomial vs Poisson",
+        xlab = "k", ylab = "P(X=k)")</pre>
+</div>
+
+<!-- ── QUIZ ── -->
+<h2 id="quiz">🎓 Quiz final — Parcial 2</h2>
+
+<div class="card game">
+<p>12 preguntas de opción múltiple. Respondé cada una y recibís feedback inmediato.</p>
+<button class="btn" onclick="startQuiz()">Empezar quiz</button>
+<button class="btn-2" onclick="resetQuiz()" style="margin-left:8px">Reiniciar</button>
+<div id="quizContainer" style="margin-top:18px"></div>
+<div id="quizFinalScore"></div>
+</div>
+
+<!-- ── ERRORES COMUNES ── -->
+<h2 id="errores">⚠️ Errores comunes en el parcial</h2>
+
+<div class="card warn">
+<h4>1. Usar Binomial cuando deberías usar Poisson (y viceversa)</h4>
+<p>Si el enunciado dice "en promedio X veces por unidad de tiempo/espacio" → Poisson. Si dice "n pruebas con prob p" → Binomial.</p>
+</div>
+
+<div class="card warn">
+<h4>2. No ajustar λ al cambiar de intervalo</h4>
+<p>Si λ=4/hora y te preguntan en 30 min: usar λ=2, no λ=4. Si te preguntan en 3 horas: λ=12.</p>
+</div>
+
+<div class="card warn">
+<h4>3. Confundir P(X ≤ k) con P(X &lt; k)</h4>
+<p>Son distintos: $P(X \le k) = P(X < k+1)$. En R: <code>pbinom(k, n, p)</code> incluye el k. Para "menos de k": <code>pbinom(k-1, n, p)</code>.</p>
+</div>
+
+<div class="card warn">
+<h4>4. Calcular "al menos 1" sumando muchos términos</h4>
+<p>¡Usá el complemento! $P(X \ge 1) = 1 - P(X = 0)$. Es mucho más rápido.</p>
+</div>
+
+<div class="card warn">
+<h4>5. Creer que en Binomial Var = E[X]</h4>
+<p>Eso es solo en Poisson. En Binomial: $\text{Var} = np(1-p) \ne np$ salvo que $p=0$.</p>
+</div>
+
+<div class="card warn">
+<h4>6. Aproximar Bi → Poisson sin verificar condiciones</h4>
+<p>La aproximación requiere n grande y p pequeño. Si p = 0,5, la aproximación es mala aunque λ sea razonable.</p>
+</div>
+
+<div class="footer">
+  Estadística · Parcial 2 — Lic. en Automatización y Control · UNI Pilar<br>
+  Contenido basado en Clase 8: Modelos Discretos (Montgomery & Runger, Walpole et al.)
+</div>
+
+</main>
+</div><!-- .layout -->
+
+<script>
+/* ══════════════════════════════════════
+   FUNCIONES MATEMÁTICAS
+══════════════════════════════════════ */
+
+function logFactorial(n){
+  let s=0; for(let i=2;i<=n;i++) s+=Math.log(i); return s;
+}
+
+function pmfBinomial(n,p,k){
+  if(k<0||k>n) return 0;
+  const logC = logFactorial(n)-logFactorial(k)-logFactorial(n-k);
+  return Math.exp(logC + k*Math.log(p||1e-300) + (n-k)*Math.log((1-p)||1e-300));
+}
+
+function cdfBinomial(n,p,k){
+  let s=0; for(let j=0;j<=k;j++) s+=pmfBinomial(n,p,j); return s;
+}
+
+function pmfPoisson(lambda,k){
+  if(k<0) return 0;
+  return Math.exp(-lambda + k*Math.log(lambda||1e-300) - logFactorial(k));
+}
+
+function cdfPoisson(lambda,k){
+  let s=0; for(let j=0;j<=k;j++) s+=pmfPoisson(lambda,j); return s;
+}
+
+/* ══════════════════════════════════════
+   LAYOUT PLOTLY
+══════════════════════════════════════ */
+
+const layoutBase = {
+  paper_bgcolor:'#0b1220', plot_bgcolor:'#0b1220',
+  font:{color:'#e2e8f0', size:12},
+  margin:{t:40,r:20,b:50,l:55},
+  xaxis:{gridcolor:'#334155', zerolinecolor:'#334155'},
+  yaxis:{gridcolor:'#334155', zerolinecolor:'#334155'}
+};
+
+/* ══════════════════════════════════════
+   SIMULADOR BINOMIAL
+══════════════════════════════════════ */
+
+function plotBinomial(){
+  const n = +document.getElementById('binN').value;
+  const p = +document.getElementById('binP').value;
+  const k = +document.getElementById('binK').value;
+  if(isNaN(n)||isNaN(p)||n<1||p<=0||p>=1) return;
+
+  const xs=[], ys=[], colors=[];
+  for(let j=0;j<=n;j++){
+    xs.push(j);
+    const prob = pmfBinomial(n,p,j);
+    ys.push(prob);
+    colors.push(j===k ? '#fbbf24' : j<k ? '#34d399' : '#38bdf8');
+  }
+
+  const ex = (n*p).toFixed(3);
+  const va = (n*p*(1-p)).toFixed(3);
+  const sd = Math.sqrt(n*p*(1-p)).toFixed(3);
+  const pk  = pmfBinomial(n,p,k).toFixed(4);
+  const cdf = cdfBinomial(n,p,k).toFixed(4);
+  const ccdf = (1-cdfBinomial(n,p,Math.max(0,k-1))).toFixed(4);
+
+  document.getElementById('binStats').innerHTML = `
+    <div class="stat-box"><div class="label">E[X] = np</div><div class="value">${ex}</div></div>
+    <div class="stat-box"><div class="label">Var = np(1−p)</div><div class="value">${va}</div></div>
+    <div class="stat-box"><div class="label">σ</div><div class="value">${sd}</div></div>
+    <div class="stat-box"><div class="label">P(X=${k})</div><div class="value" style="color:var(--warn)">${pk}</div></div>
+    <div class="stat-box"><div class="label">P(X≤${k})</div><div class="value" style="color:var(--good)">${cdf}</div></div>
+    <div class="stat-box"><div class="label">P(X≥${k})</div><div class="value" style="color:var(--bad)">${ccdf}</div></div>
+  `;
+
+  Plotly.newPlot('binPlot', [{
+    x:xs, y:ys, type:'bar',
+    marker:{color:colors},
+    name:`Bi(${n}, ${p})`
+  }], {
+    ...layoutBase,
+    title:{text:`Bi(n=${n}, p=${p}) — barra amarilla = k=${k}`, font:{color:'#e2e8f0', size:13}},
+    xaxis:{...layoutBase.xaxis, title:'k (éxitos)'},
+    yaxis:{...layoutBase.yaxis, title:'P(X = k)'}
+  }, {responsive:true, displayModeBar:false});
+}
+
+function calcBinomial(){
+  const n=+document.getElementById('calcN').value;
+  const p=+document.getElementById('calcP').value;
+  const k=+document.getElementById('calcK').value;
+  const pk = pmfBinomial(n,p,k);
+  const cumk = cdfBinomial(n,p,k);
+  const cumk1 = k>0 ? cdfBinomial(n,p,k-1) : 0;
+  document.getElementById('calcBinOut').innerHTML = `
+    <strong>X ~ Bi(${n}, ${p})</strong><br>
+    P(X = ${k}) = <span class="hl-accent">${pk.toFixed(6)}</span><br>
+    P(X ≤ ${k}) = <span class="hl-good">${cumk.toFixed(6)}</span><br>
+    P(X ≥ ${k}) = <span class="hl-bad">${(1-cumk1).toFixed(6)}</span><br>
+    P(X < ${k})  = <span class="hl-warn">${cumk1.toFixed(6)}</span><br>
+    E[X] = ${(n*p).toFixed(4)} &nbsp;|&nbsp; Var = ${(n*p*(1-p)).toFixed(4)} &nbsp;|&nbsp; σ = ${Math.sqrt(n*p*(1-p)).toFixed(4)}
+  `;
+}
+
+/* ══════════════════════════════════════
+   SIMULADOR POISSON
+══════════════════════════════════════ */
+
+function plotPoisson(){
+  const L = +document.getElementById('poiL').value;
+  const k = +document.getElementById('poiK').value;
+  if(isNaN(L)||L<=0) return;
+
+  const kmax = Math.max(20, Math.ceil(L*3));
+  const xs=[], ys=[], colors=[];
+  for(let j=0;j<=kmax;j++){
+    xs.push(j);
+    const prob = pmfPoisson(L,j);
+    ys.push(prob);
+    colors.push(j===k ? '#fbbf24' : j<k ? '#a78bfa' : '#38bdf8');
+  }
+
+  const pk = pmfPoisson(L,k).toFixed(4);
+  const cdf = cdfPoisson(L,k).toFixed(4);
+  const ccdf = (1 - (k>0 ? cdfPoisson(L,k-1) : 0)).toFixed(4);
+
+  document.getElementById('poiStats').innerHTML = `
+    <div class="stat-box"><div class="label">E[X] = λ</div><div class="value">${L}</div></div>
+    <div class="stat-box"><div class="label">Var = λ</div><div class="value">${L}</div></div>
+    <div class="stat-box"><div class="label">σ = √λ</div><div class="value">${Math.sqrt(L).toFixed(3)}</div></div>
+    <div class="stat-box"><div class="label">P(X=${k})</div><div class="value" style="color:var(--warn)">${pk}</div></div>
+    <div class="stat-box"><div class="label">P(X≤${k})</div><div class="value" style="color:var(--good)">${cdf}</div></div>
+    <div class="stat-box"><div class="label">P(X≥${k})</div><div class="value" style="color:var(--bad)">${ccdf}</div></div>
+  `;
+
+  Plotly.newPlot('poiPlot', [{
+    x:xs, y:ys, type:'bar',
+    marker:{color:colors},
+    name:`Poisson(λ=${L})`
+  }], {
+    ...layoutBase,
+    title:{text:`Poisson(λ=${L}) — barra amarilla = k=${k}`, font:{color:'#e2e8f0', size:13}},
+    xaxis:{...layoutBase.xaxis, title:'k (ocurrencias)'},
+    yaxis:{...layoutBase.yaxis, title:'P(X = k)'}
+  }, {responsive:true, displayModeBar:false});
+}
+
+function calcPoisson(){
+  const L0 = +document.getElementById('calcPoiL').value;
+  const T0 = +document.getElementById('calcPoiT0').value;
+  const T  = +document.getElementById('calcPoiT').value;
+  const k  = +document.getElementById('calcPoiK').value;
+  const L  = L0 * T / T0;
+  const pk = pmfPoisson(L,k);
+  const cumk = cdfPoisson(L,k);
+  const cumk1 = k>0 ? cdfPoisson(L,k-1) : 0;
+  document.getElementById('calcPoiOut').innerHTML = `
+    <strong>λ_original = ${L0} / intervalo ${T0} → λ_nuevo = ${L.toFixed(4)} (intervalo ${T})</strong><br>
+    X ~ Poisson(${L.toFixed(4)})<br>
+    P(X = ${k}) = <span class="hl-accent">${pk.toFixed(6)}</span><br>
+    P(X ≤ ${k}) = <span class="hl-good">${cumk.toFixed(6)}</span><br>
+    P(X ≥ ${k}) = <span class="hl-bad">${(1-cumk1).toFixed(6)}</span><br>
+    E[X] = Var = <span class="hl-warn">${L.toFixed(4)}</span>
+  `;
+}
+
+/* ══════════════════════════════════════
+   DEMO CONVERGENCIA
+══════════════════════════════════════ */
+
+function plotConvergencia(){
+  const L = +document.getElementById('convL').value;
+  const n = +document.getElementById('convN').value;
+  if(isNaN(L)||isNaN(n)||n<1||L<=0) return;
+  const p = L/n;
+
+  document.getElementById('convInfo').textContent =
+    `n=${n}, p = λ/n = ${L}/${n} = ${p.toFixed(5)} | Condición buena aprox: ${p<0.05?'✅ p < 0.05':'⚠️ p ≥ 0.05'}`;
+
+  const kmax = Math.max(15, Math.ceil(L*3));
+  const xs=[], yBin=[], yPoi=[];
+  for(let k=0;k<=kmax;k++){
+    xs.push(k);
+    yBin.push(pmfBinomial(n,p,k));
+    yPoi.push(pmfPoisson(L,k));
+  }
+
+  Plotly.newPlot('convPlot', [
+    {x:xs, y:yBin, type:'bar', marker:{color:'#34d399', opacity:0.7}, name:`Bi(${n}, ${p.toFixed(4)})`},
+    {x:xs, y:yPoi, type:'scatter', mode:'lines+markers',
+     line:{color:'#fbbf24', width:3}, marker:{size:7}, name:`Poisson(λ=${L})`}
+  ], {
+    ...layoutBase,
+    title:{text:`λ = ${L} fijo, n = ${n} → p = ${p.toFixed(4)}`, font:{color:'#e2e8f0', size:13}},
+    xaxis:{...layoutBase.xaxis, title:'k'},
+    showlegend:true, legend:{orientation:'h', y:1.15, x:0}
+  }, {responsive:true, displayModeBar:false});
+}
+
+/* ══════════════════════════════════════
+   QUIZ FINAL
+══════════════════════════════════════ */
+
+const quizQs = [
+  {q:'¿Qué distribución usás si inspeccionás 50 tornillos y querés saber cuántos están defectuosos (p=0,03)?',
+   ops:['Poisson con λ=1,5','Binomial con n=50, p=0,03','Bernoulli con p=0,03','Cualquiera vale igual'],
+   correct:1, exp:'n ensayos fijos con probabilidad constante → Binomial.'},
+
+  {q:'Un sensor falla en promedio 3 veces por semana. Querés P(X=5) en una semana. ¿Qué usás?',
+   ops:['Binomial con n=7, p=3/7','Poisson con λ=3','Poisson con λ=5','Binomial con n=3, p=5/3'],
+   correct:1, exp:'Tasa constante en intervalo de tiempo, sin "n ensayos" fijo → Poisson(λ=3).'},
+
+  {q:'En una Binomial Bi(30, 0,1), ¿cuánto vale E[X]?',
+   ops:['0,1','1','3','10'],
+   correct:2, exp:'E[X] = n·p = 30 × 0,1 = 3.'},
+
+  {q:'En una Poisson(λ=4), ¿cuánto vale Var(X)?',
+   ops:['2','4','8','16'],
+   correct:1, exp:'En Poisson, E[X] = Var(X) = λ. Por lo tanto Var = 4.'},
+
+  {q:'Si hay 6 fallas/hora en promedio, ¿cuál es λ para calcular probabilidades en 20 minutos?',
+   ops:['6','3','2','12'],
+   correct:2, exp:'λ_nuevo = 6 × (20/60) = 6 × 1/3 = 2.'},
+
+  {q:'La mejor forma de calcular P(X ≥ 1) cuando P(X=0) es conocida es:',
+   ops:['Sumar P(X=1) + P(X=2) + ...','1 − P(X=0)','P(X=1)','n·p'],
+   correct:1, exp:'Siempre más fácil usar el complemento: 1 − P(X=0).'},
+
+  {q:'¿Cuándo es válido aproximar Bi(n,p) ≈ Poisson(λ)?',
+   ops:['Siempre que λ=np','Cuando n es grande y p es pequeño','Cuando p > 0,5','Solo si n < 10'],
+   correct:1, exp:'La aproximación es buena cuando n es grande (≥20) y p es pequeño (≤0,05).'},
+
+  {q:'X ~ Bi(10, 0,5). ¿Cuál es Var(X)?',
+   ops:['5','2,5','0,5','10'],
+   correct:1, exp:'Var = n·p·(1-p) = 10 × 0,5 × 0,5 = 2,5.'},
+
+  {q:'En R, ¿qué función calcula P(X ≤ k) para Poisson?',
+   ops:['dpois(k, lambda)','ppois(k, lambda)','qpois(k, lambda)','rpois(k, lambda)'],
+   correct:1, exp:'ppois es la CDF: P(X ≤ k). dpois es la PMF: P(X = k).'},
+
+  {q:'Un proceso tiene 1% de defectos. Si n=200 piezas, ¿puede aproximarse con Poisson?',
+   ops:['No, n es muy pequeño','Sí, λ = np = 2 y la aproximación es buena','No, p=0,01 es muy grande','Solo si λ > 5'],
+   correct:1, exp:'n=200 grande, p=0,01 pequeño → condiciones perfectas. λ = 200×0,01 = 2.'},
+
+  {q:'¿Cuál es P(X = 0) para Poisson(λ=2)?',
+   ops:['0','0,5','e⁻² ≈ 0,135','1/2'],
+   correct:2, exp:'P(X=0) = e^(-λ) × λ^0 / 0! = e^(-2) ≈ 0,1353.'},
+
+  {q:'Bi(n=100, p=0,03). ¿Qué nos dice que P(X≥6) = 0,084?',
+   ops:['Proceso fuera de control — parar inmediatamente','Probabilidad baja — señal de alarma leve','Probabilidad normal — no hay problema','No se puede interpretar sin más datos'],
+   correct:1, exp:'8,4% > 5% pero relativamente bajo. Es una señal de alerta que merece monitoreo, no parada inmediata (típicamente < 5% dispara alarma).'},
+];
+
+let quizIdx=0, quizScore=0;
+
+function startQuiz(){
+  quizIdx=0; quizScore=0;
+  document.getElementById('quizFinalScore').innerHTML='';
+  showQuizQ();
+}
+
+function resetQuiz(){
+  document.getElementById('quizContainer').innerHTML='';
+  document.getElementById('quizFinalScore').innerHTML='';
+  quizIdx=0; quizScore=0;
+}
+
+function showQuizQ(){
+  if(quizIdx >= quizQs.length){
+    const pct = Math.round(quizScore/quizQs.length*100);
+    const msg = pct>=80 ? '🏆 ¡Excelente! Estás listo para el parcial.' :
+                pct>=60 ? '👍 Bien, repasá lo que erraste.' : '📚 Seguí estudiando, dale!';
+    document.getElementById('quizContainer').innerHTML='';
+    document.getElementById('quizFinalScore').innerHTML =
+      `<div class="quiz-score">${quizScore}/${quizQs.length} (${pct}%)<br>
+       <span style="font-size:18px">${msg}</span></div>`;
+    return;
+  }
+  const q = quizQs[quizIdx];
+  const dots = quizQs.map((_,i)=>`<div class="step ${i<quizIdx?'done':''}"></div>`).join('');
+  document.getElementById('quizContainer').innerHTML = `
+    <div class="progress-bar">${dots}</div>
+    <div class="quiz-q">
+      <div><b>${quizIdx+1}/${quizQs.length}.</b> ${q.q}</div>
+      <div class="opts">
+        ${q.ops.map((o,i)=>`<div class="opt" onclick="answerQuiz(${i})" id="qo-${i}">${o}</div>`).join('')}
+      </div>
+      <div id="qFb"></div>
+    </div>`;
+}
+
+function answerQuiz(oi){
+  const q = quizQs[quizIdx];
+  for(let j=0;j<q.ops.length;j++){
+    const el=document.getElementById(`qo-${j}`);
+    if(el){
+      if(j===q.correct) el.classList.add('correct');
+      else if(j===oi) el.classList.add('wrong');
+      el.onclick=null;
+    }
+  }
+  document.getElementById('qFb').innerHTML =
+    `<div class="quiz-feedback">${oi===q.correct?'✅ ¡Correcto!':'❌ Incorrecto.'} ${q.exp}
+     <br><button class="btn" style="margin-top:10px; padding:6px 14px" onclick="nextQ()">Siguiente →</button></div>`;
+  if(oi===q.correct) quizScore++;
+}
+
+function nextQ(){
+  quizIdx++;
+  showQuizQ();
+}
+
+/* ══════════════════════════════════════
+   INICIALIZACIÓN
+══════════════════════════════════════ */
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  plotBinomial();
+  plotPoisson();
+  plotConvergencia();
+});
+</script>
+</body>
+</html>

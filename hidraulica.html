@@ -281,6 +281,7 @@ tr:nth-child(even) td{background:var(--blue-bg)}
     <button class="tab-btn"        onclick="showPage('u3',this)">🌊 U3 · Hidrodinámica</button>
     <button class="tab-btn"        onclick="showPage('u4',this)">📉 U4 · Pérdidas</button>
     <button class="tab-btn"        onclick="showPage('u5',this)">⚡ U5 · Energía</button>
+    <button class="tab-btn"        onclick="showPage('fenomenos',this)">🚨 Fenómenos</button>
     <button class="tab-btn"        onclick="showPage('ejercicios',this)">✏️ Ejercicios</button>
     <button class="tab-btn"        onclick="showPage('simuladores',this)">🔬 Simuladores</button>
     <button class="tab-btn"        onclick="showPage('juegos',this)">🎮 Juegos</button>
@@ -1093,6 +1094,335 @@ tr:nth-child(even) td{background:var(--blue-bg)}
   </div>
 
   <div class="note">📚 La <strong>ecuación general de energía</strong> es la herramienta más importante del parcial: úsala siempre que haya bomba, turbina o pérdidas. Si no hay ninguno de esos, basta Bernoulli.</div>
+
+</div></div>
+
+<!-- ═══════════════════════ FENÓMENOS TRANSITORIOS ═══════════════════════ -->
+<div id="fenomenos" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">🚨</span>Patologías hidráulicas</div>
+  <div class="card re">
+    <p>En sistemas de bombeo existen <strong>fenómenos físicos capaces de destruir</strong> componentes mecánicos y cañerías en cuestión de minutos. Los tres más importantes:</p>
+    <ol style="margin-left:1.4rem;margin-top:.6rem;line-height:1.9">
+      <li><strong>Cavitación</strong> — burbujas de <em>vapor del propio fluido</em> que implosionan (ebullición en frío)</li>
+      <li><strong>Golpe de ariete</strong> — ondas de choque por cambio brusco de velocidad (impacto inercial)</li>
+      <li><strong>Aireación</strong> — burbujas de <em>aire externo</em> que entran al circuito</li>
+    </ol>
+  </div>
+
+  <!-- ═══ CAVITACIÓN ═══ -->
+  <div class="stitle"><span class="ico">💨</span>1. Cavitación (ebullición en frío)</div>
+  <div class="grid g2">
+    <div class="card bl">
+      <h3>¿Qué es?</h3>
+      <p>Fenómeno físico que ocurre cuando la <strong>presión absoluta del fluido cae por debajo de su presión de vapor</strong>. En ese momento, el líquido "hierve" a temperatura ambiente, creando burbujas de vapor dentro de la bomba o cañería.</p>
+      <p style="margin-top:.5rem;font-weight:700;color:var(--blue)">📌 ¿El agua puede hervir a 40°C? <em>Sí, si la presión es lo suficientemente baja.</em></p>
+    </div>
+    <div class="card or">
+      <h3>¿Dónde ocurre?</h3>
+      <ul>
+        <li><strong>En bombas:</strong> en el ojo del impulsor, donde la velocidad es máxima y la presión mínima</li>
+        <li><strong>En tuberías:</strong> en estrechamientos o angostamientos (Bernoulli: ↑v → ↓p)</li>
+        <li><strong>En válvulas:</strong> después de un cierre parcial brusco</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub">🔬 Proceso de destrucción paso a paso</div>
+  <div class="grid g4">
+    <div class="card bl"><h3>1️⃣ Caída de presión</h3><p>En el ojo del impulsor el fluido alcanza su velocidad máxima y su presión mínima.</p></div>
+    <div class="card or"><h3>2️⃣ Ebullición local</h3><p>Se forman miles de micro-burbujas de vapor (el líquido "hierve" en frío).</p></div>
+    <div class="card re"><h3>3️⃣ Implosión</h3><p>Al avanzar por el álabe la presión sube. Las burbujas <strong>colapsan violentamente</strong>.</p></div>
+    <div class="card pu"><h3>4️⃣ Micro-jet</h3><p>El colapso genera ondas de choque de altísima presión que <strong>arrancan partículas de metal</strong>.</p></div>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 600 200" width="100%" style="max-width:600px">
+      <!-- Tubo con estrechamiento -->
+      <path d="M 20 60 L 220 60 L 270 90 L 330 90 L 380 60 L 580 60 L 580 140 L 380 140 L 330 110 L 270 110 L 220 140 L 20 140 Z" fill="url(#g-water1)" stroke="#0369a1" stroke-width="2"/>
+      <!-- Burbujas en garganta y después -->
+      <g fill="#fff" opacity=".95">
+        <circle cx="295" cy="95" r="3"/>
+        <circle cx="305" cy="105" r="2.5"/>
+        <circle cx="320" cy="98" r="4"/>
+        <circle cx="345" cy="100" r="3.5"/>
+        <circle cx="365" cy="105" r="2.5"/>
+        <circle cx="385" cy="100" r="3"/>
+        <circle cx="410" cy="95" r="2"/>
+      </g>
+      <!-- Onda de choque (implosión) -->
+      <g stroke="#dc2626" fill="none" stroke-width="1.5" opacity=".8">
+        <circle cx="420" cy="100" r="8"/>
+        <circle cx="420" cy="100" r="14"/>
+        <circle cx="420" cy="100" r="20"/>
+      </g>
+      <text x="125" y="40" text-anchor="middle" font-size="11" font-weight="700" fill="#0c4a6e">↑ P, ↓ v</text>
+      <text x="300" y="40" text-anchor="middle" font-size="11" font-weight="700" fill="#b91c1c">↓ P, ↑ v</text>
+      <text x="475" y="40" text-anchor="middle" font-size="11" font-weight="700" fill="#0c4a6e">↑ P → IMPLOSIÓN</text>
+      <text x="300" y="180" text-anchor="middle" font-size="10" fill="#374151" font-style="italic">Burbujas de vapor formándose</text>
+      <text x="475" y="180" text-anchor="middle" font-size="10" fill="#b91c1c" font-style="italic">Colapso violento → daño</text>
+    </svg>
+    <div class="dcap">En la garganta la presión cae por debajo de la presión de vapor → se forman burbujas que implosionan al recuperar presión.</div>
+  </div>
+
+  <div class="sub">🔊 ¿Cómo detectarla en la planta?</div>
+  <div class="grid g3">
+    <div class="card or"><h3>🪨 Ruido característico</h3><p>Suena como si la bomba estuviera <strong>bombeando piedras</strong>. Crepitar metálico inconfundible.</p></div>
+    <div class="card or"><h3>📳 Vibraciones excesivas</h3><p>Vibración de alta frecuencia que termina destruyendo rodamientos y sellos.</p></div>
+    <div class="card or"><h3>📉 Caída de rendimiento</h3><p>La bomba <strong>deja de entregar el caudal y presión</strong> de diseño.</p></div>
+  </div>
+
+  <div class="sub">📐 NPSH: la clave para evitar cavitación</div>
+  <div class="grid g2">
+    <div class="card pu">
+      <h3>NPSH (Net Positive Suction Head)</h3>
+      <p>Es la <strong>energía total disponible a la entrada de la bomba</strong>, expresada como altura de columna. Aplicando Bernoulli entre el tanque de aspiración (A) y la entrada de la bomba (e):</p>
+      <div class="fbox" style="margin-top:.5rem"><span class="big">NPSH<sub>d</sub> = (p<sub>A</sub> − p<sub>v</sub>)/γ − H<sub>S</sub> − H<sub>A-e</sub></span><span class="sub-f">disponible · p<sub>v</sub> = presión de vapor</span></div>
+    </div>
+    <div class="card bl">
+      <h3>Condición para no cavitar</h3>
+      <p>El fabricante de la bomba indica el <strong>NPSH requerido</strong> (NPSH<sub>r</sub>). La condición de seguridad es:</p>
+      <div class="fbox" style="margin-top:.5rem"><span class="big">NPSH<sub>d</sub> ≥ NPSH<sub>r</sub></span><span class="sub-f">Margen de seguridad recomendado:</span><span class="big" style="font-size:1rem">NPSH<sub>d</sub> − NPSH<sub>r</sub> &gt; 0,5 m</span></div>
+    </div>
+  </div>
+
+  <div class="sub">🛠️ Cómo evitarla</div>
+  <div class="card gr">
+    <ul style="margin-left:1.4rem;line-height:1.9">
+      <li><strong>Subir el tanque de aspiración</strong> (preferir <em>succión positiva</em>: tanque por encima de la bomba)</li>
+      <li><strong>Aumentar el diámetro</strong> de la cañería de succión (baja la velocidad → sube la presión)</li>
+      <li><strong>Acortar la succión</strong> y reducir codos/accesorios (menos pérdidas H<sub>A-e</sub>)</li>
+      <li><strong>Limpiar filtros</strong> de succión obstruidos</li>
+      <li><strong>Trabajar a menor temperatura</strong> (a más temperatura, más presión de vapor)</li>
+      <li><strong>Usar bomba sumergible</strong> si la altura de succión sería excesiva (&gt; 8 m)</li>
+    </ul>
+  </div>
+
+  <div class="warn">⚠️ <strong>¡El peligro es mayor cuando!</strong> (a) la presión atmosférica local es baja (mucha altitud), (b) la temperatura del líquido es alta, (c) las pérdidas H<sub>A-e</sub> son grandes (mucho largo / muchos codos).</div>
+
+  <!-- ═══ AIREACIÓN ═══ -->
+  <div class="stitle"><span class="ico">💧</span>2. Aireación (entrada de aire externo)</div>
+  <div class="card or">
+    <p><strong>Es la entrada de aire del exterior</strong> hacia el interior de la cañería. Es completamente DIFERENTE de la cavitación, aunque a veces se confunden.</p>
+  </div>
+
+  <div class="sub">🆚 Cavitación vs. Aireación — diferencias críticas</div>
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Aspecto</th><th style="background:#7c3aed">CAVITACIÓN</th><th style="background:#c05c00">AIREACIÓN</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Causa principal</strong></td><td>Baja presión (debajo de presión de vapor)</td><td>Entrada de aire externo</td></tr>
+        <tr><td><strong>Tipo de burbuja</strong></td><td>Vapor del propio líquido</td><td>Aire del ambiente</td></tr>
+        <tr><td><strong>Origen de las burbujas</strong></td><td>Se crean DENTRO de la bomba</td><td>Existen ANTES de entrar</td></tr>
+        <tr><td><strong>Colapso de burbujas</strong></td><td>Violento, erosivo (implosión)</td><td>Suave, NO erosivo</td></tr>
+        <tr><td><strong>Daño mecánico</strong></td><td>Sí — picado del metal</td><td>No directo, pero pierde cebado</td></tr>
+        <tr><td><strong>Sonido</strong></td><td>Golpes secos, metálicos ("piedras")</td><td>Gorgoteo, ruido irregular ("burbujeo")</td></tr>
+        <tr><td><strong>Consecuencia</strong></td><td>Vibración y rotura</td><td>Caída de rendimiento, fluctuación</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sub">🚪 ¿Por dónde entra el aire?</div>
+  <div class="grid g3">
+    <div class="card or"><h3>🔧 Sellos defectuosos</h3><p>Sello mecánico desgastado o O-ring vencido en la zona de succión.</p></div>
+    <div class="card or"><h3>🌪️ Vórtices en tanque</h3><p>Si el nivel del tanque está bajo, se forma un <strong>remolino que "traga" aire</strong>.</p></div>
+    <div class="card or"><h3>🔩 Bridas / juntas flojas</h3><p>En la zona de succión (donde hay vacío) el aire entra por la mínima fisura.</p></div>
+  </div>
+
+  <div class="card bl">
+    <h3>📌 Cómo evitarla</h3>
+    <ul style="margin-left:1.4rem">
+      <li>Mantener <strong>nivel mínimo</strong> del tanque por encima del límite anti-vórtice</li>
+      <li>Inspeccionar y reemplazar <strong>sellos mecánicos</strong> regularmente</li>
+      <li>Verificar el ajuste de <strong>bridas y juntas</strong> en la línea de succión</li>
+      <li>Instalar <strong>válvula antirretorno con filtro</strong> a la entrada de la succión</li>
+      <li>Diseñar la cañería <strong>en pendiente ascendente</strong> hacia la bomba para que el aire no se acumule</li>
+    </ul>
+  </div>
+
+  <!-- ═══ GOLPE DE ARIETE ═══ -->
+  <div class="stitle"><span class="ico">🔨</span>3. Golpe de ariete (choque hidráulico)</div>
+  <div class="card re">
+    <p><strong>Definición:</strong> ondas de choque de alta presión que se propagan en un sistema de tuberías cuando un fluido en movimiento se ve obligado a <strong>detenerse o cambiar de dirección abruptamente</strong>. La energía cinética se transforma instantáneamente en energía de presión.</p>
+    <p style="margin-top:.6rem;font-weight:700;color:var(--red)">⚠️ Los picos de presión pueden superar 4-10× la presión de trabajo normal.</p>
+  </div>
+
+  <div class="sub">⚡ Las 4 fases de la onda de choque</div>
+  <div class="grid g2">
+    <div class="card re"><h3>Fase 1: Impacto instantáneo</h3><p>Se cierra la válvula → la primera "capa" de fluido se detiene. Toda su energía cinética se convierte en presión. La cañería se expande microscópicamente.</p></div>
+    <div class="card or"><h3>Fase 2: Onda viaja al tanque</h3><p>La sobrepresión viaja hacia atrás como una <strong>onda de choque a la velocidad del sonido del fluido</strong> (≈ 1200-1400 m/s en agua/aceite).</p></div>
+    <div class="card bl"><h3>Fase 3: Rebote (depresión)</h3><p>La onda llega al tanque, este absorbe el exceso y el fluido <strong>retrocede</strong>, generando una onda de baja presión (vacío) hacia la válvula.</p></div>
+    <div class="card pu"><h3>Fase 4: Ciclo de rebotes</h3><p>La onda va y vuelve sucesivamente, golpeando válvula y tanque. Es lo que genera el <strong>"martilleo"</strong> característico hasta que la fricción la frena.</p></div>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 600 220" width="100%" style="max-width:600px">
+      <!-- Cañería horizontal -->
+      <rect x="20" y="100" width="540" height="40" fill="url(#g-flow3)" stroke="#0369a1" stroke-width="2"/>
+      <!-- Tanque -->
+      <rect x="0" y="60" width="40" height="80" fill="url(#g-water1)" stroke="#0369a1" stroke-width="2"/>
+      <text x="20" y="55" text-anchor="middle" font-size="10" font-weight="700" fill="#0369a1">Tanque</text>
+      <!-- Válvula -->
+      <rect x="560" y="80" width="20" height="80" fill="#dc2626" stroke="#7f1d1d" stroke-width="2"/>
+      <text x="570" y="75" text-anchor="middle" font-size="10" font-weight="700" fill="#b91c1c">Válv.</text>
+      <!-- Onda en cañería -->
+      <g stroke="#b91c1c" stroke-width="2" fill="none">
+        <path d="M 460 120 Q 470 105 480 120 T 500 120 T 520 120 T 540 120"/>
+        <path d="M 350 120 Q 360 105 370 120 T 390 120 T 410 120 T 430 120" opacity=".6"/>
+      </g>
+      <!-- Flecha rebote -->
+      <line x1="470" y1="170" x2="380" y2="170" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrR)"/>
+      <defs><marker id="arrR" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0,0 6,3 0,6" fill="#7c3aed"/></marker></defs>
+      <text x="425" y="185" text-anchor="middle" font-size="11" font-weight="700" fill="#7c3aed">Onda de retorno</text>
+      <!-- Sobrepresión -->
+      <g fill="#dc2626" font-size="11" font-weight="700">
+        <text x="490" y="50" text-anchor="middle">⚡ Sobrepresión</text>
+        <text x="490" y="65" text-anchor="middle" font-size="9">P × 4 a 10</text>
+      </g>
+      <line x1="550" y1="100" x2="550" y2="70" stroke="#dc2626" stroke-width="1.5"/>
+      <polygon points="550,68 545,78 555,78" fill="#dc2626"/>
+      <!-- Fórmula -->
+      <text x="290" y="40" text-anchor="middle" font-size="14" font-weight="700" fill="#0369a1">t<sub>p</sub> = 2·L / a</text>
+      <text x="290" y="20" text-anchor="middle" font-size="10" fill="#0369a1">tiempo de ida y vuelta</text>
+      <!-- L -->
+      <line x1="40" y1="200" x2="560" y2="200" stroke="#374151" stroke-width="1"/>
+      <polygon points="40,200 50,195 50,205" fill="#374151"/>
+      <polygon points="560,200 550,195 550,205" fill="#374151"/>
+      <text x="300" y="215" text-anchor="middle" font-size="11" fill="#374151" font-weight="700">L (largo de cañería)</text>
+    </svg>
+    <div class="dcap">La onda viaja desde la válvula al tanque, rebota, y regresa creando ciclos de sobrepresión y vacío.</div>
+  </div>
+
+  <div class="sub">⏱️ Tiempo crítico de cierre</div>
+  <div class="card pu">
+    <p>El factor clave para que el golpe sea <strong>destructivo o no</strong> es el tiempo de cierre <strong>t<sub>c</sub></strong> comparado con el tiempo de ida y vuelta de la onda <strong>t<sub>p</sub></strong>:</p>
+    <div class="fbox" style="margin-top:.6rem"><span class="big">t<sub>p</sub> = 2 · L / a</span><span class="sub-f">L = largo de cañería · a = velocidad de la onda (≈ 1200-1400 m/s)</span></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="card re">
+      <h3>🚨 Cierre rápido / crítico (t<sub>c</sub> &lt; t<sub>p</sub>)</h3>
+      <p>La válvula se cierra <strong>antes</strong> de que la onda haya tenido tiempo de ir al tanque y volver. La presión máxima golpea con toda su fuerza contra la válvula bloqueada.</p>
+      <p style="margin-top:.5rem;font-weight:700;color:var(--red)">→ Acá se rompen cañerías, bombas y accesorios.</p>
+    </div>
+    <div class="card gr">
+      <h3>✅ Cierre lento / seguro (t<sub>c</sub> &gt; t<sub>p</sub>)</h3>
+      <p>Se cierra despacio. Cuando la onda regresa del tanque, encuentra la válvula <strong>todavía medio abierta</strong>. Parte de la presión se libera, amortiguando el impacto.</p>
+      <p style="margin-top:.5rem;font-weight:700;color:var(--green)">→ La cañería sobrevive.</p>
+    </div>
+  </div>
+
+  <div class="sub">🏭 Golpe de ariete por bombas</div>
+  <div class="grid g2">
+    <div class="card or">
+      <h3>⛔ Paro brusco (el peor escenario)</h3>
+      <p>Al cortarse la energía, el impulsor frena pero la columna de fluido <strong>sigue por inercia</strong>. Crea una <strong>depresión</strong> a la salida de la bomba. Luego el fluido retrocede y choca contra la válvula de retención → ¡golpe de ariete destructivo!</p>
+    </div>
+    <div class="card or">
+      <h3>🚀 Arranque (líneas vacías)</h3>
+      <p>Si la cañería está vacía, el fluido avanza a alta velocidad sin resistencia. Al chocar contra el final o un codo, se transforma toda la energía cinética en sobrepresión.</p>
+    </div>
+  </div>
+
+  <div class="sub">💥 Efectos y daños</div>
+  <div class="grid g2">
+    <div class="card re"><h3>🔥 Picos de sobrepresión</h3><p>La presión puede multiplicarse por <strong>4-10× la presión nominal</strong> en milisegundos. Raja cañerías, rompe mangueras, daña soldaduras y bridas.</p></div>
+    <div class="card re"><h3>📉 Efecto de vacío</h3><p>La onda de depresión puede caer por debajo de la atmosférica → <strong>aplasta cañerías</strong> de paredes delgadas y arranca sellos.</p></div>
+    <div class="card re"><h3>🔧 Destrucción de instrumentos</h3><p>Manómetros, transductores y caudalímetros se descalibran o dañan al instante.</p></div>
+    <div class="card re"><h3>⚓ Aflojamiento de soportes</h3><p>Las vibraciones cortan espárragos de anclajes — la línea queda suelta y vulnerable.</p></div>
+  </div>
+
+  <div class="sub">🛡️ 5 métodos de mitigación</div>
+  <div class="grid g3">
+    <div class="card gr"><h3>1. Cierre progresivo</h3><p>Actuadores con cierre lento programado. Da tiempo a que la onda rebote.</p></div>
+    <div class="card gr"><h3>2. Acumuladores</h3><p>Tanques hidroneumáticos con <strong>vejiga de nitrógeno</strong> cerca de las válvulas. Absorben la onda como amortiguador.</p></div>
+    <div class="card gr"><h3>3. Válvulas antigolpe</h3><p>Válvulas de seguridad que se abren al detectar el pico, desviando caudal al retorno.</p></div>
+    <div class="card gr"><h3>4. Reducir velocidad</h3><p>Diámetros más amplios → menos v → menos energía cinética convertible en presión.</p></div>
+    <div class="card gr"><h3>5. Válvula de retención de disco partido</h3><p>A la salida de la bomba, cierra <strong>ultra rápido</strong> antes que la columna invierta el sentido.</p></div>
+    <div class="card gr"><h3>Bonus</h3><p>Mantener <strong>aire purgado</strong> de las líneas y diseñar trayectos sin codos a 90° innecesarios.</p></div>
+  </div>
+
+  <!-- ═══ SIMULADOR DE GOLPE DE ARIETE ═══ -->
+  <div class="stitle"><span class="ico">🔬</span>Simulador: tiempo crítico de cierre</div>
+  <div class="lab">
+    <div class="lab-head">
+      <h3>🔨 Lab · Golpe de ariete</h3>
+      <p class="ctx">Ajustá la longitud, velocidad y tiempo de cierre. Mirá si el cierre es seguro o destructivo.</p>
+    </div>
+    <div class="lab-body">
+      <div class="lab-viz">
+        <svg id="labGa-svg" viewBox="0 0 360 240" width="100%">
+          <!-- Tanque -->
+          <rect x="10" y="60" width="40" height="100" fill="url(#g-water1)" stroke="#0369a1" stroke-width="2"/>
+          <text x="30" y="55" text-anchor="middle" font-size="9" font-weight="700" fill="#0369a1">Tanque</text>
+          <!-- Cañería -->
+          <rect x="50" y="100" width="280" height="20" fill="#0284c7" stroke="#0369a1" stroke-width="2"/>
+          <!-- Válvula -->
+          <rect id="labGa-valve" x="330" y="80" width="20" height="60" fill="#dc2626" stroke="#7f1d1d" stroke-width="2"/>
+          <!-- Onda animada -->
+          <g id="labGa-wave"></g>
+          <!-- L -->
+          <line x1="50" y1="180" x2="330" y2="180" stroke="#374151" stroke-width="1"/>
+          <text x="190" y="195" text-anchor="middle" font-size="11" font-weight="700" fill="#374151" id="labGa-llbl">L = 200 m</text>
+          <!-- Indicador status -->
+          <rect id="labGa-statbox" x="100" y="20" width="160" height="28" rx="6" fill="#15803d"/>
+          <text x="180" y="38" text-anchor="middle" font-size="12" font-weight="700" fill="#fff" id="labGa-stattxt">✅ CIERRE SEGURO</text>
+        </svg>
+      </div>
+      <div class="lab-ctrls">
+        <div class="row">
+          <label>Longitud cañería L <span class="val" id="labGa-l-v">200 m</span></label>
+          <input type="range" id="labGa-l" min="10" max="2000" step="10" value="200" oninput="labGa()">
+        </div>
+        <div class="row">
+          <label>Velocidad fluido v₀ <span class="val" id="labGa-v-v">2.0 m/s</span></label>
+          <input type="range" id="labGa-v" min="0.5" max="6" step="0.1" value="2" oninput="labGa()">
+        </div>
+        <div class="row">
+          <label>Velocidad onda a <span class="val" id="labGa-a-v">1200 m/s</span></label>
+          <input type="range" id="labGa-a" min="800" max="1500" step="50" value="1200" oninput="labGa()">
+        </div>
+        <div class="row">
+          <label>Tiempo de cierre t<sub>c</sub> <span class="val" id="labGa-tc-v">2.0 s</span></label>
+          <input type="range" id="labGa-tc" min="0.05" max="10" step="0.05" value="2" oninput="labGa()">
+        </div>
+        <div class="lab-result" id="labGa-out">
+          <span class="res-line"><span class="res-key">t_p (ida+vuelta)</span> = 0,33 s</span>
+          <span class="res-line"><span class="res-key">Δp Joukowsky</span> = 23,5 bar</span>
+          <span class="res-line"><span class="res-key">Pico de presión</span> = 6,1× nominal</span>
+        </div>
+        <div class="lab-graph">
+          <h4>📊 Relación t<sub>c</sub> vs t<sub>p</sub></h4>
+          <svg viewBox="0 0 280 80" id="labGa-graph">
+            <rect x="30" y="30" width="100" height="20" fill="#fee2e2" stroke="#b91c1c"/>
+            <rect x="130" y="30" width="140" height="20" fill="#dcfce7" stroke="#15803d"/>
+            <line x1="130" y1="25" x2="130" y2="55" stroke="#475569" stroke-width="2"/>
+            <text x="130" y="20" font-size="9" fill="#475569" text-anchor="middle" font-weight="700">t_p</text>
+            <text x="80" y="45" text-anchor="middle" font-size="10" font-weight="700" fill="#b91c1c">CRÍTICO</text>
+            <text x="200" y="45" text-anchor="middle" font-size="10" font-weight="700" fill="#15803d">SEGURO</text>
+            <circle id="labGa-mark" cx="180" cy="40" r="6" fill="#0284c7" stroke="#fff" stroke-width="2"/>
+            <text x="30" y="68" font-size="8" fill="#64748b">0s</text>
+            <text x="270" y="68" font-size="8" fill="#64748b" text-anchor="end">t_c grande</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="lab-fact" id="labGa-fact">💡 <strong>Dato real:</strong> En una cañería de 200 m con cierre &lt; 0,33 s, la presión puede saltar de 4 a 23,5 bar instantáneamente. Por eso las grandes válvulas industriales se accionan motorizadas con tiempos de 30-60 s.</div>
+  </div>
+
+  <div class="note" style="margin-top:1rem">📚 <strong>Fórmula de Joukowsky:</strong> el pico de sobrepresión por golpe de ariete (cierre instantáneo) es:<br><span class="fi" style="font-size:1.05rem;padding:.3rem .8rem;margin-top:.4rem;display:inline-block">Δp = ρ · a · v₀</span><br>Donde ρ = densidad, a = velocidad de la onda, v₀ = velocidad inicial del fluido. Es la mayor sobrepresión teórica posible.</div>
+
+  <div class="card bl" style="margin-top:1.5rem">
+    <h3>🎯 Resumen ejecutivo</h3>
+    <div class="twrap" style="margin-top:.6rem"><table>
+      <thead><tr><th>Fenómeno</th><th>Causa</th><th>Solución principal</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Cavitación</strong></td><td>p &lt; p_vapor (vacío excesivo)</td><td>Bajar v, acortar succión, NPSH<sub>d</sub> &gt; NPSH<sub>r</sub></td></tr>
+        <tr><td><strong>Aireación</strong></td><td>Aire externo entra al circuito</td><td>Reparar sellos, evitar vórtices</td></tr>
+        <tr><td><strong>Golpe de ariete</strong></td><td>Cambio brusco de velocidad</td><td>Cierre lento, acumuladores, válvulas antigolpe</td></tr>
+      </tbody>
+    </table></div>
+  </div>
 
 </div></div>
 
@@ -2337,6 +2667,20 @@ tr:nth-child(even) td{background:var(--blue-bg)}
   </div>
 
   <div class="cheat">
+    <h2>🚨 FENÓMENOS TRANSITORIOS</h2>
+    <div class="cgrid">
+      <div class="citem"><div class="lbl">NPSH disponible</div><div class="cf">(p_A−p_v)/γ − H_S − H_A-e</div><div class="cu">en m de columna</div></div>
+      <div class="citem"><div class="lbl">Condición no cavitar</div><div class="cf">NPSH_d ≥ NPSH_r</div><div class="cu">margen &gt; 0,5 m</div></div>
+      <div class="citem"><div class="lbl">Tiempo onda</div><div class="cf">t_p = 2L/a</div><div class="cu">L=largo, a≈1200-1400 m/s</div></div>
+      <div class="citem"><div class="lbl">Joukowsky (cierre instantáneo)</div><div class="cf">Δp = ρ·a·v₀</div><div class="cu">máxima sobrepresión</div></div>
+      <div class="citem"><div class="lbl">Cierre crítico</div><div class="cf">t_c &lt; t_p</div><div class="cu">DESTRUCTIVO</div></div>
+      <div class="citem"><div class="lbl">Cierre seguro</div><div class="cf">t_c &gt; t_p</div><div class="cu">amortigua onda</div></div>
+      <div class="citem"><div class="lbl">Cavitación</div><div class="cf">p &lt; p_vapor</div><div class="cu">vapor interno</div></div>
+      <div class="citem"><div class="lbl">Aireación</div><div class="cf">aire externo entra</div><div class="cu">por sellos/vórtices</div></div>
+    </div>
+  </div>
+
+  <div class="cheat">
     <h2>🔄 CONVERSIONES ÚTILES</h2>
     <div class="cgrid">
       <div class="citem"><div class="lbl">Volumen</div><div class="cf">1 m³ = 1000 L</div><div class="cu">= 1000 dm³</div></div>
@@ -2958,8 +3302,82 @@ function lab11(){
   document.getElementById('lab11-fact').innerHTML = '💡 <strong>Dato real:</strong> '+fact;
 }
 
+/* LAB Golpe de Ariete */
+function labGa(){
+  const L = parseFloat(document.getElementById('labGa-l').value);
+  const v0 = parseFloat(document.getElementById('labGa-v').value);
+  const a = parseFloat(document.getElementById('labGa-a').value);
+  const tc = parseFloat(document.getElementById('labGa-tc').value);
+  document.getElementById('labGa-l-v').textContent = L+' m';
+  document.getElementById('labGa-v-v').textContent = v0.toFixed(1)+' m/s';
+  document.getElementById('labGa-a-v').textContent = a+' m/s';
+  document.getElementById('labGa-tc-v').textContent = tc.toFixed(2)+' s';
+  // Cálculos
+  const tp = (2*L)/a;
+  const rho = 1000;
+  // Joukowsky (cierre instantáneo): Δp = ρ·a·v
+  let dpJou = rho*a*v0;
+  // Si tc > tp, el golpe se reduce proporcionalmente (Michaud aprox): Δp = 2ρLv/tc
+  let dpMich = (2*rho*L*v0)/tc;
+  const dpReal = Math.min(dpJou, dpMich);
+  const dpBar = dpReal/1e5;
+  // Pico relativo a presión nominal (asumimos 4 bar nominal)
+  const pNominal = 4;
+  const peak = (pNominal + dpBar) / pNominal;
+  const critico = tc < tp;
+  // Etiqueta
+  document.getElementById('labGa-llbl').textContent = 'L = '+L+' m';
+  // Status
+  if(critico){
+    document.getElementById('labGa-statbox').setAttribute('fill', '#b91c1c');
+    document.getElementById('labGa-stattxt').textContent = '🚨 CIERRE CRÍTICO!';
+  } else if(tc < tp*2){
+    document.getElementById('labGa-statbox').setAttribute('fill', '#f59e0b');
+    document.getElementById('labGa-stattxt').textContent = '⚠️ MARGEN BAJO';
+  } else {
+    document.getElementById('labGa-statbox').setAttribute('fill', '#15803d');
+    document.getElementById('labGa-stattxt').textContent = '✅ CIERRE SEGURO';
+  }
+  // Onda visual (más onda si crítico)
+  const wave = document.getElementById('labGa-wave');
+  const intensity = Math.min(1, dpBar/40);
+  let wsvg = '';
+  if(critico || dpBar > 5){
+    for(let i=0;i<3;i++){
+      const x = 240 + i*30;
+      const amp = 8 + intensity*8;
+      wsvg += '<path d="M '+x+' 110 Q '+(x+5)+' '+(110-amp)+' '+(x+10)+' 110 T '+(x+20)+' 110" stroke="#dc2626" stroke-width="2" fill="none" opacity="'+(0.4+0.2*i)+'"/>';
+    }
+    wsvg += '<g stroke="#dc2626" stroke-width="1.5" fill="none" opacity=".7"><circle cx="340" cy="110" r="8"/><circle cx="340" cy="110" r="14"/><circle cx="340" cy="110" r="20"/></g>';
+  }
+  wave.innerHTML = wsvg;
+  // Output
+  document.getElementById('labGa-out').innerHTML =
+    '<span class="res-line"><span class="res-key">t_p (ida+vuelta)</span> = '+tp.toFixed(3)+' s</span>'+
+    '<span class="res-line"><span class="res-key">Δp (sobrepresión)</span> = '+dpBar.toFixed(1)+' bar</span>'+
+    '<span class="res-line"><span class="res-key">Pico vs nominal</span> = '+peak.toFixed(1)+'×</span>'+
+    '<span class="res-line"><span class="res-key">Cierre</span> '+(critico?'crítico (t_c &lt; t_p)':'seguro (t_c ≥ t_p)')+'</span>';
+  // Marker gráfico
+  const xMark = 30 + Math.min(240, (tc/(tp*5))*140 + 130*(tc>=tp?1:0));
+  const markPos = critico ? (30 + (tc/tp)*100) : (130 + Math.min(140, ((tc-tp)/(tp*3))*140));
+  document.getElementById('labGa-mark').setAttribute('cx', Math.min(265, markPos));
+  document.getElementById('labGa-mark').setAttribute('fill', critico ? '#b91c1c' : '#15803d');
+  // Fact
+  let fact = '💡 <strong>Dato real:</strong> ';
+  if(critico){
+    fact += '🚨 ¡Cierre crítico! t_c='+tc.toFixed(2)+'s &lt; t_p='+tp.toFixed(2)+'s. La presión salta '+dpBar.toFixed(1)+' bar. Con presión nominal de 4 bar, alcanzás '+(4+dpBar).toFixed(0)+' bar — riesgo de rotura.';
+  } else if(dpBar < 2){
+    fact += 'Δp='+dpBar.toFixed(2)+' bar — golpe leve, sin riesgo. Buena práctica de operación.';
+  } else if(dpBar < 8){
+    fact += 'Δp='+dpBar.toFixed(1)+' bar — moderado. La cañería debe soportar al menos '+(4+dpBar).toFixed(0)+' bar. Considerar amortiguador si hay ciclos frecuentes.';
+  } else {
+    fact += 'Δp='+dpBar.toFixed(0)+' bar — significativo aunque t_c &gt; t_p. Pensar en cierre todavía más lento o instalar acumulador.';
+  }
+  document.getElementById('labGa-fact').innerHTML = fact;
+}
+
 // Inicializar todos los labs
-lab1(); lab2(); lab3(); lab4(); lab5(); lab6(); lab7(); lab8(); lab9(); lab10(); lab11();
+lab1(); lab2(); lab3(); lab4(); lab5(); lab6(); lab7(); lab8(); lab9(); lab10(); lab11(); labGa();
 
 /* ========== FLASHCARDS ========== */
 const cards = [
@@ -2978,6 +3396,10 @@ const cards = [
   {q:'¿Cuál es la ALTURA MÁX DE ASPIRACIÓN práctica?', a:'≈ 8 m (la teórica es 10,33 m = 1 atm)', f:'p_atm = 10,33 m H₂O'},
   {q:'¿Qué densidad tiene el aceite hidráulico?', a:'Aproximadamente 850 kg/m³, MENOR que el agua', f:'ρ_aceite ≈ 850 kg/m³'},
   {q:'¿Qué es el RENDIMIENTO TOTAL η?', a:'Producto del rendimiento volumétrico por el mecánico-hidráulico', f:'η_total = η_vol · η_mh'},
+  {q:'¿Qué es la CAVITACIÓN?', a:'Formación de burbujas de vapor del propio líquido cuando la presión cae por debajo de la presión de vapor — implosionan y dañan el impulsor', f:'p &lt; p_vapor → burbujas'},
+  {q:'¿Cuál es la diferencia entre CAVITACIÓN y AIREACIÓN?', a:'Cavitación: burbujas de VAPOR del propio líquido (interno). Aireación: burbujas de AIRE externo que entra al circuito', f:'vapor vs aire externo'},
+  {q:'¿Qué es el GOLPE DE ARIETE?', a:'Ondas de choque de alta presión por cambio brusco de velocidad — picos de 4-10× la presión nominal', f:'t_p = 2L/a'},
+  {q:'Condición para evitar cavitación: NPSH', a:'El NPSH disponible debe ser MAYOR que el NPSH requerido (con margen &gt; 0,5 m)', f:'NPSH_d ≥ NPSH_r'},
 ];
 let cIdx = 0;
 function showCard(){
@@ -3133,6 +3555,11 @@ const quizQs = [
   {q:'Un fluido IDEAL se considera:', opts:['Incompresible y SIN viscosidad','Con viscosidad pero incompresible','Compresible y sin viscosidad','Real con pérdidas'], ok:0, exp:'Ideal: incompresible + viscosidad nula + sin pérdidas + flujo estacionario.'},
   {q:'La fórmula P = p · Q calcula:', opts:['Presión','POTENCIA HIDRÁULICA','Caudal','Pérdidas'], ok:1, exp:'P [W] = p [Pa] · Q [m³/s]. La potencia hidráulica se obtiene del producto presión × caudal.'},
   {q:'¿Por qué el flujo TURBULENTO no es deseado?', opts:['Es más lento','Genera más PÉRDIDAS por fricción','Es más caro','Aumenta la presión'], ok:1, exp:'Los remolinos disipan más energía → mayores pérdidas → menor presión útil en el actuador.'},
+  {q:'¿Qué causa la CAVITACIÓN en una bomba?', opts:['Demasiada presión a la salida','Que la presión caiga POR DEBAJO de la presión de vapor en la succión','Aire externo entrando al sistema','Un cierre brusco de válvula'], ok:1, exp:'La cavitación ocurre cuando p_estática &lt; p_vapor → el líquido "hierve" en frío, formando burbujas que implosionan.'},
+  {q:'¿Cuál es la diferencia clave entre CAVITACIÓN y AIREACIÓN?', opts:['Son sinónimos','Cavitación: burbujas de VAPOR del fluido. Aireación: burbujas de AIRE externo','Cavitación pasa en líquidos, aireación en gases','La cavitación no daña nada'], ok:1, exp:'Cavitación = vapor interno (implosión violenta, daña). Aireación = aire externo que entra (gorgoteo, no daña pero baja rendimiento).'},
+  {q:'¿Qué provoca el GOLPE DE ARIETE?', opts:['Una bomba muy potente','Cambio BRUSCO de velocidad del fluido (cierre rápido / paro de bomba)','La cavitación','Bajo nivel del tanque'], ok:1, exp:'La energía cinética del fluido se transforma instantáneamente en una onda de sobrepresión que viaja a la velocidad del sonido.'},
+  {q:'Para evitar golpe de ariete, ¿cuándo es SEGURO cerrar una válvula?', opts:['Lo más rápido posible','Cuando t_c &gt; t_p (cierre más LENTO que el viaje de la onda)','Solo si la bomba está apagada','Con un cierre instantáneo'], ok:1, exp:'Si t_c &gt; t_p, la onda de presión rebota y se libera antes que la válvula cierre del todo, amortiguando el golpe.'},
+  {q:'¿Cuál NO es una forma de evitar cavitación?', opts:['Subir el tanque de aspiración','Aumentar el diámetro de la succión','SUBIR la temperatura del fluido','Acortar la cañería de succión'], ok:2, exp:'Al revés: a mayor temperatura, mayor presión de vapor del líquido → MÁS riesgo de cavitar.'},
 ];
 let qIdx = 0, qScore = 0, qCorrect = 0, qWrong = 0;
 function buildQuiz(){

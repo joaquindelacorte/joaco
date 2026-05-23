@@ -253,9 +253,172 @@ tr:nth-child(even) td{background:var(--blue-bg)}
 .lab-section-title::before{content:'';flex:1;height:2px;background:linear-gradient(90deg,var(--blue),transparent)}
 .lab-section-title::after{content:'';flex:1;height:2px;background:linear-gradient(90deg,transparent,var(--blue))}
 
+/* Fórmula dinámica con valores actualizados dentro de lab-result */
+.lab-result .res-line.fm{
+  background:rgba(253,230,138,.08);
+  color:#fde68a;
+  font-family:'Courier New',monospace;
+  font-size:.82rem;
+  padding:.5rem .7rem;
+  margin:-.4rem -.5rem .6rem;
+  border-radius:8px 8px 0 0;
+  border-bottom:1px dashed rgba(253,230,138,.25);
+  letter-spacing:0;
+  line-height:1.6;
+  word-break:break-word
+}
+.lab-result .res-line.fm .fname{
+  color:#94a3b8;
+  font-family:-apple-system,system-ui,sans-serif;
+  font-size:.7rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  display:block;
+  margin-bottom:.25rem
+}
+.lab-result .res-line.fm .fnum{color:#fbbf24}
+.lab-result .res-line.fm .fres{color:#7dd3fc;font-weight:800}
+
 @media(max-width:780px){
-  .lab-body{grid-template-columns:1fr}
+  .lab-body{grid-template-columns:1fr;gap:1rem}
   .lab-viz{min-height:200px}
+}
+
+/* ══════ RESPONSIVE MÓVIL ══════ */
+@media(max-width:768px){
+  body{font-size:15px}
+  .container{padding:1.4rem 1rem}
+  /* Nav */
+  .brand{padding:.65rem 1rem;font-size:.95rem}
+  .tab-btn{padding:.6rem .8rem;font-size:.78rem}
+  /* Hero */
+  .hero{padding:1.8rem 1rem 1.5rem}
+  .hero h1{font-size:1.5rem}
+  .hero p{font-size:.85rem}
+  .badge{font-size:.7rem;padding:.2rem .65rem}
+  /* Tipografía */
+  .stitle{font-size:1.1rem;margin:2rem 0 .8rem;gap:.45rem}
+  .stitle .ico{font-size:1.1rem}
+  .sub{font-size:.95rem}
+  /* Cards */
+  .card{padding:1rem}
+  .card h3{font-size:.93rem}
+  .card p,.card li{font-size:.86rem}
+  /* Fórmulas */
+  .fbox{padding:.85rem 1rem}
+  .fbox .big{font-size:1.15rem}
+  .fbox .sub-f{font-size:.78rem}
+  /* Notas y tips */
+  .note,.tip,.warn{padding:.75rem .9rem;font-size:.86rem}
+  /* Tablas */
+  th{padding:.55rem .7rem;font-size:.82rem}
+  td{padding:.5rem .7rem;font-size:.83rem}
+  /* Labs */
+  .lab{padding:1rem;margin-bottom:1.5rem}
+  .lab-head h3{font-size:1rem}
+  .lab-head .ctx{font-size:.83rem}
+  .lab-viz{min-height:180px;padding:.7rem}
+  .lab-ctrls label{font-size:.8rem}
+  .lab-ctrls label .val{font-size:.85rem;padding:.12rem .55rem}
+  .lab-ctrls input[type=range]{height:24px}
+  .lab-ctrls .sel{font-size:.85rem;padding:.55rem .65rem}
+  .lab-result{font-size:.88rem;padding:.85rem 1rem}
+  .lab-result .res-line.fm{font-size:.74rem;padding:.45rem .55rem}
+  .lab-graph h4{font-size:.78rem}
+  .lab-fact{font-size:.83rem;padding:.75rem .9rem}
+  .lab-section-title{font-size:.78rem;letter-spacing:.5px}
+  /* Diagrama */
+  .diagram{padding:.7rem}
+  .dcap{font-size:.78rem}
+  /* Ejercicios */
+  .ej-filter-btn{font-size:.76rem;padding:.4rem .8rem}
+  .ej-header{padding:.85rem 1rem;gap:.4rem}
+  .ej-header h3{font-size:.88rem}
+  .ej-badge{font-size:.65rem;padding:.18rem .55rem}
+  .ej-body{padding:1rem}
+  .ej-enunciado{padding:.85rem;font-size:.86rem}
+  .step{gap:.6rem;margin-bottom:.7rem}
+  .step-num{width:22px;height:22px;font-size:.72rem}
+  .step-body{font-size:.86rem}
+  .result-box{font-size:.92rem;padding:.7rem .9rem}
+  .show-sol-btn{font-size:.8rem;padding:.5rem 1rem}
+  /* Quiz */
+  .quiz-card{padding:1.3rem 1rem;border-radius:12px}
+  .quiz-card .q-text{font-size:.96rem;margin-bottom:1rem}
+  .quiz-card .q-num{font-size:.72rem}
+  .opt-btn{padding:.7rem .9rem;font-size:.85rem}
+  .feedback-box{font-size:.84rem;padding:.75rem .9rem}
+  .btn-next{padding:.65rem 1.4rem;font-size:.88rem}
+  .quiz-header{font-size:.85rem}
+  .quiz-score-display{font-size:.9rem}
+  .result-card{padding:1.8rem 1.2rem}
+  .result-card h2{font-size:1.3rem}
+  .result-card .score-big{font-size:2.4rem}
+  .result-card .emoji{font-size:3rem}
+  /* Flashcards */
+  .flashcard-wrap{height:190px;margin-bottom:1.2rem}
+  .fc-front .fc-content{font-size:1rem}
+  .fc-back .fc-answer{font-size:.85rem}
+  .fc-back .fc-formula{font-size:1rem}
+  .fc-btn{padding:.5rem 1rem;font-size:.82rem}
+  .fc-counter{font-size:.8rem}
+  /* Matching */
+  .match-item{padding:.6rem .8rem;font-size:.83rem}
+  .match-col h4{font-size:.76rem}
+  .match-item.formula-item{font-size:.78rem}
+  /* Fill-in */
+  .fill-q{padding:1rem 1.1rem}
+  .fill-q .fq-text{font-size:.88rem}
+  .fill-input{width:100px;font-size:.88rem;padding:.5rem .75rem}
+  .fill-check-btn{font-size:.82rem;padding:.5rem .9rem}
+  /* Cheat sheet */
+  .cheat{padding:1.3rem 1rem}
+  .cheat h2{font-size:1rem}
+  .cgrid{grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.7rem}
+  .citem{padding:.7rem}
+  .citem .cf{font-size:.88rem}
+  /* Grid genérico */
+  .g3,.g4{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+}
+
+@media(max-width:480px){
+  .container{padding:1.2rem .75rem}
+  .hero h1{font-size:1.3rem}
+  .hero p{font-size:.8rem}
+  .badges{gap:.35rem;margin-top:.7rem}
+  .badge{font-size:.65rem;padding:.18rem .55rem}
+  .brand{font-size:.9rem;padding:.55rem .8rem;text-align:center;width:100%;border-right:none;border-bottom:1px solid rgba(255,255,255,.2)}
+  .tab-btn{padding:.55rem .65rem;font-size:.72rem}
+  /* Cards más compactas */
+  .fbox .big{font-size:1rem}
+  .stitle{font-size:1rem}
+  /* Labs: viz arriba, controles abajo en pantalla pequeña */
+  .lab{padding:.85rem}
+  .lab-viz{min-height:160px;padding:.5rem}
+  .lab-result{font-size:.82rem;padding:.75rem .85rem}
+  .lab-result .res-line.fm{font-size:.7rem}
+  .lab-fact{font-size:.8rem}
+  /* Ejercicios más compactos */
+  .ej-filter{gap:.35rem}
+  .ej-filter-btn{font-size:.72rem;padding:.35rem .7rem}
+  .ej-header h3{font-size:.83rem}
+  .ej-badge{font-size:.62rem}
+  .ej-body{padding:.9rem .8rem}
+  .step-body{font-size:.83rem}
+  .result-box{font-size:.85rem;padding:.65rem .8rem}
+  /* Quiz mobile */
+  .quiz-card{padding:1.1rem .85rem}
+  .quiz-card .q-text{font-size:.92rem}
+  .opt-btn{padding:.65rem .8rem;font-size:.82rem}
+  /* Flashcards más compactas */
+  .flashcard-wrap{height:170px}
+  /* Cheat */
+  .cgrid{grid-template-columns:1fr 1fr;gap:.55rem}
+  .citem{padding:.6rem .5rem}
+  .citem .cf{font-size:.82rem}
+  .citem .lbl{font-size:.68rem}
+  .citem .cu{font-size:.66rem}
 }
 
 /* Confetti */
@@ -2808,8 +2971,10 @@ function lab1(){
   const yDot = 100 - (pBar/Math.max(maxP,10))*85;
   document.getElementById('lab1-dot').setAttribute('cx', xDot);
   document.getElementById('lab1-dot').setAttribute('cy', yDot);
+  // Fórmula dinámica
+  const fm = '<span class="res-line fm"><span class="fname">📐 p = ρ · g · h</span><span class="fnum">'+rho+' · 9.81 · '+h.toFixed(1)+'</span> = <span class="fres">'+p.toFixed(0)+' Pa</span></span>';
   // Output
-  document.getElementById('lab1-out').innerHTML =
+  document.getElementById('lab1-out').innerHTML = fm +
     '<span class="res-line"><span class="res-key">p_relativa</span> = '+pBar.toFixed(2)+' bar = '+(p/1000).toFixed(0)+' kPa</span>'+
     '<span class="res-line"><span class="res-key">p_absoluta</span> = '+pAbs.toFixed(2)+' bar</span>'+
     '<span class="res-line"><span class="res-key">Fuerza/cm²</span> = '+fPerCm2.toFixed(1)+' N</span>';
@@ -2847,8 +3012,10 @@ function lab2(){
   document.getElementById('lab2-f2lbl').textContent = 'F₂ = '+F2.toLocaleString('es-AR')+' N';
   document.getElementById('lab2-a1lbl').textContent = 'A₁ = '+A1.toFixed(1)+' cm²';
   document.getElementById('lab2-a2lbl').textContent = 'A₂ = '+A2.toFixed(0)+' cm²';
+  // Fórmula dinámica
+  const fm = '<span class="res-line fm"><span class="fname">📐 F₁ = F₂ · A₁ / A₂</span><span class="fnum">'+F2.toLocaleString('es-AR')+' · '+A1.toFixed(1)+' / '+A2.toFixed(0)+'</span> = <span class="fres">'+F1.toFixed(0)+' N</span></span>';
   // Output
-  document.getElementById('lab2-out').innerHTML =
+  document.getElementById('lab2-out').innerHTML = fm +
     '<span class="res-line"><span class="res-key">F₁ necesaria</span> = '+F1.toFixed(0)+' N (≈ '+kg1.toFixed(1)+' kg)</span>'+
     '<span class="res-line"><span class="res-key">Multiplicación</span> = '+ratio.toFixed(1)+'×</span>'+
     '<span class="res-line"><span class="res-key">Bombeos</span> por cm subir = '+ratio.toFixed(1)+'</span>';
@@ -2896,8 +3063,10 @@ function lab3(){
   // Flecha de v2 más larga si v2 grande
   const arrLen = Math.min(50, Math.max(15, ratio*8));
   document.getElementById('lab3-arr2').setAttribute('x2', 285+arrLen);
+  // Fórmula dinámica
+  const fm = '<span class="res-line fm"><span class="fname">📐 v₂ = v₁ · (d₁/d₂)²</span><span class="fnum">'+v1.toFixed(1)+' · ('+d1+'/'+d2+')²</span> = <span class="fres">'+v2.toFixed(2)+' m/s</span></span>';
   // Output
-  document.getElementById('lab3-out').innerHTML =
+  document.getElementById('lab3-out').innerHTML = fm +
     '<span class="res-line"><span class="res-key">v₂ en el pico</span> = '+v2.toFixed(2)+' m/s</span>'+
     '<span class="res-line"><span class="res-key">Aumento</span> = '+ratio.toFixed(1)+'×</span>'+
     '<span class="res-line"><span class="res-key">Caudal Q</span> = '+(Q*1000).toFixed(2)+' L/s = '+Qlmin.toFixed(0)+' L/min</span>';
@@ -2937,7 +3106,9 @@ function lab4(){
   const H2elev = 0;
   const H2pres = Htot - H2vel - H2elev;
   const p2 = H2pres*gamma/1e5; // bar
-  document.getElementById('lab4-out').innerHTML =
+  // Fórmula dinámica
+  const fm = '<span class="res-line fm"><span class="fname">📐 p₂/γ = p₁/γ + (v₁²−v₂²)/2g + Δz</span><span class="fnum">'+H1pres.toFixed(2)+' + ('+v1.toFixed(1)+'²−'+v2.toFixed(1)+'²)/19.62 + ('+dz.toFixed(1)+')</span> = <span class="fres">'+H2pres.toFixed(2)+' m → '+p2.toFixed(2)+' bar</span></span>';
+  document.getElementById('lab4-out').innerHTML = fm +
     '<span class="res-line"><span class="res-key">p₂</span> = '+p2.toFixed(2)+' bar</span>'+
     '<span class="res-line"><span class="res-key">H total</span> = '+Htot.toFixed(2)+' m (constante)</span>'+
     (p2 < 0 ? '<span class="res-line" style="color:#fca5a5">⚠️ p₂ &lt; 0: NO físico</span>' : '');
@@ -2998,7 +3169,9 @@ function lab5(){
   document.getElementById('lab5-hlbl').textContent = h.toFixed(1)+'m';
   // Output
   const kmh = v*3.6;
-  document.getElementById('lab5-out').innerHTML =
+  // Fórmula dinámica
+  const fm = '<span class="res-line fm"><span class="fname">📐 v = √(2 · g · h)</span><span class="fnum">√(2 · 9.81 · '+h.toFixed(1)+')</span> = √'+(2*9.81*h).toFixed(2)+' = <span class="fres">'+v.toFixed(2)+' m/s</span></span>';
+  document.getElementById('lab5-out').innerHTML = fm +
     '<span class="res-line"><span class="res-key">Velocidad</span> v = '+v.toFixed(2)+' m/s (≈ '+kmh.toFixed(0)+' km/h)</span>'+
     '<span class="res-line"><span class="res-key">Alcance horizontal</span> = '+range.toFixed(2)+' m</span>'+
     '<span class="res-line"><span class="res-key">Tiempo de caída</span> = '+tFall.toFixed(2)+' s</span>';
@@ -3044,8 +3217,10 @@ function lab6(){
   // Flecha de velocidad garganta más larga
   const arrLenG = Math.min(60, 15 + (v2-v1)*5);
   document.getElementById('lab6-arrG').setAttribute('x2', 180+arrLenG);
+  // Fórmula dinámica
+  const fm = '<span class="res-line fm"><span class="fname">📐 Δp = ρ/2 · (v₂² − v₁²)</span><span class="fnum">500 · ('+v2.toFixed(2)+'² − '+v1.toFixed(1)+'²)</span> = <span class="fres">'+dp.toFixed(0)+' Pa</span></span>';
   // Output
-  document.getElementById('lab6-out').innerHTML =
+  document.getElementById('lab6-out').innerHTML = fm +
     '<span class="res-line"><span class="res-key">v₂ (garganta)</span> = '+v2.toFixed(2)+' m/s</span>'+
     '<span class="res-line"><span class="res-key">ΔP = P₁ − P₂</span> = '+dp.toFixed(0)+' Pa = '+(dp/1e5).toFixed(3)+' bar</span>'+
     '<span class="res-line"><span class="res-key">Caudal Q</span> = '+(Q*1000).toFixed(2)+' L/s</span>';
@@ -3108,8 +3283,10 @@ function lab7(){
   document.getElementById('lab7-typebox').setAttribute('fill', isLam ? '#15803d' : '#b91c1c');
   document.getElementById('lab7-typetxt').textContent = isLam ? 'LAMINAR' : 'TURBULENTO';
   document.getElementById('lab7-relbl').textContent = 'Re = '+Re.toFixed(0);
+  // Fórmula dinámica
+  const fm = '<span class="res-line fm"><span class="fname">📐 Re = v · d / ν</span><span class="fnum">'+v.toFixed(1)+' · '+d.toFixed(3)+' / '+nu.toExponential(1)+'</span> = <span class="fres">'+Re.toFixed(0)+'</span></span>';
   // Output
-  document.getElementById('lab7-out').innerHTML =
+  document.getElementById('lab7-out').innerHTML = fm +
     '<span class="res-line"><span class="res-key">Re</span> = '+Re.toFixed(0)+'</span>'+
     '<span class="res-line"><span class="res-key">Régimen</span> = '+(isLam ? 'LAMINAR ✅' : 'TURBULENTO ⚠️')+'</span>'+
     '<span class="res-line"><span class="res-key">v crítica</span> = '+vCrit.toFixed(2)+' m/s</span>';
@@ -3156,8 +3333,10 @@ function lab8(){
   });
   document.getElementById('lab8-ltot').textContent = 'L total = '+L+' m';
   document.getElementById('lab8-dptot').textContent = 'Δp total = '+dpBar.toFixed(2)+' bar perdidos';
+  // Fórmula dinámica
+  const fm = '<span class="res-line fm"><span class="fname">📐 h_f = f · (L/D) · v² / 2g</span><span class="fnum">'+lambda.toFixed(3)+' · ('+L+'/'+D.toFixed(3)+') · '+v.toFixed(1)+'² / 19.62</span> = <span class="fres">'+hf.toFixed(2)+' m → '+dpBar.toFixed(2)+' bar</span></span>';
   // Output
-  document.getElementById('lab8-out').innerHTML =
+  document.getElementById('lab8-out').innerHTML = fm +
     '<span class="res-line"><span class="res-key">h_f total</span> = '+hf.toFixed(2)+' m</span>'+
     '<span class="res-line"><span class="res-key">Δp total</span> = '+dpBar.toFixed(2)+' bar</span>'+
     '<span class="res-line"><span class="res-key">Pérdida</span> = '+(dpPerM*1000).toFixed(1)+' mbar/m</span>'+
@@ -3201,8 +3380,10 @@ function lab9(){
   document.getElementById('lab9-meterlbl').textContent = (P_ele/1000).toFixed(2)+' kW';
   const meterColor = P_ele < 500 ? '#10b981' : (P_ele < 3000 ? '#f59e0b' : '#dc2626');
   document.getElementById('lab9-meter').setAttribute('fill', meterColor);
+  // Fórmula dinámica
+  const fm = '<span class="res-line fm"><span class="fname">📐 P_hid = γ · Q · h_A</span><span class="fnum">9810 · '+Q.toFixed(5)+' · '+h+'</span> = <span class="fres">'+P_hid.toFixed(1)+' W</span></span>';
   // Output
-  document.getElementById('lab9-out').innerHTML =
+  document.getElementById('lab9-out').innerHTML = fm +
     '<span class="res-line"><span class="res-key">P hidráulica</span> = '+P_hid.toFixed(1)+' W</span>'+
     '<span class="res-line"><span class="res-key">P eléctrica</span> = '+P_ele.toFixed(1)+' W ('+(P_ele/735).toFixed(2)+' HP)</span>'+
     '<span class="res-line"><span class="res-key">Consumo/mes</span> = '+kWh_mes.toFixed(1)+' kWh</span>'+
@@ -3242,8 +3423,10 @@ function lab10(){
   // Color presión según riesgo
   const presColor = p_bar < 100 ? '#15803d' : (p_bar < 250 ? '#f59e0b' : '#dc2626');
   document.getElementById('lab10-plbl').setAttribute('fill', presColor);
+  // Fórmula dinámica
+  const fm = '<span class="res-line fm"><span class="fname">📐 p = F / A   ·   Q = A · v</span><span class="fnum">'+F.toFixed(0)+' / '+A.toFixed(5)+'</span> = <span class="fres">'+p_Pa.toFixed(0)+' Pa = '+p_bar.toFixed(1)+' bar</span></span>';
   // Output
-  document.getElementById('lab10-out').innerHTML =
+  document.getElementById('lab10-out').innerHTML = fm +
     '<span class="res-line"><span class="res-key">Presión necesaria</span> = '+p_bar.toFixed(1)+' bar</span>'+
     '<span class="res-line"><span class="res-key">Caudal</span> = '+Q_lmin.toFixed(2)+' L/min</span>'+
     '<span class="res-line"><span class="res-key">Potencia</span> = '+(P_W/1000).toFixed(2)+' kW</span>';
@@ -3291,8 +3474,10 @@ function lab11(){
     fact = '❌ '+h.toFixed(1)+' m supera el límite teórico (10,33 m). NO existe bomba aspirante que pueda subir agua tanto. Hay que usar bomba SUMERGIBLE.';
   }
   const margin = 8 - h;
+  // Fórmula dinámica
+  const fm = '<span class="res-line fm"><span class="fname">📐 p_vacío = −ρ · g · h / 10⁵</span><span class="fnum">−1000 · 9.81 · '+h.toFixed(1)+' / 10⁵</span> = <span class="fres">'+vacio.toFixed(3)+' bar</span></span>';
   // Output
-  document.getElementById('lab11-out').innerHTML =
+  document.getElementById('lab11-out').innerHTML = fm +
     '<span class="res-line"><span class="res-key">Estado</span> = '+status+'</span>'+
     '<span class="res-line"><span class="res-key">Vacío necesario</span> = '+vacio.toFixed(2)+' bar</span>'+
     '<span class="res-line"><span class="res-key">Margen al límite</span> = '+margin.toFixed(1)+' m</span>';
@@ -3351,8 +3536,10 @@ function labGa(){
     wsvg += '<g stroke="#dc2626" stroke-width="1.5" fill="none" opacity=".7"><circle cx="340" cy="110" r="8"/><circle cx="340" cy="110" r="14"/><circle cx="340" cy="110" r="20"/></g>';
   }
   wave.innerHTML = wsvg;
+  // Fórmula dinámica
+  const fm = '<span class="res-line fm"><span class="fname">📐 t_p = 2L/a   ·   Δp = ρ·a·v₀ (Joukowsky)</span><span class="fnum">t_p = 2·'+L+'/'+a+' = '+tp.toFixed(3)+'s   |   Δp = 1000·'+a+'·'+v0.toFixed(1)+'</span> = <span class="fres">'+dpBar.toFixed(1)+' bar</span></span>';
   // Output
-  document.getElementById('labGa-out').innerHTML =
+  document.getElementById('labGa-out').innerHTML = fm +
     '<span class="res-line"><span class="res-key">t_p (ida+vuelta)</span> = '+tp.toFixed(3)+' s</span>'+
     '<span class="res-line"><span class="res-key">Δp (sobrepresión)</span> = '+dpBar.toFixed(1)+' bar</span>'+
     '<span class="res-line"><span class="res-key">Pico vs nominal</span> = '+peak.toFixed(1)+'×</span>'+

@@ -17,8 +17,50 @@
   --bg:#f0f9ff;--card:#fff;--border:#e2e8f0;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{
+  font-family:'Segoe UI',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--gray);
+  line-height:1.65;
+  overflow-x:hidden;
+  -webkit-tap-highlight-color:rgba(2,132,199,.15);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility
+}
+
+/* Prevenir desbordes */
+img,svg,video{max-width:100%;height:auto}
+table{max-width:100%}
+pre,code,.fbox,.lab-result{word-wrap:break-word;overflow-wrap:break-word}
+
+/* Touch targets mínimos (44px) */
+button,select,input[type=range]{min-height:44px}
+.opt-btn,.tab-btn,.fc-btn,.ej-filter-btn,.fill-check-btn,.btn-next,.btn-retry,.btn-reset,.show-sol-btn{min-height:44px}
+.match-item{min-height:44px;display:flex;align-items:center;justify-content:center}
+
+/* Range slider táctil */
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:6px;background:var(--border);border-radius:3px}
+input[type=range]::-moz-range-track{height:6px;background:var(--border);border-radius:3px}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:22px;height:22px;border-radius:50%;
+  background:var(--blue-lt);border:2px solid #fff;
+  box-shadow:0 1px 4px rgba(0,0,0,.25);
+  margin-top:-8px;cursor:pointer
+}
+input[type=range]::-moz-range-thumb{
+  width:22px;height:22px;border-radius:50%;
+  background:var(--blue-lt);border:2px solid #fff;
+  box-shadow:0 1px 4px rgba(0,0,0,.25);cursor:pointer
+}
+
+/* Hover sólo en dispositivos con cursor real */
+@media(hover:none){
+  .card:hover{box-shadow:0 1px 4px rgba(0,0,0,.05);transform:none}
+  .note-card:hover{transform:none;box-shadow:none}
+}
 
 /* NAV */
 nav{position:sticky;top:0;z-index:200;background:var(--blue);display:flex;align-items:center;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.3)}
@@ -419,6 +461,116 @@ tr:nth-child(even) td{background:var(--blue-bg)}
   .citem .cf{font-size:.82rem}
   .citem .lbl{font-size:.68rem}
   .citem .cu{font-size:.66rem}
+}
+
+/* ══════ TABLETS / PANTALLAS MEDIANAS (641-1024px) ══════ */
+@media(max-width:1024px){
+  .lab-body{grid-template-columns:1fr;gap:1rem}
+  .lab-viz{min-height:220px;max-width:600px;margin:0 auto}
+}
+
+/* ══════ BREAKPOINT INTERMEDIO (641-768px) ══════ */
+@media(max-width:640px){
+  /* Forzar una sola columna en grids de 2 elementos */
+  .grid.g2{grid-template-columns:1fr!important}
+  /* Reducir gaps en grids */
+  .grid{gap:.85rem}
+  /* Containers compactos */
+  .container{padding:1.2rem .9rem}
+  /* Hero más compacto */
+  .hero{padding:1.6rem .9rem 1.3rem}
+  .badges{display:flex;justify-content:center}
+  /* Diagramas con altura controlada */
+  .diagram svg{max-height:280px}
+  /* Nav tabs scrolleable con snap */
+  .tabs{scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+  .tab-btn{scroll-snap-align:start;flex-shrink:0}
+  /* Tablas con scroll prominente */
+  .twrap{box-shadow:inset -10px 0 8px -8px rgba(0,0,0,.15)}
+  /* Repaso hero overflow */
+  #repaso .hero{margin:0 0 1.2rem!important;border-radius:10px;padding:1.4rem 1rem}
+  #repaso .hero h1{font-size:1.25rem}
+  #repaso .hero p{font-size:.82rem}
+  /* Lab graph SVG más compacto */
+  .lab-graph{padding:.55rem}
+  .lab-graph svg{max-height:120px}
+  /* Steps con margen menor */
+  .step{gap:.5rem}
+  /* Matching: items más altos y legibles */
+  .match-item{font-size:.8rem;padding:.55rem .7rem}
+  .match-item.formula-item{font-size:.74rem}
+  /* Filter chips wrap mejor */
+  .ej-filter{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;padding-bottom:.4rem;scrollbar-width:thin}
+  .ej-filter-btn{flex-shrink:0}
+  /* Ejercicios: tags abajo del título */
+  .ej-header{flex-direction:column;align-items:flex-start;gap:.5rem}
+  .ej-tags{flex-direction:row;gap:.3rem}
+  /* Result-box no rompe */
+  .result-box{font-size:.85rem;word-break:break-word;line-height:1.5}
+  /* Lab section title sin líneas que rompan */
+  .lab-section-title{font-size:.78rem}
+  .lab-section-title::before,.lab-section-title::after{display:none}
+  /* Cheat 2 columnas siempre */
+  .cgrid{grid-template-columns:repeat(2,1fr);gap:.6rem}
+  /* Quiz nav button full width */
+  .quiz-nav{justify-content:stretch}
+  .btn-next{width:100%}
+}
+
+/* ══════ MUY PEQUEÑO (320-374px iPhone SE 1ra gen) ══════ */
+@media(max-width:374px){
+  body{font-size:14px}
+  .container{padding:1rem .65rem}
+  .hero h1{font-size:1.15rem}
+  .hero p{font-size:.75rem}
+  .badges{display:none}
+  .stitle{font-size:.95rem}
+  .tab-btn{padding:.5rem .55rem;font-size:.68rem}
+  .brand{font-size:.85rem;padding:.5rem .7rem}
+  .card{padding:.85rem}
+  .card h3{font-size:.88rem}
+  .lab{padding:.7rem}
+  .lab-viz{min-height:140px;padding:.4rem}
+  .lab-head h3{font-size:.92rem}
+  .lab-result{font-size:.78rem;padding:.7rem .75rem}
+  .lab-result .res-line.fm{font-size:.66rem;padding:.4rem .5rem}
+  .fbox{padding:.7rem .85rem}
+  .fbox .big{font-size:.92rem}
+  .opt-btn{font-size:.78rem;padding:.6rem .7rem}
+  .quiz-card{padding:1rem .75rem}
+  .quiz-card .q-text{font-size:.86rem}
+  .flashcard-wrap{height:155px}
+  .fc-front .fc-content{font-size:.85rem}
+  .fc-back .fc-answer{font-size:.78rem}
+  /* Cheat 1 columna */
+  .cgrid{grid-template-columns:1fr}
+  /* Match en 2 columnas siempre */
+  .match-grid{gap:.7rem}
+  /* Ejercicios mínimos */
+  .ej-header h3{font-size:.78rem}
+  .step-body{font-size:.78rem}
+}
+
+/* ══════ ORIENTACIÓN HORIZONTAL CELULAR ══════ */
+@media(max-height:500px) and (orientation:landscape){
+  .hero{padding:1rem .9rem .8rem}
+  .hero h1{font-size:1.2rem}
+  .hero p{font-size:.75rem;margin-top:.2rem}
+  .badges{margin-top:.5rem}
+  nav{position:relative} /* No sticky para no ocupar espacio */
+  .flashcard-wrap{height:140px}
+}
+
+/* ══════ SCROLLBARS DECENTES ══════ */
+.tabs::-webkit-scrollbar,.twrap::-webkit-scrollbar,.ej-filter::-webkit-scrollbar{height:4px}
+.tabs::-webkit-scrollbar-thumb,.twrap::-webkit-scrollbar-thumb,.ej-filter::-webkit-scrollbar-thumb{background:rgba(125,211,252,.5);border-radius:2px}
+
+/* ══════ PRINT FRIENDLY ══════ */
+@media print{
+  nav,.tabs,.btn-next,.btn-retry,.btn-reset,.show-sol-btn,.ej-filter,.fc-controls{display:none!important}
+  .page{display:block!important;page-break-after:always}
+  .lab,.card{box-shadow:none;border:1px solid #ccc}
+  .ej-body{display:block!important}
 }
 
 /* Confetti */

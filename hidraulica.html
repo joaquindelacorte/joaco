@@ -267,6 +267,82 @@ tr:nth-child(even) td{background:var(--blue-bg)}
 .sim-ctl .val{font-family:'Courier New',monospace;color:var(--blue);font-weight:700;font-size:.92rem;margin-left:.5rem}
 .sim-result{background:linear-gradient(90deg,#0c1a2e,#1e3a5f);color:#7dd3fc;border-radius:10px;padding:.95rem 1.2rem;font-family:'Courier New',monospace;font-size:1.05rem;font-weight:700;text-align:center;margin-top:.7rem}
 
+/* ══════════ RED CONCEPTUAL NAVEGABLE ══════════ */
+.rc-wrap{
+  position:relative;
+  background:radial-gradient(circle at center,#fafbff,#e0f2fe);
+  border:1px solid var(--border);
+  border-radius:14px;
+  box-shadow:0 1px 6px rgba(0,0,0,.06);
+  overflow:hidden;
+  margin-bottom:1.5rem
+}
+.rc-viewport{
+  width:100%;
+  height:620px;
+  overflow:hidden;
+  cursor:grab;
+  position:relative;
+  touch-action:none;
+  user-select:none;
+  -webkit-user-select:none
+}
+.rc-viewport.rc-grabbing{cursor:grabbing}
+.rc-viewport svg{
+  transform-origin:0 0;
+  transition:transform .15s ease-out;
+  pointer-events:auto
+}
+.rc-viewport.rc-dragging svg{transition:none}
+.rc-controls{
+  position:absolute;
+  top:12px;right:12px;
+  z-index:10;
+  display:flex;flex-direction:column;gap:6px;
+  background:rgba(255,255,255,.92);
+  padding:6px;border-radius:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,.12)
+}
+.rc-btn{
+  width:36px;height:36px;
+  border:1px solid var(--border);
+  background:#fff;color:var(--blue);
+  border-radius:8px;
+  font-size:1.1rem;font-weight:800;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:.15s;
+  font-family:system-ui,sans-serif;
+  min-height:36px!important
+}
+.rc-btn:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
+.rc-btn:active{transform:scale(.9)}
+.rc-help{
+  position:absolute;
+  bottom:12px;left:12px;
+  z-index:5;
+  background:rgba(255,255,255,.92);
+  padding:.45rem .8rem;
+  border-radius:20px;
+  font-size:.75rem;
+  color:var(--gray);
+  font-weight:600;
+  box-shadow:0 1px 4px rgba(0,0,0,.1);
+  pointer-events:none;
+  transition:opacity .3s
+}
+.rc-help.hidden{opacity:0}
+
+@media(max-width:640px){
+  .rc-viewport{height:480px}
+  .rc-help{font-size:.7rem;padding:.35rem .65rem;bottom:8px;left:8px}
+  .rc-controls{top:8px;right:8px}
+  .rc-btn{width:34px;height:34px;font-size:1rem}
+}
+@media(max-width:374px){
+  .rc-viewport{height:420px}
+}
+
 /* ══════════ LABORATORIOS / SIMULADORES ══════════ */
 .lab{background:#fff;border:1px solid var(--border);border-radius:16px;padding:1.4rem;margin-bottom:2rem;box-shadow:0 2px 12px rgba(0,0,0,.06);overflow:hidden}
 .lab-head{margin-bottom:1.2rem;border-bottom:2px solid var(--blue-bg);padding-bottom:.8rem}
@@ -2387,10 +2463,18 @@ tr:nth-child(even) td{background:var(--blue-bg)}
   <!-- ═══════ RED CONCEPTUAL ═══════ -->
   <div class="stitle"><span class="ico">🗺️</span>Red conceptual: todos los temas conectados</div>
 
-  <p style="font-size:.95rem;color:var(--gray-lt);margin-bottom:1rem">Mirá cómo se relacionan los conceptos entre sí. <strong>En mobile, deslizá horizontalmente</strong> para explorar el mapa completo.</p>
+  <p style="font-size:.95rem;color:var(--gray-lt);margin-bottom:1rem">Arrastrá con el dedo/mouse para moverte. Rueda o pinch para zoom. <strong>Click en cualquier nodo</strong> para ir al tema. Doble-click para resetear.</p>
 
-  <div style="background:#fafbff;border:1px solid var(--border);border-radius:14px;padding:.6rem;overflow-x:auto;-webkit-overflow-scrolling:touch;box-shadow:0 1px 6px rgba(0,0,0,.06)">
-    <svg viewBox="0 0 1600 1200" style="min-width:900px;width:100%;height:auto;display:block">
+  <div class="rc-wrap">
+    <div class="rc-controls">
+      <button class="rc-btn" onclick="rcZoom(1.25)" title="Acercar">＋</button>
+      <button class="rc-btn" onclick="rcZoom(0.8)" title="Alejar">－</button>
+      <button class="rc-btn" onclick="rcFit()" title="Ajustar al ancho">⤢</button>
+      <button class="rc-btn" onclick="rcReset()" title="Centrar">⌂</button>
+    </div>
+    <div class="rc-help" id="rc-help">👆 Arrastrá para mover · 🔍 Pinch / rueda para zoom</div>
+    <div class="rc-viewport" id="rc-vp" ondblclick="rcFit()">
+      <svg id="rc-svg" viewBox="0 0 1600 1200" style="display:block;width:1600px;height:1200px">
       <defs>
         <!-- Gradientes -->
         <radialGradient id="rc-center" cx="50%" cy="50%">
@@ -2723,6 +2807,7 @@ tr:nth-child(even) td{background:var(--blue-bg)}
         <text x="68" y="64" font-size="10" fill="#475569">Relación cruzada</text>
       </g>
     </svg>
+    </div>
   </div>
 
   <div class="card bl" style="margin-top:1.5rem">
@@ -4736,6 +4821,232 @@ function labGa(){
 
 // Inicializar todos los labs
 lab1(); lab2(); lab3(); lab4(); lab5(); lab6(); lab7(); lab8(); lab9(); lab10(); lab11(); labGa();
+
+/* ════════════════════ RED CONCEPTUAL NAVEGABLE ════════════════════ */
+(function(){
+  const vp = document.getElementById('rc-vp');
+  const svg = document.getElementById('rc-svg');
+  const help = document.getElementById('rc-help');
+  if(!vp || !svg) return;
+
+  // SVG natural size (viewBox)
+  const SVG_W = 1600;
+  const SVG_H = 1200;
+
+  let zoom = 0.5;
+  let tx = 0, ty = 0;
+  let dragging = false;
+  let dragStartX, dragStartY;
+  let dragStartTx, dragStartTy;
+  let moved = false;
+  let pinchStartDist = 0;
+  let pinchStartZoom = 1;
+  let pinchCenter = {x:0, y:0};
+  let pinching = false;
+
+  function apply(){
+    svg.style.transform = 'translate('+tx+'px,'+ty+'px) scale('+zoom+')';
+  }
+  function clampZoom(z){ return Math.max(0.25, Math.min(3, z)); }
+  function clampPan(){
+    const rect = vp.getBoundingClientRect();
+    const sw = SVG_W * zoom;
+    const sh = SVG_H * zoom;
+    const margin = 200;
+    // Mantener algo del SVG visible
+    if(tx > rect.width - margin) tx = rect.width - margin;
+    if(tx < -sw + margin) tx = -sw + margin;
+    if(ty > rect.height - margin) ty = rect.height - margin;
+    if(ty < -sh + margin) ty = -sh + margin;
+  }
+
+  window.rcZoom = function(factor, cx, cy){
+    const rect = vp.getBoundingClientRect();
+    if(cx === undefined) cx = rect.width / 2;
+    if(cy === undefined) cy = rect.height / 2;
+    const newZoom = clampZoom(zoom * factor);
+    const f = newZoom / zoom;
+    tx = cx - (cx - tx) * f;
+    ty = cy - (cy - ty) * f;
+    zoom = newZoom;
+    clampPan();
+    apply();
+    hideHelp();
+  };
+
+  window.rcFit = function(){
+    const rect = vp.getBoundingClientRect();
+    const fit = Math.min(rect.width / SVG_W, rect.height / SVG_H) * 0.95;
+    zoom = clampZoom(fit);
+    tx = (rect.width - SVG_W * zoom) / 2;
+    ty = (rect.height - SVG_H * zoom) / 2;
+    apply();
+    hideHelp();
+  };
+
+  window.rcReset = function(){
+    const rect = vp.getBoundingClientRect();
+    zoom = clampZoom(Math.min(rect.width / SVG_W, rect.height / SVG_H) * 0.95);
+    tx = (rect.width - SVG_W * zoom) / 2;
+    ty = (rect.height - SVG_H * zoom) / 2;
+    apply();
+  };
+
+  function hideHelp(){
+    if(help && !help.classList.contains('hidden')){
+      help.classList.add('hidden');
+    }
+  }
+
+  // ── Mouse pan ──
+  vp.addEventListener('mousedown', function(e){
+    if(e.button !== 0) return;
+    dragging = true;
+    moved = false;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    dragStartTx = tx;
+    dragStartTy = ty;
+    vp.classList.add('rc-dragging','rc-grabbing');
+    e.preventDefault();
+  });
+
+  window.addEventListener('mousemove', function(e){
+    if(!dragging) return;
+    const dx = e.clientX - dragStartX;
+    const dy = e.clientY - dragStartY;
+    if(Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
+    tx = dragStartTx + dx;
+    ty = dragStartTy + dy;
+    clampPan();
+    apply();
+    hideHelp();
+  });
+
+  window.addEventListener('mouseup', function(){
+    if(dragging){
+      dragging = false;
+      vp.classList.remove('rc-dragging','rc-grabbing');
+    }
+  });
+
+  // ── Bloquear clicks si hubo drag ──
+  svg.addEventListener('click', function(e){
+    if(moved){
+      e.preventDefault();
+      e.stopPropagation();
+      moved = false;
+    }
+  }, true);
+
+  // ── Mouse wheel zoom ──
+  vp.addEventListener('wheel', function(e){
+    e.preventDefault();
+    const rect = vp.getBoundingClientRect();
+    const cx = e.clientX - rect.left;
+    const cy = e.clientY - rect.top;
+    window.rcZoom(e.deltaY < 0 ? 1.15 : 0.87, cx, cy);
+  }, {passive: false});
+
+  // ── Touch: pan + pinch ──
+  vp.addEventListener('touchstart', function(e){
+    if(e.touches.length === 1){
+      dragging = true;
+      pinching = false;
+      moved = false;
+      dragStartX = e.touches[0].clientX;
+      dragStartY = e.touches[0].clientY;
+      dragStartTx = tx;
+      dragStartTy = ty;
+    } else if(e.touches.length === 2){
+      dragging = false;
+      pinching = true;
+      const dx = e.touches[1].clientX - e.touches[0].clientX;
+      const dy = e.touches[1].clientY - e.touches[0].clientY;
+      pinchStartDist = Math.sqrt(dx*dx + dy*dy);
+      pinchStartZoom = zoom;
+      const rect = vp.getBoundingClientRect();
+      pinchCenter.x = (e.touches[0].clientX + e.touches[1].clientX)/2 - rect.left;
+      pinchCenter.y = (e.touches[0].clientY + e.touches[1].clientY)/2 - rect.top;
+    }
+  }, {passive: true});
+
+  vp.addEventListener('touchmove', function(e){
+    if(pinching && e.touches.length === 2){
+      e.preventDefault();
+      const dx = e.touches[1].clientX - e.touches[0].clientX;
+      const dy = e.touches[1].clientY - e.touches[0].clientY;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      const newZoom = clampZoom(pinchStartZoom * (dist / pinchStartDist));
+      const f = newZoom / zoom;
+      tx = pinchCenter.x - (pinchCenter.x - tx) * f;
+      ty = pinchCenter.y - (pinchCenter.y - ty) * f;
+      zoom = newZoom;
+      clampPan();
+      apply();
+      hideHelp();
+    } else if(dragging && e.touches.length === 1){
+      e.preventDefault();
+      const dx = e.touches[0].clientX - dragStartX;
+      const dy = e.touches[0].clientY - dragStartY;
+      if(Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
+      tx = dragStartTx + dx;
+      ty = dragStartTy + dy;
+      clampPan();
+      apply();
+      hideHelp();
+    }
+  }, {passive: false});
+
+  vp.addEventListener('touchend', function(e){
+    if(e.touches.length === 0){
+      dragging = false;
+      pinching = false;
+    } else if(e.touches.length === 1 && pinching){
+      // De pinch a pan
+      pinching = false;
+      dragging = true;
+      moved = false;
+      dragStartX = e.touches[0].clientX;
+      dragStartY = e.touches[0].clientY;
+      dragStartTx = tx;
+      dragStartTy = ty;
+    }
+  });
+
+  // Bloquear touchclicks si hubo drag
+  svg.addEventListener('touchend', function(e){
+    if(moved){
+      e.preventDefault();
+      moved = false;
+    }
+  });
+
+  // Inicializar fit cuando se carga / cuando se muestra la página
+  function tryFit(){
+    if(vp.offsetWidth > 0){
+      window.rcFit();
+    } else {
+      setTimeout(tryFit, 100);
+    }
+  }
+  setTimeout(tryFit, 200);
+
+  // Refit si se cambia el tamaño de ventana
+  let resizeTimer;
+  window.addEventListener('resize', function(){
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(window.rcFit, 200);
+  });
+
+  // Refit cuando se navega a la pestaña Repaso
+  const repasoBtn = document.querySelector('[onclick*=repaso]');
+  if(repasoBtn){
+    repasoBtn.addEventListener('click', function(){
+      setTimeout(window.rcFit, 100);
+    });
+  }
+})();
 
 /* ========== FLASHCARDS ========== */
 const cards = [

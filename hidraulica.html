@@ -445,6 +445,7 @@ tr:nth-child(even) td{background:var(--blue-bg)}
     <button class="tab-btn"        onclick="showPage('u4',this)">📉 U4 · Pérdidas</button>
     <button class="tab-btn"        onclick="showPage('u5',this)">⚡ U5 · Energía</button>
     <button class="tab-btn"        onclick="showPage('fenomenos',this)">🚨 Fenómenos</button>
+    <button class="tab-btn" style="background:#facc15;color:#0c4a6e;font-weight:800;border-bottom:3px solid #f59e0b" onclick="showPage('repaso',this)">📝 Repaso Parcial</button>
     <button class="tab-btn"        onclick="showPage('ejercicios',this)">✏️ Ejercicios</button>
     <button class="tab-btn"        onclick="showPage('simuladores',this)">🔬 Simuladores</button>
     <button class="tab-btn"        onclick="showPage('juegos',this)">🎮 Juegos</button>
@@ -1585,6 +1586,655 @@ tr:nth-child(even) td{background:var(--blue-bg)}
         <tr><td><strong>Golpe de ariete</strong></td><td>Cambio brusco de velocidad</td><td>Cierre lento, acumuladores, válvulas antigolpe</td></tr>
       </tbody>
     </table></div>
+  </div>
+
+</div></div>
+
+<!-- ═══════════════════════ REPASO PARCIAL ═══════════════════════ -->
+<div id="repaso" class="page"><div class="container">
+
+  <div class="hero" style="margin:-2rem -1.5rem 1.5rem;border-radius:12px;background:linear-gradient(135deg,#facc15,#f59e0b);color:#0c4a6e">
+    <h1 style="color:#0c4a6e">📝 Repaso para el Parcial</h1>
+    <p style="opacity:1;color:#1e3a5f;font-weight:600">Guía conceptual basada en el repaso del profesor — explicaciones para entender, no memorizar</p>
+  </div>
+
+  <div class="note" style="background:#fef9c3;border-left-color:#facc15;color:#713f12;font-size:.95rem">
+    💡 <strong>Cómo usar esta página:</strong> Cada sección responde una pregunta concreta del profe. La idea no es solo aprender la fórmula, sino <strong>entender qué pasa físicamente</strong>. Si entendés el concepto, podés reconstruir la fórmula.
+  </div>
+
+  <!-- ═══════ 1. LEY DE PASCAL ═══════ -->
+  <div class="stitle"><span class="ico">1️⃣</span>Ley de Pascal y el gato hidráulico</div>
+
+  <div class="card bl">
+    <h3>📖 ¿Qué dice Pascal? (en simple)</h3>
+    <p>Imaginate un globo lleno de agua. Si lo apretás <strong>en un lugar</strong>, la presión NO se queda ahí — se transmite <strong>con la misma intensidad a TODO el globo</strong>. Eso es Pascal:</p>
+    <p style="margin-top:.6rem;padding:.7rem 1rem;background:#dbeafe;border-radius:8px;font-style:italic;border-left:3px solid var(--blue)">"La presión aplicada a un fluido encerrado en un recipiente indeformable se transmite con igual intensidad en todas direcciones y a todos los puntos del fluido."</p>
+  </div>
+
+  <div class="sub">🚗 ¿Cómo funciona un gato hidráulico?</div>
+
+  <div class="grid g2">
+    <div class="card or">
+      <h3>El truco está en la PRESIÓN compartida</h3>
+      <p>Un gato tiene <strong>dos cilindros conectados</strong>: uno chico (A₁) donde apretás, y uno grande (A₂) que levanta el auto. Cuando hacés fuerza F₁ sobre A₁ se genera una presión:</p>
+      <div class="fbox" style="margin:.5rem 0"><span class="big">p = F₁ / A₁</span></div>
+      <p>Por Pascal, <strong>esa misma presión llega al cilindro grande</strong>. Como en el cilindro grande tenés más área:</p>
+      <div class="fbox"><span class="big">F₂ = p · A₂ = F₁ · (A₂/A₁)</span></div>
+    </div>
+    <div class="card gr">
+      <h3>🎯 Idea clave para responder al profe</h3>
+      <ul style="margin-left:1.2rem">
+        <li>La <strong>presión es la misma</strong> en los dos cilindros (Pascal)</li>
+        <li>La <strong>fuerza se multiplica</strong> según el cociente de áreas A₂/A₁</li>
+        <li>El aumento de presión depende de <strong>F₁ (cuánta fuerza hacés)</strong> y <strong>A₁ (qué tan chico es el émbolo de entrada)</strong></li>
+        <li>Cuanto más chico el émbolo de entrada (o más fuerza), más presión generás → más capacidad de levantar peso</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="diagram" style="background:#fef3c7">
+    <svg viewBox="0 0 500 200" width="100%" style="max-width:500px">
+      <defs><pattern id="rep-fluid" patternUnits="userSpaceOnUse" width="6" height="6"><rect width="6" height="6" fill="#fbbf24"/><circle cx="3" cy="3" r=".8" fill="#f59e0b"/></pattern></defs>
+      <!-- Cilindro chico -->
+      <rect x="40" y="60" width="60" height="120" fill="url(#rep-fluid)" stroke="#92400e" stroke-width="2"/>
+      <rect x="40" y="75" width="60" height="14" fill="#475569"/>
+      <line x1="70" y1="30" x2="70" y2="72" stroke="#dc2626" stroke-width="3" marker-end="url(#repArr)"/>
+      <defs><marker id="repArr" markerWidth="8" markerHeight="8" refX="4" refY="3" orient="auto"><polygon points="0,0 8,3 0,6" fill="#dc2626"/></marker></defs>
+      <text x="70" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#dc2626">F₁ chica</text>
+      <text x="70" y="195" text-anchor="middle" font-size="11" font-weight="700">A₁ pequeña</text>
+      <!-- Conexión -->
+      <rect x="100" y="170" width="240" height="14" fill="url(#rep-fluid)" stroke="#92400e" stroke-width="2"/>
+      <!-- Cilindro grande -->
+      <rect x="340" y="50" width="120" height="130" fill="url(#rep-fluid)" stroke="#92400e" stroke-width="2"/>
+      <rect x="340" y="55" width="120" height="14" fill="#475569"/>
+      <!-- Auto -->
+      <rect x="360" y="20" width="80" height="25" rx="3" fill="#0284c7"/>
+      <rect x="370" y="10" width="60" height="14" rx="3" fill="#0284c7"/>
+      <circle cx="375" cy="48" r="6" fill="#1e293b"/>
+      <circle cx="425" cy="48" r="6" fill="#1e293b"/>
+      <text x="400" y="0" text-anchor="middle" font-size="13" font-weight="700" fill="#dc2626">F₂ enorme ↓</text>
+      <text x="400" y="195" text-anchor="middle" font-size="11" font-weight="700">A₂ grande</text>
+      <!-- Presión común -->
+      <text x="220" y="160" text-anchor="middle" font-size="14" font-weight="800" fill="#92400e">p = misma en todo el fluido (Pascal)</text>
+    </svg>
+    <div class="dcap">Apretás poco → multiplicás fuerza. Pero ojo: si A₂ es 100× más grande, también tenés que <strong>bombear 100× más</strong> para subir 1 cm.</div>
+  </div>
+
+  <div class="warn">⚠️ <strong>Trade-off importante:</strong> "Lo que ganás en fuerza, lo perdés en recorrido." Si multiplicás la fuerza por 10, el pistón grande sube 10 veces MENOS que lo que baja el chico. El TRABAJO total (F·d) se conserva.</div>
+
+  <!-- ═══════ 2. CONTINUIDAD ═══════ -->
+  <div class="stitle"><span class="ico">2️⃣</span>Ecuación de continuidad (estrechamientos)</div>
+
+  <div class="card bl">
+    <h3>📖 La idea intuitiva</h3>
+    <p>Pensá en un río que pasa por una <strong>zona estrecha entre dos rocas</strong>: el agua se acelera en el medio. ¿Por qué? Porque la cantidad de agua que entra al río por minuto tiene que ser <strong>la misma</strong> que sale — si no, se acumularía agua.</p>
+    <p style="margin-top:.5rem">En una cañería pasa lo mismo: <strong>lo que entra debe salir</strong>. Por eso, cuando se angosta el tubo, la velocidad aumenta para "compensar".</p>
+  </div>
+
+  <div class="fbox"><span class="big">Q = A · v = constante</span><span class="sub-f">A₁ · v₁ = A₂ · v₂ = A₃ · v₃</span><span class="unit">incompresible (líquidos)</span></div>
+
+  <div class="sub">🧩 Cómo varía v en 1, 2 y 3 (la pregunta del profe)</div>
+
+  <div class="diagram" style="background:#e0f2fe">
+    <svg viewBox="0 0 540 200" width="100%" style="max-width:560px">
+      <!-- Sección 1 (ancha) -->
+      <rect x="20" y="50" width="160" height="100" fill="#7dd3fc" stroke="#0369a1" stroke-width="2"/>
+      <text x="100" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#0369a1">① Sección ANCHA</text>
+      <text x="100" y="170" text-anchor="middle" font-size="11" fill="#374151">A₁ = grande</text>
+      <text x="100" y="185" text-anchor="middle" font-size="13" font-weight="800" fill="#0369a1">v₁ = LENTA</text>
+      <!-- Flechas cortas -->
+      <g stroke="#fff" stroke-width="2" fill="none">
+        <line x1="40" y1="100" x2="65" y2="100" marker-end="url(#repArr2)"/>
+        <line x1="40" y1="85" x2="60" y2="85" marker-end="url(#repArr2)"/>
+        <line x1="40" y1="115" x2="60" y2="115" marker-end="url(#repArr2)"/>
+      </g>
+      <defs><marker id="repArr2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0,0 6,3 0,6" fill="#fff"/></marker></defs>
+      <!-- Transición a estrecho -->
+      <path d="M 180 50 L 230 80 L 230 120 L 180 150 Z" fill="#0284c7" stroke="#0369a1" stroke-width="2"/>
+      <!-- Sección 2 (estrecha) -->
+      <rect x="230" y="80" width="80" height="40" fill="#0284c7" stroke="#0369a1" stroke-width="2"/>
+      <text x="270" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#b91c1c">② Sección ANGOSTA</text>
+      <text x="270" y="170" text-anchor="middle" font-size="11" fill="#374151">A₂ = pequeña</text>
+      <text x="270" y="185" text-anchor="middle" font-size="13" font-weight="800" fill="#b91c1c">v₂ = RÁPIDA</text>
+      <!-- Flechas largas -->
+      <g stroke="#fff" stroke-width="2.5" fill="none">
+        <line x1="240" y1="100" x2="300" y2="100" marker-end="url(#repArr2)"/>
+      </g>
+      <!-- Transición de estrecho a ancho -->
+      <path d="M 310 80 L 360 50 L 360 150 L 310 120 Z" fill="#0284c7" stroke="#0369a1" stroke-width="2"/>
+      <!-- Sección 3 (ancha de nuevo) -->
+      <rect x="360" y="50" width="160" height="100" fill="#7dd3fc" stroke="#0369a1" stroke-width="2"/>
+      <text x="440" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#0369a1">③ Vuelve a ANCHA</text>
+      <text x="440" y="170" text-anchor="middle" font-size="11" fill="#374151">A₃ = A₁</text>
+      <text x="440" y="185" text-anchor="middle" font-size="13" font-weight="800" fill="#0369a1">v₃ = v₁ (lenta otra vez)</text>
+      <!-- Flechas cortas -->
+      <g stroke="#fff" stroke-width="2" fill="none">
+        <line x1="380" y1="100" x2="405" y2="100" marker-end="url(#repArr2)"/>
+        <line x1="380" y1="85" x2="400" y2="85" marker-end="url(#repArr2)"/>
+        <line x1="380" y1="115" x2="400" y2="115" marker-end="url(#repArr2)"/>
+      </g>
+    </svg>
+    <div class="dcap">El <strong>caudal Q es siempre el mismo</strong> (lo que entra = lo que sale). Lo que cambia es la velocidad: rápida en el angosto, lenta en lo ancho.</div>
+  </div>
+
+  <div class="card pu">
+    <h3>🎯 Respuesta para el profe (1 párrafo)</h3>
+    <p>"La ecuación de continuidad expresa la <strong>conservación de la masa</strong> en un fluido incompresible. Como el volumen de líquido que entra por segundo debe ser igual al que sale, el caudal Q = A·v se mantiene constante en toda la cañería. Por eso, cuando la sección se reduce (punto 2), la velocidad aumenta para compensar; y cuando se vuelve a ensanchar (punto 3), la velocidad vuelve al valor inicial. Matemáticamente: A₁v₁ = A₂v₂ = A₃v₃."</p>
+  </div>
+
+  <!-- ═══════ 3. TIPOS DE FLUJO + REYNOLDS ═══════ -->
+  <div class="stitle"><span class="ico">3️⃣</span>Tipos de flujo, Reynolds y velocidad crítica</div>
+
+  <div class="grid g2">
+    <div class="card bl">
+      <h3>🌊 Flujo LAMINAR</h3>
+      <p>El líquido fluye en <strong>capas paralelas</strong>, como hojas que se deslizan una sobre otra. La capa del centro va más rápido, la del borde está casi quieta (pegada a la pared).</p>
+      <ul style="margin-top:.5rem;margin-left:1.2rem">
+        <li>Trayectorias rectas y predecibles</li>
+        <li>Poca pérdida por fricción</li>
+        <li>Ideal en sistemas oleohidráulicos</li>
+      </ul>
+    </div>
+    <div class="card re">
+      <h3>🌀 Flujo TURBULENTO</h3>
+      <p>El líquido forma <strong>remolinos caóticos</strong>. No hay capas: las moléculas se mezclan en todas las direcciones. Pasa cuando la velocidad supera un límite.</p>
+      <ul style="margin-top:.5rem;margin-left:1.2rem">
+        <li>Trayectorias erráticas</li>
+        <li>Mucha pérdida por fricción</li>
+        <li><strong>No deseado</strong> en hidráulica</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub">🔢 Número de Reynolds (Re) — el "detector" de régimen</div>
+
+  <div class="card or">
+    <p>Es un <strong>número adimensional</strong> (no tiene unidades) que combina velocidad, diámetro y viscosidad para decirte si el flujo es laminar o turbulento. Comparable a un "termómetro" del flujo.</p>
+    <div class="fbox" style="margin-top:.5rem"><span class="big">Re = v · d / ν</span><span class="sub-f">v: velocidad [m/s] · d: diámetro [m] · ν: viscosidad cinemática [m²/s]</span></div>
+    <div class="twrap" style="margin-top:.7rem"><table>
+      <thead><tr><th>Valor de Re</th><th>Régimen</th><th>¿Qué pasa?</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Re &lt; 2300</strong></td><td>🌊 LAMINAR</td><td>Capas ordenadas, poco rozamiento</td></tr>
+        <tr><td>Re ≈ 2300</td><td>⚠️ Transición</td><td>Empieza a desestabilizarse</td></tr>
+        <tr><td><strong>Re &gt; 2300</strong></td><td>🌀 TURBULENTO</td><td>Remolinos, alta fricción</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="sub">⚡ Velocidad crítica</div>
+  <div class="card pu">
+    <p>Es la <strong>velocidad límite</strong> en la cual el flujo deja de ser laminar y se vuelve turbulento. Para hallarla, partís de Re = 2300 y despejás v:</p>
+    <div class="fbox"><span class="big">v_crít = 2300 · ν / d</span><span class="sub-f">para tubo circular liso</span></div>
+    <div class="tip" style="margin-top:.6rem"><span class="tip-i">💡</span><span><strong>Cómo entenderla:</strong> es la "frontera". Por debajo → flujo prolijo. Por encima → caos. Si querés un sistema sin pérdidas excesivas, diseñá con v &lt; v_crít.</span></div>
+  </div>
+
+  <!-- ═══════ 4. CAÍDA DE PRESIÓN ═══════ -->
+  <div class="stitle"><span class="ico">4️⃣</span>Pérdidas de energía por fricción (Darcy)</div>
+
+  <div class="card bl">
+    <h3>🧠 ¿Por qué hay pérdidas?</h3>
+    <p>Cuando un fluido se mueve por una cañería, <strong>roza</strong>: contra las paredes (fricción externa) y consigo mismo entre capas (fricción interna). Ese roce convierte energía de presión en <strong>calor</strong>. Por eso a la salida tenés menos presión que a la entrada — la diferencia es Δp.</p>
+  </div>
+
+  <div class="sub">📐 ¿Cómo varía Δp con la velocidad?</div>
+  <div class="card re">
+    <p style="font-size:1.05rem;font-weight:700;text-align:center;color:var(--red)">¡Es CUADRÁTICA! Δp ∝ v²</p>
+    <p style="margin-top:.5rem">Si duplicás la velocidad → la pérdida se <strong>multiplica por 4</strong>. Si triplicás → x9. Por eso hay que tener mucho cuidado con velocidades altas: <em>las pérdidas se disparan.</em></p>
+    <div class="diagram" style="background:#fff;margin-top:.6rem">
+      <svg viewBox="0 0 320 140" width="100%" style="max-width:320px">
+        <line x1="40" y1="120" x2="300" y2="120" stroke="#475569" stroke-width="1.5"/>
+        <line x1="40" y1="10" x2="40" y2="120" stroke="#475569" stroke-width="1.5"/>
+        <text x="20" y="20" font-size="10" fill="#475569">Δp</text>
+        <text x="305" y="135" font-size="10" fill="#475569">v</text>
+        <path d="M 40 120 Q 100 110 160 80 T 300 15" stroke="#b91c1c" stroke-width="3" fill="none"/>
+        <text x="200" y="50" font-size="11" font-weight="700" fill="#b91c1c">Δp ∝ v²</text>
+        <!-- Marcadores -->
+        <line x1="100" y1="115" x2="100" y2="125" stroke="#475569"/>
+        <text x="100" y="135" font-size="9" text-anchor="middle">v</text>
+        <line x1="160" y1="115" x2="160" y2="125" stroke="#475569"/>
+        <text x="160" y="135" font-size="9" text-anchor="middle">2v</text>
+        <line x1="220" y1="115" x2="220" y2="125" stroke="#475569"/>
+        <text x="220" y="135" font-size="9" text-anchor="middle">3v</text>
+        <text x="100" y="113" font-size="9" fill="#b91c1c">1×</text>
+        <text x="160" y="80" font-size="9" fill="#b91c1c">4×</text>
+        <text x="220" y="50" font-size="9" fill="#b91c1c">9×</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="sub">📋 Fórmula de Darcy-Weisbach explicada término a término</div>
+  <div class="fbox"><span class="big">h_f = f · (L / D) · v² / (2g)</span><span class="sub-f">Pérdida de carga por fricción [m de columna de fluido]</span></div>
+
+  <div class="grid g3">
+    <div class="card bl"><h3>f (factor de fricción)</h3><p>Depende del <strong>régimen y la rugosidad</strong> del tubo. En laminar: f = 64/Re. En turbulento: se busca en el diagrama de Moody.</p></div>
+    <div class="card bl"><h3>L (longitud)</h3><p>Cuanto más larga la cañería, <strong>más pérdidas</strong>. Es directamente proporcional: doble largo → doble pérdida.</p></div>
+    <div class="card bl"><h3>D (diámetro)</h3><p>Está en el <strong>denominador</strong>: a mayor diámetro, menos pérdidas. Por eso los acueductos usan tubos enormes.</p></div>
+    <div class="card or"><h3>v² (velocidad al cuadrado)</h3><p>El término más sensible: <strong>dominante en las pérdidas</strong>. Hay que controlarlo.</p></div>
+    <div class="card or"><h3>2g (gravedad)</h3><p>Constante en el denominador para que el resultado quede en metros (la "moneda" universal de energía).</p></div>
+    <div class="card or"><h3>h_f en metros</h3><p>Es la <strong>altura equivalente</strong> de fluido perdida por fricción. Para pasar a presión: Δp = γ·h_f.</p></div>
+  </div>
+
+  <div class="sub">↪️ Pérdidas en accesorios (codos, tés, válvulas)</div>
+  <div class="card pu">
+    <p>Cada codo, válvula, derivación, expansión o contracción <strong>también pierde energía</strong>. Se calcula con un coeficiente experimental ξ (zeta):</p>
+    <div class="fbox" style="margin-top:.5rem"><span class="big">Δp_accesorio = ξ · ρ · v² / 2</span></div>
+    <p style="margin-top:.5rem"><strong>De qué depende ξ:</strong></p>
+    <ul style="margin-left:1.3rem">
+      <li><strong>Geometría:</strong> codo 90° suave vs cerrado, T vs cruz, válvula globo vs compuerta</li>
+      <li><strong>Material y rugosidad</strong> de la superficie interna</li>
+      <li><strong>Velocidad</strong> del fluido (siempre al cuadrado)</li>
+      <li><strong>Viscosidad</strong> del aceite (más espeso → más pérdida)</li>
+      <li><strong>Régimen</strong> (mayor en turbulento)</li>
+    </ul>
+    <div class="tip" style="margin-top:.6rem"><span class="tip-i">📐</span><span><strong>Truco práctico:</strong> en la realidad se usa el método de <em>longitud equivalente</em>. Cada accesorio "vale" como X metros de cañería recta. Sumás todo y aplicás Darcy de una sola vez.</span></div>
+  </div>
+
+  <!-- ═══════ 5. PÉRDIDAS EN SISTEMA OLEOHIDRÁULICO ═══════ -->
+  <div class="stitle"><span class="ico">5️⃣</span>Pérdidas en un sistema oleohidráulico completo</div>
+
+  <div class="card or">
+    <p><strong>La pregunta del profe:</strong> "Desde la electricidad de la red hasta el extremo del pistón, ¿dónde se pierde energía?". Mirá el viaje:</p>
+  </div>
+
+  <div class="diagram" style="background:#fef9c3">
+    <svg viewBox="0 0 540 220" width="100%" style="max-width:560px">
+      <!-- Etapas como cajas -->
+      <g font-size="11" font-weight="700">
+        <rect x="10" y="80" width="80" height="40" rx="6" fill="#fef08a" stroke="#a16207"/>
+        <text x="50" y="105" text-anchor="middle">⚡ Red eléctrica</text>
+        <text x="50" y="130" text-anchor="middle" font-size="9" fill="#a16207">100%</text>
+        <polygon points="90,100 110,100 110,95 120,100 110,105 110,100" fill="#a16207"/>
+        <rect x="120" y="80" width="80" height="40" rx="6" fill="#bef264" stroke="#3f6212"/>
+        <text x="160" y="105" text-anchor="middle">Motor</text>
+        <text x="160" y="130" text-anchor="middle" font-size="9" fill="#b91c1c">−5%</text>
+        <polygon points="200,100 220,100 220,95 230,100 220,105 220,100" fill="#a16207"/>
+        <rect x="230" y="80" width="80" height="40" rx="6" fill="#a7f3d0" stroke="#047857"/>
+        <text x="270" y="105" text-anchor="middle">Bomba</text>
+        <text x="270" y="130" text-anchor="middle" font-size="9" fill="#b91c1c">−10%</text>
+        <polygon points="310,100 330,100 330,95 340,100 330,105 330,100" fill="#a16207"/>
+        <rect x="340" y="80" width="80" height="40" rx="6" fill="#7dd3fc" stroke="#0369a1"/>
+        <text x="380" y="105" text-anchor="middle">Cañerías</text>
+        <text x="380" y="130" text-anchor="middle" font-size="9" fill="#b91c1c">−10%</text>
+        <polygon points="420,100 440,100 440,95 450,100 440,105 440,100" fill="#a16207"/>
+        <rect x="450" y="80" width="80" height="40" rx="6" fill="#fda4af" stroke="#9f1239"/>
+        <text x="490" y="105" text-anchor="middle">Cilindro</text>
+        <text x="490" y="130" text-anchor="middle" font-size="9" fill="#b91c1c">−5%</text>
+      </g>
+      <text x="270" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="#92400e">🎯 Solo ≈ 70% llega al pistón final</text>
+      <text x="50" y="180" text-anchor="middle" font-size="10" fill="#374151">Calor por</text>
+      <text x="50" y="195" text-anchor="middle" font-size="10" fill="#374151">resistencia</text>
+      <text x="160" y="180" text-anchor="middle" font-size="10" fill="#374151">Calor por</text>
+      <text x="160" y="195" text-anchor="middle" font-size="10" fill="#374151">cobre/hierro</text>
+      <text x="270" y="180" text-anchor="middle" font-size="10" fill="#374151">Fugas internas</text>
+      <text x="270" y="195" text-anchor="middle" font-size="10" fill="#374151">+ rozamiento</text>
+      <text x="380" y="180" text-anchor="middle" font-size="10" fill="#374151">Fricción</text>
+      <text x="380" y="195" text-anchor="middle" font-size="10" fill="#374151">+ accesorios</text>
+      <text x="490" y="180" text-anchor="middle" font-size="10" fill="#374151">Fricción de</text>
+      <text x="490" y="195" text-anchor="middle" font-size="10" fill="#374151">sellos y pistón</text>
+    </svg>
+  </div>
+
+  <div class="grid g2">
+    <div class="card bl"><h3>1. Motor eléctrico (−5%)</h3><p>La corriente eléctrica genera calor en bobinados y hierro (efecto Joule + pérdidas magnéticas). Ese calor se disipa, no se aprovecha.</p></div>
+    <div class="card bl"><h3>2. Bomba (−10%)</h3><p>Pierde por <strong>fugas internas</strong> (ηvol) y <strong>rozamiento mecánico</strong> de engranajes/paletas (ηmh). Calienta el aceite.</p></div>
+    <div class="card bl"><h3>3. Válvulas y conductos (−10%)</h3><p>Toda la red de cañerías y los componentes intermedios suman pérdidas por fricción (Darcy) y caídas en accesorios (ξ).</p></div>
+    <div class="card bl"><h3>4. Cilindro/motor (−5/10%)</h3><p>El cilindro pierde por la <strong>fricción de los sellos</strong> contra el émbolo. Un motor hidráulico además pierde por fugas internas.</p></div>
+  </div>
+
+  <div class="note">📌 <strong>η_total = η_motor · η_bomba · η_conductos · η_cilindro</strong>. Típicamente 0,95·0,90·0,90·0,95 ≈ 0,73 → solo el <strong>73% de la energía eléctrica</strong> llega a hacer trabajo útil. El resto se va en calor.</div>
+
+  <!-- ═══════ 6. ECUACIÓN GENERALIZADA ═══════ -->
+  <div class="stitle"><span class="ico">6️⃣</span>Ecuación de Energía Generalizada (cada término)</div>
+
+  <div class="card pu">
+    <h3>📖 La idea: Bernoulli + correcciones</h3>
+    <p>Bernoulli funciona para fluidos ideales (sin pérdidas, sin bombas). Pero en la vida real hay bombas y hay rozamiento. La <strong>ecuación generalizada</strong> añade esos términos a Bernoulli:</p>
+  </div>
+
+  <div class="fbox" style="font-size:.95rem"><span class="big">P₁/γ + z₁ + v₁²/2g  +  h_A − h_R − h_L  =  P₂/γ + z₂ + v₂²/2g</span></div>
+
+  <div class="sub">🔎 Cada término significa esto:</div>
+
+  <div class="grid g2">
+    <div class="card bl">
+      <h3>📊 Términos de ENERGÍA DEL FLUIDO (en cada punto)</h3>
+      <ul style="margin-left:1.2rem;line-height:2">
+        <li><strong>P/γ</strong> — Energía de PRESIÓN (cuánto empuje tiene el fluido). En metros.</li>
+        <li><strong>z</strong> — Energía POTENCIAL (altura sobre la referencia). En metros.</li>
+        <li><strong>v²/2g</strong> — Energía CINÉTICA (cuánto se mueve). En metros.</li>
+      </ul>
+      <p style="margin-top:.5rem;font-style:italic">Todos están en <strong>metros de columna de fluido</strong> — eso permite compararlos directamente.</p>
+    </div>
+    <div class="card or">
+      <h3>⚙️ Términos AGREGADOS (lo que cambia la energía total)</h3>
+      <ul style="margin-left:1.2rem;line-height:2">
+        <li><strong>+ h_A</strong> — energía AGREGADA por una bomba. SUMA.</li>
+        <li><strong>− h_R</strong> — energía RETIRADA por turbina o motor hidráulico. RESTA.</li>
+        <li><strong>− h_L</strong> — pérdidas por fricción (cañerías + accesorios). SIEMPRE RESTA.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card gr">
+    <h3>🎯 Cómo entenderlo (analogía)</h3>
+    <p>Pensá en tu billetera de energía 💵:</p>
+    <ul style="margin-left:1.2rem;line-height:1.8">
+      <li>En el punto 1 tenés cierta "plata" (P/γ + z + v²/2g)</li>
+      <li>Si pasás por una <strong>bomba</strong>, te dan plata (+h_A)</li>
+      <li>Si pasás por una <strong>turbina</strong>, te sacan plata (−h_R)</li>
+      <li>En cada metro de cañería y cada accesorio te <strong>cobran impuestos</strong> (−h_L)</li>
+      <li>En el punto 2 te queda lo que sobrevivió: P₂/γ + z₂ + v₂²/2g</li>
+    </ul>
+  </div>
+
+  <!-- ═══════ 7. REDUCCIÓN HORIZONTAL ═══════ -->
+  <div class="stitle"><span class="ico">7️⃣</span>Reducción horizontal: velocidad y presión se transforman</div>
+
+  <div class="card bl">
+    <h3>🔑 El concepto clave</h3>
+    <p>Cuando una cañería <strong>horizontal</strong> (z₁ = z₂) se angosta, pasan dos cosas a la vez:</p>
+    <ol style="margin-left:1.4rem;margin-top:.5rem">
+      <li><strong>Continuidad:</strong> v aumenta (porque A baja) → A₁v₁ = A₂v₂</li>
+      <li><strong>Bernoulli:</strong> como la energía total es constante, si crece v² → tiene que <strong>bajar P</strong></li>
+    </ol>
+    <p style="margin-top:.5rem;font-weight:700;color:var(--blue)">→ En el angostamiento: ↑v y ↓P (compensación perfecta)</p>
+  </div>
+
+  <div class="fbox"><span class="big">P₁/γ + v₁²/2g = P₂/γ + v₂²/2g</span><span class="sub-f">Sin altura ni pérdidas (caso ideal)</span></div>
+
+  <div class="card or">
+    <h3>💡 Aplicación: Tubo Venturi</h3>
+    <p>Es la base del <strong>Venturi</strong>, el carburador y el aerógrafo. La caída de presión en la garganta "succiona" otro fluido (nafta, pintura) o se usa para <em>medir el caudal</em> sabiendo Δp.</p>
+    <div class="fbox" style="margin-top:.5rem;font-size:.95rem"><span class="big">Δp = ρ/2 · (v₂² − v₁²)</span></div>
+  </div>
+
+  <!-- ═══════ 8. TORRICELLI ═══════ -->
+  <div class="stitle"><span class="ico">8️⃣</span>Teorema de Torricelli (deducción conceptual)</div>
+
+  <div class="card pu">
+    <h3>📖 ¿Qué dice?</h3>
+    <p>"El agua sale por un orificio en el fondo de un tanque <strong>a la misma velocidad</strong> que tendría una piedra cayendo libremente desde la superficie hasta ese orificio."</p>
+    <div class="fbox" style="margin-top:.5rem"><span class="big">v = √(2 · g · h)</span></div>
+  </div>
+
+  <div class="sub">🧠 Deducción simple (paso a paso)</div>
+  <div class="card gr">
+    <p><strong>Suposiciones del fluido ideal:</strong> sin viscosidad, sin pérdidas, sin bombas → la ecuación generalizada se reduce a Bernoulli.</p>
+
+    <p style="margin-top:.5rem"><strong>Aplicamos Bernoulli</strong> entre la superficie del tanque (1) y el chorro de salida (2):</p>
+    <div class="fbox" style="font-size:.92rem"><span class="big">P₁/γ + z₁ + v₁²/2g = P₂/γ + z₂ + v₂²/2g</span></div>
+
+    <p style="margin-top:.5rem"><strong>Anulamos los términos que valen cero:</strong></p>
+    <ul style="margin-left:1.3rem">
+      <li>P₁ = P₂ = atmosférica → <span style="text-decoration:line-through">P₁/γ = P₂/γ</span></li>
+      <li>v₁ ≈ 0 (el tanque es grande, baja muy lento) → <span style="text-decoration:line-through">v₁²/2g</span></li>
+      <li>Tomamos z₂ = 0 (referencia en el orificio) y z₁ = h</li>
+    </ul>
+
+    <p style="margin-top:.5rem"><strong>Queda:</strong></p>
+    <div class="fbox" style="font-size:.92rem"><span class="big">h = v₂² / (2g)</span></div>
+
+    <p style="margin-top:.5rem"><strong>Despejamos v₂:</strong></p>
+    <div class="fbox"><span class="big">v₂ = √(2 · g · h)</span></div>
+
+    <p style="margin-top:.6rem;font-style:italic">¡Es exactamente la fórmula de caída libre de un cuerpo! Tiene sentido: <strong>la energía potencial (m·g·h) se transforma en cinética (½·m·v²)</strong>.</p>
+  </div>
+
+  <!-- ═══════ 9. CAVITACIÓN / AIREACIÓN / GOLPE DE ARIETE ═══════ -->
+  <div class="stitle"><span class="ico">9️⃣</span>Cavitación, Aireación y Golpe de Ariete</div>
+
+  <div class="card re">
+    <h3>💨 Cavitación (ebullición en frío)</h3>
+    <p>Es la formación de <strong>burbujas de VAPOR</strong> del propio líquido cuando la presión cae por debajo de la presión de vapor (en la entrada de la bomba o en estrechamientos).</p>
+    <p style="margin-top:.5rem;padding:.6rem .9rem;background:#fee2e2;border-radius:8px;font-weight:700;color:#7f1d1d">⚠️ ¡Hay CAMBIO DE ESTADO! Líquido → vapor → líquido. Las burbujas implosionan y rompen el impulsor.</p>
+  </div>
+
+  <div class="card or">
+    <h3>💧 Aireación (NO es cavitación)</h3>
+    <p>Es la entrada de <strong>AIRE externo</strong> al circuito por sellos rotos, juntas flojas o vórtices en el tanque.</p>
+    <p style="margin-top:.5rem;padding:.6rem .9rem;background:#fef3c7;border-radius:8px;font-weight:700;color:#78350f">📌 NO hay cambio de estado. El aire entra como aire y se va como aire. No erosiona pero baja el rendimiento.</p>
+  </div>
+
+  <div class="diagram" style="background:#fef9c3">
+    <svg viewBox="0 0 540 130" width="100%" style="max-width:560px">
+      <text x="135" y="20" text-anchor="middle" font-size="13" font-weight="800" fill="#b91c1c">CAVITACIÓN</text>
+      <rect x="20" y="35" width="220" height="60" fill="#7dd3fc" stroke="#0369a1"/>
+      <g fill="#fff" opacity=".9">
+        <circle cx="80" cy="60" r="4"/><circle cx="100" cy="75" r="3"/><circle cx="125" cy="60" r="5"/>
+        <circle cx="155" cy="80" r="3"/><circle cx="180" cy="65" r="4"/>
+      </g>
+      <text x="135" y="115" text-anchor="middle" font-size="10" fill="#b91c1c" font-weight="700">Burbujas de VAPOR (interno)</text>
+
+      <text x="405" y="20" text-anchor="middle" font-size="13" font-weight="800" fill="#c05c00">AIREACIÓN</text>
+      <rect x="290" y="35" width="220" height="60" fill="#7dd3fc" stroke="#0369a1"/>
+      <g fill="#fff" opacity=".9">
+        <circle cx="340" cy="50" r="6"/><circle cx="380" cy="70" r="5"/><circle cx="430" cy="55" r="7"/>
+      </g>
+      <!-- Flecha entrada -->
+      <line x1="320" y1="20" x2="335" y2="40" stroke="#c05c00" stroke-width="2" marker-end="url(#airIn)"/>
+      <defs><marker id="airIn" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0,0 6,3 0,6" fill="#c05c00"/></marker></defs>
+      <text x="313" y="14" font-size="9" fill="#c05c00" font-weight="700">aire entra</text>
+      <text x="405" y="115" text-anchor="middle" font-size="10" fill="#c05c00" font-weight="700">Burbujas de AIRE (externo)</text>
+    </svg>
+  </div>
+
+  <div class="sub">🛡️ ¿Cómo PREVENIR la cavitación?</div>
+  <div class="card gr">
+    <p>Trabajamos sobre los parámetros que controlan la presión en la succión:</p>
+    <ul style="margin-left:1.3rem;line-height:1.85">
+      <li><strong>Bajar la velocidad en la succión</strong> → usar diámetro más grande</li>
+      <li><strong>Acortar la cañería de succión</strong> y reducir codos → menos pérdidas H_A-e</li>
+      <li><strong>Usar aspiración POSITIVA</strong> (tanque arriba de la bomba) en lugar de NEGATIVA (tanque debajo)</li>
+      <li><strong>Bajar la temperatura</strong> del fluido → menor presión de vapor → más margen</li>
+      <li><strong>Limpiar filtros</strong> de succión obstruidos</li>
+      <li><strong>Verificar NPSH_disponible &gt; NPSH_requerido</strong> con margen &gt; 0,5 m</li>
+    </ul>
+  </div>
+
+  <div class="sub">🔨 Golpe de Ariete (relacionado con Bernoulli)</div>
+  <div class="card re">
+    <h3>📖 ¿Qué pasa cuando cerrás bruscamente una válvula?</h3>
+    <p>El fluido venía con <strong>energía cinética</strong> (v²/2g). Al frenar de golpe, esa energía no desaparece: <strong>se transforma en energía de presión</strong> (P/γ). Como dice Bernoulli, lo que se pierde por un lado aparece por otro.</p>
+    <p style="margin-top:.5rem;padding:.7rem;background:#fee2e2;border-radius:8px;font-weight:700">📌 Esa transformación instantánea es lo que hace que la presión salte 4 a 10 veces el valor normal → rompe cañerías.</p>
+  </div>
+
+  <div class="grid g2" style="margin-top:1rem">
+    <div class="card or">
+      <h3>⏱️ Tiempo crítico (T_c)</h3>
+      <p>La onda de choque viaja desde la válvula al tanque y vuelve. El tiempo total es:</p>
+      <div class="fbox" style="margin:.4rem 0"><span class="big">t_p = 2L / a</span><span class="sub-f">a ≈ 1200-1400 m/s en agua</span></div>
+      <ul style="margin-left:1.2rem">
+        <li><strong>Cierre rápido (t_c &lt; t_p):</strong> 🚨 DESTRUCTIVO</li>
+        <li><strong>Cierre lento (t_c &gt; t_p):</strong> ✅ Seguro (la onda rebota antes que se cierre)</li>
+      </ul>
+    </div>
+    <div class="card pu">
+      <h3>🛡️ Cómo evitarlo</h3>
+      <ul style="margin-left:1.2rem;line-height:1.7">
+        <li>Cierre <strong>progresivo</strong> de válvulas (motorizado)</li>
+        <li><strong>Acumuladores hidroneumáticos</strong> con vejiga de N₂</li>
+        <li><strong>Válvulas antigolpe</strong> de alivio</li>
+        <li>Reducir velocidad del flujo (más diámetro)</li>
+        <li>Válvulas de retención de <strong>disco partido</strong> a la salida de bombas</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════ 10. FLUIDOS HIDRÁULICOS ═══════ -->
+  <div class="stitle"><span class="ico">🔟</span>Fluidos hidráulicos y viscosidad</div>
+
+  <div class="card bl">
+    <h3>🧪 ¿Qué es la viscosidad?</h3>
+    <p>Es la <strong>"resistencia al deslizamiento interno"</strong> de un fluido. Cuanto más viscoso, más "espeso" se mueve.</p>
+    <ul style="margin-top:.4rem;margin-left:1.2rem">
+      <li><strong>Agua:</strong> ν ≈ 1 cSt (poco viscosa)</li>
+      <li><strong>Aceite hidráulico (ISO VG 32):</strong> ν ≈ 32 cSt a 40°C</li>
+      <li><strong>Miel:</strong> ν ≈ 10 000 cSt</li>
+    </ul>
+  </div>
+
+  <div class="sub">⚖️ Viscosidad muy alta vs muy baja</div>
+  <div class="grid g2">
+    <div class="card re">
+      <h3>🥶 Viscosidad MUY ALTA (aceite frío o muy espeso)</h3>
+      <ul style="margin-left:1.2rem">
+        <li>↑ Pérdidas por fricción interna</li>
+        <li>↑ Caída de presión en cañerías</li>
+        <li>↑ Riesgo de <strong>cavitación</strong> (no llena el ojo del impulsor a tiempo)</li>
+        <li>↓ Velocidad de actuadores</li>
+        <li>Aumenta consumo del motor</li>
+      </ul>
+    </div>
+    <div class="card or">
+      <h3>🔥 Viscosidad MUY BAJA (aceite caliente o degradado)</h3>
+      <ul style="margin-left:1.2rem">
+        <li>↑ Fugas internas en bombas, válvulas y cilindros</li>
+        <li>↓ Rendimiento volumétrico (η_vol)</li>
+        <li>↓ Capacidad lubricante → desgaste mecánico</li>
+        <li>↑ Riesgo de calentamiento descontrolado</li>
+        <li>El sistema "pierde firmeza"</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card pu">
+    <h3>✅ Características deseables de un fluido hidráulico</h3>
+    <ul style="margin-left:1.3rem;line-height:1.8">
+      <li><strong>Viscosidad estable</strong> con la temperatura (alto índice de viscosidad)</li>
+      <li><strong>Buena lubricación</strong> (reduce desgaste de componentes)</li>
+      <li><strong>No corrosivo</strong> ni espumante</li>
+      <li><strong>Resistente a la oxidación</strong> (no se degrade rápido)</li>
+      <li><strong>Buena conductividad térmica</strong> (disipa calor)</li>
+      <li><strong>Compatible con sellos</strong> y juntas del sistema</li>
+      <li><strong>No tóxico</strong> ni inflamable (en aplicaciones sensibles)</li>
+    </ul>
+  </div>
+
+  <div class="sub">🔬 Análisis de aceite y filtración</div>
+  <div class="card gr">
+    <p>El aceite hidráulico <strong>se contamina y degrada</strong> con el uso (partículas metálicas, agua, oxidación). El análisis periódico permite:</p>
+    <ul style="margin-left:1.3rem;margin-top:.4rem">
+      <li>Detectar <strong>desgaste</strong> antes de que falle un componente</li>
+      <li>Saber cuándo <strong>cambiar el aceite</strong> (vida útil)</li>
+      <li>Verificar la <strong>filtración</strong> (microfiltros eliminan partículas &gt; 10 μm)</li>
+      <li>Prevenir averías costosas (una bomba se destruye con partículas)</li>
+    </ul>
+  </div>
+
+  <!-- ═══════ 11. EJERCICIO MODELO ═══════ -->
+  <div class="stitle"><span class="ico">📐</span>Ejercicio modelo: bombeo entre tanques</div>
+
+  <div class="card or">
+    <h3>📋 Enunciado típico del parcial</h3>
+    <p>"Se debe bombear agua desde un tanque A (cota inferior) a un tanque elevado C. Dadas las pérdidas en succión e impulsión, calcular la altura que debe entregar la bomba H_B, el caudal Q, la potencia W y las presiones a la entrada y salida de la bomba."</p>
+  </div>
+
+  <div class="card bl">
+    <h3>🎯 El enfoque conceptual (lo que dice el profe)</h3>
+    <p>La bomba tiene que hacer <strong>tres cosas a la vez</strong>:</p>
+    <ol style="margin-left:1.4rem;margin-top:.4rem">
+      <li><strong>Elevar</strong> el agua una altura Δz (vencer la gravedad)</li>
+      <li><strong>Vencer las pérdidas</strong> de carga (cañerías + accesorios)</li>
+      <li><strong>Mover</strong> ese caudal de agua (darle energía cinética)</li>
+    </ol>
+    <p style="margin-top:.5rem">Como los dos tanques son grandes (v ≈ 0) y están abiertos a la atmósfera (P = 0 manométrica), la ecuación entre las dos superficies queda super simple:</p>
+    <div class="fbox" style="margin-top:.4rem"><span class="big">H_B = Δz + h_L_total</span></div>
+  </div>
+
+  <div class="ej-card">
+    <div class="ej-header" style="cursor:default;background:linear-gradient(90deg,#fef3c7,#fef9c3)">
+      <h3>📝 Ejemplo del repaso: bombeo de A (z=2m) a C (z=8m)</h3>
+      <span class="ej-badge t-ene">Ec. Energía</span>
+    </div>
+    <div class="ej-body" style="display:block">
+      <div class="ej-enunciado"><strong>Datos:</strong> Tubería 1 (succión): D₁ = 0,24 m · v₁ = 2,4 m/s · h_A-e = 2,2 m. Tubería 2 (impulsión): D₂ = 0,20 m · h_s-C = 6,8 m. <strong>Calcular:</strong> H_B, Q, W, P_entrada y P_salida de la bomba.</div>
+
+      <div class="step"><span class="step-num">a</span><span class="step-body"><strong>H_B (altura de la bomba)</strong> — aplicamos energía entre las dos superficies (A y C):<br>
+      <span class="fi">0 + z_A + 0 + H_B = 0 + z_C + 0 + h_L_total</span><br>
+      <span class="fi">H_B = (8 − 2) + (2,2 + 6,8) = 6 + 9 = 15 m... 🤔</span></span></div>
+
+      <div class="note" style="margin:.4rem 0">📌 <strong>Aclaración del profe:</strong> si tomás <strong>z_A = 0</strong> (referencia en el pelo del agua) entonces z_C = 8 directamente y la cuenta sale 17 m. Si tomás referencia en el suelo, sería Δz = 6 m + las pérdidas. Es lo MISMO.</div>
+
+      <div class="result-box">H_B = 17 m (carga total de la bomba)</div>
+
+      <div class="step" style="margin-top:1rem"><span class="step-num">b</span><span class="step-body"><strong>Caudal Q</strong> — usamos los datos de la cañería 1:<br>
+      <span class="fi">Q = v₁ · A₁ = 2,4 · π·(0,24)²/4 = 2,4 · 0,0452</span></span></div>
+      <div class="result-box">Q = 0,109 m³/s = 109 L/s</div>
+
+      <div class="step" style="margin-top:1rem"><span class="step-num">c</span><span class="step-body"><strong>Potencia entregada al fluido</strong>:<br>
+      <span class="fi">W = γ · Q · H_B = 9800 · 0,109 · 17</span></span></div>
+      <div class="result-box">W ≈ 18 088 W ≈ 18,1 kW</div>
+
+      <div class="step" style="margin-top:1rem"><span class="step-num">d</span><span class="step-body"><strong>Presión a la entrada de la bomba (P_e)</strong> — Bernoulli desde A (z=0, pelo del agua) hasta e (z=2m, dentro de la cañería):<br>
+      <span class="fi">0 + 0 + 0 = P_e/γ + 2 + v₁²/19,62 + 2,2</span><br>
+      <span class="fi">P_e/γ = −2 − 0,294 − 2,2 = −4,494 m</span><br>
+      <span class="fi">P_e = 9800 · (−4,494)</span></span></div>
+      <div class="result-box">P_e ≈ −44 040 Pa (¡VACÍO! La bomba succiona)</div>
+
+      <div class="step" style="margin-top:1rem"><span class="step-num">e</span><span class="step-body"><strong>Presión a la salida de la bomba (P_s)</strong> — primero la velocidad en cañería 2:<br>
+      <span class="fi">v₂ = Q/A₂ = 4·0,109/(π·0,2²) = 3,46 m/s</span><br>
+      Bernoulli desde s (z=2) hasta C (z=8, pelo del agua de descarga):<br>
+      <span class="fi">P_s/9800 + 2 + 3,46²/19,62 = 0 + 8 + 0 + 6,8</span><br>
+      <span class="fi">P_s/9800 = 14,8 − 2 − 0,61 = 12,19 m</span></span></div>
+      <div class="result-box">P_s ≈ 119 454 Pa ≈ 1,2 bar</div>
+    </div>
+  </div>
+
+  <div class="card pu" style="margin-top:1rem">
+    <h3>🎯 Cómo razonar este tipo de problemas</h3>
+    <ol style="margin-left:1.4rem;line-height:1.8">
+      <li><strong>Identificá las dos superficies "fáciles"</strong> (tanques): v=0, P=atm=0.</li>
+      <li>Aplicá energía entre esas dos → calculás <strong>H_B</strong> directamente.</li>
+      <li>Calculá <strong>Q</strong> con los datos de velocidad y diámetro de una de las cañerías.</li>
+      <li>Calculá <strong>W = γ·Q·H_B</strong> (potencia hidráulica entregada).</li>
+      <li>Para P_e y P_s usá <strong>Bernoulli</strong> desde el tanque correspondiente hasta el punto pedido, restando las pérdidas de ese tramo.</li>
+      <li>Si P_e te da negativa, ¡es normal! La bomba succiona = vacío.</li>
+    </ol>
+  </div>
+
+  <!-- ═══════ CIERRE ═══════ -->
+  <div class="stitle"><span class="ico">🎓</span>Estrategia final para el día del parcial</div>
+
+  <div class="grid g2">
+    <div class="card gr">
+      <h3>📐 Para los problemas numéricos</h3>
+      <ol style="margin-left:1.3rem;line-height:1.7">
+        <li>Hacé un <strong>esquema</strong> y marcá los dos puntos de aplicación.</li>
+        <li>Identificá qué se anula (P_atm, v_tanque, z_referencia).</li>
+        <li>Aplicá energía generalizada, no Bernoulli puro (hay pérdidas y/o bomba).</li>
+        <li>Verificá unidades — todo en SI (m, s, kg, Pa).</li>
+        <li>¿Tiene sentido el resultado? (P negativa = succión, &gt; 50 bar = revisá)</li>
+      </ol>
+    </div>
+    <div class="card bl">
+      <h3>📚 Para las preguntas teóricas</h3>
+      <ol style="margin-left:1.3rem;line-height:1.7">
+        <li>Empezá con la <strong>definición conceptual</strong> en tus palabras.</li>
+        <li>Mostrá la <strong>fórmula</strong> y explicá cada término.</li>
+        <li>Da un <strong>ejemplo real</strong> (manguera, gato, ala de avión).</li>
+        <li>Si te preguntan por relaciones (lineal/cuadrática) — <strong>dibujá la gráfica</strong>.</li>
+        <li>Mencioná las <strong>consecuencias prácticas</strong> (por qué importa).</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="card or" style="margin-top:1.5rem;background:linear-gradient(135deg,#fef3c7,#fde68a);border-left-color:#f59e0b">
+    <h3 style="color:#78350f">💪 Lo que NO te puede faltar saber</h3>
+    <ul style="margin-left:1.3rem;line-height:1.85;color:#451a03">
+      <li>✅ Que la PRESIÓN se transmite igual en todas direcciones (Pascal)</li>
+      <li>✅ Que el CAUDAL se conserva (continuidad: A₁v₁ = A₂v₂)</li>
+      <li>✅ Que la ENERGÍA total se conserva (Bernoulli) — y se distribuye entre P, v, z</li>
+      <li>✅ Que el régimen lo define <strong>Reynolds</strong> (2300 es la frontera)</li>
+      <li>✅ Que las pérdidas por fricción son <strong>cuadráticas con v</strong> (Darcy: v²)</li>
+      <li>✅ Que la bomba SUMA energía (h_A), las pérdidas RESTAN (h_L)</li>
+      <li>✅ Que la cavitación es <strong>vapor interno</strong> y la aireación es <strong>aire externo</strong></li>
+      <li>✅ Que el golpe de ariete = energía cinética → energía de presión instantánea</li>
+    </ul>
+  </div>
+
+  <div class="card" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0);border:2px solid #15803d;text-align:center;padding:1.5rem;margin-top:1.5rem">
+    <h3 style="color:#14532d;font-size:1.1rem">🍀 ¡Mucha suerte en el parcial!</h3>
+    <p style="color:#166534;margin-top:.5rem">Si entendiste el "por qué" físico de cada fenómeno, las fórmulas son consecuencia natural. Confiá en lo que estudiaste.</p>
   </div>
 
 </div></div>

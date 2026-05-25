@@ -2384,6 +2384,375 @@ tr:nth-child(even) td{background:var(--blue-bg)}
     </ul>
   </div>
 
+  <!-- ═══════ RED CONCEPTUAL ═══════ -->
+  <div class="stitle"><span class="ico">🗺️</span>Red conceptual: todos los temas conectados</div>
+
+  <p style="font-size:.95rem;color:var(--gray-lt);margin-bottom:1rem">Mirá cómo se relacionan los conceptos entre sí. <strong>En mobile, deslizá horizontalmente</strong> para explorar el mapa completo.</p>
+
+  <div style="background:#fafbff;border:1px solid var(--border);border-radius:14px;padding:.6rem;overflow-x:auto;-webkit-overflow-scrolling:touch;box-shadow:0 1px 6px rgba(0,0,0,.06)">
+    <svg viewBox="0 0 1600 1200" style="min-width:900px;width:100%;height:auto;display:block">
+      <defs>
+        <!-- Gradientes -->
+        <radialGradient id="rc-center" cx="50%" cy="50%">
+          <stop offset="0" stop-color="#1e40af"/>
+          <stop offset="1" stop-color="#0c1a2e"/>
+        </radialGradient>
+        <linearGradient id="rc-hs" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0369a1"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+        <linearGradient id="rc-hd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0d9488"/><stop offset="1" stop-color="#134e4a"/></linearGradient>
+        <linearGradient id="rc-pe" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c05c00"/><stop offset="1" stop-color="#7c2d12"/></linearGradient>
+        <linearGradient id="rc-en" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c3aed"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+        <linearGradient id="rc-fn" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b91c1c"/><stop offset="1" stop-color="#7f1d1d"/></linearGradient>
+        <linearGradient id="rc-fl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#15803d"/><stop offset="1" stop-color="#14532d"/></linearGradient>
+        <marker id="rc-arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0,0 6,3 0,6" fill="#94a3b8"/></marker>
+      </defs>
+
+      <!-- Título de fondo -->
+      <text x="800" y="40" text-anchor="middle" font-size="28" font-weight="800" fill="#cbd5e1" letter-spacing="3">MAPA DE HIDRÁULICA</text>
+      <text x="800" y="65" text-anchor="middle" font-size="13" fill="#94a3b8">Click en cualquier nodo para ir al tema</text>
+
+      <!-- ═══ LÍNEAS DE CONEXIÓN PRINCIPALES (debajo) ═══ -->
+      <g stroke-width="3" fill="none" opacity=".5">
+        <!-- Centro a categorías -->
+        <path d="M 800 600 Q 550 500 350 320" stroke="#0369a1"/>
+        <path d="M 800 600 Q 800 400 800 230" stroke="#0d9488"/>
+        <path d="M 800 600 Q 1050 500 1250 320" stroke="#c05c00"/>
+        <path d="M 800 600 Q 1050 700 1250 880" stroke="#7c3aed"/>
+        <path d="M 800 600 Q 800 800 800 970" stroke="#b91c1c"/>
+        <path d="M 800 600 Q 550 700 350 880" stroke="#15803d"/>
+      </g>
+
+      <!-- ═══ LÍNEAS DE RELACIONES CRUZADAS ═══ -->
+      <g stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-dasharray="5 4" opacity=".7" marker-end="url(#rc-arr)">
+        <!-- Bernoulli → Torricelli -->
+        <path d="M 870 200 Q 1000 250 1080 270"/>
+        <!-- Bernoulli → Venturi -->
+        <path d="M 800 175 Q 750 230 700 270"/>
+        <!-- Pascal → Gato -->
+        <path d="M 270 230 Q 320 200 380 200"/>
+        <!-- Reynolds → Cavitación -->
+        <path d="M 1340 360 Q 1100 700 870 970"/>
+        <!-- Continuidad → Bernoulli -->
+        <path d="M 660 175 Q 730 165 790 170" stroke-dasharray="3 3"/>
+        <!-- Viscosidad → Reynolds -->
+        <path d="M 290 800 Q 700 600 1320 360"/>
+        <!-- Aireación / Cavitación (no confundir) -->
+        <path d="M 800 1030 Q 770 1010 730 990"/>
+        <!-- Bernoulli → Golpe ariete -->
+        <path d="M 820 200 Q 1000 850 980 970"/>
+      </g>
+
+      <!-- ═══ ETIQUETAS DE RELACIONES CRUZADAS ═══ -->
+      <g font-size="10" fill="#475569" font-style="italic" font-weight="600">
+        <text x="990" y="240">deduce</text>
+        <text x="720" y="260">aplica</text>
+        <text x="290" y="195">activa</text>
+        <text x="1080" y="700">influye en</text>
+        <text x="720" y="160">previa a</text>
+        <text x="700" y="500">depende</text>
+        <text x="755" y="1005">vs.</text>
+        <text x="1010" y="800">explica</text>
+      </g>
+
+      <!-- ═══ NODO CENTRAL ═══ -->
+      <g onclick="showPage('u1',document.querySelector('.tab-btn'))" style="cursor:pointer">
+        <circle cx="800" cy="600" r="95" fill="url(#rc-center)" stroke="#fff" stroke-width="4"/>
+        <text x="800" y="595" text-anchor="middle" font-size="22" font-weight="900" fill="#fff" letter-spacing="1">HIDRÁULICA</text>
+        <text x="800" y="618" text-anchor="middle" font-size="11" fill="#7dd3fc" font-weight="600">FUERZAS · MOVIMIENTOS</text>
+        <text x="800" y="635" text-anchor="middle" font-size="10" fill="#94a3b8">mediante fluidos a presión</text>
+      </g>
+
+      <!-- ═══ CATEGORÍAS PRINCIPALES ═══ -->
+      <!-- 1. HIDROSTÁTICA -->
+      <g onclick="showPage('u2',document.querySelectorAll('.tab-btn')[1])" style="cursor:pointer">
+        <rect x="220" y="270" width="260" height="100" rx="16" fill="url(#rc-hs)" stroke="#fff" stroke-width="3"/>
+        <text x="350" y="305" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">⚖️ HIDROSTÁTICA</text>
+        <text x="350" y="328" text-anchor="middle" font-size="11" fill="#bae6fd">fluidos en reposo</text>
+        <text x="350" y="352" text-anchor="middle" font-size="10" fill="#7dd3fc" font-style="italic">"fuerza = presión × superficie"</text>
+      </g>
+
+      <!-- 2. HIDRODINÁMICA -->
+      <g onclick="showPage('u3',document.querySelectorAll('.tab-btn')[2])" style="cursor:pointer">
+        <rect x="670" y="140" width="260" height="100" rx="16" fill="url(#rc-hd)" stroke="#fff" stroke-width="3"/>
+        <text x="800" y="175" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">🌊 HIDRODINÁMICA</text>
+        <text x="800" y="198" text-anchor="middle" font-size="11" fill="#a7f3d0">fluidos en movimiento</text>
+        <text x="800" y="222" text-anchor="middle" font-size="10" fill="#5eead4" font-style="italic">"fuerza = masa × aceleración"</text>
+      </g>
+
+      <!-- 3. PÉRDIDAS -->
+      <g onclick="showPage('u4',document.querySelectorAll('.tab-btn')[3])" style="cursor:pointer">
+        <rect x="1120" y="270" width="260" height="100" rx="16" fill="url(#rc-pe)" stroke="#fff" stroke-width="3"/>
+        <text x="1250" y="305" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">📉 PÉRDIDAS</text>
+        <text x="1250" y="328" text-anchor="middle" font-size="11" fill="#fed7aa">fricción y régimen</text>
+        <text x="1250" y="352" text-anchor="middle" font-size="10" fill="#fdba74" font-style="italic">"el peaje del flujo"</text>
+      </g>
+
+      <!-- 4. ENERGÍA -->
+      <g onclick="showPage('u5',document.querySelectorAll('.tab-btn')[4])" style="cursor:pointer">
+        <rect x="1120" y="830" width="260" height="100" rx="16" fill="url(#rc-en)" stroke="#fff" stroke-width="3"/>
+        <text x="1250" y="865" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">⚡ ENERGÍA</text>
+        <text x="1250" y="888" text-anchor="middle" font-size="11" fill="#ddd6fe">bombas + balance</text>
+        <text x="1250" y="912" text-anchor="middle" font-size="10" fill="#c4b5fd" font-style="italic">"billetera de energía"</text>
+      </g>
+
+      <!-- 5. FENÓMENOS -->
+      <g onclick="showPage('fenomenos',document.querySelectorAll('.tab-btn')[5])" style="cursor:pointer">
+        <rect x="670" y="970" width="260" height="100" rx="16" fill="url(#rc-fn)" stroke="#fff" stroke-width="3"/>
+        <text x="800" y="1005" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">🚨 FENÓMENOS</text>
+        <text x="800" y="1028" text-anchor="middle" font-size="11" fill="#fecaca">patologías hidráulicas</text>
+        <text x="800" y="1052" text-anchor="middle" font-size="10" fill="#fca5a5" font-style="italic">"lo que rompe el sistema"</text>
+      </g>
+
+      <!-- 6. FLUIDOS -->
+      <g onclick="showPage('repaso',document.querySelector('[onclick*=repaso]'))" style="cursor:pointer">
+        <rect x="220" y="830" width="260" height="100" rx="16" fill="url(#rc-fl)" stroke="#fff" stroke-width="3"/>
+        <text x="350" y="865" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">🧪 FLUIDOS</text>
+        <text x="350" y="888" text-anchor="middle" font-size="11" fill="#bbf7d0">aceite y viscosidad</text>
+        <text x="350" y="912" text-anchor="middle" font-size="10" fill="#86efac" font-style="italic">"el medio que transmite"</text>
+      </g>
+
+      <!-- ═══ SUBNODOS HIDROSTÁTICA (4) ═══ -->
+      <g font-family="system-ui">
+        <!-- Pascal -->
+        <g><line x1="280" y1="290" x2="180" y2="220" stroke="#0369a1" stroke-width="2" opacity=".6"/>
+          <rect x="60" y="190" width="160" height="50" rx="10" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"/>
+          <text x="140" y="210" text-anchor="middle" font-size="12" font-weight="700" fill="#0c4a6e">⚖️ Ley de Pascal</text>
+          <text x="140" y="226" text-anchor="middle" font-size="10" fill="#075985" font-family="monospace">p₁ = p₂</text>
+        </g>
+        <!-- p hidrostática -->
+        <g><line x1="290" y1="310" x2="180" y2="320" stroke="#0369a1" stroke-width="2" opacity=".6"/>
+          <rect x="60" y="295" width="160" height="50" rx="10" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"/>
+          <text x="140" y="315" text-anchor="middle" font-size="12" font-weight="700" fill="#0c4a6e">📏 P. hidrostática</text>
+          <text x="140" y="331" text-anchor="middle" font-size="10" fill="#075985" font-family="monospace">p = ρ·g·h</text>
+        </g>
+        <!-- p = F/A -->
+        <g><line x1="290" y1="340" x2="170" y2="430" stroke="#0369a1" stroke-width="2" opacity=".6"/>
+          <rect x="50" y="405" width="160" height="50" rx="10" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"/>
+          <text x="130" y="425" text-anchor="middle" font-size="12" font-weight="700" fill="#0c4a6e">📐 Presión</text>
+          <text x="130" y="441" text-anchor="middle" font-size="10" fill="#075985" font-family="monospace">p = F / A</text>
+        </g>
+        <!-- Gato hidráulico -->
+        <g><line x1="350" y1="270" x2="370" y2="200" stroke="#0369a1" stroke-width="2" opacity=".6"/>
+          <rect x="290" y="160" width="170" height="50" rx="10" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"/>
+          <text x="375" y="180" text-anchor="middle" font-size="12" font-weight="700" fill="#0c4a6e">🚗 Multiplicador F</text>
+          <text x="375" y="196" text-anchor="middle" font-size="10" fill="#075985" font-family="monospace">F₂ = F₁·A₂/A₁</text>
+        </g>
+        <!-- Manómetros -->
+        <g><line x1="430" y1="350" x2="500" y2="450" stroke="#0369a1" stroke-width="2" opacity=".6"/>
+          <rect x="420" y="455" width="160" height="50" rx="10" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"/>
+          <text x="500" y="475" text-anchor="middle" font-size="12" font-weight="700" fill="#0c4a6e">📊 Manómetros</text>
+          <text x="500" y="491" text-anchor="middle" font-size="10" fill="#075985">absoluta · relativa · vacío</text>
+        </g>
+      </g>
+
+      <!-- ═══ SUBNODOS HIDRODINÁMICA (6) ═══ -->
+      <g>
+        <!-- Caudal -->
+        <g><line x1="700" y1="180" x2="620" y2="100" stroke="#0d9488" stroke-width="2" opacity=".6"/>
+          <rect x="500" y="70" width="160" height="50" rx="10" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/>
+          <text x="580" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="#134e4a">💧 Caudal</text>
+          <text x="580" y="106" text-anchor="middle" font-size="10" fill="#115e59" font-family="monospace">Q = A·v = V/t</text>
+        </g>
+        <!-- Continuidad -->
+        <g><line x1="780" y1="170" x2="780" y2="110" stroke="#0d9488" stroke-width="2" opacity=".6"/>
+          <rect x="660" y="50" width="170" height="50" rx="10" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/>
+          <text x="745" y="70" text-anchor="middle" font-size="12" font-weight="700" fill="#134e4a">🔗 Continuidad</text>
+          <text x="745" y="86" text-anchor="middle" font-size="10" fill="#115e59" font-family="monospace">A₁v₁ = A₂v₂</text>
+        </g>
+        <!-- Bernoulli -->
+        <g><line x1="850" y1="160" x2="900" y2="110" stroke="#0d9488" stroke-width="2" opacity=".6"/>
+          <rect x="830" y="50" width="170" height="50" rx="10" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/>
+          <text x="915" y="70" text-anchor="middle" font-size="12" font-weight="700" fill="#134e4a">🎯 Bernoulli</text>
+          <text x="915" y="86" text-anchor="middle" font-size="10" fill="#115e59" font-family="monospace">p/γ+z+v²/2g=cte</text>
+        </g>
+        <!-- Torricelli -->
+        <g><line x1="910" y1="200" x2="1050" y2="270" stroke="#0d9488" stroke-width="2" opacity=".6"/>
+          <rect x="1030" y="265" width="160" height="50" rx="10" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/>
+          <text x="1110" y="285" text-anchor="middle" font-size="12" font-weight="700" fill="#134e4a">💦 Torricelli</text>
+          <text x="1110" y="301" text-anchor="middle" font-size="10" fill="#115e59" font-family="monospace">v = √(2gh)</text>
+        </g>
+        <!-- Venturi -->
+        <g><line x1="720" y1="200" x2="610" y2="265" stroke="#0d9488" stroke-width="2" opacity=".6"/>
+          <rect x="440" y="265" width="160" height="50" rx="10" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/>
+          <text x="520" y="285" text-anchor="middle" font-size="12" font-weight="700" fill="#134e4a">📏 Venturi</text>
+          <text x="520" y="301" text-anchor="middle" font-size="10" fill="#115e59">medidor de caudal</text>
+        </g>
+        <!-- Pitot -->
+        <g><line x1="900" y1="180" x2="980" y2="180" stroke="#0d9488" stroke-width="2" opacity=".6"/>
+          <rect x="985" y="155" width="140" height="50" rx="10" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/>
+          <text x="1055" y="175" text-anchor="middle" font-size="12" font-weight="700" fill="#134e4a">📊 Pitot</text>
+          <text x="1055" y="191" text-anchor="middle" font-size="10" fill="#115e59">medidor velocidad</text>
+        </g>
+      </g>
+
+      <!-- ═══ SUBNODOS PÉRDIDAS (5) ═══ -->
+      <g>
+        <!-- Reynolds -->
+        <g><line x1="1320" y1="290" x2="1410" y2="220" stroke="#c05c00" stroke-width="2" opacity=".6"/>
+          <rect x="1380" y="190" width="170" height="50" rx="10" fill="#fff3e0" stroke="#c05c00" stroke-width="2"/>
+          <text x="1465" y="210" text-anchor="middle" font-size="12" font-weight="700" fill="#7c2d12">🔢 Reynolds</text>
+          <text x="1465" y="226" text-anchor="middle" font-size="10" fill="#9a3412" font-family="monospace">Re = v·d/ν</text>
+        </g>
+        <!-- Laminar/Turbulento -->
+        <g><line x1="1310" y1="310" x2="1400" y2="320" stroke="#c05c00" stroke-width="2" opacity=".6"/>
+          <rect x="1390" y="295" width="190" height="50" rx="10" fill="#fff3e0" stroke="#c05c00" stroke-width="2"/>
+          <text x="1485" y="313" text-anchor="middle" font-size="11" font-weight="700" fill="#7c2d12">🌊 Laminar (Re&lt;2300)</text>
+          <text x="1485" y="331" text-anchor="middle" font-size="11" font-weight="700" fill="#7c2d12">🌀 Turbulento (Re&gt;2300)</text>
+        </g>
+        <!-- Velocidad crítica -->
+        <g><line x1="1310" y1="345" x2="1400" y2="425" stroke="#c05c00" stroke-width="2" opacity=".6"/>
+          <rect x="1390" y="400" width="170" height="50" rx="10" fill="#fff3e0" stroke="#c05c00" stroke-width="2"/>
+          <text x="1475" y="420" text-anchor="middle" font-size="12" font-weight="700" fill="#7c2d12">⚡ v crítica</text>
+          <text x="1475" y="436" text-anchor="middle" font-size="10" fill="#9a3412" font-family="monospace">v = 2300·ν/d</text>
+        </g>
+        <!-- Darcy-Weisbach -->
+        <g><line x1="1250" y1="370" x2="1250" y2="500" stroke="#c05c00" stroke-width="2" opacity=".6"/>
+          <rect x="1160" y="500" width="180" height="55" rx="10" fill="#fff3e0" stroke="#c05c00" stroke-width="2"/>
+          <text x="1250" y="520" text-anchor="middle" font-size="12" font-weight="700" fill="#7c2d12">📐 Darcy-Weisbach</text>
+          <text x="1250" y="538" text-anchor="middle" font-size="10" fill="#9a3412" font-family="monospace">h_f=f·(L/D)·v²/2g</text>
+          <text x="1250" y="552" text-anchor="middle" font-size="9" fill="#c2410c" font-style="italic">Δp ∝ v² (cuadrática)</text>
+        </g>
+        <!-- Accesorios -->
+        <g><line x1="1180" y1="365" x2="1080" y2="430" stroke="#c05c00" stroke-width="2" opacity=".6"/>
+          <rect x="950" y="425" width="170" height="50" rx="10" fill="#fff3e0" stroke="#c05c00" stroke-width="2"/>
+          <text x="1035" y="445" text-anchor="middle" font-size="12" font-weight="700" fill="#7c2d12">↪️ Accesorios (ξ)</text>
+          <text x="1035" y="461" text-anchor="middle" font-size="10" fill="#9a3412" font-family="monospace">Δp = ξ·ρv²/2</text>
+        </g>
+      </g>
+
+      <!-- ═══ SUBNODOS ENERGÍA (5) ═══ -->
+      <g>
+        <!-- Ec. Generalizada -->
+        <g><line x1="1180" y1="870" x2="1100" y2="780" stroke="#7c3aed" stroke-width="2" opacity=".6"/>
+          <rect x="970" y="780" width="190" height="55" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+          <text x="1065" y="800" text-anchor="middle" font-size="11" font-weight="700" fill="#4c1d95">🌍 Ec. Energía Gen.</text>
+          <text x="1065" y="817" text-anchor="middle" font-size="9" fill="#5b21b6" font-family="monospace">+h_A − h_R − h_L</text>
+          <text x="1065" y="830" text-anchor="middle" font-size="9" fill="#6d28d9" font-style="italic">bomba/turbina/pérdidas</text>
+        </g>
+        <!-- Bomba -->
+        <g><line x1="1310" y1="855" x2="1400" y2="800" stroke="#7c3aed" stroke-width="2" opacity=".6"/>
+          <rect x="1390" y="775" width="160" height="50" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+          <text x="1470" y="795" text-anchor="middle" font-size="12" font-weight="700" fill="#4c1d95">⚙️ Bomba (h_A)</text>
+          <text x="1470" y="811" text-anchor="middle" font-size="10" fill="#5b21b6" font-family="monospace">P = γ·Q·h_A</text>
+        </g>
+        <!-- Rendimiento -->
+        <g><line x1="1300" y1="900" x2="1400" y2="900" stroke="#7c3aed" stroke-width="2" opacity=".6"/>
+          <rect x="1395" y="875" width="170" height="50" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+          <text x="1480" y="895" text-anchor="middle" font-size="12" font-weight="700" fill="#4c1d95">η Rendimiento</text>
+          <text x="1480" y="911" text-anchor="middle" font-size="10" fill="#5b21b6" font-family="monospace">η_tot = η_vol·η_mh</text>
+        </g>
+        <!-- NPSH -->
+        <g><line x1="1300" y1="920" x2="1400" y2="980" stroke="#7c3aed" stroke-width="2" opacity=".6"/>
+          <rect x="1390" y="975" width="170" height="55" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+          <text x="1475" y="995" text-anchor="middle" font-size="12" font-weight="700" fill="#4c1d95">📏 NPSH</text>
+          <text x="1475" y="1011" text-anchor="middle" font-size="10" fill="#5b21b6" font-family="monospace">NPSH_d ≥ NPSH_r</text>
+          <text x="1475" y="1025" text-anchor="middle" font-size="9" fill="#6d28d9" font-style="italic">aspiración segura</text>
+        </g>
+        <!-- Aspiración -->
+        <g><line x1="1150" y1="900" x2="1080" y2="950" stroke="#7c3aed" stroke-width="2" opacity=".6"/>
+          <rect x="960" y="945" width="180" height="55" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+          <text x="1050" y="965" text-anchor="middle" font-size="12" font-weight="700" fill="#4c1d95">🚰 Aspiración</text>
+          <text x="1050" y="981" text-anchor="middle" font-size="10" fill="#5b21b6">positiva vs negativa</text>
+          <text x="1050" y="995" text-anchor="middle" font-size="9" fill="#6d28d9" font-style="italic">máx práctica: 8 m</text>
+        </g>
+      </g>
+
+      <!-- ═══ SUBNODOS FENÓMENOS (3) ═══ -->
+      <g>
+        <!-- Cavitación -->
+        <g><line x1="720" y1="1010" x2="610" y2="1090" stroke="#b91c1c" stroke-width="2" opacity=".6"/>
+          <rect x="450" y="1085" width="170" height="55" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+          <text x="535" y="1105" text-anchor="middle" font-size="12" font-weight="700" fill="#7f1d1d">💨 Cavitación</text>
+          <text x="535" y="1121" text-anchor="middle" font-size="10" fill="#991b1b">vapor del propio fluido</text>
+          <text x="535" y="1135" text-anchor="middle" font-size="9" fill="#b91c1c" font-style="italic">p &lt; p_vapor</text>
+        </g>
+        <!-- Aireación -->
+        <g><line x1="800" y1="1020" x2="800" y2="1090" stroke="#b91c1c" stroke-width="2" opacity=".6"/>
+          <rect x="700" y="1090" width="200" height="55" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+          <text x="800" y="1110" text-anchor="middle" font-size="12" font-weight="700" fill="#7f1d1d">💧 Aireación</text>
+          <text x="800" y="1126" text-anchor="middle" font-size="10" fill="#991b1b">aire externo entrando</text>
+          <text x="800" y="1140" text-anchor="middle" font-size="9" fill="#b91c1c" font-style="italic">sellos/vórtices</text>
+        </g>
+        <!-- Golpe de Ariete -->
+        <g><line x1="880" y1="1010" x2="990" y2="1090" stroke="#b91c1c" stroke-width="2" opacity=".6"/>
+          <rect x="950" y="1085" width="200" height="55" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+          <text x="1050" y="1105" text-anchor="middle" font-size="12" font-weight="700" fill="#7f1d1d">🔨 Golpe Ariete</text>
+          <text x="1050" y="1121" text-anchor="middle" font-size="10" fill="#991b1b" font-family="monospace">Δp = ρ·a·v₀</text>
+          <text x="1050" y="1135" text-anchor="middle" font-size="9" fill="#b91c1c" font-style="italic">cierre brusco</text>
+        </g>
+      </g>
+
+      <!-- ═══ SUBNODOS FLUIDOS (4) ═══ -->
+      <g>
+        <!-- Viscosidad -->
+        <g><line x1="280" y1="870" x2="180" y2="780" stroke="#15803d" stroke-width="2" opacity=".6"/>
+          <rect x="60" y="755" width="170" height="50" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+          <text x="145" y="775" text-anchor="middle" font-size="12" font-weight="700" fill="#14532d">🧪 Viscosidad ν</text>
+          <text x="145" y="791" text-anchor="middle" font-size="10" fill="#166534" font-style="italic">resistencia interna</text>
+        </g>
+        <!-- ISO VG -->
+        <g><line x1="280" y1="890" x2="180" y2="870" stroke="#15803d" stroke-width="2" opacity=".6"/>
+          <rect x="60" y="855" width="170" height="50" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+          <text x="145" y="875" text-anchor="middle" font-size="12" font-weight="700" fill="#14532d">📐 ISO VG</text>
+          <text x="145" y="891" text-anchor="middle" font-size="10" fill="#166534">VG 32, 46, 68, 100</text>
+        </g>
+        <!-- Aceite hidráulico -->
+        <g><line x1="290" y1="910" x2="200" y2="970" stroke="#15803d" stroke-width="2" opacity=".6"/>
+          <rect x="80" y="945" width="190" height="55" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+          <text x="175" y="965" text-anchor="middle" font-size="12" font-weight="700" fill="#14532d">🛢️ Aceite hidráulico</text>
+          <text x="175" y="981" text-anchor="middle" font-size="10" fill="#166534" font-family="monospace">ρ ≈ 850 kg/m³</text>
+          <text x="175" y="995" text-anchor="middle" font-size="9" fill="#15803d" font-style="italic">flota sobre el agua</text>
+        </g>
+        <!-- Análisis y filtración -->
+        <g><line x1="350" y1="930" x2="370" y2="1050" stroke="#15803d" stroke-width="2" opacity=".6"/>
+          <rect x="280" y="1050" width="180" height="55" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+          <text x="370" y="1070" text-anchor="middle" font-size="12" font-weight="700" fill="#14532d">🔬 Análisis + Filtración</text>
+          <text x="370" y="1086" text-anchor="middle" font-size="10" fill="#166534">prevenir desgaste</text>
+          <text x="370" y="1100" text-anchor="middle" font-size="9" fill="#15803d" font-style="italic">microfiltros &gt; 10 μm</text>
+        </g>
+      </g>
+
+      <!-- ═══ LEYENDA ═══ -->
+      <g transform="translate(1170,1100)">
+        <rect x="0" y="0" width="380" height="80" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+        <text x="190" y="20" text-anchor="middle" font-size="11" font-weight="800" fill="#475569">LEYENDA DE CONEXIONES</text>
+        <line x1="20" y1="38" x2="60" y2="38" stroke="#0369a1" stroke-width="3" opacity=".6"/>
+        <text x="68" y="42" font-size="10" fill="#475569">Categoría principal</text>
+        <line x1="200" y1="38" x2="240" y2="38" stroke="#0369a1" stroke-width="2" opacity=".6"/>
+        <text x="248" y="42" font-size="10" fill="#475569">Subtema</text>
+        <line x1="20" y1="60" x2="60" y2="60" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#rc-arr)"/>
+        <text x="68" y="64" font-size="10" fill="#475569">Relación cruzada</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="card bl" style="margin-top:1.5rem">
+    <h3>🧠 Cómo leer el mapa</h3>
+    <ul style="margin-left:1.3rem;line-height:1.85">
+      <li><strong>Nodo central HIDRÁULICA</strong> → todo deriva de acá. Estudia las fuerzas y movimientos en fluidos a presión.</li>
+      <li><strong>6 ramas principales</strong> (colores) → las "familias" temáticas del parcial.</li>
+      <li><strong>Subnodos blancos</strong> → conceptos y fórmulas concretos de cada familia.</li>
+      <li><strong>Líneas punteadas con flechas</strong> → relaciones <em>cruzadas</em> entre familias (ej: Bernoulli "deduce" Torricelli, Reynolds "influye en" Cavitación).</li>
+      <li><strong>Click en cualquier nodo principal</strong> → te lleva directo a esa sección del apunte.</li>
+    </ul>
+  </div>
+
+  <div class="card or" style="margin-top:1rem">
+    <h3>🔑 8 relaciones clave que tenés que poder explicar</h3>
+    <div class="twrap"><table>
+      <thead><tr><th>Relación</th><th>Cómo se conectan</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Continuidad → Bernoulli</strong></td><td>La continuidad da v₁ y v₂; Bernoulli convierte ese cambio de v en cambio de presión.</td></tr>
+        <tr><td><strong>Bernoulli → Torricelli</strong></td><td>Torricelli es Bernoulli aplicado a un tanque abierto (p₁=p₂=atm, v₁≈0).</td></tr>
+        <tr><td><strong>Bernoulli → Venturi</strong></td><td>Estrechamiento → ↑v → ↓p (caída medible para calcular Q).</td></tr>
+        <tr><td><strong>Pascal → Gato hidráulico</strong></td><td>La misma presión en dos áreas distintas multiplica la fuerza por A₂/A₁.</td></tr>
+        <tr><td><strong>Viscosidad → Reynolds</strong></td><td>ν está en el denominador de Re. Más viscoso → menor Re → más laminar.</td></tr>
+        <tr><td><strong>Reynolds → Pérdidas (Darcy)</strong></td><td>El factor f depende de Re. En laminar f=64/Re; en turbulento sube y pierde más.</td></tr>
+        <tr><td><strong>Bernoulli → Golpe de Ariete</strong></td><td>Al cerrar la válvula, la energía cinética v²/2g se transforma instantáneamente en presión p/γ.</td></tr>
+        <tr><td><strong>Aspiración + Bernoulli → Cavitación</strong></td><td>Si la presión en la succión cae &lt; p_vapor, el líquido hierve en frío. NPSH es la verificación.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
   <div class="card" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0);border:2px solid #15803d;text-align:center;padding:1.5rem;margin-top:1.5rem">
     <h3 style="color:#14532d;font-size:1.1rem">🍀 ¡Mucha suerte en el parcial!</h3>
     <p style="color:#166534;margin-top:.5rem">Si entendiste el "por qué" físico de cada fenómeno, las fórmulas son consecuencia natural. Confiá en lo que estudiaste.</p>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Estadística · Parcial 2 — Modelos Discretos</title>
+<title>Estadística · Parcial 2 — Modelos Discretos y Normal</title>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -65,6 +65,8 @@ ul,ol{padding-left:22px; margin:6px 0}
 .badge.binomial{background:#143526; color:var(--good)}
 .badge.poisson{background:#3d2e0a; color:var(--warn)}
 .badge.compare{background:#3a1c1c; color:var(--bad)}
+.badge.normal{background:#1a1a3e; color:#818cf8}
+.badge.tcl{background:#1e293b; color:var(--muted)}
 
 /* ── Tables ── */
 table{border-collapse:collapse; width:100%; margin:10px 0; font-size:14px}
@@ -178,16 +180,16 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
 
 <!-- ════════════════ SIDEBAR ════════════════ -->
 <nav class="sidebar">
-  <div class="brand">📊 Estadística · P2<br><small>Modelos Discretos · Lic. Automatización</small></div>
+  <div class="brand">📊 Estadística · P2<br><small>Discretos + Normal · Lic. Automatización</small></div>
 
-  <div class="nav-level">🟢 Binomial</div>
+  <div class="nav-level">🟢 Binomial · Clase 8</div>
   <a href="#intro">👋 Presentación</a>
   <a href="#bernoulli">1. Ensayo de Bernoulli</a>
   <a href="#binomial-teoria">2. Distribución Binomial</a>
   <a href="#binomial-sim">🎮 Simulador Binomial</a>
   <a href="#binomial-ej">📝 Ejercicios Binomial</a>
 
-  <div class="nav-level">🟡 Poisson</div>
+  <div class="nav-level">🟡 Poisson · Clase 8</div>
   <a href="#poisson-teoria">3. Distribución Poisson</a>
   <a href="#poisson-sim">🎮 Simulador Poisson</a>
   <a href="#poisson-ej">📝 Ejercicios Poisson</a>
@@ -197,7 +199,19 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
   <a href="#convergencia">⚡ Demo convergencia</a>
   <a href="#cuando-usar">5. ¿Cuándo usar cada una?</a>
 
-  <div class="nav-level">🏆 Práctica</div>
+  <div class="nav-level">🟣 Normal · Clase 9</div>
+  <a href="#normal-teoria">7. Distribución Normal</a>
+  <a href="#normal-empirica">📐 Regla 68-95-99,7</a>
+  <a href="#normal-z">8. Estandarización (Z)</a>
+  <a href="#normal-sim">🎮 Simulador Normal</a>
+  <a href="#tabla-z">📋 Tabla Z interactiva</a>
+  <a href="#normal-ej">📝 Ejercicios Normal</a>
+
+  <div class="nav-level">⬜ Clase 10 — Preview</div>
+  <a href="#tcl">9. Teorema Central del Límite</a>
+  <a href="#tcl-ej">📝 Ejercicios TCL</a>
+
+  <div class="nav-level">🏆 Práctica general</div>
   <a href="#integradores">6. Problemas integradores</a>
   <a href="#r-code">🔵 Código en R</a>
   <a href="#quiz">🎓 Quiz final</a>
@@ -209,7 +223,7 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
 
 <!-- ── INTRO ── -->
 <h1 id="intro">📊 Estadística — Parcial 2</h1>
-<p class="subtitle">Modelos discretos: Binomial y Poisson · Lic. en Automatización y Control · Clase 8</p>
+<p class="subtitle">Modelos discretos (Binomial · Poisson) y Distribución Normal · Lic. en Automatización y Control · Clases 8 y 9</p>
 
 <div class="card intuition">
 <h3 style="margin-top:0">👋 ¿Qué vas a aprender acá?</h3>
@@ -826,6 +840,396 @@ Criterio habitual: si P(X ≥ observado) < 5% → señal de alarma. Si < 1% → 
 </div>
 </details>
 
+<!-- ══════════════════════════════════════════════════
+     DISTRIBUCIÓN NORMAL — CLASE 9
+══════════════════════════════════════════════════ -->
+
+<h2 id="normal-teoria"><span class="badge normal">Normal</span>7. Distribución Normal — La campana de Gauss</h2>
+
+<div class="card intuition">
+<h4>🧠 Intuición</h4>
+<p>Hasta ahora trabajamos con variables <em>discretas</em> (conteos). La Normal es <strong>continua</strong>: la variable puede tomar cualquier valor real. Aparece en todo lo que se mide con error:</p>
+<ul>
+  <li>⚙️ Dimensiones de piezas maquinadas (diámetro, longitud)</li>
+  <li>🌡️ Temperatura de un horno bajo control</li>
+  <li>⏱️ Tiempo de ciclo de un proceso estable</li>
+  <li>💧 Volumen de llenado de envases</li>
+</ul>
+<p>La forma de campana surge por el <strong>Teorema Central del Límite</strong>: cuando muchos errores pequeños e independientes se suman, el resultado siempre tiende a una Normal.</p>
+</div>
+
+<div class="card formula">
+<h4>Función de densidad (PDF)</h4>
+$$\boxed{f(x) = \frac{1}{\sigma\sqrt{2\pi}}\, e^{-\frac{(x-\mu)^2}{2\sigma^2}}, \quad -\infty < x < +\infty}$$
+<p style="margin-top:8px; font-size:13px"><strong>μ</strong> = media (centro de la campana) · <strong>σ</strong> = desvío estándar (ancho). En R: <code>dnorm(x, mu, sigma)</code></p>
+</div>
+
+<div class="grid2">
+<div class="card formula">
+<h4>Notación y parámetros</h4>
+$$X \sim N(\mu,\, \sigma)$$
+<p>E[X] = μ &nbsp;·&nbsp; Var(X) = σ²</p>
+<p><em>Nota:</em> algunos libros escriben $N(\mu, \sigma^2)$. En R se usa σ directamente.</p>
+</div>
+<div class="card formula">
+<h4>Propiedades clave</h4>
+<ul style="font-size:13.5px; line-height:1.8">
+  <li>Simétrica alrededor de μ</li>
+  <li>Media = Mediana = Moda = μ</li>
+  <li>Área total bajo la curva = 1</li>
+  <li>Las colas se extienden a ±∞ (pero son muy pequeñas)</li>
+</ul>
+</div>
+</div>
+
+<!-- ── REGLA EMPÍRICA ── -->
+<h2 id="normal-empirica">📐 Regla empírica — 68 · 95 · 99,7</h2>
+
+<div class="card">
+<p>Para cualquier distribución Normal, sin importar μ y σ:</p>
+<table>
+  <tr><th>Intervalo</th><th>Porcentaje de datos</th><th>Ejemplo μ=120, σ=4</th></tr>
+  <tr>
+    <td>$\mu \pm 1\sigma$</td>
+    <td><strong style="color:var(--good)">68%</strong></td>
+    <td>[116 , 124]</td>
+  </tr>
+  <tr>
+    <td>$\mu \pm 2\sigma$</td>
+    <td><strong style="color:var(--warn)">95%</strong></td>
+    <td>[112 , 128]</td>
+  </tr>
+  <tr>
+    <td>$\mu \pm 3\sigma$</td>
+    <td><strong style="color:var(--bad)">99,7%</strong></td>
+    <td>[108 , 132]</td>
+  </tr>
+</table>
+<div class="card tip" style="margin-top:10px">
+<strong>Control de calidad:</strong> Si el proceso es Normal y está centrado, solo el 0,3% de las piezas cae fuera de los límites ±3σ. Ese es el fundamento de las cartas de control de Shewhart.
+</div>
+</div>
+
+<!-- ── ESTANDARIZACIÓN ── -->
+<h2 id="normal-z">8. Estandarización — La variable Z</h2>
+
+<div class="card intuition">
+<h4>🧠 ¿Por qué estandarizar?</h4>
+<p>Hay infinitas distribuciones normales (una por cada par μ, σ). En vez de calcular integrales para cada una, <strong>transformamos</strong> X en Z, que siempre tiene μ=0 y σ=1, y usamos <em>una sola tabla</em>.</p>
+</div>
+
+<div class="card formula">
+<h4>Fórmula de estandarización</h4>
+$$\boxed{Z = \frac{X - \mu}{\sigma}} \quad \Rightarrow \quad Z \sim N(0,\, 1)$$
+<p style="font-size:13px; margin-top:6px">Z mide "cuántos desvíos estándar está X por encima o por debajo de la media".</p>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">Tipos de probabilidades con la tabla Z</h3>
+<p>La tabla da $\Phi(z) = P(Z \le z)$ (área desde −∞ hasta z). Todo se reduce a esto:</p>
+<div class="grid2">
+<div>
+<h4>P(X ≤ a)</h4>
+$$z = \frac{a-\mu}{\sigma}$$
+$$P(X \le a) = \Phi(z)$$
+<p style="font-size:13px">En R: <code>pnorm(a, mu, sigma)</code></p>
+</div>
+<div>
+<h4>P(X ≥ a)</h4>
+$$P(X \ge a) = 1 - \Phi(z)$$
+<p style="font-size:13px">En R: <code>1 - pnorm(a, mu, sigma)</code></p>
+</div>
+<div>
+<h4>P(a ≤ X ≤ b)</h4>
+$$z_1 = \frac{a-\mu}{\sigma}, \quad z_2 = \frac{b-\mu}{\sigma}$$
+$$P = \Phi(z_2) - \Phi(z_1)$$
+</div>
+<div>
+<h4>Z negativo — simetría</h4>
+$$\Phi(-z) = 1 - \Phi(z)$$
+<p style="font-size:13px">La tabla suele dar solo Z ≥ 0. Para Z negativo usás la simetría.</p>
+</div>
+</div>
+</div>
+
+<div class="card tip">
+<h4>🔑 Percentiles — la Normal inversa</h4>
+<p>Para encontrar el valor $x$ tal que $P(X \le x) = p$:</p>
+$$x = \mu + z_p \cdot \sigma$$
+<p>Donde $z_p$ es el cuantil de la Normal estándar. Valores de referencia:</p>
+<table>
+  <tr><th>Probabilidad acumulada</th><th>z_p</th><th>Uso típico</th></tr>
+  <tr><td>90% (percentil 90)</td><td>1,282</td><td>Límite superior de alerta</td></tr>
+  <tr><td>95% (percentil 95)</td><td>1,645</td><td>Intervalo de confianza 90%</td></tr>
+  <tr><td>97,5% (percentil 97,5)</td><td>1,960</td><td>Intervalo de confianza 95%</td></tr>
+  <tr><td>99% (percentil 99)</td><td>2,326</td><td>Control 3σ extendido</td></tr>
+  <tr><td>10% (percentil 10)</td><td>−1,282</td><td>Límite inferior de alerta</td></tr>
+</table>
+</div>
+
+<!-- ── SIMULADOR NORMAL ── -->
+<h2 id="normal-sim">🎮 Simulador Normal</h2>
+
+<div class="card game">
+<h3 style="margin-top:0">Graficá N(μ, σ) y calculá probabilidades</h3>
+<p>El área sombreada corresponde al tipo de probabilidad seleccionado.</p>
+<div class="controls">
+  <label>μ (media) <input type="number" id="normMu" value="100" step="1" oninput="plotNormal()"></label>
+  <label>σ (desvío) <input type="number" id="normSigma" value="10" min="0.1" step="1" oninput="plotNormal()"></label>
+  <label>a (límite inferior) <input type="number" id="normA" value="90" step="1" oninput="plotNormal()"></label>
+  <label>b (límite superior) <input type="number" id="normB" value="110" step="1" oninput="plotNormal()"></label>
+  <label>Tipo
+    <select id="normType" onchange="plotNormal()">
+      <option value="le">P(X ≤ a)</option>
+      <option value="ge">P(X ≥ a)</option>
+      <option value="between" selected>P(a ≤ X ≤ b)</option>
+      <option value="outside">P(X &lt; a o X &gt; b)</option>
+    </select>
+  </label>
+</div>
+<div id="normStats" class="stat-output"></div>
+<div id="normPlot" class="plot"></div>
+</div>
+
+<div class="card game">
+<h3 style="margin-top:0">Calculadora rápida Normal</h3>
+<div class="controls">
+  <label>μ <input type="number" id="calcNormMu" value="100" step="1"></label>
+  <label>σ <input type="number" id="calcNormSigma" value="10" min="0.01" step="1"></label>
+  <label>a <input type="number" id="calcNormA" value="90" step="0.1"></label>
+  <label>b <input type="number" id="calcNormB" value="110" step="0.1"></label>
+  <button class="btn" onclick="calcNormal()">Calcular</button>
+</div>
+<div id="calcNormOut" style="margin-top:12px; font-size:14px; line-height:2"></div>
+</div>
+
+<!-- ── TABLA Z INTERACTIVA ── -->
+<h2 id="tabla-z">📋 Tabla Z interactiva</h2>
+
+<div class="card game">
+<h3 style="margin-top:0">Buscá Φ(z) = P(Z ≤ z)</h3>
+<p>Ingresá un z positivo o negativo y obtenés el valor de tabla + su equivalente X para cualquier Normal.</p>
+<div class="controls">
+  <label>z <input type="number" id="ztZ" value="1.96" step="0.01" oninput="lookupZ()"></label>
+  <label>μ (para desestandarizar) <input type="number" id="ztMu" value="0" step="1" oninput="lookupZ()"></label>
+  <label>σ <input type="number" id="ztSigma" value="1" min="0.01" step="1" oninput="lookupZ()"></label>
+</div>
+<div id="ztOut" style="margin-top:12px; font-size:14px; line-height:2.2"></div>
+<div id="ztTableOut" style="margin-top:16px"></div>
+</div>
+
+<!-- ── EJERCICIOS NORMAL ── -->
+<h2 id="normal-ej">📝 Ejercicios — Guía Práctica N°9</h2>
+
+<div class="card enunciado">
+<h4>Ejercicio 1 — Regla empírica · μ=120, σ=4</h4>
+<p>Un proceso tiene μ=120 y σ=4. Determiná los intervalos que contienen el 68%, 95% y 99,7% de los valores.</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<div class="steps">
+  <div class="step"><div class="step-n">1</div><div class="step-body">
+    <strong>68% → μ ± σ = 120 ± 4 = <span class="hl-good">[116 ; 124]</span></strong>
+  </div></div>
+  <div class="step"><div class="step-n">2</div><div class="step-body">
+    <strong>95% → μ ± 2σ = 120 ± 8 = <span class="hl-warn">[112 ; 128]</span></strong>
+  </div></div>
+  <div class="step"><div class="step-n">3</div><div class="step-body">
+    <strong>99,7% → μ ± 3σ = 120 ± 12 = <span class="hl-bad">[108 ; 132]</span></strong>
+  </div></div>
+</div>
+</div>
+</details>
+
+<div class="card enunciado">
+<h4>Ejercicio 2 — Cálculo de probabilidades · X~N(100, 10)</h4>
+<p>Calculá: a) P(X ≤ 110) &nbsp;·&nbsp; b) P(X ≥ 90) &nbsp;·&nbsp; c) P(85 ≤ X ≤ 115)</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<p><strong>Modelo:</strong> $X \sim N(100;\, 10)$. Estandarizar: $Z = (X-100)/10$</p>
+<div class="steps">
+  <div class="step"><div class="step-n">a</div><div class="step-body">
+    $$P(X \le 110) = P\!\left(Z \le \frac{110-100}{10}\right) = P(Z \le 1{,}00) = \Phi(1{,}00) = \mathbf{0{,}8413}$$
+    En R: <code>pnorm(110, 100, 10)</code>
+  </div></div>
+  <div class="step"><div class="step-n">b</div><div class="step-body">
+    $$P(X \ge 90) = 1 - P(X \le 90) = 1 - \Phi\!\left(\frac{90-100}{10}\right) = 1 - \Phi(-1{,}00)$$
+    $$= 1 - (1 - 0{,}8413) = \mathbf{0{,}8413}$$
+    <p style="font-size:13px; color:var(--muted)">¡Por simetría, P(X ≥ μ−kσ) = P(X ≤ μ+kσ)!</p>
+    En R: <code>1 - pnorm(90, 100, 10)</code>
+  </div></div>
+  <div class="step"><div class="step-n">c</div><div class="step-body">
+    $$P(85 \le X \le 115) = \Phi\!\left(\frac{115-100}{10}\right) - \Phi\!\left(\frac{85-100}{10}\right)$$
+    $$= \Phi(1{,}5) - \Phi(-1{,}5) = 0{,}9332 - 0{,}0668 = \mathbf{0{,}8664}$$
+    En R: <code>pnorm(115,100,10) - pnorm(85,100,10)</code>
+  </div></div>
+</div>
+</div>
+</details>
+
+<div class="card enunciado">
+<h4>Ejercicio 3 — Percentiles · X~N(50, 2)</h4>
+<p>Encontrá: a) Percentil 90 &nbsp;·&nbsp; b) Percentil 10 &nbsp;·&nbsp; c) Valor superado por el 95% de los datos</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<p>Fórmula inversa: $x = \mu + z_p \cdot \sigma = 50 + z_p \cdot 2$</p>
+<div class="steps">
+  <div class="step"><div class="step-n">a</div><div class="step-body">
+    <strong>Percentil 90 → z₀.₉₀ = 1,282</strong>
+    $$x = 50 + 1{,}282 \times 2 = \mathbf{52{,}56}$$
+    En R: <code>qnorm(0.90, 50, 2)</code>
+  </div></div>
+  <div class="step"><div class="step-n">b</div><div class="step-body">
+    <strong>Percentil 10 → z₀.₁₀ = −1,282</strong>
+    $$x = 50 - 1{,}282 \times 2 = \mathbf{47{,}44}$$
+    En R: <code>qnorm(0.10, 50, 2)</code>
+  </div></div>
+  <div class="step"><div class="step-n">c</div><div class="step-body">
+    <strong>"Superado por el 95%" = percentil 5 → z₀.₀₅ = −1,645</strong>
+    $$x = 50 - 1{,}645 \times 2 = \mathbf{46{,}71}$$
+    El 95% de los valores está por encima de 46,71.
+  </div></div>
+</div>
+</div>
+</details>
+
+<div class="card enunciado">
+<h4>Ejercicio 4 — Control de calidad: llenado μ=250 ml, σ=3 ml</h4>
+<p>Especificaciones: 244 ml a 256 ml. Calculá: a) % que cumple &nbsp;·&nbsp; b) % por debajo del límite &nbsp;·&nbsp; c) Volumen superado por el 99% de los productos</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<p><strong>Modelo:</strong> $X \sim N(250;\, 3)$</p>
+<div class="steps">
+  <div class="step"><div class="step-n">a</div><div class="step-body">
+    $$P(244 \le X \le 256) = \Phi\!\left(\frac{256-250}{3}\right) - \Phi\!\left(\frac{244-250}{3}\right) = \Phi(2{,}00) - \Phi(-2{,}00)$$
+    $$= 0{,}9772 - 0{,}0228 = \mathbf{0{,}9545 \approx 95{,}4\%}$$
+    <code>pnorm(256,250,3) - pnorm(244,250,3)</code>
+  </div></div>
+  <div class="step"><div class="step-n">b</div><div class="step-body">
+    $$P(X < 244) = \Phi(-2{,}00) = \mathbf{0{,}0228 \approx 2{,}3\%}$$
+    <code>pnorm(244, 250, 3)</code>
+  </div></div>
+  <div class="step"><div class="step-n">c</div><div class="step-body">
+    <strong>"Superado por el 99%" = percentil 1 → z₀.₀₁ = −2,326</strong>
+    $$x = 250 - 2{,}326 \times 3 = 250 - 6{,}98 = \mathbf{243{,}0 \text{ ml}}$$
+    <code>qnorm(0.01, 250, 3)</code>
+    <p style="font-size:13px; color:var(--muted)">El 99% de los envases tiene más de 243 ml.</p>
+  </div></div>
+</div>
+</div>
+</details>
+
+<!-- ══════════════════════════════════════════════════
+     TEOREMA CENTRAL DEL LÍMITE — PREVIEW CLASE 10
+══════════════════════════════════════════════════ -->
+
+<h2 id="tcl"><span class="badge tcl">Preview Clase 10</span>9. Teorema Central del Límite — Distribución muestral de X̄</h2>
+
+<div class="card warn">
+<h4>⚡ Esto entra en el parcial — preparate con esto antes de la Clase 10</h4>
+<ul>
+  <li>La diferencia entre <strong>parámetro</strong> (de la población) y <strong>estadístico</strong> (de la muestra)</li>
+  <li>Las propiedades de la distribución muestral de $\bar{X}$</li>
+  <li>El TCL y su condición de aplicación (n ≥ 30)</li>
+</ul>
+</div>
+
+<div class="card intuition">
+<h4>🧠 Intuición</h4>
+<p>Tenés una población con μ y σ (pueden ser lo que sea: Poisson, Exponencial, lo que sea). Tomás una muestra de n elementos y calculás su media $\bar{X}$. Si hacés eso muchas veces, ¿qué distribución tiene $\bar{X}$?</p>
+<p>El <strong>Teorema Central del Límite (TCL)</strong> dice: sin importar cómo sea la población, la media muestral $\bar{X}$ se aproxima a una Normal para n suficientemente grande (n ≥ 30).</p>
+</div>
+
+<div class="card formula">
+<h4>Distribución muestral de X̄</h4>
+$$\boxed{\bar{X} \sim N\!\left(\mu,\; \frac{\sigma}{\sqrt{n}}\right)} \quad \text{para } n \ge 30$$
+<div class="grid2" style="margin-top:12px">
+<div>
+<p><strong>Media:</strong> $E[\bar{X}] = \mu$</p>
+<p><em>La media de la distribución muestral es igual a la media poblacional.</em></p>
+</div>
+<div>
+<p><strong>Error estándar:</strong> $\sigma_{\bar{X}} = \dfrac{\sigma}{\sqrt{n}}$</p>
+<p><em>A mayor tamaño de muestra, menor variabilidad de X̄.</em></p>
+</div>
+</div>
+</div>
+
+<div class="card tip">
+<h4>💡 Para aplicar TCL a probabilidades</h4>
+<p>Estandarizás igual que con la Normal, pero usando el error estándar:</p>
+$$Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$$
+<p>Luego usás la tabla Z normalmente.</p>
+</div>
+
+<h2 id="tcl-ej">📝 Ejercicios introductores — Antes de Clase 10</h2>
+
+<div class="card enunciado">
+<h4>Ejercicio TCL 1 — Población μ=100, σ=15, n=36</h4>
+<p>a) ¿Cuál es la media de la distribución muestral de X̄? &nbsp; b) ¿Cuál es el error estándar σ_x̄? &nbsp; c) ¿Qué forma tiene según el TCL?</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<div class="steps">
+  <div class="step"><div class="step-n">a</div><div class="step-body">
+    $E[\bar{X}] = \mu = \mathbf{100}$ — la media muestral espera valer lo mismo que la población.
+  </div></div>
+  <div class="step"><div class="step-n">b</div><div class="step-body">
+    $$\sigma_{\bar{X}} = \frac{\sigma}{\sqrt{n}} = \frac{15}{\sqrt{36}} = \frac{15}{6} = \mathbf{2{,}5}$$
+  </div></div>
+  <div class="step"><div class="step-n">c</div><div class="step-body">
+    $\bar{X} \sim N(100;\, 2{,}5)$ — n=36 ≥ 30, el TCL garantiza distribución Normal aproximada.
+  </div></div>
+</div>
+</div>
+</details>
+
+<div class="card enunciado">
+<h4>Ejercicio TCL 2 — Población μ=50, σ=10, n=25</h4>
+<p>a) Calculá E[X̄] y Var(X̄). &nbsp; b) ¿Qué dice el TCL sobre la forma de la distribución?</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<div class="steps">
+  <div class="step"><div class="step-n">a</div><div class="step-body">
+    $$E[\bar{X}] = 50 \qquad \text{Var}(\bar{X}) = \frac{\sigma^2}{n} = \frac{100}{25} = \mathbf{4} \qquad \sigma_{\bar{X}} = 2$$
+  </div></div>
+  <div class="step"><div class="step-n">b</div><div class="step-body">
+    <span class="hl-warn">n=25 &lt; 30:</span> el TCL no garantiza Normal, a menos que la población ya sea Normal. Si la distribución de origen es desconocida, conviene aumentar n.
+  </div></div>
+</div>
+</div>
+</details>
+
+<div class="card enunciado">
+<h4>Ejercicio TCL 3 — Distribución desconocida, μ=80, σ=12, n=49</h4>
+<p>a) ¿Qué distribución aproximada tiene X̄? &nbsp; b) Calculá P(X̄ &lt; 78).</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<div class="steps">
+  <div class="step"><div class="step-n">a</div><div class="step-body">
+    n=49 ≥ 30 → TCL aplica: $\bar{X} \sim N(80;\; 12/\sqrt{49}) = N(80;\; 12/7) \approx N(80;\, 1{,}714)$
+  </div></div>
+  <div class="step"><div class="step-n">b</div><div class="step-body">
+    $$Z = \frac{78 - 80}{12/\sqrt{49}} = \frac{-2}{1{,}714} = -1{,}167$$
+    $$P(\bar{X} < 78) = \Phi(-1{,}167) = 1 - \Phi(1{,}167) \approx 1 - 0{,}8784 = \mathbf{0{,}1216}$$
+    En R: <code>pnorm(78, 80, 12/sqrt(49))</code> = 0.1216
+  </div></div>
+</div>
+</div>
+</details>
+
 <!-- ── R CODE ── -->
 <h2 id="r-code">🔵 Código R — Referencia rápida</h2>
 
@@ -888,11 +1292,51 @@ barplot(rbind(prob_binom, prob_pois), beside = TRUE,
         xlab = "k", ylab = "P(X=k)")</pre>
 </div>
 
+<div class="card r">
+<h4>Normal — funciones principales</h4>
+<pre><span style="color:#a78bfa"># Distribución Normal: X ~ N(mu, sigma)</span>
+mu &lt;- 100; sigma &lt;- 10
+
+<span style="color:#94a3b8"># Densidad f(x) — para graficar</span>
+dnorm(x, mu, sigma)
+
+<span style="color:#94a3b8"># CDF: P(X ≤ a) = Φ((a-mu)/sigma)</span>
+pnorm(a, mu, sigma)
+
+<span style="color:#94a3b8"># P(X ≥ a)</span>
+1 - pnorm(a, mu, sigma)
+
+<span style="color:#94a3b8"># P(a ≤ X ≤ b)</span>
+pnorm(b, mu, sigma) - pnorm(a, mu, sigma)
+
+<span style="color:#94a3b8"># Percentil p: valor x tal que P(X ≤ x) = p</span>
+qnorm(p, mu, sigma)
+
+<span style="color:#94a3b8"># Estandarizar manualmente</span>
+z &lt;- (x - mu) / sigma
+pnorm(z)  <span style="color:#94a3b8"># equivalente a pnorm(x, mu, sigma)</span></pre>
+</div>
+
+<div class="card r">
+<h4>Distribución muestral de X̄ (TCL)</h4>
+<pre>mu &lt;- 80; sigma &lt;- 12; n &lt;- 49
+
+<span style="color:#94a3b8"># Error estándar</span>
+se &lt;- sigma / sqrt(n)   <span style="color:#94a3b8"># = 12/7 ≈ 1.714</span>
+
+<span style="color:#94a3b8"># P(X̄ < 78)  usando TCL</span>
+pnorm(78, mu, se)       <span style="color:#94a3b8"># = 0.1216</span>
+
+<span style="color:#94a3b8"># Estandarización manual</span>
+z &lt;- (78 - mu) / se
+pnorm(z)                <span style="color:#94a3b8"># mismo resultado</span></pre>
+</div>
+
 <!-- ── QUIZ ── -->
 <h2 id="quiz">🎓 Quiz final — Parcial 2</h2>
 
 <div class="card game">
-<p>12 preguntas de opción múltiple. Respondé cada una y recibís feedback inmediato.</p>
+<p>19 preguntas de opción múltiple (Binomial, Poisson y Normal). Respondé cada una y recibís feedback inmediato.</p>
 <button class="btn" onclick="startQuiz()">Empezar quiz</button>
 <button class="btn-2" onclick="resetQuiz()" style="margin-left:8px">Reiniciar</button>
 <div id="quizContainer" style="margin-top:18px"></div>
@@ -932,9 +1376,35 @@ barplot(rbind(prob_binom, prob_pois), beside = TRUE,
 <p>La aproximación requiere n grande y p pequeño. Si p = 0,5, la aproximación es mala aunque λ sea razonable.</p>
 </div>
 
+<div class="card warn">
+<h4>7. Confundir N(μ, σ) con N(μ, σ²) según el libro</h4>
+<p>Algunos libros (Walpole) escriben $N(\mu, \sigma^2)$ (con varianza). Otros (y R) usan $N(\mu, \sigma)$ (con desvío). En R <code>pnorm(x, mu, sigma)</code> siempre recibe σ, no σ². ¡Verificá el contexto!</p>
+</div>
+
+<div class="card warn">
+<h4>8. Olvidar estandarizar antes de usar la tabla Z</h4>
+<p>La tabla da $\Phi(z)$ para la Normal estándar (μ=0, σ=1). Si tu variable es X~N(μ,σ) con μ≠0 o σ≠1, primero calculás $z = (x-\mu)/\sigma$ y luego entrás a la tabla.</p>
+</div>
+
+<div class="card warn">
+<h4>9. Z negativo → asumir que no está en la tabla</h4>
+<p>La mayoría de las tablas Z solo muestran valores positivos. Para z negativo: $\Phi(-z) = 1 - \Phi(z)$ (simetría de la Normal). Nunca busques en la tabla un z negativo — transformalo primero.</p>
+</div>
+
+<div class="card warn">
+<h4>10. Aplicar TCL con n &lt; 30 sin verificar normalidad</h4>
+<p>El TCL garantiza distribución Normal aproximada de X̄ solo si n ≥ 30. Para n menor, necesitás que la población ya sea Normal. Si no lo es y n es chico, el resultado puede ser incorrecto.</p>
+</div>
+
+<div class="card warn">
+<h4>11. Confundir error estándar σ/√n con varianza σ²/n</h4>
+<p>El error estándar es $\sigma_{\bar{X}} = \sigma/\sqrt{n}$. La varianza muestral es $\sigma^2/n$. En <code>pnorm</code> siempre usás el <strong>error estándar</strong> (desvío), no la varianza.</p>
+</div>
+
 <div class="footer">
   Estadística · Parcial 2 — Lic. en Automatización y Control · UNI Pilar<br>
-  Contenido basado en Clase 8: Modelos Discretos (Montgomery & Runger, Walpole et al.)
+  Clases 8 y 9: Modelos Discretos (Binomial · Poisson) y Distribución Normal · Preview Clase 10: TCL<br>
+  Basado en Montgomery &amp; Runger y Walpole et al.
 </div>
 
 </main>
@@ -1190,6 +1660,35 @@ const quizQs = [
   {q:'Bi(n=100, p=0,03). ¿Qué nos dice que P(X≥6) = 0,084?',
    ops:['Proceso fuera de control — parar inmediatamente','Probabilidad baja — señal de alarma leve','Probabilidad normal — no hay problema','No se puede interpretar sin más datos'],
    correct:1, exp:'8,4% > 5% pero relativamente bajo. Es una señal de alerta que merece monitoreo, no parada inmediata (típicamente < 5% dispara alarma).'},
+
+  // ── Preguntas Normal ──
+  {q:'X ~ N(50, 5). ¿Cuánto vale P(X ≤ 50)?',
+   ops:['0','0,25','0,50','1'],
+   correct:2, exp:'La Normal es simétrica. La media divide el área en dos mitades iguales → P(X ≤ μ) = 0,50 siempre.'},
+
+  {q:'Para calcular P(X ≥ a) con la tabla Z, usás:',
+   ops:['Φ(z)','1 − Φ(z)','Φ(z)²','Φ(−z) + Φ(z)'],
+   correct:1, exp:'La tabla da P(Z ≤ z). Para "≥" usás el complemento: 1 − Φ(z).'},
+
+  {q:'X ~ N(120, 4). Según la regla empírica, ¿qué intervalo contiene el 95% de los datos?',
+   ops:['[116, 124]','[112, 128]','[108, 132]','[118, 122]'],
+   correct:1, exp:'95% → μ ± 2σ = 120 ± 8 = [112, 128].'},
+
+  {q:'Z = (X − μ) / σ. Si X = 130, μ = 100, σ = 15, ¿cuánto vale Z?',
+   ops:['0','1','2','3'],
+   correct:2, exp:'Z = (130 − 100) / 15 = 30/15 = 2. X está 2 desvíos por encima de la media.'},
+
+  {q:'Para encontrar el percentil 90 de X ~ N(μ, σ), ¿qué fórmula usás?',
+   ops:['x = μ / z₀.₉₀','x = μ + z₀.₉₀ × σ','x = z₀.₉₀ / σ','x = σ − z₀.₉₀ × μ'],
+   correct:1, exp:'Inversa normal: x = μ + z_p × σ. Para p=0,90: z₀.₉₀ = 1,282 → x = μ + 1,282σ.'},
+
+  {q:'Según el TCL, si tomo muestras de n=49 de una población con σ=14, ¿cuánto vale el error estándar?',
+   ops:['14','7','2','49'],
+   correct:2, exp:'σ_x̄ = σ/√n = 14/√49 = 14/7 = 2.'},
+
+  {q:'El TCL garantiza que X̄ se distribuye Normal aproximadamente cuando:',
+   ops:['La población es Normal','n ≥ 30','p sea pequeño','σ sea conocido'],
+   correct:1, exp:'El TCL aplica para n ≥ 30, sin importar la distribución de la población. Si la población ya es Normal, aplica para cualquier n.'},
 ];
 
 let quizIdx=0, quizScore=0;
@@ -1252,6 +1751,174 @@ function nextQ(){
 }
 
 /* ══════════════════════════════════════
+   DISTRIBUCIÓN NORMAL — FUNCIONES
+══════════════════════════════════════ */
+
+// CDF de la Normal estándar Φ(z) — Abramowitz & Stegun 26.2.17
+function phi(z){
+  const t = 1/(1+0.2316419*Math.abs(z));
+  const d = 0.3989423*Math.exp(-z*z/2);
+  const p = d*t*(0.3193815+t*(-0.3565638+t*(1.7814779+t*(-1.8212560+t*1.3302744))));
+  return z>=0 ? 1-p : p;
+}
+
+// Inversa de la Normal estándar (Beasley-Springer-Moro)
+function qnormStd(p){
+  if(p<=0) return -Infinity; if(p>=1) return Infinity;
+  const c=[2.50662823884,-18.61500062529,41.39119773534,-25.44106049637];
+  const d=[-8.47351093090,23.08336743743,-21.06224101826,3.13082909833];
+  const e=[0.3374754822726147,0.9761690190917186,0.1607979714918209,
+           0.0276438810333863,0.0038405729373609,0.0003951896511349,
+           0.0000321767881768,0.0000002888167364,0.0000003960315187];
+  const y=p-0.5;
+  if(Math.abs(y)<0.42){
+    const r=y*y;
+    return y*(((c[3]*r+c[2])*r+c[1])*r+c[0])/((((d[3]*r+d[2])*r+d[1])*r+d[0])*r+1);
+  }
+  const r=p<0.5?Math.sqrt(-Math.log(p)):Math.sqrt(-Math.log(1-p));
+  let x=e[0]+r*(e[1]+r*(e[2]+r*(e[3]+r*(e[4]+r*(e[5]+r*(e[6]+r*(e[7]+r*e[8])))))));
+  return p<0.5?-x:x;
+}
+
+function pnormJS(x,mu,sigma){ return phi((x-mu)/sigma); }
+function qnormJS(p,mu,sigma){ return mu+qnormStd(p)*sigma; }
+function dnormJS(x,mu,sigma){ const z=(x-mu)/sigma; return Math.exp(-0.5*z*z)/(sigma*Math.sqrt(2*Math.PI)); }
+
+/* ── Simulador Normal ── */
+function plotNormal(){
+  const mu    = +document.getElementById('normMu').value    || 0;
+  const sigma = +document.getElementById('normSigma').value || 1;
+  const a     = +document.getElementById('normA').value;
+  const b     = +document.getElementById('normB').value;
+  const type  = document.getElementById('normType').value;
+  if(sigma<=0) return;
+
+  const span = 4*sigma;
+  const xmin = mu-span, xmax = mu+span;
+  const npts = 400;
+  const xs=[], ys=[];
+  for(let i=0;i<=npts;i++){
+    const x = xmin + (xmax-xmin)*i/npts;
+    xs.push(x); ys.push(dnormJS(x,mu,sigma));
+  }
+
+  // Área sombreada
+  const fillXs=[], fillYs=[];
+  const shade=(lo,hi)=>{
+    for(let i=0;i<=200;i++){
+      const x=lo+(hi-lo)*i/200;
+      fillXs.push(x); fillYs.push(dnormJS(x,mu,sigma));
+    }
+    fillXs.push(hi); fillYs.push(0);
+    fillXs.push(lo); fillYs.push(0);
+  };
+
+  let prob, label;
+  if(type==='le'){
+    const lo=Math.max(xmin,a-span*2); shade(lo,a);
+    prob=pnormJS(a,mu,sigma);
+    label=`P(X ≤ ${a})`;
+  } else if(type==='ge'){
+    const hi=Math.min(xmax,a+span*2); shade(a,hi);
+    prob=1-pnormJS(a,mu,sigma);
+    label=`P(X ≥ ${a})`;
+  } else if(type==='between'){
+    shade(Math.min(a,b),Math.max(a,b));
+    prob=pnormJS(Math.max(a,b),mu,sigma)-pnormJS(Math.min(a,b),mu,sigma);
+    label=`P(${Math.min(a,b)} ≤ X ≤ ${Math.max(a,b)})`;
+  } else { // outside
+    shade(xmin,Math.min(a,b));
+    shade(Math.max(a,b),xmax);
+    prob=pnormJS(Math.min(a,b),mu,sigma)+(1-pnormJS(Math.max(a,b),mu,sigma));
+    label=`P fuera de [${Math.min(a,b)}, ${Math.max(a,b)}]`;
+  }
+
+  const za = ((a-mu)/sigma).toFixed(3);
+  const zb = ((b-mu)/sigma).toFixed(3);
+
+  document.getElementById('normStats').innerHTML=`
+    <div class="stat-box"><div class="label">E[X] = μ</div><div class="value">${mu}</div></div>
+    <div class="stat-box"><div class="label">Var = σ²</div><div class="value">${(sigma*sigma).toFixed(2)}</div></div>
+    <div class="stat-box"><div class="label">z(a)</div><div class="value">${za}</div></div>
+    <div class="stat-box"><div class="label">z(b)</div><div class="value">${zb}</div></div>
+    <div class="stat-box"><div class="label">${label}</div><div class="value" style="color:var(--warn)">${prob.toFixed(4)}</div></div>
+    <div class="stat-box"><div class="label">% área</div><div class="value" style="color:var(--good)">${(prob*100).toFixed(2)}%</div></div>
+  `;
+
+  Plotly.newPlot('normPlot',[
+    {x:xs, y:ys, type:'scatter', mode:'lines', line:{color:'#818cf8', width:2.5}, name:`N(${mu}, ${sigma})`},
+    {x:fillXs, y:fillYs, type:'scatter', fill:'toself', fillcolor:'rgba(251,191,36,0.25)',
+     line:{color:'rgba(251,191,36,0.5)', width:1}, name:label, showlegend:true}
+  ],{
+    ...layoutBase,
+    title:{text:`N(μ=${mu}, σ=${sigma}) — ${label} = ${prob.toFixed(4)}`, font:{color:'#e2e8f0',size:13}},
+    xaxis:{...layoutBase.xaxis, title:'x'},
+    yaxis:{...layoutBase.yaxis, title:'f(x)'},
+    showlegend:false
+  },{responsive:true, displayModeBar:false});
+}
+
+function calcNormal(){
+  const mu    = +document.getElementById('calcNormMu').value;
+  const sigma = +document.getElementById('calcNormSigma').value;
+  const a     = +document.getElementById('calcNormA').value;
+  const b     = +document.getElementById('calcNormB').value;
+  if(sigma<=0){document.getElementById('calcNormOut').innerHTML='<span style="color:var(--bad)">σ debe ser positivo.</span>'; return;}
+  const za=(a-mu)/sigma, zb=(b-mu)/sigma;
+  document.getElementById('calcNormOut').innerHTML=`
+    <strong>X ~ N(${mu}, ${sigma})</strong><br>
+    z(a=${a}) = <span class="hl-purple">${za.toFixed(4)}</span> &nbsp;·&nbsp; z(b=${b}) = <span class="hl-purple">${zb.toFixed(4)}</span><br>
+    P(X ≤ ${a}) = <span class="hl-good">${pnormJS(a,mu,sigma).toFixed(4)}</span><br>
+    P(X ≥ ${a}) = <span class="hl-bad">${(1-pnormJS(a,mu,sigma)).toFixed(4)}</span><br>
+    P(${Math.min(a,b)} ≤ X ≤ ${Math.max(a,b)}) = <span class="hl-accent">${(pnormJS(Math.max(a,b),mu,sigma)-pnormJS(Math.min(a,b),mu,sigma)).toFixed(4)}</span><br>
+    Percentil 90 = <span class="hl-warn">${qnormJS(0.90,mu,sigma).toFixed(4)}</span> &nbsp;|&nbsp;
+    Percentil 95 = <span class="hl-warn">${qnormJS(0.95,mu,sigma).toFixed(4)}</span> &nbsp;|&nbsp;
+    Percentil 99 = <span class="hl-warn">${qnormJS(0.99,mu,sigma).toFixed(4)}</span>
+  `;
+}
+
+/* ── Lookup Tabla Z ── */
+function lookupZ(){
+  const z    = +document.getElementById('ztZ').value;
+  const mu   = +document.getElementById('ztMu').value;
+  const sig  = +document.getElementById('ztSigma').value||1;
+  if(isNaN(z)) return;
+
+  const phiZ = phi(z);
+  const x    = mu + z*sig;
+
+  document.getElementById('ztOut').innerHTML=`
+    <strong>z = ${z.toFixed(2)}</strong><br>
+    Φ(${z.toFixed(2)}) = P(Z ≤ ${z.toFixed(2)}) = <span class="hl-accent">${phiZ.toFixed(4)}</span><br>
+    P(Z ≥ ${z.toFixed(2)}) = 1 − Φ = <span class="hl-bad">${(1-phiZ).toFixed(4)}</span><br>
+    P(Z entre 0 y ${z.toFixed(2)}) = <span class="hl-good">${Math.abs(phiZ-0.5).toFixed(4)}</span><br>
+    ${sig!==1||mu!==0?`Desestandarizado x = μ + z·σ = ${mu} + ${z.toFixed(2)}×${sig} = <strong>${x.toFixed(4)}</strong>`:''}
+  `;
+
+  // Mini tabla alrededor del z pedido
+  const zRow = Math.floor(Math.abs(z)*10)/10;
+  const sign = z<0?-1:1;
+  const rows=[];
+  for(let r=Math.max(0,zRow-0.2);r<=Math.min(3.4,zRow+0.3);r=Math.round((r+0.1)*10)/10){
+    const cells=[`<td style="color:var(--accent);font-weight:700">${(sign*r).toFixed(1)}</td>`];
+    for(let d=0;d<=9;d++){
+      const zz=sign*(r+d/100);
+      const val=phi(zz).toFixed(4);
+      const isTarget=Math.abs(Math.abs(zz)-Math.abs(z))<0.005;
+      cells.push(`<td${isTarget?' style="background:var(--warn);color:#0b1220;font-weight:700"':''}>${val}</td>`);
+    }
+    rows.push(`<tr>${cells.join('')}</tr>`);
+  }
+  document.getElementById('ztTableOut').innerHTML=`
+    <p style="font-size:12px;color:var(--muted);margin-bottom:6px">Extracto de tabla Z (fila resaltada = tu z)</p>
+    <div style="overflow-x:auto">
+    <table style="font-size:12px">
+      <tr><th>z</th><th>.00</th><th>.01</th><th>.02</th><th>.03</th><th>.04</th><th>.05</th><th>.06</th><th>.07</th><th>.08</th><th>.09</th></tr>
+      ${rows.join('')}
+    </table></div>`;
+}
+
+/* ══════════════════════════════════════
    INICIALIZACIÓN
 ══════════════════════════════════════ */
 
@@ -1259,6 +1926,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
   plotBinomial();
   plotPoisson();
   plotConvergencia();
+  plotNormal();
+  lookupZ();
 });
 </script>
 </body>

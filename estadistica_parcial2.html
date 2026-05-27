@@ -1004,14 +1004,111 @@ $$x = \mu + z_p \cdot \sigma$$
 </div>
 
 <!-- ── TABLA Z INTERACTIVA ── -->
-<h2 id="tabla-z">📋 Tabla Z interactiva</h2>
+<h2 id="tabla-z">📋 Tabla Z — Cómo leerla y usarla</h2>
 
+<div class="card intuition">
+<h4>🧠 ¿Qué ES la tabla Z?</h4>
+<p>La tabla Z es una lista de valores de la función $\Phi(z) = P(Z \le z)$: el <strong>área bajo la campana estándar desde −∞ hasta z</strong>. Como esa integral no tiene solución analítica, la tabla la pre-calcula para vos.</p>
+<p style="margin-top:8px">La tabla <strong>solo funciona para Z ~ N(0,1)</strong>. Por eso primero estandarizás tu variable X con $Z = (X-\mu)/\sigma$, y después usás la tabla con ese z.</p>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">📖 Cómo leer la tabla — 3 pasos</h3>
+<div class="steps">
+  <div class="step"><div class="step-n">1</div><div class="step-body">
+    <strong>Calculá z</strong> con la fórmula de estandarización: $z = (x - \mu)/\sigma$<br>
+    <em>Ejemplo:</em> X ~ N(100, 10), x = 115 → z = (115−100)/10 = <strong>1,50</strong>
+  </div></div>
+  <div class="step"><div class="step-n">2</div><div class="step-body">
+    <strong>Buscá la fila</strong>: el entero + primer decimal de z → fila <strong>1,5</strong><br>
+    <strong>Buscá la columna</strong>: el segundo decimal → columna <strong>.00</strong><br>
+    El cruce te da: Φ(1,50) = <strong>0,9332</strong>
+  </div></div>
+  <div class="step"><div class="step-n">3</div><div class="step-body">
+    <strong>Interpretá</strong>: Φ(1,50) = 0,9332 → hay 93,32% de probabilidad de que X sea ≤ 115.<br>
+    P(X ≥ 115) = 1 − 0,9332 = <strong>0,0668</strong>
+  </div></div>
+</div>
+</div>
+
+<div class="card warn">
+<h4>⚡ Z negativo — la regla de simetría</h4>
+<p>La tabla generalmente solo muestra z ≥ 0. Para z negativo usás la simetría de la Normal:</p>
+$$\Phi(-z) = 1 - \Phi(z)$$
+<div class="grid2" style="margin-top:10px">
+<div style="background:#0b1220; padding:10px; border-radius:8px; border:1px solid var(--border)">
+<p style="margin:0; font-size:13px"><strong>Ejemplo:</strong> P(Z ≤ −1,5)<br>
+= Φ(−1,5) = 1 − Φ(1,5)<br>
+= 1 − 0,9332 = <span class="hl-bad">0,0668</span></p>
+</div>
+<div style="background:#0b1220; padding:10px; border-radius:8px; border:1px solid var(--border)">
+<p style="margin:0; font-size:13px"><strong>Intuición:</strong> la campana es simétrica en 0. El área a la izquierda de −1,5 es igual al área a la derecha de +1,5.</p>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">Los 4 casos que aparecen en el parcial</h3>
+<table>
+  <tr><th>Probabilidad que piden</th><th>Cómo resolverla con la tabla</th><th>En R</th></tr>
+  <tr>
+    <td>$P(X \le a)$</td>
+    <td>$z = (a-\mu)/\sigma$ → buscar $\Phi(z)$</td>
+    <td><code>pnorm(a,μ,σ)</code></td>
+  </tr>
+  <tr>
+    <td>$P(X \ge a)$</td>
+    <td>$1 - \Phi(z)$</td>
+    <td><code>1-pnorm(a,μ,σ)</code></td>
+  </tr>
+  <tr>
+    <td>$P(a \le X \le b)$</td>
+    <td>$\Phi(z_b) - \Phi(z_a)$</td>
+    <td><code>pnorm(b,μ,σ)-pnorm(a,μ,σ)</code></td>
+  </tr>
+  <tr>
+    <td>Percentil $p$ (inversa)</td>
+    <td>Buscar $z_p$ en tabla → $x = \mu + z_p \cdot \sigma$</td>
+    <td><code>qnorm(p,μ,σ)</code></td>
+  </tr>
+</table>
+</div>
+
+<!-- Dual campana -->
 <div class="card game">
-<h3 style="margin-top:0">Buscá Φ(z) = P(Z ≤ z)</h3>
-<p>Ingresá un z positivo o negativo y obtenés el valor de tabla + su equivalente X para cualquier Normal.</p>
+<h3 style="margin-top:0">🎯 Mirá la transformación: X original → Z estandarizada</h3>
+<p>Ingresá una Normal cualquiera y un valor x. Las dos campanas muestran <em>la misma probabilidad</em>: la izquierda en la escala original, la derecha en la escala Z. El área sombreada es idéntica.</p>
+<div class="controls">
+  <label>μ <input type="number" id="dualMu" value="100" step="1" oninput="plotDual()"></label>
+  <label>σ <input type="number" id="dualSigma" value="10" min="0.1" step="1" oninput="plotDual()"></label>
+  <label>x (valor) <input type="number" id="dualX" value="115" step="1" oninput="plotDual()"></label>
+  <label>Tipo
+    <select id="dualType" onchange="plotDual()">
+      <option value="le">P(X ≤ x)</option>
+      <option value="ge">P(X ≥ x)</option>
+    </select>
+  </label>
+</div>
+<div id="dualInfo" style="margin:10px 0; padding:10px 14px; background:#0b1220; border-radius:8px; border:1px solid var(--border); font-size:14px; line-height:2"></div>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px">
+  <div>
+    <p style="text-align:center; font-size:13px; color:#818cf8; font-weight:600; margin-bottom:6px">X ~ N(μ, σ) — escala original</p>
+    <div id="dualPlotX" style="height:260px; background:#0b1220; border-radius:8px; border:1px solid var(--border)"></div>
+  </div>
+  <div>
+    <p style="text-align:center; font-size:13px; color:var(--warn); font-weight:600; margin-bottom:6px">Z ~ N(0, 1) — estandarizada</p>
+    <div id="dualPlotZ" style="height:260px; background:#0b1220; border-radius:8px; border:1px solid var(--border)"></div>
+  </div>
+</div>
+</div>
+
+<!-- Lookup tabla -->
+<div class="card game">
+<h3 style="margin-top:0">🔍 Buscador en la tabla Z</h3>
+<p>Ingresá un z y te muestra el valor Φ(z) resaltado en la tabla. También podés desestandarizar a X.</p>
 <div class="controls">
   <label>z <input type="number" id="ztZ" value="1.96" step="0.01" oninput="lookupZ()"></label>
-  <label>μ (para desestandarizar) <input type="number" id="ztMu" value="0" step="1" oninput="lookupZ()"></label>
+  <label>μ (desestandarizar) <input type="number" id="ztMu" value="0" step="1" oninput="lookupZ()"></label>
   <label>σ <input type="number" id="ztSigma" value="1" min="0.01" step="1" oninput="lookupZ()"></label>
 </div>
 <div id="ztOut" style="margin-top:12px; font-size:14px; line-height:2.2"></div>
@@ -1916,6 +2013,90 @@ function calcNormal(){
   `;
 }
 
+/* ── Dual campana: X original + Z estandarizada ── */
+function plotDual(){
+  const mu    = +document.getElementById('dualMu').value    || 0;
+  const sigma = +document.getElementById('dualSigma').value || 1;
+  const x     = +document.getElementById('dualX').value;
+  const type  = document.getElementById('dualType').value;
+  if(sigma<=0) return;
+
+  const z    = (x - mu) / sigma;
+  const prob = type==='le' ? pnormJS(x,mu,sigma) : 1 - pnormJS(x,mu,sigma);
+  const label = type==='le' ? `P(X ≤ ${x})` : `P(X ≥ ${x})`;
+  const zlabel = type==='le' ? `P(Z ≤ ${z.toFixed(2)})` : `P(Z ≥ ${z.toFixed(2)})`;
+
+  document.getElementById('dualInfo').innerHTML =
+    `<strong>Paso 1 — Estandarizar:</strong> z = (x − μ) / σ = (${x} − ${mu}) / ${sigma} = <span class="hl-warn">${z.toFixed(4)}</span><br>
+     <strong>Paso 2 — Tabla Z:</strong> Φ(${z.toFixed(2)}) = <span class="hl-accent">${pnormJS(x,mu,sigma).toFixed(4)}</span><br>
+     <strong>Resultado:</strong> ${label} = ${zlabel} = <span class="hl-good" style="font-size:16px">${prob.toFixed(4)}</span> (${(prob*100).toFixed(2)}%)`;
+
+  // Helper: curva + área sombreada para un genérico N(m,s) y un corte xc
+  function buildNormalTraces(m, s, xc, col, lType){
+    const span=4*s, xmin=m-span, xmax=m+span;
+    const Xs=[], Ys=[];
+    for(let i=0;i<=400;i++){const v=xmin+(xmax-xmin)*i/400; Xs.push(v); Ys.push(dnormJS(v,m,s));}
+
+    const fXs=[], fYs=[];
+    const lo = lType==='le' ? xmin : xc;
+    const hi = lType==='le' ? xc   : xmax;
+    for(let i=0;i<=300;i++){const v=lo+(hi-lo)*i/300; fXs.push(v); fYs.push(dnormJS(v,m,s));}
+    fXs.push(hi); fYs.push(0); fXs.push(lo); fYs.push(0);
+
+    return [
+      {x:Xs, y:Ys, type:'scatter', mode:'lines', line:{color:col, width:2.5}, showlegend:false},
+      {x:fXs, y:fYs, type:'scatter', fill:'toself',
+       fillcolor:'rgba(251,191,36,0.28)', line:{color:'rgba(251,191,36,0.6)',width:1.2}, showlegend:false}
+    ];
+  }
+
+  // Sigma markers helper
+  function sigmaShapes(m, s, xc){
+    const cols=['#f87171','#fbbf24','#34d399','#e2e8f0','#34d399','#fbbf24','#f87171'];
+    const lbls=['−3σ','−2σ','−σ','μ','μ+σ','μ+2σ','μ+3σ'];
+    const sh=[], an=[];
+    for(let k=-3;k<=3;k++){
+      const xk=m+k*s, col=cols[k+3], lbl=lbls[k+3];
+      sh.push({type:'line',x0:xk,x1:xk,y0:0,y1:dnormJS(xk,m,s),
+               line:{color:col,width:k===0?2:1.2,dash:k===0?'solid':'dot'}});
+      an.push({x:xk,xref:'x',y:0,yref:'paper',text:`<b>${lbl}</b>`,
+               showarrow:false,font:{color:col,size:9},xanchor:'center',yanchor:'top',yshift:-14});
+    }
+    // Línea del valor x (naranja)
+    sh.push({type:'line',x0:xc,x1:xc,y0:0,y1:dnormJS(xc,m,s)*1.02,
+             line:{color:'#f97316',width:2.5,dash:'solid'}});
+    an.push({x:xc,xref:'x',y:dnormJS(xc,m,s),yref:'y',
+             text:`<b>x=${xc}</b>`,showarrow:true,arrowhead:2,arrowcolor:'#f97316',
+             font:{color:'#f97316',size:10},ax:0,ay:-28});
+    return {sh, an};
+  }
+
+  const {sh:shX, an:anX} = sigmaShapes(mu, sigma, x);
+
+  // Para el gráfico Z, reconstruir con m=0,s=1,xc=z
+  const {sh:shZ, an:anZ} = sigmaShapes(0, 1, z);
+  // Corregir etiqueta del marcador de valor en Z
+  const lastAnZ = anZ[anZ.length-1];
+  lastAnZ.text = `<b>z=${z.toFixed(2)}</b>`;
+
+  const layoutX = {...layoutBase,
+    title:{text:`N(${mu}, ${sigma})`, font:{color:'#818cf8',size:12}},
+    xaxis:{...layoutBase.xaxis, title:'x'},
+    yaxis:{...layoutBase.yaxis, title:'f(x)'},
+    margin:{t:34,r:14,b:58,l:46},
+    shapes:shX, annotations:anX, showlegend:false};
+
+  const layoutZ = {...layoutBase,
+    title:{text:`N(0, 1) — estandarizada`, font:{color:'#fbbf24',size:12}},
+    xaxis:{...layoutBase.xaxis, title:'z'},
+    yaxis:{...layoutBase.yaxis, title:'f(z)'},
+    margin:{t:34,r:14,b:58,l:46},
+    shapes:shZ, annotations:anZ, showlegend:false};
+
+  Plotly.newPlot('dualPlotX', buildNormalTraces(mu,sigma,x,'#818cf8',type), layoutX,{responsive:true,displayModeBar:false});
+  Plotly.newPlot('dualPlotZ', buildNormalTraces(0,1,z,'#fbbf24',type), layoutZ,{responsive:true,displayModeBar:false});
+}
+
 /* ── Lookup Tabla Z ── */
 function lookupZ(){
   const z    = +document.getElementById('ztZ').value;
@@ -1966,6 +2147,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   plotPoisson();
   plotConvergencia();
   plotNormal();
+  plotDual();
   lookupZ();
 });
 </script>

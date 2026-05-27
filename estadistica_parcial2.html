@@ -1845,15 +1845,54 @@ function plotNormal(){
     <div class="stat-box"><div class="label">% área</div><div class="value" style="color:var(--good)">${(prob*100).toFixed(2)}%</div></div>
   `;
 
+  // ── Marcadores sigma ──
+  const sigColores = ['#f87171','#fbbf24','#34d399','#e2e8f0','#34d399','#fbbf24','#f87171'];
+  const sigLabels  = ['μ−3σ','μ−2σ','μ−σ','μ','μ+σ','μ+2σ','μ+3σ'];
+  const sigShapes=[], sigAnnotations=[];
+  for(let k=-3;k<=3;k++){
+    const xk  = mu + k*sigma;
+    const col = sigColores[k+3];
+    const lbl = sigLabels[k+3];
+    const yTop = dnormJS(xk,mu,sigma);
+    // Línea vertical punteada (sólida para μ)
+    sigShapes.push({
+      type:'line', x0:xk, x1:xk, y0:0, y1:yTop,
+      line:{color:col, width:k===0?2:1.5, dash:k===0?'solid':'dot'}
+    });
+    // Etiqueta σ abajo del eje
+    sigAnnotations.push({
+      x:xk, xref:'x',
+      y:0,  yref:'paper',
+      text:`<b>${lbl}</b>`,
+      showarrow:false,
+      font:{color:col, size:10},
+      xanchor:'center', yanchor:'top',
+      yshift:-16
+    });
+    // Valor numérico arriba de la línea
+    sigAnnotations.push({
+      x:xk, xref:'x',
+      y:yTop, yref:'y',
+      text:`${Number.isInteger(xk) ? xk : xk.toFixed(1)}`,
+      showarrow:false,
+      font:{color:col, size:9},
+      xanchor:'center', yanchor:'bottom',
+      yshift:4
+    });
+  }
+
   Plotly.newPlot('normPlot',[
     {x:xs, y:ys, type:'scatter', mode:'lines', line:{color:'#818cf8', width:2.5}, name:`N(${mu}, ${sigma})`},
     {x:fillXs, y:fillYs, type:'scatter', fill:'toself', fillcolor:'rgba(251,191,36,0.25)',
-     line:{color:'rgba(251,191,36,0.5)', width:1}, name:label, showlegend:true}
+     line:{color:'rgba(251,191,36,0.5)', width:1}, name:label}
   ],{
     ...layoutBase,
     title:{text:`N(μ=${mu}, σ=${sigma}) — ${label} = ${prob.toFixed(4)}`, font:{color:'#e2e8f0',size:13}},
     xaxis:{...layoutBase.xaxis, title:'x'},
     yaxis:{...layoutBase.yaxis, title:'f(x)'},
+    margin:{t:40, r:20, b:70, l:55},
+    shapes:sigShapes,
+    annotations:sigAnnotations,
     showlegend:false
   },{responsive:true, displayModeBar:false});
 }

@@ -66,7 +66,8 @@ ul,ol{padding-left:22px; margin:6px 0}
 .badge.poisson{background:#3d2e0a; color:var(--warn)}
 .badge.compare{background:#3a1c1c; color:var(--bad)}
 .badge.normal{background:#1a1a3e; color:#818cf8}
-.badge.tcl{background:#1e293b; color:var(--muted)}
+.badge.tcl{background:#1e3a5f; color:#38bdf8}
+.badge.ic{background:#0f2a1e; color:#34d399}
 
 /* ── Tables ── */
 table{border-collapse:collapse; width:100%; margin:10px 0; font-size:14px}
@@ -207,9 +208,15 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
   <a href="#tabla-z">📋 Tabla Z interactiva</a>
   <a href="#normal-ej">📝 Ejercicios Normal</a>
 
-  <div class="nav-level">⬜ Clase 10 — Preview</div>
-  <a href="#tcl">9. Teorema Central del Límite</a>
-  <a href="#tcl-ej">📝 Ejercicios TCL</a>
+  <div class="nav-level">🔵 Inferencia · Clase 10</div>
+  <a href="#tcl">9. Distribución muestral de X̄</a>
+  <a href="#tcl-sim">🎮 Simulador TCL</a>
+  <a href="#tcl-ej">📝 Ejercicios Clase 10</a>
+  <a href="#practica10">📋 Práctica N°10</a>
+
+  <div class="nav-level">⬜ Clase 11 — Preview</div>
+  <a href="#ic">10. Intervalos de confianza</a>
+  <a href="#regresion">11. Regresión lineal simple</a>
 
   <div class="nav-level">🏆 Práctica general</div>
   <a href="#integradores">6. Problemas integradores</a>
@@ -223,7 +230,7 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
 
 <!-- ── INTRO ── -->
 <h1 id="intro">📊 Estadística — Parcial 2</h1>
-<p class="subtitle">Modelos discretos (Binomial · Poisson) y Distribución Normal · Lic. en Automatización y Control · Clases 8 y 9</p>
+<p class="subtitle">Binomial · Poisson · Normal · Distribución muestral · TCL · IC · Regresión — Lic. en Automatización y Control · Clases 8–11</p>
 
 <div class="card intuition">
 <h3 style="margin-top:0">👋 ¿Qué vas a aprender acá?</h3>
@@ -1224,108 +1231,502 @@ $$\Phi(-z) = 1 - \Phi(z)$$
 </details>
 
 <!-- ══════════════════════════════════════════════════
-     TEOREMA CENTRAL DEL LÍMITE — PREVIEW CLASE 10
+     CLASE 10: DISTRIBUCIÓN MUESTRAL Y TCL
 ══════════════════════════════════════════════════ -->
 
-<h2 id="tcl"><span class="badge tcl">Preview Clase 10</span>9. Teorema Central del Límite — Distribución muestral de X̄</h2>
+<h2 id="tcl"><span class="badge tcl">Clase 10</span> Distribución muestral de X̄ — Inferencia estadística</h2>
 
-<div class="card warn">
-<h4>⚡ Esto entra en el parcial — preparate con esto antes de la Clase 10</h4>
-<ul>
-  <li>La diferencia entre <strong>parámetro</strong> (de la población) y <strong>estadístico</strong> (de la muestra)</li>
-  <li>Las propiedades de la distribución muestral de $\bar{X}$</li>
-  <li>El TCL y su condición de aplicación (n ≥ 30)</li>
+<div class="compare-box">
+<div class="compare-cell left">
+<h4>📊 Parámetro (población)</h4>
+<p>Valor que describe a <strong>toda la población</strong>. Fijo pero <em>generalmente desconocido</em>.</p>
+<ul style="font-size:13.5px">
+  <li><strong>μ</strong> — media poblacional</li>
+  <li><strong>σ</strong> — desvío estándar poblacional</li>
+  <li><strong>p</strong> — proporción poblacional</li>
 </ul>
+<p style="font-size:12px;color:var(--muted)">No podemos medirlos directamente → los <em>estimamos</em> con estadísticos.</p>
+</div>
+<div class="compare-cell right">
+<h4>📐 Estadístico (muestra)</h4>
+<p>Valor calculado a partir de una <strong>muestra</strong>. Observable y varía de muestra en muestra.</p>
+<ul style="font-size:13.5px">
+  <li><strong>X̄</strong> — media muestral → estima μ</li>
+  <li><strong>S</strong> — desvío muestral → estima σ</li>
+  <li><strong>p̂</strong> — proporción muestral → estima p</li>
+</ul>
+<p style="font-size:12px;color:var(--muted)">La distribución de un estadístico se llama <em>distribución muestral</em>.</p>
+</div>
 </div>
 
 <div class="card intuition">
-<h4>🧠 Intuición</h4>
-<p>Tenés una población con μ y σ (pueden ser lo que sea: Poisson, Exponencial, lo que sea). Tomás una muestra de n elementos y calculás su media $\bar{X}$. Si hacés eso muchas veces, ¿qué distribución tiene $\bar{X}$?</p>
-<p>El <strong>Teorema Central del Límite (TCL)</strong> dice: sin importar cómo sea la población, la media muestral $\bar{X}$ se aproxima a una Normal para n suficientemente grande (n ≥ 30).</p>
+<h4>🧠 ¿Qué es la distribución muestral de X̄?</h4>
+<p>Imaginá que tomás 1000 muestras distintas de tamaño n de la misma población y calculás X̄ en cada una. Esas 1000 medias forman una distribución — esa es la <strong>distribución muestral de X̄</strong>.</p>
+<p>El <strong>Teorema Central del Límite (TCL)</strong> responde tres preguntas clave: ¿dónde se centra? ¿cuánto varía? ¿qué forma tiene? — sin importar cómo sea la distribución original de la población.</p>
 </div>
 
 <div class="card formula">
-<h4>Distribución muestral de X̄</h4>
-$$\boxed{\bar{X} \sim N\!\left(\mu,\; \frac{\sigma}{\sqrt{n}}\right)} \quad \text{para } n \ge 30$$
-<div class="grid2" style="margin-top:12px">
-<div>
-<p><strong>Media:</strong> $E[\bar{X}] = \mu$</p>
-<p><em>La media de la distribución muestral es igual a la media poblacional.</em></p>
-</div>
-<div>
-<p><strong>Error estándar:</strong> $\sigma_{\bar{X}} = \dfrac{\sigma}{\sqrt{n}}$</p>
-<p><em>A mayor tamaño de muestra, menor variabilidad de X̄.</em></p>
-</div>
-</div>
+<h4>Propiedades de la distribución muestral de X̄</h4>
+$$\boxed{E[\bar{X}] = \mu} \qquad \boxed{\sigma_{\bar{X}} = \frac{\sigma}{\sqrt{n}}} \qquad \boxed{\bar{X} \sim N\!\left(\mu,\; \frac{\sigma}{\sqrt{n}}\right) \text{ para } n \ge 30}$$
+<table style="margin-top:12px">
+<tr><th>Propiedad</th><th>Fórmula</th><th>Significado</th></tr>
+<tr><td>Media esperada de X̄</td><td>$E[\bar{X}] = \mu$</td><td>X̄ es estimador <em>insesgado</em> de μ</td></tr>
+<tr><td>Varianza de X̄</td><td>$\text{Var}(\bar{X}) = \sigma^2/n$</td><td>Decrece con n</td></tr>
+<tr><td>Error estándar</td><td>$\sigma_{\bar{X}} = \sigma/\sqrt{n}$</td><td>A mayor n → X̄ más precisa</td></tr>
+<tr><td>Estandarización</td><td>$Z = \dfrac{\bar{X}-\mu}{\sigma/\sqrt{n}}$</td><td>Para usar tabla Z normalmente</td></tr>
+</table>
 </div>
 
 <div class="card tip">
-<h4>💡 Para aplicar TCL a probabilidades</h4>
-<p>Estandarizás igual que con la Normal, pero usando el error estándar:</p>
-$$Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$$
-<p>Luego usás la tabla Z normalmente.</p>
+<h4>💡 Regla práctica del cuádruple</h4>
+<p>Para reducir el error estándar a la mitad, necesitás <strong>cuadruplicar</strong> el tamaño de muestra:</p>
+$$n \times 4 \quad\Rightarrow\quad \sigma_{\bar{X}} \div 2$$
+<p>Esto explica por qué las encuestas nacionales necesitan miles de personas: reducir el error estándar tiene un costo cuadrático.</p>
 </div>
 
-<h2 id="tcl-ej">📝 Ejercicios introductores — Antes de Clase 10</h2>
+<!-- ── TCL SIMULATOR ── -->
+<h2 id="tcl-sim">🎮 Simulador TCL — Efecto del tamaño de muestra</h2>
+
+<div class="card game">
+<p>Ajustá μ y σ de la población. El gráfico muestra cómo la distribución de X̄ se vuelve más <em>angosta y concentrada</em> alrededor de μ a medida que n crece.</p>
+<div class="controls">
+  <label>μ (media poblacional)<input type="number" id="tclMu" value="100" step="5"></label>
+  <label>σ (desvío poblacional)<input type="number" id="tclSigma" value="20" step="1" min="1"></label>
+  <button class="btn" onclick="plotTCL()">Actualizar</button>
+</div>
+<div id="tclPlot" class="plot" style="height:360px"></div>
+<div id="tclStats" class="stat-output" style="margin-top:10px"></div>
+<p style="font-size:12px;color:var(--muted);margin-top:8px">🔵 Gris = distribución de la población (n=1) &nbsp; La curva se estrecha con n creciente.</p>
+</div>
+
+<!-- ── EXERCISES CLASE 10 ── -->
+<h2 id="tcl-ej">📝 Ejercicios — Clase 10</h2>
+
+<h3>Actividad 2: Propiedades de la distribución muestral</h3>
 
 <div class="card enunciado">
-<h4>Ejercicio TCL 1 — Población μ=100, σ=15, n=36</h4>
-<p>a) ¿Cuál es la media de la distribución muestral de X̄? &nbsp; b) ¿Cuál es el error estándar σ_x̄? &nbsp; c) ¿Qué forma tiene según el TCL?</p>
+<h4>Ejercicio 2.1 — μ=120, σ=20, n=25</h4>
+<p>a) Calculá E[X̄] y σ_X̄ &nbsp;·&nbsp; b) P(115 ≤ X̄ ≤ 125) &nbsp;·&nbsp; c) Intervalo del 95% central de X̄</p>
 </div>
 <details class="reveal">
 <summary>Ver solución</summary>
 <div style="margin-top:12px">
 <div class="steps">
   <div class="step"><div class="step-n">a</div><div class="step-body">
-    $E[\bar{X}] = \mu = \mathbf{100}$ — la media muestral espera valer lo mismo que la población.
+    $$E[\bar{X}] = \mu = \mathbf{120} \qquad \sigma_{\bar{X}} = \frac{20}{\sqrt{25}} = \frac{20}{5} = \mathbf{4}$$
   </div></div>
   <div class="step"><div class="step-n">b</div><div class="step-body">
-    $$\sigma_{\bar{X}} = \frac{\sigma}{\sqrt{n}} = \frac{15}{\sqrt{36}} = \frac{15}{6} = \mathbf{2{,}5}$$
+    $$Z_1 = \frac{115-120}{4} = -1{,}25 \qquad Z_2 = \frac{125-120}{4} = 1{,}25$$
+    $$P(115 \le \bar{X} \le 125) = \Phi(1{,}25) - \Phi(-1{,}25) = 0{,}8944 - 0{,}1056 = \mathbf{0{,}7888}$$
+    <code>pnorm(125,120,4) - pnorm(115,120,4)</code>
   </div></div>
   <div class="step"><div class="step-n">c</div><div class="step-body">
-    $\bar{X} \sim N(100;\, 2{,}5)$ — n=36 ≥ 30, el TCL garantiza distribución Normal aproximada.
+    95% central → $z_{0{,}025} = -1{,}96 \quad z_{0{,}975} = 1{,}96$
+    $$[120 - 1{,}96 \times 4;\; 120 + 1{,}96 \times 4] = [\mathbf{112{,}16};\; \mathbf{127{,}84}]$$
+    <code>qnorm(0.025,120,4); qnorm(0.975,120,4)</code>
   </div></div>
 </div>
 </div>
 </details>
 
 <div class="card enunciado">
-<h4>Ejercicio TCL 2 — Población μ=50, σ=10, n=25</h4>
-<p>a) Calculá E[X̄] y Var(X̄). &nbsp; b) ¿Qué dice el TCL sobre la forma de la distribución?</p>
+<h4>Ejercicio 2.2 — μ=75, σ=15, n=36</h4>
+<p>a) E[X̄] y σ_X̄ &nbsp;·&nbsp; b) P(X̄ > 78) &nbsp;·&nbsp; c) P(X̄ &lt; 73)</p>
 </div>
 <details class="reveal">
 <summary>Ver solución</summary>
 <div style="margin-top:12px">
 <div class="steps">
   <div class="step"><div class="step-n">a</div><div class="step-body">
-    $$E[\bar{X}] = 50 \qquad \text{Var}(\bar{X}) = \frac{\sigma^2}{n} = \frac{100}{25} = \mathbf{4} \qquad \sigma_{\bar{X}} = 2$$
+    $$E[\bar{X}] = 75 \qquad \sigma_{\bar{X}} = \frac{15}{\sqrt{36}} = \frac{15}{6} = \mathbf{2{,}5}$$
   </div></div>
   <div class="step"><div class="step-n">b</div><div class="step-body">
-    <span class="hl-warn">n=25 &lt; 30:</span> el TCL no garantiza Normal, a menos que la población ya sea Normal. Si la distribución de origen es desconocida, conviene aumentar n.
+    $$Z = \frac{78-75}{2{,}5} = 1{,}2 \qquad P(\bar{X} > 78) = 1-\Phi(1{,}2) = 1-0{,}8849 = \mathbf{0{,}1151}$$
+    <code>1 - pnorm(78, 75, 2.5)</code>
+  </div></div>
+  <div class="step"><div class="step-n">c</div><div class="step-body">
+    $$Z = \frac{73-75}{2{,}5} = -0{,}8 \qquad P(\bar{X} < 73) = \Phi(-0{,}8) = 1-\Phi(0{,}8) = 1-0{,}7881 = \mathbf{0{,}2119}$$
+    <code>pnorm(73, 75, 2.5)</code>
+  </div></div>
+</div>
+</div>
+</details>
+
+<h3>Actividad 3: TCL — Cálculo de probabilidades</h3>
+
+<div class="card enunciado">
+<h4>Ejercicio 3.1 — μ=100, σ=15, n=49</h4>
+<p>a) Distribución aproximada de X̄ &nbsp;·&nbsp; b) P(X̄ > 103) &nbsp;·&nbsp; c) P(98 ≤ X̄ ≤ 102) &nbsp;·&nbsp; d) Valor superado por el 95% (percentil 5%)</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<div class="steps">
+  <div class="step"><div class="step-n">a</div><div class="step-body">
+    $\sigma_{\bar{X}} = 15/\sqrt{49} = 15/7 \approx 2{,}143$ → $\bar{X} \sim N(100;\, 2{,}143)$
+  </div></div>
+  <div class="step"><div class="step-n">b</div><div class="step-body">
+    $$Z = \frac{103-100}{2{,}143} \approx 1{,}4 \qquad P(\bar{X} > 103) = 1-\Phi(1{,}4) = \mathbf{0{,}0808}$$
+    <code>1 - pnorm(103, 100, 15/sqrt(49))</code>
+  </div></div>
+  <div class="step"><div class="step-n">c</div><div class="step-body">
+    $$Z_1=\frac{98-100}{2{,}143}=-0{,}933 \quad Z_2=\frac{102-100}{2{,}143}=0{,}933$$
+    $$P = \Phi(0{,}933)-\Phi(-0{,}933) = 2\Phi(0{,}933)-1 = \mathbf{0{,}6494}$$
+    <code>pnorm(102,100,15/sqrt(49)) - pnorm(98,100,15/sqrt(49))</code>
+  </div></div>
+  <div class="step"><div class="step-n">d</div><div class="step-body">
+    Percentil 5% → $z_{0{,}05} = -1{,}645$
+    $$x = 100 - 1{,}645 \times 2{,}143 = \mathbf{96{,}47}$$
+    <code>qnorm(0.05, 100, 15/sqrt(49))</code>
+    <p style="font-size:12px;color:var(--muted)">El 95% de las medias muestrales superará este valor.</p>
   </div></div>
 </div>
 </div>
 </details>
 
 <div class="card enunciado">
-<h4>Ejercicio TCL 3 — Distribución desconocida, μ=80, σ=12, n=49</h4>
-<p>a) ¿Qué distribución aproximada tiene X̄? &nbsp; b) Calculá P(X̄ &lt; 78).</p>
+<h4>Ejercicio 3.2 — μ=250, σ=40, n=64</h4>
+<p>a) Distribución de X̄ &nbsp;·&nbsp; b) P(X̄ &lt; 245) &nbsp;·&nbsp; c) P(245 ≤ X̄ ≤ 255) &nbsp;·&nbsp; d) Intervalo del 90% central</p>
 </div>
 <details class="reveal">
 <summary>Ver solución</summary>
 <div style="margin-top:12px">
 <div class="steps">
   <div class="step"><div class="step-n">a</div><div class="step-body">
-    n=49 ≥ 30 → TCL aplica: $\bar{X} \sim N(80;\; 12/\sqrt{49}) = N(80;\; 12/7) \approx N(80;\, 1{,}714)$
+    $\sigma_{\bar{X}} = 40/\sqrt{64} = 40/8 = 5$ → $\bar{X} \sim N(250;\, 5)$
   </div></div>
   <div class="step"><div class="step-n">b</div><div class="step-body">
-    $$Z = \frac{78 - 80}{12/\sqrt{49}} = \frac{-2}{1{,}714} = -1{,}167$$
-    $$P(\bar{X} < 78) = \Phi(-1{,}167) = 1 - \Phi(1{,}167) \approx 1 - 0{,}8784 = \mathbf{0{,}1216}$$
-    En R: <code>pnorm(78, 80, 12/sqrt(49))</code> = 0.1216
+    $$Z = \frac{245-250}{5} = -1 \qquad P(\bar{X} < 245) = \Phi(-1) = \mathbf{0{,}1587}$$
+    <code>pnorm(245, 250, 5)</code>
+  </div></div>
+  <div class="step"><div class="step-n">c</div><div class="step-body">
+    $$P(245 \le \bar{X} \le 255) = \Phi(1)-\Phi(-1) = 0{,}8413-0{,}1587 = \mathbf{0{,}6827}$$
+    <code>pnorm(255,250,5) - pnorm(245,250,5)</code>
+  </div></div>
+  <div class="step"><div class="step-n">d</div><div class="step-body">
+    90% central → $z_{0{,}05}=-1{,}645 \quad z_{0{,}95}=1{,}645$
+    $$[250-1{,}645\times5;\; 250+1{,}645\times5] = [\mathbf{241{,}78};\; \mathbf{258{,}22}]$$
+    <code>qnorm(0.05,250,5); qnorm(0.95,250,5)</code>
   </div></div>
 </div>
 </div>
 </details>
+
+<h3>Actividad 4: Problemas aplicados</h3>
+
+<div class="card enunciado">
+<h4>Ejercicio 4.1 — Control de calidad: bolsas de café μ=500 g, σ=8 g, n=64</h4>
+<p>a) P(X̄ &lt; 498) &nbsp;·&nbsp; b) P(499 ≤ X̄ ≤ 501) &nbsp;·&nbsp; c) Si X̄ observada = 497, ¿el proceso está desajustado?</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<div class="steps">
+  <div class="step"><div class="step-n">·</div><div class="step-body">
+    $\sigma_{\bar{X}} = 8/\sqrt{64} = 1$ → $\bar{X} \sim N(500;\, 1)$
+  </div></div>
+  <div class="step"><div class="step-n">a</div><div class="step-body">
+    $$Z = \frac{498-500}{1} = -2 \qquad P(\bar{X} < 498) = \Phi(-2) = \mathbf{0{,}0228 \approx 2{,}3\%}$$
+    <code>pnorm(498, 500, 1)</code>
+  </div></div>
+  <div class="step"><div class="step-n">b</div><div class="step-body">
+    $$Z = \pm1 \qquad P(499 \le \bar{X} \le 501) = \Phi(1)-\Phi(-1) = \mathbf{0{,}6827}$$
+    <code>pnorm(501,500,1) - pnorm(499,500,1)</code>
+  </div></div>
+  <div class="step"><div class="step-n">c</div><div class="step-body">
+    $$Z = \frac{497-500}{1} = -3 \qquad P(\bar{X} \le 497) = \Phi(-3) = \mathbf{0{,}0013}$$
+    <span class="hl-bad">Probabilidad de 0,13% — extremadamente improbable si el proceso funciona bien. Señal fuerte de desajuste.</span>
+    <code>pnorm(497, 500, 1)</code>
+  </div></div>
+</div>
+</div>
+</details>
+
+<div class="card enunciado">
+<h4>Ejercicio 4.2 — Sensor industrial: μ=100°C, σ=3°C, n=36</h4>
+<p>a) P(X̄ > 101) &nbsp;·&nbsp; b) P(99,5 ≤ X̄ ≤ 100,5) &nbsp;·&nbsp; c) Temperatura superada por el 95% de las medias (percentil 5%)</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<div class="steps">
+  <div class="step"><div class="step-n">·</div><div class="step-body">
+    $\sigma_{\bar{X}} = 3/\sqrt{36} = 0{,}5$ → $\bar{X} \sim N(100;\, 0{,}5)$
+  </div></div>
+  <div class="step"><div class="step-n">a</div><div class="step-body">
+    $$Z = \frac{101-100}{0{,}5} = 2 \qquad P(\bar{X} > 101) = 1-\Phi(2) = \mathbf{0{,}0228}$$
+    <code>1 - pnorm(101, 100, 0.5)</code>
+  </div></div>
+  <div class="step"><div class="step-n">b</div><div class="step-body">
+    $$Z_1=\frac{99{,}5-100}{0{,}5}=-1 \quad Z_2=\frac{100{,}5-100}{0{,}5}=1$$
+    $$P(99{,}5 \le \bar{X} \le 100{,}5) = \Phi(1)-\Phi(-1) = \mathbf{0{,}6827}$$
+    <code>pnorm(100.5,100,0.5) - pnorm(99.5,100,0.5)</code>
+  </div></div>
+  <div class="step"><div class="step-n">c</div><div class="step-body">
+    $z_{0{,}05} = -1{,}645$ → $x = 100 - 1{,}645 \times 0{,}5 = \mathbf{99{,}18°C}$
+    <code>qnorm(0.05, 100, 0.5)</code>
+    <p style="font-size:12px;color:var(--muted)">El 95% de las muestras tendrá media superior a 99,18°C.</p>
+  </div></div>
+</div>
+</div>
+</details>
+
+<h3>Actividad 5: Comparación de tamaños de muestra</h3>
+
+<div class="card enunciado">
+<h4>Ejercicio 5.1 — μ=50, σ=10: comparar n=25 vs n=100</h4>
+<p>Calculá P(48 ≤ X̄ ≤ 52) para ambos tamaños. ¿Qué conclusión sacás?</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<div class="compare-box">
+<div class="compare-cell left">
+<h4>n = 25: σ_X̄ = 10/5 = <span class="hl-warn">2</span></h4>
+$$Z = \pm\frac{2}{2} = \pm1$$
+$$P = \Phi(1)-\Phi(-1) = \mathbf{0{,}6827}$$
+<code style="font-size:11px">pnorm(52,50,2)-pnorm(48,50,2)</code>
+</div>
+<div class="compare-cell right">
+<h4>n = 100: σ_X̄ = 10/10 = <span class="hl-good">1</span></h4>
+$$Z = \pm\frac{2}{1} = \pm2$$
+$$P = \Phi(2)-\Phi(-2) = \mathbf{0{,}9545}$$
+<code style="font-size:11px">pnorm(52,50,1)-pnorm(48,50,1)</code>
+</div>
+</div>
+<p class="hl-accent" style="margin-top:8px">Al cuadruplicar n (25→100), el error estándar se reduce a la mitad y la probabilidad de estar cerca de μ sube de 68% a 95%.</p>
+</div>
+</details>
+
+<div class="card enunciado">
+<h4>Ejercicio 5.2 — μ=200, σ=30: comparar n=36 vs n=144</h4>
+<p>Calculá el error estándar y P(195 ≤ X̄ ≤ 205) para cada tamaño de muestra.</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<div class="compare-box">
+<div class="compare-cell left">
+<h4>n = 36: σ_X̄ = 30/6 = <span class="hl-warn">5</span></h4>
+$$Z = \pm\frac{5}{5} = \pm1$$
+$$P = \mathbf{0{,}6827}$$
+<code style="font-size:11px">pnorm(205,200,5)-pnorm(195,200,5)</code>
+</div>
+<div class="compare-cell right">
+<h4>n = 144: σ_X̄ = 30/12 = <span class="hl-good">2,5</span></h4>
+$$Z = \pm\frac{5}{2{,}5} = \pm2$$
+$$P = \mathbf{0{,}9545}$$
+<code style="font-size:11px">pnorm(205,200,2.5)-pnorm(195,200,2.5)</code>
+</div>
+</div>
+<p style="font-size:13px;color:var(--muted);margin-top:8px">Al cuadruplicar n (36→144), σ_X̄ se reduce a la mitad y la precisión mejora notablemente.</p>
+</div>
+</details>
+
+<!-- ── PRÁCTICA N°10 ── -->
+<h2 id="practica10">📋 Práctica N°10 — Introducción a la Inferencia</h2>
+
+<div class="card enunciado">
+<h4>Práctica 10 · Ej. 1 — μ=150, σ=25, n=100</h4>
+<p>a) E[X̄] y σ_X̄ &nbsp;·&nbsp; b) P(X̄ > 153) &nbsp;·&nbsp; c) P(146 ≤ X̄ ≤ 154) &nbsp;·&nbsp; d) Percentil 90 de X̄</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<div class="steps">
+  <div class="step"><div class="step-n">a</div><div class="step-body">
+    $$E[\bar{X}] = 150 \qquad \sigma_{\bar{X}} = \frac{25}{\sqrt{100}} = \frac{25}{10} = \mathbf{2{,}5}$$
+  </div></div>
+  <div class="step"><div class="step-n">b</div><div class="step-body">
+    $$Z = \frac{153-150}{2{,}5} = 1{,}2 \qquad P(\bar{X}>153) = 1-\Phi(1{,}2) = 1-0{,}8849 = \mathbf{0{,}1151}$$
+    <code>1 - pnorm(153, 150, 2.5)</code>
+  </div></div>
+  <div class="step"><div class="step-n">c</div><div class="step-body">
+    $$Z_1=\frac{146-150}{2{,}5}=-1{,}6 \quad Z_2=\frac{154-150}{2{,}5}=1{,}6$$
+    $$P = \Phi(1{,}6)-\Phi(-1{,}6) = 0{,}9452-0{,}0548 = \mathbf{0{,}8904}$$
+    <code>pnorm(154,150,2.5) - pnorm(146,150,2.5)</code>
+  </div></div>
+  <div class="step"><div class="step-n">d</div><div class="step-body">
+    $z_{0{,}90} = 1{,}282$ → $x = 150 + 1{,}282 \times 2{,}5 = \mathbf{153{,}21}$
+    <code>qnorm(0.90, 150, 2.5)</code>
+  </div></div>
+</div>
+</div>
+</details>
+
+<div class="card enunciado">
+<h4>Práctica 10 · Ej. 2 — μ=300, σ=40, n=64</h4>
+<p>a) Distribución de X̄ &nbsp;·&nbsp; b) P(X̄ &lt; 295) &nbsp;·&nbsp; c) P(292 ≤ X̄ ≤ 308) &nbsp;·&nbsp; d) Intervalo del 95% central de X̄</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<div class="steps">
+  <div class="step"><div class="step-n">a</div><div class="step-body">
+    $\sigma_{\bar{X}} = 40/\sqrt{64} = 5$ → $\bar{X} \sim N(300;\, 5)$
+  </div></div>
+  <div class="step"><div class="step-n">b</div><div class="step-body">
+    $$Z = \frac{295-300}{5} = -1 \qquad P(\bar{X}<295) = \Phi(-1) = \mathbf{0{,}1587}$$
+    <code>pnorm(295, 300, 5)</code>
+  </div></div>
+  <div class="step"><div class="step-n">c</div><div class="step-body">
+    $$Z_1=\frac{292-300}{5}=-1{,}6 \quad Z_2=\frac{308-300}{5}=1{,}6$$
+    $$P = \Phi(1{,}6)-\Phi(-1{,}6) = \mathbf{0{,}8904}$$
+    <code>pnorm(308,300,5) - pnorm(292,300,5)</code>
+  </div></div>
+  <div class="step"><div class="step-n">d</div><div class="step-body">
+    $[300-1{,}96\times5;\; 300+1{,}96\times5] = [\mathbf{290{,}2;\; 309{,}8}]$
+    <code>qnorm(0.025,300,5); qnorm(0.975,300,5)</code>
+  </div></div>
+</div>
+</div>
+</details>
+
+<div class="card enunciado">
+<h4>Práctica 10 · Ej. 3 — μ=80, σ=12, n=49</h4>
+<p>a) Distribución de X̄ &nbsp;·&nbsp; b) P(X̄ > 83) &nbsp;·&nbsp; c) P(X̄ &lt; 78) &nbsp;·&nbsp; d) ¿Cuánto cambia σ_X̄ si duplicamos n?</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<div class="steps">
+  <div class="step"><div class="step-n">a</div><div class="step-body">
+    $\sigma_{\bar{X}} = 12/\sqrt{49} = 12/7 \approx 1{,}714$ → $\bar{X} \sim N(80;\, 1{,}714)$
+  </div></div>
+  <div class="step"><div class="step-n">b</div><div class="step-body">
+    $$Z = \frac{83-80}{1{,}714} \approx 1{,}75 \qquad P(\bar{X}>83) = 1-\Phi(1{,}75) = \mathbf{0{,}0401}$$
+    <code>1 - pnorm(83, 80, 12/sqrt(49))</code>
+  </div></div>
+  <div class="step"><div class="step-n">c</div><div class="step-body">
+    $$Z = \frac{78-80}{1{,}714} \approx -1{,}167 \qquad P(\bar{X}<78) = \Phi(-1{,}167) = \mathbf{0{,}1216}$$
+    <code>pnorm(78, 80, 12/sqrt(49))</code>
+  </div></div>
+  <div class="step"><div class="step-n">d</div><div class="step-body">
+    Si $n: 49 \to 98$: $\sigma_{\bar{X}} = 12/\sqrt{98} \approx 1{,}212$. Se reduce por factor $\sqrt{2} \approx 1{,}41$.
+  </div></div>
+</div>
+</div>
+</details>
+
+<div class="card enunciado">
+<h4>Práctica 10 · Ej. 4 — Proceso de llenado: μ=250 ml, σ=5 ml, n=36</h4>
+<p>a) E[X̄] y σ_X̄ &nbsp;·&nbsp; b) P(X̄ > 252) &nbsp;·&nbsp; c) P(248 ≤ X̄ ≤ 252) &nbsp;·&nbsp; d) Volumen superado por el 90% de las medias muestrales</p>
+</div>
+<details class="reveal">
+<summary>Ver solución</summary>
+<div style="margin-top:12px">
+<div class="steps">
+  <div class="step"><div class="step-n">a</div><div class="step-body">
+    $$E[\bar{X}] = 250 \qquad \sigma_{\bar{X}} = \frac{5}{\sqrt{36}} = \frac{5}{6} \approx \mathbf{0{,}833}$$
+  </div></div>
+  <div class="step"><div class="step-n">b</div><div class="step-body">
+    $$Z = \frac{252-250}{0{,}833} \approx 2{,}4 \qquad P(\bar{X}>252) = 1-\Phi(2{,}4) = \mathbf{0{,}0082}$$
+    <code>1 - pnorm(252, 250, 5/sqrt(36))</code>
+  </div></div>
+  <div class="step"><div class="step-n">c</div><div class="step-body">
+    $$Z = \pm2{,}4 \qquad P(248\le\bar{X}\le252) = \Phi(2{,}4)-\Phi(-2{,}4) = \mathbf{0{,}9836}$$
+    <code>pnorm(252,250,5/sqrt(36)) - pnorm(248,250,5/sqrt(36))</code>
+  </div></div>
+  <div class="step"><div class="step-n">d</div><div class="step-body">
+    Percentil 10% (el 90% supera este valor): $z_{0{,}10} = -1{,}282$
+    $$x = 250 - 1{,}282 \times 0{,}833 = \mathbf{248{,}93 \text{ ml}}$$
+    <code>qnorm(0.10, 250, 5/sqrt(36))</code>
+  </div></div>
+</div>
+</div>
+</details>
+
+<!-- ══════════════════════════════════════════════════
+     CLASE 11 — PREVIEW: INTERVALOS DE CONFIANZA
+══════════════════════════════════════════════════ -->
+<h2 id="ic"><span class="badge ic">Preview Clase 11</span> Intervalos de Confianza</h2>
+
+<div class="card warn">
+<h4>⚡ Próximo tema — preparate con esto</h4>
+<p>Los intervalos de confianza son la aplicación directa del TCL: si X̄ se distribuye Normal, podemos construir un rango que "capture" a μ con una probabilidad dada.</p>
+</div>
+
+<div class="card intuition">
+<h4>🧠 ¿Qué es un intervalo de confianza?</h4>
+<p>En vez de estimar "μ = 100 exactamente", el IC dice: <em>"con un 95% de confianza, μ está entre 97 y 103"</em>. Combina la estimación puntual con una medida de incertidumbre.</p>
+<p><strong>Interpretación correcta:</strong> si tomáramos 100 muestras y construyéramos 100 intervalos, <span class="hl-good">95 de ellos contendrían a μ</span>. No es que μ tenga probabilidad 0,95 de estar ahí (μ es un número fijo), sino que el <em>procedimiento</em> captura μ el 95% de las veces.</p>
+</div>
+
+<div class="card formula">
+<h4>IC para μ con σ conocida</h4>
+$$\boxed{IC_{1-\alpha} = \bar{x} \pm z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}}$$
+<table style="margin-top:12px">
+<tr><th>Confianza (1−α)</th><th>α</th><th>$z_{\alpha/2}$</th><th>Uso</th></tr>
+<tr><td>90%</td><td>0,10</td><td>1,645</td><td>Menos preciso, intervalo angosto</td></tr>
+<tr><td>95%</td><td>0,05</td><td>1,960</td><td>El más usado en práctica</td></tr>
+<tr><td>99%</td><td>0,01</td><td>2,576</td><td>Muy seguro, intervalo ancho</td></tr>
+</table>
+<p style="font-size:12px;color:var(--muted);margin-top:8px">Cuando σ es <strong>desconocida</strong>: reemplazás z por $t_{n-1}$ y σ por S (desvío muestral). Esto se ve en Clase 11.</p>
+</div>
+
+<div class="card tip">
+<h4>💡 El margen de error y cómo controlarlo</h4>
+$$E = z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}} \qquad \Rightarrow \qquad n = \left\lceil\left(\frac{z_{\alpha/2} \cdot \sigma}{E}\right)^2\right\rceil$$
+<ul>
+  <li>Mayor confianza → z mayor → intervalo más <em>ancho</em></li>
+  <li>Mayor n → √n mayor → intervalo más <em>angosto</em></li>
+  <li>Mayor σ → intervalo más <em>ancho</em></li>
+  <li>Si querés reducir E a la mitad: necesitás multiplicar n por 4</li>
+</ul>
+</div>
+
+<h2 id="regresion"><span class="badge ic">Preview Clase 11</span> Regresión Lineal Simple</h2>
+
+<div class="card intuition">
+<h4>🧠 Idea central</h4>
+<p>La regresión lineal sirve para cuantificar la <strong>relación lineal entre dos variables</strong> (X e Y) y hacer predicciones. Se ajusta la recta que minimiza la suma de errores al cuadrado (mínimos cuadrados).</p>
+<p>Ejemplo industrial: ¿cómo predice la presión de inyección (X) la resistencia del producto (Y)?</p>
+</div>
+
+<div class="card formula">
+<h4>Modelo de regresión lineal simple</h4>
+$$\boxed{Y = a + bX + \varepsilon} \qquad \varepsilon \sim N(0,\, \sigma)$$
+<div class="grid2" style="margin-top:10px">
+<div>
+<p><strong>Pendiente b:</strong></p>
+$$b = \frac{\sum(X_i-\bar{X})(Y_i-\bar{Y})}{\sum(X_i-\bar{X})^2} = \frac{S_{xy}}{S_{xx}}$$
+</div>
+<div>
+<p><strong>Ordenada al origen a:</strong></p>
+$$a = \bar{Y} - b\bar{X}$$
+<p><em>La recta siempre pasa por $(\bar{X},\, \bar{Y})$.</em></p>
+</div>
+</div>
+</div>
+
+<div class="card formula">
+<h4>Coeficiente de determinación R²</h4>
+$$R^2 = \frac{SS_{\text{Reg}}}{SS_T} = 1 - \frac{SS_E}{SS_T} \qquad R^2 \in [0,\, 1]$$
+<p>$R^2 = 0{,}85$: X <em>explica</em> el 85% de la variabilidad de Y. El 15% restante es error o variables omitidas.</p>
+<p>Nota: $R^2 = r^2$ donde $r$ es el coeficiente de correlación de Pearson. Un $R^2$ alto no implica causalidad.</p>
+</div>
+
+<div class="card r">
+<h4>Regresión lineal en R</h4>
+<pre><span style="color:#a78bfa"># Ajustar modelo de regresión lineal simple</span>
+modelo &lt;- lm(Y ~ X, data = datos)
+
+<span style="color:#94a3b8"># Resumen completo: coeficientes, R², p-values</span>
+summary(modelo)
+
+<span style="color:#94a3b8"># Extraer a (intercepto) y b (pendiente)</span>
+coef(modelo)        <span style="color:#94a3b8"># a = Intercept, b = X</span>
+
+<span style="color:#94a3b8"># R² del modelo</span>
+summary(modelo)$r.squared
+
+<span style="color:#94a3b8"># Predecir Y para un nuevo X</span>
+predict(modelo, newdata = data.frame(X = 50))
+
+<span style="color:#94a3b8"># Gráfico con línea de regresión</span>
+plot(datos$X, datos$Y, main = "Regresión lineal", xlab = "X", ylab = "Y")
+abline(modelo, col = "red", lwd = 2)</pre>
+</div>
 
 <!-- ── R CODE ── -->
 <h2 id="r-code">🔵 Código R — Referencia rápida</h2>
@@ -1429,11 +1830,61 @@ z &lt;- (78 - mu) / se
 pnorm(z)                <span style="color:#94a3b8"># mismo resultado</span></pre>
 </div>
 
+<div class="card r">
+<h4>Ejercicios Clase 10 — Cálculos completos</h4>
+<pre><span style="color:#a78bfa"># Ejercicio 3.1: μ=100, σ=15, n=49</span>
+mu &lt;- 100; sigma &lt;- 15; n &lt;- 49
+se &lt;- sigma / sqrt(n)   <span style="color:#94a3b8"># ≈ 2.143</span>
+
+cat("a) Xbar ~ N(", mu, ",", round(se,3), ")\n")
+cat("b) P(Xbar > 103):", 1 - pnorm(103, mu, se), "\n")
+cat("c) P(98 ≤ Xbar ≤ 102):", pnorm(102,mu,se) - pnorm(98,mu,se), "\n")
+cat("d) Percentil 5%:", qnorm(0.05, mu, se), "\n\n")
+
+<span style="color:#a78bfa"># Ejercicio 4.1: bolsas de café</span>
+mu &lt;- 500; sigma &lt;- 8; n &lt;- 64
+se &lt;- sigma / sqrt(n)   <span style="color:#94a3b8"># = 1</span>
+
+cat("P(Xbar < 498):", pnorm(498, mu, se), "\n")
+cat("P(499 ≤ Xbar ≤ 501):", pnorm(501,mu,se) - pnorm(499,mu,se), "\n")
+cat("P(Xbar ≤ 497):", pnorm(497, mu, se), "← señal de alarma\n\n")
+
+<span style="color:#a78bfa"># Ejercicio 5.1: comparar n=25 vs n=100</span>
+mu &lt;- 50; sigma &lt;- 10
+for (n in c(25, 100)) {
+  se &lt;- sigma / sqrt(n)
+  p &lt;- pnorm(52, mu, se) - pnorm(48, mu, se)
+  cat("n =", n, "| se =", round(se,3), "| P(48≤Xbar≤52) =", round(p,4), "\n")
+}</pre>
+</div>
+
+<div class="card r">
+<h4>Intervalo de confianza para μ (σ conocida)</h4>
+<pre><span style="color:#a78bfa"># IC al 95% para μ — σ conocida</span>
+x_barra &lt;- 103.5  <span style="color:#94a3b8"># media muestral observada</span>
+sigma   &lt;- 15
+n       &lt;- 36
+alpha   &lt;- 0.05
+
+z_alpha2 &lt;- qnorm(1 - alpha/2)   <span style="color:#94a3b8"># = 1.96</span>
+margen   &lt;- z_alpha2 * sigma / sqrt(n)
+
+IC_inf &lt;- x_barra - margen
+IC_sup &lt;- x_barra + margen
+cat("IC 95%: [", round(IC_inf, 3), ",", round(IC_sup, 3), "]\n")
+cat("Margen de error:", round(margen, 3), "\n\n")
+
+<span style="color:#94a3b8"># Tamaño de muestra para margen E dado</span>
+E &lt;- 2          <span style="color:#94a3b8"># margen máximo deseado</span>
+n_min &lt;- ceiling((z_alpha2 * sigma / E)^2)
+cat("n mínimo para E ≤", E, ":", n_min, "\n")</pre>
+</div>
+
 <!-- ── QUIZ ── -->
 <h2 id="quiz">🎓 Quiz final — Parcial 2</h2>
 
 <div class="card game">
-<p>19 preguntas de opción múltiple (Binomial, Poisson y Normal). Respondé cada una y recibís feedback inmediato.</p>
+<p>25 preguntas de opción múltiple (Binomial, Poisson, Normal, TCL e Intervalos de Confianza). Respondé cada una y recibís feedback inmediato.</p>
 <button class="btn" onclick="startQuiz()">Empezar quiz</button>
 <button class="btn-2" onclick="resetQuiz()" style="margin-left:8px">Reiniciar</button>
 <div id="quizContainer" style="margin-top:18px"></div>
@@ -1498,9 +1949,25 @@ pnorm(z)                <span style="color:#94a3b8"># mismo resultado</span></pr
 <p>El error estándar es $\sigma_{\bar{X}} = \sigma/\sqrt{n}$. La varianza muestral es $\sigma^2/n$. En <code>pnorm</code> siempre usás el <strong>error estándar</strong> (desvío), no la varianza.</p>
 </div>
 
+<div class="card warn">
+<h4>12. Usar σ en vez de σ/√n al aplicar TCL</h4>
+<p>Si el problema pide probabilidades sobre X̄ (la media de n observaciones), el desvío que usás en pnorm es el <strong>error estándar</strong> σ/√n, no σ. Usar σ directamente da probabilidades para una sola observación X, no para X̄.</p>
+<p>En R: <code>pnorm(78, 80, 12)</code> ← incorrecto para X̄. Correcto: <code>pnorm(78, 80, 12/sqrt(49))</code></p>
+</div>
+
+<div class="card warn">
+<h4>13. Interpretar mal el IC: "μ tiene 95% de probabilidad de estar adentro"</h4>
+<p>μ es un número fijo — no tiene probabilidades de estar "adentro o afuera". El 95% se refiere al <strong>procedimiento</strong>: si repitiéramos el muestreo muchas veces, el 95% de los intervalos construidos de esa manera capturarían a μ. Una vez construido el intervalo específico [a, b], μ o está o no está — no hay probabilidad.</p>
+</div>
+
+<div class="card warn">
+<h4>14. No verificar la condición del TCL (n ≥ 30)</h4>
+<p>Para n &lt; 30 y población no Normal, el TCL no garantiza distribución Normal de X̄. En ese caso debería usarse la distribución t con n−1 grados de libertad. Aplicar el TCL ciegamente con muestras chicas introduce error en los cálculos de probabilidad.</p>
+</div>
+
 <div class="footer">
   Estadística · Parcial 2 — Lic. en Automatización y Control · UNI Pilar<br>
-  Clases 8 y 9: Modelos Discretos (Binomial · Poisson) y Distribución Normal · Preview Clase 10: TCL<br>
+  Clases 8 y 9: Binomial · Poisson · Normal &nbsp;|&nbsp; Clase 10: Distribución muestral y TCL &nbsp;|&nbsp; Preview Clase 11: IC y Regresión<br>
   Basado en Montgomery &amp; Runger y Walpole et al.
 </div>
 
@@ -1786,6 +2253,31 @@ const quizQs = [
   {q:'El TCL garantiza que X̄ se distribuye Normal aproximadamente cuando:',
    ops:['La población es Normal','n ≥ 30','p sea pequeño','σ sea conocido'],
    correct:1, exp:'El TCL aplica para n ≥ 30, sin importar la distribución de la población. Si la población ya es Normal, aplica para cualquier n.'},
+
+  // ── Preguntas TCL y distribución muestral ──
+  {q:'Población con μ=200 y σ=30. Si tomamos muestras de n=100, ¿cuál es el error estándar de X̄?',
+   ops:['30','3','0,3','300'],
+   correct:1, exp:'σ_X̄ = σ/√n = 30/√100 = 30/10 = 3. A mayor n, menor error estándar.'},
+
+  {q:'¿Cuál es la diferencia entre parámetro y estadístico?',
+   ops:['Son sinónimos','El parámetro describe la muestra, el estadístico la población','El parámetro describe la población (fijo), el estadístico describe la muestra (varía)','El parámetro se calcula, el estadístico se supone'],
+   correct:2, exp:'Parámetro (μ, σ) es fijo y describe la población — generalmente desconocido. Estadístico (X̄, S) se calcula en cada muestra y estima al parámetro.'},
+
+  {q:'Si cuadruplicás el tamaño de muestra (de n a 4n), el error estándar:',
+   ops:['Se cuadruplica','Se reduce a la mitad','Se divide entre 4','No cambia'],
+   correct:1, exp:'σ_X̄ = σ/√n. Si n se multiplica por 4: σ/√(4n) = σ/(2√n) = (σ/√n)/2. El error se reduce a la mitad.'},
+
+  {q:'Población μ=80, σ=12, n=36. ¿Cuánto vale E[X̄]?',
+   ops:['12','80','2','80/12'],
+   correct:1, exp:'E[X̄] = μ = 80 siempre, independientemente de n. El error estándar (σ/√n = 2) mide la dispersión de X̄, no su centro.'},
+
+  {q:'En un IC al 95%, ¿qué significa "95% de confianza"?',
+   ops:['P(μ ∈ IC) = 0,95 — μ está en el intervalo con probabilidad 0,95','Si repetimos el procedimiento 100 veces, 95 intervalos capturan a μ','El intervalo tiene longitud igual al 95% de σ','Necesitamos n ≥ 95'],
+   correct:1, exp:'μ es fijo, no aleatorio. Lo que varía es X̄ y por lo tanto el intervalo. El 95% se refiere al porcentaje de intervalos (de infinitas muestras posibles) que contendrían a μ.'},
+
+  {q:'Para construir un IC al 99% en lugar de uno al 95% (mismos n y σ):',
+   ops:['El intervalo se achica','El intervalo se agranda','El intervalo queda igual','Se necesita cambiar n'],
+   correct:1, exp:'Mayor confianza → z_{α/2} mayor (2,576 > 1,96) → margen de error mayor → intervalo más ancho. Hay un trade-off entre confianza y precisión.'},
 ];
 
 let quizIdx=0, quizScore=0;
@@ -2097,6 +2589,64 @@ function plotDual(){
   Plotly.newPlot('dualPlotZ', buildNormalTraces(0,1,z,'#fbbf24',type), layoutZ,{responsive:true,displayModeBar:false});
 }
 
+/* ══════════════════════════════════════
+   SIMULADOR TCL
+══════════════════════════════════════ */
+
+function plotTCL(){
+  const mu    = +document.getElementById('tclMu').value    || 100;
+  const sigma = +document.getElementById('tclSigma').value || 20;
+  if(sigma <= 0) return;
+
+  const ns     = [1, 5, 25, 100];
+  const colors = ['#475569','#f87171','#fbbf24','#34d399'];
+  const names  = [
+    `Población (σ=${sigma})`,
+    `n = 5  (σ_x̄=${( sigma/Math.sqrt(5) ).toFixed(2)})`,
+    `n = 25  (σ_x̄=${( sigma/Math.sqrt(25)).toFixed(2)})`,
+    `n = 100 (σ_x̄=${( sigma/Math.sqrt(100)).toFixed(2)})`
+  ];
+
+  // Range: based on population width
+  const xmin = mu - 4*sigma;
+  const xmax = mu + 4*sigma;
+  const npts = 500;
+
+  const traces = ns.map((n, i) => {
+    const se = sigma / Math.sqrt(n);
+    const xs = [], ys = [];
+    for(let j = 0; j <= npts; j++){
+      const x = xmin + (xmax - xmin)*j/npts;
+      xs.push(x);
+      ys.push(dnormJS(x, mu, se));
+    }
+    return {
+      x: xs, y: ys, type:'scatter', mode:'lines',
+      line:{color:colors[i], width: n===1 ? 2 : 2.5, dash: n===1 ? 'dash' : 'solid'},
+      name: names[i]
+    };
+  });
+
+  document.getElementById('tclStats').innerHTML = ns.map((n, i) => {
+    const se = (sigma/Math.sqrt(n)).toFixed(3);
+    return `<div class="stat-box">
+      <div class="label">${n===1?'Población':('n = '+n)}</div>
+      <div class="value" style="color:${colors[i]}">${se}</div>
+      <div style="font-size:10px;color:var(--muted)">σ_x̄</div>
+    </div>`;
+  }).join('');
+
+  Plotly.newPlot('tclPlot', traces, {
+    ...layoutBase,
+    title:{text:`Distribución de X̄ — μ=${mu}, σ=${sigma}`, font:{color:'#e2e8f0',size:13}},
+    xaxis:{...layoutBase.xaxis, title:'x̄', range:[xmin, xmax]},
+    yaxis:{...layoutBase.yaxis, title:'Densidad'},
+    showlegend:true,
+    legend:{orientation:'h', y:1.14, x:0, font:{size:11}},
+    margin:{t:50, r:20, b:50, l:55}
+  }, {responsive:true, displayModeBar:false});
+}
+
 /* ── Lookup Tabla Z ── */
 function lookupZ(){
   const z    = +document.getElementById('ztZ').value;
@@ -2148,6 +2698,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   plotConvergencia();
   plotNormal();
   plotDual();
+  plotTCL();
   lookupZ();
 });
 </script>

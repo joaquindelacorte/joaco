@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Robótica I — Resumen Parcial</title>
+<style>
+:root{
+  --pur:#6d28d9;--pur-lt:#8b5cf6;--pur-bg:#ede9fe;
+  --blue:#1d4ed8;--blue-bg:#dbeafe;
+  --green:#15803d;--green-bg:#dcfce7;
+  --orange:#c2410c;--orange-bg:#fff3e0;
+  --red:#b91c1c;--red-bg:#fee2e2;
+  --teal:#0d9488;--teal-bg:#ccfbf1;
+  --yellow:#d97706;--yellow-bg:#fef9c3;
+  --gray:#374151;--gray-lt:#6b7280;
+  --bg:#f5f3ff;--card:#fff;--border:#e2e8f0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:var(--pur);display:flex;align-items:center;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.brand{color:#fff;font-size:1.05rem;font-weight:800;padding:.8rem 1.2rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.2)}
+.tabs{display:flex;overflow-x:auto;flex:1}
+.tab-btn{padding:.75rem 1.05rem;border:none;background:transparent;color:rgba(255,255,255,.75);font-size:.83rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tab-btn.active{color:#fff;border-bottom-color:#c4b5fd}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#4c1d95 0%,var(--pur-lt) 100%);color:#fff;text-align:center;padding:2.5rem 1rem 2rem}
+.hero h1{font-size:2.2rem;font-weight:900;letter-spacing:-.5px}
+.hero p{opacity:.85;margin-top:.4rem}
+.badges{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.25rem .85rem;font-size:.78rem;font-weight:700}
+
+/* LAYOUT */
+.page{display:none}.page.active{display:block}
+.container{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+
+/* SECTION TITLE */
+.stitle{display:flex;align-items:center;gap:.6rem;font-size:1.25rem;font-weight:800;color:var(--pur);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid var(--pur-bg)}
+.stitle:first-of-type{margin-top:.5rem}
+.stitle .ico{font-size:1.2rem}
+.semana-chip{display:inline-block;background:var(--pur);color:#fff;font-size:.7rem;font-weight:700;padding:.2rem .65rem;border-radius:2rem;margin-left:.6rem;vertical-align:middle}
+
+/* CARDS */
+.grid{display:grid;gap:1.1rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;box-shadow:0 1px 4px rgba(0,0,0,.05);transition:.2s}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.card h3{font-size:.97rem;font-weight:700;margin-bottom:.5rem;color:var(--pur)}
+.card p,.card li{font-size:.9rem;color:var(--gray)}
+.card.pu{border-left:4px solid var(--pur);background:var(--pur-bg)}
+.card.bl{border-left:4px solid var(--blue);background:var(--blue-bg)}
+.card.gr{border-left:4px solid var(--green);background:var(--green-bg)}
+.card.or{border-left:4px solid var(--orange);background:var(--orange-bg)}
+.card.re{border-left:4px solid var(--red);background:var(--red-bg)}
+.card.te{border-left:4px solid var(--teal);background:var(--teal-bg)}
+
+/* FORMULA */
+.fbox{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1rem 1.3rem;font-family:'Courier New',monospace;text-align:center;margin:.7rem 0;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.fbox .big{font-size:1.35rem;font-weight:700;color:#c4b5fd;display:block;margin-bottom:.25rem}
+.fbox .sub{font-size:.82rem;color:#94a3b8;display:block;margin-top:.2rem}
+.fbox .unit{font-size:.78rem;color:#64748b;display:block;margin-top:.3rem}
+
+/* CODE */
+.code{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1rem 1.2rem;font-family:'Courier New',monospace;font-size:.85rem;line-height:1.55;overflow-x:auto;margin:.7rem 0;box-shadow:0 2px 8px rgba(0,0,0,.2);text-align:left}
+.code .kw{color:#c4b5fd;font-weight:700}
+.code .fn{color:#7dd3fc}
+.code .num{color:#fbbf24}
+.code .str{color:#86efac}
+.code .cm{color:#64748b;font-style:italic}
+
+/* TABLE */
+.twrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th{background:var(--pur);color:#fff;padding:.65rem 1rem;text-align:left;font-weight:600}
+td{padding:.6rem 1rem;border-bottom:1px solid var(--border)}
+tr:last-child td{border:none}
+tr:nth-child(even) td{background:var(--pur-bg)}
+
+/* TIP */
+.tip{display:flex;gap:.7rem;align-items:flex-start;background:#fffbeb;border:1px solid #fbbf24;border-radius:10px;padding:.85rem 1.1rem;margin:.7rem 0;font-size:.88rem}
+.note{background:var(--pur-bg);border-left:4px solid var(--pur);border-radius:0 8px 8px 0;padding:.75rem 1rem;font-size:.9rem;margin:.7rem 0;color:var(--pur)}
+
+/* ACCORDION */
+details{border:1px solid var(--border);border-radius:10px;margin-bottom:.7rem;overflow:hidden}
+details summary{padding:.9rem 1.1rem;cursor:pointer;font-weight:600;font-size:.92rem;background:var(--card);list-style:none;display:flex;justify-content:space-between;align-items:center;user-select:none}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:'＋';color:var(--pur-lt)}
+details[open] summary::after{content:'－'}
+details[open] summary{background:var(--pur-bg);color:var(--pur)}
+.dbody{padding:1.1rem;background:var(--card);border-top:1px solid var(--border);font-size:.9rem;line-height:1.7}
+
+/* CHEAT DARK */
+.cheat{background:linear-gradient(135deg,#1e1b4b 0%,#4c1d95 100%);color:#e2e8f0;border-radius:14px;padding:1.8rem;margin:1rem 0}
+.cheat h2{color:#c4b5fd;font-size:1.1rem;margin-bottom:1.1rem;text-align:center}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.9rem}
+.citem{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:.85rem;text-align:center}
+.citem .lbl{font-size:.72rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.25rem}
+.citem .cf{font-family:'Courier New',monospace;font-size:.95rem;color:#c4b5fd;font-weight:700}
+.citem .cu{font-size:.72rem;color:#64748b;margin-top:.2rem}
+
+/* DIAGRAMA Arduino */
+.arduino-board{background:#0c4a6e;border-radius:10px;padding:1.2rem;color:#fff;font-family:'Courier New',monospace;font-size:.8rem;line-height:1.8;text-align:center;max-width:520px;margin:1rem auto;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.arduino-board h4{color:#7dd3fc;font-size:.9rem;margin-bottom:.6rem;text-align:center}
+.pin-row{display:flex;justify-content:space-between;gap:.5rem;align-items:center;padding:.2rem .5rem;border-bottom:1px dashed rgba(255,255,255,.1)}
+.pin-row span:first-child{color:#fbbf24}
+.pin-row span:last-child{color:#86efac;font-size:.75rem}
+
+/* PWM simulation */
+.pwm-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;margin:1rem 0}
+.pwm-canvas{display:block;width:100%;max-width:600px;height:140px;background:#0f172a;border-radius:8px;margin:.6rem auto}
+.pwm-controls{display:flex;justify-content:center;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:.7rem}
+.pwm-controls label{font-size:.88rem;font-weight:600;color:var(--gray)}
+.pwm-controls input[type=range]{width:200px}
+.pwm-val{font-family:'Courier New',monospace;font-weight:700;color:var(--pur);min-width:80px;text-align:center}
+
+/* SERVO simulation */
+.servo-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;margin:1rem 0;text-align:center}
+.servo-svg{max-width:280px;width:100%;margin:0 auto;display:block}
+
+/* ADC simulation */
+.adc-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;margin:1rem 0}
+.adc-row{display:flex;justify-content:space-around;gap:1rem;flex-wrap:wrap;margin-top:.7rem;text-align:center}
+.adc-num{font-family:'Courier New',monospace;font-size:1.7rem;font-weight:800;color:var(--pur)}
+.adc-lbl{font-size:.75rem;color:var(--gray-lt);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+
+/* QUIZ */
+#quiz-container{max-width:720px;margin:0 auto}
+.quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:.5rem}
+.quiz-score-display{font-weight:700;font-size:1rem;color:var(--pur)}
+.progress-bar-wrap{background:var(--border);border-radius:2rem;height:8px;margin-bottom:1.5rem;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--pur-lt),#a78bfa);border-radius:2rem;transition:width .4s ease}
+
+.quiz-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.quiz-card .q-num{font-size:.8rem;font-weight:700;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem}
+.quiz-card .q-text{font-size:1.05rem;font-weight:600;color:var(--gray);margin-bottom:1.3rem;line-height:1.5}
+.quiz-card .hint{font-size:.82rem;font-family:'Courier New',monospace;background:#f1f5f9;border-radius:6px;padding:.4rem .7rem;color:var(--pur);display:inline-block;margin-bottom:1rem}
+
+.options{display:grid;gap:.65rem}
+.opt-btn{padding:.85rem 1.1rem;border:2px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;font-size:.9rem;text-align:left;transition:.2s;font-weight:500;color:var(--gray)}
+.opt-btn:hover:not(:disabled){border-color:var(--pur-lt);background:var(--pur-bg);color:var(--pur)}
+.opt-btn.correct{border-color:var(--green);background:var(--green-bg);color:var(--green);font-weight:700}
+.opt-btn.wrong{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+.opt-btn:disabled{cursor:default}
+
+.feedback-box{margin-top:1.1rem;padding:.9rem 1.1rem;border-radius:10px;font-size:.9rem;line-height:1.6;display:none}
+.feedback-box.show{display:block}
+.feedback-box.ok{background:var(--green-bg);border:1px solid var(--green);color:var(--green)}
+.feedback-box.ko{background:var(--red-bg);border:1px solid var(--red);color:var(--red)}
+
+.quiz-nav{display:flex;justify-content:flex-end;margin-top:1.2rem}
+.btn-next{padding:.75rem 1.8rem;background:var(--pur);color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:700;cursor:pointer;transition:.2s}
+.btn-next:hover{background:var(--pur-lt)}
+.btn-next:disabled{opacity:.4;cursor:default}
+
+.result-card{background:var(--card);border-radius:16px;padding:2.5rem;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+.result-card .emoji{font-size:4rem;display:block;margin-bottom:.8rem}
+.result-card h2{font-size:1.6rem;font-weight:800;color:var(--pur);margin-bottom:.5rem}
+.result-card .score-big{font-size:3rem;font-weight:900;color:var(--pur);display:block;margin:.5rem 0}
+.result-card p{color:var(--gray-lt);font-size:.95rem;margin-bottom:1.3rem}
+.result-detail{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin:1rem 0;max-width:380px;margin-inline:auto}
+.rstat{border-radius:10px;padding:.8rem;font-weight:700;font-size:1rem}
+.rstat.ok{background:var(--green-bg);color:var(--green)}
+.rstat.ko{background:var(--red-bg);color:var(--red)}
+.btn-retry{padding:.8rem 2rem;background:var(--pur);color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:.5rem}
+
+/* EJERCICIOS */
+.ej-card{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:1.2rem;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.ej-header{padding:1.1rem 1.4rem;background:linear-gradient(90deg,var(--pur-bg),#f8fafc);border-bottom:1px solid var(--border);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.ej-header h3{font-size:.97rem;font-weight:700;color:var(--pur)}
+.ej-badge{font-size:.72rem;font-weight:700;padding:.25rem .7rem;border-radius:2rem;background:var(--pur);color:#fff;flex-shrink:0}
+.ej-body{padding:1.3rem 1.4rem;display:none}
+.ej-body.open{display:block}
+.ej-enunciado{background:#f8fafc;border-radius:10px;padding:1rem 1.2rem;border-left:4px solid var(--pur);margin-bottom:1rem;font-size:.92rem}
+.ej-enunciado strong{color:var(--pur)}
+.show-sol-btn{padding:.55rem 1.2rem;background:transparent;border:2px solid var(--pur);color:var(--pur);border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;transition:.2s;margin-top:.5rem}
+.show-sol-btn:hover{background:var(--pur);color:#fff}
+.result-box{background:linear-gradient(90deg,#1e1b4b,#4c1d95);color:#c4b5fd;border-radius:10px;padding:.85rem 1.2rem;font-family:'Courier New',monospace;font-size:1rem;font-weight:700;text-align:center;margin-top:.8rem}
+
+/* FLASHCARDS */
+.flashcard-wrap{perspective:900px;max-width:520px;margin:0 auto 1.5rem;height:220px;cursor:pointer}
+.flashcard{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.flashcard.flipped{transform:rotateY(180deg)}
+.fc-front,.fc-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.12)}
+.fc-front{background:linear-gradient(135deg,var(--pur),var(--pur-lt));color:#fff}
+.fc-front .fc-label{font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;opacity:.7;margin-bottom:.5rem}
+.fc-front .fc-content{font-size:1.2rem;font-weight:700}
+.fc-back{background:var(--card);border:2px solid var(--pur);transform:rotateY(180deg);color:var(--gray)}
+.fc-back .fc-answer{font-size:.92rem;line-height:1.6}
+.fc-back .fc-formula{font-family:'Courier New',monospace;font-size:1rem;color:var(--pur);font-weight:700;display:block;margin-top:.5rem}
+.fc-controls{display:flex;justify-content:center;align-items:center;gap:1rem;max-width:520px;margin:0 auto}
+.fc-btn{padding:.55rem 1.4rem;border:2px solid var(--border);border-radius:8px;background:var(--card);cursor:pointer;font-weight:700;font-size:.88rem;transition:.2s;color:var(--gray)}
+.fc-btn:hover{border-color:var(--pur);color:var(--pur)}
+.fc-counter{font-size:.85rem;color:var(--gray-lt);font-weight:600;min-width:60px;text-align:center}
+
+/* MATCHING */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;max-width:780px;margin:0 auto}
+.match-col h4{font-size:.82rem;font-weight:700;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.7rem;text-align:center}
+.match-item{padding:.7rem 1rem;border:2px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;font-size:.86rem;font-weight:600;text-align:center;transition:.2s;margin-bottom:.5rem;user-select:none}
+.match-item:hover:not(.matched):not(.selected-wrong){border-color:var(--pur-lt);background:var(--pur-bg)}
+.match-item.selected{border-color:var(--pur);background:var(--pur-bg);color:var(--pur);transform:scale(1.02)}
+.match-item.matched{border-color:var(--green);background:var(--green-bg);color:var(--green);cursor:default}
+.match-item.selected-wrong{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+.match-status{text-align:center;margin-top:1rem;font-weight:700;font-size:.95rem;min-height:1.5rem}
+.match-status.win{color:var(--green)}
+.match-status.err{color:var(--red)}
+.btn-reset{padding:.55rem 1.4rem;border:2px solid var(--border);border-radius:8px;background:var(--card);cursor:pointer;font-weight:700;font-size:.85rem;transition:.2s;color:var(--gray);display:block;margin:.8rem auto 0}
+.btn-reset:hover{border-color:var(--pur);color:var(--pur)}
+
+/* FILL */
+.fill-wrap{max-width:680px;margin:0 auto}
+.fill-q{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin-bottom:.9rem;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.fill-q .fq-text{font-size:.95rem;margin-bottom:.3rem;line-height:1.7}
+.fill-input{border:2px solid var(--border);border-radius:8px;padding:.5rem .8rem;font-size:.92rem;font-family:'Courier New',monospace;width:130px;text-align:center;transition:.2s;color:var(--gray)}
+.fill-input:focus{outline:none;border-color:var(--pur-lt)}
+.fill-input.correct{border-color:var(--green);background:var(--green-bg);color:var(--green)}
+.fill-input.wrong{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+.fill-check-btn{padding:.5rem 1rem;background:var(--pur);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.85rem;font-weight:700;margin-left:.5rem}
+.fill-feedback{font-size:.82rem;margin-top:.5rem;min-height:1.2rem;font-weight:600}
+.fill-feedback.ok{color:var(--green)}.fill-feedback.ko{color:var(--red)}
+
+/* CONFETTI */
+.confetti-piece{position:fixed;width:10px;height:10px;border-radius:2px;animation:fall linear forwards;pointer-events:none;z-index:9999}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+@media(max-width:640px){
+  .hero h1{font-size:1.7rem}
+  .match-grid{grid-template-columns:1fr}
+  nav{flex-direction:column}
+  .brand{text-align:center;border:none;border-bottom:1px solid rgba(255,255,255,.2)}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">🤖 Robótica I</div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showPage('u1',this)">📖 Intro & Arduino</button>
+    <button class="tab-btn"        onclick="showPage('entradas',this)">🔘 Entradas</button>
+    <button class="tab-btn"        onclick="showPage('pwm',this)">⚡ PWM & Servos</button>
+    <button class="tab-btn"        onclick="showPage('sensores',this)">🔍 Sensores</button>
+    <button class="tab-btn"        onclick="showPage('codigo',this)">💻 Código</button>
+    <button class="tab-btn"        onclick="showPage('juegos',this)">🎮 Juegos</button>
+    <button class="tab-btn"        onclick="showPage('quiz',this)">🧠 Quiz</button>
+    <button class="tab-btn"        onclick="showPage('cheatsheet',this)">📋 Cheat sheet</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>Robótica I — Parcial</h1>
+  <p>Tecnicatura en Automatización y Control · UNPilar · Unidad 1 + Sensores y Actuadores</p>
+  <div class="badges">
+    <span class="badge">Arduino UNO</span>
+    <span class="badge">E/S digitales</span>
+    <span class="badge">ADC</span>
+    <span class="badge">PWM</span>
+    <span class="badge">Servomotores</span>
+    <span class="badge">Sensores IR</span>
+  </div>
+</div>
+
+<!-- ════════════ U1 · INTRO ════════════ -->
+<div id="u1" class="page active"><div class="container">
+
+  <div class="stitle"><span class="ico">🤖</span>¿Qué es la robótica?<span class="semana-chip">Semana 1</span></div>
+  <div class="grid g2">
+    <div class="card pu">
+      <h3>Definición</h3>
+      <p>Rama de la ingeniería que se encarga del <strong>diseño, construcción y programación</strong> de robots. Combina hardware y software para crear dispositivos que realizan tareas de manera autónoma, eficiente y precisa.</p>
+    </div>
+    <div class="card">
+      <h3>Aplicaciones</h3>
+      <ul style="margin-left:1.2rem;font-size:.9rem;line-height:1.9">
+        <li><strong>Industria:</strong> ensamble de productos en fábricas</li>
+        <li><strong>Medicina:</strong> cirugía robótica asistida</li>
+        <li><strong>Exploración espacial:</strong> rovers en Marte</li>
+        <li><strong>Hogar:</strong> aspiradoras, humanoides</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">🧩</span>Sistema robótico: componentes</div>
+  <p style="margin-bottom:.8rem">Un sistema robótico se entiende como un <strong>conjunto integrado</strong> donde interactúan tres bloques alrededor de un núcleo de control.</p>
+  <div class="grid g4">
+    <div class="card bl"><h3>🧠 Controlador</h3><p>Núcleo del sistema: microcontrolador (Arduino UNO) que procesa información y ejecuta el programa.</p></div>
+    <div class="card gr"><h3>🔘 Entradas</h3><p>Sensores que captan información del entorno (digital u analógica).</p></div>
+    <div class="card or"><h3>💡 Salidas</h3><p>Actuadores que modifican el entorno: LEDs, buzzers, motores, servos.</p></div>
+    <div class="card re"><h3>🔋 Alimentación</h3><p>Provee energía: USB (5V), pila/batería, fuente regulada.</p></div>
+  </div>
+
+  <div class="stitle"><span class="ico">📟</span>Arquitectura del Arduino UNO</div>
+  <div class="grid g2">
+    <div>
+      <div class="card te">
+        <h3>Microcontrolador</h3>
+        <p><strong>ATmega328P</strong> de 8 bits, 16 MHz. Es el cerebro: unidad de procesamiento + memoria + periféricos E/S.</p>
+      </div>
+      <div class="card" style="margin-top:.8rem">
+        <h3>Memoria</h3>
+        <ul style="margin-left:1.2rem;font-size:.88rem;line-height:1.8">
+          <li><strong>Flash:</strong> 32 KB (programa)</li>
+          <li><strong>SRAM:</strong> 2 KB (variables en tiempo real)</li>
+          <li><strong>EEPROM:</strong> 1 KB (datos persistentes)</li>
+        </ul>
+      </div>
+      <div class="card" style="margin-top:.8rem">
+        <h3>Alimentación</h3>
+        <p>Por USB (5V) o por jack DC (7-12V recomendado). Regulador interno baja a 5V y 3,3V.</p>
+      </div>
+    </div>
+    <div class="arduino-board">
+      <h4>━━ ARDUINO UNO R3 ━━</h4>
+      <div class="pin-row"><span>D0 / RX</span><span>Comunicación serie</span></div>
+      <div class="pin-row"><span>D1 / TX</span><span>Comunicación serie</span></div>
+      <div class="pin-row"><span>D2 – D13</span><span>Digitales E/S</span></div>
+      <div class="pin-row"><span>~3,~5,~6,~9,~10,~11</span><span>PWM</span></div>
+      <div class="pin-row"><span>D13</span><span>LED on-board</span></div>
+      <div class="pin-row"><span>A0 – A5</span><span>Entradas analógicas</span></div>
+      <div class="pin-row"><span>5V / 3.3V</span><span>Salida de tensión</span></div>
+      <div class="pin-row"><span>GND</span><span>Tierra (0 V)</span></div>
+      <div class="pin-row"><span>VIN</span><span>Entrada externa</span></div>
+      <div class="pin-row"><span>RESET</span><span>Reiniciar μC</span></div>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">⌨️</span>Entorno de desarrollo (IDE)</div>
+  <div class="grid g3">
+    <div class="card pu">
+      <h3>Arduino IDE</h3>
+      <p>Software oficial para escribir, compilar y subir el "sketch" al microcontrolador. Lenguaje basado en C/C++.</p>
+    </div>
+    <div class="card">
+      <h3>Tinkercad</h3>
+      <p>Simulador online: permite armar circuitos virtuales sin tener la placa física.</p>
+    </div>
+    <div class="card">
+      <h3>Wokwi</h3>
+      <p>Otro simulador online, soporta múltiples sensores y comunicación serie.</p>
+    </div>
+  </div>
+
+  <div class="note"><strong>Estructura mínima de un sketch:</strong> Todo programa de Arduino tiene dos funciones obligatorias: <code>setup()</code> (se ejecuta una sola vez al iniciar) y <code>loop()</code> (se ejecuta continuamente).</div>
+
+  <div class="code">
+<span class="cm">// Estructura básica de un sketch</span>
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="cm">// se ejecuta UNA SOLA VEZ al arrancar</span>
+  <span class="fn">pinMode</span>(<span class="num">13</span>, OUTPUT);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="cm">// se repite infinitamente</span>
+  <span class="fn">digitalWrite</span>(<span class="num">13</span>, HIGH);
+  <span class="fn">delay</span>(<span class="num">1000</span>);
+  <span class="fn">digitalWrite</span>(<span class="num">13</span>, LOW);
+  <span class="fn">delay</span>(<span class="num">1000</span>);
+}</div>
+
+  <div class="stitle"><span class="ico">📜</span>Historia breve</div>
+  <div class="grid g4">
+    <div class="card"><h3>Antigüedad</h3><p>Autómatas griegos y romanos como curiosidades mecánicas.</p></div>
+    <div class="card"><h3>Rev. Industrial</h3><p>Máquinas automatizadas → bases de la robótica industrial.</p></div>
+    <div class="card"><h3>Siglo XX</h3><p>Avance de la informática → robots en medicina, espacio.</p></div>
+    <div class="card"><h3>Actualidad</h3><p>Humanoides en el hogar, integración cotidiana.</p></div>
+  </div>
+
+</div></div>
+
+<!-- ════════════ ENTRADAS ════════════ -->
+<div id="entradas" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">🔘</span>Entradas digitales<span class="semana-chip">Semana 2</span></div>
+  <div class="grid g2">
+    <div>
+      <div class="card pu">
+        <h3>¿Qué es una entrada digital?</h3>
+        <p>Pin configurado para <strong>leer</strong> sólo dos estados: <strong>HIGH (1, ≈5V)</strong> o <strong>LOW (0, ≈0V)</strong>. Se usa para pulsadores, switches, sensores ON/OFF.</p>
+      </div>
+      <div class="code"><span class="fn">pinMode</span>(<span class="num">2</span>, INPUT);
+<span class="kw">int</span> estado = <span class="fn">digitalRead</span>(<span class="num">2</span>);
+<span class="kw">if</span> (estado == HIGH) { <span class="cm">/* pulsador apretado */</span> }</div>
+    </div>
+    <div>
+      <div class="fbox"><span class="big">digitalRead(pin)</span><span class="sub">Devuelve HIGH (1) o LOW (0)</span><span class="unit">Antes: pinMode(pin, INPUT);</span></div>
+      <div class="tip"><span>⚠️</span><span>Un pin "al aire" (sin nada conectado) lee valores aleatorios → "flotando". Siempre usar pull-up o pull-down.</span></div>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">⬆️⬇️</span>Resistencias pull-up y pull-down</div>
+  <div class="grid g2">
+    <div class="card bl">
+      <h3>🔼 Pull-UP</h3>
+      <p>Resistencia entre el pin y <strong>+5V</strong>. En reposo lee <strong>HIGH</strong>. Al apretar el pulsador → cortocircuita a GND → lee <strong>LOW</strong>.</p>
+      <p style="margin-top:.5rem;font-size:.85rem"><strong>Lógica invertida</strong>: pulsado = 0, suelto = 1.</p>
+      <div class="code" style="margin-top:.5rem">
+<span class="cm">// Pull-up interno de Arduino</span>
+<span class="fn">pinMode</span>(<span class="num">2</span>, INPUT_PULLUP);</div>
+    </div>
+    <div class="card gr">
+      <h3>🔽 Pull-DOWN</h3>
+      <p>Resistencia entre el pin y <strong>GND</strong>. En reposo lee <strong>LOW</strong>. Al apretar el pulsador → conecta a +5V → lee <strong>HIGH</strong>.</p>
+      <p style="margin-top:.5rem;font-size:.85rem"><strong>Lógica directa</strong>: pulsado = 1, suelto = 0.</p>
+      <div class="code" style="margin-top:.5rem">
+<span class="cm">// Pull-down con resistencia externa</span>
+<span class="fn">pinMode</span>(<span class="num">2</span>, INPUT);
+<span class="cm">// R 10kΩ entre pin y GND</span></div>
+    </div>
+  </div>
+  <div class="tip"><span>💡</span><span>El valor típico de la resistencia pull-up/pull-down es <strong>10 kΩ</strong>. Arduino tiene pull-ups internos activables con <code>INPUT_PULLUP</code>, así evitamos resistencia externa.</span></div>
+
+  <div class="stitle"><span class="ico">🔁</span>Rebote mecánico (debounce)</div>
+  <div class="grid g2">
+    <div class="card or">
+      <h3>El problema</h3>
+      <p>Al cerrar un pulsador, los contactos metálicos <strong>rebotan</strong> durante unos pocos milisegundos, generando varias transiciones HIGH↔LOW antes de estabilizarse. El μC lee 1 pulsación como <strong>varias</strong>.</p>
+    </div>
+    <div class="card te">
+      <h3>Soluciones</h3>
+      <ul style="margin-left:1.2rem;font-size:.88rem;line-height:1.9">
+        <li><strong>Software:</strong> <code>delay(20-50ms)</code> después de detectar cambio.</li>
+        <li><strong>Software avanzado:</strong> usar <code>millis()</code> + tiempo de antirrebote.</li>
+        <li><strong>Hardware:</strong> capacitor en paralelo con el pulsador (filtro RC).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="code">
+<span class="cm">// Antirrebote por software simple</span>
+<span class="kw">if</span> (<span class="fn">digitalRead</span>(BTN) == LOW) {
+  <span class="fn">delay</span>(<span class="num">30</span>);                  <span class="cm">// espera el rebote</span>
+  <span class="kw">if</span> (<span class="fn">digitalRead</span>(BTN) == LOW) { <span class="cm">// confirma</span>
+    contador++;
+  }
+}</div>
+
+  <!-- ═════ Semana 3 ═════ -->
+  <div class="stitle"><span class="ico">📊</span>Entradas analógicas — ADC<span class="semana-chip">Semana 3</span></div>
+  <div class="grid g2">
+    <div>
+      <div class="card pu">
+        <h3>¿Qué es el ADC?</h3>
+        <p>Conversor <strong>A</strong>nalógico-<strong>D</strong>igital. Toma una tensión continua (0–5V) y devuelve un número entero proporcional. El Arduino UNO tiene <strong>6 pines analógicos</strong> (A0–A5).</p>
+      </div>
+      <div class="card" style="margin-top:.8rem">
+        <h3>Resolución del ADC</h3>
+        <p>El ADC del Arduino UNO es de <strong>10 bits</strong>: el rango 0–5V se divide en <strong>2¹⁰ = 1024 niveles</strong> (de 0 a 1023).</p>
+        <div class="fbox" style="margin-top:.5rem"><span class="big" style="font-size:1.1rem">Resolución = 5V / 1024 ≈ 4,88 mV</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="fbox"><span class="big">analogRead(A0)</span><span class="sub">Devuelve un entero 0…1023</span><span class="unit">No hace falta pinMode</span></div>
+      <div class="fbox" style="background:#1e1b4b"><span class="big" style="font-size:1.05rem">V = lectura × 5 / 1023</span><span class="sub">Conversión a volts</span></div>
+      <div class="tip"><span>📌</span><span>Cuantos más bits, mejor la resolución. 10 bits → 1024 niveles. 12 bits → 4096 niveles.</span></div>
+    </div>
+  </div>
+
+  <div class="adc-wrap">
+    <h4 style="text-align:center;color:var(--pur);font-size:.95rem;margin-bottom:.6rem">🔬 Simulador ADC — moveé el potenciómetro</h4>
+    <input type="range" id="adcRange" min="0" max="1023" value="512" style="width:100%;max-width:500px;display:block;margin:0 auto"/>
+    <div class="adc-row">
+      <div><div class="adc-num" id="adcRaw">512</div><div class="adc-lbl">Lectura ADC</div></div>
+      <div><div class="adc-num" id="adcVolt">2.50</div><div class="adc-lbl">Volts</div></div>
+      <div><div class="adc-num" id="adcPct">50</div><div class="adc-lbl">% del rango</div></div>
+      <div><div class="adc-num" id="adcTemp">25.0</div><div class="adc-lbl">°C (LM35)</div></div>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">🎛️</span>Sensores analógicos del kit</div>
+  <div class="grid g3">
+    <div class="card pu">
+      <h3>Potenciómetro B10k</h3>
+      <p>Resistencia variable de 10 kΩ. Tres terminales: 5V – señal – GND. Permite generar una tensión variable entre 0 y 5V.</p>
+    </div>
+    <div class="card pu">
+      <h3>Fotoresistor (LDR)</h3>
+      <p>Resistencia que <strong>varía con la luz</strong>. Con más luz → menos resistencia. Se usa en divisor de tensión con una R fija.</p>
+    </div>
+    <div class="card pu">
+      <h3>Sensor LM35</h3>
+      <p>Sensor de temperatura analógico. Entrega <strong>10 mV/°C</strong>. Con 5V de alimentación, mide aproximadamente 0–150 °C.</p>
+      <div class="fbox" style="margin-top:.5rem;padding:.5rem"><span class="big" style="font-size:.95rem">°C = (lectura × 5 / 1023) / 0,01</span></div>
+    </div>
+  </div>
+
+</div></div>
+
+<!-- ════════════ PWM ════════════ -->
+<div id="pwm" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">💡</span>Salidas digitales<span class="semana-chip">Semana 4</span></div>
+  <div class="grid g2">
+    <div>
+      <div class="card pu">
+        <h3>Salida digital</h3>
+        <p>Un pin configurado como salida sólo puede entregar <strong>HIGH (5V)</strong> o <strong>LOW (0V)</strong>. Se usa para LEDs, buzzers y otros actuadores binarios.</p>
+      </div>
+      <div class="code"><span class="fn">pinMode</span>(<span class="num">13</span>, OUTPUT);
+<span class="fn">digitalWrite</span>(<span class="num">13</span>, HIGH);  <span class="cm">// enciende</span>
+<span class="fn">digitalWrite</span>(<span class="num">13</span>, LOW);   <span class="cm">// apaga</span></div>
+    </div>
+    <div>
+      <div class="fbox"><span class="big">digitalWrite(pin, valor)</span><span class="sub">valor = HIGH o LOW</span><span class="unit">El pin debe estar como OUTPUT</span></div>
+      <div class="tip"><span>⚠️</span><span>Un pin sólo puede dar hasta <strong>~20 mA</strong>. Para encender un LED <strong>siempre</strong> hay que usar una resistencia limitadora (típica: 220 Ω).</span></div>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">📈</span>PWM — Modulación por Ancho de Pulso</div>
+  <div class="grid g2">
+    <div class="card te">
+      <h3>Concepto</h3>
+      <p>El Arduino <strong>no tiene</strong> verdaderas salidas analógicas, simula valores intermedios prendiendo y apagando muy rápido el pin. La proporción del tiempo en HIGH es el <strong>ciclo activo (duty cycle)</strong>.</p>
+      <p style="margin-top:.5rem;font-size:.88rem">El valor medio de la señal es proporcional al duty cycle: 50% duty → 2,5V medio. 25% → 1,25V medio.</p>
+    </div>
+    <div>
+      <div class="fbox"><span class="big">analogWrite(pin, valor)</span><span class="sub">valor = 0 (0%) … 255 (100%)</span><span class="unit">Sólo pines marcados con ~</span></div>
+      <div class="card or">
+        <h3>Pines PWM del Arduino UNO</h3>
+        <p style="font-family:'Courier New',monospace;font-weight:700;font-size:1rem;color:var(--orange)">~3, ~5, ~6, ~9, ~10, ~11</p>
+        <p style="font-size:.83rem;margin-top:.4rem">Frecuencia: ~490 Hz (la mayoría) y ~980 Hz (pines 5 y 6).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="pwm-wrap">
+    <h4 style="text-align:center;color:var(--pur);font-size:.95rem">🎚️ Simulador PWM — moveé el duty cycle</h4>
+    <canvas class="pwm-canvas" id="pwmCanvas" width="600" height="140"></canvas>
+    <div class="pwm-controls">
+      <label>Duty cycle: <input type="range" id="pwmRange" min="0" max="255" value="128"/></label>
+      <span class="pwm-val" id="pwmVal">128 / 255 (50%)</span>
+    </div>
+    <p style="text-align:center;font-size:.85rem;color:var(--gray-lt);margin-top:.3rem">Tensión media ≈ <span id="pwmVolt" style="font-weight:700;color:var(--pur)">2.50 V</span></p>
+  </div>
+
+  <div class="note"><strong>Relación clave:</strong> <code>valor 0 → 0V</code>, <code>valor 128 → ~2,5V</code>, <code>valor 255 → 5V</code>. Para convertir un porcentaje en valor PWM: <code>valor = porcentaje × 255 / 100</code>.</div>
+
+  <div class="stitle"><span class="ico">🎯</span>Aplicaciones del PWM</div>
+  <div class="grid g4">
+    <div class="card bl"><h3>💡 Brillo LED</h3><p>Variar la intensidad de un LED suavemente (de apagado a 100%).</p></div>
+    <div class="card gr"><h3>🔊 Buzzer</h3><p>Generar tonos de distinta frecuencia (función <code>tone()</code> internamente usa PWM).</p></div>
+    <div class="card or"><h3>⚙️ Motor DC</h3><p>Controlar la velocidad de un motor (con driver tipo L298N o transistor).</p></div>
+    <div class="card pu"><h3>🤖 Servomotor</h3><p>Controlar la posición angular del eje del servo.</p></div>
+  </div>
+
+  <!-- ═════ Servomotores del PDF ═════ -->
+  <div class="stitle"><span class="ico">🤖</span>Servomotores</div>
+  <div class="grid g2">
+    <div class="card pu">
+      <h3>¿Qué es un servo?</h3>
+      <p>Dispositivo electromecánico que permite <strong>mover un eje a una cierta cantidad de grados</strong> (típicamente entre 0° y 180°). Es uno de los actuadores más importantes en robótica.</p>
+      <p style="margin-top:.5rem;font-size:.88rem"><strong>Tipos:</strong> pequeños (juguetes, robots didácticos) o industriales de mayor potencia (controlados por PLCs).</p>
+    </div>
+    <div class="card te">
+      <h3>Cableado típico (3 cables)</h3>
+      <ul style="margin-left:1.2rem;font-size:.9rem;line-height:1.9">
+        <li><span style="color:#dc2626;font-weight:700">■ Rojo:</span> +5V (alimentación)</li>
+        <li><span style="color:#78350f;font-weight:700">■ Marrón/negro:</span> 0V (GND)</li>
+        <li><span style="color:#ea580c;font-weight:700">■ Naranja/amarillo:</span> Señal de control</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">📐</span>Señal de control del servo</div>
+  <div class="grid g2">
+    <div>
+      <div class="card or">
+        <h3>Señal PWM al servo</h3>
+        <p>Pulsos de <strong>5V</strong> con período de <strong>20 a 50 ms</strong> (típico: 20 ms = 50 Hz). La <strong>duración del pulso en alto</strong> determina el ángulo:</p>
+        <ul style="margin-left:1.2rem;font-size:.9rem;line-height:1.9;margin-top:.5rem">
+          <li><strong>1 ms</strong> en alto → <strong>0°</strong></li>
+          <li><strong>1,5 ms</strong> → <strong>90°</strong></li>
+          <li><strong>2,5 ms</strong> en alto → <strong>180°</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div class="servo-wrap">
+      <svg class="servo-svg" viewBox="0 0 240 240">
+        <rect x="50" y="80" width="140" height="100" fill="#1e293b" stroke="#475569" stroke-width="2" rx="8"/>
+        <text x="120" y="135" fill="#c4b5fd" font-size="12" font-weight="700" text-anchor="middle">SERVO</text>
+        <text x="120" y="155" fill="#94a3b8" font-size="10" text-anchor="middle">SG90</text>
+        <circle cx="120" cy="80" r="22" fill="#374151" stroke="#6b7280" stroke-width="2"/>
+        <line id="servoArm" x1="120" y1="80" x2="120" y2="35" stroke="#a78bfa" stroke-width="6" stroke-linecap="round" transform="rotate(0 120 80)"/>
+        <circle cx="120" cy="80" r="5" fill="#c4b5fd"/>
+        <text x="120" y="210" fill="#374151" font-size="14" font-weight="700" text-anchor="middle" id="servoLabel">Ángulo: 90°</text>
+      </svg>
+      <input type="range" id="servoRange" min="0" max="180" value="90" style="width:100%;max-width:240px;display:block;margin:.5rem auto"/>
+    </div>
+  </div>
+
+  <div class="code">
+<span class="cm">// Control de servo con la biblioteca Servo</span>
+<span class="kw">#include</span> <span class="str">&lt;Servo.h&gt;</span>
+<span class="kw">#define</span> PIN_MOTOR <span class="num">10</span>
+
+Servo mi_servo;                    <span class="cm">// objeto de la clase Servo</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  mi_servo.<span class="fn">attach</span>(PIN_MOTOR);    <span class="cm">// asocia el pin</span>
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  mi_servo.<span class="fn">write</span>(<span class="num">0</span>);   <span class="fn">delay</span>(<span class="num">1000</span>);
+  mi_servo.<span class="fn">write</span>(<span class="num">45</span>);  <span class="fn">delay</span>(<span class="num">1000</span>);
+  mi_servo.<span class="fn">write</span>(<span class="num">90</span>);  <span class="fn">delay</span>(<span class="num">1000</span>);
+  mi_servo.<span class="fn">write</span>(<span class="num">135</span>); <span class="fn">delay</span>(<span class="num">1000</span>);
+  mi_servo.<span class="fn">write</span>(<span class="num">180</span>); <span class="fn">delay</span>(<span class="num">1000</span>);
+}</div>
+
+  <div class="stitle"><span class="ico">💪</span>TORQUE de los servomotores</div>
+  <div class="grid g2">
+    <div class="card re">
+      <h3>¿Qué es el torque?</h3>
+      <p>Es la <strong>fuerza que el eje del motor entrega para girar</strong> un sistema mecánico. Cuando usás un destornillador o pedaleás una bici, esa fuerza giratoria es torque.</p>
+      <p style="margin-top:.5rem;font-size:.88rem">El torque se obtiene multiplicando <strong>fuerza × distancia al eje</strong>.</p>
+    </div>
+    <div>
+      <div class="fbox"><span class="big">τ = F × d</span><span class="sub">Torque = Fuerza × distancia</span><span class="unit">Unidad típica en servos: kg·cm</span></div>
+      <div class="tip"><span>📌</span><span>El <strong>servo SG90</strong> (el más usado en kits) tiene un torque de <strong>1,5 kg·cm</strong>.</span></div>
+    </div>
+  </div>
+
+  <div class="note"><strong>Ejemplo de cálculo:</strong> con un SG90 (1,5 kg·cm), si la carga está a 2 cm del eje, el peso máximo que mueve es: <code>1,5 / 2 = 0,75 kg = 750 g</code>. A mayor distancia → menos peso podemos mover.</div>
+
+</div></div>
+
+<!-- ════════════ SENSORES ════════════ -->
+<div id="sensores" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">⚙️</span>Sensores digitales ON/OFF<span class="semana-chip">Semana 5</span></div>
+  <div class="grid g3">
+    <div class="card pu">
+      <h3>Ball switch (tilt)</h3>
+      <p>Sensor de <strong>inclinación</strong>. Contiene una bolita metálica que cierra el circuito cuando se inclina. Sólo dos estados: posición vertical / inclinado.</p>
+      <p style="font-size:.83rem;margin-top:.4rem"><strong>Uso:</strong> alarmas anti-vuelco, detección de movimiento brusco.</p>
+    </div>
+    <div class="card pu">
+      <h3>Sensor de nivel de agua</h3>
+      <p>Pistas conductoras paralelas. Cuando el agua las toca, conduce y el sensor entrega señal proporcional al nivel mojado.</p>
+      <p style="font-size:.83rem;margin-top:.4rem"><strong>Lectura:</strong> analógica o como umbral digital (mojado/seco).</p>
+    </div>
+    <div class="card pu">
+      <h3>Sensor infrarrojo (IR)</h3>
+      <p>Tipo TCRT5000: LED IR emisor + fototransistor receptor. Detecta proximidad u objetos por reflexión.</p>
+      <p style="font-size:.83rem;margin-top:.4rem"><strong>Uso:</strong> seguidor de línea, detección de obstáculos.</p>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">📡</span>Detección de eventos</div>
+  <div class="grid g2">
+    <div class="card te">
+      <h3>Lectura por nivel</h3>
+      <p>Comparar el valor leído con un <strong>umbral</strong>. Si supera el umbral → evento (sensor activado).</p>
+      <div class="code" style="margin-top:.5rem;padding:.7rem"><span class="kw">if</span>(<span class="fn">analogRead</span>(A0) &gt; <span class="num">500</span>) {
+  <span class="cm">// agua detectada</span>
+}</div>
+    </div>
+    <div class="card te">
+      <h3>Lectura por flanco</h3>
+      <p>Detectar el <strong>cambio</strong> de estado (LOW→HIGH o viceversa) en lugar del nivel. Útil para contar eventos sin repeticiones.</p>
+      <div class="code" style="margin-top:.5rem;padding:.7rem"><span class="kw">int</span> ahora = <span class="fn">digitalRead</span>(SENSOR);
+<span class="kw">if</span>(ahora != anterior &amp;&amp; ahora == HIGH){
+  contador++;
+}
+anterior = ahora;</div>
+    </div>
+  </div>
+
+  <!-- ═════ Semana 6 ═════ -->
+  <div class="stitle"><span class="ico">📺</span>Receptor IR y control remoto<span class="semana-chip">Semana 6</span></div>
+  <div class="grid g2">
+    <div>
+      <div class="card pu">
+        <h3>Receptor IR 1838B</h3>
+        <p>Módulo de 3 patas (VCC, GND, OUT) que <strong>decodifica</strong> luz infrarroja modulada a <strong>38 kHz</strong>. La salida es digital.</p>
+      </div>
+      <div class="card" style="margin-top:.8rem">
+        <h3>Control remoto 21 botones</h3>
+        <p>Emite códigos infrarrojos modulados. Cada botón envía un <strong>código único</strong> (típicamente protocolo NEC).</p>
+      </div>
+    </div>
+    <div>
+      <div class="card or">
+        <h3>Comunicación codificada</h3>
+        <p>El emisor IR no transmite "encendido fijo" sino <strong>pulsos modulados</strong> a 38 kHz. Esto evita confundirse con la luz ambiente (filtra el ruido).</p>
+        <p style="font-size:.83rem;margin-top:.4rem"><strong>Protocolos comunes:</strong> NEC, Sony SIRC, RC5.</p>
+      </div>
+      <div class="tip" style="margin-top:.7rem"><span>📚</span><span>Librería <code>IRremote.h</code> facilita decodificar los códigos sin programar el protocolo.</span></div>
+    </div>
+  </div>
+
+  <div class="code">
+<span class="cm">// Decodificar control remoto IR</span>
+<span class="kw">#include</span> <span class="str">&lt;IRremote.h&gt;</span>
+<span class="kw">#define</span> RECV_PIN <span class="num">7</span>
+
+IRrecv irrecv(RECV_PIN);
+decode_results results;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">9600</span>);
+  irrecv.<span class="fn">enableIRIn</span>();        <span class="cm">// inicia el receptor</span>
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="kw">if</span> (irrecv.<span class="fn">decode</span>(&amp;results)) {
+    <span class="fn">Serial</span>.<span class="fn">println</span>(results.value, HEX);
+    irrecv.<span class="fn">resume</span>();           <span class="cm">// listo para el siguiente</span>
+  }
+}</div>
+
+  <div class="stitle"><span class="ico">🔗</span>Integración de E/S</div>
+  <div class="note">El objetivo de la semana 6 es <strong>combinar entradas + salidas</strong>: usar el control remoto IR (entrada codificada) para encender LEDs, cambiar el ángulo de un servo, regular el brillo con PWM, etc. El microcontrolador es el <strong>cerebro</strong> que decide qué hacer con la entrada y qué actuador modificar.</div>
+
+</div></div>
+
+<!-- ════════════ CÓDIGO ════════════ -->
+<div id="codigo" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">💻</span>Sketches típicos para el parcial</div>
+  <p style="margin-bottom:1.2rem">Hacé click en cada ejercicio para ver el código completo y la explicación.</p>
+
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>1️⃣ Blink — el "Hola mundo" del Arduino</h3><span class="ej-badge">Semana 1</span></div>
+    <div class="ej-body">
+      <div class="ej-enunciado">Hacer parpadear el LED interno del pin 13 cada 1 segundo.</div>
+      <div class="code">
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">pinMode</span>(<span class="num">13</span>, OUTPUT);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="fn">digitalWrite</span>(<span class="num">13</span>, HIGH);
+  <span class="fn">delay</span>(<span class="num">1000</span>);
+  <span class="fn">digitalWrite</span>(<span class="num">13</span>, LOW);
+  <span class="fn">delay</span>(<span class="num">1000</span>);
+}</div>
+      <p style="font-size:.88rem;margin-top:.5rem"><strong>Clave:</strong> <code>pinMode</code> en setup (una vez), <code>digitalWrite</code> + <code>delay</code> en loop.</p>
+    </div>
+  </div>
+
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>2️⃣ Pulsador enciende LED</h3><span class="ej-badge">Semana 2</span></div>
+    <div class="ej-body">
+      <div class="ej-enunciado">Encender un LED en el pin 9 mientras un pulsador en el pin 2 esté apretado.</div>
+      <div class="code">
+<span class="kw">#define</span> BTN <span class="num">2</span>
+<span class="kw">#define</span> LED <span class="num">9</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">pinMode</span>(BTN, INPUT_PULLUP);
+  <span class="fn">pinMode</span>(LED, OUTPUT);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="kw">if</span> (<span class="fn">digitalRead</span>(BTN) == LOW) {  <span class="cm">// pull-up → LOW = apretado</span>
+    <span class="fn">digitalWrite</span>(LED, HIGH);
+  } <span class="kw">else</span> {
+    <span class="fn">digitalWrite</span>(LED, LOW);
+  }
+}</div>
+      <p style="font-size:.88rem;margin-top:.5rem"><strong>Clave:</strong> con <code>INPUT_PULLUP</code> la lógica es invertida → apretado = LOW.</p>
+    </div>
+  </div>
+
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>3️⃣ Potenciómetro controla brillo de LED</h3><span class="ej-badge">Semanas 3 + 4</span></div>
+    <div class="ej-body">
+      <div class="ej-enunciado">Leer un potenciómetro en A0 (0-1023) y usarlo para controlar el brillo de un LED en pin 9 vía PWM (0-255).</div>
+      <div class="code">
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">pinMode</span>(<span class="num">9</span>, OUTPUT);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="kw">int</span> lectura = <span class="fn">analogRead</span>(A0);           <span class="cm">// 0..1023</span>
+  <span class="kw">int</span> brillo  = <span class="fn">map</span>(lectura, <span class="num">0</span>, <span class="num">1023</span>, <span class="num">0</span>, <span class="num">255</span>);
+  <span class="fn">analogWrite</span>(<span class="num">9</span>, brillo);                  <span class="cm">// PWM</span>
+}</div>
+      <p style="font-size:.88rem;margin-top:.5rem"><strong>Clave:</strong> <code>map()</code> escala del rango ADC (1024 niveles) al rango PWM (256 niveles).</p>
+    </div>
+  </div>
+
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>4️⃣ Termómetro con LM35 por Serial</h3><span class="ej-badge">Semana 3</span></div>
+    <div class="ej-body">
+      <div class="ej-enunciado">Leer el sensor LM35 en A0 y mostrar la temperatura en °C en el monitor serie cada segundo.</div>
+      <div class="code">
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">9600</span>);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="kw">int</span>   lectura = <span class="fn">analogRead</span>(A0);
+  <span class="kw">float</span> volt    = lectura * <span class="num">5.0</span> / <span class="num">1023.0</span>;
+  <span class="kw">float</span> tempC   = volt / <span class="num">0.01</span>;             <span class="cm">// 10 mV/°C</span>
+
+  <span class="fn">Serial</span>.<span class="fn">print</span>(<span class="str">"T = "</span>);
+  <span class="fn">Serial</span>.<span class="fn">print</span>(tempC);
+  <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">" °C"</span>);
+  <span class="fn">delay</span>(<span class="num">1000</span>);
+}</div>
+      <p style="font-size:.88rem;margin-top:.5rem"><strong>Clave:</strong> LM35 entrega 10 mV por °C, por eso dividimos los volts por 0,01.</p>
+    </div>
+  </div>
+
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>5️⃣ Servo de 0° a 180° y vuelta</h3><span class="ej-badge">PDF — Clase #5</span></div>
+    <div class="ej-body">
+      <div class="ej-enunciado">Hacer girar un servomotor a las posiciones 0°, 45°, 90°, 135°, 180° con un segundo entre cada movimiento.</div>
+      <div class="code">
+<span class="kw">#include</span> <span class="str">&lt;Servo.h&gt;</span>
+<span class="kw">#define</span> PIN_MOTOR <span class="num">10</span>
+
+Servo mi_servo;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  mi_servo.<span class="fn">attach</span>(PIN_MOTOR);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  mi_servo.<span class="fn">write</span>(<span class="num">0</span>);   <span class="fn">delay</span>(<span class="num">1000</span>);
+  mi_servo.<span class="fn">write</span>(<span class="num">45</span>);  <span class="fn">delay</span>(<span class="num">1000</span>);
+  mi_servo.<span class="fn">write</span>(<span class="num">90</span>);  <span class="fn">delay</span>(<span class="num">1000</span>);
+  mi_servo.<span class="fn">write</span>(<span class="num">135</span>); <span class="fn">delay</span>(<span class="num">1000</span>);
+  mi_servo.<span class="fn">write</span>(<span class="num">180</span>); <span class="fn">delay</span>(<span class="num">1000</span>);
+  mi_servo.<span class="fn">write</span>(<span class="num">90</span>);  <span class="fn">delay</span>(<span class="num">1000</span>);
+}</div>
+      <p style="font-size:.88rem;margin-top:.5rem"><strong>Clave:</strong> instanciar <code>Servo</code>, llamar a <code>attach(pin)</code> y luego <code>write(ángulo)</code>.</p>
+    </div>
+  </div>
+
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>6️⃣ Antirrebote con millis()</h3><span class="ej-badge">Semana 2</span></div>
+    <div class="ej-body">
+      <div class="ej-enunciado">Contar pulsaciones de un botón sin contar rebotes, usando <code>millis()</code> en lugar de <code>delay()</code>.</div>
+      <div class="code">
+<span class="kw">#define</span> BTN <span class="num">2</span>
+
+<span class="kw">int</span> contador = <span class="num">0</span>;
+<span class="kw">int</span> estado, anterior = HIGH;
+<span class="kw">unsigned long</span> ultima = <span class="num">0</span>;
+<span class="kw">const</span> <span class="kw">unsigned long</span> ANTIREBOTE = <span class="num">50</span>;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">pinMode</span>(BTN, INPUT_PULLUP);
+  <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">9600</span>);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  estado = <span class="fn">digitalRead</span>(BTN);
+  <span class="kw">if</span> (estado != anterior &amp;&amp; <span class="fn">millis</span>() - ultima &gt; ANTIREBOTE) {
+    <span class="kw">if</span> (estado == LOW) {     <span class="cm">// flanco de bajada (apretó)</span>
+      contador++;
+      <span class="fn">Serial</span>.<span class="fn">println</span>(contador);
+    }
+    ultima = <span class="fn">millis</span>();
+    anterior = estado;
+  }
+}</div>
+      <p style="font-size:.88rem;margin-top:.5rem"><strong>Clave:</strong> <code>millis()</code> no bloquea el programa como <code>delay()</code>. Se detecta el flanco de bajada (cambio HIGH→LOW).</p>
+    </div>
+  </div>
+
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>7️⃣ Control de LED por IR remoto</h3><span class="ej-badge">Semana 6</span></div>
+    <div class="ej-body">
+      <div class="ej-enunciado">Encender / apagar un LED con dos botones del control remoto IR.</div>
+      <div class="code">
+<span class="kw">#include</span> <span class="str">&lt;IRremote.h&gt;</span>
+<span class="kw">#define</span> RECV_PIN <span class="num">7</span>
+<span class="kw">#define</span> LED <span class="num">9</span>
+
+<span class="kw">const long</span> COD_ON  = <span class="num">0xFFA25D</span>;     <span class="cm">// botón POWER</span>
+<span class="kw">const long</span> COD_OFF = <span class="num">0xFFE21D</span>;     <span class="cm">// botón FUNC/STOP</span>
+
+IRrecv irrecv(RECV_PIN);
+decode_results results;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">pinMode</span>(LED, OUTPUT);
+  irrecv.<span class="fn">enableIRIn</span>();
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="kw">if</span> (irrecv.<span class="fn">decode</span>(&amp;results)) {
+    <span class="kw">if</span> (results.value == COD_ON)  <span class="fn">digitalWrite</span>(LED, HIGH);
+    <span class="kw">if</span> (results.value == COD_OFF) <span class="fn">digitalWrite</span>(LED, LOW);
+    irrecv.<span class="fn">resume</span>();
+  }
+}</div>
+      <p style="font-size:.88rem;margin-top:.5rem"><strong>Clave:</strong> los códigos hex son únicos por botón. Primero hay que descubrirlos imprimiéndolos por serial.</p>
+    </div>
+  </div>
+
+</div></div>
+
+<!-- ════════════ JUEGOS ════════════ -->
+<div id="juegos" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">🃏</span>Flashcards — Conceptos clave</div>
+  <p style="margin-bottom:1.2rem;color:var(--gray-lt);font-size:.9rem">Hacé click en la tarjeta para revelar la respuesta.</p>
+
+  <div class="flashcard-wrap" onclick="flipCard()">
+    <div class="flashcard" id="fc">
+      <div class="fc-front"><div class="fc-label">¿Qué es...?</div><div class="fc-content" id="fc-q"></div></div>
+      <div class="fc-back"><div id="fc-a" class="fc-answer"></div><div id="fc-f" class="fc-formula"></div></div>
+    </div>
+  </div>
+  <div class="fc-controls">
+    <button class="fc-btn" onclick="prevCard()">← Anterior</button>
+    <span class="fc-counter" id="fc-count"></span>
+    <button class="fc-btn" onclick="nextCard()">Siguiente →</button>
+  </div>
+
+  <div class="stitle" style="margin-top:3rem"><span class="ico">🔗</span>Asociación — Une el concepto con su función</div>
+  <p style="margin-bottom:1.2rem;color:var(--gray-lt);font-size:.9rem">Hacé click en un concepto y luego en la función correspondiente.</p>
+
+  <div class="match-grid">
+    <div><h4>Función / Concepto</h4><div id="match-left"></div></div>
+    <div><h4>Significado</h4><div id="match-right"></div></div>
+  </div>
+  <div class="match-status" id="match-status"></div>
+  <button class="btn-reset" onclick="initMatch()">🔄 Reiniciar juego</button>
+
+  <div class="stitle" style="margin-top:3rem"><span class="ico">⌨️</span>Completá el dato</div>
+  <p style="margin-bottom:1.2rem;color:var(--gray-lt);font-size:.9rem">Escribí el valor correcto en cada hueco y presioná Verificar.</p>
+  <div class="fill-wrap" id="fill-wrap"></div>
+
+</div></div>
+
+<!-- ════════════ QUIZ ════════════ -->
+<div id="quiz" class="page"><div class="container">
+  <div class="stitle"><span class="ico">🧠</span>Quiz interactivo — 18 preguntas</div>
+  <div id="quiz-container">
+    <div class="quiz-header">
+      <div class="quiz-score-display">Puntos: <span id="q-score">0</span> / <span id="q-total">18</span></div>
+      <div style="font-size:.85rem;color:var(--gray-lt)">Pregunta <span id="q-cur">1</span> de 18</div>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="q-progress" style="width:0%"></div></div>
+    <div id="quiz-area"></div>
+  </div>
+</div></div>
+
+<!-- ════════════ CHEAT SHEET ════════════ -->
+<div id="cheatsheet" class="page"><div class="container">
+  <div class="cheat">
+    <h2>🤖 FÓRMULAS Y FUNCIONES — ROBÓTICA I</h2>
+    <div class="cgrid">
+      <div class="citem"><div class="lbl">Pin como entrada</div><div class="cf">pinMode(p, INPUT);</div><div class="cu">o INPUT_PULLUP</div></div>
+      <div class="citem"><div class="lbl">Pin como salida</div><div class="cf">pinMode(p, OUTPUT);</div><div class="cu">en setup()</div></div>
+      <div class="citem"><div class="lbl">Lectura digital</div><div class="cf">digitalRead(p)</div><div class="cu">HIGH / LOW</div></div>
+      <div class="citem"><div class="lbl">Escritura digital</div><div class="cf">digitalWrite(p, v)</div><div class="cu">HIGH / LOW</div></div>
+      <div class="citem"><div class="lbl">Lectura analógica</div><div class="cf">analogRead(A0)</div><div class="cu">0 … 1023</div></div>
+      <div class="citem"><div class="lbl">PWM (analogWrite)</div><div class="cf">analogWrite(p, v)</div><div class="cu">v: 0 … 255</div></div>
+      <div class="citem"><div class="lbl">ADC resolución</div><div class="cf">5V / 1024 ≈ 4,88 mV</div><div class="cu">10 bits</div></div>
+      <div class="citem"><div class="lbl">ADC → Volts</div><div class="cf">V = lect × 5 / 1023</div><div class="cu">en volts</div></div>
+      <div class="citem"><div class="lbl">LM35 → °C</div><div class="cf">°C = V / 0,01</div><div class="cu">10 mV/°C</div></div>
+      <div class="citem"><div class="lbl">map (escala)</div><div class="cf">map(x, 0,1023, 0,255)</div><div class="cu">útil ADC→PWM</div></div>
+      <div class="citem"><div class="lbl">Espera</div><div class="cf">delay(ms)</div><div class="cu">bloqueante</div></div>
+      <div class="citem"><div class="lbl">Tiempo no bloqueante</div><div class="cf">millis()</div><div class="cu">ms desde el boot</div></div>
+      <div class="citem"><div class="lbl">Servo — incluir</div><div class="cf">#include &lt;Servo.h&gt;</div><div class="cu">biblioteca</div></div>
+      <div class="citem"><div class="lbl">Servo — atar</div><div class="cf">srv.attach(pin)</div><div class="cu">en setup()</div></div>
+      <div class="citem"><div class="lbl">Servo — mover</div><div class="cf">srv.write(grados)</div><div class="cu">0 … 180</div></div>
+      <div class="citem"><div class="lbl">Torque</div><div class="cf">τ = F × d</div><div class="cu">kg·cm</div></div>
+      <div class="citem"><div class="lbl">Servo SG90</div><div class="cf">τ = 1,5 kg·cm</div><div class="cu">típico</div></div>
+      <div class="citem"><div class="lbl">IR carrier</div><div class="cf">38 kHz</div><div class="cu">modulación</div></div>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">📌</span>Datos clave del Arduino UNO</div>
+  <div class="grid g2">
+    <div class="twrap"><table><thead><tr><th>Característica</th><th>Valor</th></tr></thead><tbody>
+      <tr><td>Microcontrolador</td><td>ATmega328P</td></tr>
+      <tr><td>Velocidad de reloj</td><td>16 MHz</td></tr>
+      <tr><td>Tensión de operación</td><td>5 V</td></tr>
+      <tr><td>Tensión de entrada (jack)</td><td>7–12 V</td></tr>
+      <tr><td>Pines digitales E/S</td><td>14 (D0–D13)</td></tr>
+      <tr><td>Pines PWM</td><td>6 (~3, ~5, ~6, ~9, ~10, ~11)</td></tr>
+      <tr><td>Pines analógicos</td><td>6 (A0–A5)</td></tr>
+      <tr><td>Corriente máx. por pin</td><td>~20 mA</td></tr>
+      <tr><td>Flash / SRAM / EEPROM</td><td>32 KB / 2 KB / 1 KB</td></tr>
+      <tr><td>Resolución ADC</td><td>10 bits (0–1023)</td></tr>
+      <tr><td>Resolución PWM</td><td>8 bits (0–255)</td></tr>
+    </tbody></table></div>
+    <div class="twrap"><table><thead><tr><th>Componente</th><th>Característica</th></tr></thead><tbody>
+      <tr><td>LED + R (220 Ω)</td><td>I ≈ 13 mA, seguro para pin</td></tr>
+      <tr><td>Pulsador + pull-up (10 kΩ)</td><td>Lógica invertida</td></tr>
+      <tr><td>Potenciómetro B10k</td><td>0–5 V (divisor de tensión)</td></tr>
+      <tr><td>LDR (fotoresistor)</td><td>↑ luz → ↓ R</td></tr>
+      <tr><td>LM35</td><td>10 mV/°C, lineal</td></tr>
+      <tr><td>Ball switch</td><td>ON/OFF por inclinación</td></tr>
+      <tr><td>Sensor nivel agua</td><td>Analógico (mojado/seco)</td></tr>
+      <tr><td>Sensor IR (TCRT5000)</td><td>Reflexión IR — proximidad</td></tr>
+      <tr><td>Receptor IR 1838B</td><td>Decodifica 38 kHz</td></tr>
+      <tr><td>Servo SG90</td><td>0°–180°, 1,5 kg·cm</td></tr>
+      <tr><td>Buzzer</td><td>Tono con tone()/PWM</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="stitle"><span class="ico">⚠️</span>Errores típicos del parcial</div>
+  <div class="grid g2">
+    <div class="card re"><h3>❌ Olvidar pinMode</h3><p>Sin <code>pinMode(p, OUTPUT)</code> en setup, el <code>digitalWrite</code> no funciona como esperás.</p></div>
+    <div class="card re"><h3>❌ Lógica de pull-up</h3><p>Con <code>INPUT_PULLUP</code>, apretado = LOW (no HIGH). Es <strong>lógica invertida</strong>.</p></div>
+    <div class="card re"><h3>❌ analogWrite en pin sin ~</h3><p>El PWM sólo sale por pines marcados con <strong>~</strong> (3, 5, 6, 9, 10, 11).</p></div>
+    <div class="card re"><h3>❌ Rango PWM vs ADC</h3><p>ADC: 0–1023 (10 bits). PWM: 0–255 (8 bits). Usar <code>map()</code> para escalar.</p></div>
+    <div class="card re"><h3>❌ LED sin resistencia</h3><p>Quema el LED o el pin. Siempre 220 Ω para LEDs comunes a 5V.</p></div>
+    <div class="card re"><h3>❌ delay() bloquea todo</h3><p>Mientras dura, no podés leer entradas. Para multitarea: <code>millis()</code>.</p></div>
+  </div>
+
+</div></div>
+
+<script>
+// ════════════════════════════
+//  UTILS
+// ════════════════════════════
+function showPage(id, btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function toggleEj(header){
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-.5) }
+
+// ════════════════════════════
+//  SIMULADOR ADC
+// ════════════════════════════
+const adcRange = document.getElementById('adcRange');
+function updateAdc(){
+  const v = parseInt(adcRange.value);
+  document.getElementById('adcRaw').textContent = v;
+  const volt = (v * 5 / 1023);
+  document.getElementById('adcVolt').textContent = volt.toFixed(2);
+  document.getElementById('adcPct').textContent = Math.round(v/1023*100);
+  document.getElementById('adcTemp').textContent = (volt/0.01).toFixed(1);
+}
+adcRange.addEventListener('input', updateAdc);
+updateAdc();
+
+// ════════════════════════════
+//  SIMULADOR PWM
+// ════════════════════════════
+const pwmCanvas = document.getElementById('pwmCanvas');
+const pwmRange = document.getElementById('pwmRange');
+function drawPwm(){
+  const v = parseInt(pwmRange.value);
+  const ctx = pwmCanvas.getContext('2d');
+  const W = pwmCanvas.width, H = pwmCanvas.height;
+  ctx.clearRect(0,0,W,H);
+  // ejes
+  ctx.strokeStyle = '#475569';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0,H-20); ctx.lineTo(W,H-20); ctx.stroke();
+  // labels
+  ctx.fillStyle = '#94a3b8'; ctx.font = '11px monospace';
+  ctx.fillText('0 V', 5, H-7);
+  ctx.fillText('5 V', 5, 18);
+  // PWM signal
+  const duty = v / 255;
+  const period = 100;
+  const high = period * duty;
+  ctx.strokeStyle = '#c4b5fd';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  let x = 0, y = H - 20;
+  ctx.moveTo(x, y);
+  while(x < W){
+    // high
+    if(high > 0){
+      ctx.lineTo(x, 25);
+      ctx.lineTo(x + high, 25);
+      y = 25;
+    }
+    // low
+    if(high < period){
+      ctx.lineTo(x + high, H - 20);
+      ctx.lineTo(x + period, H - 20);
+      y = H - 20;
+    }
+    x += period;
+    ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  // promedio (línea media)
+  const avgY = H - 20 - (H - 45) * duty;
+  ctx.strokeStyle = '#fbbf24';
+  ctx.setLineDash([6,4]);
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(0, avgY); ctx.lineTo(W, avgY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#fbbf24';
+  ctx.fillText('V medio', W-60, avgY-3);
+
+  const pct = Math.round(duty*100);
+  document.getElementById('pwmVal').textContent = `${v} / 255 (${pct}%)`;
+  document.getElementById('pwmVolt').textContent = (duty*5).toFixed(2) + ' V';
+}
+pwmRange.addEventListener('input', drawPwm);
+drawPwm();
+
+// ════════════════════════════
+//  SIMULADOR SERVO
+// ════════════════════════════
+const servoRange = document.getElementById('servoRange');
+function updateServo(){
+  const ang = parseInt(servoRange.value);
+  document.getElementById('servoArm').setAttribute('transform', `rotate(${ang-90} 120 80)`);
+  document.getElementById('servoLabel').textContent = `Ángulo: ${ang}°`;
+}
+servoRange.addEventListener('input', updateServo);
+updateServo();
+
+// ════════════════════════════
+//  FLASHCARDS
+// ════════════════════════════
+const cards = [
+  {q:'Sistema robótico',          a:'Conjunto integrado de controlador, entradas, salidas y alimentación.', f:'4 bloques'},
+  {q:'Arduino UNO',               a:'Placa con microcontrolador ATmega328P de 8 bits y 16 MHz.', f:'14 D + 6 A'},
+  {q:'setup() vs loop()',         a:'setup se ejecuta una sola vez al arrancar; loop se repite infinitamente.', f:'Estructura básica'},
+  {q:'Entrada digital',           a:'Pin que solo lee HIGH (5V) o LOW (0V). Para pulsadores y sensores ON/OFF.', f:'digitalRead(p)'},
+  {q:'Pull-up',                   a:'Resistencia a 5V. En reposo HIGH, apretado LOW (lógica invertida).', f:'INPUT_PULLUP'},
+  {q:'Pull-down',                 a:'Resistencia a GND. En reposo LOW, apretado HIGH (lógica directa).', f:'10 kΩ a GND'},
+  {q:'Rebote mecánico',           a:'Vibración de los contactos del pulsador → varias lecturas falsas. Se resuelve con delay 20-50 ms o millis().', f:'debounce'},
+  {q:'ADC del Arduino',           a:'Conversor analógico-digital de 10 bits. Devuelve 0–1023.', f:'analogRead(A0)'},
+  {q:'Resolución ADC',            a:'Tensión mínima detectable: 5V dividido en 1024 niveles.', f:'≈ 4,88 mV'},
+  {q:'LM35',                      a:'Sensor analógico de temperatura: entrega 10 mV por cada °C.', f:'°C = V / 0,01'},
+  {q:'Salida digital',            a:'Pin configurado para entregar HIGH (5V) o LOW (0V).', f:'digitalWrite(p,v)'},
+  {q:'PWM',                       a:'Pulse Width Modulation: simula salida analógica variando el ciclo activo.', f:'analogWrite(p, 0-255)'},
+  {q:'Pines PWM del UNO',         a:'Solo los marcados con tilde ~: 3, 5, 6, 9, 10, 11.', f:'6 pines'},
+  {q:'Duty cycle',                a:'Porcentaje del tiempo que la señal PWM está en alto vs el período total.', f:'50% → V_med = 2,5V'},
+  {q:'Servomotor',                a:'Actuador que gira su eje a un ángulo determinado por un pulso PWM.', f:'0°–180°'},
+  {q:'Servo SG90',                a:'Servo pequeño muy usado en kits, con torque de 1,5 kg·cm.', f:'τ = 1,5 kg·cm'},
+  {q:'Torque',                    a:'Fuerza giratoria del eje. Se calcula como fuerza × distancia al eje.', f:'τ = F × d  [kg·cm]'},
+  {q:'Ball switch',               a:'Sensor digital de inclinación: cierra el circuito al moverse de su posición.', f:'ON / OFF'},
+  {q:'Receptor IR 1838B',         a:'Decodifica luz infrarroja modulada a 38 kHz. Salida digital.', f:'NEC / RC5'},
+  {q:'IRremote.h',                a:'Biblioteca que decodifica códigos de control remoto IR fácilmente.', f:'irrecv.decode()'},
+];
+let fcIdx=0, fcFlipped=false;
+function renderCard(){
+  document.getElementById('fc').classList.remove('flipped');
+  fcFlipped=false;
+  setTimeout(()=>{
+    document.getElementById('fc-q').textContent = cards[fcIdx].q;
+    document.getElementById('fc-a').textContent = cards[fcIdx].a;
+    document.getElementById('fc-f').textContent = cards[fcIdx].f;
+    document.getElementById('fc-count').textContent = `${fcIdx+1} / ${cards.length}`;
+  },fcFlipped?250:0);
+}
+function flipCard(){
+  fcFlipped=!fcFlipped;
+  document.getElementById('fc').classList.toggle('flipped',fcFlipped);
+}
+function nextCard(){ fcIdx=(fcIdx+1)%cards.length; renderCard(); }
+function prevCard(){ fcIdx=(fcIdx-1+cards.length)%cards.length; renderCard(); }
+renderCard();
+
+// ════════════════════════════
+//  MATCHING
+// ════════════════════════════
+const matchPairs = [
+  {left:'pinMode()',         right:'Configura un pin como INPUT u OUTPUT'},
+  {left:'digitalRead()',     right:'Lee HIGH o LOW de un pin digital'},
+  {left:'digitalWrite()',    right:'Pone un pin en HIGH o LOW'},
+  {left:'analogRead()',      right:'Lee 0–1023 desde un pin analógico'},
+  {left:'analogWrite()',     right:'Genera PWM (0–255) en un pin'},
+  {left:'delay()',           right:'Pausa el programa en milisegundos'},
+  {left:'millis()',          right:'Tiempo (ms) desde que arrancó el programa'},
+  {left:'Servo.write(g)',    right:'Mueve el servo al ángulo "g" en grados'},
+];
+let matchSelected=null, matchedCount=0;
+function initMatch(){
+  matchSelected=null; matchedCount=0;
+  document.getElementById('match-status').textContent='';
+  const shuffledLeft  = shuffle(matchPairs);
+  const shuffledRight = shuffle(matchPairs);
+  const lDiv = document.getElementById('match-left');
+  const rDiv = document.getElementById('match-right');
+  lDiv.innerHTML=''; rDiv.innerHTML='';
+  shuffledLeft.forEach(p=>{
+    const d=document.createElement('div');
+    d.className='match-item'; d.textContent=p.left;
+    d.dataset.key=p.left; d.dataset.side='left';
+    d.onclick=()=>matchClick(d);
+    lDiv.appendChild(d);
+  });
+  shuffledRight.forEach(p=>{
+    const d=document.createElement('div');
+    d.className='match-item'; d.textContent=p.right;
+    d.dataset.key=p.left; d.dataset.side='right';
+    d.onclick=()=>matchClick(d);
+    rDiv.appendChild(d);
+  });
+}
+function matchClick(el){
+  if(el.classList.contains('matched')) return;
+  if(!matchSelected){
+    document.querySelectorAll('.match-item.selected').forEach(e=>e.classList.remove('selected','selected-wrong'));
+    matchSelected=el; el.classList.add('selected');
+  } else {
+    if(el===matchSelected){ matchSelected=null; el.classList.remove('selected'); return; }
+    if(el.dataset.side===matchSelected.dataset.side){
+      document.querySelectorAll('.match-item.selected').forEach(e=>e.classList.remove('selected'));
+      matchSelected=el; el.classList.add('selected'); return;
+    }
+    if(el.dataset.key===matchSelected.dataset.key){
+      [el,matchSelected].forEach(e=>{ e.classList.remove('selected'); e.classList.add('matched'); e.onclick=null; });
+      matchedCount++;
+      const st=document.getElementById('match-status');
+      if(matchedCount===matchPairs.length){ st.textContent='🎉 ¡Perfecto! Todas las parejas correctas.'; st.className='match-status win'; launchConfetti(); }
+      else { st.textContent=`✅ ¡Correcto! ${matchedCount}/${matchPairs.length} parejas.`; st.className='match-status win'; }
+    } else {
+      [el,matchSelected].forEach(e=>e.classList.add('selected-wrong'));
+      setTimeout(()=>{ [el,matchSelected].forEach(e=>e.classList.remove('selected','selected-wrong')); matchSelected=null; },700);
+      document.getElementById('match-status').textContent='❌ Eso no coincide, intentá de nuevo.';
+      document.getElementById('match-status').className='match-status err';
+      return;
+    }
+    matchSelected=null;
+  }
+}
+initMatch();
+
+// ════════════════════════════
+//  FILL IN
+// ════════════════════════════
+const fillQs = [
+  {before:'El microcontrolador del Arduino UNO es el',           after:'.',                          answer:'ATmega328P', hint:'8 bits, 16 MHz'},
+  {before:'Los pines analógicos del UNO se llaman A0 a',         after:'.',                          answer:'A5',         hint:'6 pines'},
+  {before:'El ADC del UNO tiene una resolución de',              after:' bits.',                     answer:'10',         hint:'2^10 = 1024'},
+  {before:'analogRead devuelve un valor de 0 a',                 after:'.',                          answer:'1023',       hint:'1024 niveles'},
+  {before:'analogWrite recibe un valor de 0 a',                  after:'.',                          answer:'255',        hint:'PWM 8 bits'},
+  {before:'El LM35 entrega',                                     after:' mV por cada grado Celsius.', answer:'10',         hint:'pendiente lineal'},
+  {before:'La frecuencia de modulación del receptor IR 1838B es', after:' kHz.',                     answer:'38',         hint:'protocolo NEC'},
+  {before:'El torque del servo SG90 es',                         after:' kg·cm.',                    answer:'1,5',        hint:'fabricante'},
+  {before:'En INPUT_PULLUP, apretar el pulsador genera lectura', after:'.',                          answer:'LOW',        hint:'lógica invertida'},
+  {before:'La resistencia típica de pull-up/down es 10',         after:' Ω.',                        answer:'k',          hint:'10 000'},
+];
+function initFill(){
+  const wrap = document.getElementById('fill-wrap');
+  wrap.innerHTML='';
+  fillQs.forEach((q,i)=>{
+    wrap.innerHTML+=`
+    <div class="fill-q">
+      <div class="fq-text">${q.before} <input class="fill-input" id="fi-${i}" placeholder="?" autocomplete="off"/> ${q.after}
+        <button class="fill-check-btn" onclick="checkFill(${i},'${q.answer}')">Verificar</button>
+      </div>
+      <div class="fill-feedback" id="ff-${i}"></div>
+    </div>`;
+  });
+}
+function checkFill(i, answer){
+  const inp = document.getElementById(`fi-${i}`);
+  const fb  = document.getElementById(`ff-${i}`);
+  const val = inp.value.trim().toLowerCase().replace(',', '.');
+  const ans = answer.toLowerCase().replace(',', '.');
+  if(val===ans){
+    inp.classList.add('correct'); inp.classList.remove('wrong');
+    fb.textContent='✅ ¡Correcto!'; fb.className='fill-feedback ok';
+    inp.disabled=true;
+  } else {
+    inp.classList.add('wrong'); inp.classList.remove('correct');
+    fb.textContent=`❌ No es correcto. Pista: ${fillQs[i].hint}`; fb.className='fill-feedback ko';
+    setTimeout(()=>{ inp.classList.remove('wrong'); inp.value=''; },1200);
+  }
+}
+initFill();
+
+// ════════════════════════════
+//  QUIZ
+// ════════════════════════════
+const allQuestions = [
+  {t:'¿Cuáles son las 4 partes de un sistema robótico?', h:null,
+   opts:['Sensor, motor, batería, código','Controlador, entradas, salidas, alimentación','CPU, RAM, disco, monitor','Hardware, firmware, software, robot'], c:1,
+   exp:'Un sistema robótico se compone de: controlador (cerebro), entradas (sensores), salidas (actuadores) y alimentación (energía).'},
+  {t:'¿Qué microcontrolador tiene el Arduino UNO?', h:null,
+   opts:['ATmega2560','ESP32','ATmega328P','PIC16F84'], c:2,
+   exp:'El Arduino UNO usa el ATmega328P, un microcontrolador de 8 bits que corre a 16 MHz.'},
+  {t:'¿Qué función se ejecuta UNA SOLA VEZ al iniciar el programa?', h:null,
+   opts:['loop()','main()','setup()','init()'], c:2,
+   exp:'setup() se ejecuta una sola vez al arrancar. loop() se ejecuta continuamente.'},
+  {t:'¿Cuántos pines digitales tiene el Arduino UNO?', h:null,
+   opts:['6','14','20','8'], c:1,
+   exp:'El UNO tiene 14 pines digitales (D0 a D13). Además, los pines analógicos A0–A5 también pueden usarse como digitales.'},
+  {t:'Para leer un pulsador, ¿qué función usamos?', h:null,
+   opts:['analogRead()','digitalRead()','digitalWrite()','pinMode()'], c:1,
+   exp:'digitalRead(pin) devuelve HIGH o LOW según el estado del pin de entrada.'},
+  {t:'¿Qué hace INPUT_PULLUP?', h:null,
+   opts:['Activa una resistencia interna entre el pin y +5V','Conecta el pin a GND','Habilita el modo analógico','Aumenta el voltaje a 5V'], c:0,
+   exp:'INPUT_PULLUP activa la resistencia interna del Arduino entre el pin y +5V. En reposo el pin lee HIGH, apretado lee LOW (lógica invertida).'},
+  {t:'En un pulsador con pull-up, cuando lo apretamos el pin lee:', h:null,
+   opts:['HIGH','LOW','Flotante','Cambia aleatoriamente'], c:1,
+   exp:'Con pull-up, el reposo es HIGH y al apretar cortocircuita a GND → lee LOW. Es lógica invertida.'},
+  {t:'¿Cuántos niveles tiene el ADC del Arduino UNO?', h:'2^n niveles',
+   opts:['256','512','1024','4096'], c:2,
+   exp:'El ADC es de 10 bits, por lo tanto tiene 2^10 = 1024 niveles (valores de 0 a 1023).'},
+  {t:'¿Cuál es la resolución aproximada del ADC del UNO?', h:'5V / 1024',
+   opts:['1 mV','4,88 mV','19,5 mV','5 V'], c:1,
+   exp:'Resolución = 5V / 1024 ≈ 4,88 mV. Es el cambio mínimo de tensión que el ADC puede detectar.'},
+  {t:'El LM35 entrega ¿cuánto voltaje por grado?', h:null,
+   opts:['1 mV/°C','10 mV/°C','100 mV/°C','1 V/°C'], c:1,
+   exp:'El LM35 es lineal con pendiente de 10 mV/°C. Para convertir: °C = (volts) / 0,01.'},
+  {t:'¿Qué pines del UNO tienen PWM?', h:'marcados con ~',
+   opts:['Todos los digitales','3, 5, 6, 9, 10, 11','A0–A5','Sólo el 13'], c:1,
+   exp:'Los pines PWM del UNO son seis: 3, 5, 6, 9, 10 y 11. Vienen marcados con el símbolo ~.'},
+  {t:'¿Qué rango de valores acepta analogWrite()?', h:null,
+   opts:['0 a 100','0 a 255','0 a 1023','0 a 5'], c:1,
+   exp:'analogWrite(pin, valor) acepta valores 0 (0% duty, 0V medio) a 255 (100% duty, 5V medio).'},
+  {t:'¿Qué es el "duty cycle" en PWM?', h:null,
+   opts:['La frecuencia de la señal','El tiempo en alto sobre el período total','La amplitud de la señal','La fase de la señal'], c:1,
+   exp:'El duty cycle (ciclo activo) es la proporción del tiempo que la señal está en alto respecto del período total.'},
+  {t:'¿Qué biblioteca se usa para controlar servomotores?', h:'#include &lt;...&gt;',
+   opts:['IRremote.h','Servo.h','LiquidCrystal.h','Wire.h'], c:1,
+   exp:'Servo.h provee la clase Servo. Después de attach(pin) se mueve con write(angulo).'},
+  {t:'¿Cuál es el torque típico del servo SG90?', h:'kg·cm',
+   opts:['0,5 kg·cm','1,5 kg·cm','5 kg·cm','15 kg·cm'], c:1,
+   exp:'El SG90 entrega un torque de aproximadamente 1,5 kg·cm. Con una palanca de 2 cm puede mover 750 g.'},
+  {t:'Si un servo tiene 1,5 kg·cm de torque y la carga está a 3 cm del eje, ¿cuánto peso puede mover?', h:'τ = F × d',
+   opts:['0,3 kg','0,5 kg','1,5 kg','4,5 kg'], c:1,
+   exp:'F = τ / d = 1,5 / 3 = 0,5 kg. A mayor distancia del eje, menos peso se puede mover.'},
+  {t:'¿A qué frecuencia se modula la señal del receptor IR 1838B?', h:null,
+   opts:['1 kHz','38 kHz','100 kHz','38 MHz'], c:1,
+   exp:'El 1838B decodifica una portadora de 38 kHz. Esta modulación permite filtrar la luz ambiente.'},
+  {t:'¿Qué es el rebote mecánico?', h:null,
+   opts:['Una vibración del pulsador que genera varias lecturas falsas','Un eco de la señal','Un retorno del LED','Un error del compilador'], c:0,
+   exp:'Al apretar un pulsador, los contactos metálicos rebotan unos pocos ms generando múltiples transiciones. Se evita con delay(20-50ms) o millis().'},
+];
+
+let qIdx=0, score=0, answered=false;
+document.getElementById('q-total').textContent=allQuestions.length;
+function renderQuiz(){
+  const area=document.getElementById('quiz-area');
+  if(qIdx>=allQuestions.length){ showResult(); return; }
+  const q=allQuestions[qIdx];
+  const pct=Math.round((qIdx/allQuestions.length)*100);
+  document.getElementById('q-progress').style.width=pct+'%';
+  document.getElementById('q-cur').textContent=qIdx+1;
+  document.getElementById('q-score').textContent=score;
+  answered=false;
+  area.innerHTML=`
+  <div class="quiz-card">
+    <div class="q-num">Pregunta ${qIdx+1} de ${allQuestions.length}</div>
+    <div class="q-text">${q.t}</div>
+    ${q.h?`<div class="hint">${q.h}</div>`:''}
+    <div class="options" id="opts">
+      ${q.opts.map((o,i)=>`<button class="opt-btn" onclick="answerQ(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}
+    </div>
+    <div class="feedback-box" id="fb"></div>
+    <div class="quiz-nav">
+      <button class="btn-next" id="btn-next" onclick="nextQ()" disabled>Siguiente →</button>
+    </div>
+  </div>`;
+}
+function answerQ(i){
+  if(answered) return;
+  answered=true;
+  const q=allQuestions[qIdx];
+  const btns=document.querySelectorAll('.opt-btn');
+  btns.forEach(b=>b.disabled=true);
+  const fb=document.getElementById('fb');
+  if(i===q.c){
+    score++;
+    btns[i].classList.add('correct');
+    fb.className='feedback-box show ok';
+    fb.innerHTML=`✅ <strong>¡Correcto!</strong> ${q.exp}`;
+  } else {
+    btns[i].classList.add('wrong');
+    btns[q.c].classList.add('correct');
+    fb.className='feedback-box show ko';
+    fb.innerHTML=`❌ <strong>Incorrecto.</strong> La respuesta correcta es <strong>${String.fromCharCode(65+q.c)}. ${q.opts[q.c]}</strong>. ${q.exp}`;
+  }
+  document.getElementById('q-score').textContent=score;
+  document.getElementById('btn-next').disabled=false;
+}
+function nextQ(){ qIdx++; renderQuiz(); }
+function showResult(){
+  document.getElementById('q-progress').style.width='100%';
+  const pct=Math.round((score/allQuestions.length)*100);
+  const emoji = pct>=80?'🎉':pct>=60?'👍':'📚';
+  const msg   = pct>=80?'¡Excelente! Estás listo para el parcial.':pct>=60?'Bien, pero repasá algunos temas.':'Seguí estudiando, podés mejorar.';
+  document.getElementById('quiz-area').innerHTML=`
+  <div class="result-card">
+    <span class="emoji">${emoji}</span>
+    <h2>${msg}</h2>
+    <span class="score-big">${score}/${allQuestions.length}</span>
+    <p>${pct}% de respuestas correctas</p>
+    <div class="result-detail">
+      <div class="rstat ok">✅ Correctas<br><strong>${score}</strong></div>
+      <div class="rstat ko">❌ Incorrectas<br><strong>${allQuestions.length-score}</strong></div>
+    </div>
+    <button class="btn-retry" onclick="restartQuiz()">🔄 Repetir Quiz</button>
+  </div>`;
+  if(pct>=80) launchConfetti();
+}
+function restartQuiz(){ qIdx=0; score=0; renderQuiz(); }
+renderQuiz();
+
+// ════════════════════════════
+//  CONFETTI
+// ════════════════════════════
+function launchConfetti(){
+  const colors=['#6d28d9','#8b5cf6','#c4b5fd','#a78bfa','#fbbf24','#34d399'];
+  for(let i=0;i<80;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.cssText=`left:${Math.random()*100}vw;top:-20px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${1.2+Math.random()*1.5}s;animation-delay:${Math.random()*.8}s;transform:rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(el);
+    el.addEventListener('animationend',()=>el.remove());
+  }
+}
+</script>
+</body>
+</html>

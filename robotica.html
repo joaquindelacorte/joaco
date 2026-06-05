@@ -316,6 +316,45 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
 .btn-fisico{width:90px;height:90px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fca5a5,#dc2626);box-shadow:0 6px 0 #7f1d1d,0 8px 14px rgba(0,0,0,.25);border:none;cursor:pointer;font-weight:800;color:#fff;font-size:.85rem;transition:.07s;user-select:none}
 .btn-fisico:active,.btn-fisico.pressed{transform:translateY(4px);box-shadow:0 2px 0 #7f1d1d,0 4px 8px rgba(0,0,0,.25)}
 
+/* CIRCUITO esquemático */
+.circuit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.4rem;margin-top:1rem}
+.circuit-card{background:#fff;border:2px solid var(--border);border-radius:14px;padding:1.2rem;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.circuit-card.up{border-color:var(--blue);background:linear-gradient(180deg,#fff,#eff6ff)}
+.circuit-card.down{border-color:var(--green);background:linear-gradient(180deg,#fff,#f0fdf4)}
+.circuit-card h3{font-size:1rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+.circuit-card.up h3{color:var(--blue)}
+.circuit-card.down h3{color:var(--green)}
+.circuit-svg{display:block;margin:0 auto;max-width:280px;width:100%}
+.circuit-state{display:flex;justify-content:space-around;align-items:center;gap:.6rem;background:#0f172a;color:#fff;border-radius:10px;padding:.7rem;margin-top:.6rem;font-family:'Courier New',monospace}
+.cs-block{text-align:center}
+.cs-block .cs-lbl{font-size:.65rem;text-transform:uppercase;color:#94a3b8;letter-spacing:.5px}
+.cs-block .cs-val{font-size:1rem;font-weight:800;display:block;margin-top:.15rem}
+.cs-block .cs-val.HIGH{color:#86efac}
+.cs-block .cs-val.LOW{color:#fca5a5}
+.cs-btn{display:block;width:100%;margin-top:.7rem;padding:.6rem;background:var(--pur);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:.88rem;user-select:none}
+.cs-btn:active{background:var(--pur-lt)}
+.cs-btn.pressed{background:#dc2626}
+
+/* Animación corriente */
+@keyframes flow{to{stroke-dashoffset:-20}}
+.current-on{stroke:#22c55e!important;stroke-width:4!important;stroke-dasharray:8 4;animation:flow .6s linear infinite}
+.current-off{stroke:#94a3b8;stroke-width:2.5}
+
+/* Pin reading box */
+.pinbox{background:#0c4a6e;color:#fff;padding:.3rem .6rem;border-radius:4px;font-family:monospace;font-size:.7rem;font-weight:700}
+
+/* Tabla de verdad */
+.truth-tbl{width:100%;font-size:.82rem;margin-top:.7rem;border-collapse:collapse;border-radius:8px;overflow:hidden}
+.truth-tbl th{background:#374151;color:#fff;padding:.5rem;text-align:center;font-size:.75rem}
+.truth-tbl td{padding:.55rem .4rem;text-align:center;border-bottom:1px solid var(--border);background:#fff}
+.truth-tbl td.high{color:var(--green);font-weight:800;background:#dcfce7}
+.truth-tbl td.low{color:var(--red);font-weight:800;background:#fee2e2}
+
+/* Analogía visual */
+.analogy{background:linear-gradient(135deg,#fef9c3,#fde68a);border:2px dashed #f59e0b;border-radius:12px;padding:1rem 1.3rem;margin:1rem 0}
+.analogy h4{color:#92400e;font-size:.95rem;margin-bottom:.4rem;display:flex;align-items:center;gap:.4rem}
+.analogy p{color:#78350f;font-size:.88rem;line-height:1.6}
+
 /* LDR sim */
 .ldr-svg{max-width:260px;width:100%;display:block;margin:0 auto}
 
@@ -564,6 +603,221 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
     </div>
   </div>
   <div class="tip"><span>💡</span><span>El valor típico de la resistencia pull-up/pull-down es <strong>10 kΩ</strong>. Arduino tiene pull-ups internos activables con <code>INPUT_PULLUP</code>, así evitamos resistencia externa.</span></div>
+
+  <div class="stitle"><span class="ico">🔬</span>¿Cómo funcionan realmente? — Esquemas interactivos</div>
+
+  <div class="grid g2">
+    <div class="card re">
+      <h3>🚨 El problema: pin "flotando"</h3>
+      <p>Un pin de Arduino configurado como <code>INPUT</code> tiene <strong>alta impedancia</strong>: casi no consume corriente. Si lo dejás suelto sin nada conectado, su lectura es <strong>impredecible</strong>: cualquier ruido eléctrico (lámparas, motores, hasta tu mano cerca) le induce una tensión variable.</p>
+      <div class="diag-card" style="display:block;margin-top:.7rem;color:#fca5a5">
+        Sin pull-up/down → lecturas aleatorias:<br>HIGH, LOW, HIGH, HIGH, LOW, HIGH... 🎲
+      </div>
+    </div>
+    <div class="card te">
+      <h3>✅ La solución</h3>
+      <p>Conectamos una resistencia que "<strong>fuerce</strong>" al pin a un nivel <strong>conocido</strong> cuando el pulsador está en reposo. Y además <strong>limita la corriente</strong> cuando se aprieta el pulsador, evitando un cortocircuito entre +5V y GND.</p>
+      <ul style="margin-top:.5rem;margin-left:1.2rem;font-size:.88rem">
+        <li><strong>Pull-UP</strong> → R va a <strong>+5V</strong> → en reposo lee HIGH</li>
+        <li><strong>Pull-DOWN</strong> → R va a <strong>GND</strong> → en reposo lee LOW</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <h4>🚰 Analogía del agua</h4>
+    <p>Pensá el pin del Arduino como un <strong>medidor de presión</strong>. La resistencia pull-up es como una <strong>canilla de agua siempre abierta</strong> (a baja presión) — el pin "siente" presión alta (HIGH). Cuando apretás el pulsador, abrís un <strong>desagüe directo</strong> a GND: toda el agua se va al drenaje, la presión cae a cero (LOW). El pull-down es lo inverso: en reposo está conectado al drenaje (LOW), y al apretar abrís la canilla de +5V (HIGH).</p>
+  </div>
+
+  <div class="circuit-grid">
+    <!-- ═════ PULL-UP CIRCUIT ═════ -->
+    <div class="circuit-card up">
+      <h3>🔼 Pull-UP</h3>
+      <svg class="circuit-svg" viewBox="0 0 280 320" id="pullUpSvg">
+        <!-- +5V rail -->
+        <line x1="20" y1="25" x2="260" y2="25" stroke="#dc2626" stroke-width="3"/>
+        <circle cx="140" cy="25" r="5" fill="#dc2626"/>
+        <text x="140" y="18" fill="#dc2626" font-size="11" font-weight="800" text-anchor="middle">+5V</text>
+
+        <!-- Wire from +5V down to resistor -->
+        <line x1="140" y1="25" x2="140" y2="55" stroke="#1f2937" stroke-width="2.5" id="pu-w1"/>
+
+        <!-- Resistor (zigzag) -->
+        <polyline points="140,55 130,62 150,72 130,82 150,92 130,102 150,112 140,118" fill="none" stroke="#1f2937" stroke-width="2.5"/>
+        <text x="170" y="90" fill="#1d4ed8" font-size="11" font-weight="700">R</text>
+        <text x="170" y="103" fill="#6b7280" font-size="9">10kΩ</text>
+
+        <!-- Wire from resistor down to junction -->
+        <line x1="140" y1="118" x2="140" y2="170" stroke="#1f2937" stroke-width="2.5" id="pu-w2"/>
+
+        <!-- Junction node -->
+        <circle cx="140" cy="170" r="5" fill="#1f2937"/>
+
+        <!-- Wire from junction to PIN (right) -->
+        <line x1="140" y1="170" x2="220" y2="170" stroke="#1f2937" stroke-width="2.5"/>
+
+        <!-- PIN connection -->
+        <rect x="220" y="155" width="55" height="30" fill="#0c4a6e" stroke="#0284c7" stroke-width="2" rx="4"/>
+        <text x="247" y="173" fill="#7dd3fc" font-size="9" font-weight="700" text-anchor="middle">PIN 2</text>
+        <text x="247" y="183" fill="#94a3b8" font-size="7" text-anchor="middle">Arduino</text>
+
+        <!-- Wire from junction down to switch -->
+        <line x1="140" y1="170" x2="140" y2="215" stroke="#1f2937" stroke-width="2.5" id="pu-w3"/>
+
+        <!-- Switch (button) — animatable -->
+        <g id="pu-switch">
+          <circle cx="140" cy="215" r="4" fill="#1f2937"/>
+          <line x1="140" y1="215" x2="160" y2="200" stroke="#1f2937" stroke-width="2.5" id="pu-sw-arm"/>
+          <circle cx="160" cy="200" r="3" fill="none" stroke="#1f2937" stroke-width="2"/>
+          <circle cx="140" cy="245" r="4" fill="#1f2937"/>
+        </g>
+        <text x="180" y="225" fill="#374151" font-size="10" font-weight="700">⏵ Pulsador</text>
+
+        <!-- Wire from switch down to GND -->
+        <line x1="140" y1="245" x2="140" y2="285" stroke="#1f2937" stroke-width="2.5" id="pu-w4"/>
+
+        <!-- GND rail -->
+        <line x1="20" y1="285" x2="260" y2="285" stroke="#374151" stroke-width="3"/>
+        <circle cx="140" cy="285" r="5" fill="#374151"/>
+        <text x="140" y="305" fill="#374151" font-size="11" font-weight="800" text-anchor="middle">GND</text>
+
+        <!-- Voltage marker at pin (lightning) -->
+        <text x="105" y="175" fill="#dc2626" font-size="12" font-weight="800" id="pu-volt">5V</text>
+      </svg>
+
+      <div class="circuit-state">
+        <div class="cs-block">
+          <div class="cs-lbl">Pulsador</div>
+          <span class="cs-val" id="pu-btn-state">SUELTO</span>
+        </div>
+        <div class="cs-block">
+          <div class="cs-lbl">V en pin</div>
+          <span class="cs-val" id="pu-pin-volt">5 V</span>
+        </div>
+        <div class="cs-block">
+          <div class="cs-lbl">digitalRead</div>
+          <span class="cs-val HIGH" id="pu-pin-read">HIGH</span>
+        </div>
+      </div>
+
+      <button class="cs-btn" id="pu-press-btn"
+        onmousedown="setPullUp(true)" onmouseup="setPullUp(false)" onmouseleave="setPullUp(false)"
+        ontouchstart="setPullUp(true)" ontouchend="setPullUp(false)">
+        🖱️ Mantené apretado para presionar
+      </button>
+
+      <table class="truth-tbl">
+        <thead><tr><th>Estado</th><th>Camino</th><th>Lectura</th></tr></thead>
+        <tbody>
+          <tr><td>Suelto</td><td>+5V → R → pin</td><td class="high">HIGH</td></tr>
+          <tr><td>Apretado</td><td>pin → GND</td><td class="low">LOW</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ═════ PULL-DOWN CIRCUIT ═════ -->
+    <div class="circuit-card down">
+      <h3>🔽 Pull-DOWN</h3>
+      <svg class="circuit-svg" viewBox="0 0 280 320" id="pullDownSvg">
+        <!-- +5V rail -->
+        <line x1="20" y1="25" x2="260" y2="25" stroke="#dc2626" stroke-width="3"/>
+        <circle cx="140" cy="25" r="5" fill="#dc2626"/>
+        <text x="140" y="18" fill="#dc2626" font-size="11" font-weight="800" text-anchor="middle">+5V</text>
+
+        <!-- Wire from +5V down to switch -->
+        <line x1="140" y1="25" x2="140" y2="55" stroke="#1f2937" stroke-width="2.5" id="pd-w1"/>
+
+        <!-- Switch (button) — animatable -->
+        <g id="pd-switch">
+          <circle cx="140" cy="55" r="4" fill="#1f2937"/>
+          <line x1="140" y1="55" x2="160" y2="40" stroke="#1f2937" stroke-width="2.5" id="pd-sw-arm"/>
+          <circle cx="160" cy="40" r="3" fill="none" stroke="#1f2937" stroke-width="2"/>
+          <circle cx="140" cy="85" r="4" fill="#1f2937"/>
+        </g>
+        <text x="180" y="65" fill="#374151" font-size="10" font-weight="700">⏵ Pulsador</text>
+
+        <!-- Wire from switch down to junction -->
+        <line x1="140" y1="85" x2="140" y2="170" stroke="#1f2937" stroke-width="2.5" id="pd-w2"/>
+
+        <!-- Junction node -->
+        <circle cx="140" cy="170" r="5" fill="#1f2937"/>
+
+        <!-- Wire to PIN -->
+        <line x1="140" y1="170" x2="220" y2="170" stroke="#1f2937" stroke-width="2.5"/>
+
+        <!-- PIN connection -->
+        <rect x="220" y="155" width="55" height="30" fill="#0c4a6e" stroke="#0284c7" stroke-width="2" rx="4"/>
+        <text x="247" y="173" fill="#7dd3fc" font-size="9" font-weight="700" text-anchor="middle">PIN 2</text>
+        <text x="247" y="183" fill="#94a3b8" font-size="7" text-anchor="middle">Arduino</text>
+
+        <!-- Wire from junction down to resistor -->
+        <line x1="140" y1="170" x2="140" y2="195" stroke="#1f2937" stroke-width="2.5" id="pd-w3"/>
+
+        <!-- Resistor (zigzag) -->
+        <polyline points="140,195 130,202 150,212 130,222 150,232 130,242 150,252 140,258" fill="none" stroke="#1f2937" stroke-width="2.5"/>
+        <text x="170" y="225" fill="#15803d" font-size="11" font-weight="700">R</text>
+        <text x="170" y="238" fill="#6b7280" font-size="9">10kΩ</text>
+
+        <!-- Wire from resistor down to GND -->
+        <line x1="140" y1="258" x2="140" y2="285" stroke="#1f2937" stroke-width="2.5" id="pd-w4"/>
+
+        <!-- GND rail -->
+        <line x1="20" y1="285" x2="260" y2="285" stroke="#374151" stroke-width="3"/>
+        <circle cx="140" cy="285" r="5" fill="#374151"/>
+        <text x="140" y="305" fill="#374151" font-size="11" font-weight="800" text-anchor="middle">GND</text>
+
+        <!-- Voltage marker at pin -->
+        <text x="105" y="175" fill="#15803d" font-size="12" font-weight="800" id="pd-volt">0V</text>
+      </svg>
+
+      <div class="circuit-state">
+        <div class="cs-block">
+          <div class="cs-lbl">Pulsador</div>
+          <span class="cs-val" id="pd-btn-state">SUELTO</span>
+        </div>
+        <div class="cs-block">
+          <div class="cs-lbl">V en pin</div>
+          <span class="cs-val" id="pd-pin-volt">0 V</span>
+        </div>
+        <div class="cs-block">
+          <div class="cs-lbl">digitalRead</div>
+          <span class="cs-val LOW" id="pd-pin-read">LOW</span>
+        </div>
+      </div>
+
+      <button class="cs-btn" id="pd-press-btn"
+        onmousedown="setPullDown(true)" onmouseup="setPullDown(false)" onmouseleave="setPullDown(false)"
+        ontouchstart="setPullDown(true)" ontouchend="setPullDown(false)">
+        🖱️ Mantené apretado para presionar
+      </button>
+
+      <table class="truth-tbl">
+        <thead><tr><th>Estado</th><th>Camino</th><th>Lectura</th></tr></thead>
+        <tbody>
+          <tr><td>Suelto</td><td>pin → R → GND</td><td class="low">LOW</td></tr>
+          <tr><td>Apretado</td><td>+5V → pin</td><td class="high">HIGH</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="stitle" style="margin-top:2.5rem;font-size:1.05rem"><span class="ico">📚</span>¿Por qué SIEMPRE va la resistencia?</div>
+  <div class="grid g3">
+    <div class="card or">
+      <h3>① Define el estado en reposo</h3>
+      <p>Sin la R, el pin queda "<strong>flotando</strong>": no está conectado a nada. Cualquier interferencia eléctrica le induce una tensión y la lectura es <strong>basura</strong>.</p>
+    </div>
+    <div class="card or">
+      <h3>② Evita el cortocircuito</h3>
+      <p>Si conectaras +5V directo a GND al apretar el botón → <strong>cortocircuito</strong>. La R limita la corriente a <code>I = 5V / 10kΩ = 0,5 mA</code>: segura para el Arduino.</p>
+    </div>
+    <div class="card or">
+      <h3>③ Ahorra energía</h3>
+      <p>10 kΩ es un valor balanceado: lo suficientemente alto como para gastar poca corriente, y bajo como para que el ruido eléctrico no afecte la lectura.</p>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:1.2rem"><strong>🎁 Atajo:</strong> el Arduino tiene <strong>resistencias pull-up internas</strong> que se activan con <code>pinMode(pin, INPUT_PULLUP)</code>. Así te ahorrás soldar la R externa y conectás el pulsador directamente entre el pin y GND. ¡La lógica sigue siendo invertida!</div>
 
   <div class="stitle"><span class="ico">🔁</span>Rebote mecánico (debounce)</div>
   <div class="grid g2">
@@ -1855,6 +2109,53 @@ function updateBtn(){
   document.getElementById('btnLed').classList.toggle('on', btnPressed);
 }
 updateBtn();
+
+// ════════════════════════════
+//  PULL-UP / PULL-DOWN CIRCUITS
+// ════════════════════════════
+function setPullUp(pressed){
+  document.getElementById('pu-press-btn').classList.toggle('pressed', pressed);
+  // cerrar/abrir la llave (línea diagonal vs vertical)
+  const arm = document.getElementById('pu-sw-arm');
+  if(pressed){ arm.setAttribute('x2','140'); arm.setAttribute('y2','245'); }
+  else       { arm.setAttribute('x2','160'); arm.setAttribute('y2','200'); }
+  // estados
+  document.getElementById('pu-btn-state').textContent = pressed ? 'APRETADO' : 'SUELTO';
+  document.getElementById('pu-pin-volt').textContent  = pressed ? '0 V' : '5 V';
+  const read = document.getElementById('pu-pin-read');
+  read.textContent = pressed ? 'LOW' : 'HIGH';
+  read.className = 'cs-val ' + (pressed?'LOW':'HIGH');
+  // animación de corriente: solo cuando está apretado fluye +5V → R → pin → GND
+  ['pu-w1','pu-w2','pu-w3','pu-w4'].forEach(id=>{
+    const el = document.getElementById(id);
+    el.classList.toggle('current-on', pressed);
+  });
+  // marca de tensión cerca del pin
+  const volt = document.getElementById('pu-volt');
+  volt.textContent = pressed ? '0V' : '5V';
+  volt.setAttribute('fill', pressed ? '#15803d' : '#dc2626');
+}
+
+function setPullDown(pressed){
+  document.getElementById('pd-press-btn').classList.toggle('pressed', pressed);
+  const arm = document.getElementById('pd-sw-arm');
+  if(pressed){ arm.setAttribute('x2','140'); arm.setAttribute('y2','85'); }
+  else       { arm.setAttribute('x2','160'); arm.setAttribute('y2','40'); }
+  document.getElementById('pd-btn-state').textContent = pressed ? 'APRETADO' : 'SUELTO';
+  document.getElementById('pd-pin-volt').textContent  = pressed ? '5 V' : '0 V';
+  const read = document.getElementById('pd-pin-read');
+  read.textContent = pressed ? 'HIGH' : 'LOW';
+  read.className = 'cs-val ' + (pressed?'HIGH':'LOW');
+  // En pull-DOWN sin apretar, sigue habiendo conexión por R (pero sin corriente real significativa).
+  // Mostramos corriente solo cuando se aprieta (+5V → pin → R → GND)
+  ['pd-w1','pd-w2','pd-w3','pd-w4'].forEach(id=>{
+    const el = document.getElementById(id);
+    el.classList.toggle('current-on', pressed);
+  });
+  const volt = document.getElementById('pd-volt');
+  volt.textContent = pressed ? '5V' : '0V';
+  volt.setAttribute('fill', pressed ? '#dc2626' : '#15803d');
+}
 
 // ════════════════════════════
 //  REBOTE SIM

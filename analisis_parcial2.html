@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análisis Matemático I · Parcial 2 — Derivadas, Integrales y EDOs</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+
+<style>
+:root{
+  --bg:#0f172a; --panel:#1e293b; --panel2:#273449; --border:#334155;
+  --text:#e2e8f0; --muted:#94a3b8; --accent:#38bdf8; --accent2:#a78bfa;
+  --good:#34d399; --warn:#fbbf24; --bad:#f87171; --pink:#ec4899;
+  --yellow:#fde68a; --orange:#fb923c;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+     background:var(--bg); color:var(--text); line-height:1.55}
+
+.layout{display:grid; grid-template-columns:280px 1fr; min-height:100vh}
+
+/* ── Sidebar ── */
+nav.sidebar{background:var(--panel); border-right:1px solid var(--border);
+            padding:18px 14px; position:sticky; top:0; height:100vh; overflow-y:auto}
+.brand{font-weight:700; font-size:17px; color:white; margin-bottom:4px}
+.brand small{display:block; font-weight:400; color:var(--muted); font-size:11px; margin-top:2px}
+.nav-level{font-size:10px; color:var(--muted); letter-spacing:1px; text-transform:uppercase;
+           padding:14px 4px 4px}
+nav.sidebar a{display:flex; align-items:center; gap:8px; color:var(--text); text-decoration:none;
+              padding:6px 10px; border-radius:6px; font-size:13px; margin:1px 0; transition:background .15s}
+nav.sidebar a:hover,nav.sidebar a.active{background:var(--panel2); color:var(--accent)}
+
+/* ── Main ── */
+main{padding:28px 40px; max-width:980px}
+h1{font-size:30px; color:white; margin-bottom:4px}
+.subtitle{color:var(--muted); font-size:14px; margin-bottom:28px}
+h2{font-size:22px; color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:7px; margin:40px 0 14px}
+h3{font-size:17px; color:var(--accent2); margin:22px 0 8px}
+h4{font-size:14px; color:var(--yellow); margin:14px 0 6px; font-weight:600}
+p,li{font-size:14.5px}
+ul,ol{padding-left:22px; margin:6px 0}
+
+/* ── Cards ── */
+.card{background:var(--panel); border:1px solid var(--border); border-radius:10px;
+      padding:16px 20px; margin:12px 0}
+.card.formula{border-left:4px solid var(--accent2); background:var(--panel2)}
+.card.tip{border-left:4px solid var(--good)}
+.card.warn{border-left:4px solid var(--warn)}
+.card.intuition{border-left:4px solid var(--pink); background:#2a1d2e}
+.card.game{border-left:4px solid var(--accent); background:#0a1929}
+.card.answer{border-left:4px solid var(--good); background:#0d1f16}
+.card.enunciado{border-left:4px solid var(--warn); background:#1c1a0e}
+.card.key{border-left:4px solid var(--pink); background:#1a0d18}
+.card.edo{border-left:4px solid var(--orange); background:#1a1208}
+
+/* ── Badges ── */
+.badge{display:inline-block; padding:3px 10px; border-radius:12px;
+       font-size:12px; font-weight:600; margin-right:6px; margin-bottom:4px}
+.badge.deriv{background:#143526; color:var(--good)}
+.badge.integ{background:#1a1a3e; color:#818cf8}
+.badge.edo{background:#3d2e0a; color:var(--warn)}
+.badge.aplic{background:#3a1c1c; color:var(--bad)}
+
+/* ── Tables ── */
+table{border-collapse:collapse; width:100%; margin:10px 0; font-size:14px}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--panel2); color:var(--accent)}
+td code{background:#0b1220; padding:1px 5px; border-radius:3px; font-size:12px; color:var(--yellow)}
+
+/* ── Formula box ── */
+.formula-box{background:#0b1220; border:1px solid var(--border); border-radius:8px;
+             padding:12px 16px; margin:8px 0; text-align:center; font-size:16px}
+
+/* ── Grid ── */
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+@media(max-width:860px){.grid2,.grid3{grid-template-columns:1fr}}
+
+/* ── Steps ── */
+.steps{margin:10px 0}
+.step{display:flex; gap:12px; margin:8px 0; align-items:flex-start}
+.step-n{flex-shrink:0; width:26px; height:26px; border-radius:50%;
+        background:var(--accent2); color:#0b1220; font-size:12px; font-weight:700;
+        display:flex; align-items:center; justify-content:center}
+.step-body{flex:1; font-size:14px; padding-top:4px}
+
+/* ── Controls ── */
+.controls{display:flex; flex-wrap:wrap; gap:12px; margin:14px 0; align-items:flex-end}
+.controls label{display:flex; flex-direction:column; font-size:13px; color:var(--muted); min-width:130px}
+.controls input[type=number],.controls select{
+  background:#0b1220; color:var(--text); border:1px solid var(--border); border-radius:6px;
+  padding:6px 10px; font-size:14px; margin-top:4px}
+.controls input[type=range]{background:transparent; margin-top:4px; width:100%}
+
+/* ── Stats output ── */
+.stat-output{display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));
+             gap:10px; margin-top:12px}
+.stat-box{background:#0b1220; padding:10px 12px; border-radius:8px; border:1px solid var(--border)}
+.stat-box .label{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px}
+.stat-box .value{font-size:20px; font-weight:700; color:var(--accent)}
+
+/* ── Plot ── */
+.plot{width:100%; height:340px; background:#0b1220; border-radius:8px; border:1px solid var(--border); margin-top:10px}
+.plot-sm{width:100%; height:240px; background:#0b1220; border-radius:8px; border:1px solid var(--border)}
+
+/* ── Buttons ── */
+.btn{background:var(--accent); color:#0b1220; border:none; padding:8px 18px;
+     border-radius:6px; font-weight:600; cursor:pointer; font-size:14px; transition:filter .15s}
+.btn:hover{filter:brightness(1.1)}
+.btn-2{background:var(--panel2); color:var(--text); border:1px solid var(--border);
+       padding:8px 16px; border-radius:6px; cursor:pointer; font-size:14px}
+.btn-good{background:var(--good); color:#0b1220; border:none; padding:8px 18px;
+          border-radius:6px; font-weight:600; cursor:pointer; font-size:14px}
+
+/* ── Code ── */
+code{background:#0b1220; padding:2px 6px; border-radius:4px; font-size:13px; color:#fcd34d}
+pre{background:#0b1220; border:1px solid var(--border); border-radius:6px;
+    padding:12px 16px; overflow-x:auto; font-size:13px; color:#e2e8f0; line-height:1.6}
+
+/* ── Quiz ── */
+.quiz-q{background:var(--panel2); padding:14px 18px; border-radius:8px; margin:10px 0}
+.quiz-q .opts{display:flex; flex-direction:column; gap:8px; margin-top:10px}
+.quiz-q .opt{background:#0b1220; padding:10px 14px; border-radius:6px; border:2px solid transparent;
+             cursor:pointer; transition:all .15s}
+.quiz-q .opt:hover{border-color:var(--accent)}
+.quiz-q .opt.correct{background:#143526; border-color:var(--good)}
+.quiz-q .opt.wrong{background:#3a1c1c; border-color:var(--bad)}
+.quiz-feedback{margin-top:8px; font-size:13.5px; color:var(--muted); padding:8px 10px;
+               background:#0b1220; border-radius:6px; border-left:3px solid var(--accent)}
+.quiz-score{font-size:28px; font-weight:700; text-align:center; padding:16px; color:var(--accent)}
+
+/* ── Reveal ── */
+details.reveal{background:var(--panel2); border-radius:8px; padding:10px 16px; margin:10px 0;
+               border:1px solid var(--border)}
+details.reveal summary{cursor:pointer; color:var(--accent); font-weight:600; padding:4px 0; font-size:14px}
+details.reveal[open]{padding-bottom:14px}
+
+hr{border:none; border-top:1px solid var(--border); margin:30px 0}
+.footer{margin-top:60px; padding:20px; text-align:center; color:var(--muted); font-size:12px;
+        border-top:1px solid var(--border)}
+
+/* ── Highlight ── */
+.hl-good{color:var(--good); font-weight:700}
+.hl-warn{color:var(--warn); font-weight:700}
+.hl-bad{color:var(--bad); font-weight:700}
+.hl-accent{color:var(--accent); font-weight:700}
+.hl-purple{color:var(--accent2); font-weight:700}
+.hl-orange{color:var(--orange); font-weight:700}
+
+/* ── Responsive ── */
+@media(max-width:860px){
+  .layout{grid-template-columns:1fr}
+  nav.sidebar{position:relative; height:auto; max-height:60vh}
+  main{padding:20px 16px}
+}
+
+/* Mobile back-to-top */
+.back-home{display:inline-block; margin-bottom:14px; color:var(--accent);
+           text-decoration:none; font-size:13px}
+.back-home:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ════════════════ SIDEBAR ════════════════ -->
+<nav class="sidebar">
+  <div class="brand">📐 Análisis I · P2<br><small>Derivadas + Integrales + EDOs · Lic. Automatización</small></div>
+
+  <a href="index.html" class="back-home">← Volver al inicio</a>
+
+  <div class="nav-level">🟢 Bloque 1 · Derivadas</div>
+  <a href="#intro">👋 Presentación</a>
+  <a href="#deriv-concepto">1. Razón de cambio</a>
+  <a href="#deriv-reglas">2. Reglas de derivación</a>
+  <a href="#deriv-sim">🎮 Simulador tangente</a>
+  <a href="#deriv-aplic">3. Aplicaciones (sensor / actuador)</a>
+  <a href="#deriv-ej">📝 Ejercicios derivadas</a>
+
+  <div class="nav-level">🟣 Bloque 2 · Integrales</div>
+  <a href="#int-concepto">4. Integral como acumulación</a>
+  <a href="#tfc">5. TFC y Regla de Barrow</a>
+  <a href="#riemann">6. Sumas de Riemann (PLC)</a>
+  <a href="#riemann-sim">🎮 Simulador Riemann vs Barrow</a>
+  <a href="#hidro">7. Variables hidromecánicas</a>
+  <a href="#area-curvas">8. Área entre curvas</a>
+  <a href="#int-ej">📝 Ejercicios integrales</a>
+
+  <div class="nav-level">🟠 Bloque 3 · EDOs</div>
+  <a href="#edo-concepto">9. ¿Qué es una EDO?</a>
+  <a href="#edo-clasif">10. Orden y linealidad</a>
+  <a href="#separables">11. Variables separables</a>
+  <a href="#torricelli">💧 Vaciado Torricelli</a>
+  <a href="#rl">⚡ Circuito RL</a>
+  <a href="#newton">🌡️ Ley de Newton</a>
+  <a href="#edo-sim">🎮 Simulador tanque</a>
+  <a href="#edo-ej">📝 Ejercicios EDOs</a>
+
+  <div class="nav-level">🏆 Cierre</div>
+  <a href="#cheatsheet">📋 Cheat sheet</a>
+  <a href="#errores">⚠️ Errores comunes</a>
+  <a href="#quiz">🎓 Quiz final (12 preguntas)</a>
+</nav>
+
+<!-- ════════════════ MAIN ════════════════ -->
+<main>
+
+<!-- ── INTRO ── -->
+<h1 id="intro">📐 Análisis Matemático I — Parcial 2</h1>
+<p class="subtitle">Derivadas · Integrales · TFC · EDOs · Aplicaciones a control y automatización — Clases 8 a 11</p>
+
+<div class="card intuition">
+<h3 style="margin-top:0">👋 ¿Qué vas a aprender acá?</h3>
+<p>En el primer parcial trabajamos con <strong>funciones, límites y continuidad</strong>. En el segundo parcial damos el salto al <strong>cálculo diferencial e integral</strong>, las dos herramientas que cualquier ingeniero de control necesita todos los días.</p>
+<p>Las tres ideas centrales del parcial:</p>
+<ul>
+  <li><strong>Derivada</strong> → mide qué tan rápido cambia algo. Velocidad de un actuador, sensibilidad de un sensor, pendiente de una curva.</li>
+  <li><strong>Integral</strong> → mide cuánto se acumuló. Volumen en un tanque, distancia recorrida, trabajo realizado.</li>
+  <li><strong>EDO</strong> → describe cómo evoluciona un sistema dinámico. Vaciado de tanque, carga de un circuito RL, enfriamiento.</li>
+</ul>
+<p>El hilo conductor: <span class="hl-purple">en automatización todo cambia con el tiempo</span> y necesitamos predecir esa evolución.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- ─────────────────────────── BLOQUE 1: DERIVADAS ─────────────────────────── -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+
+<h2 id="deriv-concepto"><span class="badge deriv">Derivadas</span>1. La derivada como razón de cambio</h2>
+
+<div class="card intuition">
+<h4>🧠 Intuición</h4>
+<p>En automatización constantemente nos preguntamos <em>¿qué tan rápido cambia esta variable?</em></p>
+<ul>
+  <li>¿Con qué rapidez se calienta un horno cuando aumentamos la potencia?</li>
+  <li>¿Qué tan sensible es un sensor de presión ante pequeñas variaciones?</li>
+  <li>¿Cuál es la velocidad instantánea de un brazo robótico?</li>
+</ul>
+<p>La <strong>derivada</strong> responde a todas estas preguntas. Mide cómo cambia una función ante cambios <em>muy pequeños</em> en su entrada.</p>
+</div>
+
+<div class="card formula">
+<h4>Definición formal</h4>
+$$f'(a) = \lim_{h \to 0} \frac{f(a+h) - f(a)}{h}$$
+<p style="margin-top:8px; font-size:13.5px">Geométricamente es la <strong>pendiente de la recta tangente</strong> a la curva en $x=a$. Físicamente es la <strong>razón de cambio instantánea</strong>.</p>
+</div>
+
+<div class="grid2">
+<div class="card tip">
+<h4>🔧 Si f es posición → f′ es velocidad</h4>
+<p>Si $x(t)$ es la posición de un actuador, entonces $v(t)=x'(t)$ es su <strong>velocidad instantánea</strong>.</p>
+<p>Ejemplo: $x(t)=5t^2$ ⟹ $v(t)=10t$ m/s.</p>
+</div>
+<div class="card tip">
+<h4>🌡️ Si V es la lectura del sensor → V′ es la sensibilidad</h4>
+<p>Si $V(T)$ es el voltaje en función de la temperatura, $V'(T)$ es cuánto cambia la salida por cada °C extra.</p>
+<p>Ejemplo lineal: $V(T)=0{,}04\,T-1$ ⟹ $V'(T)=0{,}04$ V/°C.</p>
+</div>
+</div>
+
+<!-- ── 2. REGLAS ── -->
+<h2 id="deriv-reglas"><span class="badge deriv">Derivadas</span>2. Reglas de derivación</h2>
+
+<p>Para no calcular el límite cada vez, usamos reglas prácticas. Estas son las <span class="hl-accent">imprescindibles</span> para el parcial:</p>
+
+<div class="card formula">
+<table>
+<tr><th>Regla</th><th>Expresión</th><th>Ejemplo</th></tr>
+<tr><td>Constante</td><td>$\frac{d}{dx}[c]=0$</td><td>$\frac{d}{dx}[7]=0$</td></tr>
+<tr><td>Potencia</td><td>$\frac{d}{dx}[x^n]=n\,x^{n-1}$</td><td>$\frac{d}{dx}[x^5]=5x^4$</td></tr>
+<tr><td>Múltiplo</td><td>$\frac{d}{dx}[c\cdot f]=c\cdot f'$</td><td>$\frac{d}{dx}[3x^2]=6x$</td></tr>
+<tr><td>Suma/Resta</td><td>$\frac{d}{dx}[f\pm g]=f'\pm g'$</td><td>$\frac{d}{dx}[x^2+x]=2x+1$</td></tr>
+<tr><td>Producto</td><td>$\frac{d}{dx}[f\cdot g]=f'g+fg'$</td><td>$\frac{d}{dx}[x\cdot \ln x]=\ln x+1$</td></tr>
+<tr><td>Cociente</td><td>$\frac{d}{dx}\left[\frac{f}{g}\right]=\frac{f'g-fg'}{g^2}$</td><td>$\frac{d}{dx}\left[\frac{x}{x+1}\right]=\frac{1}{(x+1)^2}$</td></tr>
+<tr><td>Exponencial</td><td>$\frac{d}{dx}[e^{kx}]=k\,e^{kx}$</td><td>$\frac{d}{dx}[e^{-2t}]=-2e^{-2t}$</td></tr>
+<tr><td>Logaritmo</td><td>$\frac{d}{dx}[\ln x]=\frac{1}{x}$</td><td>$\frac{d}{dx}[\ln(t^2)]=\frac{2}{t}$</td></tr>
+</table>
+</div>
+
+<div class="card warn">
+<h4>⚠️ Truco: pasá raíces y fracciones a potencias</h4>
+<ul>
+  <li>$\sqrt{x} = x^{1/2}$ ⟹ $\dfrac{d}{dx}[\sqrt x]=\tfrac12 x^{-1/2}=\dfrac{1}{2\sqrt x}$</li>
+  <li>$\dfrac{1}{x^2} = x^{-2}$ ⟹ $\dfrac{d}{dx}\!\left[\tfrac{1}{x^2}\right]=-2x^{-3}=-\dfrac{2}{x^3}$</li>
+</ul>
+<p>Así evitás regla del cociente cuando hay potencias y fracciones simples.</p>
+</div>
+
+<!-- ── SIMULADOR TANGENTE ── -->
+<h2 id="deriv-sim">🎮 Simulador: recta tangente</h2>
+
+<div class="card game">
+<p>Movés el punto $x=a$ con el deslizador y ves cómo cambia la pendiente de la recta tangente. La curva azul es $f(x)$, la línea naranja es la tangente, y el valor de $f'(a)$ aparece en vivo.</p>
+<div class="controls">
+  <label>Función f(x)
+    <select id="dfunc">
+      <option value="x2">x²</option>
+      <option value="x3">x³ − 3x</option>
+      <option value="sin">sin(x)</option>
+      <option value="exp">e^(0.5x)</option>
+      <option value="sqrt">√x</option>
+    </select>
+  </label>
+  <label>Punto a = <span id="dval" class="hl-accent">1.0</span>
+    <input type="range" id="da" min="-3" max="3" step="0.05" value="1">
+  </label>
+</div>
+<div id="dplot" class="plot"></div>
+<div class="stat-output">
+  <div class="stat-box"><div class="label">f(a)</div><div class="value" id="dfa">1.00</div></div>
+  <div class="stat-box"><div class="label">f′(a) = pendiente</div><div class="value" id="dfpa">2.00</div></div>
+</div>
+</div>
+
+<!-- ── 3. APLICACIONES ── -->
+<h2 id="deriv-aplic"><span class="badge deriv">Derivadas</span>3. Aplicaciones a planta</h2>
+
+<div class="grid2">
+<div class="card key">
+<h4>⚙️ Actuador lineal</h4>
+<p>Posición: $x(t)=2t^3-9t^2+12t$ cm</p>
+<p>Velocidad: $v(t)=x'(t)=6t^2-18t+12$ cm/s</p>
+<p><strong>v(t)=0</strong> cuando $6(t^2-3t+2)=0$ ⟹ $t=1$ s o $t=2$ s.</p>
+<p>Físicamente: el actuador <em>se detiene momentáneamente</em> para cambiar de sentido.</p>
+</div>
+<div class="card key">
+<h4>🌡️ Sensor no lineal</h4>
+<p>$V(T)=0{,}01T^2+0{,}5T+2$ V</p>
+<p>Sensibilidad: $V'(T)=0{,}02T+0{,}5$ V/°C</p>
+<p>En T=50°C → S=1,5 V/°C. En T=100°C → S=2,5 V/°C.</p>
+<p>El sensor es <span class="hl-warn">más sensible a temperaturas altas</span>: hay que linealizar antes del PLC.</p>
+</div>
+</div>
+
+<!-- ── EJERCICIOS DERIVADAS ── -->
+<h2 id="deriv-ej">📝 Ejercicios resueltos — Derivadas</h2>
+
+<details class="reveal" open>
+<summary>Ejercicio 1: Derivación básica (reglas de potencia y suma)</summary>
+<div class="card enunciado" style="margin-top:10px">Derivar: <br>
+a) $f(x)=3x^5-2x^3+7x-4$ <br>
+b) $g(x)=\dfrac{1}{x^2}$ <br>
+c) $h(x)=\sqrt x$
+</div>
+<div class="card answer">
+<p><strong>a)</strong> Aplicamos potencia + suma: $f'(x)=15x^4-6x^2+7$</p>
+<p><strong>b)</strong> Reescribo $g(x)=x^{-2}$ ⟹ $g'(x)=-2x^{-3}=-\dfrac{2}{x^3}$</p>
+<p><strong>c)</strong> Reescribo $h(x)=x^{1/2}$ ⟹ $h'(x)=\tfrac12 x^{-1/2}=\dfrac{1}{2\sqrt x}$</p>
+</div>
+</details>
+
+<details class="reveal">
+<summary>Ejercicio 2: Regla del producto</summary>
+<div class="card enunciado" style="margin-top:10px">Derivar $f(x)=(x^2+1)(x^3-2x)$</div>
+<div class="card answer">
+<p>Con regla del producto $u\cdot v$: $u=x^2+1$, $v=x^3-2x$, $u'=2x$, $v'=3x^2-2$.</p>
+<p>$f'(x)=u'v+uv'=(2x)(x^3-2x)+(x^2+1)(3x^2-2)$</p>
+<p>Desarrollando: $f'(x)=2x^4-4x^2+3x^4-2x^2+3x^2-2 = 5x^4-3x^2-2$</p>
+<p><em>Verificación rápida:</em> expandiendo primero $f(x)=x^5-2x^3+x^3-2x=x^5-x^3-2x$ ⟹ $f'(x)=5x^4-3x^2-2$ ✓</p>
+</div>
+</details>
+
+<details class="reveal">
+<summary>Ejercicio 3: Regla del cociente</summary>
+<div class="card enunciado" style="margin-top:10px">Derivar $f(x)=\dfrac{2x}{x^2+1}$</div>
+<div class="card answer">
+<p>$u=2x$, $v=x^2+1$, $u'=2$, $v'=2x$.</p>
+<p>$f'(x)=\dfrac{u'v-uv'}{v^2}=\dfrac{2(x^2+1)-2x(2x)}{(x^2+1)^2}=\dfrac{2x^2+2-4x^2}{(x^2+1)^2}$</p>
+<p>$\boxed{f'(x)=\dfrac{2-2x^2}{(x^2+1)^2}=\dfrac{2(1-x^2)}{(x^2+1)^2}}$</p>
+</div>
+</details>
+
+<details class="reveal">
+<summary>Ejercicio 4: Sensibilidad de un sensor de temperatura</summary>
+<div class="card enunciado" style="margin-top:10px">
+$V(T)=0{,}01T^2+0{,}5T+2$ <br>
+a) Hallar $V'(T)$ <br>
+b) Sensibilidad a T=50 °C y T=100 °C <br>
+c) ¿Qué significa que la sensibilidad aumente con T?
+</div>
+<div class="card answer">
+<p><strong>a)</strong> $V'(T)=0{,}02T+0{,}5$ V/°C</p>
+<p><strong>b)</strong> $V'(50)=1{,}0+0{,}5=1{,}5$ V/°C &emsp; $V'(100)=2{,}0+0{,}5=2{,}5$ V/°C</p>
+<p><strong>c)</strong> Es un sensor <em>no lineal</em>: a temperaturas más altas, un mismo $\Delta T$ produce mayor $\Delta V$. El PLC debe <span class="hl-warn">linealizar</span> antes de tomar decisiones, o usar una tabla de conversión. Si no, la lectura será sesgada en el rango alto.</p>
+</div>
+</details>
+
+<details class="reveal">
+<summary>Ejercicio 5: Velocidad de un actuador (¿cuándo se detiene?)</summary>
+<div class="card enunciado" style="margin-top:10px">
+$x(t)=2t^3-9t^2+12t$ cm <br>
+a) Hallar $v(t)$ <br>
+b) ¿En qué instante v=0? <br>
+c) ¿Qué pasa físicamente?
+</div>
+<div class="card answer">
+<p><strong>a)</strong> $v(t)=x'(t)=6t^2-18t+12$ cm/s</p>
+<p><strong>b)</strong> $6(t^2-3t+2)=6(t-1)(t-2)=0$ ⟹ <span class="hl-accent">$t=1$ s</span> o <span class="hl-accent">$t=2$ s</span></p>
+<p><strong>c)</strong> El actuador <em>cambia de sentido</em>: entre $t=1$ y $t=2$ la velocidad es negativa (el actuador retrocede), y a partir de $t=2$ vuelve a avanzar. Es un movimiento típico de pick &amp; place: avanzar → retroceder → volver a posición final.</p>
+</div>
+</details>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- ─────────────────────────── BLOQUE 2: INTEGRALES ─────────────────────────── -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+
+<h2 id="int-concepto"><span class="badge integ">Integrales</span>4. La integral como acumulación</h2>
+
+<div class="card intuition">
+<h4>🧠 Intuición</h4>
+<p>Si la derivada mide <em>"qué tan rápido cambia"</em>, la integral mide <em>"cuánto se acumuló"</em>.</p>
+<p>Ejemplo: un sensor de caudal $Q(t)$ entrega L/s. Para saber cuántos litros entraron al tanque entre $t=0$ y $t=T$, hay que <strong>sumar</strong> todos los aportes infinitesimales:</p>
+$$V(T)=\int_0^T Q(\tau)\,d\tau$$
+</div>
+
+<div class="grid2">
+<div class="card formula">
+<h4>Dualidad derivada / integral</h4>
+<table>
+<tr><th>Operación</th><th>Interpretación</th></tr>
+<tr><td>Derivada</td><td>"Qué tan rápido cambia"</td></tr>
+<tr><td>Integral</td><td>"Cuánto se acumuló"</td></tr>
+</table>
+</div>
+<div class="card formula">
+<h4>Geométricamente</h4>
+<p>La integral definida $\displaystyle\int_a^b f(x)\,dx$ es el <strong>área bajo la curva</strong> entre $x=a$ y $x=b$.</p>
+<p>Si $f<0$ el área cuenta como <em>negativa</em> (el signo importa).</p>
+</div>
+</div>
+
+<!-- ── 5. TFC ── -->
+<h2 id="tfc"><span class="badge integ">Integrales</span>5. Teorema Fundamental del Cálculo (TFC)</h2>
+
+<div class="card formula">
+<h4>Primera parte — la derivada deshace la integral</h4>
+<p>Si $F(x)=\displaystyle\int_a^x f(t)\,dt$, entonces $F'(x)=f(x)$.</p>
+<p style="font-size:13px; color:var(--muted)">→ Derivar la acumulación devuelve la función original.</p>
+</div>
+
+<div class="card formula">
+<h4>Segunda parte — Regla de Barrow</h4>
+$$\int_a^b f(x)\,dx = F(b)-F(a)\quad \text{donde } F'=f$$
+<p style="font-size:13px; color:var(--muted)">→ Para calcular el área exacta, buscamos una primitiva $F$ y evaluamos en los extremos.</p>
+</div>
+
+<div class="card tip">
+<h4>📐 Primitivas que tenés que saber de memoria</h4>
+<table>
+<tr><th>$f(x)$</th><th>Primitiva $F(x)$</th></tr>
+<tr><td>$x^n$ (n≠−1)</td><td>$\dfrac{x^{n+1}}{n+1}+C$</td></tr>
+<tr><td>$\dfrac{1}{x}$</td><td>$\ln|x|+C$</td></tr>
+<tr><td>$e^{kx}$</td><td>$\dfrac{1}{k}e^{kx}+C$</td></tr>
+<tr><td>$\sin x$</td><td>$-\cos x+C$</td></tr>
+<tr><td>$\cos x$</td><td>$\sin x+C$</td></tr>
+<tr><td>constante $c$</td><td>$cx+C$</td></tr>
+</table>
+</div>
+
+<div class="card key">
+<h4>🔑 Ejemplo guía (Regla de Barrow)</h4>
+<p>$\displaystyle\int_0^1 (3t^2+1)\,dt$</p>
+<p>Primitiva: $F(t)=t^3+t$</p>
+<p>$F(1)-F(0)=(1+1)-(0+0)=2$</p>
+<p>→ La distancia exacta recorrida por el motor entre $t=0$ y $t=1$ es <span class="hl-good">2 m</span>.</p>
+</div>
+
+<!-- ── 6. RIEMANN ── -->
+<h2 id="riemann"><span class="badge integ">Integrales</span>6. Sumas de Riemann — cómo integra un PLC</h2>
+
+<div class="card intuition">
+<h4>🧠 Por qué importa esto en automatización</h4>
+<p>Un PLC <strong>no hace álgebra simbólica</strong>: no conoce primitivas. Lo único que puede hacer es <em>muestrear</em> el sensor cada $\Delta t$ y aproximar la integral con rectángulos. Eso es exactamente una <strong>suma de Riemann</strong>:</p>
+$$\int_a^b f(x)\,dx \approx \sum_{i=0}^{n-1} f(x_i)\,\Delta x$$
+<p>Cuanto más chico el $\Delta t$ del muestreo, menor el error. Pero también más carga de cálculo y memoria.</p>
+</div>
+
+<div class="card warn">
+<h4>⚖️ Trade-off del muestreo</h4>
+<ul>
+  <li><span class="hl-accent">Δt grande</span> (muestreo lento): pocos cálculos pero <strong>mucho error</strong>. Riesgo en parada de emergencia.</li>
+  <li><span class="hl-accent">Δt chico</span> (muestreo rápido): mucha precisión pero el PLC se satura.</li>
+  <li>Solución industrial: aumentar la frecuencia de muestreo o usar <em>regla trapezoidal</em> (mejor que rectángulos por izquierda).</li>
+</ul>
+</div>
+
+<!-- ── SIMULADOR RIEMANN ── -->
+<h2 id="riemann-sim">🎮 Simulador: PLC (Riemann) vs Barrow exacto</h2>
+
+<div class="card game">
+<p>Cambiá el número de rectángulos (cada uno representa un período de muestreo del PLC) y ves cómo la aproximación se acerca al valor exacto calculado por Barrow.</p>
+<div class="controls">
+  <label>Función v(t)
+    <select id="rfunc">
+      <option value="3t2+1">3t² + 1 (motor)</option>
+      <option value="8-2t">8 − 2t (caudal)</option>
+      <option value="2t+1">2t + 1 (llenado)</option>
+      <option value="sin">sin(πt) (oscilación)</option>
+    </select>
+  </label>
+  <label>Intervalo [0, b], b = <span id="rbval" class="hl-accent">1</span>
+    <input type="range" id="rb" min="0.5" max="4" step="0.5" value="1">
+  </label>
+  <label>Cantidad de rectángulos n = <span id="rnval" class="hl-accent">5</span>
+    <input type="range" id="rn" min="1" max="50" step="1" value="5">
+  </label>
+  <label>Método
+    <select id="rmethod">
+      <option value="left">Riemann por izquierda</option>
+      <option value="right">Riemann por derecha</option>
+      <option value="trap">Trapecios</option>
+    </select>
+  </label>
+</div>
+<div id="rplot" class="plot"></div>
+<div class="stat-output">
+  <div class="stat-box"><div class="label">Aproximación PLC</div><div class="value" id="rapprox">—</div></div>
+  <div class="stat-box"><div class="label">Exacto (Barrow)</div><div class="value" id="rexact">—</div></div>
+  <div class="stat-box"><div class="label">Error %</div><div class="value" id="rerr">—</div></div>
+</div>
+</div>
+
+<!-- ── 7. HIDROMECÁNICA ── -->
+<h2 id="hidro"><span class="badge integ">Integrales</span>7. Variables hidromecánicas y balance</h2>
+
+<div class="card formula">
+<h4>Variables típicas</h4>
+<table>
+<tr><th>Variable</th><th>Símbolo</th><th>Unidad SI</th></tr>
+<tr><td>Presión</td><td>$P$</td><td>Pa</td></tr>
+<tr><td>Caudal volumétrico</td><td>$Q$</td><td>m³/s</td></tr>
+<tr><td>Velocidad</td><td>$v$</td><td>m/s</td></tr>
+<tr><td>Densidad</td><td>$\rho$</td><td>kg/m³</td></tr>
+<tr><td>Nivel</td><td>$h$</td><td>m</td></tr>
+</table>
+</div>
+
+<div class="card key">
+<h4>🔑 Principio de conservación de masa</h4>
+$$\text{Acumulación} = \text{Entrada} - \text{Salida}$$
+$$\frac{dV}{dt} = Q_e(t) - Q_s(t)$$
+<table>
+<tr><th>Caso</th><th>Caudal neto</th><th>Comportamiento</th></tr>
+<tr><td>Entra más que sale</td><td>$Q_e>Q_s$</td><td>El nivel <span class="hl-good">sube</span></td></tr>
+<tr><td>Sale más que entra</td><td>$Q_e<Q_s$</td><td>El nivel <span class="hl-bad">baja</span></td></tr>
+<tr><td>Iguales</td><td>$Q_e=Q_s$</td><td>Régimen <span class="hl-accent">estacionario</span></td></tr>
+</table>
+</div>
+
+<div class="card tip">
+<h4>💧 Ecuación de continuidad (flujo incompresible)</h4>
+$$A_1 v_1 = A_2 v_2$$
+<p>Si el conducto se estrecha, la velocidad aumenta. Base de Venturi, sensores de flujo y sistemas hidráulicos.</p>
+</div>
+
+<!-- ── 8. ÁREA ENTRE CURVAS ── -->
+<h2 id="area-curvas"><span class="badge integ">Integrales</span>8. Área entre curvas (pérdidas energéticas)</h2>
+
+<div class="card intuition">
+<h4>🧠 Aplicación: Efecto Joule</h4>
+<p>Si la <strong>potencia eléctrica</strong> entregada al driver es $f(x)$ y la <strong>potencia mecánica útil</strong> en el eje es $g(x)$, el área <em>entre las dos curvas</em> representa la <span class="hl-warn">pérdida térmica por efecto Joule</span>.</p>
+$$\text{Pérdida} = \int_a^b [f(x)-g(x)]\,dx$$
+</div>
+
+<details class="reveal">
+<summary>Ejemplo: pérdida térmica en servomotor — f(x)=√x vs g(x)=x²</summary>
+<div class="card answer">
+<p><strong>1. Intersecciones</strong>: $\sqrt x = x^2$ ⟹ $x=x^4$ ⟹ $x(x^3-1)=0$ ⟹ $x=0$ o $x=1$.</p>
+<p>En $[0,1]$, $\sqrt x \ge x^2$ (la eléctrica está por encima de la útil → hay disipación).</p>
+<p><strong>2. Área</strong>:</p>
+$$\int_0^1\!\left(\sqrt x-x^2\right)dx=\left[\tfrac{2}{3}x^{3/2}-\tfrac{1}{3}x^3\right]_0^1=\tfrac{2}{3}-\tfrac{1}{3}=\tfrac{1}{3}$$
+<p><strong>3. Interpretación</strong>: en 1 minuto se disiparon <span class="hl-warn">1/3 ≈ 0,33 kW·min ≈ 20 kJ</span> en forma de calor. Hay que dimensionar bien el disipador.</p>
+</div>
+</details>
+
+<!-- ── EJERCICIOS INTEGRALES ── -->
+<h2 id="int-ej">📝 Ejercicios resueltos — Integrales</h2>
+
+<details class="reveal" open>
+<summary>Ejercicio 1: Llenado de tanque con caudal variable</summary>
+<div class="card enunciado" style="margin-top:10px">$Q(t)=8-2t$ L/s para $0\le t\le 4$ s. Calcular el volumen acumulado entre $t=0$ y $t=4$ s.</div>
+<div class="card answer">
+<p>Primitiva: $F(t)=8t-t^2$</p>
+<p>$\displaystyle V=\int_0^4 (8-2t)\,dt = F(4)-F(0) = (32-16)-0 = 16$ L</p>
+<p>Atención: en $t=4$ el caudal es $Q(4)=0$ → justo en ese instante deja de entrar agua. <span class="hl-good">El llenado es máximo a t=4 s.</span></p>
+</div>
+</details>
+
+<details class="reveal">
+<summary>Ejercicio 2: Trabajo mecánico en actuador neumático</summary>
+<div class="card enunciado" style="margin-top:10px">$F(x)=4x+2$ N, desplazamiento de $x=1$ a $x=3$ m. Calcular el trabajo.</div>
+<div class="card answer">
+<p>Por definición $W=\int_a^b F(x)\,dx$.</p>
+<p>Primitiva: $\Phi(x)=2x^2+2x$</p>
+<p>$W=\Phi(3)-\Phi(1)=(18+6)-(2+2)=24-4 = 20$ J</p>
+<p><strong>Análisis dimensional</strong>: [N]·[m] = J ✓</p>
+</div>
+</details>
+
+<details class="reveal">
+<summary>Ejercicio 3: Posición a partir de velocidad (encoder)</summary>
+<div class="card enunciado" style="margin-top:10px">$v(t)=6t^2-4t+2$ m/s, $x(0)=0$. Hallar la posición a $t=2$ s.</div>
+<div class="card answer">
+<p>$\displaystyle x(2)=\int_0^2 (6t^2-4t+2)\,dt = \left[2t^3-2t^2+2t\right]_0^2$</p>
+<p>$=(16-8+4)-0 = 12$ m</p>
+</details>
+
+<details class="reveal">
+<summary>Ejercicio 4: Discretización — PLC vs Barrow exacto</summary>
+<div class="card enunciado" style="margin-top:10px">
+$v(t)=3t^2+1$ m/s en $[0,1]$ s. <br>
+a) Distancia exacta por Barrow. <br>
+b) Aproximación PLC con Δt=0,5 s (Riemann por izquierda en t₀=0 y t₁=0,5). <br>
+c) Error porcentual.
+</div>
+<div class="card answer">
+<p><strong>a)</strong> Primitiva $F(t)=t^3+t$ ⟹ exacta = $F(1)-F(0)=2$ m</p>
+<p><strong>b)</strong> Riemann por izquierda con $\Delta t=0{,}5$:</p>
+<p>$d_{PLC} = v(0)\cdot 0{,}5 + v(0{,}5)\cdot 0{,}5 = 1\cdot 0{,}5 + 1{,}75\cdot 0{,}5 = 0{,}5+0{,}875 = 1{,}375$ m</p>
+<p><strong>c)</strong> Error: $\dfrac{|2-1{,}375|}{2}\cdot 100\% = 31{,}25\%$</p>
+<p class="hl-bad" style="margin-top:8px"><strong>¡Crítico!</strong> Si esto define una parada de emergencia, el brazo se desplaza ~31% más de lo calculado → colisión. Solución: muestrear más rápido o usar trapecios (que da 1,75 → error 12,5%).</p>
+</div>
+</details>
+
+<details class="reveal">
+<summary>Ejercicio 5: Saturación integral (windup) del PID</summary>
+<div class="card enunciado" style="margin-top:10px">
+Un motor se traba mecánicamente. El error queda fijo en $e=5$ durante 4 s. Acción integral del PID: $u_I(t)=K_i\!\int_0^t e(\tau)\,d\tau$ con $K_i=2$. <br>
+¿Cuánto vale $u_I(4)$? ¿Qué pasa si la traba no se suelta?
+</div>
+<div class="card answer">
+<p>$u_I(4)=2\cdot\int_0^4 5\,d\tau = 2\cdot 5\cdot 4 = 40$</p>
+<p>Si la traba sigue: $u_I(t)\to\infty$ cuando $t\to\infty$. La señal de control crece <strong>sin límite</strong>.</p>
+<p class="hl-warn"><strong>Fenómeno: integral windup.</strong> Cuando la traba se suelta, el motor recibe una señal enorme acumulada → arranque violento, posible daño mecánico. <span class="hl-accent">Solución: anti-windup</span> (saturar el integrador, o detener su acumulación cuando el actuador satura).</p>
+</div>
+</details>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- ─────────────────────────── BLOQUE 3: EDOs ─────────────────────────── -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+
+<h2 id="edo-concepto"><span class="badge edo">EDOs</span>9. ¿Qué es una EDO?</h2>
+
+<div class="card intuition">
+<h4>🧠 La gran diferencia</h4>
+<p>En una <strong>ecuación algebraica</strong> ($2x+3=11$), la incógnita es un <em>número</em>.</p>
+<p>En una <strong>Ecuación Diferencial Ordinaria (EDO)</strong>, la incógnita es una <em>función</em> $y(t)$. La ecuación relaciona la función con sus derivadas:</p>
+$$\frac{dy}{dt} = f(t,y)$$
+<p>No buscamos un valor fijo — buscamos <strong>cómo evoluciona la variable en el tiempo</strong>.</p>
+</div>
+
+<div class="card key">
+<h4>🔑 Por qué las EDO son el lenguaje del control</h4>
+<p>Todos los sistemas físicos que estudiamos en automatización son <em>dinámicos</em>: cambian con el tiempo en respuesta a perturbaciones o señales de mando. Modelarlos significa escribir una EDO.</p>
+<ul>
+  <li>Temperatura de un horno: $\dfrac{dT}{dt}=\text{calor entrante}-\text{pérdidas}$</li>
+  <li>Nivel de un tanque: $\dfrac{dV}{dt}=Q_e-Q_s$</li>
+  <li>Corriente en RL: $L\dfrac{di}{dt}+Ri=E$</li>
+  <li>Posición de un motor: $J\dfrac{d^2\theta}{dt^2}=\tau$</li>
+</ul>
+</div>
+
+<!-- ── 10. CLASIFICACIÓN ── -->
+<h2 id="edo-clasif"><span class="badge edo">EDOs</span>10. Clasificación: orden y linealidad</h2>
+
+<div class="grid2">
+<div class="card formula">
+<h4>📏 Orden</h4>
+<p>Es la <strong>derivada más alta</strong> que aparece.</p>
+<ul>
+  <li>$y'+2y=t$ → orden 1</li>
+  <li>$y''+3y'-y=0$ → orden 2</li>
+  <li>$y'''-y=\cos t$ → orden 3</li>
+</ul>
+</div>
+<div class="card formula">
+<h4>📐 Linealidad</h4>
+<p>Una EDO es <strong>lineal</strong> si $y$ y sus derivadas aparecen:</p>
+<ul>
+  <li>elevadas a potencia 1 (sin $y^2$, $y^3$),</li>
+  <li>sin productos entre sí ($y\cdot y'$ no vale),</li>
+  <li>sin funciones compuestas no lineales ($\sin y$, $e^y$ no valen).</li>
+</ul>
+<p>Los coeficientes <em>sí</em> pueden depender de $t$.</p>
+</div>
+</div>
+
+<div class="card tip">
+<h4>🔍 Clasificación de los 4 ejemplos de la guía</h4>
+<table>
+<tr><th>EDO</th><th>Orden</th><th>Linealidad</th><th>Justificación</th></tr>
+<tr><td>$\dfrac{dy}{dt}+4t^2y=\cos t$</td><td>1</td><td>Lineal</td><td>$y$ a la potencia 1, coeficientes en $t$</td></tr>
+<tr><td>$\dfrac{d^2y}{dt^2}+3\dfrac{dy}{dt}-y^2=0$</td><td>2</td><td><span class="hl-bad">No lineal</span></td><td>$y^2$ rompe linealidad</td></tr>
+<tr><td>$L\dfrac{di}{dt}+Ri=E\sin(\omega t)$</td><td>1</td><td>Lineal</td><td>$L, R, E, \omega$ constantes; $i$ a la 1</td></tr>
+<tr><td>$\dfrac{dx}{dt}=k\sqrt x$</td><td>1</td><td><span class="hl-bad">No lineal</span></td><td>$\sqrt x = x^{1/2}$ rompe linealidad</td></tr>
+</table>
+</div>
+
+<!-- ── 11. VARIABLES SEPARABLES ── -->
+<h2 id="separables"><span class="badge edo">EDOs</span>11. Método de variables separables</h2>
+
+<div class="card formula">
+<h4>Forma general</h4>
+$$\frac{dy}{dt}=g(t)\cdot h(y)$$
+<p>Si podés escribir la EDO así (la derivada igual a un <em>producto</em> de una función de $t$ por una función de $y$), entonces es <strong>separable</strong>.</p>
+</div>
+
+<div class="card key">
+<h4>🔑 Receta paso a paso</h4>
+<div class="steps">
+<div class="step"><div class="step-n">1</div><div class="step-body"><strong>Separar:</strong> llevar todo lo de $y$ a la izquierda, todo lo de $t$ a la derecha: $\dfrac{dy}{h(y)}=g(t)\,dt$</div></div>
+<div class="step"><div class="step-n">2</div><div class="step-body"><strong>Integrar ambos lados:</strong> $\displaystyle\int\frac{dy}{h(y)}=\int g(t)\,dt+C$</div></div>
+<div class="step"><div class="step-n">3</div><div class="step-body"><strong>Despejar $y$</strong> en función de $t$.</div></div>
+<div class="step"><div class="step-n">4</div><div class="step-body"><strong>Aplicar la condición inicial</strong> $y(t_0)=y_0$ para hallar $C$ (solución particular).</div></div>
+</div>
+</div>
+
+<details class="reveal">
+<summary>Ejemplo guiado: dy/dt = t²/y</summary>
+<div class="card answer">
+<p><strong>1. Separar:</strong> $y\,dy=t^2\,dt$</p>
+<p><strong>2. Integrar:</strong> $\dfrac{y^2}{2}=\dfrac{t^3}{3}+C$</p>
+<p><strong>3. Despejar:</strong> $y^2=\dfrac{2t^3}{3}+C_1$ ⟹ $y(t)=\pm\sqrt{\dfrac{2t^3}{3}+C_1}$</p>
+<p>El signo se elige según la condición inicial. Es la <em>solución general</em>.</p>
+</div>
+</details>
+
+<details class="reveal">
+<summary>PVI: dy/dt = −2ty con y(0)=5</summary>
+<div class="card answer">
+<p><strong>1. Separar:</strong> $\dfrac{dy}{y}=-2t\,dt$</p>
+<p><strong>2. Integrar:</strong> $\ln|y|=-t^2+C$</p>
+<p><strong>3. Despejar:</strong> $y(t)=A\,e^{-t^2}$, con $A=e^C$.</p>
+<p><strong>4. Condición:</strong> $y(0)=A=5$ ⟹ $\boxed{y(t)=5\,e^{-t^2}}$</p>
+<p>Esta es la curva de una <em>gaussiana decreciente</em> — típica en disipación rápida.</p>
+</div>
+</details>
+
+<!-- ── TORRICELLI ── -->
+<h2 id="torricelli"><span class="badge aplic">Aplicación</span>💧 Vaciado de un tanque (Torricelli)</h2>
+
+<div class="card edo">
+<p>Tanque con orificio basal. Por <strong>Ley de Torricelli</strong>, la altura del fluido satisface:</p>
+$$\frac{dh}{dt}=-k\sqrt h$$
+<p>Es <em>no lineal</em> de primer orden, separable.</p>
+</div>
+
+<details class="reveal" open>
+<summary>Resolución paso a paso</summary>
+<div class="card answer">
+<p><strong>1. Separar:</strong> $h^{-1/2}\,dh = -k\,dt$</p>
+<p><strong>2. Integrar:</strong> $2h^{1/2}=-kt+C$</p>
+<p><strong>3. Despejar:</strong> $\sqrt h=\dfrac{-kt+C}{2}$ ⟹ $h(t)=\left(\dfrac{-kt+C}{2}\right)^2$</p>
+<p><strong>4. Condición $h(0)=H_0$:</strong></p>
+$$H_0=\left(\tfrac{C}{2}\right)^2 \Rightarrow C=2\sqrt{H_0}$$
+<p><strong>Solución particular:</strong></p>
+$$\boxed{\;h(t)=\left(-\tfrac{k}{2}t+\sqrt{H_0}\right)^{\!2}\;}$$
+<p><strong>Tiempo de vaciado completo</strong> ($h=0$): $t_{vac}=\dfrac{2\sqrt{H_0}}{k}$</p>
+</div>
+</details>
+
+<!-- ── RL ── -->
+<h2 id="rl"><span class="badge aplic">Aplicación</span>⚡ Circuito RL — respuesta transitoria</h2>
+
+<div class="card edo">
+<p>Resistencia $R$, inductancia $L$ y fuente continua $E$. Por Kirchhoff:</p>
+$$L\,\frac{di}{dt}+Ri=E$$
+<p>Es <em>lineal</em> de primer orden. La solución con $i(0)=0$ es:</p>
+$$\boxed{\;i(t)=\frac{E}{R}\left(1-e^{-\frac{R}{L}t}\right)\;}$$
+</div>
+
+<div class="card key">
+<h4>🔑 Lectura física</h4>
+<ul>
+  <li>En $t=0$: $i=0$. El inductor no deja que la corriente cambie de golpe.</li>
+  <li>Cuando $t\to\infty$: $e^{-Rt/L}\to 0$, entonces $i_\infty=\dfrac{E}{R}$ → <strong>Ley de Ohm</strong> en régimen estacionario.</li>
+  <li><strong>Constante de tiempo</strong>: $\tau=L/R$. A $t=\tau$, la corriente alcanza ~63% del final. A $t=5\tau$, ya está prácticamente en régimen.</li>
+</ul>
+</div>
+
+<!-- ── NEWTON ── -->
+<h2 id="newton"><span class="badge aplic">Aplicación</span>🌡️ Ley de Enfriamiento de Newton</h2>
+
+<div class="card edo">
+$$\frac{dT}{dt}=-k(T-T_a)$$
+<p>$T(t)$ es la temperatura del fluido, $T_a$ el ambiente, $k>0$ la constante térmica.</p>
+</div>
+
+<details class="reveal">
+<summary>Resolución: T(0)=80, Tₐ=20, k=0,1 min⁻¹</summary>
+<div class="card answer">
+<p>Defino $u=T-T_a$, entonces $\dfrac{du}{dt}=-ku$ ⟹ separable.</p>
+<p><strong>1. Separar:</strong> $\dfrac{du}{u}=-k\,dt$</p>
+<p><strong>2. Integrar:</strong> $\ln|u|=-kt+C$ ⟹ $u=A\,e^{-kt}$</p>
+<p><strong>3. Volver a T:</strong> $T(t)=T_a+A\,e^{-kt}$</p>
+<p><strong>4. Condición $T(0)=80$:</strong> $80=20+A$ ⟹ $A=60$</p>
+<p style="font-size:16px"><strong>Solución particular:</strong> $\boxed{\;T(t)=20+60\,e^{-0{,}1\,t}\;}$</p>
+<p><strong>a los 10 min:</strong> $T(10)=20+60\,e^{-1}=20+60\cdot 0{,}3679 \approx 42{,}07$ °C</p>
+<p><strong>Límite asintótico:</strong> $\displaystyle\lim_{t\to\infty}T(t)=20$ °C → el fluido se equilibra con el ambiente. Tiene sentido: no se puede enfriar por debajo de $T_a$ sin un sistema activo.</p>
+</div>
+</details>
+
+<!-- ── SIMULADOR EDO ── -->
+<h2 id="edo-sim">🎮 Simulador: llenado de tanque con caudal constante</h2>
+
+<div class="card game">
+<p>Modelo: $A\dfrac{dh}{dt}=Q_{in}-Q_{out}$, con $Q_{out}=K\cdot h$ (proporcional a la altura). Solución exacta:</p>
+$$h(t)=\frac{Q_{in}}{K}\left(1-e^{-Kt/A}\right)$$
+<p>Probá distintos parámetros y observá cómo el sistema se acerca al estacionario $h_\infty=Q_{in}/K$.</p>
+<div class="controls">
+  <label>Área A (m²) = <span id="aval" class="hl-accent">2</span>
+    <input type="range" id="ea" min="0.5" max="5" step="0.5" value="2">
+  </label>
+  <label>Q entrada (m³/min) = <span id="qval" class="hl-accent">4</span>
+    <input type="range" id="eq" min="1" max="10" step="0.5" value="4">
+  </label>
+  <label>K salida = <span id="kval" class="hl-accent">2</span>
+    <input type="range" id="ek" min="0.5" max="5" step="0.5" value="2">
+  </label>
+  <label>Tiempo máx (min) = <span id="tval" class="hl-accent">5</span>
+    <input type="range" id="et" min="1" max="20" step="1" value="5">
+  </label>
+</div>
+<div id="eplot" class="plot"></div>
+<div class="stat-output">
+  <div class="stat-box"><div class="label">h estacionario (∞)</div><div class="value" id="hss">2.00 m</div></div>
+  <div class="stat-box"><div class="label">τ = A/K (min)</div><div class="value" id="tau">1.00</div></div>
+  <div class="stat-box"><div class="label">h(t máx)</div><div class="value" id="hfin">—</div></div>
+</div>
+</div>
+
+<!-- ── EJERCICIOS EDOs ── -->
+<h2 id="edo-ej">📝 Ejercicios resueltos — EDOs</h2>
+
+<details class="reveal" open>
+<summary>Ejercicio 1: Resolver dy/dt = 3t²(y−1)</summary>
+<div class="card answer">
+<p><strong>Separar:</strong> $\dfrac{dy}{y-1}=3t^2\,dt$</p>
+<p><strong>Integrar:</strong> $\ln|y-1|=t^3+C$</p>
+<p><strong>Despejar:</strong> $y-1=A\,e^{t^3}$ ⟹ $\boxed{\;y(t)=1+A\,e^{t^3}\;}$</p>
+</div>
+</details>
+
+<details class="reveal">
+<summary>Ejercicio 2: Resolver t·dx/dt = x·ln(x)</summary>
+<div class="card answer">
+<p><strong>Separar:</strong> $\dfrac{dx}{x\ln x}=\dfrac{dt}{t}$</p>
+<p><strong>Integrar:</strong> en la izquierda, sustituyendo $u=\ln x$ ⟹ $du=\dfrac{dx}{x}$: $\displaystyle\int\frac{du}{u}=\ln|u|$. Luego $\ln|\ln x|=\ln|t|+C$.</p>
+<p><strong>Despejar:</strong> $\ln x = A\cdot t$ ⟹ $\boxed{\;x(t)=e^{At}\;}$</p>
+</div>
+</details>
+
+<details class="reveal">
+<summary>PVI: dx/dt = eᵗ/x con x(0)=2</summary>
+<div class="card answer">
+<p><strong>Separar:</strong> $x\,dx=e^t\,dt$</p>
+<p><strong>Integrar:</strong> $\dfrac{x^2}{2}=e^t+C$</p>
+<p><strong>Condición $x(0)=2$:</strong> $\dfrac{4}{2}=e^0+C$ ⟹ $2=1+C$ ⟹ $C=1$</p>
+<p><strong>Solución particular:</strong> $x^2=2e^t+2$ ⟹ $\boxed{\;x(t)=\sqrt{2e^t+2}\;}$</p>
+</div>
+</details>
+
+<details class="reveal">
+<summary>Llenado con caudal constante (A=2, Qᵢₙ=4, Qₒᵤₜ=2h)</summary>
+<div class="card answer">
+<p>EDO: $2\dfrac{dh}{dt}=4-2h$ ⟹ $\dfrac{dh}{dt}=2-h$</p>
+<p><strong>Separar:</strong> $\dfrac{dh}{2-h}=dt$</p>
+<p><strong>Integrar:</strong> $-\ln|2-h|=t+C$ ⟹ $2-h=A\,e^{-t}$</p>
+<p><strong>Condición $h(0)=0$:</strong> $2=A$</p>
+<p style="font-size:16px"><strong>Solución:</strong> $\boxed{\;h(t)=2\left(1-e^{-t}\right)\;}$ m</p>
+<p><strong>Estado estacionario:</strong> $\displaystyle\lim_{t\to\infty} h(t)=2$ m → es cuando $Q_{in}=Q_{out}$: $4=2h$ ⟹ $h=2$. ✓</p>
+</div>
+</details>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- ─────────────────────────── CIERRE ─────────────────────────── -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+
+<h2 id="cheatsheet">📋 Cheat sheet rápido para el parcial</h2>
+
+<div class="grid3">
+<div class="card formula">
+<h4>Derivadas básicas</h4>
+<ul style="font-size:13px; padding-left:18px">
+  <li>$(c)'=0$</li>
+  <li>$(x^n)'=nx^{n-1}$</li>
+  <li>$(e^{kx})'=ke^{kx}$</li>
+  <li>$(\ln x)'=1/x$</li>
+  <li>$(\sin x)'=\cos x$</li>
+  <li>$(\cos x)'=-\sin x$</li>
+  <li>Producto: $(uv)'=u'v+uv'$</li>
+  <li>Cociente: $(u/v)'=(u'v-uv')/v^2$</li>
+</ul>
+</div>
+<div class="card formula">
+<h4>Integrales básicas</h4>
+<ul style="font-size:13px; padding-left:18px">
+  <li>$\int x^n dx=\dfrac{x^{n+1}}{n+1}$</li>
+  <li>$\int \dfrac{1}{x}dx=\ln|x|$</li>
+  <li>$\int e^{kx}dx=\dfrac{1}{k}e^{kx}$</li>
+  <li>$\int \sin x\, dx=-\cos x$</li>
+  <li>$\int \cos x\, dx=\sin x$</li>
+  <li>Barrow: $\int_a^b f=F(b)-F(a)$</li>
+</ul>
+</div>
+<div class="card formula">
+<h4>EDOs separables</h4>
+<ul style="font-size:13px; padding-left:18px">
+  <li>$\dfrac{dy}{dt}=g(t)h(y)$</li>
+  <li>$\dfrac{dy}{h(y)}=g(t)dt$</li>
+  <li>Integrar ambos lados</li>
+  <li>Aplicar $y(t_0)=y_0$</li>
+  <li>Torricelli: $h=(\sqrt{H_0}-\tfrac k2 t)^2$</li>
+  <li>RL: $i=\tfrac{E}{R}(1-e^{-Rt/L})$</li>
+  <li>Newton: $T=T_a+(T_0-T_a)e^{-kt}$</li>
+</ul>
+</div>
+</div>
+
+<!-- ── ERRORES COMUNES ── -->
+<h2 id="errores">⚠️ Errores comunes en el parcial</h2>
+
+<div class="card warn">
+<ul>
+  <li><strong>Olvidar el "+C"</strong> en la integral indefinida. En las EDOs es fatal porque sin la constante no podés aplicar la condición inicial.</li>
+  <li><strong>Confundir $\ln|y|$ con $\ln y$</strong>. Cuando despejás $y=\pm e^C\cdot \ldots$, el signo lo decide la condición inicial.</li>
+  <li><strong>Equivocarse en el orden de la EDO</strong>: el orden es la <em>derivada</em> más alta, no la <em>potencia</em>. $y'^3+y=0$ es orden 1 (no lineal).</li>
+  <li><strong>No clasificar bien lineal</strong>: $y^2$, $\sin y$, $y\cdot y'$ rompen la linealidad. Coeficientes en $t$ no la rompen.</li>
+  <li><strong>Olvidar evaluar $F(a)$</strong> en Barrow: $\int_a^b f = F(b)-F(a)$, no solo $F(b)$.</li>
+  <li><strong>Mezclar variable muda</strong>: en $V(t)=\int_0^t Q(\tau)d\tau$, la variable de integración es $\tau$, no $t$.</li>
+  <li><strong>Regla del cociente al revés</strong>: es $\dfrac{u'v-uv'}{v^2}$, NO $\dfrac{uv'-u'v}{v^2}$.</li>
+  <li><strong>Riemann sin Δt</strong>: la suma es $\sum f(x_i)\cdot \Delta x$. Multiplicar por $\Delta x$ es <em>obligatorio</em>.</li>
+</ul>
+</div>
+
+<!-- ── QUIZ ── -->
+<h2 id="quiz">🎓 Quiz final — 12 preguntas</h2>
+
+<div id="quiz-container"></div>
+
+<div class="quiz-score" id="quiz-score" style="display:none"></div>
+<button class="btn" id="quiz-reset" style="display:none; margin:10px auto; display:block">🔄 Reintentar</button>
+
+<div class="footer">
+  Hecho con ❤️ para estudiar el Parcial 2 de Análisis Matemático I · Lic. Automatización y Control · 2026<br>
+  Joaquín De La Corte · joaquin.delacorte.ar
+</div>
+
+</main>
+</div>
+
+<script>
+/* ════════════════ DERIVADA SIMULADOR ════════════════ */
+const dFuncs = {
+  x2:    {f:x=>x*x,             d:x=>2*x,                lbl:'x²'},
+  x3:    {f:x=>x*x*x-3*x,       d:x=>3*x*x-3,            lbl:'x³ − 3x'},
+  sin:   {f:x=>Math.sin(x),     d:x=>Math.cos(x),        lbl:'sin(x)'},
+  exp:   {f:x=>Math.exp(0.5*x), d:x=>0.5*Math.exp(0.5*x),lbl:'e^(0.5x)'},
+  sqrt:  {f:x=>x<=0?NaN:Math.sqrt(x), d:x=>x<=0?NaN:1/(2*Math.sqrt(x)), lbl:'√x'}
+};
+function drawDeriv(){
+  const key = document.getElementById('dfunc').value;
+  const a = parseFloat(document.getElementById('da').value);
+  document.getElementById('dval').textContent = a.toFixed(2);
+  const F = dFuncs[key];
+  const xs=[], ys=[];
+  for(let x=-3; x<=3; x+=0.05){ const y=F.f(x); xs.push(x); ys.push(isFinite(y)?y:null); }
+  const fa = F.f(a), fpa = F.d(a);
+  const tx=[a-1.2, a+1.2];
+  const ty=tx.map(x=>fa+fpa*(x-a));
+  document.getElementById('dfa').textContent = isFinite(fa)?fa.toFixed(2):'—';
+  document.getElementById('dfpa').textContent = isFinite(fpa)?fpa.toFixed(2):'—';
+  Plotly.react('dplot',[
+    {x:xs, y:ys, type:'scatter', mode:'lines', line:{color:'#38bdf8', width:3}, name:F.lbl},
+    {x:tx, y:ty, type:'scatter', mode:'lines', line:{color:'#fb923c', width:2, dash:'dash'}, name:'tangente'},
+    {x:[a], y:[fa], type:'scatter', mode:'markers', marker:{color:'#a78bfa', size:12}, name:'(a, f(a))'}
+  ],{
+    paper_bgcolor:'#0b1220', plot_bgcolor:'#0b1220',
+    font:{color:'#e2e8f0'},
+    margin:{t:20,r:20,b:40,l:40},
+    xaxis:{gridcolor:'#334155', zerolinecolor:'#64748b'},
+    yaxis:{gridcolor:'#334155', zerolinecolor:'#64748b'},
+    legend:{orientation:'h', y:-0.15}
+  },{displayModeBar:false, responsive:true});
+}
+document.getElementById('dfunc').addEventListener('change', drawDeriv);
+document.getElementById('da').addEventListener('input', drawDeriv);
+drawDeriv();
+
+/* ════════════════ RIEMANN SIMULADOR ════════════════ */
+const rFuncs = {
+  '3t2+1': {f:t=>3*t*t+1,         F:t=>t*t*t+t,           lbl:'3t² + 1'},
+  '8-2t':  {f:t=>8-2*t,            F:t=>8*t-t*t,           lbl:'8 − 2t'},
+  '2t+1':  {f:t=>2*t+1,            F:t=>t*t+t,             lbl:'2t + 1'},
+  'sin':   {f:t=>Math.sin(Math.PI*t), F:t=>-Math.cos(Math.PI*t)/Math.PI, lbl:'sin(πt)'}
+};
+function drawRiemann(){
+  const key=document.getElementById('rfunc').value;
+  const b=parseFloat(document.getElementById('rb').value);
+  const n=parseInt(document.getElementById('rn').value);
+  const method=document.getElementById('rmethod').value;
+  document.getElementById('rbval').textContent=b.toFixed(1);
+  document.getElementById('rnval').textContent=n;
+  const F=rFuncs[key]; const dt=b/n;
+  // curva exacta
+  const xs=[], ys=[];
+  for(let x=0; x<=b; x+=b/200){ xs.push(x); ys.push(F.f(x)); }
+  // rectángulos
+  const traces=[{x:xs, y:ys, type:'scatter', mode:'lines', line:{color:'#38bdf8', width:3}, name:F.lbl, fill:'tozeroy', fillcolor:'rgba(56,189,248,0.1)'}];
+  let approx=0;
+  for(let i=0; i<n; i++){
+    const x0=i*dt, x1=(i+1)*dt;
+    let h;
+    if(method==='left'){ h=F.f(x0); approx+=h*dt; }
+    else if(method==='right'){ h=F.f(x1); approx+=h*dt; }
+    else { h=(F.f(x0)+F.f(x1))/2; approx+=h*dt; }
+    if(method==='trap'){
+      traces.push({x:[x0,x0,x1,x1], y:[0,F.f(x0),F.f(x1),0], type:'scatter', mode:'lines', fill:'toself', fillcolor:'rgba(251,146,60,0.25)', line:{color:'#fb923c', width:1}, showlegend:i===0, name:'PLC'});
+    } else {
+      traces.push({x:[x0,x0,x1,x1,x0], y:[0,h,h,0,0], type:'scatter', mode:'lines', fill:'toself', fillcolor:'rgba(251,146,60,0.25)', line:{color:'#fb923c', width:1}, showlegend:i===0, name:'PLC'});
+    }
+  }
+  const exact=F.F(b)-F.F(0);
+  const err=Math.abs(approx-exact)/Math.abs(exact)*100;
+  document.getElementById('rapprox').textContent=approx.toFixed(3);
+  document.getElementById('rexact').textContent=exact.toFixed(3);
+  document.getElementById('rerr').textContent=err.toFixed(2)+'%';
+  Plotly.react('rplot', traces, {
+    paper_bgcolor:'#0b1220', plot_bgcolor:'#0b1220',
+    font:{color:'#e2e8f0'},
+    margin:{t:20,r:20,b:40,l:40},
+    xaxis:{gridcolor:'#334155', title:'t'},
+    yaxis:{gridcolor:'#334155', title:'v(t)'},
+    legend:{orientation:'h', y:-0.15}
+  },{displayModeBar:false, responsive:true});
+}
+['rfunc','rb','rn','rmethod'].forEach(id=>document.getElementById(id).addEventListener('input', drawRiemann));
+drawRiemann();
+
+/* ════════════════ EDO SIMULADOR (tanque) ════════════════ */
+function drawEdo(){
+  const A=parseFloat(document.getElementById('ea').value);
+  const Q=parseFloat(document.getElementById('eq').value);
+  const K=parseFloat(document.getElementById('ek').value);
+  const tmax=parseFloat(document.getElementById('et').value);
+  document.getElementById('aval').textContent=A.toFixed(1);
+  document.getElementById('qval').textContent=Q.toFixed(1);
+  document.getElementById('kval').textContent=K.toFixed(1);
+  document.getElementById('tval').textContent=tmax;
+  const hss=Q/K; const tau=A/K;
+  const xs=[], ys=[];
+  for(let t=0; t<=tmax; t+=tmax/200){ xs.push(t); ys.push(hss*(1-Math.exp(-K*t/A))); }
+  document.getElementById('hss').textContent=hss.toFixed(2)+' m';
+  document.getElementById('tau').textContent=tau.toFixed(2);
+  document.getElementById('hfin').textContent=ys[ys.length-1].toFixed(2)+' m';
+  Plotly.react('eplot',[
+    {x:xs, y:ys, type:'scatter', mode:'lines', line:{color:'#fb923c', width:3}, name:'h(t)'},
+    {x:[0,tmax], y:[hss,hss], type:'scatter', mode:'lines', line:{color:'#34d399', width:2, dash:'dash'}, name:'h estacionario'}
+  ],{
+    paper_bgcolor:'#0b1220', plot_bgcolor:'#0b1220',
+    font:{color:'#e2e8f0'},
+    margin:{t:20,r:20,b:40,l:40},
+    xaxis:{gridcolor:'#334155', title:'tiempo (min)'},
+    yaxis:{gridcolor:'#334155', title:'altura h (m)', rangemode:'tozero'},
+    legend:{orientation:'h', y:-0.15}
+  },{displayModeBar:false, responsive:true});
+}
+['ea','eq','ek','et'].forEach(id=>document.getElementById(id).addEventListener('input', drawEdo));
+drawEdo();
+
+/* ════════════════ QUIZ ════════════════ */
+const quizData = [
+  {q:'¿Cuál es la derivada de f(x) = 3x⁵ − 2x³ + 7x − 4?',
+   opts:['15x⁴ − 6x² + 7','15x⁴ − 6x² + 7x','3x⁴ − 2x² + 7','15x⁴ − 2x² + 7'],
+   correct:0,
+   fb:'Aplicamos potencia + suma: (3x⁵)\' = 15x⁴, (−2x³)\' = −6x², (7x)\' = 7, (−4)\' = 0.'},
+  {q:'¿Cuál es la sensibilidad V′(T) del sensor V(T) = 0,01T² + 0,5T + 2 en T = 50 °C?',
+   opts:['1,5 V/°C','0,5 V/°C','2,5 V/°C','1,0 V/°C'],
+   correct:0,
+   fb:'V′(T) = 0,02T + 0,5. En T=50: V′(50) = 1,0 + 0,5 = 1,5 V/°C.'},
+  {q:'Por Regla de Barrow, ∫₀¹ (3t² + 1) dt = ?',
+   opts:['2','3','1','1,5'],
+   correct:0,
+   fb:'Primitiva F(t) = t³ + t. F(1) − F(0) = 2 − 0 = 2.'},
+  {q:'Un sensor de caudal da Q(t) = 8 − 2t L/s. ¿Volumen entre t=0 y t=4 s?',
+   opts:['16 L','32 L','8 L','24 L'],
+   correct:0,
+   fb:'∫₀⁴ (8 − 2t)dt = [8t − t²]₀⁴ = 32 − 16 = 16 L.'},
+  {q:'Un PLC muestrea v(t) = 3t² + 1 cada Δt = 0,5 s en [0,1]. Por Riemann izquierda obtiene...',
+   opts:['1,375 m','2,000 m','0,875 m','1,750 m'],
+   correct:0,
+   fb:'v(0)·0,5 + v(0,5)·0,5 = 1·0,5 + 1,75·0,5 = 1,375. El exacto es 2 → error 31%.'},
+  {q:'¿Qué orden y linealidad tiene y′′ + 3y′ − y² = 0?',
+   opts:['Orden 2, no lineal','Orden 2, lineal','Orden 1, no lineal','Orden 3, no lineal'],
+   correct:0,
+   fb:'La derivada más alta es y′′ (orden 2). El término y² rompe la linealidad.'},
+  {q:'En la EDO L·di/dt + R·i = E, la corriente estacionaria (t→∞) es...',
+   opts:['E/R','E·R','R/E','E·L'],
+   correct:0,
+   fb:'El término transitorio e^(-Rt/L) → 0, así que i∞ = E/R (Ley de Ohm).'},
+  {q:'¿Solución de dy/dt = −2ty con y(0) = 5?',
+   opts:['y(t) = 5·e^(−t²)','y(t) = 5·e^(−2t)','y(t) = 5 − t²','y(t) = 5·e^(t²)'],
+   correct:0,
+   fb:'Separando: dy/y = −2t dt → ln|y| = −t² + C. Con y(0)=5: y = 5·e^(−t²).'},
+  {q:'Ley de Newton: dT/dt = −k(T − Tₐ). Si k=0,1, Tₐ=20, T(0)=80, ¿T(10)?',
+   opts:['≈ 42,07 °C','≈ 20 °C','≈ 50 °C','≈ 60 °C'],
+   correct:0,
+   fb:'T(t) = 20 + 60e^(−0,1·t). T(10) = 20 + 60·e^(−1) ≈ 20 + 22,07 ≈ 42,07 °C.'},
+  {q:'Tanque que se vacía por Torricelli: dh/dt = −k√h con h(0)=H₀. ¿Cuándo se vacía?',
+   opts:['t = 2√H₀/k','t = √H₀/k','t = 2k/√H₀','Nunca se vacía'],
+   correct:0,
+   fb:'h(t) = (√H₀ − kt/2)². Se anula cuando √H₀ = kt/2 → t = 2√H₀/k.'},
+  {q:'En un PID con error fijo, el integrador acumula sin límite. Este fenómeno se llama...',
+   opts:['Integral windup','Saturación derivativa','Drift de offset','Resonancia armónica'],
+   correct:0,
+   fb:'Cuando el actuador satura y el error persiste, el integrador acumula indefinidamente → windup. Se corrige con anti-windup.'},
+  {q:'¿Cuál es el trabajo realizado por F(x) = 4x + 2 N de x=1 a x=3 m?',
+   opts:['20 J','24 J','16 J','12 J'],
+   correct:0,
+   fb:'W = ∫₁³ (4x+2)dx = [2x² + 2x]₁³ = (18+6) − (2+2) = 20 J.'}
+];
+
+const qc = document.getElementById('quiz-container');
+let userAnswers = new Array(quizData.length).fill(null);
+
+function renderQuiz(){
+  qc.innerHTML='';
+  quizData.forEach((q,i)=>{
+    const div = document.createElement('div'); div.className='quiz-q';
+    div.innerHTML = `<strong>${i+1}. ${q.q}</strong>`;
+    const opts = document.createElement('div'); opts.className='opts';
+    q.opts.forEach((opt,j)=>{
+      const o = document.createElement('div'); o.className='opt';
+      o.textContent = opt;
+      o.addEventListener('click', ()=>{
+        if(userAnswers[i]!==null) return;
+        userAnswers[i] = j;
+        const correct = j===q.correct;
+        o.classList.add(correct?'correct':'wrong');
+        if(!correct){ opts.children[q.correct].classList.add('correct'); }
+        const fb = document.createElement('div'); fb.className='quiz-feedback';
+        fb.innerHTML = (correct?'✅ Correcto. ':'❌ No. ') + q.fb;
+        div.appendChild(fb);
+        checkComplete();
+      });
+      opts.appendChild(o);
+    });
+    div.appendChild(opts);
+    qc.appendChild(div);
+  });
+}
+function checkComplete(){
+  if(userAnswers.every(a=>a!==null)){
+    const score = userAnswers.filter((a,i)=>a===quizData[i].correct).length;
+    const out = document.getElementById('quiz-score');
+    out.style.display='block';
+    out.innerHTML = `🎯 ${score} / ${quizData.length} correctas` +
+      (score===quizData.length?'<br><span style="color:var(--good)">¡Perfecto! Listo para el parcial 🚀</span>':
+       score>=9?'<br><span style="color:var(--good)">Muy bien — repasá los errores y vas seguro.</span>':
+       score>=6?'<br><span style="color:var(--warn)">Bien, pero hay temas para reforzar.</span>':
+       '<br><span style="color:var(--bad)">A repasar derivadas, integrales y EDOs.</span>');
+    document.getElementById('quiz-reset').style.display='block';
+  }
+}
+document.getElementById('quiz-reset').addEventListener('click', ()=>{
+  userAnswers = new Array(quizData.length).fill(null);
+  document.getElementById('quiz-score').style.display='none';
+  document.getElementById('quiz-reset').style.display='none';
+  renderQuiz();
+});
+renderQuiz();
+</script>
+</body>
+</html>

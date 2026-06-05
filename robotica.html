@@ -1757,7 +1757,7 @@ function answerQ(i){
   if(answered) return;
   answered=true;
   const q=allQuestions[qIdx];
-  const btns=document.querySelectorAll('.opt-btn');
+  const btns=document.querySelectorAll('#quiz-area .opt-btn');
   btns.forEach(b=>b.disabled=true);
   const fb=document.getElementById('fb');
   if(i===q.c){
@@ -2274,8 +2274,8 @@ function renderEvalQ(){
 
 function answerEval(i){
   const q = evalQs[evalIdx];
-  const btns = document.querySelectorAll('.opt-btn');
-  if(btns[0].disabled) return;
+  const btns = document.querySelectorAll('#eval-area .opt-btn');
+  if(!btns.length || btns[0].disabled) return;
   btns.forEach(b=>b.disabled=true);
   const correct = i === q.c;
   const fb = document.getElementById('eval-fb');

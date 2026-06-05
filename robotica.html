@@ -226,6 +226,69 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
 .fill-feedback{font-size:.82rem;margin-top:.5rem;min-height:1.2rem;font-weight:600}
 .fill-feedback.ok{color:var(--green)}.fill-feedback.ko{color:var(--red)}
 
+/* SIMULADORES GENÉRICOS */
+.sim{background:linear-gradient(135deg,#faf5ff 0%,#ede9fe 100%);border:2px solid var(--pur-lt);border-radius:14px;padding:1.3rem;margin:1rem 0;box-shadow:0 2px 10px rgba(109,40,217,.08)}
+.sim h4{text-align:center;color:var(--pur);font-size:.98rem;margin-bottom:.8rem;font-weight:800}
+.sim-row{display:flex;align-items:center;justify-content:center;gap:1.5rem;flex-wrap:wrap;margin:.6rem 0}
+.sim-controls{display:flex;justify-content:center;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:.7rem}
+.sim-controls label{font-size:.85rem;font-weight:600;color:var(--gray)}
+.sim-controls input[type=range]{width:200px}
+.sim-led{width:60px;height:60px;border-radius:50%;background:#1f2937;box-shadow:inset 0 0 12px rgba(0,0,0,.5);transition:background .2s, box-shadow .2s;position:relative;border:3px solid #374151}
+.sim-led.on{background:radial-gradient(circle at 35% 35%,#fef9c3,#fbbf24 60%,#d97706);box-shadow:0 0 24px #fbbf24,inset 0 0 12px rgba(255,255,255,.5)}
+.sim-led-lbl{font-size:.78rem;color:var(--gray-lt);text-align:center;margin-top:.4rem;font-weight:600}
+.sim-state{display:inline-block;font-family:'Courier New',monospace;font-weight:800;font-size:1.1rem;padding:.4rem .9rem;border-radius:8px;min-width:80px;text-align:center}
+.sim-state.high{background:#dcfce7;color:#15803d;border:2px solid #15803d}
+.sim-state.low{background:#fee2e2;color:#b91c1c;border:2px solid #b91c1c}
+.sim-stat{text-align:center;padding:.5rem .8rem}
+.sim-stat .v{font-family:'Courier New',monospace;font-size:1.4rem;font-weight:800;color:var(--pur);display:block}
+.sim-stat .l{font-size:.72rem;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.sim-btn{padding:.55rem 1.2rem;border:none;border-radius:8px;background:var(--pur);color:#fff;font-weight:700;font-size:.88rem;cursor:pointer;transition:.2s}
+.sim-btn:hover{background:var(--pur-lt)}
+.sim-btn.gray{background:#64748b}.sim-btn.gray:hover{background:#475569}
+.sim-tog{display:inline-flex;background:#fff;border:2px solid var(--pur-lt);border-radius:8px;overflow:hidden}
+.sim-tog button{padding:.5rem .9rem;border:none;background:transparent;font-weight:700;font-size:.83rem;cursor:pointer;color:var(--gray-lt);transition:.2s}
+.sim-tog button.active{background:var(--pur);color:#fff}
+
+/* PULSADOR sim */
+.btn-fisico{width:90px;height:90px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fca5a5,#dc2626);box-shadow:0 6px 0 #7f1d1d,0 8px 14px rgba(0,0,0,.25);border:none;cursor:pointer;font-weight:800;color:#fff;font-size:.85rem;transition:.07s;user-select:none}
+.btn-fisico:active,.btn-fisico.pressed{transform:translateY(4px);box-shadow:0 2px 0 #7f1d1d,0 4px 8px rgba(0,0,0,.25)}
+
+/* LDR sim */
+.ldr-svg{max-width:260px;width:100%;display:block;margin:0 auto}
+
+/* BALL switch */
+.ball-svg{max-width:240px;width:100%;display:block;margin:0 auto}
+
+/* WATER level */
+.water-tank{width:120px;height:180px;border:4px solid #475569;border-top:none;border-radius:0 0 14px 14px;position:relative;background:#f1f5f9;overflow:hidden;margin:0 auto}
+.water-fill{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(180deg,#38bdf8,#0284c7);transition:height .25s ease}
+.water-mark{position:absolute;left:-32px;font-size:.7rem;color:var(--gray-lt);font-family:'Courier New',monospace}
+
+/* IR distance */
+.ir-track{position:relative;height:60px;background:linear-gradient(90deg,#1f2937,#374151);border-radius:10px;margin:1rem auto;max-width:480px;overflow:hidden}
+.ir-sensor{position:absolute;left:8px;top:50%;transform:translateY(-50%);width:34px;height:34px;background:#0f172a;border:2px solid #c4b5fd;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#c4b5fd;font-size:.62rem;font-weight:700}
+.ir-beam{position:absolute;top:50%;left:46px;height:4px;background:linear-gradient(90deg,#ef4444,transparent);transform:translateY(-50%);transition:width .2s, opacity .2s;border-radius:2px}
+.ir-obstacle{position:absolute;top:50%;transform:translate(-50%,-50%);width:28px;height:42px;background:linear-gradient(180deg,#a3a3a3,#525252);border-radius:4px;transition:left .15s ease}
+
+/* CONTROL remoto */
+.remote{background:#1f2937;border-radius:14px;padding:1rem;max-width:200px;margin:0 auto;box-shadow:0 6px 14px rgba(0,0,0,.3)}
+.remote-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem;margin-top:.5rem}
+.remote-btn{background:#374151;border:1px solid #4b5563;color:#e5e7eb;font-size:.7rem;font-weight:700;padding:.55rem .2rem;border-radius:6px;cursor:pointer;transition:.1s;font-family:'Courier New',monospace}
+.remote-btn:hover{background:var(--pur);border-color:var(--pur-lt)}
+.remote-btn:active{transform:scale(.95)}
+.remote-title{color:#c4b5fd;font-size:.7rem;text-align:center;font-weight:700;letter-spacing:1px}
+.ir-receiver{background:#0f172a;border-radius:10px;padding:1rem;color:#e5e7eb;font-family:'Courier New',monospace;font-size:.85rem;max-width:280px;margin:1rem auto}
+.ir-receiver .recv-lbl{color:#94a3b8;font-size:.7rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:.4rem}
+.ir-receiver .recv-code{color:#c4b5fd;font-size:1.1rem;font-weight:700;text-align:center;padding:.4rem;background:rgba(196,181,253,.1);border-radius:6px}
+
+/* BLINK sim */
+.blink-wrap{background:#0f172a;border-radius:12px;padding:1.2rem;color:#e5e7eb}
+.blink-led-row{display:flex;align-items:center;justify-content:center;gap:2rem;margin:1rem 0}
+.blink-pin{font-family:'Courier New',monospace;color:#94a3b8;font-size:.85rem}
+.blink-pin .pin-state{color:#fbbf24;font-weight:700;margin-left:.4rem}
+.blink-timeline{height:30px;background:#020617;border-radius:6px;position:relative;overflow:hidden;margin-top:.6rem}
+.blink-timeline-fill{position:absolute;top:0;bottom:0;background:#fbbf24;transition:width .1s linear;width:0}
+
 /* CONFETTI */
 .confetti-piece{position:fixed;width:10px;height:10px;border-radius:2px;animation:fall linear forwards;pointer-events:none;z-index:9999}
 @keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
@@ -364,6 +427,28 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
   <span class="fn">delay</span>(<span class="num">1000</span>);
 }</div>
 
+  <div class="sim">
+    <h4>🟡 Simulador Blink — ejecuta el sketch arriba en vivo</h4>
+    <div class="blink-wrap">
+      <div class="blink-led-row">
+        <div>
+          <div class="sim-led" id="blinkLed"></div>
+          <div class="sim-led-lbl" style="color:#c4b5fd">LED Pin 13</div>
+        </div>
+        <div>
+          <div class="blink-pin">digitalWrite(13, <span class="pin-state" id="blinkState">LOW</span>)</div>
+          <div class="blink-pin" style="margin-top:.4rem">delay actual: <span class="pin-state" id="blinkPhase">--</span></div>
+          <div class="blink-timeline"><div class="blink-timeline-fill" id="blinkBar"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="sim-controls">
+      <label>delay HIGH: <input type="range" id="blinkHigh" min="100" max="2000" step="100" value="1000"/> <span id="blinkHighVal" style="font-family:monospace;font-weight:700;color:var(--pur)">1000 ms</span></label>
+      <label>delay LOW: <input type="range" id="blinkLow" min="100" max="2000" step="100" value="1000"/> <span id="blinkLowVal" style="font-family:monospace;font-weight:700;color:var(--pur)">1000 ms</span></label>
+      <button class="sim-btn" id="blinkBtn" onclick="toggleBlink()">⏸️ Pausar</button>
+    </div>
+  </div>
+
   <div class="stitle"><span class="ico">📜</span>Historia breve</div>
   <div class="grid g4">
     <div class="card"><h3>Antigüedad</h3><p>Autómatas griegos y romanos como curiosidades mecánicas.</p></div>
@@ -441,6 +526,53 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
   }
 }</div>
 
+  <div class="sim">
+    <h4>🔘 Simulador Pulsador — cambiá el modo y apretá el botón</h4>
+    <div class="sim-row">
+      <div style="text-align:center">
+        <button class="btn-fisico" id="btnFisico" onmousedown="pressBtn(true)" onmouseup="pressBtn(false)" onmouseleave="pressBtn(false)" ontouchstart="pressBtn(true)" ontouchend="pressBtn(false)">PUSH</button>
+        <div class="sim-led-lbl" style="margin-top:.7rem">Pulsador físico</div>
+      </div>
+      <div style="text-align:center">
+        <div class="sim-led" id="btnLed"></div>
+        <div class="sim-led-lbl" style="margin-top:.4rem">LED Pin 9</div>
+      </div>
+      <div class="sim-stat">
+        <span class="sim-state low" id="btnPin">LOW</span>
+        <div class="l" style="margin-top:.4rem">digitalRead(2)</div>
+      </div>
+    </div>
+    <div class="sim-controls">
+      <span style="font-size:.85rem;font-weight:600">Modo:</span>
+      <div class="sim-tog">
+        <button class="active" id="modePullup" onclick="setBtnMode('up')">Pull-UP</button>
+        <button id="modePulldown" onclick="setBtnMode('down')">Pull-DOWN</button>
+      </div>
+      <span style="font-size:.85rem" id="btnLogic">Lógica invertida: suelto = HIGH, apretado = LOW</span>
+    </div>
+  </div>
+
+  <div class="sim">
+    <h4>🔁 Simulador Rebote — observá las falsas lecturas</h4>
+    <div class="sim-row">
+      <div style="text-align:center">
+        <button class="sim-btn" onclick="simRebote()">⚡ Apretar pulsador</button>
+        <div class="sim-led-lbl" style="margin-top:.5rem">Genera 1 pulsación física</div>
+      </div>
+      <div class="sim-stat">
+        <span class="v" id="reboteSin">0</span>
+        <span class="l">Lecturas sin debounce</span>
+      </div>
+      <div class="sim-stat">
+        <span class="v" id="reboteCon">0</span>
+        <span class="l">Lecturas con debounce</span>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:.82rem;color:var(--gray-lt);margin-top:.5rem">
+      Sin debounce el μC ve <strong style="color:var(--red)">varias</strong> pulsaciones. Con debounce (<code>delay 30 ms</code>) → ve <strong style="color:var(--green)">una sola</strong>.
+    </div>
+  </div>
+
   <!-- ═════ Semana 3 ═════ -->
   <div class="stitle"><span class="ico">📊</span>Entradas analógicas — ADC<span class="semana-chip">Semana 3</span></div>
   <div class="grid g2">
@@ -487,6 +619,64 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
       <h3>Sensor LM35</h3>
       <p>Sensor de temperatura analógico. Entrega <strong>10 mV/°C</strong>. Con 5V de alimentación, mide aproximadamente 0–150 °C.</p>
       <div class="fbox" style="margin-top:.5rem;padding:.5rem"><span class="big" style="font-size:.95rem">°C = (lectura × 5 / 1023) / 0,01</span></div>
+    </div>
+  </div>
+
+  <div class="sim">
+    <h4>💡 Simulador LDR — moveé el sol para cambiar la luz</h4>
+    <div class="sim-row">
+      <svg class="ldr-svg" viewBox="0 0 240 160">
+        <defs>
+          <radialGradient id="sunGrad" cx=".4" cy=".4" r=".7"><stop offset="0" stop-color="#fef9c3"/><stop offset="1" stop-color="#f59e0b"/></radialGradient>
+        </defs>
+        <circle id="ldrSun" cx="60" cy="50" r="26" fill="url(#sunGrad)"/>
+        <g id="sunRays" stroke="#fbbf24" stroke-width="3" stroke-linecap="round">
+          <line x1="60" y1="10" x2="60" y2="20"/><line x1="60" y1="80" x2="60" y2="90"/>
+          <line x1="20" y1="50" x2="30" y2="50"/><line x1="90" y1="50" x2="100" y2="50"/>
+          <line x1="30" y1="20" x2="37" y2="27"/><line x1="83" y1="73" x2="90" y2="80"/>
+          <line x1="83" y1="27" x2="90" y2="20"/><line x1="30" y1="80" x2="37" y2="73"/>
+        </g>
+        <rect x="150" y="100" width="60" height="40" rx="6" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+        <circle cx="180" cy="120" r="14" fill="#fef3c7" id="ldrCircle" stroke="#92400e" stroke-width="2"/>
+        <path d="M 170 120 Q 180 110 190 120 Q 180 130 170 120" fill="#92400e" opacity=".7"/>
+        <text x="180" y="155" fill="#374151" font-size="10" font-weight="700" text-anchor="middle">LDR</text>
+      </svg>
+      <div>
+        <div class="sim-stat"><span class="v" id="ldrAdc">512</span><span class="l">analogRead(A1)</span></div>
+        <div class="sim-stat"><span class="v" id="ldrRes">10</span><span class="l">Resistencia (kΩ)</span></div>
+        <div style="text-align:center;margin-top:.4rem">
+          <div class="sim-led" id="ldrLed"></div>
+          <div class="sim-led-lbl" style="margin-top:.3rem">LED auto-noche</div>
+        </div>
+      </div>
+    </div>
+    <div class="sim-controls">
+      <label>Luz: <input type="range" id="ldrLux" min="0" max="100" value="50"/> <span id="ldrLuxVal" style="font-family:monospace;font-weight:700;color:var(--pur)">50%</span></label>
+    </div>
+    <div style="text-align:center;font-size:.82rem;color:var(--gray-lt);margin-top:.4rem">
+      Más luz → <strong>menos R</strong> → <strong>más</strong> lectura ADC. Si está oscuro, el LED se enciende solo.
+    </div>
+  </div>
+
+  <div class="sim">
+    <h4>🌡️ Simulador LM35 — termómetro analógico</h4>
+    <div class="sim-row">
+      <svg viewBox="0 0 80 200" style="width:60px">
+        <rect x="30" y="20" width="20" height="140" rx="10" fill="#fff" stroke="#475569" stroke-width="3"/>
+        <rect id="thermoFill" x="33" y="100" width="14" height="60" fill="#dc2626" rx="7"/>
+        <circle cx="40" cy="170" r="18" fill="#dc2626" stroke="#7f1d1d" stroke-width="2"/>
+      </svg>
+      <div>
+        <div class="sim-stat"><span class="v" id="lm35Temp">25.0</span><span class="l">Temperatura (°C)</span></div>
+        <div class="sim-stat"><span class="v" id="lm35Mv">250</span><span class="l">Salida (mV)</span></div>
+        <div class="sim-stat"><span class="v" id="lm35Adc">51</span><span class="l">analogRead(A2)</span></div>
+      </div>
+    </div>
+    <div class="sim-controls">
+      <label>Temperatura: <input type="range" id="lm35Range" min="0" max="100" value="25"/> <span id="lm35RangeVal" style="font-family:monospace;font-weight:700;color:var(--pur)">25 °C</span></label>
+    </div>
+    <div style="text-align:center;font-size:.82rem;color:var(--gray-lt);margin-top:.4rem">
+      LM35: pendiente lineal de <strong>10 mV/°C</strong>. La lectura ADC se mantiene baja porque sólo se usa una fracción del rango 0–5V.
     </div>
   </div>
 
@@ -652,6 +842,92 @@ Servo mi_servo;                    <span class="cm">// objeto de la clase Servo<
     </div>
   </div>
 
+  <div class="sim">
+    <h4>⚖️ Simulador Ball switch — inclina el sensor</h4>
+    <div class="sim-row">
+      <svg class="ball-svg" viewBox="0 0 200 160" id="ballSvg">
+        <g id="ballGroup" transform="rotate(0 100 80)">
+          <rect x="40" y="50" width="120" height="60" rx="30" fill="#1e293b" stroke="#475569" stroke-width="3"/>
+          <circle cx="60" cy="80" r="8" fill="#fbbf24" stroke="#92400e" stroke-width="1.5"/>
+          <circle cx="140" cy="80" r="8" fill="#fbbf24" stroke="#92400e" stroke-width="1.5"/>
+          <line x1="56" y1="80" x2="48" y2="80" stroke="#94a3b8" stroke-width="2"/>
+          <line x1="144" y1="80" x2="152" y2="80" stroke="#94a3b8" stroke-width="2"/>
+          <circle id="ballMetal" cx="60" cy="80" r="10" fill="url(#metalGrad)"/>
+        </g>
+        <defs>
+          <radialGradient id="metalGrad" cx=".3" cy=".3" r=".7">
+            <stop offset="0" stop-color="#e2e8f0"/><stop offset="1" stop-color="#475569"/>
+          </radialGradient>
+        </defs>
+      </svg>
+      <div class="sim-stat">
+        <span class="sim-state low" id="ballPin">LOW</span>
+        <div class="l" style="margin-top:.4rem">digitalRead(SENSOR)</div>
+        <div class="l" style="margin-top:.6rem" id="ballStatus">⚪ Vertical — circuito abierto</div>
+      </div>
+    </div>
+    <div class="sim-controls">
+      <label>Inclinación: <input type="range" id="ballRange" min="-60" max="60" value="0"/> <span id="ballAng" style="font-family:monospace;font-weight:700;color:var(--pur)">0°</span></label>
+    </div>
+    <div style="text-align:center;font-size:.82rem;color:var(--gray-lt);margin-top:.4rem">
+      Al inclinarse, la bolita toca ambos contactos → cierra el circuito → lectura HIGH.
+    </div>
+  </div>
+
+  <div class="sim">
+    <h4>💧 Simulador Nivel de agua — variá el nivel</h4>
+    <div class="sim-row">
+      <div>
+        <div class="water-tank">
+          <div class="water-fill" id="waterFill" style="height:50%"></div>
+          <div class="water-mark" style="bottom:0">0</div>
+          <div class="water-mark" style="bottom:50%">512</div>
+          <div class="water-mark" style="top:0">1023</div>
+        </div>
+        <div class="sim-led-lbl" style="margin-top:.5rem">Tanque</div>
+      </div>
+      <div>
+        <div class="sim-stat"><span class="v" id="waterAdc">512</span><span class="l">analogRead(A3)</span></div>
+        <div class="sim-stat"><span class="v" id="waterPct">50%</span><span class="l">Nivel</span></div>
+        <div style="text-align:center;margin-top:.5rem">
+          <span class="sim-state high" id="waterAlarm">ALARMA</span>
+          <div class="l" style="margin-top:.3rem">if(lectura &gt; 750)</div>
+        </div>
+      </div>
+    </div>
+    <div class="sim-controls">
+      <label>Nivel: <input type="range" id="waterRange" min="0" max="100" value="50"/> <span id="waterRangeVal" style="font-family:monospace;font-weight:700;color:var(--pur)">50%</span></label>
+    </div>
+  </div>
+
+  <div class="sim">
+    <h4>📡 Simulador IR proximidad (TCRT5000) — moveé el obstáculo</h4>
+    <div class="ir-track">
+      <div class="ir-sensor">IR</div>
+      <div class="ir-beam" id="irBeam" style="width:60%"></div>
+      <div class="ir-obstacle" id="irObs" style="left:70%"></div>
+    </div>
+    <div class="sim-row">
+      <div class="sim-stat">
+        <span class="v" id="irDist">12</span><span class="l">Distancia (cm)</span>
+      </div>
+      <div class="sim-stat">
+        <span class="sim-state low" id="irPin">LOW</span>
+        <div class="l" style="margin-top:.4rem">digitalRead(IR)</div>
+      </div>
+      <div style="text-align:center">
+        <div class="sim-led" id="irLed"></div>
+        <div class="sim-led-lbl" style="margin-top:.3rem">Detección</div>
+      </div>
+    </div>
+    <div class="sim-controls">
+      <label>Distancia: <input type="range" id="irRange" min="0" max="100" value="70"/> <span id="irRangeVal" style="font-family:monospace;font-weight:700;color:var(--pur)">70%</span></label>
+    </div>
+    <div style="text-align:center;font-size:.82rem;color:var(--gray-lt);margin-top:.4rem">
+      Si el obstáculo está cerca (&lt; 5 cm), el LED IR rebota al fototransistor → salida LOW (activa).
+    </div>
+  </div>
+
   <div class="stitle"><span class="ico">📡</span>Detección de eventos</div>
   <div class="grid g2">
     <div class="card te">
@@ -714,6 +990,50 @@ decode_results results;
     irrecv.<span class="fn">resume</span>();           <span class="cm">// listo para el siguiente</span>
   }
 }</div>
+
+  <div class="sim">
+    <h4>📺 Simulador Receptor IR — apretá un botón del control</h4>
+    <div class="sim-row" style="align-items:flex-start">
+      <div class="remote">
+        <div class="remote-title">CONTROL IR</div>
+        <div class="remote-grid">
+          <button class="remote-btn" onclick="pressRemote('POWER','0xFFA25D')">⏻</button>
+          <button class="remote-btn" onclick="pressRemote('MENU','0xFF629D')">≡</button>
+          <button class="remote-btn" onclick="pressRemote('FUNC','0xFFE21D')">FN</button>
+          <button class="remote-btn" onclick="pressRemote('◄','0xFF22DD')">◄</button>
+          <button class="remote-btn" onclick="pressRemote('OK','0xFF02FD')">OK</button>
+          <button class="remote-btn" onclick="pressRemote('►','0xFFC23D')">►</button>
+          <button class="remote-btn" onclick="pressRemote('▲','0xFFA857')">▲</button>
+          <button class="remote-btn" onclick="pressRemote('0','0xFF4AB5')">0</button>
+          <button class="remote-btn" onclick="pressRemote('▼','0xFFE01F')">▼</button>
+          <button class="remote-btn" onclick="pressRemote('1','0xFF6897')">1</button>
+          <button class="remote-btn" onclick="pressRemote('2','0xFF9867')">2</button>
+          <button class="remote-btn" onclick="pressRemote('3','0xFFB04F')">3</button>
+          <button class="remote-btn" onclick="pressRemote('4','0xFF30CF')">4</button>
+          <button class="remote-btn" onclick="pressRemote('5','0xFF18E7')">5</button>
+          <button class="remote-btn" onclick="pressRemote('6','0xFF7A85')">6</button>
+        </div>
+      </div>
+      <div>
+        <div class="ir-receiver">
+          <div class="recv-lbl">Monitor Serie · 9600 bps</div>
+          <div class="recv-code" id="irRecvCode">Esperando código…</div>
+          <div style="font-size:.7rem;color:#94a3b8;margin-top:.5rem;text-align:center" id="irRecvBtn">— ninguno —</div>
+        </div>
+        <div style="display:flex;gap:.7rem;justify-content:center;margin-top:.6rem">
+          <div style="text-align:center">
+            <div class="sim-led" id="ledRed"></div><div class="sim-led-lbl">LED rojo</div>
+          </div>
+          <div style="text-align:center">
+            <div class="sim-led" id="ledGreen"></div><div class="sim-led-lbl">LED verde</div>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:.78rem;color:var(--gray-lt);margin-top:.4rem">
+          <strong>1</strong> enciende rojo · <strong>2</strong> enciende verde · <strong>⏻</strong> apaga todo
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="stitle"><span class="ico">🔗</span>Integración de E/S</div>
   <div class="note">El objetivo de la semana 6 es <strong>combinar entradas + salidas</strong>: usar el control remoto IR (entrada codificada) para encender LEDs, cambiar el ángulo de un servo, regular el brillo con PWM, etc. El microcontrolador es el <strong>cerebro</strong> que decide qué hacer con la entrada y qué actuador modificar.</div>
@@ -1406,6 +1726,204 @@ function showResult(){
 }
 function restartQuiz(){ qIdx=0; score=0; renderQuiz(); }
 renderQuiz();
+
+// ════════════════════════════
+//  BLINK SIM
+// ════════════════════════════
+const blinkLed = document.getElementById('blinkLed');
+const blinkState = document.getElementById('blinkState');
+const blinkPhase = document.getElementById('blinkPhase');
+const blinkBar = document.getElementById('blinkBar');
+const blinkHigh = document.getElementById('blinkHigh');
+const blinkLow = document.getElementById('blinkLow');
+let blinkRunning = true, blinkOn = false, blinkStart = Date.now();
+function blinkTick(){
+  const tH = parseInt(blinkHigh.value), tL = parseInt(blinkLow.value);
+  document.getElementById('blinkHighVal').textContent = tH + ' ms';
+  document.getElementById('blinkLowVal').textContent = tL + ' ms';
+  if(!blinkRunning){ requestAnimationFrame(blinkTick); return; }
+  const dt = Date.now() - blinkStart;
+  const dur = blinkOn ? tH : tL;
+  if(dt >= dur){ blinkOn = !blinkOn; blinkStart = Date.now(); }
+  blinkLed.classList.toggle('on', blinkOn);
+  blinkState.textContent = blinkOn ? 'HIGH' : 'LOW';
+  blinkPhase.textContent = blinkOn ? `HIGH (${tH} ms)` : `LOW (${tL} ms)`;
+  blinkBar.style.width = ((Date.now()-blinkStart)/dur*100)+'%';
+  blinkBar.style.background = blinkOn ? '#fbbf24' : '#475569';
+  requestAnimationFrame(blinkTick);
+}
+function toggleBlink(){
+  blinkRunning = !blinkRunning;
+  document.getElementById('blinkBtn').textContent = blinkRunning ? '⏸️ Pausar' : '▶️ Reanudar';
+  if(blinkRunning) blinkStart = Date.now();
+}
+blinkTick();
+
+// ════════════════════════════
+//  PULSADOR SIM
+// ════════════════════════════
+let btnMode = 'up', btnPressed = false;
+function setBtnMode(m){
+  btnMode = m;
+  document.getElementById('modePullup').classList.toggle('active', m==='up');
+  document.getElementById('modePulldown').classList.toggle('active', m==='down');
+  document.getElementById('btnLogic').textContent = m==='up'
+    ? 'Lógica invertida: suelto = HIGH, apretado = LOW'
+    : 'Lógica directa: suelto = LOW, apretado = HIGH';
+  updateBtn();
+}
+function pressBtn(p){
+  btnPressed = p;
+  document.getElementById('btnFisico').classList.toggle('pressed', p);
+  updateBtn();
+}
+function updateBtn(){
+  const reading = btnMode==='up' ? (btnPressed?'LOW':'HIGH') : (btnPressed?'HIGH':'LOW');
+  const pinEl = document.getElementById('btnPin');
+  pinEl.textContent = reading;
+  pinEl.className = 'sim-state ' + (reading==='HIGH'?'high':'low');
+  document.getElementById('btnLed').classList.toggle('on', btnPressed);
+}
+updateBtn();
+
+// ════════════════════════════
+//  REBOTE SIM
+// ════════════════════════════
+function simRebote(){
+  let sin = 0, con = 0;
+  document.getElementById('reboteSin').textContent = '0';
+  document.getElementById('reboteCon').textContent = '0';
+  const pulsos = 6 + Math.floor(Math.random()*4);
+  let i = 0;
+  const t = setInterval(()=>{
+    sin++;
+    document.getElementById('reboteSin').textContent = sin;
+    if(i===0){ con = 1; document.getElementById('reboteCon').textContent = con; }
+    i++;
+    if(i>=pulsos) clearInterval(t);
+  }, 60);
+}
+
+// ════════════════════════════
+//  LDR SIM
+// ════════════════════════════
+const ldrLux = document.getElementById('ldrLux');
+function updateLdr(){
+  const lux = parseInt(ldrLux.value);
+  document.getElementById('ldrLuxVal').textContent = lux + '%';
+  // a más luz, más lectura ADC (en divisor pull-down con LDR a +5V)
+  const adc = Math.round(lux/100 * 1023);
+  const res = Math.round(200 / (lux+1));  // simula k-ohm: oscuro alto, luz bajo
+  document.getElementById('ldrAdc').textContent = adc;
+  document.getElementById('ldrRes').textContent = res;
+  // sol visible solo si hay luz
+  document.getElementById('ldrSun').style.opacity = (lux/100).toFixed(2);
+  document.getElementById('sunRays').style.opacity = (lux/100).toFixed(2);
+  document.getElementById('ldrCircle').setAttribute('fill', lux<30?'#1f2937':lux<70?'#facc15':'#fef9c3');
+  // LED auto: enciende si poca luz
+  document.getElementById('ldrLed').classList.toggle('on', lux<30);
+}
+ldrLux.addEventListener('input', updateLdr);
+updateLdr();
+
+// ════════════════════════════
+//  LM35 SIM
+// ════════════════════════════
+const lm35Range = document.getElementById('lm35Range');
+function updateLm35(){
+  const t = parseInt(lm35Range.value);
+  document.getElementById('lm35RangeVal').textContent = t + ' °C';
+  document.getElementById('lm35Temp').textContent = t.toFixed(1);
+  const mv = t * 10;          // 10 mV/°C
+  document.getElementById('lm35Mv').textContent = mv;
+  const adc = Math.round(mv/1000 * 1023 / 5);
+  document.getElementById('lm35Adc').textContent = adc;
+  // termómetro fill (altura)
+  const fillH = (t/100) * 140;
+  document.getElementById('thermoFill').setAttribute('y', 160 - fillH);
+  document.getElementById('thermoFill').setAttribute('height', fillH);
+  const color = t<10?'#3b82f6':t<25?'#22c55e':t<60?'#f59e0b':'#dc2626';
+  document.getElementById('thermoFill').setAttribute('fill', color);
+}
+lm35Range.addEventListener('input', updateLm35);
+updateLm35();
+
+// ════════════════════════════
+//  BALL SWITCH SIM
+// ════════════════════════════
+const ballRange = document.getElementById('ballRange');
+function updateBall(){
+  const ang = parseInt(ballRange.value);
+  document.getElementById('ballAng').textContent = ang + '°';
+  document.getElementById('ballGroup').setAttribute('transform', `rotate(${ang} 100 80)`);
+  // posición de la bola: gravedad hace que vaya al lado bajo
+  const bx = ang < -10 ? 140 : ang > 10 ? 60 : 100;
+  document.getElementById('ballMetal').setAttribute('cx', bx);
+  document.getElementById('ballMetal').setAttribute('cy', 80);
+  const closed = Math.abs(ang) >= 10;
+  const pin = document.getElementById('ballPin');
+  pin.textContent = closed ? 'HIGH' : 'LOW';
+  pin.className = 'sim-state ' + (closed?'high':'low');
+  document.getElementById('ballStatus').innerHTML = closed
+    ? '🔴 Inclinado — circuito cerrado'
+    : '⚪ Vertical — circuito abierto';
+}
+ballRange.addEventListener('input', updateBall);
+updateBall();
+
+// ════════════════════════════
+//  WATER LEVEL SIM
+// ════════════════════════════
+const waterRange = document.getElementById('waterRange');
+function updateWater(){
+  const v = parseInt(waterRange.value);
+  document.getElementById('waterRangeVal').textContent = v + '%';
+  document.getElementById('waterFill').style.height = v + '%';
+  const adc = Math.round(v/100 * 1023);
+  document.getElementById('waterAdc').textContent = adc;
+  document.getElementById('waterPct').textContent = v + '%';
+  const alarm = adc > 750;
+  const alEl = document.getElementById('waterAlarm');
+  alEl.textContent = alarm ? '🚨 ALARMA' : '✅ OK';
+  alEl.className = 'sim-state ' + (alarm?'low':'high');
+}
+waterRange.addEventListener('input', updateWater);
+updateWater();
+
+// ════════════════════════════
+//  IR PROXIMIDAD SIM
+// ════════════════════════════
+const irRange = document.getElementById('irRange');
+function updateIr(){
+  const pos = parseInt(irRange.value);
+  document.getElementById('irRangeVal').textContent = pos + '%';
+  document.getElementById('irObs').style.left = pos + '%';
+  const dist = Math.round(pos * 0.3);  // simula cm
+  document.getElementById('irDist').textContent = dist;
+  document.getElementById('irBeam').style.width = (pos-6) + '%';
+  const detect = dist < 5;
+  document.getElementById('irBeam').style.opacity = detect?'1':'.4';
+  const pin = document.getElementById('irPin');
+  pin.textContent = detect ? 'LOW' : 'HIGH';
+  pin.className = 'sim-state ' + (detect?'low':'high');
+  document.getElementById('irLed').classList.toggle('on', detect);
+}
+irRange.addEventListener('input', updateIr);
+updateIr();
+
+// ════════════════════════════
+//  REMOTO IR SIM
+// ════════════════════════════
+function pressRemote(label, code){
+  document.getElementById('irRecvCode').textContent = code;
+  document.getElementById('irRecvBtn').textContent = '← botón ' + label;
+  if(label === '1') document.getElementById('ledRed').classList.add('on');
+  if(label === '2') document.getElementById('ledGreen').classList.add('on');
+  if(label === 'POWER'){
+    document.getElementById('ledRed').classList.remove('on');
+    document.getElementById('ledGreen').classList.remove('on');
+  }
+}
 
 // ════════════════════════════
 //  CONFETTI

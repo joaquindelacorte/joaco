@@ -164,6 +164,55 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
 .back-home{display:inline-block; margin-bottom:14px; color:var(--accent);
            text-decoration:none; font-size:13px}
 .back-home:hover{text-decoration:underline}
+
+/* ── Sandbox ── */
+.sb-wrap{background:#0a1929; border:1px solid var(--border); border-radius:12px; padding:18px; margin:14px 0}
+.sb-tabs{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px}
+.sb-tab{background:var(--panel2); color:var(--text); border:1px solid var(--border);
+        padding:8px 14px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;
+        transition:all .15s}
+.sb-tab:hover{border-color:var(--accent)}
+.sb-tab.active{background:var(--accent); color:#0b1220; border-color:var(--accent)}
+.sb-types{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px}
+.sb-type{background:#0b1220; color:var(--muted); border:1px solid var(--border);
+         padding:6px 12px; border-radius:20px; cursor:pointer; font-size:12px; transition:all .15s}
+.sb-type:hover{border-color:var(--accent2); color:var(--text)}
+.sb-type.active{background:var(--accent2); color:#0b1220; border-color:var(--accent2); font-weight:600}
+.sb-stats{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:14px; padding:10px 14px;
+          background:#0b1220; border-radius:8px; border:1px solid var(--border)}
+.sb-stat{display:flex; flex-direction:column}
+.sb-stat .lbl{font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px}
+.sb-stat .val{font-size:18px; font-weight:700; color:var(--accent)}
+.sb-problem{background:var(--panel2); border-left:4px solid var(--warn); padding:14px 18px;
+            border-radius:8px; margin-bottom:14px; font-size:16px}
+.sb-problem .lbl{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px}
+.sb-step{background:var(--panel); border:1px solid var(--border); border-radius:8px;
+         padding:12px 16px; margin:10px 0}
+.sb-step .num{display:inline-block; width:22px; height:22px; border-radius:50%;
+              background:var(--accent2); color:#0b1220; text-align:center; line-height:22px;
+              font-size:12px; font-weight:700; margin-right:8px}
+.sb-step.locked{opacity:0.4}
+.sb-step .qst{font-weight:600; color:var(--yellow); margin-bottom:10px; font-size:14px}
+.sb-opts{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+@media(max-width:600px){.sb-opts{grid-template-columns:1fr}}
+.sb-opt{background:#0b1220; padding:10px 14px; border-radius:6px; border:2px solid transparent;
+        cursor:pointer; font-size:14px; transition:all .15s; text-align:left}
+.sb-opt:hover{border-color:var(--accent)}
+.sb-opt.correct{background:#143526; border-color:var(--good)}
+.sb-opt.wrong{background:#3a1c1c; border-color:var(--bad)}
+.sb-fb{margin-top:10px; padding:8px 12px; background:#0b1220; border-radius:6px;
+       border-left:3px solid var(--accent); font-size:13px; color:var(--muted)}
+.sb-result{background:#0d1f16; border-left:4px solid var(--good); padding:14px 18px;
+           border-radius:8px; margin-top:14px; display:none}
+.sb-result.show{display:block}
+.sb-result .lbl{font-size:11px; color:var(--good); text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px}
+.sb-actions{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap}
+.sb-hint{font-size:12px; color:var(--muted); margin-top:6px; font-style:italic}
+.sb-streak{display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:700;
+           background:var(--warn); color:#0b1220; margin-left:6px}
+.sb-streak.fire{background:var(--orange); animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.sb-empty{color:var(--muted); text-align:center; padding:30px; font-style:italic}
 </style>
 </head>
 <body>
@@ -201,6 +250,9 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
   <a href="#newton">🌡️ Ley de Newton</a>
   <a href="#edo-sim">🎮 Simulador tanque</a>
   <a href="#edo-ej">📝 Ejercicios EDOs</a>
+
+  <div class="nav-level">🎯 Práctica</div>
+  <a href="#sandbox">🕹️ Sandbox paso a paso</a>
 
   <div class="nav-level">🏆 Cierre</div>
   <a href="#cheatsheet">📋 Cheat sheet</a>
@@ -881,6 +933,47 @@ $$h(t)=\frac{Q_{in}}{K}\left(1-e^{-Kt/A}\right)$$
 <!-- ─────────────────────────── CIERRE ─────────────────────────── -->
 <!-- ════════════════════════════════════════════════════════════════════════ -->
 
+<h2 id="sandbox">🕹️ Sandbox — practicá el paso a paso</h2>
+
+<div class="card intuition">
+<p>Elegí <strong>categoría</strong> y luego un <strong>tipo de problema</strong>. El sistema te genera un ejercicio aleatorio y te guía paso a paso. En cada paso elegís la respuesta correcta entre opciones. <span class="hl-good">Hacé clic en "Otro problema" todas las veces que quieras</span> — los números cambian pero la receta es siempre la misma. Así fijás el método.</p>
+<p><strong>🎯 Objetivo:</strong> que cuando aparezca un problema nuevo en el parcial, identifiques el tipo en 5 segundos y reproduzcas los pasos en automático.</p>
+</div>
+
+<div class="sb-wrap">
+  <div class="sb-tabs" id="sb-cats">
+    <button class="sb-tab active" data-cat="deriv">🟢 Derivadas</button>
+    <button class="sb-tab" data-cat="integ">🟣 Integrales</button>
+    <button class="sb-tab" data-cat="edo">🟠 EDOs</button>
+  </div>
+
+  <div class="sb-types" id="sb-types"></div>
+
+  <div class="sb-stats">
+    <div class="sb-stat"><span class="lbl">Resueltos</span><span class="val" id="sb-total">0</span></div>
+    <div class="sb-stat"><span class="lbl">Aciertos 1er intento</span><span class="val" id="sb-aciertos">0</span></div>
+    <div class="sb-stat"><span class="lbl">Racha actual</span><span class="val" id="sb-racha">0 <span id="sb-fire"></span></span></div>
+    <div class="sb-stat"><span class="lbl">Mejor racha</span><span class="val" id="sb-best">0</span></div>
+  </div>
+
+  <div id="sb-problem-box" class="sb-problem">
+    <div class="lbl">Problema</div>
+    <div id="sb-problem-text">Elegí un tipo arriba para empezar →</div>
+  </div>
+
+  <div id="sb-steps"></div>
+
+  <div id="sb-result" class="sb-result">
+    <div class="lbl">Resultado final ✓</div>
+    <div id="sb-result-text"></div>
+  </div>
+
+  <div class="sb-actions">
+    <button class="btn" id="sb-new">🎲 Otro problema</button>
+    <button class="btn-2" id="sb-reveal">👁️ Ver solución completa</button>
+  </div>
+</div>
+
 <h2 id="cheatsheet">📋 Cheat sheet rápido para el parcial</h2>
 
 <div class="grid3">
@@ -1174,6 +1267,766 @@ document.getElementById('quiz-reset').addEventListener('click', ()=>{
   renderQuiz();
 });
 renderQuiz();
+
+/* ════════════════ SANDBOX ════════════════ */
+const rint=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const choice=arr=>arr[Math.floor(Math.random()*arr.length)];
+const shuffle=arr=>{const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const km=(c,v)=>{ // KaTeX inline render
+  try{return katex.renderToString(c,{throwOnError:false, displayMode:!!v});}catch(e){return c;}
+};
+
+/* ─── PROBLEMAS DE DERIVADAS ─── */
+const SB_DERIV = {
+  'd-pot':{
+    title:'Regla de potencia + suma',
+    gen:()=>{
+      const a=rint(2,9), n=rint(2,6), b=rint(2,7), m=rint(2,4), c=rint(1,9);
+      const expr=`f(x) = ${a}x^{${n}} - ${b}x^{${m}} + ${c}x - ${rint(1,9)}`;
+      const der=`f'(x) = ${a*n}x^{${n-1}} - ${b*m}x^{${m-1}} + ${c}`;
+      return {
+        problem:`Derivar $${expr}$`,
+        steps:[
+          {q:'¿Qué reglas necesitás?',
+           opts:shuffle([
+             {t:'Potencia + suma/resta + múltiplo constante', ok:true, fb:'Sí: cada término es un monomio o constante.'},
+             {t:'Regla del producto', ok:false, fb:'No hay productos de funciones, son sumas.'},
+             {t:'Regla del cociente', ok:false, fb:'No hay división de funciones.'},
+             {t:'Regla de la cadena', ok:false, fb:'No hay composiciones.'}
+           ])},
+          {q:'Derivá el primer término $${a}x^{${n}}$$:'.replace('${a}',a).replace('${n}',n),
+           opts:shuffle([
+             {t:km(`${a*n}x^{${n-1}}`), ok:true, fb:`Bajás el exponente: ${a}·${n} = ${a*n}, y restás 1 al exponente.`},
+             {t:km(`${a}x^{${n-1}}`), ok:false, fb:'Te olvidaste de multiplicar por el exponente.'},
+             {t:km(`${a*n}x^{${n}}`), ok:false, fb:'No restaste 1 al exponente.'},
+             {t:km(`${n}x^{${a-1}}`), ok:false, fb:'Confundiste base con exponente.'}
+           ])},
+          {q:'Derivá el término lineal $${c}x$$:'.replace('${c}',c),
+           opts:shuffle([
+             {t:km(`${c}`), ok:true, fb:`La derivada de $cx$ es $c$ (la pendiente).`},
+             {t:km(`${c}x`), ok:false, fb:'No derivaste, dejaste el original.'},
+             {t:km(`0`), ok:false, fb:'No es una constante: $x$ tiene derivada 1.'},
+             {t:km(`\\frac{${c}x^2}{2}`), ok:false, fb:'Eso es la integral, no la derivada.'}
+           ])},
+          {q:'¿Cuál es la derivada de la constante final?',
+           opts:shuffle([
+             {t:'0', ok:true, fb:'La derivada de cualquier constante es 0.'},
+             {t:'1', ok:false, fb:'No: las constantes derivan a 0.'},
+             {t:'la constante misma', ok:false, fb:'No: eso pasa con $e^x$, no con constantes.'},
+             {t:'$x$', ok:false, fb:'No tiene sentido dimensional.'}
+           ])}
+        ],
+        result:km(der,true)
+      };
+    }
+  },
+  'd-raiz':{
+    title:'Potencia fraccionaria (raíces)',
+    gen:()=>{
+      const a=rint(2,8);
+      return {
+        problem:`Derivar $f(x) = ${a}\\sqrt{x}$`,
+        steps:[
+          {q:'Primer paso: reescribir como potencia',
+           opts:shuffle([
+             {t:km(`${a}x^{1/2}`), ok:true, fb:`$\\sqrt x = x^{1/2}$, mantenemos el coeficiente.`},
+             {t:km(`${a}x^{2}`), ok:false, fb:'Raíz no es cuadrado.'},
+             {t:km(`${a}x^{-1/2}`), ok:false, fb:'Eso es $1/\\sqrt x$.'},
+             {t:km(`x^{${a}/2}`), ok:false, fb:'El coeficiente no va al exponente.'}
+           ])},
+          {q:'Aplicá la regla de la potencia',
+           opts:shuffle([
+             {t:km(`\\frac{${a}}{2}x^{-1/2}`), ok:true, fb:`Bajás 1/2, restás 1: $1/2-1=-1/2$.`},
+             {t:km(`${a}\\cdot\\frac{1}{2}x^{1/2}`), ok:false, fb:'No restaste 1 al exponente.'},
+             {t:km(`${a*2}x^{-1/2}`), ok:false, fb:'Multiplicaste por 2 en vez de 1/2.'},
+             {t:km(`${a}x^{-1/2}`), ok:false, fb:'Te olvidaste de multiplicar por 1/2.'}
+           ])},
+          {q:'Reescribilo de forma "limpia" con raíz',
+           opts:shuffle([
+             {t:km(`\\frac{${a}}{2\\sqrt{x}}`), ok:true, fb:`$x^{-1/2}=1/\\sqrt x$.`},
+             {t:km(`\\frac{${a}\\sqrt{x}}{2}`), ok:false, fb:'El exponente es −1/2 (raíz al denominador).'},
+             {t:km(`\\frac{1}{${a*2}\\sqrt{x}}`), ok:false, fb:'Confundiste numerador con denominador.'},
+             {t:km(`\\frac{${a}}{2x}`), ok:false, fb:'No: $x^{-1/2}\\ne 1/x$.'}
+           ])}
+        ],
+        result:km(`f'(x)=\\frac{${a}}{2\\sqrt{x}}`,true)
+      };
+    }
+  },
+  'd-prod':{
+    title:'Regla del producto',
+    gen:()=>{
+      const a=rint(1,4), b=rint(1,4);
+      return {
+        problem:`Derivar $f(x) = (x^2 + ${a})(x^3 - ${b}x)$`,
+        steps:[
+          {q:'¿Qué regla aplicás?',
+           opts:shuffle([
+             {t:'Producto: $(uv)\'=u\'v+uv\'$', ok:true, fb:'Hay dos polinomios multiplicándose.'},
+             {t:'Cociente', ok:false, fb:'No hay división.'},
+             {t:'Cadena', ok:false, fb:'No es una composición.'},
+             {t:'Potencia directa', ok:false, fb:'Funcionaría expandiendo, pero la regla del producto es más mecánica.'}
+           ])},
+          {q:'Identificá u, v, u′, v′',
+           opts:shuffle([
+             {t:km(`u=x^2+${a},\\ v=x^3-${b}x,\\ u'=2x,\\ v'=3x^2-${b}`), ok:true, fb:'Correcto.'},
+             {t:km(`u=2x,\\ v=3x^2-${b},\\ u'=x^2+${a},\\ v'=x^3-${b}x`), ok:false, fb:'Invertiste u con u′ (y v con v′).'},
+             {t:km(`u=x^2,\\ v=x^3,\\ u'=2x,\\ v'=3x^2`), ok:false, fb:'Ignoraste términos constantes y lineales.'},
+             {t:km(`u=x^2+${a},\\ v=x^3-${b}x,\\ u'=x,\\ v'=3x^2`), ok:false, fb:'Derivaste mal: $(x^2)\'=2x$, no $x$.'}
+           ])},
+          {q:'Armá $u\'v + uv\'$ (no hace falta simplificar)',
+           opts:shuffle([
+             {t:km(`(2x)(x^3-${b}x) + (x^2+${a})(3x^2-${b})`), ok:true, fb:'Esa es la fórmula del producto aplicada.'},
+             {t:km(`(2x)(3x^2-${b}) + (x^2+${a})(x^3-${b}x)`), ok:false, fb:'Mezclaste u′·v′ y u·v.'},
+             {t:km(`(2x)(3x^2-${b})`), ok:false, fb:'Esa es la "falsa" derivada del producto (u′·v′), no es la regla.'},
+             {t:km(`(x^2+${a})(3x^2-${b})`), ok:false, fb:'Te faltó el término $u\'v$.'}
+           ])}
+        ],
+        result:km(`f'(x)=2x(x^3-${b}x)+(x^2+${a})(3x^2-${b})`,true)
+      };
+    }
+  },
+  'd-coc':{
+    title:'Regla del cociente',
+    gen:()=>{
+      const a=rint(1,4), b=rint(1,5);
+      return {
+        problem:`Derivar $f(x) = \\dfrac{${a}x}{x^2 + ${b}}$`,
+        steps:[
+          {q:'¿Qué regla?',
+           opts:shuffle([
+             {t:'Cociente: $\\left(\\dfrac{u}{v}\\right)\'=\\dfrac{u\'v-uv\'}{v^2}$', ok:true, fb:'Hay división de funciones.'},
+             {t:'Producto', ok:false, fb:'No es producto, es cociente.'},
+             {t:'Potencia', ok:false, fb:'Solo si reescribís con exponente negativo, pero el cociente es más directo.'},
+             {t:'Suma', ok:false, fb:'No se separa una división como suma.'}
+           ])},
+          {q:'u, v, u′, v′',
+           opts:shuffle([
+             {t:km(`u=${a}x,\\ v=x^2+${b},\\ u'=${a},\\ v'=2x`), ok:true, fb:'Bien.'},
+             {t:km(`u=${a}x,\\ v=x^2+${b},\\ u'=${a}x,\\ v'=2x+${b}`), ok:false, fb:'No derivaste u y v.'},
+             {t:km(`u=x^2+${b},\\ v=${a}x`), ok:false, fb:'Invertiste numerador y denominador.'},
+             {t:km(`u'=1,\\ v'=2x`), ok:false, fb:'Te olvidaste del coeficiente $${a}$ en $u\'$.`.replace('${a}',a)}
+           ])},
+          {q:'Aplicá $\\dfrac{u\'v-uv\'}{v^2}$',
+           opts:shuffle([
+             {t:km(`\\dfrac{${a}(x^2+${b}) - ${a}x(2x)}{(x^2+${b})^2}`), ok:true, fb:'Correcto. Atención: u′·v menos u·v′.'},
+             {t:km(`\\dfrac{${a}x(2x) - ${a}(x^2+${b})}{(x^2+${b})^2}`), ok:false, fb:'Invertiste el orden del numerador (es u′v − uv′).'},
+             {t:km(`\\dfrac{${a}(x^2+${b}) - ${a}x(2x)}{x^2+${b}}`), ok:false, fb:'El denominador va al cuadrado.'},
+             {t:km(`\\dfrac{${a} - 2x}{(x^2+${b})^2}`), ok:false, fb:'No aplicaste bien la fórmula.'}
+           ])},
+          {q:'Simplificá el numerador',
+           opts:shuffle([
+             {t:km(`\\dfrac{${a}(${b}-x^2)}{(x^2+${b})^2}`), ok:true, fb:`${a}x²+${a*b}−${a*2}x² = ${a*b}−${a}x² = ${a}(${b}−x²).`.replace(/\$\{a\}/g,a).replace(/\$\{b\}/g,b).replace(/\$\{a\*b\}/g,a*b).replace(/\$\{a\*2\}/g,a*2)},
+             {t:km(`\\dfrac{${a}(${b}+x^2)}{(x^2+${b})^2}`), ok:false, fb:'Te equivocaste con el signo de $-2x^2$.'},
+             {t:km(`\\dfrac{${a}(x^2-${b})}{(x^2+${b})^2}`), ok:false, fb:'Invertiste el signo final.'},
+             {t:km(`\\dfrac{${a}}{x^2+${b}}`), ok:false, fb:'Simplificaste de más.'}
+           ])}
+        ],
+        result:km(`f'(x)=\\dfrac{${a}(${b}-x^2)}{(x^2+${b})^2}`,true)
+      };
+    }
+  },
+  'd-sens':{
+    title:'🌡️ Sensibilidad de sensor',
+    gen:()=>{
+      const a=choice([0.005,0.01,0.02,0.03]), b=choice([0.3,0.5,0.7,1.0]);
+      const T=choice([25,50,75,100]);
+      const sens=a*2*T+b;
+      return {
+        problem:`Un sensor entrega $V(T) = ${a}T^2 + ${b}T + 2$ (V). ¿Cuál es su <strong>sensibilidad</strong> en T = ${T}°C?`,
+        steps:[
+          {q:'¿Qué es la sensibilidad?',
+           opts:shuffle([
+             {t:'La derivada $V\'(T)$', ok:true, fb:'Sí: cuánto cambia la salida por cada °C de cambio en la entrada.'},
+             {t:'El valor $V(T)$', ok:false, fb:'Ese es el voltaje, no la sensibilidad.'},
+             {t:'La integral $\\int V\\,dT$', ok:false, fb:'No: la integral acumula, no mide cambio.'},
+             {t:'$V(T)/T$', ok:false, fb:'Eso es un cociente, no una tasa de cambio.'}
+           ])},
+          {q:'Calculá $V\'(T)$',
+           opts:shuffle([
+             {t:km(`${a*2}T + ${b}`), ok:true, fb:`Potencia + suma: $2·${a}T + ${b}$.`},
+             {t:km(`${a}T + ${b}`), ok:false, fb:'No bajaste el exponente 2.'},
+             {t:km(`${a*2}T^2 + ${b}`), ok:false, fb:'No restaste 1 al exponente.'},
+             {t:km(`${a*2}T`), ok:false, fb:'Te olvidaste de $b$.'}
+           ])},
+          {q:`Evaluá en T = ${T}°C`,
+           opts:shuffle([
+             {t:`${sens.toFixed(3)} V/°C`, ok:true, fb:`$${a*2}·${T} + ${b} = ${sens.toFixed(3)}$ V/°C.`},
+             {t:`${(a*T*T+b*T+2).toFixed(3)} V/°C`, ok:false, fb:'Evaluaste $V(T)$ en vez de $V\'(T)$.'},
+             {t:`${(a*2*T).toFixed(3)} V/°C`, ok:false, fb:'Te olvidaste de sumar $b$.'},
+             {t:`${(a+b+T).toFixed(3)} V/°C`, ok:false, fb:'Sumaste los coeficientes sin aplicar derivada.'}
+           ])}
+        ],
+        result:`V'(${T}) = ${sens.toFixed(3)} V/°C — el sensor es más sensible a temperaturas altas.`
+      };
+    }
+  }
+};
+
+/* ─── PROBLEMAS DE INTEGRALES ─── */
+const SB_INTEG = {
+  'i-barrow':{
+    title:'Regla de Barrow (polinomio)',
+    gen:()=>{
+      const a=rint(2,6), n=rint(2,4), c=rint(1,9);
+      const b=rint(2,4);
+      const Fb=a*Math.pow(b,n+1)/(n+1)+c*b;
+      const F0=0;
+      const res=Fb-F0;
+      return {
+        problem:`Calcular $\\displaystyle\\int_0^{${b}} \\left(${a}t^{${n}} + ${c}\\right) dt$`,
+        steps:[
+          {q:'Hallá la primitiva F(t)',
+           opts:shuffle([
+             {t:km(`F(t)=\\dfrac{${a}}{${n+1}}t^{${n+1}} + ${c}t`), ok:true, fb:`Subís el exponente y dividís: $${a}t^${n}\\to \\dfrac{${a}}{${n+1}}t^{${n+1}}$.`},
+             {t:km(`F(t)=${a}t^{${n+1}} + ${c}t`), ok:false, fb:'Te olvidaste de dividir por el nuevo exponente.'},
+             {t:km(`F(t)=${a*n}t^{${n-1}} + 0`), ok:false, fb:'Esa es la derivada, no la primitiva.'},
+             {t:km(`F(t)=\\dfrac{${a}}{${n+1}}t^{${n+1}}`), ok:false, fb:'Te olvidaste del término constante.'}
+           ])},
+          {q:`Por Regla de Barrow: $F(${b}) - F(0)$. Calculá $F(${b})$`,
+           opts:shuffle([
+             {t:Fb.toFixed(2), ok:true, fb:`Evaluás cada término en $t=${b}$ y sumás.`},
+             {t:(Fb*2).toFixed(2), ok:false, fb:'Multiplicaste por 2 sin razón.'},
+             {t:F0.toFixed(2), ok:false, fb:'Eso es $F(0)$, no $F(${b})$.'.replace('${b}',b)},
+             {t:(Fb-c*b).toFixed(2), ok:false, fb:'Te olvidaste del término lineal evaluado.'}
+           ])},
+          {q:'Calculá $F(0)$',
+           opts:shuffle([
+             {t:'0', ok:true, fb:'Cualquier potencia con $t=0$ vale 0, y $c·0=0$.'},
+             {t:`${c}`, ok:false, fb:'No hay constante de integración aquí (es definida).'},
+             {t:`${a}`, ok:false, fb:'No tiene sentido: en $t=0$ todo se anula.'},
+             {t:`${a+c}`, ok:false, fb:'No: en $t=0$ los términos se anulan.'}
+           ])},
+          {q:'Resultado final',
+           opts:shuffle([
+             {t:res.toFixed(2), ok:true, fb:`$F(${b}) - F(0) = ${Fb.toFixed(2)} - 0 = ${res.toFixed(2)}$.`},
+             {t:(res*-1).toFixed(2), ok:false, fb:'Invertiste el orden: es $F(b)-F(a)$, no al revés.'},
+             {t:(res+c).toFixed(2), ok:false, fb:'Sumaste algo de más.'},
+             {t:(res/2).toFixed(2), ok:false, fb:'Dividiste por 2 sin razón.'}
+           ])}
+        ],
+        result:km(`\\int_0^{${b}}(${a}t^{${n}}+${c})\\,dt = ${res.toFixed(2)}`,true)
+      };
+    }
+  },
+  'i-caudal':{
+    title:'💧 Volumen acumulado en tanque',
+    gen:()=>{
+      const a=rint(4,10), b=rint(1,3), T=rint(2,5);
+      const V=a*T-b*T*T;
+      return {
+        problem:`Un caudal varía como $Q(t) = ${a} - ${2*b}t$ L/s. Calcular el volumen acumulado entre $t=0$ y $t=${T}$ s.`,
+        steps:[
+          {q:'¿Qué hay que hacer para obtener el volumen?',
+           opts:shuffle([
+             {t:`Integrar Q(t) entre 0 y ${T}`, ok:true, fb:'Volumen = ∫Q dt: la integral acumula caudal.'},
+             {t:`Derivar Q(t)`, ok:false, fb:'La derivada da la tasa de cambio del caudal, no el volumen.'},
+             {t:`Evaluar Q en t=${T}`, ok:false, fb:'Eso te da el caudal instantáneo, no el volumen.'},
+             {t:'Multiplicar Q(0) por '+T, ok:false, fb:'Solo funcionaría si Q fuera constante.'}
+           ])},
+          {q:'Plantear la integral',
+           opts:shuffle([
+             {t:km(`\\int_0^{${T}} (${a}-${2*b}t)\\,dt`), ok:true, fb:'Bien planteada.'},
+             {t:km(`\\int_0^{${T}} (${a}-${2*b}t)\\,dx`), ok:false, fb:'La variable es $t$, no $x$.'},
+             {t:km(`\\int_${T}^{0} (${a}-${2*b}t)\\,dt`), ok:false, fb:'Invertiste los límites (cambia el signo).'},
+             {t:km(`\\int (${a}-${2*b}t)\\,dt`), ok:false, fb:'Es definida, faltan los límites.'}
+           ])},
+          {q:'Hallá la primitiva',
+           opts:shuffle([
+             {t:km(`F(t) = ${a}t - ${b}t^2`), ok:true, fb:`$\\int ${a}\\,dt = ${a}t$ y $\\int ${2*b}t\\,dt = ${b}t^2$.`},
+             {t:km(`F(t) = ${a}t - ${2*b}t^2`), ok:false, fb:'Faltó dividir por 2 al integrar $${2*b}t$.'.replace('${2*b}',2*b)},
+             {t:km(`F(t) = ${a} - ${b}t`), ok:false, fb:'Esa es la derivada de algo, no la primitiva.'},
+             {t:km(`F(t) = ${a}t^2 - ${b}t^3`), ok:false, fb:'Aumentaste los exponentes mal.'}
+           ])},
+          {q:'Evaluá por Barrow',
+           opts:shuffle([
+             {t:`${V} L`, ok:true, fb:`$F(${T})-F(0) = ${a*T}-${b*T*T} = ${V}$.`},
+             {t:`${V+5} L`, ok:false, fb:'Error de cálculo.'},
+             {t:`${a*T} L`, ok:false, fb:'Olvidaste restar el término cuadrático.'},
+             {t:`${b*T*T} L`, ok:false, fb:'Olvidaste el primer término.'}
+           ])}
+        ],
+        result:km(`V = ${V} \\text{ L}`,true)
+      };
+    }
+  },
+  'i-posic':{
+    title:'⚙️ Posición desde velocidad',
+    gen:()=>{
+      const a=rint(2,6), b=rint(2,6), c=rint(1,5), T=rint(1,3);
+      const pos=a*Math.pow(T,3)/3*3+(b/2*2)*T*T*-1+c*T;
+      // Use v(t) = a*t^2 - b*t + c -> x(T) = a*T^3/3 - b*T^2/2 + c*T  (require integer)
+      const a2=3*rint(1,3), b2=2*rint(1,3); // multiples to keep integer
+      const xT = a2*Math.pow(T,3)/3 - b2*Math.pow(T,2)/2 + c*T;
+      return {
+        problem:`Un encoder mide $v(t) = ${a2}t^2 - ${b2}t + ${c}$ m/s. Si $x(0)=0$, hallar la posición a $t=${T}$ s.`,
+        steps:[
+          {q:'¿Cómo paso de velocidad a posición?',
+           opts:shuffle([
+             {t:'Integrando v(t)', ok:true, fb:'Posición = integral de velocidad (acumula desplazamientos).'},
+             {t:'Derivando v(t)', ok:false, fb:'Eso da aceleración, no posición.'},
+             {t:'Multiplicando v(T) por T', ok:false, fb:'Solo vale si la velocidad es constante.'},
+             {t:'v(T)/T', ok:false, fb:'No tiene sentido físico.'}
+           ])},
+          {q:'Primitiva de v(t)',
+           opts:shuffle([
+             {t:km(`\\dfrac{${a2}}{3}t^3 - \\dfrac{${b2}}{2}t^2 + ${c}t`), ok:true, fb:'Subís 1 al exponente y dividís.'},
+             {t:km(`${a2*3}t^3 - ${b2*2}t^2 + ${c}t`), ok:false, fb:'Multiplicaste en vez de dividir.'},
+             {t:km(`${a2}t^3 - ${b2}t^2 + ${c}t`), ok:false, fb:'Te olvidaste de dividir por el nuevo exponente.'},
+             {t:km(`${2*a2}t - ${b2} + 0`), ok:false, fb:'Esa es la derivada, no la primitiva.'}
+           ])},
+          {q:`Evaluá en $t=${T}$`,
+           opts:shuffle([
+             {t:`${xT} m`, ok:true, fb:`Reemplazás y simplificás: x(${T}) = ${xT} m.`},
+             {t:`${xT+2} m`, ok:false, fb:'Error de cálculo.'},
+             {t:`${a2*T} m`, ok:false, fb:'Solo evaluaste un término.'},
+             {t:`${xT*2} m`, ok:false, fb:'Multiplicaste por 2 sin razón.'}
+           ])}
+        ],
+        result:km(`x(${T}) = ${xT} \\text{ m}`,true)
+      };
+    }
+  },
+  'i-riemann':{
+    title:'📊 PLC: Riemann por izquierda',
+    gen:()=>{
+      // v(t) = a*t^2 + b in [0,1] with dt=0.5
+      const a=choice([2,3,4]), b=choice([1,2]);
+      const v0=b, vh=a*0.25+b;
+      const approx=v0*0.5+vh*0.5;
+      const exact=a/3+b;
+      const err=Math.abs(approx-exact)/exact*100;
+      return {
+        problem:`Un PLC muestrea $v(t)=${a}t^2+${b}$ m/s en $[0,1]$ s con $\\Delta t=0{,}5$ s. Calcular la distancia aproximada por Riemann izquierda.`,
+        steps:[
+          {q:'¿En qué instantes evalúa el PLC?',
+           opts:shuffle([
+             {t:'t = 0 y t = 0,5', ok:true, fb:'Riemann por izquierda: tomamos el extremo izquierdo de cada subintervalo.'},
+             {t:'t = 0,5 y t = 1', ok:false, fb:'Eso sería Riemann por derecha.'},
+             {t:'t = 0,25 y t = 0,75', ok:false, fb:'Eso sería el punto medio.'},
+             {t:'Solo t = 0', ok:false, fb:'Hay 2 subintervalos en [0,1] con Δt=0,5.'}
+           ])},
+          {q:`Calculá $v(0)$ y $v(0{,}5)$`,
+           opts:shuffle([
+             {t:`v(0) = ${v0}, v(0,5) = ${vh.toFixed(2)}`, ok:true, fb:`$v(0)=${b}$; $v(0,5)=${a}·0{,}25+${b}=${vh.toFixed(2)}$.`},
+             {t:`v(0) = 0, v(0,5) = ${(a*0.25).toFixed(2)}`, ok:false, fb:'Te olvidaste del término constante b.'},
+             {t:`v(0) = ${b}, v(0,5) = ${(a*0.5+b).toFixed(2)}`, ok:false, fb:'Reemplazaste t en vez de t²: es 0,5² = 0,25.'},
+             {t:`v(0) = ${a+b}, v(0,5) = ${(a+b).toFixed(2)}`, ok:false, fb:'Evaluaste mal: $0^2=0$, no 1.'}
+           ])},
+          {q:'Suma de Riemann por izquierda',
+           opts:shuffle([
+             {t:`d ≈ v(0)·Δt + v(0,5)·Δt = ${approx.toFixed(3)} m`, ok:true, fb:`Cada rectángulo es altura×ancho.`},
+             {t:`d ≈ v(0) + v(0,5) = ${(v0+vh).toFixed(3)} m`, ok:false, fb:'Olvidaste multiplicar por $\\Delta t$.'},
+             {t:`d ≈ v(0,5)·1 = ${vh.toFixed(3)} m`, ok:false, fb:'Eso sería un solo rectángulo grande.'},
+             {t:`d ≈ (v(0)+v(0,5))/2 = ${((v0+vh)/2).toFixed(3)} m`, ok:false, fb:'Eso sería trapecios, no rectángulos por izquierda.'}
+           ])},
+          {q:'Error porcentual vs Barrow exacto',
+           opts:shuffle([
+             {t:`≈ ${err.toFixed(1)}%`, ok:true, fb:`Exacto = ${exact.toFixed(3)}. Error = |aprox−exacto|/exacto.`},
+             {t:'0%', ok:false, fb:'Imposible con Δt=0,5: el muestreo es muy lento.'},
+             {t:'≈ 100%', ok:false, fb:'No tanto. El método aproxima razonablemente.'},
+             {t:`≈ ${(err*2).toFixed(1)}%`, ok:false, fb:'Sobreestimaste el error.'}
+           ])}
+        ],
+        result:`Riemann izq ≈ ${approx.toFixed(3)} m vs Barrow ${exact.toFixed(3)} m → error ${err.toFixed(1)}%`
+      };
+    }
+  },
+  'i-trabajo':{
+    title:'⚙️ Trabajo mecánico',
+    gen:()=>{
+      const a=rint(2,6), b=rint(1,6), x1=rint(1,3), x2=rint(4,6);
+      const W=a*(x2*x2-x1*x1)/2+b*(x2-x1);
+      return {
+        problem:`Un actuador ejerce $F(x) = ${a}x + ${b}$ N. Calcular el trabajo entre $x=${x1}$ m y $x=${x2}$ m.`,
+        steps:[
+          {q:'Fórmula del trabajo con fuerza variable',
+           opts:shuffle([
+             {t:km(`W = \\int_{${x1}}^{${x2}} F(x)\\,dx`), ok:true, fb:'Trabajo = integral de fuerza por desplazamiento.'},
+             {t:km(`W = F\\cdot d`), ok:false, fb:'Solo si F es constante. Acá varía con x.'},
+             {t:km(`W = F'(x)`), ok:false, fb:'Eso es la derivada, no el trabajo.'},
+             {t:km(`W = \\dfrac{F(${x2})-F(${x1})}{${x2}-${x1}}`), ok:false, fb:'Eso es velocidad media, no trabajo.'}
+           ])},
+          {q:'Primitiva de F(x)',
+           opts:shuffle([
+             {t:km(`\\dfrac{${a}}{2}x^2 + ${b}x`), ok:true, fb:`$\\int ${a}x\\,dx = \\dfrac{${a}}{2}x^2$ y $\\int ${b}\\,dx = ${b}x$.`},
+             {t:km(`${a}x^2 + ${b}x`), ok:false, fb:'Te olvidaste de dividir por 2.'},
+             {t:km(`${a} + 0`), ok:false, fb:'Esa es la derivada.'},
+             {t:km(`${a/2}x + ${b}`), ok:false, fb:'No bajaste 1 exponente, lo subiste.'}
+           ])},
+          {q:'Aplicá Barrow',
+           opts:shuffle([
+             {t:`W = ${W} J`, ok:true, fb:`F(${x2})-F(${x1}) = ${a*x2*x2/2+b*x2}-${a*x1*x1/2+b*x1} = ${W}.`},
+             {t:`W = ${W*-1} J`, ok:false, fb:'Invertiste el signo (F(b)-F(a), no al revés).'},
+             {t:`W = ${a*(x2-x1)} J`, ok:false, fb:'Trataste F como constante.'},
+             {t:`W = ${W+10} J`, ok:false, fb:'Error de cálculo.'}
+           ])}
+        ],
+        result:km(`W = ${W} \\text{ J}`,true)
+      };
+    }
+  }
+};
+
+/* ─── PROBLEMAS DE EDOs ─── */
+const SB_EDO = {
+  'e-clasif':{
+    title:'🔍 Clasificar EDO (orden + linealidad)',
+    gen:()=>{
+      const opciones = [
+        {edo:`\\dfrac{dy}{dt} + 4t^2y = \\cos(t)`, orden:1, lineal:true,
+         fbL:'Lineal: y y sus derivadas a la potencia 1, coeficientes en t.'},
+        {edo:`\\dfrac{d^2y}{dt^2} + 3\\dfrac{dy}{dt} - y^2 = 0`, orden:2, lineal:false,
+         fbL:'No lineal: $y^2$ rompe la linealidad.'},
+        {edo:`L\\dfrac{di}{dt} + Ri = E\\sin(\\omega t)`, orden:1, lineal:true,
+         fbL:'Lineal: L, R constantes; i a la 1.'},
+        {edo:`\\dfrac{dx}{dt} = k\\sqrt{x}`, orden:1, lineal:false,
+         fbL:'No lineal: $\\sqrt x = x^{1/2}$ rompe linealidad.'},
+        {edo:`\\dfrac{d^3y}{dt^3} - 5\\dfrac{dy}{dt} = e^t`, orden:3, lineal:true,
+         fbL:'Lineal: y y derivadas a la 1, sin funciones no lineales de y.'}
+      ];
+      const sel=choice(opciones);
+      return {
+        problem:`Clasificar la EDO: $${sel.edo}$`,
+        steps:[
+          {q:'¿Qué es el ORDEN de una EDO?',
+           opts:shuffle([
+             {t:'La derivada más alta presente', ok:true, fb:'Por ejemplo, $y\'\'$ ⟹ orden 2.'},
+             {t:'La potencia más alta', ok:false, fb:'No: eso no define orden.'},
+             {t:'Cantidad de términos', ok:false, fb:'No tiene que ver con la cantidad.'},
+             {t:'El grado del polinomio en t', ok:false, fb:'No: el orden es de la derivada, no de t.'}
+           ])},
+          {q:'¿Cuál es el ORDEN de esta EDO?',
+           opts:shuffle([
+             {t:`Orden ${sel.orden}`, ok:true, fb:`La derivada más alta es de orden ${sel.orden}.`},
+             {t:`Orden ${sel.orden+1}`, ok:false, fb:'Contaste de más.'},
+             {t:`Orden ${Math.max(1,sel.orden-1)}`, ok:false, fb:'Contaste de menos.'},
+             {t:'No tiene orden definido', ok:false, fb:'Toda EDO tiene un orden bien definido.'}
+           ])},
+          {q:'¿Cuándo una EDO es LINEAL?',
+           opts:shuffle([
+             {t:'y y derivadas a la potencia 1, sin funciones no lineales de y', ok:true, fb:'Coeficientes en t sí valen.'},
+             {t:'Cuando todos los coeficientes son constantes', ok:false, fb:'No: pueden depender de t y seguir siendo lineal.'},
+             {t:'Cuando es de orden 1', ok:false, fb:'El orden no determina la linealidad.'},
+             {t:'Cuando es resoluble por variables separables', ok:false, fb:'Son cosas distintas.'}
+           ])},
+          {q:'¿Es LINEAL esta EDO?',
+           opts:shuffle([
+             {t:sel.lineal?'Sí, es lineal':'No, no es lineal', ok:true, fb:sel.fbL},
+             {t:sel.lineal?'No, no es lineal':'Sí, es lineal', ok:false, fb:'Revisá los términos donde aparece y.'},
+             {t:'Es semilineal', ok:false, fb:'Categoría que no usamos en este parcial.'},
+             {t:'Depende de la condición inicial', ok:false, fb:'La linealidad es intrínseca a la EDO, no a la CI.'}
+           ])}
+        ],
+        result:`Orden ${sel.orden}, ${sel.lineal?'lineal':'no lineal'}`
+      };
+    }
+  },
+  'e-sep':{
+    title:'📐 Variables separables (sin CI)',
+    gen:()=>{
+      const k=rint(2,5);
+      return {
+        problem:`Resolver $\\dfrac{dy}{dt} = ${k}t^2(y-1)$`,
+        steps:[
+          {q:'¿Es separable?',
+           opts:shuffle([
+             {t:'Sí: g(t)·h(y) con g(t)=${k}t² y h(y)=y−1'.replace('${k}',k), ok:true, fb:'El lado derecho es producto de función de t por función de y.'},
+             {t:'No: hay t y y mezclados', ok:false, fb:'Es producto, no suma — eso es justamente separable.'},
+             {t:'Solo si y(0)=1', ok:false, fb:'La condición inicial no afecta si es separable.'},
+             {t:'Es lineal, no separable', ok:false, fb:'Puede ser ambas cosas.'}
+           ])},
+          {q:'Separar variables',
+           opts:shuffle([
+             {t:km(`\\dfrac{dy}{y-1} = ${k}t^2\\,dt`), ok:true, fb:'Todo lo de y a la izquierda, todo lo de t a la derecha.'},
+             {t:km(`\\dfrac{dy}{${k}t^2} = (y-1)\\,dt`), ok:false, fb:'Pusiste t en el denominador de y. Mal.'},
+             {t:km(`(y-1)\\,dy = ${k}t^2\\,dt`), ok:false, fb:'Olvidaste dividir por (y−1).'},
+             {t:km(`\\dfrac{dy}{dt} = (y-1) + ${k}t^2`), ok:false, fb:'No es suma, es producto.'}
+           ])},
+          {q:'Integrar ambos lados',
+           opts:shuffle([
+             {t:km(`\\ln|y-1| = \\dfrac{${k}}{3}t^3 + C`), ok:true, fb:`$\\int\\dfrac{dy}{y-1}=\\ln|y-1|$; $\\int ${k}t^2 dt = \\dfrac{${k}}{3}t^3$.`},
+             {t:km(`\\ln|y-1| = ${k}t^2 + C`), ok:false, fb:'No integraste el lado derecho.'},
+             {t:km(`(y-1)^2 = \\dfrac{${k}}{3}t^3 + C`), ok:false, fb:'$\\int 1/(y-1)\\,dy$ es logaritmo, no potencia.'},
+             {t:km(`\\dfrac{1}{y-1} = \\dfrac{${k}}{3}t^3 + C`), ok:false, fb:'Ese es el integrando original, no su primitiva.'}
+           ])},
+          {q:'Despejar y(t)',
+           opts:shuffle([
+             {t:km(`y(t) = 1 + A\\,e^{\\frac{${k}}{3}t^3}`), ok:true, fb:`Aplicás exponencial a ambos lados y absorbés C en A.`},
+             {t:km(`y(t) = 1 + A\\cdot\\dfrac{${k}}{3}t^3`), ok:false, fb:'No exponenciaste, solo despejaste de forma lineal.'},
+             {t:km(`y(t) = e^{\\frac{${k}}{3}t^3} - 1`), ok:false, fb:'Olvidaste la constante A y movieras mal el 1.'},
+             {t:km(`y(t) = A\\,e^{\\frac{${k}}{3}t^3}`), ok:false, fb:'Olvidaste el +1.'}
+           ])}
+        ],
+        result:km(`y(t) = 1 + A\\,e^{\\frac{${k}}{3}t^3}`,true)
+      };
+    }
+  },
+  'e-newton':{
+    title:'🌡️ Ley de Newton de enfriamiento',
+    gen:()=>{
+      const Ta=choice([15,20,25]), T0=choice([60,80,100]), k=choice([0.05,0.1,0.2]);
+      const t=choice([5,10,15]);
+      const Tt=Ta+(T0-Ta)*Math.exp(-k*t);
+      return {
+        problem:`Un fluido satisface $\\dfrac{dT}{dt} = -${k}(T - ${Ta})$ con $T(0) = ${T0}$°C. Hallar $T(${t})$.`,
+        steps:[
+          {q:'Sustitución útil',
+           opts:shuffle([
+             {t:`u = T − ${Ta} → la EDO queda du/dt = −${k}u`, ok:true, fb:'Así separamos cómodamente.'},
+             {t:`u = T·${Ta}`, ok:false, fb:'No simplifica nada.'},
+             {t:`u = T + ${Ta}`, ok:false, fb:'No: la diferencia es T−Ta.'},
+             {t:`u = T/Ta`, ok:false, fb:'No reduce la EDO a forma separable simple.'}
+           ])},
+          {q:'Resolver $du/dt=-${k}u$ separando'.replace('${k}',k),
+           opts:shuffle([
+             {t:km(`u(t) = A\\,e^{-${k}t}`), ok:true, fb:`$du/u = -${k}\\,dt \\Rightarrow \\ln|u|=-${k}t+C$.`},
+             {t:km(`u(t) = A\\,e^{${k}t}`), ok:false, fb:'Te olvidaste del signo negativo.'},
+             {t:km(`u(t) = -${k}t + A`), ok:false, fb:'No integraste exponencialmente.'},
+             {t:km(`u(t) = A\\sin(${k}t)`), ok:false, fb:'No es oscilatorio, es decay.'}
+           ])},
+          {q:`Volvé a T y aplicá $T(0)=${T0}$`,
+           opts:shuffle([
+             {t:km(`T(t) = ${Ta} + ${T0-Ta}\\,e^{-${k}t}`), ok:true, fb:`En t=0: $T(0) = ${Ta} + A = ${T0}$ ⟹ A = ${T0-Ta}.`},
+             {t:km(`T(t) = ${Ta} + ${T0}\\,e^{-${k}t}`), ok:false, fb:'A no es T₀, es T₀−Tₐ.'},
+             {t:km(`T(t) = ${T0}\\,e^{-${k}t}`), ok:false, fb:'Olvidaste el offset Tₐ.'},
+             {t:km(`T(t) = ${Ta} - ${T0-Ta}\\,e^{-${k}t}`), ok:false, fb:'Signo equivocado en A.'}
+           ])},
+          {q:`Calculá $T(${t})$`,
+           opts:shuffle([
+             {t:`≈ ${Tt.toFixed(2)} °C`, ok:true, fb:`Reemplazás t=${t}: $${Ta}+${T0-Ta}·e^{-${(k*t).toFixed(2)}} ≈ ${Tt.toFixed(2)}$°C.`},
+             {t:`${Ta} °C`, ok:false, fb:'Eso es el límite cuando t→∞, no en t='+t+'.'},
+             {t:`${T0} °C`, ok:false, fb:'No: a t='+t+' ya se enfrió bastante.'},
+             {t:`≈ ${(Tt+10).toFixed(2)} °C`, ok:false, fb:'Error de cálculo.'}
+           ])}
+        ],
+        result:km(`T(${t}) \\approx ${Tt.toFixed(2)} ^\\circ C`,true)
+      };
+    }
+  },
+  'e-torri':{
+    title:'💧 Torricelli (vaciado de tanque)',
+    gen:()=>{
+      const H0=choice([4,9,16,25]), k=choice([0.5,1,2]);
+      const sqrtH=Math.sqrt(H0);
+      const tvac=2*sqrtH/k;
+      return {
+        problem:`Tanque que se vacía: $\\dfrac{dh}{dt} = -${k}\\sqrt{h}$ con $h(0)=${H0}$ m. ¿Cuándo se vacía completamente?`,
+        steps:[
+          {q:'Reescribir y separar',
+           opts:shuffle([
+             {t:km(`h^{-1/2}\\,dh = -${k}\\,dt`), ok:true, fb:'$1/\\sqrt h = h^{-1/2}$, pasamos al lado izquierdo.'},
+             {t:km(`\\sqrt{h}\\,dh = -${k}\\,dt`), ok:false, fb:'Multiplicaste en vez de dividir.'},
+             {t:km(`dh = -${k}\\sqrt h\\,dt`), ok:false, fb:'No separaste todavía.'},
+             {t:km(`\\dfrac{1}{h}\\,dh = -${k}\\,dt`), ok:false, fb:'$1/\\sqrt h \\ne 1/h$.'}
+           ])},
+          {q:'Integrar ambos lados',
+           opts:shuffle([
+             {t:km(`2h^{1/2} = -${k}t + C`), ok:true, fb:`$\\int h^{-1/2}\\,dh = 2h^{1/2}$.`},
+             {t:km(`h^{1/2} = -${k}t + C`), ok:false, fb:'Olvidaste el 2 al integrar.'},
+             {t:km(`h^{-3/2} = -${k}t + C`), ok:false, fb:'Bajaste exponente en vez de subirlo (estás integrando, no derivando).'},
+             {t:km(`\\ln h = -${k}t + C`), ok:false, fb:'$\\int h^{-1/2}$ no es logaritmo.'}
+           ])},
+          {q:`Aplicar $h(0) = ${H0}$`,
+           opts:shuffle([
+             {t:km(`C = 2\\sqrt{${H0}} = ${2*sqrtH}`), ok:true, fb:`En t=0: $2\\sqrt{${H0}} = 0 + C$.`},
+             {t:km(`C = ${H0}`), ok:false, fb:'No: hay que multiplicar por 2 y sacar raíz.'},
+             {t:km(`C = -${H0}`), ok:false, fb:'Mal signo y mal valor.'},
+             {t:km(`C = \\sqrt{${H0}}`), ok:false, fb:'Olvidaste el 2.'}
+           ])},
+          {q:'¿Cuándo $h(t)=0$?',
+           opts:shuffle([
+             {t:`t = ${tvac} s`, ok:true, fb:`$\\sqrt h = 0 \\Rightarrow -${k}t/2 + \\sqrt{${H0}} = 0 \\Rightarrow t = 2\\sqrt{${H0}}/${k}$.`},
+             {t:'Nunca (asintótico)', ok:false, fb:'No: a diferencia del exponencial, Torricelli sí se vacía en tiempo finito.'},
+             {t:`t = ${H0/k} s`, ok:false, fb:'Falta la raíz cuadrada.'},
+             {t:`t = ${sqrtH} s`, ok:false, fb:'Olvidaste multiplicar por 2/k.'}
+           ])}
+        ],
+        result:km(`t_{vac} = ${tvac} \\text{ s}`,true)
+      };
+    }
+  },
+  'e-rl':{
+    title:'⚡ Circuito RL',
+    gen:()=>{
+      const R=choice([2,4,5,10]), L=choice([1,2,4]), E=choice([12,24,100]);
+      const t=L/R;
+      const iss=E/R;
+      const it=iss*(1-Math.exp(-1));
+      return {
+        problem:`Circuito RL con R=${R}Ω, L=${L}H, E=${E}V. ¿Cuánto vale la corriente en $t=\\tau$ (una constante de tiempo)?`,
+        steps:[
+          {q:'EDO del circuito',
+           opts:shuffle([
+             {t:km(`L\\dfrac{di}{dt} + Ri = E`), ok:true, fb:'Kirchhoff de tensiones en serie.'},
+             {t:km(`R\\dfrac{di}{dt} + Li = E`), ok:false, fb:'Invertiste R y L.'},
+             {t:km(`\\dfrac{di}{dt} = E - Ri`), ok:false, fb:'Olvidaste L en el término dinámico.'},
+             {t:km(`i = \\dfrac{E}{R}`), ok:false, fb:'Esa es la corriente final (estacionaria), no la EDO.'}
+           ])},
+          {q:'Solución con i(0)=0',
+           opts:shuffle([
+             {t:km(`i(t) = \\dfrac{E}{R}(1 - e^{-Rt/L})`), ok:true, fb:'Es la respuesta típica de carga exponencial.'},
+             {t:km(`i(t) = \\dfrac{E}{R}e^{-Rt/L}`), ok:false, fb:'Esa es descarga, no carga.'},
+             {t:km(`i(t) = \\dfrac{E}{R}\\sin(t)`), ok:false, fb:'No es oscilatorio (sería RLC).'},
+             {t:km(`i(t) = \\dfrac{E}{R}t`), ok:false, fb:'No es lineal, es exponencial.'}
+           ])},
+          {q:'¿Qué es τ (constante de tiempo)?',
+           opts:shuffle([
+             {t:`τ = L/R = ${t.toFixed(2)} s`, ok:true, fb:'A t=τ se llega al 63% del valor final.'},
+             {t:`τ = R/L = ${(R/L).toFixed(2)} s`, ok:false, fb:'Invertido. τ = L/R.'},
+             {t:`τ = R·L = ${R*L} s`, ok:false, fb:'No es producto, es cociente.'},
+             {t:`τ = E/R = ${(E/R)} s`, ok:false, fb:'Eso es la corriente final.'}
+           ])},
+          {q:'i(τ) = ?',
+           opts:shuffle([
+             {t:`≈ ${it.toFixed(2)} A (63% de I∞)`, ok:true, fb:`I∞ = E/R = ${iss} A. A τ: $I_\\infty(1-1/e) ≈ 0.632·I_\\infty$.`},
+             {t:`${iss} A`, ok:false, fb:'Esa es la corriente estacionaria (t→∞).'},
+             {t:'0 A', ok:false, fb:'En t=τ ya hay corriente.'},
+             {t:`≈ ${(iss*0.95).toFixed(2)} A`, ok:false, fb:'Eso sería a t≈3τ.'}
+           ])}
+        ],
+        result:km(`i(\\tau) \\approx ${it.toFixed(2)} \\text{ A}`,true)
+      };
+    }
+  }
+};
+
+/* ─── MOTOR DEL SANDBOX ─── */
+const SB_ALL = {deriv:SB_DERIV, integ:SB_INTEG, edo:SB_EDO};
+const SB_LABELS = {
+  deriv:[['d-pot','Potencia + suma'],['d-raiz','Raíces (potencia fracc.)'],['d-prod','Producto'],['d-coc','Cociente'],['d-sens','🌡️ Sensibilidad de sensor']],
+  integ:[['i-barrow','Barrow (polinomio)'],['i-caudal','💧 Volumen acumulado'],['i-posic','⚙️ Posición desde velocidad'],['i-riemann','📊 PLC: Riemann'],['i-trabajo','⚙️ Trabajo mecánico']],
+  edo:[['e-clasif','🔍 Clasificar EDO'],['e-sep','📐 Variables separables'],['e-newton','🌡️ Newton enfriamiento'],['e-torri','💧 Torricelli'],['e-rl','⚡ Circuito RL']]
+};
+
+let sbState = {
+  cat:'deriv',
+  type:'d-pot',
+  problem:null,
+  step:0,
+  firstTryOk:true,
+  stats:{total:0, aciertos:0, racha:0, best:0}
+};
+
+function sbRenderTypes(){
+  const cont=document.getElementById('sb-types');
+  cont.innerHTML='';
+  SB_LABELS[sbState.cat].forEach(([k,lbl])=>{
+    const b=document.createElement('button');
+    b.className='sb-type'+(k===sbState.type?' active':'');
+    b.textContent=lbl;
+    b.dataset.type=k;
+    b.addEventListener('click',()=>{
+      sbState.type=k;
+      sbRenderTypes();
+      sbNewProblem();
+    });
+    cont.appendChild(b);
+  });
+}
+
+function sbNewProblem(){
+  const P = SB_ALL[sbState.cat][sbState.type];
+  if(!P){ return; }
+  sbState.problem = P.gen();
+  sbState.step = 0;
+  sbState.firstTryOk = true;
+  document.getElementById('sb-problem-text').innerHTML = sbState.problem.problem;
+  document.getElementById('sb-result').classList.remove('show');
+  document.getElementById('sb-steps').innerHTML='';
+  sbRenderStep();
+  if(window.renderMathInElement){
+    renderMathInElement(document.getElementById('sb-problem-box'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+  }
+}
+
+function sbRenderStep(){
+  const stepsCont = document.getElementById('sb-steps');
+  const i = sbState.step;
+  const stepData = sbState.problem.steps[i];
+  if(!stepData){
+    document.getElementById('sb-result-text').innerHTML = sbState.problem.result;
+    document.getElementById('sb-result').classList.add('show');
+    sbState.stats.total++;
+    if(sbState.firstTryOk){
+      sbState.stats.aciertos++;
+      sbState.stats.racha++;
+      if(sbState.stats.racha>sbState.stats.best) sbState.stats.best=sbState.stats.racha;
+    } else {
+      sbState.stats.racha=0;
+    }
+    sbUpdateStats();
+    if(window.renderMathInElement){
+      renderMathInElement(document.getElementById('sb-result'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+    }
+    return;
+  }
+  const div=document.createElement('div');
+  div.className='sb-step';
+  div.innerHTML=`<div class="qst"><span class="num">${i+1}</span>${stepData.q}</div>`;
+  const opts=document.createElement('div'); opts.className='sb-opts';
+  stepData.opts.forEach(o=>{
+    const b=document.createElement('div');
+    b.className='sb-opt';
+    b.innerHTML=o.t;
+    b.addEventListener('click',()=>{
+      if(b.classList.contains('correct')||b.classList.contains('wrong')) return;
+      if(o.ok){
+        b.classList.add('correct');
+        const fb=document.createElement('div'); fb.className='sb-fb';
+        fb.innerHTML='✅ '+o.fb;
+        div.appendChild(fb);
+        setTimeout(()=>{ sbState.step++; sbRenderStep(); }, 800);
+      } else {
+        b.classList.add('wrong');
+        sbState.firstTryOk=false;
+        const fb=document.createElement('div'); fb.className='sb-fb';
+        fb.innerHTML='❌ '+o.fb;
+        div.appendChild(fb);
+      }
+    });
+    opts.appendChild(b);
+  });
+  div.appendChild(opts);
+  stepsCont.appendChild(div);
+  if(window.renderMathInElement){
+    renderMathInElement(div,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+  }
+}
+
+function sbUpdateStats(){
+  document.getElementById('sb-total').textContent=sbState.stats.total;
+  document.getElementById('sb-aciertos').textContent=sbState.stats.aciertos;
+  document.getElementById('sb-racha').firstChild.textContent=sbState.stats.racha+' ';
+  document.getElementById('sb-best').textContent=sbState.stats.best;
+  const fire=document.getElementById('sb-fire');
+  if(sbState.stats.racha>=3){ fire.textContent='🔥'; fire.className='sb-streak fire'; fire.style.background='var(--orange)'; }
+  else if(sbState.stats.racha>=1){ fire.textContent='✨'; fire.className='sb-streak'; }
+  else { fire.textContent=''; fire.className=''; }
+}
+
+document.querySelectorAll('#sb-cats .sb-tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('#sb-cats .sb-tab').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    sbState.cat = t.dataset.cat;
+    sbState.type = SB_LABELS[sbState.cat][0][0];
+    sbRenderTypes();
+    sbNewProblem();
+  });
+});
+document.getElementById('sb-new').addEventListener('click', sbNewProblem);
+document.getElementById('sb-reveal').addEventListener('click', ()=>{
+  if(!sbState.problem) return;
+  document.getElementById('sb-result-text').innerHTML = sbState.problem.result;
+  document.getElementById('sb-result').classList.add('show');
+  if(window.renderMathInElement){
+    renderMathInElement(document.getElementById('sb-result'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+  }
+});
+
+sbRenderTypes();
+sbNewProblem();
 </script>
 </body>
 </html>

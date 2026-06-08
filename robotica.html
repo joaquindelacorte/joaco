@@ -312,6 +312,36 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
 .sim-tog button{padding:.5rem .9rem;border:none;background:transparent;font-weight:700;font-size:.83rem;cursor:pointer;color:var(--gray-lt);transition:.2s}
 .sim-tog button.active{background:var(--pur);color:#fff}
 
+/* NIVEL badges (Aprender a programar) */
+.lvl{font-size:.68rem;font-weight:800;padding:.2rem .6rem;border-radius:2rem;color:#fff;letter-spacing:.4px;text-transform:uppercase;flex-shrink:0}
+.lvl-1{background:#16a34a}
+.lvl-2{background:#0891b2}
+.lvl-3{background:#d97706}
+.lvl-4{background:#dc2626}
+.ej-header .badges-wrap{display:flex;gap:.4rem;align-items:center;flex-shrink:0}
+.roadmap{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0 1.5rem}
+.roadmap .rm-step{flex:1;min-width:130px;background:var(--card);border:2px solid var(--border);border-radius:10px;padding:.7rem .8rem;font-size:.8rem;position:relative}
+.roadmap .rm-step b{display:block;color:var(--pur);font-size:.82rem;margin-bottom:.15rem}
+.roadmap .rm-step span{color:var(--gray-lt)}
+
+/* SEMÁFORO simulador */
+.traffic{display:inline-flex;flex-direction:column;gap:10px;background:#1f2937;padding:14px;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,.3);border:3px solid #111827}
+.tl-light{width:54px;height:54px;border-radius:50%;background:#374151;box-shadow:inset 0 0 10px rgba(0,0,0,.6);transition:.15s}
+.tl-light.r.on{background:radial-gradient(circle at 35% 35%,#fecaca,#ef4444 65%,#991b1b);box-shadow:0 0 22px #ef4444}
+.tl-light.y.on{background:radial-gradient(circle at 35% 35%,#fef9c3,#facc15 65%,#a16207);box-shadow:0 0 22px #facc15}
+.tl-light.g.on{background:radial-gradient(circle at 35% 35%,#bbf7d0,#22c55e 65%,#15803d);box-shadow:0 0 22px #22c55e}
+.tl-ped{display:inline-flex;flex-direction:column;gap:8px;background:#1f2937;padding:12px;border-radius:12px;border:3px solid #111827;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+.tl-ped .tl-light{width:44px;height:44px}
+.tl-ped .tl-light.r.on{background:radial-gradient(circle at 35% 35%,#fecaca,#ef4444 65%,#991b1b);box-shadow:0 0 18px #ef4444}
+.tl-ped .tl-light.g.on{background:radial-gradient(circle at 35% 35%,#bbf7d0,#22c55e 65%,#15803d);box-shadow:0 0 18px #22c55e}
+.tl-phase{font-family:'Courier New',monospace;font-weight:800;font-size:.95rem;padding:.4rem .9rem;border-radius:8px;background:#fff;border:2px solid var(--pur-lt);color:var(--pur);min-width:220px;text-align:center}
+
+/* LCD simulador */
+.lcd{display:inline-block;background:#1c8a3c;padding:14px;border-radius:8px;box-shadow:inset 0 0 12px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.25);border:4px solid #0f5d28}
+.lcd-row{display:flex;gap:2px}
+.lcd-cell{width:15px;height:24px;background:rgba(0,0,0,.18);border-radius:2px;display:flex;align-items:center;justify-content:center;font-family:'Courier New',monospace;font-weight:700;font-size:1rem;color:#d9fbe5;text-shadow:0 0 4px #d9fbe5}
+.lcd-row+.lcd-row{margin-top:3px}
+
 /* PULSADOR sim */
 .btn-fisico{width:90px;height:90px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fca5a5,#dc2626);box-shadow:0 6px 0 #7f1d1d,0 8px 14px rgba(0,0,0,.25);border:none;cursor:pointer;font-weight:800;color:#fff;font-size:.85rem;transition:.07s;user-select:none}
 .btn-fisico:active,.btn-fisico.pressed{transform:translateY(4px);box-shadow:0 2px 0 #7f1d1d,0 4px 8px rgba(0,0,0,.25)}
@@ -413,6 +443,7 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
     <button class="tab-btn"        onclick="showPage('pwm',this)">⚡ PWM & Servos</button>
     <button class="tab-btn"        onclick="showPage('sensores',this)">🔍 Sensores</button>
     <button class="tab-btn"        onclick="showPage('codigo',this)">💻 Código</button>
+    <button class="tab-btn"        onclick="showPage('aprender',this)">📚 Aprender a programar</button>
     <button class="tab-btn"        onclick="showPage('juegos',this)">🎮 Juegos</button>
     <button class="tab-btn"        onclick="showPage('quiz',this)">🧠 Quiz</button>
     <button class="tab-btn"        onclick="showPage('eval',this)">📝 Autoevaluación</button>
@@ -1539,6 +1570,425 @@ decode_results results;
 
 </div></div>
 
+<!-- ════════════ APRENDER A PROGRAMAR ════════════ -->
+<div id="aprender" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">📚</span>Aprender a programar en Arduino — de cero a proyecto</div>
+  <p style="margin-bottom:.6rem">Una ruta progresiva: arrancamos con <strong>variables y pines</strong>, seguimos con <strong>semáforos</strong>, después <strong>pantalla LCD</strong> y <strong>servomotores</strong>, y cerramos con un <strong>proyecto que combina todo</strong>. Hacé click en cada tarjeta para ver el código y la explicación.</p>
+
+  <div class="roadmap">
+    <div class="rm-step"><b>1 · Bases</b><span>Variables, tipos de datos y pines</span></div>
+    <div class="rm-step"><b>2 · Lógica</b><span>float / Pi y semáforos</span></div>
+    <div class="rm-step"><b>3 · Periféricos</b><span>Pantalla LCD y servomotor</span></div>
+    <div class="rm-step"><b>4 · Proyecto</b><span>Todo junto: barrera inteligente</span></div>
+  </div>
+
+  <div class="note"><strong>Recordá la estructura mínima:</strong> <code>setup()</code> se ejecuta <strong>una sola vez</strong> al encender (acá se configuran pines y librerías) y <code>loop()</code> se repite <strong>para siempre</strong>. Las <strong>variables globales</strong> se declaran <em>arriba de todo</em>, fuera de las funciones, para que se vean desde cualquier parte.</div>
+
+  <!-- ░░ 1 · Variables globales y tipos de datos ░░ -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>1️⃣ Variables globales y tipos de datos</h3><div class="badges-wrap"><span class="lvl lvl-1">Básico</span></div></div>
+    <div class="ej-body">
+      <div class="ej-enunciado">Toda variable guarda un dato. Según <strong>qué</strong> guarde, elegimos su <strong>tipo</strong>. Si la declaramos arriba de <code>setup()</code> es <strong>global</strong> (visible en todo el sketch).</div>
+      <div class="code">
+<span class="cm">// ───── Variables GLOBALES (se ven en setup() y loop()) ─────</span>
+<span class="kw">int</span>    contador    = <span class="num">0</span>;        <span class="cm">// entero: -32768 a 32767</span>
+<span class="kw">float</span>  temperatura = <span class="num">23.5</span>;     <span class="cm">// decimales (4 bytes)</span>
+<span class="kw">bool</span>   encendido   = <span class="kw">false</span>;    <span class="cm">// true / false (1 bit lógico)</span>
+<span class="kw">char</span>   tecla       = <span class="str">'A'</span>;      <span class="cm">// un solo carácter</span>
+<span class="kw">String</span> mensaje     = <span class="str">"Hola robot"</span>; <span class="cm">// texto</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">9600</span>);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  contador = contador + <span class="num">1</span>;     <span class="cm">// modifico la global</span>
+  <span class="fn">Serial</span>.<span class="fn">print</span>(mensaje);
+  <span class="fn">Serial</span>.<span class="fn">print</span>(<span class="str">" #"</span>);
+  <span class="fn">Serial</span>.<span class="fn">println</span>(contador);
+  <span class="fn">delay</span>(<span class="num">500</span>);
+}</div>
+      <p style="font-size:.88rem;margin-top:.5rem"><strong>Clave:</strong> una variable <strong>global</strong> se declara afuera de las funciones y conserva su valor entre vueltas del <code>loop()</code>. Una <strong>local</strong> (declarada dentro de una función) nace y muere en cada llamada.</p>
+    </div>
+  </div>
+
+  <!-- ░░ 2 · Declaración de pines ░░ -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>2️⃣ Declaración de pines — 3 formas</h3><div class="badges-wrap"><span class="lvl lvl-1">Básico</span></div></div>
+    <div class="ej-body">
+      <div class="ej-enunciado">En vez de escribir números sueltos ("números mágicos"), le ponemos <strong>nombre</strong> a cada pin. Así el código se entiende y, si cambiás un cable, lo corregís en un solo lugar.</div>
+      <div class="code">
+<span class="cm">// Forma 1 — #define: lo reemplaza el preprocesador, NO usa RAM (sin ; ni tipo)</span>
+<span class="kw">#define</span> LED_ROJO <span class="num">8</span>
+
+<span class="cm">// Forma 2 — const int: constante con tipo, más segura (la recomendada)</span>
+<span class="kw">const</span> <span class="kw">int</span> LED_VERDE = <span class="num">9</span>;
+
+<span class="cm">// Forma 3 — variable normal: se puede cambiar (no ideal para pines fijos)</span>
+<span class="kw">int</span> PIN_BOTON = <span class="num">2</span>;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">pinMode</span>(LED_ROJO,  OUTPUT);    <span class="cm">// salida → enciende algo</span>
+  <span class="fn">pinMode</span>(LED_VERDE, OUTPUT);
+  <span class="fn">pinMode</span>(PIN_BOTON, INPUT_PULLUP); <span class="cm">// entrada con pull-up interno</span>
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="kw">if</span> (<span class="fn">digitalRead</span>(PIN_BOTON) == LOW) {  <span class="cm">// apretado</span>
+    <span class="fn">digitalWrite</span>(LED_ROJO,  HIGH);
+    <span class="fn">digitalWrite</span>(LED_VERDE, LOW);
+  } <span class="kw">else</span> {
+    <span class="fn">digitalWrite</span>(LED_ROJO,  LOW);
+    <span class="fn">digitalWrite</span>(LED_VERDE, HIGH);
+  }
+}</div>
+      <p style="font-size:.88rem;margin-top:.5rem"><strong>Clave:</strong> <code>#define</code> no ocupa memoria RAM (es un "buscar y reemplazar" antes de compilar); <code>const int</code> sí ocupa, pero te avisa si mezclás tipos. Ambas son mejores que dejar números sueltos.</p>
+    </div>
+  </div>
+
+  <!-- ░░ 3 · float y el número Pi ░░ -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>3️⃣ Variables float y el número Pi (π)</h3><div class="badges-wrap"><span class="lvl lvl-2">Intermedio</span></div></div>
+    <div class="ej-body">
+      <div class="ej-enunciado">Cuando un número tiene <strong>decimales</strong> usamos <code>float</code>. Ejemplo clásico: guardar π y calcular la <strong>circunferencia</strong> (2·π·r) y el <strong>área</strong> (π·r²) de un círculo.</div>
+      <div class="code">
+<span class="cm">// El número Pi como constante global de tipo float</span>
+<span class="kw">const</span> <span class="kw">float</span> PI_VAL = <span class="num">3.14159</span>;
+
+<span class="kw">float</span> radio = <span class="num">5.0</span>;        <span class="cm">// cm  (¡el .0 lo hace float!)</span>
+<span class="kw">float</span> circunferencia;
+<span class="kw">float</span> area;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">9600</span>);
+
+  circunferencia = <span class="num">2</span> * PI_VAL * radio;   <span class="cm">// 2·π·r</span>
+  area           = PI_VAL * radio * radio;  <span class="cm">// π·r²</span>
+
+  <span class="fn">Serial</span>.<span class="fn">print</span>(<span class="str">"Circunferencia: "</span>);
+  <span class="fn">Serial</span>.<span class="fn">println</span>(circunferencia);   <span class="cm">// 31.42</span>
+  <span class="fn">Serial</span>.<span class="fn">print</span>(<span class="str">"Area: "</span>);
+  <span class="fn">Serial</span>.<span class="fn">println</span>(area);            <span class="cm">// 78.54</span>
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() { }</div>
+      <div class="tip"><span>💡</span><div>Arduino ya trae la constante <code>PI</code> incorporada (vale 3.1415926…), así que podrías escribir directamente <code>2 * PI * radio</code>. Acá la definimos a mano para practicar los <code>float</code>. Recordá: un <code>float</code> ocupa <strong>4 bytes</strong> y tiene ~6-7 cifras de precisión.</div></div>
+      <p style="font-size:.88rem;margin-top:.5rem"><strong>Clave:</strong> escribí siempre los decimales con punto (<code>5.0</code>, no <code>5,0</code>) y agregale el <code>.0</code> aunque sea redondo, para forzar que Arduino lo trate como <code>float</code> y no como entero.</p>
+    </div>
+  </div>
+
+  <!-- ░░ 4 · Semáforo simple ░░ -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>4️⃣ Semáforo simple (3 LEDs)</h3><div class="badges-wrap"><span class="lvl lvl-2">Intermedio</span></div></div>
+    <div class="ej-body">
+      <div class="ej-enunciado">Tres LEDs (rojo, amarillo, verde) que se encienden por turnos. Es el primer "automatismo" clásico: solo <code>digitalWrite</code> + <code>delay</code> en secuencia.</div>
+      <div class="code">
+<span class="kw">#define</span> ROJO     <span class="num">8</span>
+<span class="kw">#define</span> AMARILLO <span class="num">9</span>
+<span class="kw">#define</span> VERDE    <span class="num">10</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">pinMode</span>(ROJO,     OUTPUT);
+  <span class="fn">pinMode</span>(AMARILLO, OUTPUT);
+  <span class="fn">pinMode</span>(VERDE,    OUTPUT);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="fn">digitalWrite</span>(VERDE, HIGH);      <span class="cm">// 🟢 pasar</span>
+  <span class="fn">delay</span>(<span class="num">4000</span>);
+  <span class="fn">digitalWrite</span>(VERDE, LOW);
+
+  <span class="fn">digitalWrite</span>(AMARILLO, HIGH);   <span class="cm">// 🟡 precaución</span>
+  <span class="fn">delay</span>(<span class="num">1500</span>);
+  <span class="fn">digitalWrite</span>(AMARILLO, LOW);
+
+  <span class="fn">digitalWrite</span>(ROJO, HIGH);       <span class="cm">// 🔴 detenerse</span>
+  <span class="fn">delay</span>(<span class="num">4000</span>);
+  <span class="fn">digitalWrite</span>(ROJO, LOW);
+}</div>
+      <p style="font-size:.88rem;margin-top:.5rem"><strong>Clave:</strong> el <code>loop()</code> recorre verde → amarillo → rojo y vuelve a empezar. Cada <code>delay()</code> define cuánto dura cada luz.</p>
+
+      <div class="sim">
+        <div class="sim-led-lbl" style="margin-bottom:.8rem;font-size:.85rem">▶️ Mirá el ciclo funcionando (mismo orden que el código):</div>
+        <div class="sim-row">
+          <div class="traffic">
+            <div class="tl-light r" id="tlR"></div>
+            <div class="tl-light y" id="tlY"></div>
+            <div class="tl-light g" id="tlG"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:.7rem;align-items:center">
+            <div class="tl-phase" id="tlPhase">🟢 VERDE — pasar</div>
+            <button class="sim-btn" id="tlBtn" onclick="toggleTraffic()">⏸️ Pausar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ░░ 5 · Semáforo de cruce auto + peatón ░░ -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>5️⃣ Cruce coordinado: autos + peatones</h3><div class="badges-wrap"><span class="lvl lvl-3">Avanzado</span></div></div>
+    <div class="ej-body">
+      <div class="ej-enunciado">Dos semáforos que trabajan juntos: cuando los autos tienen verde, el peatón ve rojo, y al revés. Usamos un <code>for</code> para configurar varios pines de una y otro <code>for</code> para hacer parpadear al peatón.</div>
+      <div class="code">
+<span class="cm">// Semáforo de AUTOS</span>
+<span class="kw">#define</span> A_ROJO     <span class="num">2</span>
+<span class="kw">#define</span> A_AMARILLO <span class="num">3</span>
+<span class="kw">#define</span> A_VERDE    <span class="num">4</span>
+<span class="cm">// Semáforo de PEATONES</span>
+<span class="kw">#define</span> P_ROJO     <span class="num">5</span>
+<span class="kw">#define</span> P_VERDE    <span class="num">6</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="kw">for</span> (<span class="kw">int</span> p = <span class="num">2</span>; p &lt;= <span class="num">6</span>; p++) {  <span class="cm">// configura pines 2..6 como salida</span>
+    <span class="fn">pinMode</span>(p, OUTPUT);
+  }
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="cm">// 1) Autos pasan, peatón esperá</span>
+  <span class="fn">digitalWrite</span>(A_VERDE, HIGH);
+  <span class="fn">digitalWrite</span>(P_ROJO,  HIGH);
+  <span class="fn">delay</span>(<span class="num">5000</span>);
+  <span class="fn">digitalWrite</span>(A_VERDE, LOW);
+
+  <span class="cm">// 2) Autos precaución</span>
+  <span class="fn">digitalWrite</span>(A_AMARILLO, HIGH);
+  <span class="fn">delay</span>(<span class="num">2000</span>);
+  <span class="fn">digitalWrite</span>(A_AMARILLO, LOW);
+
+  <span class="cm">// 3) Autos frenan, peatón cruza</span>
+  <span class="fn">digitalWrite</span>(A_ROJO,  HIGH);
+  <span class="fn">digitalWrite</span>(P_ROJO,  LOW);
+  <span class="fn">digitalWrite</span>(P_VERDE, HIGH);
+  <span class="fn">delay</span>(<span class="num">5000</span>);
+
+  <span class="cm">// 4) Aviso: se acaba el tiempo (parpadea 5 veces)</span>
+  <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">5</span>; i++) {
+    <span class="fn">digitalWrite</span>(P_VERDE, LOW);  <span class="fn">delay</span>(<span class="num">300</span>);
+    <span class="fn">digitalWrite</span>(P_VERDE, HIGH); <span class="fn">delay</span>(<span class="num">300</span>);
+  }
+  <span class="fn">digitalWrite</span>(P_VERDE, LOW);
+  <span class="fn">digitalWrite</span>(P_ROJO,  HIGH);
+  <span class="fn">digitalWrite</span>(A_ROJO,  LOW);
+}</div>
+      <p style="font-size:.88rem;margin-top:.5rem"><strong>Clave:</strong> el <code>for</code> evita repetir 5 veces <code>pinMode</code>. La coordinación se logra encendiendo/apagando los pares correctos en cada etapa. ¡Nunca debe haber verde para autos y peatones a la vez!</p>
+
+      <div class="sim">
+        <div class="sim-led-lbl" style="margin-bottom:.8rem;font-size:.85rem">▶️ Cruce en vivo — fijate que nunca hay dos "verdes" enfrentados:</div>
+        <div class="sim-row">
+          <div style="text-align:center">
+            <div class="traffic">
+              <div class="tl-light r" id="cxAR"></div>
+              <div class="tl-light y" id="cxAY"></div>
+              <div class="tl-light g" id="cxAG"></div>
+            </div>
+            <div class="sim-led-lbl" style="margin-top:.4rem">🚗 Autos</div>
+          </div>
+          <div style="text-align:center">
+            <div class="tl-ped">
+              <div class="tl-light r" id="cxPR"></div>
+              <div class="tl-light g" id="cxPG"></div>
+            </div>
+            <div class="sim-led-lbl" style="margin-top:.4rem">🚶 Peatón</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:.7rem;align-items:center">
+            <div class="tl-phase" id="cxPhase">Autos pasan</div>
+            <button class="sim-btn" id="cxBtn" onclick="toggleCruce()">⏸️ Pausar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ░░ 6 · Pantalla LCD ░░ -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>6️⃣ Pantalla LCD 16×2 — "Hola mundo"</h3><div class="badges-wrap"><span class="lvl lvl-3">Avanzado</span></div></div>
+    <div class="ej-body">
+      <div class="ej-enunciado">Una pantalla LCD de <strong>16 columnas × 2 filas</strong> muestra texto. Se maneja con la librería <code>LiquidCrystal</code>, que viene incluida en el IDE de Arduino.</div>
+      <div class="code">
+<span class="kw">#include</span> <span class="str">&lt;LiquidCrystal.h&gt;</span>
+
+<span class="cm">// LiquidCrystal(RS, E, D4, D5, D6, D7) — pines de datos</span>
+LiquidCrystal lcd(<span class="num">12</span>, <span class="num">11</span>, <span class="num">5</span>, <span class="num">4</span>, <span class="num">3</span>, <span class="num">2</span>);
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  lcd.<span class="fn">begin</span>(<span class="num">16</span>, <span class="num">2</span>);          <span class="cm">// 16 columnas, 2 filas</span>
+  lcd.<span class="fn">print</span>(<span class="str">"Hola Robotica!"</span>);  <span class="cm">// escribe en fila 0</span>
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  lcd.<span class="fn">setCursor</span>(<span class="num">0</span>, <span class="num">1</span>);       <span class="cm">// columna 0, fila 1 (la 2da)</span>
+  lcd.<span class="fn">print</span>(<span class="fn">millis</span>() / <span class="num">1000</span>); <span class="cm">// segundos encendido</span>
+  lcd.<span class="fn">print</span>(<span class="str">" s"</span>);
+}</div>
+      <p style="font-size:.88rem;margin-top:.5rem"><strong>Clave:</strong> <code>lcd.begin(cols, filas)</code> inicializa; <code>lcd.setCursor(col, fila)</code> mueve el cursor (¡las dos empiezan en <strong>0</strong>!); <code>lcd.print()</code> escribe. <code>lcd.clear()</code> borra todo.</p>
+
+      <div class="sim">
+        <div class="sim-led-lbl" style="margin-bottom:.8rem;font-size:.85rem">⌨️ Escribí algo y mirá cómo lo muestra la pantalla (máx. 16 caracteres por fila):</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:.9rem">
+          <div class="lcd">
+            <div class="lcd-row" id="lcdRow0"></div>
+            <div class="lcd-row" id="lcdRow1"></div>
+          </div>
+          <div class="sim-controls" style="margin-top:0">
+            <label>Fila 0: <input type="text" id="lcdIn0" maxlength="16" value="Hola Robotica!" oninput="updateLcd()" style="padding:.4rem .6rem;border:2px solid var(--pur-lt);border-radius:6px;font-family:monospace;width:170px"></label>
+          </div>
+          <div class="sim-controls" style="margin-top:0">
+            <label>Fila 1: <input type="text" id="lcdIn1" maxlength="16" value="Parcial 2026" oninput="updateLcd()" style="padding:.4rem .6rem;border:2px solid var(--pur-lt);border-radius:6px;font-family:monospace;width:170px"></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ░░ 7 · LCD + sensor ░░ -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>7️⃣ Termómetro digital en LCD (LM35)</h3><div class="badges-wrap"><span class="lvl lvl-3">Avanzado</span></div></div>
+    <div class="ej-body">
+      <div class="ej-enunciado">Combinamos lo aprendido: leemos el sensor de temperatura <strong>LM35</strong> por una entrada analógica y mostramos los °C en la pantalla LCD, actualizando cada segundo.</div>
+      <div class="code">
+<span class="kw">#include</span> <span class="str">&lt;LiquidCrystal.h&gt;</span>
+LiquidCrystal lcd(<span class="num">12</span>, <span class="num">11</span>, <span class="num">5</span>, <span class="num">4</span>, <span class="num">3</span>, <span class="num">2</span>);
+
+<span class="kw">#define</span> SENSOR A0
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  lcd.<span class="fn">begin</span>(<span class="num">16</span>, <span class="num">2</span>);
+  lcd.<span class="fn">print</span>(<span class="str">"Temperatura:"</span>);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="kw">int</span>   lectura = <span class="fn">analogRead</span>(SENSOR);     <span class="cm">// 0..1023</span>
+  <span class="kw">float</span> volt    = lectura * <span class="num">5.0</span> / <span class="num">1023.0</span>;
+  <span class="kw">float</span> tempC   = volt / <span class="num">0.01</span>;            <span class="cm">// LM35: 10 mV/°C</span>
+
+  lcd.<span class="fn">setCursor</span>(<span class="num">0</span>, <span class="num">1</span>);              <span class="cm">// fila de abajo</span>
+  lcd.<span class="fn">print</span>(tempC);
+  lcd.<span class="fn">print</span>(<span class="str">" C   "</span>);                <span class="cm">// espacios = borran sobrante</span>
+  <span class="fn">delay</span>(<span class="num">1000</span>);
+}</div>
+      <p style="font-size:.88rem;margin-top:.5rem"><strong>Clave:</strong> mismo cálculo del LM35 que vimos antes, pero la salida va a la <code>lcd</code> en vez del <code>Serial</code>. Los espacios al final de <code>" C   "</code> "limpian" dígitos viejos cuando el número baja (de 25.0 a 9.0).</p>
+    </div>
+  </div>
+
+  <!-- ░░ 8 · Servo con potenciómetro ░░ -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>8️⃣ Controlar un servomotor con potenciómetro</h3><div class="badges-wrap"><span class="lvl lvl-3">Avanzado</span></div></div>
+    <div class="ej-body">
+      <div class="ej-enunciado">Giramos el eje de un servomotor (0° a 180°) moviendo un potenciómetro. Es la base de un brazo robótico controlado a mano.</div>
+      <div class="code">
+<span class="kw">#include</span> <span class="str">&lt;Servo.h&gt;</span>
+
+Servo miServo;
+<span class="kw">#define</span> PIN_SERVO <span class="num">9</span>
+<span class="kw">#define</span> POTE      A0
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  miServo.<span class="fn">attach</span>(PIN_SERVO);   <span class="cm">// asocia el servo al pin</span>
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="kw">int</span> lectura = <span class="fn">analogRead</span>(POTE);            <span class="cm">// 0..1023</span>
+  <span class="kw">int</span> angulo  = <span class="fn">map</span>(lectura, <span class="num">0</span>, <span class="num">1023</span>, <span class="num">0</span>, <span class="num">180</span>);
+  miServo.<span class="fn">write</span>(angulo);                       <span class="cm">// mueve a ese ángulo</span>
+  <span class="fn">delay</span>(<span class="num">15</span>);                              <span class="cm">// tiempo para llegar</span>
+}</div>
+      <p style="font-size:.88rem;margin-top:.5rem"><strong>Clave:</strong> <code>map()</code> traduce el rango del potenciómetro (0–1023) al del servo (0–180°). El <code>delay(15)</code> le da tiempo físico al motor a alcanzar la posición.</p>
+
+      <div class="sim">
+        <div class="sim-led-lbl" style="margin-bottom:.6rem;font-size:.85rem">🎛️ Mové el "potenciómetro" y mirá girar el servo:</div>
+        <div class="sim-row">
+          <svg width="150" height="150" viewBox="0 0 150 150">
+            <circle cx="75" cy="75" r="60" fill="#fff" stroke="#8b5cf6" stroke-width="3"/>
+            <g id="servoArm2" style="transform-origin:75px 75px">
+              <rect x="71" y="22" width="8" height="55" rx="4" fill="#6d28d9"/>
+              <circle cx="75" cy="25" r="7" fill="#dc2626"/>
+            </g>
+            <circle cx="75" cy="75" r="9" fill="#334155"/>
+            <text x="135" y="80" font-size="11" fill="#64748b" text-anchor="middle">0°</text>
+            <text x="15" y="80" font-size="11" fill="#64748b" text-anchor="middle">180°</text>
+          </svg>
+          <div class="sim-stat">
+            <span class="v"><span id="servoPotVal">512</span></span>
+            <span class="l">analogRead(A0)</span>
+          </div>
+          <div class="sim-stat">
+            <span class="v"><span id="servoAngVal">90</span>°</span>
+            <span class="l">servo.write()</span>
+          </div>
+        </div>
+        <div class="sim-controls">
+          <label>Potenciómetro: <input type="range" id="servoPot" min="0" max="1023" value="512" oninput="updateServoPot()"></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ░░ 9 · Proyecto final ░░ -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>9️⃣ Proyecto final: barrera de estacionamiento inteligente</h3><div class="badges-wrap"><span class="lvl lvl-4">Experto</span></div></div>
+    <div class="ej-body">
+      <div class="ej-enunciado">El combo de todo: un <strong>botón</strong> abre/cierra una <strong>barrera</strong> (servomotor), dos <strong>LEDs</strong> indican el estado y una <strong>pantalla LCD</strong> muestra el mensaje. Además creamos <strong>nuestras propias funciones</strong> para ordenar el código.</div>
+      <div class="code">
+<span class="kw">#include</span> <span class="str">&lt;Servo.h&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;LiquidCrystal.h&gt;</span>
+
+Servo barrera;
+LiquidCrystal lcd(<span class="num">12</span>, <span class="num">11</span>, <span class="num">5</span>, <span class="num">4</span>, <span class="num">3</span>, <span class="num">2</span>);
+
+<span class="kw">#define</span> PIN_BARRERA <span class="num">9</span>
+<span class="kw">#define</span> BOTON       <span class="num">7</span>
+<span class="kw">#define</span> LED_VERDE   <span class="num">8</span>
+<span class="kw">#define</span> LED_ROJO    <span class="num">6</span>
+
+<span class="kw">bool</span> abierta = <span class="kw">false</span>;       <span class="cm">// variable global: recuerda el estado</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  barrera.<span class="fn">attach</span>(PIN_BARRERA);
+  <span class="fn">pinMode</span>(BOTON, INPUT_PULLUP);
+  <span class="fn">pinMode</span>(LED_VERDE, OUTPUT);
+  <span class="fn">pinMode</span>(LED_ROJO,  OUTPUT);
+  lcd.<span class="fn">begin</span>(<span class="num">16</span>, <span class="num">2</span>);
+  <span class="fn">cerrar</span>();                  <span class="cm">// arranca cerrada</span>
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="kw">if</span> (<span class="fn">digitalRead</span>(BOTON) == LOW) {   <span class="cm">// botón apretado</span>
+    <span class="kw">if</span> (abierta) <span class="fn">cerrar</span>();
+    <span class="kw">else</span>         <span class="fn">abrir</span>();
+    <span class="fn">delay</span>(<span class="num">500</span>);                  <span class="cm">// antirrebote simple</span>
+  }
+}
+
+<span class="cm">// ───── Funciones propias (organizan el código) ─────</span>
+<span class="kw">void</span> <span class="fn">abrir</span>() {
+  barrera.<span class="fn">write</span>(<span class="num">90</span>);             <span class="cm">// levanta la barrera</span>
+  <span class="fn">digitalWrite</span>(LED_VERDE, HIGH);
+  <span class="fn">digitalWrite</span>(LED_ROJO,  LOW);
+  lcd.<span class="fn">clear</span>();
+  lcd.<span class="fn">print</span>(<span class="str">"PASE :) Abierta"</span>);
+  abierta = <span class="kw">true</span>;
+}
+
+<span class="kw">void</span> <span class="fn">cerrar</span>() {
+  barrera.<span class="fn">write</span>(<span class="num">0</span>);              <span class="cm">// baja la barrera</span>
+  <span class="fn">digitalWrite</span>(LED_VERDE, LOW);
+  <span class="fn">digitalWrite</span>(LED_ROJO,  HIGH);
+  lcd.<span class="fn">clear</span>();
+  lcd.<span class="fn">print</span>(<span class="str">"ALTO - Cerrada"</span>);
+  abierta = <span class="kw">false</span>;
+}</div>
+      <div class="tip"><span>🏆</span><div>Acá juntás <strong>todo el curso</strong>: declaración de pines, una variable global <code>bool</code> que recuerda el estado, lectura de un botón con pull-up, control de un servo, LEDs de salida y una pantalla LCD. Las funciones <code>abrir()</code> y <code>cerrar()</code> evitan repetir código y hacen el <code>loop()</code> súper legible.</div></div>
+      <p style="font-size:.88rem;margin-top:.5rem"><strong>Clave:</strong> definir <strong>tus propias funciones</strong> (<code>void abrir()</code>, <code>void cerrar()</code>) es el gran paso de "principiante" a "ordenado". El <code>loop()</code> solo decide <em>qué</em> hacer; las funciones saben <em>cómo</em> hacerlo.</p>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:1.5rem"><strong>📈 ¿Y ahora?</strong> Ya recorriste variables → pines → float/Pi → semáforos → LCD → servo → proyecto integrador. Pasá a la pestaña <strong>💻 Código</strong> para más sketches de sensores, y a <strong>📝 Autoevaluación</strong> para ponerte a prueba.</div>
+
+</div></div>
+
 <!-- ════════════ JUEGOS ════════════ -->
 <div id="juegos" class="page"><div class="container">
 
@@ -1676,6 +2126,107 @@ function toggleEj(header){
   body.classList.toggle('open');
 }
 function shuffle(arr){ return [...arr].sort(()=>Math.random()-.5) }
+
+// ════════════════════════════
+//  SIMULADOR SEMÁFORO SIMPLE
+// ════════════════════════════
+const tlSteps = [
+  { on:'g', txt:'🟢 VERDE — pasar',        ms:2200 },
+  { on:'y', txt:'🟡 AMARILLO — precaución', ms:1200 },
+  { on:'r', txt:'🔴 ROJO — detenerse',      ms:2200 }
+];
+let tlIdx = 0, tlTimer = null, tlRunning = true;
+function tlPaint(){
+  const s = tlSteps[tlIdx];
+  ['r','y','g'].forEach(c=>{
+    document.getElementById('tl'+c.toUpperCase()).classList.toggle('on', s.on===c);
+  });
+  document.getElementById('tlPhase').textContent = s.txt;
+}
+function tlTick(){
+  tlPaint();
+  tlTimer = setTimeout(()=>{ tlIdx=(tlIdx+1)%tlSteps.length; tlTick(); }, tlSteps[tlIdx].ms);
+}
+function toggleTraffic(){
+  tlRunning = !tlRunning;
+  const b = document.getElementById('tlBtn');
+  if(tlRunning){ b.textContent='⏸️ Pausar'; tlTick(); }
+  else { b.textContent='▶️ Reanudar'; clearTimeout(tlTimer); }
+}
+
+// ════════════════════════════
+//  SIMULADOR CRUCE (autos + peatón)
+// ════════════════════════════
+// estados: AR AY AG | PR PG
+const cxSteps = [
+  { a:[0,0,1], p:[1,0], txt:'🚗 Autos pasan',        ms:2400 },
+  { a:[0,1,0], p:[1,0], txt:'🚗 Autos precaución',   ms:1200 },
+  { a:[1,0,0], p:[0,1], txt:'🚶 Peatón cruza',        ms:2400 },
+  { a:[1,0,0], p:[0,'blink'], txt:'🚶 ¡Apurate!',     ms:1600 }
+];
+let cxIdx = 0, cxTimer = null, cxBlink = null, cxRunning = true;
+function cxPaint(){
+  const s = cxSteps[cxIdx];
+  document.getElementById('cxAR').classList.toggle('on', s.a[0]===1);
+  document.getElementById('cxAY').classList.toggle('on', s.a[1]===1);
+  document.getElementById('cxAG').classList.toggle('on', s.a[2]===1);
+  document.getElementById('cxPR').classList.toggle('on', s.p[0]===1);
+  document.getElementById('cxPhase').textContent = s.txt;
+  clearInterval(cxBlink);
+  const pg = document.getElementById('cxPG');
+  if(s.p[1]==='blink'){
+    let vis=true; pg.classList.add('on');
+    cxBlink = setInterval(()=>{ vis=!vis; pg.classList.toggle('on',vis); },300);
+  } else {
+    pg.classList.toggle('on', s.p[1]===1);
+  }
+}
+function cxTick(){
+  cxPaint();
+  cxTimer = setTimeout(()=>{ cxIdx=(cxIdx+1)%cxSteps.length; cxTick(); }, cxSteps[cxIdx].ms);
+}
+function toggleCruce(){
+  cxRunning = !cxRunning;
+  const b = document.getElementById('cxBtn');
+  if(cxRunning){ b.textContent='⏸️ Pausar'; cxTick(); }
+  else { b.textContent='▶️ Reanudar'; clearTimeout(cxTimer); clearInterval(cxBlink); }
+}
+
+// ════════════════════════════
+//  SIMULADOR PANTALLA LCD 16×2
+// ════════════════════════════
+function lcdRender(rowEl, text){
+  rowEl.innerHTML = '';
+  const t = (text||'').padEnd(16,' ').slice(0,16);
+  for(let i=0;i<16;i++){
+    const c = document.createElement('div');
+    c.className = 'lcd-cell';
+    c.textContent = t[i]===' ' ? '' : t[i];
+    rowEl.appendChild(c);
+  }
+}
+function updateLcd(){
+  lcdRender(document.getElementById('lcdRow0'), document.getElementById('lcdIn0').value);
+  lcdRender(document.getElementById('lcdRow1'), document.getElementById('lcdIn1').value);
+}
+
+// ════════════════════════════
+//  SIMULADOR SERVO + POTENCIÓMETRO
+// ════════════════════════════
+function updateServoPot(){
+  const v = parseInt(document.getElementById('servoPot').value);
+  const ang = Math.round(v/1023*180);
+  document.getElementById('servoPotVal').textContent = v;
+  document.getElementById('servoAngVal').textContent = ang;
+  // 0° = brazo a la derecha, 180° = a la izquierda → rotamos de +90 a -90
+  document.getElementById('servoArm2').style.transform = 'rotate(' + (90-ang) + 'deg)';
+}
+
+// arranque de los simuladores de "Aprender a programar"
+tlTick();
+cxTick();
+updateLcd();
+updateServoPot();
 
 // ════════════════════════════
 //  SIMULADOR ADC

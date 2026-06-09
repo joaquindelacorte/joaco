@@ -69,7 +69,7 @@ nav{position:sticky;top:0;z-index:200;background:var(--pur);display:flex;align-i
 .fbox .unit{font-size:.78rem;color:#64748b;display:block;margin-top:.3rem}
 
 /* CODE */
-.code{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1rem 1.2rem;font-family:'Courier New',monospace;font-size:.85rem;line-height:1.55;overflow-x:auto;margin:.7rem 0;box-shadow:0 2px 8px rgba(0,0,0,.2);text-align:left}
+.code{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1rem 1.2rem;font-family:'Consolas','Courier New',monospace;font-size:.85rem;line-height:1.5;overflow-x:auto;margin:.7rem 0;box-shadow:0 2px 8px rgba(0,0,0,.2);text-align:left;white-space:pre;tab-size:2;-moz-tab-size:2}
 .code .kw{color:#c4b5fd;font-weight:700}
 .code .fn{color:#7dd3fc}
 .code .num{color:#fbbf24}
@@ -546,8 +546,7 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
 
   <div class="note"><strong>Estructura mínima de un sketch:</strong> Todo programa de Arduino tiene dos funciones obligatorias: <code>setup()</code> (se ejecuta una sola vez al iniciar) y <code>loop()</code> (se ejecuta continuamente).</div>
 
-  <div class="code">
-<span class="cm">// Estructura básica de un sketch</span>
+  <div class="code"><span class="cm">// Estructura básica de un sketch</span>
 <span class="kw">void</span> <span class="fn">setup</span>() {
   <span class="cm">// se ejecuta UNA SOLA VEZ al arrancar</span>
   <span class="fn">pinMode</span>(<span class="num">13</span>, OUTPUT);
@@ -866,8 +865,7 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
     </div>
   </div>
 
-  <div class="code">
-<span class="cm">// Antirrebote por software simple</span>
+  <div class="code"><span class="cm">// Antirrebote por software simple</span>
 <span class="kw">if</span> (<span class="fn">digitalRead</span>(BTN) == LOW) {
   <span class="fn">delay</span>(<span class="num">30</span>);                  <span class="cm">// espera el rebote</span>
   <span class="kw">if</span> (<span class="fn">digitalRead</span>(BTN) == LOW) { <span class="cm">// confirma</span>
@@ -1133,8 +1131,7 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
     </div>
   </div>
 
-  <div class="code">
-<span class="cm">// Control de servo con la biblioteca Servo</span>
+  <div class="code"><span class="cm">// Control de servo con la biblioteca Servo</span>
 <span class="kw">#include</span> <span class="str">&lt;Servo.h&gt;</span>
 <span class="kw">#define</span> PIN_MOTOR <span class="num">10</span>
 
@@ -1320,8 +1317,7 @@ anterior = ahora;</div>
     </div>
   </div>
 
-  <div class="code">
-<span class="cm">// Decodificar control remoto IR</span>
+  <div class="code"><span class="cm">// Decodificar control remoto IR</span>
 <span class="kw">#include</span> <span class="str">&lt;IRremote.h&gt;</span>
 <span class="kw">#define</span> RECV_PIN <span class="num">7</span>
 
@@ -1399,8 +1395,7 @@ decode_results results;
     <div class="ej-header" onclick="toggleEj(this)"><h3>1️⃣ Blink — el "Hola mundo" del Arduino</h3><span class="ej-badge">Semana 1</span></div>
     <div class="ej-body">
       <div class="ej-enunciado">Hacer parpadear el LED interno del pin 13 cada 1 segundo.</div>
-      <div class="code">
-<span class="kw">void</span> <span class="fn">setup</span>() {
+      <div class="code"><span class="kw">void</span> <span class="fn">setup</span>() {
   <span class="fn">pinMode</span>(<span class="num">13</span>, OUTPUT);
 }
 
@@ -1418,8 +1413,7 @@ decode_results results;
     <div class="ej-header" onclick="toggleEj(this)"><h3>2️⃣ Pulsador enciende LED</h3><span class="ej-badge">Semana 2</span></div>
     <div class="ej-body">
       <div class="ej-enunciado">Encender un LED en el pin 9 mientras un pulsador en el pin 2 esté apretado.</div>
-      <div class="code">
-<span class="kw">#define</span> BTN <span class="num">2</span>
+      <div class="code"><span class="kw">#define</span> BTN <span class="num">2</span>
 <span class="kw">#define</span> LED <span class="num">9</span>
 
 <span class="kw">void</span> <span class="fn">setup</span>() {
@@ -1442,8 +1436,7 @@ decode_results results;
     <div class="ej-header" onclick="toggleEj(this)"><h3>3️⃣ Potenciómetro controla brillo de LED</h3><span class="ej-badge">Semanas 3 + 4</span></div>
     <div class="ej-body">
       <div class="ej-enunciado">Leer un potenciómetro en A0 (0-1023) y usarlo para controlar el brillo de un LED en pin 9 vía PWM (0-255).</div>
-      <div class="code">
-<span class="kw">void</span> <span class="fn">setup</span>() {
+      <div class="code"><span class="kw">void</span> <span class="fn">setup</span>() {
   <span class="fn">pinMode</span>(<span class="num">9</span>, OUTPUT);
 }
 
@@ -1460,8 +1453,7 @@ decode_results results;
     <div class="ej-header" onclick="toggleEj(this)"><h3>4️⃣ Termómetro con LM35 por Serial</h3><span class="ej-badge">Semana 3</span></div>
     <div class="ej-body">
       <div class="ej-enunciado">Leer el sensor LM35 en A0 y mostrar la temperatura en °C en el monitor serie cada segundo.</div>
-      <div class="code">
-<span class="kw">void</span> <span class="fn">setup</span>() {
+      <div class="code"><span class="kw">void</span> <span class="fn">setup</span>() {
   <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">9600</span>);
 }
 
@@ -1483,8 +1475,7 @@ decode_results results;
     <div class="ej-header" onclick="toggleEj(this)"><h3>5️⃣ Servo de 0° a 180° y vuelta</h3><span class="ej-badge">PDF — Clase #5</span></div>
     <div class="ej-body">
       <div class="ej-enunciado">Hacer girar un servomotor a las posiciones 0°, 45°, 90°, 135°, 180° con un segundo entre cada movimiento.</div>
-      <div class="code">
-<span class="kw">#include</span> <span class="str">&lt;Servo.h&gt;</span>
+      <div class="code"><span class="kw">#include</span> <span class="str">&lt;Servo.h&gt;</span>
 <span class="kw">#define</span> PIN_MOTOR <span class="num">10</span>
 
 Servo mi_servo;
@@ -1509,8 +1500,7 @@ Servo mi_servo;
     <div class="ej-header" onclick="toggleEj(this)"><h3>6️⃣ Antirrebote con millis()</h3><span class="ej-badge">Semana 2</span></div>
     <div class="ej-body">
       <div class="ej-enunciado">Contar pulsaciones de un botón sin contar rebotes, usando <code>millis()</code> en lugar de <code>delay()</code>.</div>
-      <div class="code">
-<span class="kw">#define</span> BTN <span class="num">2</span>
+      <div class="code"><span class="kw">#define</span> BTN <span class="num">2</span>
 
 <span class="kw">int</span> contador = <span class="num">0</span>;
 <span class="kw">int</span> estado, anterior = HIGH;
@@ -1541,8 +1531,7 @@ Servo mi_servo;
     <div class="ej-header" onclick="toggleEj(this)"><h3>7️⃣ Control de LED por IR remoto</h3><span class="ej-badge">Semana 6</span></div>
     <div class="ej-body">
       <div class="ej-enunciado">Encender / apagar un LED con dos botones del control remoto IR.</div>
-      <div class="code">
-<span class="kw">#include</span> <span class="str">&lt;IRremote.h&gt;</span>
+      <div class="code"><span class="kw">#include</span> <span class="str">&lt;IRremote.h&gt;</span>
 <span class="kw">#define</span> RECV_PIN <span class="num">7</span>
 <span class="kw">#define</span> LED <span class="num">9</span>
 
@@ -1590,8 +1579,7 @@ decode_results results;
     <div class="ej-header" onclick="toggleEj(this)"><h3>1️⃣ Variables globales y tipos de datos</h3><div class="badges-wrap"><span class="lvl lvl-1">Básico</span></div></div>
     <div class="ej-body">
       <div class="ej-enunciado">Toda variable guarda un dato. Según <strong>qué</strong> guarde, elegimos su <strong>tipo</strong>. Si la declaramos arriba de <code>setup()</code> es <strong>global</strong> (visible en todo el sketch).</div>
-      <div class="code">
-<span class="cm">// ───── Variables GLOBALES (se ven en setup() y loop()) ─────</span>
+      <div class="code"><span class="cm">// ───── Variables GLOBALES (se ven en setup() y loop()) ─────</span>
 <span class="kw">int</span>    contador    = <span class="num">0</span>;        <span class="cm">// entero: -32768 a 32767</span>
 <span class="kw">float</span>  temperatura = <span class="num">23.5</span>;     <span class="cm">// decimales (4 bytes)</span>
 <span class="kw">bool</span>   encendido   = <span class="kw">false</span>;    <span class="cm">// true / false (1 bit lógico)</span>
@@ -1618,8 +1606,7 @@ decode_results results;
     <div class="ej-header" onclick="toggleEj(this)"><h3>2️⃣ Declaración de pines — 3 formas</h3><div class="badges-wrap"><span class="lvl lvl-1">Básico</span></div></div>
     <div class="ej-body">
       <div class="ej-enunciado">En vez de escribir números sueltos ("números mágicos"), le ponemos <strong>nombre</strong> a cada pin. Así el código se entiende y, si cambiás un cable, lo corregís en un solo lugar.</div>
-      <div class="code">
-<span class="cm">// Forma 1 — #define: lo reemplaza el preprocesador, NO usa RAM (sin ; ni tipo)</span>
+      <div class="code"><span class="cm">// Forma 1 — #define: lo reemplaza el preprocesador, NO usa RAM (sin ; ni tipo)</span>
 <span class="kw">#define</span> LED_ROJO <span class="num">8</span>
 
 <span class="cm">// Forma 2 — const int: constante con tipo, más segura (la recomendada)</span>
@@ -1652,8 +1639,7 @@ decode_results results;
     <div class="ej-header" onclick="toggleEj(this)"><h3>3️⃣ Variables float y el número Pi (π)</h3><div class="badges-wrap"><span class="lvl lvl-2">Intermedio</span></div></div>
     <div class="ej-body">
       <div class="ej-enunciado">Cuando un número tiene <strong>decimales</strong> usamos <code>float</code>. Ejemplo clásico: guardar π y calcular la <strong>circunferencia</strong> (2·π·r) y el <strong>área</strong> (π·r²) de un círculo.</div>
-      <div class="code">
-<span class="cm">// El número Pi como constante global de tipo float</span>
+      <div class="code"><span class="cm">// El número Pi como constante global de tipo float</span>
 <span class="kw">const</span> <span class="kw">float</span> PI_VAL = <span class="num">3.14159</span>;
 
 <span class="kw">float</span> radio = <span class="num">5.0</span>;        <span class="cm">// cm  (¡el .0 lo hace float!)</span>
@@ -1683,8 +1669,7 @@ decode_results results;
     <div class="ej-header" onclick="toggleEj(this)"><h3>4️⃣ Semáforo simple (3 LEDs)</h3><div class="badges-wrap"><span class="lvl lvl-2">Intermedio</span></div></div>
     <div class="ej-body">
       <div class="ej-enunciado">Tres LEDs (rojo, amarillo, verde) que se encienden por turnos. Es el primer "automatismo" clásico: solo <code>digitalWrite</code> + <code>delay</code> en secuencia.</div>
-      <div class="code">
-<span class="kw">#define</span> ROJO     <span class="num">8</span>
+      <div class="code"><span class="kw">#define</span> ROJO     <span class="num">8</span>
 <span class="kw">#define</span> AMARILLO <span class="num">9</span>
 <span class="kw">#define</span> VERDE    <span class="num">10</span>
 
@@ -1731,8 +1716,7 @@ decode_results results;
     <div class="ej-header" onclick="toggleEj(this)"><h3>5️⃣ Cruce coordinado: autos + peatones</h3><div class="badges-wrap"><span class="lvl lvl-3">Avanzado</span></div></div>
     <div class="ej-body">
       <div class="ej-enunciado">Dos semáforos que trabajan juntos: cuando los autos tienen verde, el peatón ve rojo, y al revés. Usamos un <code>for</code> para configurar varios pines de una y otro <code>for</code> para hacer parpadear al peatón.</div>
-      <div class="code">
-<span class="cm">// Semáforo de AUTOS</span>
+      <div class="code"><span class="cm">// Semáforo de AUTOS</span>
 <span class="kw">#define</span> A_ROJO     <span class="num">2</span>
 <span class="kw">#define</span> A_AMARILLO <span class="num">3</span>
 <span class="kw">#define</span> A_VERDE    <span class="num">4</span>
@@ -1807,8 +1791,7 @@ decode_results results;
     <div class="ej-header" onclick="toggleEj(this)"><h3>6️⃣ Pantalla LCD 16×2 — "Hola mundo"</h3><div class="badges-wrap"><span class="lvl lvl-3">Avanzado</span></div></div>
     <div class="ej-body">
       <div class="ej-enunciado">Una pantalla LCD de <strong>16 columnas × 2 filas</strong> muestra texto. Se maneja con la librería <code>LiquidCrystal</code>, que viene incluida en el IDE de Arduino.</div>
-      <div class="code">
-<span class="kw">#include</span> <span class="str">&lt;LiquidCrystal.h&gt;</span>
+      <div class="code"><span class="kw">#include</span> <span class="str">&lt;LiquidCrystal.h&gt;</span>
 
 <span class="cm">// LiquidCrystal(RS, E, D4, D5, D6, D7) — pines de datos</span>
 LiquidCrystal lcd(<span class="num">12</span>, <span class="num">11</span>, <span class="num">5</span>, <span class="num">4</span>, <span class="num">3</span>, <span class="num">2</span>);
@@ -1848,8 +1831,7 @@ LiquidCrystal lcd(<span class="num">12</span>, <span class="num">11</span>, <spa
     <div class="ej-header" onclick="toggleEj(this)"><h3>7️⃣ Termómetro digital en LCD (LM35)</h3><div class="badges-wrap"><span class="lvl lvl-3">Avanzado</span></div></div>
     <div class="ej-body">
       <div class="ej-enunciado">Combinamos lo aprendido: leemos el sensor de temperatura <strong>LM35</strong> por una entrada analógica y mostramos los °C en la pantalla LCD, actualizando cada segundo.</div>
-      <div class="code">
-<span class="kw">#include</span> <span class="str">&lt;LiquidCrystal.h&gt;</span>
+      <div class="code"><span class="kw">#include</span> <span class="str">&lt;LiquidCrystal.h&gt;</span>
 LiquidCrystal lcd(<span class="num">12</span>, <span class="num">11</span>, <span class="num">5</span>, <span class="num">4</span>, <span class="num">3</span>, <span class="num">2</span>);
 
 <span class="kw">#define</span> SENSOR A0
@@ -1878,8 +1860,7 @@ LiquidCrystal lcd(<span class="num">12</span>, <span class="num">11</span>, <spa
     <div class="ej-header" onclick="toggleEj(this)"><h3>8️⃣ Controlar un servomotor con potenciómetro</h3><div class="badges-wrap"><span class="lvl lvl-3">Avanzado</span></div></div>
     <div class="ej-body">
       <div class="ej-enunciado">Giramos el eje de un servomotor (0° a 180°) moviendo un potenciómetro. Es la base de un brazo robótico controlado a mano.</div>
-      <div class="code">
-<span class="kw">#include</span> <span class="str">&lt;Servo.h&gt;</span>
+      <div class="code"><span class="kw">#include</span> <span class="str">&lt;Servo.h&gt;</span>
 
 Servo miServo;
 <span class="kw">#define</span> PIN_SERVO <span class="num">9</span>
@@ -1931,8 +1912,7 @@ Servo miServo;
     <div class="ej-header" onclick="toggleEj(this)"><h3>9️⃣ Proyecto final: barrera de estacionamiento inteligente</h3><div class="badges-wrap"><span class="lvl lvl-4">Experto</span></div></div>
     <div class="ej-body">
       <div class="ej-enunciado">El combo de todo: un <strong>botón</strong> abre/cierra una <strong>barrera</strong> (servomotor), dos <strong>LEDs</strong> indican el estado y una <strong>pantalla LCD</strong> muestra el mensaje. Además creamos <strong>nuestras propias funciones</strong> para ordenar el código.</div>
-      <div class="code">
-<span class="kw">#include</span> <span class="str">&lt;Servo.h&gt;</span>
+      <div class="code"><span class="kw">#include</span> <span class="str">&lt;Servo.h&gt;</span>
 <span class="kw">#include</span> <span class="str">&lt;LiquidCrystal.h&gt;</span>
 
 Servo barrera;

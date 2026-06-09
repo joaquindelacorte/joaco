@@ -1891,7 +1891,7 @@ const SB_EDO = {
   }
 };
 
-/* ─── MOTOR DEL SANDBOX ─── */
+/* ─── MOTOR DEL SANDBOX (con event delegation) ─── */
 const SB_ALL = {deriv:SB_DERIV, integ:SB_INTEG, edo:SB_EDO};
 const SB_LABELS = {
   deriv:[['d-pot','Potencia + suma'],['d-raiz','Raíces (potencia fracc.)'],['d-prod','Producto'],['d-coc','Cociente'],['d-sens','🌡️ Sensibilidad de sensor']],
@@ -1899,7 +1899,7 @@ const SB_LABELS = {
   edo:[['e-clasif','🔍 Clasificar EDO'],['e-sep','📐 Variables separables'],['e-newton','🌡️ Newton enfriamiento'],['e-torri','💧 Torricelli'],['e-rl','⚡ Circuito RL']]
 };
 
-let sbState = {
+const sbState = {
   cat:'deriv',
   type:'d-pot',
   problem:null,
@@ -1908,45 +1908,55 @@ let sbState = {
   stats:{total:0, aciertos:0, racha:0, best:0}
 };
 
+function sbRenderMath(el){
+  if(!el || !window.renderMathInElement) return;
+  try{
+    renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+  }catch(e){console.warn('katex render fail',e);}
+}
+
 function sbRenderTypes(){
   const cont=document.getElementById('sb-types');
-  cont.innerHTML='';
+  if(!cont) return;
+  let html='';
   SB_LABELS[sbState.cat].forEach(([k,lbl])=>{
-    const b=document.createElement('button');
-    b.className='sb-type'+(k===sbState.type?' active':'');
-    b.textContent=lbl;
-    b.dataset.type=k;
-    b.addEventListener('click',()=>{
-      sbState.type=k;
-      sbRenderTypes();
-      sbNewProblem();
-    });
-    cont.appendChild(b);
+    html += `<button type="button" class="sb-type${k===sbState.type?' active':''}" data-type="${k}">${lbl}</button>`;
   });
+  cont.innerHTML = html;
 }
 
 function sbNewProblem(){
-  const P = SB_ALL[sbState.cat][sbState.type];
-  if(!P){ return; }
-  sbState.problem = P.gen();
-  sbState.step = 0;
-  sbState.firstTryOk = true;
-  document.getElementById('sb-problem-text').innerHTML = sbState.problem.problem;
-  document.getElementById('sb-result').classList.remove('show');
-  document.getElementById('sb-steps').innerHTML='';
-  sbRenderStep();
-  if(window.renderMathInElement){
-    renderMathInElement(document.getElementById('sb-problem-box'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+  try{
+    const P = SB_ALL[sbState.cat] && SB_ALL[sbState.cat][sbState.type];
+    if(!P){ console.warn('No problem found for',sbState.cat,sbState.type); return; }
+    sbState.problem = P.gen();
+    sbState.step = 0;
+    sbState.firstTryOk = true;
+    const ptext = document.getElementById('sb-problem-text');
+    if(ptext) ptext.innerHTML = sbState.problem.problem;
+    const res = document.getElementById('sb-result');
+    if(res) res.classList.remove('show');
+    const steps = document.getElementById('sb-steps');
+    if(steps) steps.innerHTML='';
+    sbRenderStep();
+    sbRenderMath(document.getElementById('sb-problem-box'));
+  }catch(e){
+    console.error('sbNewProblem error:',e);
+    const ptext = document.getElementById('sb-problem-text');
+    if(ptext) ptext.textContent = 'Error generando problema. Probá otro tipo.';
   }
 }
 
 function sbRenderStep(){
   const stepsCont = document.getElementById('sb-steps');
+  if(!stepsCont || !sbState.problem) return;
   const i = sbState.step;
   const stepData = sbState.problem.steps[i];
   if(!stepData){
-    document.getElementById('sb-result-text').innerHTML = sbState.problem.result;
-    document.getElementById('sb-result').classList.add('show');
+    const rtext = document.getElementById('sb-result-text');
+    if(rtext) rtext.innerHTML = sbState.problem.result;
+    const rdiv = document.getElementById('sb-result');
+    if(rdiv) rdiv.classList.add('show');
     sbState.stats.total++;
     if(sbState.firstTryOk){
       sbState.stats.aciertos++;
@@ -1956,77 +1966,129 @@ function sbRenderStep(){
       sbState.stats.racha=0;
     }
     sbUpdateStats();
-    if(window.renderMathInElement){
-      renderMathInElement(document.getElementById('sb-result'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
-    }
+    sbRenderMath(rdiv);
     return;
   }
-  const div=document.createElement('div');
-  div.className='sb-step';
-  div.innerHTML=`<div class="qst"><span class="num">${i+1}</span>${stepData.q}</div>`;
-  const opts=document.createElement('div'); opts.className='sb-opts';
-  stepData.opts.forEach(o=>{
-    const b=document.createElement('div');
-    b.className='sb-opt';
-    b.innerHTML=o.t;
-    b.addEventListener('click',()=>{
-      if(b.classList.contains('correct')||b.classList.contains('wrong')) return;
-      if(o.ok){
-        b.classList.add('correct');
-        const fb=document.createElement('div'); fb.className='sb-fb';
-        fb.innerHTML='✅ '+o.fb;
-        div.appendChild(fb);
-        setTimeout(()=>{ sbState.step++; sbRenderStep(); }, 800);
-      } else {
-        b.classList.add('wrong');
-        sbState.firstTryOk=false;
-        const fb=document.createElement('div'); fb.className='sb-fb';
-        fb.innerHTML='❌ '+o.fb;
-        div.appendChild(fb);
-      }
-    });
-    opts.appendChild(b);
+  let html = `<div class="sb-step" data-step="${i}">
+    <div class="qst"><span class="num">${i+1}</span>${stepData.q}</div>
+    <div class="sb-opts">`;
+  stepData.opts.forEach((o,j)=>{
+    html += `<button type="button" class="sb-opt" data-step="${i}" data-opt="${j}">${o.t}</button>`;
   });
-  div.appendChild(opts);
-  stepsCont.appendChild(div);
-  if(window.renderMathInElement){
-    renderMathInElement(div,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
-  }
+  html += `</div></div>`;
+  stepsCont.insertAdjacentHTML('beforeend', html);
+  sbRenderMath(stepsCont.lastElementChild);
 }
 
 function sbUpdateStats(){
-  document.getElementById('sb-total').textContent=sbState.stats.total;
-  document.getElementById('sb-aciertos').textContent=sbState.stats.aciertos;
-  document.getElementById('sb-racha').firstChild.textContent=sbState.stats.racha+' ';
-  document.getElementById('sb-best').textContent=sbState.stats.best;
-  const fire=document.getElementById('sb-fire');
-  if(sbState.stats.racha>=3){ fire.textContent='🔥'; fire.className='sb-streak fire'; fire.style.background='var(--orange)'; }
-  else if(sbState.stats.racha>=1){ fire.textContent='✨'; fire.className='sb-streak'; }
-  else { fire.textContent=''; fire.className=''; }
+  const setText=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  setText('sb-total',sbState.stats.total);
+  setText('sb-aciertos',sbState.stats.aciertos);
+  setText('sb-best',sbState.stats.best);
+  const racha = document.getElementById('sb-racha');
+  if(racha){
+    racha.innerHTML = sbState.stats.racha + ' <span id="sb-fire"></span>';
+    const fire=document.getElementById('sb-fire');
+    if(fire){
+      if(sbState.stats.racha>=3){ fire.textContent='🔥'; fire.className='sb-streak fire'; }
+      else if(sbState.stats.racha>=1){ fire.textContent='✨'; fire.className='sb-streak'; }
+      else { fire.textContent=''; fire.className=''; }
+    }
+  }
 }
 
-document.querySelectorAll('#sb-cats .sb-tab').forEach(t=>{
-  t.addEventListener('click',()=>{
+/* Event delegation — un único listener en el wrapper, sobrevive a re-renders */
+document.addEventListener('click', function(ev){
+  const target = ev.target.closest('.sb-tab, .sb-type, .sb-opt, #sb-new, #sb-reveal');
+  if(!target) return;
+
+  // Tab de categoría
+  if(target.classList.contains('sb-tab') && target.closest('#sb-cats')){
     document.querySelectorAll('#sb-cats .sb-tab').forEach(x=>x.classList.remove('active'));
-    t.classList.add('active');
-    sbState.cat = t.dataset.cat;
+    target.classList.add('active');
+    sbState.cat = target.dataset.cat;
     sbState.type = SB_LABELS[sbState.cat][0][0];
     sbRenderTypes();
     sbNewProblem();
-  });
-});
-document.getElementById('sb-new').addEventListener('click', sbNewProblem);
-document.getElementById('sb-reveal').addEventListener('click', ()=>{
-  if(!sbState.problem) return;
-  document.getElementById('sb-result-text').innerHTML = sbState.problem.result;
-  document.getElementById('sb-result').classList.add('show');
-  if(window.renderMathInElement){
-    renderMathInElement(document.getElementById('sb-result'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+    return;
+  }
+
+  // Pill de tipo
+  if(target.classList.contains('sb-type')){
+    sbState.type = target.dataset.type;
+    sbRenderTypes();
+    sbNewProblem();
+    return;
+  }
+
+  // Opción de paso
+  if(target.classList.contains('sb-opt')){
+    if(target.classList.contains('correct') || target.classList.contains('wrong')) return;
+    const stepIdx = parseInt(target.dataset.step,10);
+    const optIdx = parseInt(target.dataset.opt,10);
+    if(!sbState.problem) return;
+    const stepData = sbState.problem.steps[stepIdx];
+    if(!stepData) return;
+    const o = stepData.opts[optIdx];
+    if(!o) return;
+    const stepEl = target.closest('.sb-step');
+    if(o.ok){
+      target.classList.add('correct');
+      const fb = document.createElement('div');
+      fb.className='sb-fb';
+      fb.innerHTML='✅ '+o.fb;
+      stepEl.appendChild(fb);
+      sbRenderMath(stepEl);
+      setTimeout(()=>{
+        sbState.step = stepIdx + 1;
+        sbRenderStep();
+      }, 700);
+    } else {
+      target.classList.add('wrong');
+      sbState.firstTryOk = false;
+      const fb = document.createElement('div');
+      fb.className='sb-fb';
+      fb.innerHTML='❌ '+o.fb;
+      stepEl.appendChild(fb);
+      sbRenderMath(stepEl);
+    }
+    return;
+  }
+
+  // Otro problema
+  if(target.id === 'sb-new'){
+    sbNewProblem();
+    return;
+  }
+
+  // Ver solución
+  if(target.id === 'sb-reveal'){
+    if(!sbState.problem) return;
+    const rtext = document.getElementById('sb-result-text');
+    if(rtext) rtext.innerHTML = sbState.problem.result;
+    const rdiv = document.getElementById('sb-result');
+    if(rdiv) rdiv.classList.add('show');
+    sbRenderMath(rdiv);
+    return;
   }
 });
 
-sbRenderTypes();
-sbNewProblem();
+/* Inicialización — esperamos DOM y KaTeX */
+function sbInit(){
+  sbRenderTypes();
+  sbNewProblem();
+}
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', sbInit);
+} else {
+  sbInit();
+}
+// Re-render math cuando KaTeX termine de cargar
+window.addEventListener('load', ()=>{
+  setTimeout(()=>{
+    sbRenderMath(document.querySelector('.sb-wrap'));
+  }, 100);
+});
 </script>
 </body>
 </html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Prode Mundial 2026 – Escenario EV Máximo</title>
+<style>
+:root{
+  --bg:#0a0e1a;--card:#111827;--card2:#1a2235;
+  --accent:#34d399;--accent2:#34d399cc;
+  --text:#e8eaf0;--muted:#8892a4;--border:#2a3550;
+  --win-bg:#1e3a2f;--win:#4ade80;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-serif}
+.back-link{position:absolute;top:14px;left:16px;color:var(--muted);
+  font-size:.78rem;text-decoration:none;letter-spacing:.5px;z-index:101;
+  background:rgba(0,0,0,.3);padding:6px 12px;border-radius:6px;
+  border:1px solid var(--border);transition:all .2s}
+.back-link:hover{color:var(--accent);border-color:var(--accent)}
+.hero{background:linear-gradient(135deg,#0d2b1e,#101a35,#0d2b1e);
+  padding:36px 20px 22px;text-align:center;border-bottom:3px solid var(--accent);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,#34d39922 0%,transparent 70%)}
+.scenario-badge{display:inline-block;background:#34d39922;border:1px solid var(--accent);
+  border-radius:20px;padding:4px 14px;font-size:.7rem;font-weight:700;color:var(--accent);
+  letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;position:relative}
+.hero h1{font-size:clamp(1.3rem,3.5vw,2.2rem);font-weight:800;letter-spacing:2px;
+  background:linear-gradient(90deg,var(--accent),#fff,var(--accent));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative}
+.hero .desc{color:var(--muted);font-size:.82rem;margin-top:6px;max-width:640px;margin-left:auto;margin-right:auto;position:relative}
+.champ-badge{display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,#34d39933,#34d39966,#34d39933);
+  border:2px solid var(--accent);border-radius:50px;padding:8px 22px;margin-top:14px;position:relative}
+.champ-badge .ct{font-size:.65rem;color:rgba(255,255,255,.6);letter-spacing:1px;text-transform:uppercase}
+.champ-badge .cn{font-size:1.15rem;font-weight:800;color:#fff}
+.tabs{display:flex;gap:2px;background:#111827;border-bottom:1px solid #2a3550;
+  overflow-x:auto;padding:0 12px;position:sticky;top:0;z-index:100}
+.tab{padding:12px 16px;font-size:.8rem;font-weight:600;letter-spacing:.5px;color:var(--muted);
+  cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s;text-transform:uppercase}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.page{display:none;padding:18px 14px 40px;max-width:1200px;margin:0 auto}
+.page.active{display:block}
+.gf-wrap{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px;align-items:center}
+.gf-wrap span{color:var(--muted);font-size:.75rem;margin-right:3px}
+.gf-btn{padding:4px 12px;border-radius:20px;border:1px solid #2a3550;background:#1a2235;
+  color:var(--muted);cursor:pointer;font-size:.75rem;font-weight:600;transition:all .2s}
+.gf-btn:hover,.gf-btn.on{background:var(--accent);color:#000;border-color:var(--accent)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.card{background:var(--card);border:1px solid #2a3550;border-radius:9px;padding:12px 14px;transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card-meta{display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted);margin-bottom:9px}
+.grp-tag{background:var(--accent);color:#000;padding:1px 7px;border-radius:10px;font-weight:700;font-size:.67rem}
+.teams-row{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center}
+.team-l{text-align:left}.team-r{text-align:right}
+.tn{font-size:.85rem;font-weight:600}.tn.w{color:var(--win);font-weight:800}
+.tc{font-size:.65rem;color:var(--muted)}
+.sc-box{display:flex;align-items:center;gap:5px;justify-content:center}
+.sc{background:#1a2235;border:1px solid #2a3550;border-radius:5px;
+  padding:5px 10px;font-size:1.05rem;font-weight:800;min-width:30px;text-align:center}
+.sc.w{background:var(--win-bg);border-color:#27ae60;color:var(--win)}
+.sc-sep{color:var(--muted);font-size:.75rem}
+.win-row{font-size:.67rem;color:var(--win);text-align:center;margin-top:7px;
+  background:rgba(74,222,128,.08);border-radius:4px;padding:2px 0}
+.ev-row{display:flex;justify-content:space-between;font-size:.62rem;color:var(--muted);margin-top:6px;
+  border-top:1px dashed #2a3550;padding-top:5px}
+.ev-row b{color:var(--accent)}
+.conf-b{font-size:.6rem;padding:1px 5px;border-radius:7px;font-weight:600}
+.UEFA{background:#1a3a6b;color:#74b3ff}.CONMEBOL{background:#1a4a1a;color:#74ff74}
+.CONCACAF{background:#4a2a0a;color:#ffb347}.AFC{background:#3a0a4a;color:#df74ff}
+.CAF{background:#4a1a1a;color:#ff7474}.OFC{background:#1a3a3a;color:#74ffff}
+.ko-sec{margin-bottom:26px}
+.ko-title{font-size:.95rem;font-weight:700;color:var(--accent);letter-spacing:1px;
+  text-transform:uppercase;margin-bottom:12px;padding-bottom:7px;
+  border-bottom:1px solid #2a3550;display:flex;align-items:center;gap:6px}
+.ko-card{background:var(--card);border:1px solid #2a3550;border-radius:9px;padding:13px 14px}
+.ko-card.fin{border-color:var(--accent);background:linear-gradient(135deg,var(--card),#34d39911)}
+.ko-mid{font-size:.68rem;color:var(--muted);margin-bottom:7px}
+.ko-row{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center}
+.ko-t{font-size:.82rem;font-weight:600}.ko-t.l{text-align:left}.ko-t.r{text-align:right}
+.ko-t.w{color:var(--win);font-weight:800}
+.ko-sc{display:flex;gap:4px;align-items:center;justify-content:center}
+.ko-s{background:#1a2235;border:1px solid #2a3550;border-radius:4px;padding:4px 9px;font-weight:800;font-size:.95rem}
+.ko-s.w{background:var(--win-bg);border-color:#27ae60;color:var(--win)}
+.ko-sep{color:var(--muted);font-size:.72rem}
+.ko-win{font-size:.68rem;color:var(--win);margin-top:7px;text-align:center;
+  background:rgba(74,222,128,.08);border-radius:4px;padding:2px;display:flex;align-items:center;justify-content:center;gap:3px}
+.tie-note{font-size:.62rem;color:#f59e0b}
+.champ-sec{text-align:center;padding:28px 16px;
+  background:linear-gradient(135deg,#34d39911,#34d39922,#34d39911);
+  border:2px solid var(--accent);border-radius:14px;margin-top:20px}
+.champ-sec .tr{font-size:3.5rem;display:block;margin-bottom:10px;filter:drop-shadow(0 0 16px #34d39999)}
+.champ-sec h2{font-size:.85rem;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px}
+.champ-sec h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:900;
+  background:linear-gradient(90deg,var(--accent),#fff,var(--accent));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.champ-sec .mn{font-size:.72rem;color:var(--muted);margin-top:10px}
+.stand-wrap{margin-top:26px}
+.stand-title{font-size:.85rem;font-weight:700;color:var(--accent);margin-bottom:10px;text-transform:uppercase;letter-spacing:1px}
+.stand-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.sg{background:var(--card);border:1px solid #2a3550;border-radius:7px;overflow:hidden}
+.sg-h{background:#1a2235;padding:7px 11px;font-weight:700;font-size:.75rem;color:var(--accent);border-bottom:1px solid #2a3550}
+.sg-r{display:flex;align-items:center;gap:5px;padding:5px 11px;border-bottom:1px solid #2a355022;font-size:.74rem}
+.sg-r:last-child{border-bottom:none}
+.sg-p{width:14px;color:var(--muted);font-weight:700;font-size:.67rem}
+.sg-p.p1{color:var(--win)}.sg-p.p2{color:#60a5fa}.sg-p.p3{color:#f59e0b}
+.sg-n{flex:1;font-weight:600}
+.sg-pts{font-weight:800;color:var(--accent);font-size:.8rem}
+.prode-tip{background:#34d39911;border:1px solid #34d39944;border-radius:8px;
+  padding:14px 16px;margin-bottom:18px;font-size:.8rem;line-height:1.55}
+.prode-tip strong{color:var(--accent)}
+.st-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px;margin-bottom:14px}
+.st-card{background:var(--card);border:1px solid #2a3550;border-radius:10px;padding:16px 18px}
+.st-card h3{font-size:.8rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.st-card p,.st-card li{font-size:.78rem;line-height:1.55;color:var(--text)}
+.st-card ul{padding-left:18px}
+.st-card li{margin-bottom:6px}
+.st-card .big{font-size:1.6rem;font-weight:900;color:var(--accent)}
+.st-card .sub{font-size:.68rem;color:var(--muted)}
+table.sct{width:100%;border-collapse:collapse;font-size:.74rem;margin-top:4px}
+table.sct th{color:var(--muted);text-align:left;font-weight:600;padding:4px 6px;border-bottom:1px solid #2a3550}
+table.sct td{padding:4px 6px;border-bottom:1px solid #2a355033}
+table.sct td.v{color:var(--accent);font-weight:800;text-align:right}
+.cp-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.cp-n{width:110px;font-size:.74rem;font-weight:600}
+.cp-bar{flex:1;height:9px;background:#1a2235;border-radius:5px;overflow:hidden}
+.cp-fill{height:100%;background:linear-gradient(90deg,#34d399,#4ade80);border-radius:5px}
+.cp-v{width:48px;text-align:right;font-size:.72rem;font-weight:800;color:var(--accent)}
+.gp-pick{display:flex;justify-content:space-between;align-items:center;background:#1a2235;
+  border:1px solid #2a3550;border-radius:7px;padding:8px 12px;margin-bottom:7px}
+.gp-pick .gl{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.gp-pick .gn{font-size:.85rem;font-weight:800}
+.gp-pick .gpt{font-size:.72rem;color:var(--accent);font-weight:800}
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back-link">← Volver</a>
+
+<div class="hero">
+  <div style="position:relative">
+    <div class="scenario-badge">📈 Escenario EV Máximo · Prode Cocos</div>
+    <h1>⚽ PRODE MUNDIAL 2026</h1>
+    <div class="desc">Cada predicción maximiza los puntos esperados según el reglamento oficial (T&amp;C Cocos):
+    grupos 2+3 pts, eliminatorias con marcador (120') y clasificado independientes.
+    Modelo Poisson + Dixon-Coles sobre Valor de Tendencia y promedio de gol.</div>
+    <div class="champ-badge">
+      <span style="font-size:1.5rem">🏆</span>
+      <div><div class="ct">Campeón Predicho</div><div class="cn" id="hchamp">...</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="S('grupos')">Grupos</div>
+  <div class="tab" onclick="S('r32')">16avos</div>
+  <div class="tab" onclick="S('r16')">8vos</div>
+  <div class="tab" onclick="S('qf')">4tos</div>
+  <div class="tab" onclick="S('sf')">Semis &amp; Final</div>
+  <div class="tab" onclick="S('strat')">🎯 Estrategia</div>
+</div>
+
+<div id="pg-grupos" class="page active">
+  <div class="prode-tip"><strong>Fase de grupos (2 pts resultado + 3 pts exacto):</strong>
+  cada marcador elegido maximiza <em>2·P(resultado) + 3·P(exacto)</em> en la matriz de probabilidades del partido.
+  EV esperado de la fase: <strong>103.3 pts</strong>. Se pueden editar hasta 60' antes de cada partido.</div>
+  <div class="gf-wrap"><span>Grupo:</span><button class="gf-btn on" onclick="FG('ALL',this)">Todos</button></div>
+  <div class="grid" id="grd-grupos"></div>
+  <div class="stand-wrap"><div class="stand-title">📊 Clasificación por Grupo (según predicciones)</div>
+  <div class="stand-grid" id="grd-stand"></div></div>
+</div>
+<div id="pg-r32" class="page">
+  <div class="prode-tip"><strong>16avos (exacto 6 pts · clasificado 4 pts, independientes):</strong>
+  el marcador es a 120' — <em>el empate es válido</em> y suele ser el pick óptimo en cruces parejos.
+  ⚠️ Recargá estas predicciones cuando se confirmen los cruces reales al cierre de grupos.</div>
+  <div class="ko-sec"><div class="ko-title">⚡ 16avos de Final</div><div class="grid" id="grd-r32"></div></div>
+</div>
+<div id="pg-r16" class="page">
+  <div class="prode-tip"><strong>8vos (exacto 9 · clasificado 6):</strong> mismas reglas, más peso. Editá al conocer cruces.</div>
+  <div class="ko-sec"><div class="ko-title">⚡ 8vos de Final</div><div class="grid" id="grd-r16"></div></div>
+</div>
+<div id="pg-qf" class="page">
+  <div class="prode-tip"><strong>4tos (exacto 12 · clasificado 8):</strong> acá empieza el Corte 4 — ranking aparte desde cero.</div>
+  <div class="ko-sec"><div class="ko-title">🔥 Cuartos de Final</div><div class="grid" id="grd-qf"></div></div>
+</div>
+<div id="pg-sf" class="page">
+  <div class="prode-tip"><strong>Semis (16/11) · 3er puesto (19/13) · Final (22/15):</strong> los partidos que más pagan del prode.</div>
+  <div class="ko-sec"><div class="ko-title">🌟 Semifinales</div><div class="grid" id="grd-sf"></div></div>
+  <div class="ko-sec"><div class="ko-title">🥉 Tercer Puesto</div><div class="grid" id="grd-3rd"></div></div>
+  <div class="ko-sec"><div class="ko-title">🏆 Gran Final</div><div class="grid" id="grd-fin"></div></div>
+  <div class="champ-sec" id="champ-sec"></div>
+</div>
+
+<div id="pg-strat" class="page">
+  <div class="st-grid">
+    <div class="st-card">
+      <h3>🧮 El modelo</h3>
+      <p>Para cada partido se estiman goles esperados con un <strong>modelo Poisson</strong> ajustado por
+      <strong>Dixon-Coles</strong> (corrige la probabilidad de marcadores bajos y empates):
+      λ = avg_goles × e^(1.2·Δtendencia/100). De la matriz de marcadores sale la predicción que
+      <strong>maximiza puntos esperados con el reglamento exacto del prode</strong>, no la más "intuitiva".
+      En eliminatorias se modela el alargue (λ/3) y los penales para separar marcador (120') de clasificado.</p>
+    </div>
+    <div class="st-card">
+      <h3>📈 Puntos esperados por corte</h3>
+      <table class="sct">
+        <tr><th>Corte</th><th>Rondas</th><th style="text-align:right">EV</th></tr>
+        <tr><td>Corte 1</td><td>Fase de grupos (72 partidos)</td><td class="v">103.3 pts</td></tr>
+        <tr><td>Corte 2</td><td>16avos + 8vos</td><td class="v">93.0 pts</td></tr>
+        <tr><td>Corte 4</td><td>4tos → Final</td><td class="v">59.8 pts</td></tr>
+        <tr><td>Total partidos</td><td>+ campeón 25 × 27.1%</td><td class="v">262.9 pts</td></tr>
+      </table>
+      <p class="sub" style="margin-top:8px">EV de eliminatorias condicionado a que se den los cruces del escenario;
+      al recargar ronda a ronda con los cruces reales el EV se mantiene o mejora.</p>
+    </div>
+    <div class="st-card">
+      <h3>🏆 P(campeón) — 4000 simulaciones Monte Carlo</h3>
+      <div class="cp-row"><span class="cp-n">España</span>
+    <div class="cp-bar"><div class="cp-fill" style="width:90%"></div></div>
+    <span class="cp-v">27.1%</span></div><div class="cp-row"><span class="cp-n">Japón</span>
+    <div class="cp-bar"><div class="cp-fill" style="width:64%"></div></div>
+    <span class="cp-v">19.3%</span></div><div class="cp-row"><span class="cp-n">Argentina</span>
+    <div class="cp-bar"><div class="cp-fill" style="width:36%"></div></div>
+    <span class="cp-v">10.9%</span></div><div class="cp-row"><span class="cp-n">Portugal</span>
+    <div class="cp-bar"><div class="cp-fill" style="width:30%"></div></div>
+    <span class="cp-v">9.0%</span></div><div class="cp-row"><span class="cp-n">Alemania</span>
+    <div class="cp-bar"><div class="cp-fill" style="width:20%"></div></div>
+    <span class="cp-v">5.9%</span></div><div class="cp-row"><span class="cp-n">Marruecos</span>
+    <div class="cp-bar"><div class="cp-fill" style="width:16%"></div></div>
+    <span class="cp-v">4.7%</span></div><div class="cp-row"><span class="cp-n">México</span>
+    <div class="cp-bar"><div class="cp-fill" style="width:14%"></div></div>
+    <span class="cp-v">4.3%</span></div><div class="cp-row"><span class="cp-n">Brasil</span>
+    <div class="cp-bar"><div class="cp-fill" style="width:11%"></div></div>
+    <span class="cp-v">3.4%</span></div>
+    </div>
+    <div class="st-card">
+      <h3>⭐ Picks globales (cierran antes del 1er partido)</h3>
+      <div class="gp-pick"><div><div class="gl">Campeón · 25 pts</div><div class="gn">España</div></div><div class="gpt">27.1% prob.</div></div>
+      <div class="gp-pick"><div><div class="gl">Goleador · 30 pts</div><div class="gn">Julián Álvarez 🇦🇷</div></div><div class="gpt">finalista predicho</div></div>
+      <div class="gp-pick"><div><div class="gl">MVP · 35 pts</div><div class="gn">Lamine Yamal 🇪🇸</div></div><div class="gpt">campeón predicho</div></div>
+      <p class="sub">Goleador/MVP correlacionados con los equipos de mayor recorrido del modelo (Argentina y España
+      llegan a la final). Alternativas de cobertura: Mbappé (goleador), Vinícius (MVP).</p>
+    </div>
+    <div class="st-card" style="grid-column:1/-1">
+      <h3>🧠 Reglas de oro para maximizar el prode</h3>
+      <ul>
+        <li><strong>Nunca dejes el bracket pre-armado en eliminatorias:</strong> las tandas se habilitan al cierre de cada fase — recargá con los cruces reales y recalculá. Este escenario es tu mapa base.</li>
+        <li><strong>En KO el empate a 120' es un pick válido y muchas veces óptimo:</strong> el marcador y el clasificado puntúan por separado. En cruces parejos conviene 1-1 + clasificado favorito.</li>
+        <li><strong>Marcadores 2-1, 2-0 y 1-0 concentran la probabilidad:</strong> evitá goleadas (4-0, 5-1): casi nunca maximizan EV aunque el favorito sea muy superior.</li>
+        <li><strong>El desempate del ranking premia la cercanía de goles:</strong> predicciones moderadas (cerca del marcador esperado) también optimizan el criterio de desempate.</li>
+        <li><strong>Los cortes 2 y 4 arrancan de cero:</strong> aunque te vaya mal en grupos, seguís compitiendo por $6M en cada corte. No abandones picks.</li>
+        <li><strong>Editá hasta 60' antes:</strong> ante lesiones, suspensiones o equipos ya clasificados que rotan (jornada 3 de grupos), bajá la confianza al favorito.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+const D={"teams": {"México": {"group": "A", "conf": "CONCACAF", "tend": 80.0, "avg": 2.1}, "Rep. Checa": {"group": "A", "conf": "UEFA", "tend": 66.67, "avg": 1.7}, "Corea del Sur": {"group": "A", "conf": "AFC", "tend": 70.0, "avg": 1.8}, "Sudáfrica": {"group": "A", "conf": "CAF", "tend": 61.67, "avg": 1.4}, "Bosnia y Herz.": {"group": "B", "conf": "UEFA", "tend": 56.67, "avg": 1.5}, "Canadá": {"group": "B", "conf": "CONCACAF", "tend": 71.67, "avg": 1.9}, "Catar": {"group": "B", "conf": "AFC", "tend": 48.33, "avg": 1.3}, "Suiza": {"group": "B", "conf": "UEFA", "tend": 70.0, "avg": 1.8}, "Brasil": {"group": "C", "conf": "CONMEBOL", "tend": 75.0, "avg": 2.3}, "Haití": {"group": "C", "conf": "CONCACAF", "tend": 45.0, "avg": 1.2}, "Marruecos": {"group": "C", "conf": "CAF", "tend": 85.0, "avg": 2.0}, "Escocia": {"group": "C", "conf": "UEFA", "tend": 61.67, "avg": 1.6}, "Australia": {"group": "D", "conf": "AFC", "tend": 56.67, "avg": 1.5}, "Paraguay": {"group": "D", "conf": "CONMEBOL", "tend": 61.67, "avg": 1.5}, "Turquía": {"group": "D", "conf": "UEFA", "tend": 66.67, "avg": 1.8}, "Estados Unidos": {"group": "D", "conf": "CONCACAF", "tend": 71.67, "avg": 2.0}, "Curazao": {"group": "E", "conf": "CONCACAF", "tend": 46.67, "avg": 1.3}, "Ecuador": {"group": "E", "conf": "CONMEBOL", "tend": 63.33, "avg": 1.6}, "Alemania": {"group": "E", "conf": "UEFA", "tend": 78.33, "avg": 2.4}, "Costa de Marfil": {"group": "E", "conf": "CAF", "tend": 65.0, "avg": 1.7}, "Japón": {"group": "F", "conf": "AFC", "tend": 86.67, "avg": 2.8}, "Países Bajos": {"group": "F", "conf": "UEFA", "tend": 70.0, "avg": 2.0}, "Suecia": {"group": "F", "conf": "UEFA", "tend": 61.67, "avg": 1.7}, "Túnez": {"group": "F", "conf": "CAF", "tend": 60.0, "avg": 1.4}, "Bélgica": {"group": "G", "conf": "UEFA", "tend": 65.0, "avg": 1.9}, "Egipto": {"group": "G", "conf": "CAF", "tend": 66.67, "avg": 1.5}, "Irán": {"group": "G", "conf": "AFC", "tend": 75.0, "avg": 2.0}, "Nueva Zelanda": {"group": "G", "conf": "OFC", "tend": 45.0, "avg": 1.2}, "Cabo Verde": {"group": "H", "conf": "CAF", "tend": 65.0, "avg": 1.6}, "Arabia Saudita": {"group": "H", "conf": "AFC", "tend": 61.67, "avg": 1.5}, "España": {"group": "H", "conf": "UEFA", "tend": 88.33, "avg": 2.9}, "Uruguay": {"group": "H", "conf": "CONMEBOL", "tend": 70.0, "avg": 1.7}, "Francia": {"group": "I", "conf": "UEFA", "tend": 73.33, "avg": 2.1}, "Irak": {"group": "I", "conf": "AFC", "tend": 61.67, "avg": 1.6}, "Noruega": {"group": "I", "conf": "UEFA", "tend": 70.0, "avg": 2.2}, "Senegal": {"group": "I", "conf": "CAF", "tend": 70.0, "avg": 1.8}, "Argelia": {"group": "J", "conf": "CAF", "tend": 68.33, "avg": 1.7}, "Argentina": {"group": "J", "conf": "CONMEBOL", "tend": 83.33, "avg": 2.5}, "Austria": {"group": "J", "conf": "UEFA", "tend": 70.0, "avg": 2.1}, "Jordania": {"group": "J", "conf": "AFC", "tend": 55.0, "avg": 1.4}, "Colombia": {"group": "K", "conf": "CONMEBOL", "tend": 75.0, "avg": 2.0}, "RD Congo": {"group": "K", "conf": "CAF", "tend": 65.0, "avg": 1.5}, "Portugal": {"group": "K", "conf": "UEFA", "tend": 78.33, "avg": 2.6}, "Uzbekistán": {"group": "K", "conf": "AFC", "tend": 61.67, "avg": 1.6}, "Croacia": {"group": "L", "conf": "UEFA", "tend": 61.67, "avg": 1.5}, "Inglaterra": {"group": "L", "conf": "UEFA", "tend": 70.0, "avg": 2.0}, "Ghana": {"group": "L", "conf": "CAF", "tend": 56.67, "avg": 1.5}, "Panamá": {"group": "L", "conf": "CONCACAF", "tend": 55.0, "avg": 1.4}}, "group_matches": [{"group": "A", "md": 1, "local": "México", "visit": "Rep. Checa", "gl": 2, "gv": 1, "gan": "México", "ev": 1.44, "pp": 59, "pe": 9}, {"group": "A", "md": 1, "local": "Corea del Sur", "visit": "Sudáfrica", "gl": 2, "gv": 1, "gan": "Corea del Sur", "ev": 1.35, "pp": 53, "pe": 10}, {"group": "A", "md": 2, "local": "México", "visit": "Corea del Sur", "gl": 2, "gv": 1, "gan": "México", "ev": 1.33, "pp": 54, "pe": 8}, {"group": "A", "md": 2, "local": "Rep. Checa", "visit": "Sudáfrica", "gl": 2, "gv": 1, "gan": "Rep. Checa", "ev": 1.23, "pp": 48, "pe": 9}, {"group": "A", "md": 3, "local": "México", "visit": "Sudáfrica", "gl": 2, "gv": 1, "gan": "México", "ev": 1.64, "pp": 68, "pe": 9}, {"group": "A", "md": 3, "local": "Rep. Checa", "visit": "Corea del Sur", "gl": 1, "gv": 2, "gan": "Corea del Sur", "ev": 1.11, "pp": 43, "pe": 9}, {"group": "B", "md": 1, "local": "Bosnia y Herz.", "visit": "Canadá", "gl": 1, "gv": 2, "gan": "Canadá", "ev": 1.47, "pp": 59, "pe": 10}, {"group": "B", "md": 1, "local": "Catar", "visit": "Suiza", "gl": 1, "gv": 2, "gan": "Suiza", "ev": 1.61, "pp": 66, "pe": 10}, {"group": "B", "md": 2, "local": "Bosnia y Herz.", "visit": "Catar", "gl": 2, "gv": 1, "gan": "Bosnia y Herz.", "ev": 1.23, "pp": 47, "pe": 10}, {"group": "B", "md": 2, "local": "Canadá", "visit": "Suiza", "gl": 2, "gv": 1, "gan": "Canadá", "ev": 1.08, "pp": 42, "pe": 8}, {"group": "B", "md": 3, "local": "Bosnia y Herz.", "visit": "Suiza", "gl": 1, "gv": 2, "gan": "Suiza", "ev": 1.4, "pp": 55, "pe": 10}, {"group": "B", "md": 3, "local": "Canadá", "visit": "Catar", "gl": 2, "gv": 0, "gan": "Canadá", "ev": 1.68, "pp": 70, "pe": 10}, {"group": "C", "md": 1, "local": "Brasil", "visit": "Haití", "gl": 3, "gv": 0, "gan": "Brasil", "ev": 1.95, "pp": 83, "pe": 10}, {"group": "C", "md": 1, "local": "Marruecos", "visit": "Escocia", "gl": 2, "gv": 1, "gan": "Marruecos", "ev": 1.61, "pp": 67, "pe": 9}, {"group": "C", "md": 2, "local": "Brasil", "visit": "Marruecos", "gl": 1, "gv": 2, "gan": "Marruecos", "ev": 1.08, "pp": 43, "pe": 7}, {"group": "C", "md": 2, "local": "Haití", "visit": "Escocia", "gl": 0, "gv": 2, "gan": "Escocia", "ev": 1.48, "pp": 59, "pe": 10}, {"group": "C", "md": 3, "local": "Brasil", "visit": "Escocia", "gl": 2, "gv": 1, "gan": "Brasil", "ev": 1.55, "pp": 65, "pe": 9}, {"group": "C", "md": 3, "local": "Haití", "visit": "Marruecos", "gl": 0, "gv": 3, "gan": "Marruecos", "ev": 2.0, "pp": 84, "pe": 11}, {"group": "D", "md": 1, "local": "Australia", "visit": "Paraguay", "gl": 1, "gv": 2, "gan": "Paraguay", "ev": 1.07, "pp": 40, "pe": 9}, {"group": "D", "md": 1, "local": "Turquía", "visit": "Estados Unidos", "gl": 1, "gv": 2, "gan": "Estados Unidos", "ev": 1.19, "pp": 47, "pe": 8}, {"group": "D", "md": 2, "local": "Australia", "visit": "Turquía", "gl": 1, "gv": 2, "gan": "Turquía", "ev": 1.33, "pp": 52, "pe": 10}, {"group": "D", "md": 2, "local": "Paraguay", "visit": "Estados Unidos", "gl": 1, "gv": 2, "gan": "Estados Unidos", "ev": 1.43, "pp": 57, "pe": 9}, {"group": "D", "md": 3, "local": "Australia", "visit": "Estados Unidos", "gl": 1, "gv": 2, "gan": "Estados Unidos", "ev": 1.51, "pp": 62, "pe": 9}, {"group": "D", "md": 3, "local": "Paraguay", "visit": "Turquía", "gl": 1, "gv": 2, "gan": "Turquía", "ev": 1.24, "pp": 48, "pe": 9}, {"group": "E", "md": 1, "local": "Curazao", "visit": "Ecuador", "gl": 1, "gv": 2, "gan": "Ecuador", "ev": 1.43, "pp": 57, "pe": 10}, {"group": "E", "md": 1, "local": "Alemania", "visit": "Costa de Marfil", "gl": 2, "gv": 1, "gan": "Alemania", "ev": 1.55, "pp": 65, "pe": 8}, {"group": "E", "md": 2, "local": "Curazao", "visit": "Alemania", "gl": 0, "gv": 3, "gan": "Alemania", "ev": 1.96, "pp": 85, "pe": 9}, {"group": "E", "md": 2, "local": "Ecuador", "visit": "Costa de Marfil", "gl": 1, "gv": 2, "gan": "Costa de Marfil", "ev": 1.07, "pp": 41, "pe": 9}, {"group": "E", "md": 3, "local": "Curazao", "visit": "Costa de Marfil", "gl": 1, "gv": 2, "gan": "Costa de Marfil", "ev": 1.51, "pp": 61, "pe": 10}, {"group": "E", "md": 3, "local": "Ecuador", "visit": "Alemania", "gl": 1, "gv": 2, "gan": "Alemania", "ev": 1.61, "pp": 68, "pe": 8}, {"group": "F", "md": 1, "local": "Japón", "visit": "Países Bajos", "gl": 3, "gv": 1, "gan": "Japón", "ev": 1.63, "pp": 71, "pe": 7}, {"group": "F", "md": 1, "local": "Suecia", "visit": "Túnez", "gl": 2, "gv": 1, "gan": "Suecia", "ev": 1.17, "pp": 45, "pe": 9}, {"group": "F", "md": 2, "local": "Japón", "visit": "Suecia", "gl": 3, "gv": 1, "gan": "Japón", "ev": 1.85, "pp": 82, "pe": 7}, {"group": "F", "md": 2, "local": "Países Bajos", "visit": "Túnez", "gl": 2, "gv": 1, "gan": "Países Bajos", "ev": 1.47, "pp": 59, "pe": 10}, {"group": "F", "md": 3, "local": "Japón", "visit": "Túnez", "gl": 3, "gv": 1, "gan": "Japón", "ev": 1.94, "pp": 86, "pe": 7}, {"group": "F", "md": 3, "local": "Países Bajos", "visit": "Suecia", "gl": 2, "gv": 1, "gan": "Países Bajos", "ev": 1.3, "pp": 52, "pe": 9}, {"group": "G", "md": 1, "local": "Bélgica", "visit": "Egipto", "gl": 2, "gv": 1, "gan": "Bélgica", "ev": 1.16, "pp": 44, "pe": 9}, {"group": "G", "md": 1, "local": "Irán", "visit": "Nueva Zelanda", "gl": 2, "gv": 0, "gan": "Irán", "ev": 1.87, "pp": 78, "pe": 10}, {"group": "G", "md": 2, "local": "Bélgica", "visit": "Irán", "gl": 1, "gv": 2, "gan": "Irán", "ev": 1.25, "pp": 50, "pe": 8}, {"group": "G", "md": 2, "local": "Egipto", "visit": "Nueva Zelanda", "gl": 2, "gv": 0, "gan": "Egipto", "ev": 1.52, "pp": 60, "pe": 11}, {"group": "G", "md": 3, "local": "Bélgica", "visit": "Nueva Zelanda", "gl": 2, "gv": 0, "gan": "Bélgica", "ev": 1.68, "pp": 69, "pe": 10}, {"group": "G", "md": 3, "local": "Egipto", "visit": "Irán", "gl": 1, "gv": 2, "gan": "Irán", "ev": 1.39, "pp": 56, "pe": 9}, {"group": "H", "md": 1, "local": "Cabo Verde", "visit": "Arabia Saudita", "gl": 2, "gv": 1, "gan": "Cabo Verde", "ev": 1.1, "pp": 42, "pe": 9}, {"group": "H", "md": 1, "local": "España", "visit": "Uruguay", "gl": 3, "gv": 1, "gan": "España", "ev": 1.78, "pp": 78, "pe": 7}, {"group": "H", "md": 2, "local": "Cabo Verde", "visit": "España", "gl": 1, "gv": 3, "gan": "España", "ev": 1.88, "pp": 83, "pe": 7}, {"group": "H", "md": 2, "local": "Arabia Saudita", "visit": "Uruguay", "gl": 1, "gv": 2, "gan": "Uruguay", "ev": 1.25, "pp": 48, "pe": 9}, {"group": "H", "md": 3, "local": "Cabo Verde", "visit": "Uruguay", "gl": 1, "gv": 2, "gan": "Uruguay", "ev": 1.14, "pp": 44, "pe": 9}, {"group": "H", "md": 3, "local": "Arabia Saudita", "visit": "España", "gl": 1, "gv": 3, "gan": "España", "ev": 1.94, "pp": 86, "pe": 7}, {"group": "I", "md": 1, "local": "Francia", "visit": "Irak", "gl": 2, "gv": 1, "gan": "Francia", "ev": 1.45, "pp": 59, "pe": 9}, {"group": "I", "md": 1, "local": "Noruega", "visit": "Senegal", "gl": 2, "gv": 1, "gan": "Noruega", "ev": 1.17, "pp": 47, "pe": 8}, {"group": "I", "md": 2, "local": "Francia", "visit": "Noruega", "gl": 2, "gv": 1, "gan": "Francia", "ev": 1.02, "pp": 41, "pe": 7}, {"group": "I", "md": 2, "local": "Irak", "visit": "Senegal", "gl": 1, "gv": 2, "gan": "Senegal", "ev": 1.26, "pp": 49, "pe": 9}, {"group": "I", "md": 3, "local": "Francia", "visit": "Senegal", "gl": 2, "gv": 1, "gan": "Francia", "ev": 1.2, "pp": 48, "pe": 8}, {"group": "I", "md": 3, "local": "Irak", "visit": "Noruega", "gl": 1, "gv": 2, "gan": "Noruega", "ev": 1.43, "pp": 58, "pe": 9}, {"group": "J", "md": 1, "local": "Argelia", "visit": "Argentina", "gl": 1, "gv": 2, "gan": "Argentina", "ev": 1.6, "pp": 69, "pe": 8}, {"group": "J", "md": 1, "local": "Austria", "visit": "Jordania", "gl": 2, "gv": 1, "gan": "Austria", "ev": 1.59, "pp": 66, "pe": 9}, {"group": "J", "md": 2, "local": "Argelia", "visit": "Austria", "gl": 1, "gv": 2, "gan": "Austria", "ev": 1.21, "pp": 48, "pe": 8}, {"group": "J", "md": 2, "local": "Argentina", "visit": "Jordania", "gl": 3, "gv": 0, "gan": "Argentina", "ev": 1.9, "pp": 83, "pe": 8}, {"group": "J", "md": 3, "local": "Argelia", "visit": "Jordania", "gl": 2, "gv": 1, "gan": "Argelia", "ev": 1.39, "pp": 55, "pe": 10}, {"group": "J", "md": 3, "local": "Argentina", "visit": "Austria", "gl": 2, "gv": 1, "gan": "Argentina", "ev": 1.42, "pp": 61, "pe": 7}, {"group": "K", "md": 1, "local": "Colombia", "visit": "RD Congo", "gl": 2, "gv": 1, "gan": "Colombia", "ev": 1.43, "pp": 57, "pe": 9}, {"group": "K", "md": 1, "local": "Portugal", "visit": "Uzbekistán", "gl": 3, "gv": 1, "gan": "Portugal", "ev": 1.7, "pp": 73, "pe": 8}, {"group": "K", "md": 2, "local": "Colombia", "visit": "Portugal", "gl": 1, "gv": 2, "gan": "Portugal", "ev": 1.29, "pp": 54, "pe": 7}, {"group": "K", "md": 2, "local": "RD Congo", "visit": "Uzbekistán", "gl": 2, "gv": 1, "gan": "RD Congo", "ev": 1.0, "pp": 37, "pe": 8}, {"group": "K", "md": 3, "local": "Colombia", "visit": "Uzbekistán", "gl": 2, "gv": 1, "gan": "Colombia", "ev": 1.44, "pp": 58, "pe": 9}, {"group": "K", "md": 3, "local": "RD Congo", "visit": "Portugal", "gl": 1, "gv": 3, "gan": "Portugal", "ev": 1.68, "pp": 72, "pe": 8}, {"group": "L", "md": 1, "local": "Croacia", "visit": "Inglaterra", "gl": 1, "gv": 2, "gan": "Inglaterra", "ev": 1.39, "pp": 56, "pe": 9}, {"group": "L", "md": 1, "local": "Ghana", "visit": "Panamá", "gl": 2, "gv": 1, "gan": "Ghana", "ev": 1.06, "pp": 40, "pe": 9}, {"group": "L", "md": 2, "local": "Croacia", "visit": "Ghana", "gl": 2, "gv": 1, "gan": "Croacia", "ev": 1.07, "pp": 40, "pe": 9}, {"group": "L", "md": 2, "local": "Inglaterra", "visit": "Panamá", "gl": 2, "gv": 1, "gan": "Inglaterra", "ev": 1.55, "pp": 63, "pe": 9}, {"group": "L", "md": 3, "local": "Croacia", "visit": "Panamá", "gl": 2, "gv": 1, "gan": "Croacia", "ev": 1.15, "pp": 44, "pe": 9}, {"group": "L", "md": 3, "local": "Ghana", "visit": "Inglaterra", "gl": 1, "gv": 2, "gan": "Inglaterra", "ev": 1.48, "pp": 60, "pe": 9}], "r32": [{"match": "M73", "local": "Corea del Sur", "visit": "Suiza", "gl": 1, "gv": 2, "gan": "Corea del Sur", "ev": 2.59, "pp": 50, "pe": 10}, {"match": "M74", "local": "Alemania", "visit": "Ecuador", "gl": 2, "gv": 1, "gan": "Alemania", "ev": 3.78, "pp": 80, "pe": 10}, {"match": "M75", "local": "Japón", "visit": "Brasil", "gl": 3, "gv": 2, "gan": "Japón", "ev": 3.32, "pp": 72, "pe": 7}, {"match": "M76", "local": "Marruecos", "visit": "Países Bajos", "gl": 2, "gv": 1, "gan": "Marruecos", "ev": 3.22, "pp": 66, "pe": 10}, {"match": "M77", "local": "Francia", "visit": "Rep. Checa", "gl": 2, "gv": 1, "gan": "Francia", "ev": 3.25, "pp": 65, "pe": 11}, {"match": "M78", "local": "Costa de Marfil", "visit": "Noruega", "gl": 1, "gv": 2, "gan": "Noruega", "ev": 3.25, "pp": 66, "pe": 10}, {"match": "M79", "local": "México", "visit": "Escocia", "gl": 2, "gv": 1, "gan": "México", "ev": 3.75, "pp": 78, "pe": 11}, {"match": "M80", "local": "Inglaterra", "visit": "Ghana", "gl": 2, "gv": 1, "gan": "Inglaterra", "ev": 3.64, "pp": 73, "pe": 12}, {"match": "M81", "local": "Estados Unidos", "visit": "Egipto", "gl": 2, "gv": 1, "gan": "Estados Unidos", "ev": 3.34, "pp": 66, "pe": 12}, {"match": "M82", "local": "Irán", "visit": "Argelia", "gl": 2, "gv": 1, "gan": "Irán", "ev": 3.18, "pp": 63, "pe": 11}, {"match": "M83", "local": "Colombia", "visit": "Croacia", "gl": 2, "gv": 1, "gan": "Colombia", "ev": 3.64, "pp": 73, "pe": 12}, {"match": "M84", "local": "España", "visit": "Austria", "gl": 3, "gv": 1, "gan": "España", "ev": 3.71, "pp": 82, "pe": 7}, {"match": "M85", "local": "Canadá", "visit": "Senegal", "gl": 2, "gv": 1, "gan": "Canadá", "ev": 2.76, "pp": 54, "pe": 10}, {"match": "M86", "local": "Argentina", "visit": "Uruguay", "gl": 2, "gv": 1, "gan": "Argentina", "ev": 3.69, "pp": 78, "pe": 9}, {"match": "M87", "local": "Portugal", "visit": "Paraguay", "gl": 2, "gv": 1, "gan": "Portugal", "ev": 3.94, "pp": 85, "pe": 9}, {"match": "M88", "local": "Turquía", "visit": "Bélgica", "gl": 1, "gv": 2, "gan": "Bélgica", "ev": 2.61, "pp": 51, "pe": 10}], "r16": [{"match": "M89", "local": "Alemania", "visit": "Francia", "gl": 2, "gv": 1, "gan": "Alemania", "ev": 4.43, "pp": 62, "pe": 8}, {"match": "M90", "local": "Corea del Sur", "visit": "Japón", "gl": 1, "gv": 3, "gan": "Japón", "ev": 5.73, "pp": 84, "pe": 8}, {"match": "M91", "local": "Marruecos", "visit": "Noruega", "gl": 2, "gv": 1, "gan": "Marruecos", "ev": 4.54, "pp": 62, "pe": 9}, {"match": "M92", "local": "México", "visit": "Inglaterra", "gl": 2, "gv": 1, "gan": "México", "ev": 4.62, "pp": 63, "pe": 10}, {"match": "M93", "local": "Colombia", "visit": "España", "gl": 1, "gv": 3, "gan": "España", "ev": 5.43, "pp": 80, "pe": 7}, {"match": "M94", "local": "Estados Unidos", "visit": "Irán", "gl": 1, "gv": 2, "gan": "Irán", "ev": 4.04, "pp": 54, "pe": 9}, {"match": "M95", "local": "Argentina", "visit": "Bélgica", "gl": 2, "gv": 1, "gan": "Argentina", "ev": 5.52, "pp": 79, "pe": 8}, {"match": "M96", "local": "Canadá", "visit": "Portugal", "gl": 1, "gv": 2, "gan": "Portugal", "ev": 5.0, "pp": 71, "pe": 8}], "qf": [{"match": "M97", "local": "Alemania", "visit": "Japón", "gl": 2, "gv": 3, "gan": "Japón", "ev": 6.23, "pp": 67, "pe": 7}, {"match": "M98", "local": "España", "visit": "Irán", "gl": 3, "gv": 1, "gan": "España", "ev": 7.24, "pp": 80, "pe": 7}, {"match": "M99", "local": "Marruecos", "visit": "México", "gl": 2, "gv": 1, "gan": "Marruecos", "ev": 5.33, "pp": 53, "pe": 9}, {"match": "M100", "local": "Argentina", "visit": "Portugal", "gl": 3, "gv": 2, "gan": "Argentina", "ev": 5.16, "pp": 54, "pe": 7}], "sf": [{"label": "Semifinal", "match": "M101", "local": "Japón", "visit": "España", "gl": 2, "gv": 3, "gan": "España", "ev": 6.95, "pp": 54, "pe": 6}, {"label": "Semifinal", "match": "M102", "local": "Marruecos", "visit": "Argentina", "gl": 1, "gv": 2, "gan": "Argentina", "ev": 7.71, "pp": 58, "pe": 8}, {"match": "M103", "label": "3er Puesto", "local": "Japón", "visit": "Marruecos", "gl": 3, "gv": 2, "gan": "Japón", "ev": 10.16, "pp": 67, "pe": 8}, {"match": "M104", "label": "🏆 FINAL", "local": "España", "visit": "Argentina", "gl": 3, "gv": 2, "gan": "España", "ev": 11.04, "pp": 63, "pe": 7}], "champion": "España"};
+function S(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('pg-'+id).classList.add('active');
+  const map={grupos:0,r32:1,r16:2,qf:3,sf:4,strat:5};
+  document.querySelectorAll('.tab')[map[id]].classList.add('active');
+}
+function tend(n){return D.teams[n]?.tend??50;}
+function conf(n){return D.teams[n]?.conf??'';}
+
+function koCard(m,cls){
+  const wL=m.gan===m.local,wV=m.gan===m.visit,draw=m.gl===m.gv;
+  return `<div class="ko-card ${cls}">
+    <div class="ko-mid">${m.match||''}</div>
+    <div class="ko-row">
+      <div class="ko-t l ${wL?'w':''}">${m.local||'?'}</div>
+      <div class="ko-sc">
+        <span class="ko-s ${wL&&!draw?'w':''}">${m.gl}</span>
+        <span class="ko-sep">-</span>
+        <span class="ko-s ${wV&&!draw?'w':''}">${m.gv}</span>
+      </div>
+      <div class="ko-t r ${wV?'w':''}">${m.visit||'?'}</div>
+    </div>
+    <div class="ko-win">✅ Clasifica: ${m.gan||'?'}
+      ${draw?'<span class="tie-note"> ★ empate 120′, define por penales</span>':''}
+    </div>
+    <div class="ev-row"><span>P clasif. ${m.pp}% · P exacto ${m.pe}%</span><b>EV ${m.ev} pts</b></div>
+  </div>`;
+}
+
+function renderGroups(){
+  const grd=document.getElementById('grd-grupos');
+  const gfw=document.querySelector('.gf-wrap');
+  const groups=[...new Set(D.group_matches.map(m=>m.group))].sort();
+  groups.forEach(g=>{
+    const b=document.createElement('button');
+    b.className='gf-btn';b.textContent='Grupo '+g;
+    b.onclick=()=>FG(g,b);gfw.appendChild(b);
+  });
+  D.group_matches.forEach(m=>{
+    const wL=m.gan===m.local,wV=m.gan===m.visit,isDraw=!wL&&!wV;
+    const cL=conf(m.local),cV=conf(m.visit);
+    const d=document.createElement('div');
+    d.className='card';d.dataset.g=m.group;
+    d.innerHTML=`<div class="card-meta"><span class="grp-tag">Grupo ${m.group}</span><span>Jornada ${m.md}</span></div>
+      <div class="teams-row">
+        <div class="team-l"><div class="tn ${wL?'w':''}">${m.local}</div>
+          <div class="tc"><span class="conf-b ${cL}">${cL}</span> ${tend(m.local).toFixed(1)}</div></div>
+        <div class="sc-box">
+          <div class="sc ${wL?'w':''}">${m.gl}</div>
+          <div class="sc-sep">-</div>
+          <div class="sc ${wV?'w':''}">${m.gv}</div>
+        </div>
+        <div class="team-r"><div class="tn ${wV?'w':''}">${m.visit}</div>
+          <div class="tc">${tend(m.visit).toFixed(1)} <span class="conf-b ${cV}">${cV}</span></div></div>
+      </div>
+      <div class="win-row">${isDraw?'🤝 Empate':'✅ '+m.gan}</div>
+      <div class="ev-row"><span>P result. ${m.pp}% · P exacto ${m.pe}%</span><b>EV ${m.ev} pts</b></div>`;
+    grd.appendChild(d);
+  });
+  renderStandings();
+}
+
+function FG(g,btn){
+  document.querySelectorAll('.gf-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('#grd-grupos .card').forEach(c=>{
+    c.style.display=(g==='ALL'||c.dataset.g===g)?'':'none';
+  });
+}
+
+function renderStandings(){
+  const grid=document.getElementById('grd-stand');
+  const groups=[...new Set(D.group_matches.map(m=>m.group))].sort();
+  const pts={};
+  D.group_matches.forEach(m=>{
+    [m.local,m.visit].forEach(t=>{if(!pts[t])pts[t]={pts:0,gf:0,ga:0};});
+    if(m.gl>m.gv)pts[m.local].pts+=3;
+    else if(m.gv>m.gl)pts[m.visit].pts+=3;
+    else{pts[m.local].pts+=1;pts[m.visit].pts+=1;}
+    pts[m.local].gf+=m.gl;pts[m.local].ga+=m.gv;
+    pts[m.visit].gf+=m.gv;pts[m.visit].ga+=m.gl;
+  });
+  groups.forEach(g=>{
+    const ts=Object.keys(pts).filter(t=>D.teams[t]?.group===g)
+      .sort((a,b)=>pts[b].pts!==pts[a].pts?pts[b].pts-pts[a].pts:
+        ((pts[b].gf-pts[b].ga)!==(pts[a].gf-pts[a].ga)?(pts[b].gf-pts[b].ga)-(pts[a].gf-pts[a].ga):tend(b)-tend(a)));
+    const div=document.createElement('div');div.className='sg';
+    div.innerHTML=`<div class="sg-h">Grupo ${g}</div>`+
+      ts.map((t,i)=>`<div class="sg-r"><span class="sg-p ${['p1','p2','p3',''][i]}">${i+1}</span>
+        <span class="sg-n">${t}</span><span class="sg-pts">${pts[t]?.pts??0}pts</span></div>`).join('');
+    grid.appendChild(div);
+  });
+}
+
+function renderKO(matches,gridId,cls){
+  const g=document.getElementById(gridId);
+  matches.forEach(m=>{g.innerHTML+=koCard(m,cls);});
+}
+
+function renderChampion(){
+  document.getElementById('hchamp').textContent=D.champion;
+  document.getElementById('champ-sec').innerHTML=
+    `<span class="tr">🏆</span><h2>Campeón del Mundo Predicho</h2><h1>${D.champion}</h1>
+     <div class="mn">Pick global de campeón: 25 pts · probabilidad estimada 27.1% (líder del Monte Carlo)</div>`;
+}
+
+renderGroups();
+renderKO(D.r32,'grd-r32','');
+renderKO(D.r16,'grd-r16','');
+renderKO(D.qf,'grd-qf','');
+renderKO(D.sf.filter(m=>m.label==='Semifinal'),'grd-sf','');
+renderKO(D.sf.filter(m=>m.label==='3er Puesto'),'grd-3rd','trd');
+renderKO(D.sf.filter(m=>m.label&&m.label.includes('FINAL')),'grd-fin','fin');
+renderChampion();
+</script>
+</body>
+</html>

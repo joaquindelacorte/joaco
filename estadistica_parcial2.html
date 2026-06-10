@@ -68,6 +68,25 @@ ul,ol{padding-left:22px; margin:6px 0}
 .badge.normal{background:#1a1a3e; color:#818cf8}
 .badge.tcl{background:#1e3a5f; color:#38bdf8}
 .badge.ic{background:#0f2a1e; color:#34d399}
+.badge.repaso{background:#1a1335; color:#a78bfa}
+
+/* ── Flashcards ── */
+.flashcard-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:14px 0}
+.flashcard{perspective:600px;height:130px;cursor:pointer}
+.flashcard-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .45s ease}
+.flashcard.flipped .flashcard-inner{transform:rotateY(180deg)}
+.flashcard-front,.flashcard-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.flashcard-front{background:var(--panel2);border:1px solid var(--border);color:var(--muted);font-size:12px}
+.flashcard-front .fc-q{font-size:13.5px;color:var(--text);font-weight:600;margin-bottom:6px}
+.flashcard-back{background:#0b1220;border:2px solid var(--accent2);transform:rotateY(180deg);color:var(--text);font-size:13px}
+
+/* ── Repaso ── */
+.repaso-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin:14px 0}
+.repaso-btn{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;
+            font-size:13px;color:var(--text);cursor:pointer;text-align:left;transition:border-color .15s}
+.repaso-btn:hover{border-color:var(--accent)}
+.repaso-btn .rb-num{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.repaso-btn .rb-title{font-weight:600;color:var(--accent)}
 
 /* ── Tables ── */
 table{border-collapse:collapse; width:100%; margin:10px 0; font-size:14px}
@@ -214,11 +233,21 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
   <a href="#tcl-ej">📝 Ejercicios Clase 10</a>
   <a href="#practica10">📋 Práctica N°10</a>
 
-  <div class="nav-level">⬜ Clase 11 — Preview</div>
-  <a href="#ic">10. Intervalos de confianza</a>
-  <a href="#regresion">11. Regresión lineal simple</a>
+  <div class="nav-level">🟠 IC y Regresión · Clase 11</div>
+  <a href="#ic">10. IC con σ conocida</a>
+  <a href="#ic-calc">🧮 Calculadora IC</a>
+  <a href="#ic-t">11. IC con t de Student</a>
+  <a href="#sample-size">12. Tamaño de muestra</a>
+  <a href="#regresion">13. Regresión lineal</a>
+  <a href="#regresion-sim">🎮 Simulador regresión</a>
+  <a href="#practica11">📋 Práctica N°11</a>
 
-  <div class="nav-level">🏆 Práctica general</div>
+  <div class="nav-level">📖 Recursos</div>
+  <a href="#formulas">📐 Hoja de fórmulas</a>
+  <a href="#repaso">🔁 Repaso 2do parcial</a>
+  <a href="#autoevaluacion">🏆 Autoevaluación</a>
+
+  <div class="nav-level">⚙️ Referencia</div>
   <a href="#integradores">6. Problemas integradores</a>
   <a href="#r-code">🔵 Código en R</a>
   <a href="#quiz">🎓 Quiz final</a>
@@ -1637,95 +1666,714 @@ $$P = \mathbf{0{,}9545}$$
 </details>
 
 <!-- ══════════════════════════════════════════════════
-     CLASE 11 — PREVIEW: INTERVALOS DE CONFIANZA
+     CLASE 11 — INTERVALOS DE CONFIANZA
 ══════════════════════════════════════════════════ -->
-<h2 id="ic"><span class="badge ic">Preview Clase 11</span> Intervalos de Confianza</h2>
-
-<div class="card warn">
-<h4>⚡ Próximo tema — preparate con esto</h4>
-<p>Los intervalos de confianza son la aplicación directa del TCL: si X̄ se distribuye Normal, podemos construir un rango que "capture" a μ con una probabilidad dada.</p>
-</div>
+<h2 id="ic"><span class="badge ic">Clase 11</span> Intervalos de Confianza con σ conocida</h2>
 
 <div class="card intuition">
 <h4>🧠 ¿Qué es un intervalo de confianza?</h4>
-<p>En vez de estimar "μ = 100 exactamente", el IC dice: <em>"con un 95% de confianza, μ está entre 97 y 103"</em>. Combina la estimación puntual con una medida de incertidumbre.</p>
-<p><strong>Interpretación correcta:</strong> si tomáramos 100 muestras y construyéramos 100 intervalos, <span class="hl-good">95 de ellos contendrían a μ</span>. No es que μ tenga probabilidad 0,95 de estar ahí (μ es un número fijo), sino que el <em>procedimiento</em> captura μ el 95% de las veces.</p>
+<p>En vez de estimar "μ = 100 exactamente" (estimación puntual), el IC dice: <em>"con un 95% de confianza, μ está entre 97 y 103"</em>.</p>
+<p><strong>Interpretación correcta:</strong> si tomáramos 100 muestras y construyéramos 100 intervalos, <span class="hl-good">95 de ellos contendrían a μ</span>. No es que μ "tenga probabilidad 0,95" de estar ahí — μ es un número fijo. Es el <em>procedimiento</em> el que captura μ el 95% de las veces.</p>
+<p style="font-size:13px;background:#0d1a2a;border-radius:6px;padding:10px;margin-top:8px"><strong>Analogía:</strong> Es como una red de pesca. Si tirás la red 100 veces con el mismo método, en 95 lanzamientos el pez (μ) queda adentro. El pez no tiene probabilidad — la red sí tiene un porcentaje de acierto.</p>
 </div>
 
 <div class="card formula">
-<h4>IC para μ con σ conocida</h4>
-$$\boxed{IC_{1-\alpha} = \bar{x} \pm z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}}$$
-<table style="margin-top:12px">
-<tr><th>Confianza (1−α)</th><th>α</th><th>$z_{\alpha/2}$</th><th>Uso</th></tr>
-<tr><td>90%</td><td>0,10</td><td>1,645</td><td>Menos preciso, intervalo angosto</td></tr>
-<tr><td>95%</td><td>0,05</td><td>1,960</td><td>El más usado en práctica</td></tr>
-<tr><td>99%</td><td>0,01</td><td>2,576</td><td>Muy seguro, intervalo ancho</td></tr>
-</table>
-<p style="font-size:12px;color:var(--muted);margin-top:8px">Cuando σ es <strong>desconocida</strong>: reemplazás z por $t_{n-1}$ y σ por S (desvío muestral). Esto se ve en Clase 11.</p>
-</div>
-
-<div class="card tip">
-<h4>💡 El margen de error y cómo controlarlo</h4>
-$$E = z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}} \qquad \Rightarrow \qquad n = \left\lceil\left(\frac{z_{\alpha/2} \cdot \sigma}{E}\right)^2\right\rceil$$
-<ul>
-  <li>Mayor confianza → z mayor → intervalo más <em>ancho</em></li>
-  <li>Mayor n → √n mayor → intervalo más <em>angosto</em></li>
-  <li>Mayor σ → intervalo más <em>ancho</em></li>
-  <li>Si querés reducir E a la mitad: necesitás multiplicar n por 4</li>
-</ul>
-</div>
-
-<h2 id="regresion"><span class="badge ic">Preview Clase 11</span> Regresión Lineal Simple</h2>
-
-<div class="card intuition">
-<h4>🧠 Idea central</h4>
-<p>La regresión lineal sirve para cuantificar la <strong>relación lineal entre dos variables</strong> (X e Y) y hacer predicciones. Se ajusta la recta que minimiza la suma de errores al cuadrado (mínimos cuadrados).</p>
-<p>Ejemplo industrial: ¿cómo predice la presión de inyección (X) la resistencia del producto (Y)?</p>
-</div>
-
-<div class="card formula">
-<h4>Modelo de regresión lineal simple</h4>
-$$\boxed{Y = a + bX + \varepsilon} \qquad \varepsilon \sim N(0,\, \sigma)$$
+<h4>📐 IC para μ con σ conocida</h4>
+$$\boxed{IC_{1-\alpha} = \bar{x} \pm z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}} \qquad E = z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}$$
 <div class="grid2" style="margin-top:10px">
 <div>
-<p><strong>Pendiente b:</strong></p>
-$$b = \frac{\sum(X_i-\bar{X})(Y_i-\bar{Y})}{\sum(X_i-\bar{X})^2} = \frac{S_{xy}}{S_{xx}}$$
+<p style="font-size:13px"><strong>Requiere:</strong></p>
+<ul style="font-size:13px">
+  <li>σ poblacional <strong>conocida</strong></li>
+  <li>n grande (TCL) <em>o</em> población Normal</li>
+</ul>
+<p style="font-size:13px;margin-top:8px"><strong>Para reducir E a la mitad → multiplicar n × 4</strong></p>
 </div>
 <div>
-<p><strong>Ordenada al origen a:</strong></p>
-$$a = \bar{Y} - b\bar{X}$$
-<p><em>La recta siempre pasa por $(\bar{X},\, \bar{Y})$.</em></p>
+<table style="font-size:13px">
+<tr><th>Confianza</th><th>$z_{\alpha/2}$</th></tr>
+<tr><td>90%</td><td style="color:#34d399"><strong>1,645</strong></td></tr>
+<tr><td>95%</td><td style="color:#34d399"><strong>1,960</strong></td></tr>
+<tr><td>99%</td><td style="color:#34d399"><strong>2,576</strong></td></tr>
+</table>
 </div>
 </div>
-</div>
-
-<div class="card formula">
-<h4>Coeficiente de determinación R²</h4>
-$$R^2 = \frac{SS_{\text{Reg}}}{SS_T} = 1 - \frac{SS_E}{SS_T} \qquad R^2 \in [0,\, 1]$$
-<p>$R^2 = 0{,}85$: X <em>explica</em> el 85% de la variabilidad de Y. El 15% restante es error o variables omitidas.</p>
-<p>Nota: $R^2 = r^2$ donde $r$ es el coeficiente de correlación de Pearson. Un $R^2$ alto no implica causalidad.</p>
 </div>
 
 <div class="card r">
-<h4>Regresión lineal en R</h4>
-<pre><span style="color:#a78bfa"># Ajustar modelo de regresión lineal simple</span>
-modelo &lt;- lm(Y ~ X, data = datos)
+<h4>Código R — IC con σ conocida</h4>
+<pre><span style="color:#a78bfa"># IC con sigma conocida</span>
+x_bar &lt;- 498; sigma &lt;- 4; n &lt;- 36; conf &lt;- 0.95
+z &lt;- qnorm(1 - (1-conf)/2)       <span style="color:#94a3b8"># qnorm(0.975) = 1.96</span>
+E &lt;- z * sigma / sqrt(n)
+ic &lt;- c(x_bar - E, x_bar + E)
+cat("IC:", round(ic, 2))</pre>
+</div>
 
-<span style="color:#94a3b8"># Resumen completo: coeficientes, R², p-values</span>
-summary(modelo)
+<details>
+<summary>📝 Repaso 4.1 — Llenado de bolsas (σ conocida)</summary>
+<div class="solution">
+<p><strong>Una máquina llena bolsas con σ=4g. Muestra n=36, x̄=498g. IC al 95% y 99%.</strong></p>
+<div class="step"><div class="step-n">1</div><div class="step-body">Error estándar: $\sigma_{\bar{x}} = 4/\sqrt{36} = 0{,}667$ g</div></div>
+<div class="step"><div class="step-n">2</div><div class="step-body"><strong>95%</strong> → $z=1{,}960$: $E=1{,}960\times0{,}667=1{,}307$ g → $\mathbf{IC=[496{,}69\,;\,499{,}31]}$ g</div></div>
+<div class="step"><div class="step-n">3</div><div class="step-body"><strong>99%</strong> → $z=2{,}576$: $E=2{,}576\times0{,}667=1{,}717$ g → $\mathbf{IC=[496{,}28\,;\,499{,}72]}$ g</div></div>
+<div class="step"><div class="step-n">✔</div><div class="step-body">Mayor confianza → intervalo más ancho: 99% ⊃ 95%.</div></div>
+</div>
+</details>
 
-<span style="color:#94a3b8"># Extraer a (intercepto) y b (pendiente)</span>
-coef(modelo)        <span style="color:#94a3b8"># a = Intercept, b = X</span>
+<details>
+<summary>📝 Práctica 11 — IC-1: Diámetro de piezas</summary>
+<div class="solution">
+<p><strong>n=49 piezas, x̄=250mm, σ=5mm conocida. IC al 95%.</strong></p>
+<div class="step"><div class="step-n">1</div><div class="step-body">$\sigma_{\bar{x}} = 5/\sqrt{49} = 5/7 = 0{,}714$ mm</div></div>
+<div class="step"><div class="step-n">2</div><div class="step-body">$E = 1{,}960 \times 0{,}714 = 1{,}40$ mm → $\boxed{IC_{95\%} = [248{,}60\,;\,251{,}40] \text{ mm}}$</div></div>
+<div class="step"><div class="step-n">R</div><div class="step-body"><code>250 + c(-1,1)*qnorm(0.975)*5/sqrt(49)</code></div></div>
+</div>
+</details>
 
-<span style="color:#94a3b8"># R² del modelo</span>
-summary(modelo)$r.squared
+<!-- ── CALCULADORA IC ── -->
+<h2 id="ic-calc"><span class="badge ic">Clase 11</span> 🧮 Calculadora Interactiva de IC</h2>
 
-<span style="color:#94a3b8"># Predecir Y para un nuevo X</span>
-predict(modelo, newdata = data.frame(X = 50))
+<div class="card" style="border-color:var(--accent2)">
+<h4>Calculadora de Intervalo de Confianza</h4>
+<div class="grid2" style="gap:10px;margin-bottom:12px">
+  <div>
+    <label style="font-size:12px;color:var(--muted)">Media muestral x̄</label>
+    <input id="ic-xbar" type="number" value="498" step="0.1" style="width:100%;background:#0d1a2a;border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text);margin-top:4px">
+  </div>
+  <div>
+    <label style="font-size:12px;color:var(--muted)">Nivel de confianza (%)</label>
+    <select id="ic-conf" style="width:100%;background:#0d1a2a;border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text);margin-top:4px">
+      <option value="0.90">90%</option>
+      <option value="0.95" selected>95%</option>
+      <option value="0.99">99%</option>
+    </select>
+  </div>
+  <div>
+    <label style="font-size:12px;color:var(--muted)">Tipo de σ</label>
+    <select id="ic-tipo" onchange="toggleICInputs()" style="width:100%;background:#0d1a2a;border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text);margin-top:4px">
+      <option value="z">σ conocida → usar z</option>
+      <option value="t">s desconocida → usar t de Student</option>
+    </select>
+  </div>
+  <div id="ic-sigma-div">
+    <label style="font-size:12px;color:var(--muted)">σ poblacional</label>
+    <input id="ic-sigma" type="number" value="4" step="0.1" style="width:100%;background:#0d1a2a;border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text);margin-top:4px">
+  </div>
+  <div id="ic-s-div" style="display:none">
+    <label style="font-size:12px;color:var(--muted)">s muestral (desvío)</label>
+    <input id="ic-s" type="number" value="1.2" step="0.1" style="width:100%;background:#0d1a2a;border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text);margin-top:4px">
+  </div>
+  <div>
+    <label style="font-size:12px;color:var(--muted)">Tamaño de muestra n</label>
+    <input id="ic-n" type="number" value="36" min="2" style="width:100%;background:#0d1a2a;border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text);margin-top:4px">
+  </div>
+</div>
+<button onclick="calcIC_full()" style="background:var(--accent2);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:600;cursor:pointer">Calcular IC</button>
+<div id="ic-result" style="margin-top:14px;font-size:14px;display:none"></div>
+</div>
 
-<span style="color:#94a3b8"># Gráfico con línea de regresión</span>
-plot(datos$X, datos$Y, main = "Regresión lineal", xlab = "X", ylab = "Y")
-abline(modelo, col = "red", lwd = 2)</pre>
+<!-- ── IC CON t ── -->
+<h2 id="ic-t"><span class="badge ic">Clase 11</span> IC con t de Student (σ desconocida)</h2>
+
+<div class="card warn">
+<h4>⚠️ ¿Cuándo usar t en vez de z?</h4>
+<p>Cuando <strong>no conocemos σ</strong> y la estimamos con la desviación muestral <em>s</em>. En este caso, la estadística muestral ya no tiene distribución Normal estándar, sino <strong>t de Student con gl = n−1</strong>.</p>
+</div>
+
+<div class="card formula">
+<h4>📐 IC para μ con σ desconocida (t de Student)</h4>
+$$\boxed{IC_{1-\alpha} = \bar{x} \pm t_{\alpha/2,\, n-1} \cdot \frac{s}{\sqrt{n}}}$$
+<div class="grid2" style="margin-top:10px">
+<div>
+<p style="font-size:13px"><strong>Diferencias clave respecto al caso z:</strong></p>
+<ul style="font-size:13px">
+  <li>Reemplazás σ por <em>s</em> (desvío muestral)</li>
+  <li>Usás $t_{\alpha/2,\,n-1}$ en vez de $z_{\alpha/2}$</li>
+  <li>Siempre: $t_{n-1} > z$ → IC más ancho</li>
+  <li>Con gl→∞, la t converge a z</li>
+</ul>
+</div>
+<div>
+<table style="font-size:13px">
+<tr><th>gl (n−1)</th><th>$t_{0{,}025}$ (95%)</th></tr>
+<tr><td>5</td><td style="color:#f59e0b">2,571</td></tr>
+<tr><td>10</td><td style="color:#f59e0b">2,228</td></tr>
+<tr><td>15</td><td style="color:#f59e0b">2,131</td></tr>
+<tr><td>20</td><td style="color:#f59e0b">2,086</td></tr>
+<tr><td>30</td><td style="color:#f59e0b">2,042</td></tr>
+<tr><td>∞ (z)</td><td style="color:#34d399">1,960</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<div class="card tip">
+<h4>🔑 Regla práctica: ¿z o t?</h4>
+<table style="font-size:13px;width:100%">
+<tr><th>Situación</th><th>Distribución</th></tr>
+<tr><td>σ conocida, cualquier n</td><td style="color:#34d399">z (Normal)</td></tr>
+<tr><td>σ desconocida, n ≥ 30</td><td style="color:#f59e0b">t (aunque z es buena aproximación)</td></tr>
+<tr><td>σ desconocida, n &lt; 30, población Normal</td><td style="color:#f59e0b">t (obligatorio)</td></tr>
+<tr><td>σ desconocida, n &lt; 30, población NO Normal</td><td style="color:#ef4444">No válido ninguno de los dos</td></tr>
+</table>
+</div>
+
+<div class="card r">
+<h4>Código R — IC con t de Student</h4>
+<pre><span style="color:#a78bfa"># IC con sigma DESCONOCIDA (usa t de Student)</span>
+x_bar &lt;- 50.2; s &lt;- 1.2; n &lt;- 16; conf &lt;- 0.95
+t_crit &lt;- qt(1-(1-conf)/2, df = n-1)  <span style="color:#94a3b8"># qt(0.975, 15) = 2.131</span>
+E &lt;- t_crit * s / sqrt(n)
+ic &lt;- c(x_bar - E, x_bar + E)
+cat("gl =", n-1, "| t =", round(t_crit,3), "| IC:", round(ic,2))
+
+<span style="color:#94a3b8"># Alternativa directa con t.test</span>
+t.test(datos, conf.level = 0.95)$conf.int</pre>
+</div>
+
+<details>
+<summary>📝 Repaso 4.2 — Tornillos (σ desconocida)</summary>
+<div class="solution">
+<p><strong>n=16 tornillos, x̄=50,2mm, s=1,2mm. IC al 95%.</strong></p>
+<div class="step"><div class="step-n">1</div><div class="step-body">gl = n−1 = 15 → $t_{0{,}025,\,15} = 2{,}131$</div></div>
+<div class="step"><div class="step-n">2</div><div class="step-body">$se = s/\sqrt{n} = 1{,}2/4 = 0{,}300$ mm</div></div>
+<div class="step"><div class="step-n">3</div><div class="step-body">$E = 2{,}131 \times 0{,}300 = 0{,}639$ mm → $\boxed{IC_{95\%} = [49{,}56\,;\,50{,}84] \text{ mm}}$</div></div>
+<div class="step"><div class="step-n">✔</div><div class="step-body">Si usáramos z=1,96: E=0,588 → IC=[49,61; 50,79]. El IC con t es más ancho — correcto porque hay más incertidumbre al estimar σ.</div></div>
+</div>
+</details>
+
+<details>
+<summary>📝 Práctica 11 — IC-2: Peso de cápsulas (t)</summary>
+<div class="solution">
+<p><strong>n=20 cápsulas, x̄=15,3mg, s=0,8mg. IC al 90%.</strong></p>
+<div class="step"><div class="step-n">1</div><div class="step-body">gl = 19 → $t_{0{,}05,\,19} = 1{,}729$ (90% → α/2=0,05)</div></div>
+<div class="step"><div class="step-n">2</div><div class="step-body">$se = 0{,}8/\sqrt{20} = 0{,}179$ mg</div></div>
+<div class="step"><div class="step-n">3</div><div class="step-body">$E = 1{,}729 \times 0{,}179 = 0{,}309$ mg → $\boxed{IC_{90\%} = [14{,}99\,;\,15{,}61] \text{ mg}}$</div></div>
+</div>
+</details>
+
+<!-- ── TAMAÑO DE MUESTRA ── -->
+<h2 id="sample-size"><span class="badge ic">Clase 11</span> Tamaño de Muestra Mínimo</h2>
+
+<div class="card formula">
+<h4>📐 Fórmula del tamaño de muestra</h4>
+$$\boxed{n = \left\lceil\left(\frac{z_{\alpha/2} \cdot \sigma}{E}\right)^2\right\rceil}$$
+<p style="font-size:13px;margin-top:8px">Donde <strong>E</strong> es el error máximo admisible (semiancho del IC). Se redondea <strong>siempre hacia arriba</strong> (techo ⌈⌉) para garantizar que el error no supere E.</p>
+<p style="font-size:13px"><strong>Dato clave:</strong> duplicar la precisión (E/2) → n×4. Triplicar → n×9.</p>
+</div>
+
+<div class="card" style="border-color:var(--accent2)">
+<h4>🧮 Calculadora de Tamaño de Muestra</h4>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">
+  <div>
+    <label style="font-size:12px;color:var(--muted)">Error máximo E</label>
+    <input id="n-E" type="number" value="2" step="0.1" style="width:100%;background:#0d1a2a;border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text);margin-top:4px">
+  </div>
+  <div>
+    <label style="font-size:12px;color:var(--muted)">σ poblacional</label>
+    <input id="n-sigma" type="number" value="8" step="0.1" style="width:100%;background:#0d1a2a;border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text);margin-top:4px">
+  </div>
+  <div>
+    <label style="font-size:12px;color:var(--muted)">Confianza</label>
+    <select id="n-conf" style="width:100%;background:#0d1a2a;border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text);margin-top:4px">
+      <option value="0.90">90%</option>
+      <option value="0.95" selected>95%</option>
+      <option value="0.99">99%</option>
+    </select>
+  </div>
+</div>
+<button onclick="calcN_min()" style="background:var(--accent2);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:600;cursor:pointer">Calcular n mínimo</button>
+<div id="n-result" style="margin-top:14px;font-size:14px;display:none"></div>
+</div>
+
+<details>
+<summary>📝 Repaso 5.1 — Tamaño de muestra (95%)</summary>
+<div class="solution">
+<p><strong>σ=8 unidades, confianza 95%. Calcular n para E=2 y para E=1.</strong></p>
+<div class="step"><div class="step-n">1</div><div class="step-body">$z_{0{,}025}=1{,}960$</div></div>
+<div class="step"><div class="step-n">2</div><div class="step-body"><strong>E=2:</strong> $n=\left\lceil\left(\frac{1{,}96\times8}{2}\right)^2\right\rceil=\lceil(7{,}84)^2\rceil=\lceil61{,}47\rceil=\mathbf{62}$</div></div>
+<div class="step"><div class="step-n">3</div><div class="step-body"><strong>E=1:</strong> $n=\left\lceil\left(\frac{1{,}96\times8}{1}\right)^2\right\rceil=\lceil(15{,}68)^2\rceil=\lceil245{,}9\rceil=\mathbf{246}$</div></div>
+<div class="step"><div class="step-n">✔</div><div class="step-body">Al reducir E a la mitad (2→1): n se cuadruplicó aprox. (62→246≈4×62). <code>ceiling((qnorm(0.975)*8/2)^2)</code></div></div>
+</div>
+</details>
+
+<details>
+<summary>📝 Repaso 5.2 — Tamaño de muestra (90%)</summary>
+<div class="solution">
+<p><strong>σ=5 unidades, E=1,5, confianza 90%.</strong></p>
+<div class="step"><div class="step-n">1</div><div class="step-body">90% → $z_{0{,}05}=1{,}645$</div></div>
+<div class="step"><div class="step-n">2</div><div class="step-body">$n=\left\lceil\left(\frac{1{,}645\times5}{1{,}5}\right)^2\right\rceil=\left\lceil(5{,}483)^2\right\rceil=\lceil30{,}07\rceil=\mathbf{31}$</div></div>
+<div class="step"><div class="step-n">R</div><div class="step-body"><code>ceiling((qnorm(0.95)*5/1.5)^2)</code></div></div>
+</div>
+</details>
+
+<!-- ══════════════════════════════════════════════════
+     REGRESIÓN LINEAL SIMPLE
+══════════════════════════════════════════════════ -->
+<h2 id="regresion"><span class="badge ic">Clase 11</span> Regresión Lineal Simple</h2>
+
+<div class="card intuition">
+<h4>🧠 Idea central</h4>
+<p>La regresión lineal sirve para cuantificar la <strong>relación lineal entre X e Y</strong> y hacer predicciones. Se ajusta la recta que minimiza la suma de cuadrados de los errores (mínimos cuadrados ordinarios, MCO).</p>
+<p>El modelo es: $Y = a + bX + \varepsilon$, donde $\varepsilon \sim N(0,\sigma)$ son los errores aleatorios.</p>
+</div>
+
+<div class="card formula">
+<h4>📐 Cálculo de coeficientes</h4>
+<div class="grid2">
+<div>
+$$b = \frac{S_{xy}}{S_{xx}} \qquad S_{xy}=\sum(X_i-\bar{X})(Y_i-\bar{Y})$$
+$$a = \bar{Y} - b\bar{X}$$
+$$S_{xx}=\sum(X_i-\bar{X})^2$$
+</div>
+<div>
+$$R^2 = \frac{SS_R}{SS_T} = 1-\frac{SS_E}{SS_T}$$
+$$SS_T=S_{yy},\quad SS_R=b\cdot S_{xy},\quad SS_E=SS_T-SS_R$$
+$$s^2 = \frac{SS_E}{n-2} \quad \text{(varianza residual)}$$
+</div>
+</div>
+<p style="font-size:12px;color:var(--muted);margin-top:8px">La recta siempre pasa por $(\bar{X}, \bar{Y})$. R² ∈ [0,1]: cuanto más cercano a 1, mejor ajuste.</p>
+</div>
+
+<div class="card formula">
+<h4>📐 IC para la pendiente e intervalos de predicción</h4>
+<div class="grid2">
+<div>
+<p style="font-size:13px"><strong>IC para la pendiente b:</strong></p>
+$$b \pm t_{\alpha/2,\,n-2} \cdot \sqrt{\frac{s^2}{S_{xx}}}$$
+<p style="font-size:12px;color:var(--muted)">Si el IC no contiene 0 → relación lineal significativa.</p>
+</div>
+<div>
+<p style="font-size:13px"><strong>IC para respuesta media en $x_0$:</strong></p>
+$$\hat{y} \pm t \cdot s\sqrt{\frac{1}{n}+\frac{(x_0-\bar{X})^2}{S_{xx}}}$$
+<p style="font-size:13px"><strong>IP para nuevo valor en $x_0$:</strong></p>
+$$\hat{y} \pm t \cdot s\sqrt{1+\frac{1}{n}+\frac{(x_0-\bar{X})^2}{S_{xx}}}$$
+</div>
+</div>
+<p style="font-size:13px;background:#0d1a2a;border-radius:6px;padding:8px;margin-top:8px"><strong>Diferencia IC vs IP:</strong> El IC para la media es más angosto (predice el promedio). El IP agrega +1 bajo el radical para incluir la variabilidad individual de una nueva observación → siempre más ancho.</p>
+</div>
+
+<div class="card r">
+<h4>Código R — Regresión lineal completa</h4>
+<pre><span style="color:#a78bfa"># Ajustar modelo</span>
+x &lt;- c(245, 247, 249, 251, 253)
+y &lt;- c(48, 52, 56, 60, 64)
+modelo &lt;- lm(y ~ x)
+summary(modelo)          <span style="color:#94a3b8"># coef, R², p-values</span>
+
+<span style="color:#94a3b8"># Extraer coeficientes</span>
+a &lt;- coef(modelo)[1]; b &lt;- coef(modelo)[2]
+R2 &lt;- summary(modelo)$r.squared
+
+<span style="color:#94a3b8"># IC para la pendiente</span>
+confint(modelo, level = 0.95)
+
+<span style="color:#94a3b8"># IC para respuesta media y nuevo valor en x0=250</span>
+x0 &lt;- data.frame(x = 250)
+predict(modelo, x0, interval = "confidence", level = 0.95)
+predict(modelo, x0, interval = "prediction",  level = 0.95)</pre>
+</div>
+
+<details>
+<summary>📝 Regresión — Ejemplo clase: Temperatura vs Resistencia</summary>
+<div class="solution">
+<p><strong>Datos: X=temperatura (°C), Y=resistencia (MPa). x=[245,247,249,251,253], y=[48,52,56,60,64].</strong></p>
+<div class="step"><div class="step-n">1</div><div class="step-body">
+$\bar{X}=249,\;\bar{Y}=56$<br>
+$S_{xx}=(-4)^2+(-2)^2+0^2+2^2+4^2=40$<br>
+$S_{xy}=(-4)(-8)+(-2)(-4)+0+(2)(4)+(4)(8)=80$
+</div></div>
+<div class="step"><div class="step-n">2</div><div class="step-body">
+$b=80/40=\mathbf{2{,}0}$ MPa/°C · $a=56-2\times249=\mathbf{-442}$ · $\hat{y}=-442+2X$
+</div></div>
+<div class="step"><div class="step-n">3</div><div class="step-body">
+$R^2=1{,}00$ (ajuste perfecto — todos los puntos sobre la recta)
+</div></div>
+<div class="step"><div class="step-n">✔</div><div class="step-body">
+Predicción en X=250: $\hat{y}=-442+2\times250=\mathbf{58}$ MPa
+</div></div>
+</div>
+</details>
+
+<!-- ── SIMULADOR REGRESIÓN ── -->
+<h2 id="regresion-sim"><span class="badge ic">Clase 11</span> 🎮 Simulador de Regresión Lineal</h2>
+
+<div class="card" style="border-color:var(--accent2)">
+<h4>Ingresá los datos (un par X Y por línea)</h4>
+<div class="grid2" style="gap:12px">
+<div>
+<div style="margin-bottom:8px;display:flex;gap:8px;flex-wrap:wrap">
+  <button onclick="loadRegPreset('puntos')" style="background:#1e3a5f;color:#38bdf8;border:1px solid #38bdf8;border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer">📊 Práctica 11 — Puntos</button>
+  <button onclick="loadRegPreset('horas')" style="background:#0f2a1e;color:#34d399;border:1px solid #34d399;border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer">📚 Práctica 11 — Horas/Nota</button>
+  <button onclick="loadRegPreset('temp')" style="background:#1a1335;color:#a78bfa;border:1px solid #a78bfa;border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer">🌡️ Temp/Resistencia</button>
+</div>
+<textarea id="reg-data" rows="9" placeholder="1 3&#10;2 2&#10;3 4&#10;4 5&#10;5 6" style="width:100%;background:#0d1a2a;border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--text);font-family:monospace;font-size:13px;resize:vertical;box-sizing:border-box"></textarea>
+<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center">
+  <label style="font-size:12px;color:var(--muted)">Predecir en x₀ =</label>
+  <input id="reg-x0" type="number" value="6" step="0.1" style="width:80px;background:#0d1a2a;border:1px solid var(--border);border-radius:6px;padding:5px 8px;color:var(--text)">
+  <select id="reg-conf" style="background:#0d1a2a;border:1px solid var(--border);border-radius:6px;padding:5px 8px;color:var(--text)">
+    <option value="0.90">90%</option>
+    <option value="0.95" selected>95%</option>
+    <option value="0.99">99%</option>
+  </select>
+  <button onclick="plotRegresion()" style="background:var(--accent2);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer">Ajustar</button>
+</div>
+</div>
+<div>
+<div id="reg-plot" style="height:280px"></div>
+<div id="reg-result" style="font-size:13px;margin-top:8px;line-height:1.7"></div>
+</div>
+</div>
+</div>
+
+<!-- ── PRÁCTICA 11 ── -->
+<h2 id="practica11"><span class="badge ic">Clase 11</span> 📋 Práctica N°11 — Ejercicios resueltos</h2>
+
+<details open>
+<summary>📊 Regresión 1 — Dataset "puntos" (n=5)</summary>
+<div class="solution">
+<p><strong>Datos: X=[1,2,3,4,5], Y=[3,2,4,5,6]. Ajustar modelo, calcular R², predecir en X=6 e IC 95% para la pendiente.</strong></p>
+<div class="step"><div class="step-n">1</div><div class="step-body">
+$\bar{X}=3,\;\bar{Y}=4$<br>
+$S_{xx}=(-2)^2+(-1)^2+0^2+1^2+2^2=10$<br>
+$S_{xy}=(-2)(3-4)+(-1)(2-4)+(0)(4-4)+(1)(5-4)+(2)(6-4)=2+2+0+1+4=\mathbf{9}$
+</div></div>
+<div class="step"><div class="step-n">2</div><div class="step-body">
+$b=9/10=\mathbf{0{,}9}$ · $a=4-0{,}9\times3=\mathbf{1{,}3}$ → $\hat{y}=1{,}3+0{,}9X$
+</div></div>
+<div class="step"><div class="step-n">3</div><div class="step-body">
+$S_{yy}=(3-4)^2+(2-4)^2+0^2+(5-4)^2+(6-4)^2=1+4+0+1+4=10$<br>
+$SS_R=b\times S_{xy}=0{,}9\times9=8{,}1$ → $\mathbf{R^2=8{,}1/10=0{,}81}$<br>
+X explica el 81% de la variabilidad de Y.
+</div></div>
+<div class="step"><div class="step-n">4</div><div class="step-body">
+Predicción: $\hat{y}(6)=1{,}3+0{,}9\times6=\mathbf{6{,}7}$
+</div></div>
+<div class="step"><div class="step-n">5</div><div class="step-body">
+IC 95% para b: $ss_E=10-8{,}1=1{,}9,\;s^2=1{,}9/3=0{,}633,\;se_b=\sqrt{0{,}633/10}=0{,}252$<br>
+$t_{0{,}025,\,3}=3{,}182$ → $E=3{,}182\times0{,}252=0{,}80$<br>
+$\boxed{IC_{95\%}(b)=[0{,}10\,;\,1{,}70]}$ — no contiene 0 → pendiente significativa.
+</div></div>
+</div>
+</details>
+
+<details>
+<summary>📚 Regresión 2 — Horas de estudio vs Nota (n=6)</summary>
+<div class="solution">
+<p><strong>Datos: X (horas)=[2,4,5,6,7,9], Y (nota)=[4,5,6,7,8,9]. Ajustar modelo y calcular IC/IP al 95% para X=7.</strong></p>
+<div class="step"><div class="step-n">1</div><div class="step-body">
+$\bar{X}=5{,}5,\;\bar{Y}=6{,}5$<br>
+$S_{xx}=(2-5{,}5)^2+(4-5{,}5)^2+(5-5{,}5)^2+(6-5{,}5)^2+(7-5{,}5)^2+(9-5{,}5)^2$<br>
+$=12{,}25+2{,}25+0{,}25+0{,}25+2{,}25+12{,}25=\mathbf{29{,}5}$<br>
+$S_{xy}=(-3{,}5)(-2{,}5)+(-1{,}5)(-1{,}5)+(-0{,}5)(-0{,}5)+(0{,}5)(0{,}5)+(1{,}5)(1{,}5)+(3{,}5)(2{,}5)$<br>
+$=8{,}75+2{,}25+0{,}25+0{,}25+2{,}25+8{,}75=\mathbf{22{,}5}$
+</div></div>
+<div class="step"><div class="step-n">2</div><div class="step-body">
+$b=22{,}5/29{,}5=\mathbf{0{,}763}$ · $a=6{,}5-0{,}763\times5{,}5=\mathbf{2{,}30}$<br>
+$S_{yy}=(-2{,}5)^2+(-1{,}5)^2+(-0{,}5)^2+(0{,}5)^2+(1{,}5)^2+(2{,}5)^2=\mathbf{17{,}5}$<br>
+$SS_R=0{,}763\times22{,}5=17{,}17$ → $R^2=17{,}17/17{,}5=\mathbf{0{,}981}$
+</div></div>
+<div class="step"><div class="step-n">3</div><div class="step-body">
+Predicción en $x_0=7$: $\hat{y}=2{,}30+0{,}763\times7=\mathbf{7{,}64}$
+</div></div>
+<div class="step"><div class="step-n">4</div><div class="step-body">
+$SS_E=17{,}5-17{,}17=0{,}33,\;s^2=0{,}33/4=0{,}083,\;s=0{,}288$<br>
+$t_{0{,}025,\,4}=2{,}776$ · $\text{factor}=\sqrt{1/6+(7-5{,}5)^2/29{,}5}=\sqrt{0{,}167+0{,}076}=0{,}493$<br>
+<strong>IC respuesta media:</strong> $7{,}64\pm2{,}776\times0{,}288\times0{,}493=7{,}64\pm0{,}39=\mathbf{[7{,}25\,;\,8{,}03]}$<br>
+<strong>IP nuevo valor:</strong> $7{,}64\pm2{,}776\times0{,}288\times\sqrt{1{,}243}=7{,}64\pm0{,}89=\mathbf{[6{,}75\,;\,8{,}53]}$
+</div></div>
+<div class="step"><div class="step-n">✔</div><div class="step-body">El IP es más ancho que el IC: incluye la variabilidad individual de una nueva observación.</div></div>
+</div>
+</details>
+
+<!-- ══════════════════════════════════════════════════
+     HOJA DE FÓRMULAS
+══════════════════════════════════════════════════ -->
+<h2 id="formulas"><span class="badge repaso">Recursos</span> 📐 Hoja de Fórmulas — 2do Parcial</h2>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-bottom:20px">
+
+<div class="card formula" style="margin:0">
+<h4>Binomial Bi(n,p)</h4>
+$$P(X=k)=\binom{n}{k}p^k(1-p)^{n-k}$$
+$$E[X]=np \qquad Var(X)=np(1-p)$$
+<p style="font-size:12px;color:var(--muted)">Usar cuando: ensayos independientes, probabilidad constante, cuenta éxitos.</p>
+</div>
+
+<div class="card formula" style="margin:0">
+<h4>Poisson Poi(λ)</h4>
+$$P(X=k)=\frac{e^{-\lambda}\lambda^k}{k!}$$
+$$E[X]=\lambda \qquad Var(X)=\lambda$$
+<p style="font-size:12px;color:var(--muted)">Escala: Poi(λt) para intervalo t. Aprox. Bi(n,p)≈Poi(np) si n≥50, p≤0,05.</p>
+</div>
+
+<div class="card formula" style="margin:0">
+<h4>Normal N(μ,σ²)</h4>
+$$Z=\frac{X-\mu}{\sigma} \sim N(0,1)$$
+$$P(a\le X\le b)=\Phi\!\left(\tfrac{b-\mu}{\sigma}\right)-\Phi\!\left(\tfrac{a-\mu}{\sigma}\right)$$
+<p style="font-size:12px;color:var(--muted)">Regla: 68%-95%-99,7% para μ±σ, μ±2σ, μ±3σ.</p>
+</div>
+
+<div class="card formula" style="margin:0">
+<h4>Distribución muestral (TCL)</h4>
+$$\bar{X}\sim N\!\left(\mu,\frac{\sigma^2}{n}\right) \quad \sigma_{\bar{X}}=\frac{\sigma}{\sqrt{n}}$$
+$$Z=\frac{\bar{X}-\mu}{\sigma/\sqrt{n}} \qquad (n\ge30)$$
+</div>
+
+<div class="card formula" style="margin:0">
+<h4>IC con σ conocida</h4>
+$$IC=\bar{x}\pm z_{\alpha/2}\cdot\frac{\sigma}{\sqrt{n}}$$
+$$n_{\min}=\left\lceil\left(\frac{z_{\alpha/2}\cdot\sigma}{E}\right)^2\right\rceil$$
+<table style="font-size:11px;margin-top:6px">
+<tr><td>90%</td><td>z=1,645</td><td>95%</td><td>z=1,960</td><td>99%</td><td>z=2,576</td></tr>
+</table>
+</div>
+
+<div class="card formula" style="margin:0">
+<h4>IC con t de Student</h4>
+$$IC=\bar{x}\pm t_{\alpha/2,\,n-1}\cdot\frac{s}{\sqrt{n}}$$
+<p style="font-size:12px;color:var(--muted)">Usar cuando σ desconocida. gl=n−1. Si gl→∞: t→z.</p>
+<p style="font-size:12px">t(0,025; gl=10)=2,228 · t(0,025; gl=20)=2,086</p>
+</div>
+
+<div class="card formula" style="margin:0">
+<h4>Regresión lineal simple</h4>
+$$b=\frac{S_{xy}}{S_{xx}} \qquad a=\bar{Y}-b\bar{X}$$
+$$R^2=1-\frac{SS_E}{SS_T}=\frac{b\cdot S_{xy}}{S_{yy}}$$
+$$s^2=\frac{SS_E}{n-2}$$
+</div>
+
+<div class="card formula" style="margin:0">
+<h4>IC y IP en regresión (x₀)</h4>
+$$\hat{y}(x_0)=a+bx_0$$
+$$IC_{\text{media}}: \hat{y}\pm t\cdot s\sqrt{\frac{1}{n}+\frac{(x_0-\bar{X})^2}{S_{xx}}}$$
+$$IP_{\text{nuevo}}: \hat{y}\pm t\cdot s\sqrt{1+\frac{1}{n}+\frac{(x_0-\bar{X})^2}{S_{xx}}}$$
+<p style="font-size:12px;color:var(--muted)">t con gl=n−2. IP siempre más ancho que IC.</p>
+</div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     REPASO 2DO PARCIAL
+══════════════════════════════════════════════════ -->
+<h2 id="repaso"><span class="badge repaso">Repaso</span> 🔁 Repaso 2do Parcial — Ejercicios completos</h2>
+
+<div class="card" style="border-color:#a78bfa;margin-bottom:14px">
+<h4>📋 Temas cubiertos en el repaso</h4>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+  <span class="badge bi">Binomial</span>
+  <span class="badge poi">Poisson</span>
+  <span class="badge normal">Normal</span>
+  <span class="badge ic">IC σ conocida</span>
+  <span class="badge ic">Tamaño n</span>
+  <span class="badge ic">Regresión</span>
+</div>
+</div>
+
+<details>
+<summary>📊 Repaso 1.1 — Defectos en producción (Binomial)</summary>
+<div class="solution">
+<p><strong>En una línea de producción el 10% de los artículos es defectuoso. Se seleccionan n=10 artículos. X~Bi(10, 0,10).</strong></p>
+<div class="step"><div class="step-n">a</div><div class="step-body">
+$P(X=2)=\binom{10}{2}(0{,}1)^2(0{,}9)^8=45\times0{,}01\times0{,}4305=\mathbf{0{,}1937}$<br>
+<code>dbinom(2, 10, 0.1)</code>
+</div></div>
+<div class="step"><div class="step-n">b</div><div class="step-body">
+$P(X\ge3)=1-P(X\le2)=1-[P(0)+P(1)+P(2)]$<br>
+$P(0)=0{,}9^{10}=0{,}3487;\;P(1)=10\times0{,}1\times0{,}9^9=0{,}3874;\;P(2)=0{,}1937$<br>
+$P(X\ge3)=1-0{,}9298=\mathbf{0{,}0702}$ · <code>1-pbinom(2,10,0.1)</code>
+</div></div>
+<div class="step"><div class="step-n">c</div><div class="step-body">
+$E[X]=np=10\times0{,}1=\mathbf{1}$ · $\sigma=\sqrt{np(1-p)}=\sqrt{0{,}9}=\mathbf{0{,}949}$
+</div></div>
+</div>
+</details>
+
+<details>
+<summary>📊 Repaso 1.2 — Control de calidad (Binomial)</summary>
+<div class="solution">
+<p><strong>p=0,05 de falla, n=12. Calcular P(X=2), P(X≥3), P(X=0), E[X].</strong></p>
+<div class="step"><div class="step-n">a</div><div class="step-body">
+$P(X=2)=\binom{12}{2}(0{,}05)^2(0{,}95)^{10}=66\times0{,}0025\times0{,}5987=\mathbf{0{,}0988}$
+</div></div>
+<div class="step"><div class="step-n">b</div><div class="step-body">
+$P(X\ge3)=1-P(X\le2)=1-[0{,}5404+0{,}3413+0{,}0988]=\mathbf{0{,}0196}$ (raro pero posible)
+</div></div>
+<div class="step"><div class="step-n">c</div><div class="step-body">
+$P(X=0)=(0{,}95)^{12}=\mathbf{0{,}5404}$ · $E[X]=12\times0{,}05=\mathbf{0{,}6}$
+</div></div>
+</div>
+</details>
+
+<details>
+<summary>🔵 Repaso 2.1 — Llamadas al call center (Poisson)</summary>
+<div class="solution">
+<p><strong>Llegan 3 llamadas/hora en promedio. X~Poi(3). Calcular P(X=3 en 1h), P(X=0 en 2h), P(X≥4 en 1h).</strong></p>
+<div class="step"><div class="step-n">a</div><div class="step-body">
+$P(X=3)=e^{-3}\cdot3^3/3!=0{,}0498\times27/6=\mathbf{0{,}2240}$ · <code>dpois(3, 3)</code>
+</div></div>
+<div class="step"><div class="step-n">b</div><div class="step-body">
+En 2 horas: λ=3×2=6 → $P(X=0)=e^{-6}=\mathbf{0{,}0025}$ · <code>dpois(0, 6)</code>
+</div></div>
+<div class="step"><div class="step-n">c</div><div class="step-body">
+$P(X\ge4)=1-P(X\le3)=1-[P(0)+P(1)+P(2)+P(3)]$<br>
+$=1-[0{,}0498+0{,}1494+0{,}2240+0{,}2240]=1-0{,}6472=\mathbf{0{,}3528}$ · <code>1-ppois(3,3)</code>
+</div></div>
+</div>
+</details>
+
+<details>
+<summary>🔵 Repaso 2.2 — Fallas en máquina (Poisson)</summary>
+<div class="solution">
+<p><strong>Tasa de fallas: 5/hora. Calcular P(X=3 en 1h), P(X=0 en 30min), P(X>6 en 1h).</strong></p>
+<div class="step"><div class="step-n">a</div><div class="step-body">
+$P(X=3)=e^{-5}\cdot5^3/6=0{,}00674\times125/6=\mathbf{0{,}1404}$ · <code>dpois(3, 5)</code>
+</div></div>
+<div class="step"><div class="step-n">b</div><div class="step-body">
+30 min → λ=2,5 → $P(X=0)=e^{-2{,}5}=\mathbf{0{,}0821}$ · <code>dpois(0, 2.5)</code>
+</div></div>
+<div class="step"><div class="step-n">c</div><div class="step-body">
+$P(X>6)=1-P(X\le6)=1-ppois(6,5)=\mathbf{0{,}2378}$ · <code>1-ppois(6,5)</code>
+</div></div>
+</div>
+</details>
+
+<details>
+<summary>🔴 Repaso 3.1 — Llenado de bolsas (Normal)</summary>
+<div class="solution">
+<p><strong>X~N(500, 4²). Calcular P(490≤X≤510), P(X&lt;490), percentil 10%.</strong></p>
+<div class="step"><div class="step-n">a</div><div class="step-body">
+$Z_1=(490-500)/4=-2{,}5;\;Z_2=(510-500)/4=2{,}5$<br>
+$P(490\le X\le510)=\Phi(2{,}5)-\Phi(-2{,}5)=0{,}9938-0{,}0062=\mathbf{0{,}9876}$
+</div></div>
+<div class="step"><div class="step-n">b</div><div class="step-body">
+$P(X<490)=\Phi(-2{,}5)=\mathbf{0{,}0062}$ — sólo el 0,62% de las bolsas pesa menos de 490g.
+</div></div>
+<div class="step"><div class="step-n">c</div><div class="step-body">
+Percentil 10%: $z_{0{,}10}=-1{,}282$ → $x=500+(-1{,}282)\times4=\mathbf{494{,}87}$ g<br>
+<code>qnorm(0.10, 500, 4)</code>
+</div></div>
+</div>
+</details>
+
+<details>
+<summary>🔴 Repaso 3.2 — Sensor de temperatura (Normal)</summary>
+<div class="solution">
+<p><strong>X~N(100, 4²). Calcular P(92≤X≤108), P(X&lt;95), percentil 5%.</strong></p>
+<div class="step"><div class="step-n">a</div><div class="step-body">
+$Z_1=-2,\;Z_2=2$ → $P=\Phi(2)-\Phi(-2)=0{,}9772-0{,}0228=\mathbf{0{,}9545}$
+</div></div>
+<div class="step"><div class="step-n">b</div><div class="step-body">
+$Z=(95-100)/4=-1{,}25$ → $P(X<95)=\Phi(-1{,}25)=\mathbf{0{,}1056}$
+</div></div>
+<div class="step"><div class="step-n">c</div><div class="step-body">
+$z_{0{,}05}=-1{,}645$ → $x=100-1{,}645\times4=\mathbf{93{,}42}$ °C · <code>qnorm(0.05, 100, 4)</code>
+</div></div>
+</div>
+</details>
+
+<details>
+<summary>🟠 Repaso 4 — IC para la media (σ conocida y desconocida)</summary>
+<div class="solution">
+<p><strong>4.1: σ=4g, n=36, x̄=498g. IC 95% y 99%.</strong></p>
+<div class="step"><div class="step-n">95%</div><div class="step-body">$E=1{,}960\times4/6=1{,}307$ → $\mathbf{IC=[496{,}69\,;\,499{,}31]}$</div></div>
+<div class="step"><div class="step-n">99%</div><div class="step-body">$E=2{,}576\times0{,}667=1{,}717$ → $\mathbf{IC=[496{,}28\,;\,499{,}72]}$</div></div>
+<p style="margin-top:12px"><strong>4.2: n=16, x̄=50,2mm, s=1,2mm. IC 95% (t).</strong></p>
+<div class="step"><div class="step-n">t</div><div class="step-body">gl=15 · $t_{0{,}025,15}=2{,}131$ · $se=0{,}3$ · $E=0{,}639$ → $\mathbf{IC=[49{,}56\,;\,50{,}84]}$</div></div>
+</div>
+</details>
+
+<details>
+<summary>🟠 Repaso 5 — Tamaño de muestra</summary>
+<div class="solution">
+<p><strong>5.1: σ=8, 95%, calcular n para E=2 y E=1.</strong></p>
+<div class="step"><div class="step-n">E=2</div><div class="step-body">$n=\lceil(1{,}96\times8/2)^2\rceil=\lceil61{,}47\rceil=\mathbf{62}$</div></div>
+<div class="step"><div class="step-n">E=1</div><div class="step-body">$n=\lceil(15{,}68)^2\rceil=\lceil245{,}9\rceil=\mathbf{246}$ — al mitad el E, n×4.</div></div>
+<p style="margin-top:12px"><strong>5.2: σ=5, E=1,5, 90%.</strong></p>
+<div class="step"><div class="step-n">n</div><div class="step-body">$z=1{,}645$ → $n=\lceil(1{,}645\times5/1{,}5)^2\rceil=\lceil30{,}07\rceil=\mathbf{31}$</div></div>
+</div>
+</details>
+
+<details>
+<summary>🟠 Repaso 6 — Regresión lineal</summary>
+<div class="solution">
+<p><strong>x=[1,2,3,4,5], y=[3,2,4,5,6]. Ajustar recta, R², predecir X=6, IC 95% pendiente.</strong></p>
+<div class="step"><div class="step-n">1</div><div class="step-body">$S_{xx}=10,\;S_{xy}=9$ → $b=0{,}9,\;a=1{,}3$</div></div>
+<div class="step"><div class="step-n">2</div><div class="step-body">$R^2=0{,}81$ — X explica el 81% de variabilidad de Y.</div></div>
+<div class="step"><div class="step-n">3</div><div class="step-body">$\hat{y}(6)=1{,}3+0{,}9\times6=\mathbf{6{,}7}$</div></div>
+<div class="step"><div class="step-n">4</div><div class="step-body">$IC_{95\%}(b)=[0{,}10\,;\,1{,}70]$ — no contiene 0 → relación significativa.</div></div>
+</div>
+</details>
+
+<!-- ══════════════════════════════════════════════════
+     AUTOEVALUACIÓN
+══════════════════════════════════════════════════ -->
+<h2 id="autoevaluacion"><span class="badge repaso">Recursos</span> 🏆 Autoevaluación — Flashcards</h2>
+
+<div class="card" style="border-color:#a78bfa;margin-bottom:16px">
+<h4>📇 Flashcards — hacé clic para ver la respuesta</h4>
+<p style="font-size:13px;color:var(--muted);margin-bottom:12px">Tocá cada tarjeta para revelar la respuesta.</p>
+<div class="flashcard-grid">
+
+<div class="flashcard" onclick="this.classList.toggle('flipped')">
+  <div class="flashcard-inner">
+    <div class="flashcard-front"><div class="fc-q">¿Qué mide el margen de error E en un IC?</div><span style="font-size:11px">Toca para ver</span></div>
+    <div class="flashcard-back">E = z·σ/√n es el semiancho del IC. Representa la máxima diferencia admisible entre x̄ y μ.</div>
+  </div>
+</div>
+
+<div class="flashcard" onclick="this.classList.toggle('flipped')">
+  <div class="flashcard-inner">
+    <div class="flashcard-front"><div class="fc-q">¿Cuándo usás t en lugar de z?</div><span style="font-size:11px">Toca para ver</span></div>
+    <div class="flashcard-back">Cuando σ es desconocida y la estimás con s. Usás t con gl = n−1. Con n grande (gl→∞) t≈z.</div>
+  </div>
+</div>
+
+<div class="flashcard" onclick="this.classList.toggle('flipped')">
+  <div class="flashcard-inner">
+    <div class="flashcard-front"><div class="fc-q">Para reducir E a la mitad, ¿qué hacés con n?</div><span style="font-size:11px">Toca para ver</span></div>
+    <div class="flashcard-back">Multiplicás n por 4. Porque E = z·σ/√n → si E/2, necesitás √n×2 → n×4.</div>
+  </div>
+</div>
+
+<div class="flashcard" onclick="this.classList.toggle('flipped')">
+  <div class="flashcard-inner">
+    <div class="flashcard-front"><div class="fc-q">¿Qué significa R²=0,85 en regresión?</div><span style="font-size:11px">Toca para ver</span></div>
+    <div class="flashcard-back">X explica el 85% de la variabilidad de Y. El 15% restante queda sin explicar (error o variables omitidas).</div>
+  </div>
+</div>
+
+<div class="flashcard" onclick="this.classList.toggle('flipped')">
+  <div class="flashcard-inner">
+    <div class="flashcard-front"><div class="fc-q">¿Cuál es la diferencia entre IC e IP en regresión?</div><span style="font-size:11px">Toca para ver</span></div>
+    <div class="flashcard-back">IC: intervalo para la MEDIA de Y dado x₀. IP: intervalo para una NUEVA observación. El IP tiene +1 bajo el radical → siempre más ancho.</div>
+  </div>
+</div>
+
+<div class="flashcard" onclick="this.classList.toggle('flipped')">
+  <div class="flashcard-inner">
+    <div class="flashcard-front"><div class="fc-q">¿Qué implica si el IC de la pendiente contiene al 0?</div><span style="font-size:11px">Toca para ver</span></div>
+    <div class="flashcard-back">No hay evidencia de relación lineal significativa (b podría ser 0, es decir Y no depende de X).</div>
+  </div>
+</div>
+
+<div class="flashcard" onclick="this.classList.toggle('flipped')">
+  <div class="flashcard-inner">
+    <div class="flashcard-front"><div class="fc-q">Interpretación correcta del IC 95%</div><span style="font-size:11px">Toca para ver</span></div>
+    <div class="flashcard-back">En el 95% de las muestras, el intervalo construido contiene a μ. NO significa que μ tiene probabilidad 0,95 de estar en ese intervalo específico.</div>
+  </div>
+</div>
+
+<div class="flashcard" onclick="this.classList.toggle('flipped')">
+  <div class="flashcard-inner">
+    <div class="flashcard-front"><div class="fc-q">¿Por qué Poisson tiene E[X]=Var(X)?</div><span style="font-size:11px">Toca para ver</span></div>
+    <div class="flashcard-back">Ambos igualan a λ. Esta igualdad es una propiedad única de Poisson. Si en datos reales Var>>Media, hay sobredispersión (no es Poisson puro).</div>
+  </div>
+</div>
+
+</div>
+<p style="margin-top:14px;font-size:13px">Para el quiz de preguntas múltiple opción → <a href="#quiz" style="color:var(--accent2)">ir al Quiz Final ↓</a></p>
 </div>
 
 <!-- ── R CODE ── -->
@@ -1965,9 +2613,29 @@ cat("n mínimo para E ≤", E, ":", n_min, "\n")</pre>
 <p>Para n &lt; 30 y población no Normal, el TCL no garantiza distribución Normal de X̄. En ese caso debería usarse la distribución t con n−1 grados de libertad. Aplicar el TCL ciegamente con muestras chicas introduce error en los cálculos de probabilidad.</p>
 </div>
 
+<div class="card warn">
+<h4>15. Usar z en lugar de t cuando σ es desconocida</h4>
+<p>Si el enunciado dice "se midió s = ..." o "desvío muestral", σ es <strong>desconocida</strong> → usás <strong>t de Student</strong> con gl = n−1. Usar z en esa situación subestima el margen de error y produce un IC demasiado angosto.</p>
+</div>
+
+<div class="card warn">
+<h4>16. No redondear hacia arriba en el tamaño de muestra</h4>
+<p>La fórmula n = (z·σ/E)² casi nunca da un entero exacto. Si da 61,47 → el mínimo es <strong>n = 62</strong> (no 61). Con n=61 el error real sería mayor que E. Siempre aplicá el techo ⌈⌉.</p>
+</div>
+
+<div class="card warn">
+<h4>17. Confundir IC para la media con IP para nueva observación</h4>
+<p>El IC para respuesta media y el IP para un nuevo valor comparten la misma fórmula salvo por el "+1" bajo el radical del IP. Omitirlo produce un IP demasiado angosto — no capturaría el 95% de las nuevas observaciones.</p>
+</div>
+
+<div class="card warn">
+<h4>18. Concluir causalidad a partir de un R² alto</h4>
+<p>R² = 0,95 dice que X y Y tienen fuerte relación lineal — <strong>no</strong> que X causa Y. Puede haber una tercera variable que explique ambas (correlación espuria). La causalidad requiere diseño experimental, no solo estadística.</p>
+</div>
+
 <div class="footer">
   Estadística · Parcial 2 — Lic. en Automatización y Control · UNI Pilar<br>
-  Clases 8 y 9: Binomial · Poisson · Normal &nbsp;|&nbsp; Clase 10: Distribución muestral y TCL &nbsp;|&nbsp; Preview Clase 11: IC y Regresión<br>
+  Clases 8–10: Binomial · Poisson · Normal · TCL &nbsp;|&nbsp; Clase 11: IC y Regresión lineal<br>
   Basado en Montgomery &amp; Runger y Walpole et al.
 </div>
 
@@ -2278,6 +2946,43 @@ const quizQs = [
   {q:'Para construir un IC al 99% en lugar de uno al 95% (mismos n y σ):',
    ops:['El intervalo se achica','El intervalo se agranda','El intervalo queda igual','Se necesita cambiar n'],
    correct:1, exp:'Mayor confianza → z_{α/2} mayor (2,576 > 1,96) → margen de error mayor → intervalo más ancho. Hay un trade-off entre confianza y precisión.'},
+
+  // ── IC, tamaño de muestra, regresión ──
+  {q:'σ=10, n=25, x̄=50. ¿Cuál es el margen de error E para IC al 95%?',
+   ops:['1,96','3,92','2','10'],
+   correct:1, exp:'E = z·σ/√n = 1,96 × 10/5 = 1,96 × 2 = 3,92. El IC sería [46,08 ; 53,92].'},
+
+  {q:'¿Cuándo se usa t de Student en lugar de z para un IC?',
+   ops:['Siempre que n < 30','Cuando σ es desconocida y se estima con s','Cuando la población es Normal','Cuando p es pequeño'],
+   correct:1, exp:'La decisión clave es si σ se conoce o no. Si σ es desconocida, se usa t con gl = n−1, independientemente del tamaño de muestra.'},
+
+  {q:'Para un IC con t de Student, los grados de libertad son:',
+   ops:['n','n−1','n−2','n/2'],
+   correct:1, exp:'gl = n−1. Por ejemplo, con n=16 → gl=15. A mayor gl, la t se acerca más a z.'},
+
+  {q:'Si reducís el error máximo E a la mitad (con σ y confianza constantes), ¿cuánto cambia n?',
+   ops:['Se duplica','Se cuadriplica','Se divide a la mitad','No cambia'],
+   correct:1, exp:'n = (z·σ/E)². Si E → E/2: n_nuevo = (z·σ/(E/2))² = 4·(z·σ/E)² = 4·n_original.'},
+
+  {q:'Con σ=8 y confianza 95%, ¿qué n mínimo se necesita para E=2?',
+   ops:['25','62','16','246'],
+   correct:1, exp:'n = ⌈(1,96×8/2)²⌉ = ⌈(7,84)²⌉ = ⌈61,47⌉ = 62. Siempre se redondea hacia arriba.'},
+
+  {q:'En regresión lineal simple, ¿qué minimiza el método de mínimos cuadrados?',
+   ops:['La suma de residuos ∑eᵢ','La suma de cuadrados de residuos ∑eᵢ²','La varianza de X','El valor de b'],
+   correct:1, exp:'MCO minimiza SSE = ∑(yᵢ − ŷᵢ)². Minimizar ∑eᵢ (sin cuadrar) no sirve porque los errores positivos y negativos se cancelan.'},
+
+  {q:'Si R²=0, ¿qué indica el modelo de regresión?',
+   ops:['Ajuste perfecto','X no explica nada de la variabilidad de Y','Error cero','b = 1'],
+   correct:1, exp:'R²=0 significa que SSR=0, es decir la recta es horizontal (b=0). X no aporta ninguna información predictiva sobre Y.'},
+
+  {q:'¿Cuál es la diferencia entre el IC para la respuesta media y el IP para un nuevo valor (en regresión)?',
+   ops:['Son idénticos','El IP es más ancho porque agrega la variabilidad individual (+1 bajo el radical)','El IC es más ancho','Solo difieren en el valor de t'],
+   correct:1, exp:'IC responde "¿dónde está la media de Y para ese x₀?". IP responde "¿dónde caerá una nueva observación?". El IP incluye +1 → es siempre más ancho.'},
+
+  {q:'En un IC de 95% para la pendiente b = [0,1 ; 1,7], ¿cuál es la conclusión?',
+   ops:['b no es significativa (contiene 0)','b es significativamente positiva (no contiene 0)','La pendiente es exactamente 0,9','No se puede concluir nada'],
+   correct:1, exp:'El intervalo [0,1 ; 1,7] no contiene 0 → hay evidencia estadística de que b > 0, es decir, existe relación lineal positiva significativa.'},
 ];
 
 let quizIdx=0, quizScore=0;
@@ -2692,6 +3397,154 @@ function lookupZ(){
    INICIALIZACIÓN
 ══════════════════════════════════════ */
 
+/* ══ t-Student approximation (Cornish-Fisher, accurate for df≥3) ══ */
+function qtStudent(p, df){
+  // Returns t quantile. Uses Normal approx with Cornish-Fisher correction.
+  if(df>=1e6) return qnormStd(p);
+  const z = qnormStd(p);
+  const g1 = (z*z*z + z) / (4*df);
+  const g2 = (5*z*z*z*z*z + 16*z*z*z + 3*z) / (96*df*df);
+  const g3 = (3*z*z*z*z*z*z*z + 19*z*z*z*z*z + 17*z*z*z - 15*z) / (384*df*df*df);
+  return z + g1 + g2 + g3;
+}
+
+/* ══ Toggle IC inputs ══ */
+function toggleICInputs(){
+  const tipo = document.getElementById('ic-tipo').value;
+  document.getElementById('ic-sigma-div').style.display = tipo==='z' ? '' : 'none';
+  document.getElementById('ic-s-div').style.display = tipo==='t' ? '' : 'none';
+}
+
+/* ══ IC calculator ══ */
+function calcIC_full(){
+  const xbar = parseFloat(document.getElementById('ic-xbar').value);
+  const conf = parseFloat(document.getElementById('ic-conf').value);
+  const tipo = document.getElementById('ic-tipo').value;
+  const n    = parseInt(document.getElementById('ic-n').value);
+  const alpha = 1 - conf;
+  let crit, se, label;
+  if(tipo === 'z'){
+    const sigma = parseFloat(document.getElementById('ic-sigma').value);
+    crit  = qnormStd(1 - alpha/2);
+    se    = sigma / Math.sqrt(n);
+    label = `z<sub>α/2</sub> = ${crit.toFixed(3)}`;
+  } else {
+    const s = parseFloat(document.getElementById('ic-s').value);
+    const df = n - 1;
+    crit  = qtStudent(1 - alpha/2, df);
+    se    = s / Math.sqrt(n);
+    label = `t<sub>α/2, ${df}</sub> = ${crit.toFixed(3)}`;
+  }
+  const E   = crit * se;
+  const lo  = xbar - E;
+  const hi  = xbar + E;
+  const div = document.getElementById('ic-result');
+  div.style.display = '';
+  div.innerHTML = `
+    <div style="background:#0d1a2a;border-radius:8px;padding:14px;line-height:2">
+      <div>Error estándar: <strong>se = ${se.toFixed(4)}</strong></div>
+      <div>Valor crítico: <strong>${label}</strong></div>
+      <div>Margen de error: <strong>E = ${E.toFixed(4)}</strong></div>
+      <div style="font-size:16px;margin-top:6px;color:#34d399">
+        IC<sub>${(conf*100).toFixed(0)}%</sub> = [<strong>${lo.toFixed(3)}</strong> ; <strong>${hi.toFixed(3)}</strong>]
+      </div>
+    </div>`;
+}
+
+/* ══ Sample size calculator ══ */
+function calcN_min(){
+  const E     = parseFloat(document.getElementById('n-E').value);
+  const sigma = parseFloat(document.getElementById('n-sigma').value);
+  const conf  = parseFloat(document.getElementById('n-conf').value);
+  const z     = qnormStd(1 - (1-conf)/2);
+  const n     = Math.ceil(Math.pow(z * sigma / E, 2));
+  const div   = document.getElementById('n-result');
+  div.style.display = '';
+  div.innerHTML = `
+    <div style="background:#0d1a2a;border-radius:8px;padding:14px;line-height:2">
+      <div>z<sub>α/2</sub> = <strong>${z.toFixed(3)}</strong></div>
+      <div>(z·σ/E)² = (${z.toFixed(3)} × ${sigma} / ${E})² = <strong>${Math.pow(z*sigma/E,2).toFixed(2)}</strong></div>
+      <div style="font-size:16px;margin-top:6px;color:#34d399">n mínimo = ⌈${Math.pow(z*sigma/E,2).toFixed(2)}⌉ = <strong>${n}</strong></div>
+    </div>`;
+}
+
+/* ══ Regression simulator ══ */
+let _regState = null;
+
+const _regPresets = {
+  puntos: `1 3\n2 2\n3 4\n4 5\n5 6`,
+  horas:  `2 4\n4 5\n5 6\n6 7\n7 8\n9 9`,
+  temp:   `245 48\n247 52\n249 56\n251 60\n253 64`
+};
+
+function loadRegPreset(name){
+  document.getElementById('reg-data').value = _regPresets[name] || '';
+  plotRegresion();
+}
+
+function plotRegresion(){
+  const raw = document.getElementById('reg-data').value.trim();
+  if(!raw){ return; }
+  const rows = raw.split('\n').map(l=>l.trim().split(/[\s,;]+/).map(Number)).filter(r=>r.length>=2&&!isNaN(r[0])&&!isNaN(r[1]));
+  if(rows.length < 3){ document.getElementById('reg-result').innerHTML='<span style="color:#ef4444">Necesitás al menos 3 puntos.</span>'; return; }
+  const xs = rows.map(r=>r[0]), ys = rows.map(r=>r[1]);
+  const n  = xs.length;
+  const xm = xs.reduce((a,b)=>a+b,0)/n;
+  const ym = ys.reduce((a,b)=>a+b,0)/n;
+  const Sxx = xs.reduce((s,x)=>s+(x-xm)**2, 0);
+  const Sxy = xs.reduce((s,x,i)=>s+(x-xm)*(ys[i]-ym), 0);
+  const Syy = ys.reduce((s,y)=>s+(y-ym)**2, 0);
+  const b   = Sxy / Sxx;
+  const a   = ym - b*xm;
+  const SSR = b * Sxy;
+  const SSE = Syy - SSR;
+  const R2  = SSR / Syy;
+  const s2  = SSE / (n-2);
+  const s   = Math.sqrt(s2);
+  _regState = {n, xm, ym, Sxx, Syy, SSE, s2, s, b, a, R2};
+
+  // Predict at x0
+  const x0   = parseFloat(document.getElementById('reg-x0').value);
+  const conf = parseFloat(document.getElementById('reg-conf').value);
+  const df   = n - 2;
+  const t    = qtStudent(1-(1-conf)/2, df);
+  const yhat = a + b*x0;
+  const fac  = Math.sqrt(1/n + (x0-xm)**2/Sxx);
+  const E_ic = t*s*fac;
+  const E_ip = t*s*Math.sqrt(1 + 1/n + (x0-xm)**2/Sxx);
+
+  // Plot
+  const xmin = Math.min(...xs), xmax = Math.max(...xs);
+  const xLine = [xmin, xmax];
+  const yLine = xLine.map(x=>a+b*x);
+  const layout = {
+    paper_bgcolor:'transparent', plot_bgcolor:'#0d1a2a',
+    margin:{t:10,b:40,l:45,r:10},
+    font:{color:'#94a3b8', size:11},
+    xaxis:{gridcolor:'#1e293b', title:'X'},
+    yaxis:{gridcolor:'#1e293b', title:'Y'},
+    legend:{bgcolor:'transparent'}
+  };
+  const traces = [
+    {x:xs, y:ys, mode:'markers', name:'Datos', marker:{color:'#38bdf8', size:8}},
+    {x:xLine, y:yLine, mode:'lines', name:`ŷ=${a.toFixed(2)}+${b.toFixed(2)}X`, line:{color:'#34d399',width:2}},
+    {x:[x0], y:[yhat], mode:'markers', name:`x₀=${x0}`, marker:{color:'#f59e0b', size:10, symbol:'diamond'}},
+    {x:[x0,x0], y:[yhat-E_ip, yhat+E_ip], mode:'lines', name:'IP', line:{color:'#a78bfa',width:1,dash:'dot'}},
+    {x:[x0,x0], y:[yhat-E_ic, yhat+E_ic], mode:'lines', name:'IC media', line:{color:'#34d399',width:2,dash:'dash'}}
+  ];
+  Plotly.newPlot('reg-plot', traces, layout, {displayModeBar:false, responsive:true});
+
+  // Results
+  document.getElementById('reg-result').innerHTML = `
+    <div style="background:#0d1a2a;border-radius:8px;padding:12px;line-height:1.8;font-size:13px">
+      <strong>ŷ = ${a.toFixed(3)} + ${b.toFixed(3)}·X</strong> &nbsp;|&nbsp; R² = <strong>${R2.toFixed(4)}</strong> (X explica ${(R2*100).toFixed(1)}% de variab. de Y)<br>
+      s = ${s.toFixed(4)} &nbsp;|&nbsp; n=${n} &nbsp;|&nbsp; gl=${df}<br>
+      <span style="color:#f59e0b">ŷ(${x0}) = <strong>${yhat.toFixed(3)}</strong></span><br>
+      <span style="color:#34d399">IC ${(conf*100).toFixed(0)}% media: [${(yhat-E_ic).toFixed(3)} ; ${(yhat+E_ic).toFixed(3)}]</span><br>
+      <span style="color:#a78bfa">IP ${(conf*100).toFixed(0)}% nuevo: [${(yhat-E_ip).toFixed(3)} ; ${(yhat+E_ip).toFixed(3)}]</span>
+    </div>`;
+}
+
 document.addEventListener('DOMContentLoaded', ()=>{
   plotBinomial();
   plotPoisson();
@@ -2700,6 +3553,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   plotDual();
   plotTCL();
   lookupZ();
+  loadRegPreset('puntos');
 });
 </script>
 </body>

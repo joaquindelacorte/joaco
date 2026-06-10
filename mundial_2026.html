@@ -180,6 +180,12 @@
   .sg-pts{font-weight:800;color:var(--accent);font-size:.85rem}
   .sg-detail{color:var(--muted);font-size:.68rem;margin-right:6px}
 
+  /* DATE DIVIDER */
+  .date-divider{grid-column:1/-1;display:flex;align-items:center;gap:12px;margin:8px 0 4px;
+    font-size:.78rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px}
+  .date-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+  .match-time{font-size:.72rem;color:var(--accent2);font-weight:600;letter-spacing:.3px}
+
   /* CHAMPION */
   .champion-section{text-align:center;padding:32px 16px;
     background:linear-gradient(135deg,#0d1500,#1a1200,#0d1500);
@@ -243,6 +249,7 @@
   <div class="group-filters">
     <span>Grupo:</span>
     <button class="gf-btn active" onclick="filterGroup('ALL',this)">Todos</button>
+    <button class="gf-btn" id="btn-fecha" onclick="filterByDate(this)" style="margin-left:8px">📅 Por Fecha</button>
   </div>
   <div class="matches-grid" id="grupos-grid"></div>
   <div class="standings-wrap">
@@ -359,6 +366,44 @@ function buildData(name){
   };
 }
 
+// Horario del torneo por grupo y jornada
+// ts: [hora_partido1, hora_partido2]; para Jornada 3 son simultáneos (misma hora)
+const GROUP_SCHEDULE = {
+  A:{1:{d:'11 Jun',ts:['12:00','15:00']},2:{d:'20 Jun',ts:['12:00','15:00']},3:{d:'29 Jun',ts:['18:00','18:00']}},
+  B:{1:{d:'11 Jun',ts:['18:00','21:00']},2:{d:'20 Jun',ts:['18:00','21:00']},3:{d:'29 Jun',ts:['21:00','21:00']}},
+  C:{1:{d:'12 Jun',ts:['12:00','15:00']},2:{d:'21 Jun',ts:['12:00','15:00']},3:{d:'30 Jun',ts:['18:00','18:00']}},
+  D:{1:{d:'12 Jun',ts:['18:00','21:00']},2:{d:'21 Jun',ts:['18:00','21:00']},3:{d:'30 Jun',ts:['21:00','21:00']}},
+  E:{1:{d:'13 Jun',ts:['12:00','15:00']},2:{d:'22 Jun',ts:['12:00','15:00']},3:{d:'1 Jul', ts:['18:00','18:00']}},
+  F:{1:{d:'13 Jun',ts:['18:00','21:00']},2:{d:'22 Jun',ts:['18:00','21:00']},3:{d:'1 Jul', ts:['21:00','21:00']}},
+  G:{1:{d:'14 Jun',ts:['12:00','15:00']},2:{d:'23 Jun',ts:['12:00','15:00']},3:{d:'2 Jul', ts:['18:00','18:00']}},
+  H:{1:{d:'14 Jun',ts:['18:00','21:00']},2:{d:'23 Jun',ts:['18:00','21:00']},3:{d:'2 Jul', ts:['21:00','21:00']}},
+  I:{1:{d:'15 Jun',ts:['12:00','15:00']},2:{d:'24 Jun',ts:['12:00','15:00']},3:{d:'3 Jul', ts:['18:00','18:00']}},
+  J:{1:{d:'15 Jun',ts:['18:00','21:00']},2:{d:'24 Jun',ts:['18:00','21:00']},3:{d:'3 Jul', ts:['21:00','21:00']}},
+  K:{1:{d:'16 Jun',ts:['12:00','15:00']},2:{d:'25 Jun',ts:['12:00','15:00']},3:{d:'4 Jul', ts:['18:00','18:00']}},
+  L:{1:{d:'16 Jun',ts:['18:00','21:00']},2:{d:'25 Jun',ts:['18:00','21:00']},3:{d:'4 Jul', ts:['21:00','21:00']}},
+};
+
+// Clave numérica para ordenar: YYYYMMDD * 10000 + HHMM
+function dateSortKey(d, hora) {
+  const months = {'Jun':6,'Jul':7};
+  const [day, mon] = d.split(' ');
+  const m = months[mon];
+  const [h, min] = hora.split(':').map(Number);
+  return (2026 * 10000 + m * 100 + Number(day)) * 10000 + h * 100 + min;
+}
+
+function getMatchSchedule(matches, idx) {
+  const m = matches[idx];
+  const slot = GROUP_SCHEDULE[m.group]?.[m.md];
+  if (!slot) return {fecha:'', hora:'', sortKey:0};
+  let count = 0;
+  for (let i = 0; i < idx; i++) {
+    if (matches[i].group === m.group && matches[i].md === m.md) count++;
+  }
+  const hora = slot.ts[count] || slot.ts[0];
+  return {fecha: slot.d, hora, sortKey: dateSortKey(slot.d, hora)};
+}
+
 // Bracket linkage (idéntica para todos los escenarios)
 const ADVANCES = {
   M73:{round:'r16',match:'M90',side:'local'},
@@ -427,11 +472,14 @@ function groupCardHTML(m, idx){
   const isWinV = gv > gl;
   const cL=conf(m.local), cV=conf(m.visit);
   const winner = isDraw ? null : (isWinL ? m.local : m.visit);
+  const sched = getMatchSchedule(STATE.group_matches, idx);
+  const fechaHora = sched.fecha ? `<span class="match-time">📅 ${sched.fecha} · ${sched.hora}</span>` : '';
   return `
-    <div class="match-card" data-group="${m.group}" data-gidx="${idx}" id="gcard-${idx}">
+    <div class="match-card" data-group="${m.group}" data-gidx="${idx}" data-sortkey="${sched.sortKey}" id="gcard-${idx}">
       <div class="match-meta">
         <span class="group-tag">Grupo ${m.group}</span>
         <span>Jornada ${m.md}</span>
+        ${fechaHora}
       </div>
       <div class="match-teams">
         <div class="team local">
@@ -457,14 +505,16 @@ function groupCardHTML(m, idx){
 
 function renderGroupFilters(){
   const filters = document.querySelector('.group-filters');
-  // Eliminar botones de grupo previos (excepto Todos)
-  filters.querySelectorAll('.gf-btn:not(:first-of-type)').forEach(b=>b.remove());
+  // Eliminar botones de grupo previos (excepto Todos y Por Fecha)
+  filters.querySelectorAll('.gf-btn:not(:first-of-type):not(#btn-fecha)').forEach(b=>b.remove());
+  const fechaBtn = filters.querySelector('#btn-fecha');
   const groups = [...new Set(STATE.group_matches.map(m=>m.group))].sort();
   groups.forEach(g=>{
     const btn = document.createElement('button');
     btn.className='gf-btn'; btn.textContent='Grupo '+g;
     btn.onclick = ()=>filterGroup(g,btn);
-    filters.appendChild(btn);
+    // Insertar antes del botón Por Fecha para mantenerlo al final
+    filters.insertBefore(btn, fechaBtn);
   });
 }
 
@@ -477,14 +527,40 @@ function renderAllGroupCards(){
 function filterGroup(g, btn){
   document.querySelectorAll('.gf-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
+  // Si veníamos del modo fecha, restaurar el grid en orden normal
+  const grid = document.getElementById('grupos-grid');
+  if(grid.querySelector('.date-divider')) renderAllGroupCards();
   document.querySelectorAll('.match-card').forEach(c=>{
     c.style.display = (g==='ALL'||c.dataset.group===g)?'':'none';
   });
 }
 
+function filterByDate(btn){
+  document.querySelectorAll('.gf-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const grid = document.getElementById('grupos-grid');
+  // Recopilar tarjetas con su sortKey y reconstruir con separadores de fecha
+  const cards = [...grid.querySelectorAll('.match-card')];
+  const sorted = cards
+    .map(c=>({el:c, sk:Number(c.dataset.sortkey), fecha:c.querySelector('.match-time')?.textContent?.split('·')[0]?.replace('📅','').trim()||''}))
+    .sort((a,b)=>a.sk-b.sk);
+  let html = '';
+  let lastFecha = null;
+  sorted.forEach(({el, fecha})=>{
+    if(fecha && fecha !== lastFecha){
+      html += `<div class="date-divider">${fecha}</div>`;
+      lastFecha = fecha;
+    }
+    el.style.display = '';
+    html += el.outerHTML;
+  });
+  grid.innerHTML = html;
+}
+
 function applyCurrentFilter(){
   const btn = document.querySelector('.gf-btn.active');
   if(!btn) return;
+  if(btn.id==='btn-fecha') return; // ya está manejado
   const txt = btn.textContent;
   const g = txt==='Todos' ? 'ALL' : txt.replace('Grupo ','');
   document.querySelectorAll('.match-card').forEach(c=>{

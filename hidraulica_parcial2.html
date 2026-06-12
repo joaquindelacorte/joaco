@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Hidráulica — 2do Parcial · Componentes Oleohidráulicos</title>
+<style>
+:root{
+  --blue:#0369a1;--blue-lt:#0284c7;--blue-bg:#e0f2fe;
+  --teal:#0d9488;--teal-bg:#ccfbf1;
+  --green:#15803d;--green-bg:#dcfce7;
+  --orange:#c05c00;--orange-bg:#fff3e0;
+  --red:#b91c1c;--red-bg:#fee2e2;
+  --purple:#7c3aed;--purple-bg:#ede9fe;
+  --yellow:#d97706;--yellow-bg:#fef9c3;
+  --gray:#374151;--gray-lt:#6b7280;
+  --bg:#f0f9ff;--card:#fff;--border:#e2e8f0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65;overflow-x:hidden;-webkit-tap-highlight-color:rgba(2,132,199,.15);-webkit-font-smoothing:antialiased}
+img,svg,video{max-width:100%;height:auto}
+table{max-width:100%}
+pre,code,.fbox{word-wrap:break-word;overflow-wrap:break-word}
+button,select,input[type=range]{min-height:44px}
+.opt-btn,.tab-btn,.fc-btn,.ej-filter-btn,.btn-next,.btn-retry,.btn-reset,.show-sol-btn{min-height:44px}
+.match-item{min-height:44px;display:flex;align-items:center;justify-content:center}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:6px;background:var(--border);border-radius:3px}
+input[type=range]::-moz-range-track{height:6px;background:var(--border);border-radius:3px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:var(--blue-lt);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);margin-top:-8px;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--blue-lt);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);cursor:pointer}
+@media(hover:none){.card:hover{box-shadow:0 1px 4px rgba(0,0,0,.05);transform:none}}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:var(--blue);display:flex;align-items:center;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.brand{color:#fff;font-size:1.05rem;font-weight:800;padding:.8rem 1.2rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.2)}
+.tabs{display:flex;overflow-x:auto;flex:1}
+.tab-btn{padding:.75rem 1rem;border:none;background:transparent;color:rgba(255,255,255,.75);font-size:.83rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s;font-family:inherit}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tab-btn.active{color:#fff;border-bottom-color:#7dd3fc;background:rgba(255,255,255,.08)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#0c4a6e 0%,var(--blue-lt) 100%);color:#fff;text-align:center;padding:2.5rem 1rem 2rem}
+.hero h1{font-size:2.2rem;font-weight:900;letter-spacing:-.5px}
+.hero p{opacity:.85;margin-top:.4rem}
+.badges{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.25rem .85rem;font-size:.78rem;font-weight:700}
+
+/* LAYOUT */
+.page{display:none}.page.active{display:block}
+.container{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+.stitle{display:flex;align-items:center;gap:.6rem;font-size:1.3rem;font-weight:800;color:var(--blue);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid var(--blue-bg)}
+.stitle:first-child{margin-top:0}
+.stitle .ico{font-size:1.3rem}
+.sub{font-size:1.05rem;font-weight:700;color:var(--blue-lt);margin:1.4rem 0 .7rem}
+
+/* CARDS */
+.grid{display:grid;gap:1.1rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;box-shadow:0 1px 4px rgba(0,0,0,.05);transition:.2s}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.card h3{font-size:1rem;font-weight:700;margin-bottom:.5rem;color:var(--blue)}
+.card p,.card li{font-size:.92rem;color:var(--gray)}
+.card ul,.card ol{margin-left:1.2rem;margin-top:.3rem}
+.card.bl{border-left:4px solid var(--blue);background:var(--blue-bg)}
+.card.tl{border-left:4px solid var(--teal);background:var(--teal-bg)}
+.card.gr{border-left:4px solid var(--green);background:var(--green-bg)}
+.card.or{border-left:4px solid var(--orange);background:var(--orange-bg)}
+.card.re{border-left:4px solid var(--red);background:var(--red-bg)}
+.card.pu{border-left:4px solid var(--purple);background:var(--purple-bg)}
+
+/* FORMULA */
+.fbox{background:#0c1a2e;color:#e2e8f0;border-radius:10px;padding:1.1rem 1.3rem;font-family:'Courier New',monospace;text-align:center;margin:.7rem 0;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.fbox .big{font-size:1.4rem;font-weight:700;color:#7dd3fc;display:block;margin-bottom:.3rem}
+.fbox .sub-f{font-size:.85rem;color:#94a3b8;display:block;margin-top:.25rem}
+.fbox .unit{font-size:.78rem;color:#64748b;display:block;margin-top:.3rem}
+
+/* TABLE */
+.twrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);margin:.6rem 0}
+table{width:100%;border-collapse:collapse;font-size:.88rem;background:#fff}
+th{background:var(--blue);color:#fff;padding:.65rem 1rem;text-align:left;font-weight:600}
+td{padding:.6rem 1rem;border-bottom:1px solid var(--border)}
+tr:last-child td{border:none}
+tr:nth-child(even) td{background:var(--blue-bg)}
+
+/* TIP / NOTE / WARN */
+.tip{display:flex;gap:.7rem;align-items:flex-start;background:#fffbeb;border:1px solid #fbbf24;border-radius:10px;padding:.85rem 1.1rem;margin:.7rem 0;font-size:.9rem}
+.tip-i{flex-shrink:0;font-size:1.05rem}
+.note{background:var(--blue-bg);border-left:4px solid var(--blue);border-radius:0 8px 8px 0;padding:.8rem 1rem;font-size:.92rem;margin:.7rem 0;color:#075985}
+.warn{background:var(--red-bg);border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:.8rem 1rem;font-size:.92rem;margin:.7rem 0;color:#7f1d1d}
+
+/* DIAGRAM */
+.diagram{background:#fafbff;border:1px solid var(--border);border-radius:10px;padding:1rem;margin:.8rem 0;text-align:center}
+.diagram svg{max-width:100%;height:auto}
+.dcap{font-size:.82rem;color:var(--gray-lt);margin-top:.5rem;font-style:italic}
+
+/* CHEAT DARK */
+.cheat{background:linear-gradient(135deg,#0c1a2e 0%,#1e3a5f 100%);color:#e2e8f0;border-radius:14px;padding:1.8rem;margin:1rem 0}
+.cheat h2{color:#7dd3fc;font-size:1.15rem;margin-bottom:1.1rem;text-align:center}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.9rem}
+.citem{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:.9rem;text-align:center}
+.citem .lbl{font-size:.72rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem}
+.citem .cf{font-family:'Courier New',monospace;font-size:1rem;color:#7dd3fc;font-weight:700}
+.citem .cu{font-size:.72rem;color:#64748b;margin-top:.25rem}
+
+/* QUIZ */
+#quiz-container{max-width:720px;margin:0 auto}
+.quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:.5rem}
+.quiz-score-display{font-weight:700;font-size:1rem;color:var(--blue)}
+.progress-bar-wrap{background:var(--border);border-radius:2rem;height:8px;margin-bottom:1.5rem;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--blue-lt),#38bdf8);border-radius:2rem;transition:width .4s ease}
+.quiz-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.quiz-card .q-num{font-size:.8rem;font-weight:700;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem}
+.quiz-card .q-text{font-size:1.05rem;font-weight:600;color:var(--gray);margin-bottom:1.3rem;line-height:1.5}
+.options{display:grid;gap:.65rem}
+.opt-btn{padding:.85rem 1.1rem;border:2px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;font-size:.92rem;text-align:left;transition:.2s;font-weight:500;color:var(--gray);font-family:inherit}
+.opt-btn:hover:not(:disabled){border-color:var(--blue-lt);background:var(--blue-bg);color:var(--blue)}
+.opt-btn.correct{border-color:var(--green);background:var(--green-bg);color:var(--green);font-weight:700}
+.opt-btn.wrong{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+.opt-btn:disabled{cursor:default}
+.feedback-box{margin-top:1.1rem;padding:.95rem 1.1rem;border-radius:10px;font-size:.9rem;line-height:1.6;display:none}
+.feedback-box.show{display:block}
+.feedback-box.ok{background:var(--green-bg);border:1px solid var(--green);color:var(--green)}
+.feedback-box.ko{background:var(--red-bg);border:1px solid var(--red);color:var(--red)}
+.quiz-nav{display:flex;justify-content:flex-end;margin-top:1.2rem}
+.btn-next{padding:.75rem 1.8rem;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:700;cursor:pointer;transition:.2s;font-family:inherit}
+.btn-next:hover{background:var(--blue-lt)}
+.btn-next:disabled{opacity:.4;cursor:default}
+.result-card{background:var(--card);border-radius:16px;padding:2.5rem;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+.result-card .emoji{font-size:4rem;display:block;margin-bottom:.8rem}
+.result-card h2{font-size:1.6rem;font-weight:800;color:var(--blue);margin-bottom:.5rem}
+.result-card .score-big{font-size:3rem;font-weight:900;color:var(--blue);display:block;margin:.5rem 0}
+.result-card p{color:var(--gray-lt);font-size:.95rem;margin-bottom:1.3rem}
+.result-detail{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin:1rem 0;max-width:380px;margin-inline:auto}
+.rstat{border-radius:10px;padding:.8rem;font-weight:700;font-size:1rem}
+.rstat.ok{background:var(--green-bg);color:var(--green)}
+.rstat.ko{background:var(--red-bg);color:var(--red)}
+.btn-retry{padding:.8rem 2rem;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:.5rem;font-family:inherit}
+
+/* EJERCICIOS */
+.ej-filter{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.4rem;justify-content:center}
+.ej-filter-btn{padding:.5rem 1rem;border:2px solid var(--border);border-radius:2rem;background:#fff;cursor:pointer;font-size:.83rem;font-weight:600;color:var(--gray);transition:.2s;font-family:inherit}
+.ej-filter-btn:hover{border-color:var(--blue-lt);color:var(--blue)}
+.ej-filter-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.ej-card{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:1.1rem;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.ej-header{padding:1rem 1.3rem;background:linear-gradient(90deg,var(--blue-bg),#f8fafc);border-bottom:1px solid var(--border);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:.6rem}
+.ej-header h3{font-size:.95rem;font-weight:700;color:var(--blue);flex:1}
+.ej-badge{font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:2rem;background:var(--blue);color:#fff;flex-shrink:0}
+.ej-badge.t-pres{background:var(--red)}
+.ej-badge.t-caudal{background:var(--teal)}
+.ej-badge.t-pot{background:var(--orange)}
+.ej-badge.t-ariete{background:var(--purple)}
+.ej-badge.t-visc{background:var(--green)}
+.ej-body{padding:1.3rem 1.4rem;display:none}
+.ej-body.open{display:block}
+.ej-enunciado{background:#f8fafc;border-radius:10px;padding:1rem 1.2rem;border-left:4px solid var(--blue);margin-bottom:1rem;font-size:.92rem}
+.ej-enunciado strong{color:var(--blue)}
+.step{display:flex;gap:.8rem;margin-bottom:.8rem;align-items:flex-start}
+.step-num{background:var(--blue);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;flex-shrink:0;margin-top:.1rem}
+.step-body{font-size:.92rem;line-height:1.7;flex:1}
+.step-body .fi{font-family:'Courier New',monospace;background:#f1f5f9;padding:.15rem .5rem;border-radius:4px;color:var(--blue);font-weight:700;display:inline-block}
+.result-box{background:linear-gradient(90deg,#0c1a2e,#1e3a5f);color:#7dd3fc;border-radius:10px;padding:.85rem 1.2rem;font-family:'Courier New',monospace;font-size:1.05rem;font-weight:700;text-align:center;margin-top:.8rem}
+
+/* JUEGOS */
+.game-section{margin-bottom:3rem}
+.game-section h3{font-size:1.15rem;font-weight:800;color:var(--blue);margin-bottom:.4rem;text-align:center}
+.game-section p.desc{text-align:center;color:var(--gray-lt);font-size:.9rem;margin-bottom:1.2rem}
+.flashcard-wrap{perspective:900px;max-width:520px;margin:0 auto 1.5rem;height:220px;cursor:pointer}
+.flashcard{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.flashcard.flipped{transform:rotateY(180deg)}
+.fc-front,.fc-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.12)}
+.fc-front{background:linear-gradient(135deg,var(--blue),var(--blue-lt));color:#fff}
+.fc-front .fc-label{font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;opacity:.7;margin-bottom:.5rem}
+.fc-front .fc-content{font-size:1.1rem;font-weight:700;line-height:1.4}
+.fc-back{background:var(--card);border:2px solid var(--blue);transform:rotateY(180deg);color:var(--gray)}
+.fc-back .fc-answer{font-size:.92rem;line-height:1.6}
+.fc-controls{display:flex;justify-content:center;align-items:center;gap:1rem;max-width:520px;margin:0 auto}
+.fc-btn{padding:.55rem 1.4rem;border:2px solid var(--border);border-radius:8px;background:var(--card);cursor:pointer;font-weight:700;font-size:.88rem;transition:.2s;color:var(--gray);font-family:inherit}
+.fc-btn:hover{border-color:var(--blue);color:var(--blue)}
+.fc-counter{font-size:.85rem;color:var(--gray-lt);font-weight:600;min-width:60px;text-align:center}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;max-width:780px;margin:0 auto}
+.match-col h4{font-size:.82rem;font-weight:700;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.7rem;text-align:center}
+.match-item{padding:.7rem 1rem;border:2px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;font-size:.87rem;font-weight:600;text-align:center;transition:.2s;margin-bottom:.5rem;user-select:none}
+.match-item:hover:not(.matched):not(.selected-wrong){border-color:var(--blue-lt);background:var(--blue-bg)}
+.match-item.selected{border-color:var(--blue);background:var(--blue-bg);color:var(--blue);transform:scale(1.02)}
+.match-item.matched{border-color:var(--green);background:var(--green-bg);color:var(--green);cursor:default}
+.match-item.selected-wrong{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+.match-status{text-align:center;margin-top:1rem;font-weight:700;font-size:.95rem;min-height:1.5rem}
+.match-status.win{color:var(--green)}
+.match-status.err{color:var(--red)}
+.btn-reset{padding:.55rem 1.4rem;border:2px solid var(--border);border-radius:8px;background:var(--card);cursor:pointer;font-weight:700;font-size:.85rem;transition:.2s;color:var(--gray);display:block;margin:.8rem auto 0;font-family:inherit}
+.btn-reset:hover{border-color:var(--blue);color:var(--blue)}
+
+/* SIMULADORES (lab) */
+.lab{background:#fff;border:1px solid var(--border);border-radius:16px;padding:1.4rem;margin-bottom:2rem;box-shadow:0 2px 12px rgba(0,0,0,.06);overflow:hidden}
+.lab-head{margin-bottom:1.2rem;border-bottom:2px solid var(--blue-bg);padding-bottom:.8rem}
+.lab-head h3{color:var(--blue);font-size:1.15rem;font-weight:800;display:flex;align-items:center;gap:.5rem}
+.lab-head .ctx{margin-top:.4rem;font-size:.88rem;color:var(--gray-lt);font-style:italic}
+.lab-body{display:grid;grid-template-columns:1.3fr 1fr;gap:1.3rem;align-items:start}
+.lab-viz{background:linear-gradient(180deg,#e0f2fe,#f0f9ff);border-radius:12px;padding:1rem;border:1px solid #bae6fd;min-height:220px;display:flex;align-items:center;justify-content:center}
+.lab-viz svg{max-width:100%;height:auto;display:block}
+.lab-ctrls{display:flex;flex-direction:column;gap:.85rem}
+.lab-ctrls .row{display:flex;flex-direction:column}
+.lab-ctrls label{font-size:.83rem;font-weight:700;color:var(--gray);display:flex;justify-content:space-between;margin-bottom:.3rem}
+.lab-ctrls label .val{font-family:'Courier New',monospace;color:var(--blue);font-weight:700;font-size:.92rem;background:var(--blue-bg);padding:.15rem .6rem;border-radius:6px}
+.lab-ctrls input[type=range]{width:100%;accent-color:var(--blue-lt)}
+.lab-ctrls .sel{padding:.5rem .7rem;border:2px solid var(--border);border-radius:8px;background:#fff;font-size:.88rem;color:var(--gray);font-family:inherit;cursor:pointer}
+.lab-result{background:linear-gradient(90deg,#0c1a2e,#1e3a5f);color:#7dd3fc;border-radius:10px;padding:.95rem 1.2rem;font-family:'Courier New',monospace;font-size:1rem;font-weight:700;text-align:center;margin-top:1rem;line-height:1.6}
+.lab-result .res-line{display:block}
+.lab-result .res-key{color:#fde68a}
+.lab-fact{margin-top:1rem;background:#fffbeb;border-left:4px solid #f59e0b;border-radius:0 10px 10px 0;padding:.85rem 1.1rem;font-size:.88rem;color:#92400e;line-height:1.55}
+.lab-fact strong{color:#78350f}
+@media(max-width:780px){.lab-body{grid-template-columns:1fr;gap:1rem}.lab-viz{min-height:180px}}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  body{font-size:15px}
+  .container{padding:1.4rem 1rem}
+  .hero h1{font-size:1.5rem}
+  .hero p{font-size:.9rem}
+  .tab-btn{padding:.6rem .8rem;font-size:.78rem}
+  .brand{font-size:.92rem;padding:.7rem .9rem}
+  .stitle{font-size:1.1rem;margin:2rem 0 .8rem;gap:.45rem}
+  .stitle .ico{font-size:1.1rem}
+  .card{padding:1rem}
+  .fbox .big{font-size:1.15rem}
+  .quiz-card{padding:1.3rem}
+  .flashcard-wrap{height:190px;margin-bottom:1.2rem}
+  .match-item{padding:.6rem .8rem;font-size:.83rem}
+}
+@media(max-width:480px){
+  .tab-btn{padding:.55rem .65rem;font-size:.72rem}
+  .stitle{font-size:1rem}
+  .flashcard-wrap{height:175px}
+  .match-grid{gap:.7rem}
+  .match-item{font-size:.8rem;padding:.55rem .7rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">💧 Hidráulica · 2P</span>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showPage('fluidos',this)">🛢️ Fluidos</button>
+    <button class="tab-btn" onclick="showPage('componentes',this)">🔧 Componentes</button>
+    <button class="tab-btn" onclick="showPage('bombas',this)">⚙️ Bombas y Actuadores</button>
+    <button class="tab-btn" onclick="showPage('valvulas',this)">🎛️ Válvulas</button>
+    <button class="tab-btn" onclick="showPage('caudal',this)">🌊 Caudal y Velocidad</button>
+    <button class="tab-btn" onclick="showPage('fenomenos',this)">🚨 Fenómenos</button>
+    <button class="tab-btn" style="background:#facc15;color:#0c4a6e;font-weight:800;border-bottom:3px solid #f59e0b" onclick="showPage('repaso',this)">📝 Repaso Parcial</button>
+    <button class="tab-btn" onclick="showPage('ejercicios',this)">✏️ Ejercicios</button>
+    <button class="tab-btn" onclick="showPage('simuladores',this)">🔬 Simuladores</button>
+    <button class="tab-btn" onclick="showPage('juegos',this)">🎮 Juegos</button>
+    <button class="tab-btn" onclick="showPage('quiz',this)">🧠 Quiz</button>
+    <button class="tab-btn" onclick="showPage('cheatsheet',this)">📋 Fórmulas</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <h1>💧 Hidráulica — 2do Parcial</h1>
+  <p>Componentes de sistemas oleohidráulicos · Fluidos · Caudal, velocidad y fenómenos transitorios</p>
+  <div class="badges">
+    <span class="badge">🛢️ Fluidos y viscosidad</span>
+    <span class="badge">⚙️ Bombas y válvulas</span>
+    <span class="badge">🚨 Cavitación y golpe de ariete</span>
+    <span class="badge">🧠 Quiz interactivo</span>
+  </div>
+</header>
+
+<!-- ═══════════════════════ FLUIDOS ═══════════════════════ -->
+<div id="fluidos" class="page active"><div class="container">
+
+  <div class="stitle"><span class="ico">🛢️</span>El fluido hidráulico es un COMPONENTE, no un insumo</div>
+  <div class="note">El aceite hidráulico transmite la potencia y protege las superficies móviles: hay que tratarlo con la misma rigurosidad técnica que una bomba o un actuador, e integrarlo a los planes de mantenimiento predictivo y preventivo. <strong>Está presente en TODO el sistema.</strong></div>
+
+  <div class="grid g2">
+    <div class="card bl">
+      <h3>¿Qué es?</h3>
+      <p>Un líquido — generalmente un <strong>aceite mineral derivado del petróleo</strong> — que transmite la energía hidráulica en el sistema. Su función principal: <strong>transmitir fuerzas y movimientos</strong>.</p>
+    </div>
+    <div class="card or">
+      <h3>¿Por qué NO usamos agua?</h3>
+      <ul>
+        <li>No lubrica adecuadamente</li>
+        <li>Corroe materiales ferrosos</li>
+        <li>Viscosidad baja → facilita fugas</li>
+        <li>Se congela y evapora con facilidad</li>
+      </ul>
+      <p style="margin-top:.4rem">Sus ventajas (barata, no inflamable, no contamina) no compensan.</p>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">🎯</span>Las 5 funciones del fluido hidráulico</div>
+  <div class="grid g3">
+    <div class="card"><h3>1. Transmitir energía</h3><p>Fluir fácil por conductos y líneas para generar presiones y transmitir fuerza.</p></div>
+    <div class="card"><h3>2. Lubricar y proteger</h3><p>Forma una película sobre las superficies: evita desgaste, baja la temperatura por roce y protege de la corrosión.</p></div>
+    <div class="card"><h3>3. Sellar</h3><p>En algunos puntos produce un sellado mecánico que minimiza fugas.</p></div>
+    <div class="card"><h3>4. Disipar calor</h3><p>Absorbe el calor del sistema y lo irradia al exterior; se estabiliza al mezclarse en el tanque con fluido más frío.</p></div>
+    <div class="card"><h3>5. Transportar partículas</h3><p>Lleva los contaminantes hasta los filtros, donde quedan retenidos.</p></div>
+  </div>
+
+  <div class="stitle"><span class="ico">✅</span>Características que debe tener</div>
+  <div class="grid g3">
+    <div class="card tl"><h3>Mantener viscosidad</h3><p>Estable a distintas temperaturas, sin afectar el sellado.</p></div>
+    <div class="card tl"><h3>Estabilidad química</h3><p>Resistir la degradación, no formar lacas ni barnices, compatible con elastómeros (sellos).</p></div>
+    <div class="card tl"><h3>Desemulsibilidad</h3><p>Separarse rápido del agua que ingresa al sistema.</p></div>
+    <div class="card tl"><h3>Anticorrosivo</h3><p>Proteger los componentes metálicos impidiendo la oxidación.</p></div>
+    <div class="card tl"><h3>Antiespumante</h3><p>Eliminar el aire no disuelto, evitando espuma.</p></div>
+  </div>
+  <div class="warn">⚠️ Estas características las da el fluido por sí solo: <strong>NO se recomienda mezclar aceites ni agregar aditivos por tu cuenta.</strong></div>
+
+  <div class="stitle"><span class="ico">🌡️</span>Viscosidad: el parámetro crítico</div>
+  <p>Es la <strong>resistencia interna del fluido a fluir</strong>. Determina la capacidad de lubricación y la eficiencia volumétrica del sistema. Relación <strong>inversa</strong> con la temperatura: aceite caliente = más fluido; aceite frío = más espeso. Y al aumentar la presión, la viscosidad aumenta (~30% cada 1500 psi).</p>
+
+  <div class="grid g3">
+    <div class="card re"><h3>Mínima absoluta: 10 cSt</h3><p>Límite de seguridad. Por debajo: película tan delgada que hay <strong>contacto metal-metal</strong>, desgaste prematuro y fugas internas en la bomba.</p></div>
+    <div class="card gr"><h3>Rango óptimo: 16–36 cSt</h3><p>Mejor equilibrio entre lubricación, disipación de calor y transferencia de potencia.</p></div>
+    <div class="card or"><h3>Arranque máx: 800–1000 cSt</h3><p>Límite superior para arranque en frío. Si lo superás: <strong>cavitación por succión</strong> (el aceite está demasiado espeso para llenar la bomba).</p></div>
+  </div>
+
+  <div class="grid g2" style="margin-top:1rem">
+    <div class="card re">
+      <h3>Viscosidad MUY ALTA ¿cómo afecta?</h3>
+      <ul>
+        <li>Elevada resistencia al flujo</li>
+        <li>Alto consumo de potencia (pérdidas por rozamiento)</li>
+        <li>Elevada temperatura por fricción</li>
+        <li>Mayor caída de presión</li>
+        <li>Funcionamiento más lento</li>
+        <li>Difícil separar el aire del aceite en el depósito</li>
+      </ul>
+    </div>
+    <div class="card re">
+      <h3>Viscosidad MUY BAJA ¿cómo afecta?</h3>
+      <ul>
+        <li>Aumento de fugas (internas y externas)</li>
+        <li>Desgaste excesivo y agarrotamiento bajo carga (se destruye la película de aceite)</li>
+        <li>Menor rendimiento de la bomba</li>
+        <li>Aumento de temperatura por las fugas</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">📈</span>Índice de Viscosidad (IV)</div>
+  <div class="grid g2">
+    <div class="card">
+      <h3>¿Qué indica?</h3>
+      <p>Cuánto varía la viscosidad con la temperatura (DIN ISO 2909). <strong>A mayor IV, más estable</strong> es el aceite ante cambios térmicos. En el diagrama viscosidad–temperatura se reconoce por una <strong>curva más plana</strong>.</p>
+      <ul style="margin-top:.5rem">
+        <li><strong>Monogrado:</strong> IV ≈ 95</li>
+        <li><strong>Multigrado:</strong> IV &gt; 140 (la viscosidad cae menos con la temperatura — es lo que buscamos)</li>
+        <li>Sistemas hidráulicos típicos: IV entre 80 y 120</li>
+      </ul>
+    </div>
+    <div class="card bl">
+      <h3>Zonas críticas</h3>
+      <ul>
+        <li><strong>ISO VG se mide a 40 °C</strong> (valor estándar de comparación)</li>
+        <li><strong>Frío (&lt;40 °C):</strong> la viscosidad aumenta exponencialmente</li>
+        <li><strong>Calor (&gt;80 °C):</strong> la viscosidad cae peligrosamente → pierde lubricación, más rozamiento y fugas internas</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">🗂️</span>Clasificación de los fluidos (3 ejes)</div>
+  <div class="grid g3">
+    <div class="card bl">
+      <h3>1) Por viscosidad — ISO VG</h3>
+      <p>Norma <strong>ISO 3448</strong>: viscosidad cinemática a <strong>40 °C</strong>. VG = <em>Viscosity Grade</em>.</p>
+      <p style="margin-top:.4rem">Grados comunes: <strong>22, 32, 46, 68, 100</strong>. Un ISO VG 68 es más "espeso" que un VG 32 a igual temperatura. Es el primer dato que pide el fabricante de la bomba.</p>
+    </div>
+    <div class="card tl">
+      <h3>2) Por calidad — DIN 51524</h3>
+      <ul>
+        <li><strong>HH:</strong> mineral puro sin aditivos (en desuso)</li>
+        <li><strong>HL:</strong> + antioxidantes y anticorrosivos (baja presión)</li>
+        <li><strong>HLP:</strong> el estándar industrial, con antidesgaste (AW)</li>
+        <li><strong>HVLP:</strong> HLP + alto IV (maquinaria vial a la intemperie)</li>
+      </ul>
+    </div>
+    <div class="card pu">
+      <h3>3) Por base de fabricación</h3>
+      <ul>
+        <li><strong>Mineral:</strong> derivados del petróleo, mejor costo-prestación</li>
+        <li><strong>Sintética:</strong> condiciones extremas de temperatura o biodegradabilidad</li>
+        <li><strong>Resistentes al fuego (HFA, HFB, HFC, HFDU):</strong> agua-glicol o ésteres; siderurgia, minería, fundiciones</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="twrap"><table>
+    <tr><th>Entorno</th><th>Norma</th><th>Característica clave</th></tr>
+    <tr><td>Hidráulica industrial (estacionaria)</td><td>DIN 51524 parte 2 — <strong>HLP</strong></td><td>Ambientes controlados, aditivos AW, buena demulsibilidad</td></tr>
+    <tr><td>Hidráulica móvil (vial / agrícola)</td><td>DIN 51524 parte 3 — <strong>HVLP</strong></td><td>Alto IV: estable de arranques bajo cero a calor extremo</td></tr>
+  </table></div>
+
+  <div class="note">📌 También existen clasificaciones <strong>SAE</strong> (automotriz: motores y transmisiones; monogrados 10W/20/30… y multigrados 15W40, 20W50) y <strong>AGMA</strong> (engranajes industriales). El grado ISO VG indica viscosidad, <strong>no calidad</strong>: la calidad la dan los aditivos (DIN) y el IV.</div>
+
+  <div class="stitle"><span class="ico">🔬</span>Contaminación, análisis y norma ISO 4406</div>
+  <div class="grid g2">
+    <div class="card or">
+      <h3>El 70-80% de las fallas son por contaminación</h3>
+      <p>La suciedad es la causa principal de falla de los sistemas hidráulicos. El ojo humano distingue partículas desde <strong>40 micrones</strong>, pero las que más dañan son de <strong>1 a 10 micrones</strong> (el juego interno de bombas y válvulas). Una partícula de 5 µm puede trabar una válvula.</p>
+    </div>
+    <div class="card bl">
+      <h3>Análisis de aceite = "análisis de sangre"</h3>
+      <ol>
+        <li><strong>Estado del fluido:</strong> viscosidad real a 40 °C, oxidación, aditivos</li>
+        <li><strong>Contaminación externa:</strong> agua (ppm), sílice (polvo), aire</li>
+        <li><strong>Metales de desgaste:</strong> Fe, Cu, bronce → delata qué componente se está rompiendo</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="sub">Norma ISO 4406 — código de limpieza</div>
+  <p>Clasifica la contaminación con <strong>tres números</strong> (ej. 18/16/13): cantidad de partículas mayores a <strong>4, 6 y 14 micrones</strong> en 1 ml de muestra.</p>
+  <div class="twrap"><table>
+    <tr><th>Componente</th><th>Exigencia de limpieza</th></tr>
+    <tr><td>Válvulas de corredera / bombas de engranajes</td><td>Toleran más suciedad (ej. ISO 20/18/15)</td></tr>
+    <tr><td>Bombas de pistones / válvulas proporcionales</td><td>Muy sensibles: aceites muy limpios (ej. ISO 17/15/12)</td></tr>
+  </table></div>
+
+  <div class="sub">¿Filtrar o cambiar el aceite?</div>
+  <div class="grid g2">
+    <div class="card gr">
+      <h3>Caso A — Solo contaminación sólida/agua</h3>
+      <p>Propiedades físico-químicas OK pero conteo ISO 4406 alto → <strong>NO se cambia el aceite</strong>: microfiltración ("riñón externo"), cambio de filtros y eliminar la entrada de contaminantes. Ahorro de hasta 70%.</p>
+    </div>
+    <div class="card re">
+      <h3>Caso B — Degradación química</h3>
+      <p>Aceite oxidado, olor a quemado, viscosidad muy cambiada o aditivos agotados → <strong>cambio total</strong>. Un aceite degradado genera barnices que traban válvulas de forma irreversible.</p>
+    </div>
+  </div>
+
+  <div class="tip"><span class="tip-i">♻️</span><div><strong>Disposición final:</strong> el aceite usado es <strong>residuo peligroso</strong>. 1 litro puede contaminar un millón de litros de agua. Se guarda en tambores estancos etiquetados, lo retiran solo empresas autorizadas y puede re-refinarse. <em>"El mantenimiento termina cuando el certificado de disposición final está firmado."</em></div></div>
+
+</div></div>
+
+<!-- ═══════════════════════ COMPONENTES ═══════════════════════ -->
+<div id="componentes" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">🧩</span>Las 3 unidades de un sistema hidráulico</div>
+  <div class="grid g3">
+    <div class="card bl"><h3>1. Unidad hidráulica (generación)</h3><p>La <strong>bomba</strong>: transforma energía mecánica en energía hidráulica. Toma aceite del tanque y lo envía al sistema.</p></div>
+    <div class="card tl"><h3>2. Unidad de control de energía</h3><p>Las <strong>válvulas</strong>: controlan presión, caudal y dirección del flujo.</p></div>
+    <div class="card gr"><h3>3. Unidad de actuadores</h3><p>Convierten energía hidráulica en mecánica: <strong>cilindro</strong> (movimiento lineal → fuerza) y <strong>motor hidráulico</strong> (rotación → torque).</p></div>
+  </div>
+
+  <div class="stitle"><span class="ico">🛢️</span>Tanque hidráulico</div>
+  <div class="grid g2">
+    <div class="card">
+      <h3>4 funciones</h3>
+      <ol>
+        <li><strong>Almacenar</strong> el aceite</li>
+        <li><strong>Enfriar:</strong> disipa calor por las paredes y la superficie libre (diseño óptimo: largo, estrecho y profundo, chapa no muy gruesa)</li>
+        <li><strong>Filtrar/sedimentar:</strong> los deflectores asientan las partículas grandes</li>
+        <li><strong>Liberar aire y separar agua:</strong> por deflectores y diferencia de densidades</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Elementos del tanque</h3>
+      <ul>
+        <li>Tubo de llenado · Filtros internos · Visor de nivel</li>
+        <li>Tubería de retorno · Tapón de drenaje · Salida a bomba</li>
+        <li><strong>Plancha deflectora</strong> · Válvula de alivio · <strong>Respiradero</strong></li>
+      </ul>
+      <p style="margin-top:.4rem">En equipo pesado, el tanque forma parte del chasis.</p>
+    </div>
+  </div>
+  <div class="grid g2" style="margin-top:1rem">
+    <div class="card or">
+      <h3>¿Por qué importa el NIVEL de aceite?</h3>
+      <ul>
+        <li>Nivel bajo → el aire ocupa el espacio, condensa agua y contamina; riesgo de que la bomba <strong>aspire aire</strong></li>
+        <li>Nivel más alto que el indicado → se reduce la cámara de aire y <strong>el aceite no se enfría</strong></li>
+      </ul>
+    </div>
+    <div class="card pu">
+      <h3>Tanque presurizado</h3>
+      <p>Mantiene presión interna mayor a la atmosférica (con aire comprimido o con el propio retorno). Útil en altura: <strong>protege contra cavitación y ayuda a la succión</strong>. Necesita 2 válvulas: una de presurización y otra antivacío.</p>
+    </div>
+  </div>
+  <div class="tip"><span class="tip-i">🔧</span><div><strong>Mantenimiento:</strong> revisar nivel e indicador de filtro a diario, limpiar respiradero, drenar y lavar el tanque en cada cambio de aceite (1000 h o antes).</div></div>
+
+  <div class="stitle"><span class="ico">❄️</span>Enfriadores de aceite</div>
+  <div class="grid g2">
+    <div class="card tl"><h3>De aire</h3><p>El aceite pasa por tubos aleteados y un ventilador sopla aire (como el radiador de un auto). <strong>Más eficientes pero más voluminosos.</strong></p></div>
+    <div class="card bl"><h3>De agua</h3><p>Haz de tubos en una coraza: agua fría por dentro de los tubos, aceite entre tubos y coraza.</p></div>
+  </div>
+  <div class="note">Se instalan en la <strong>línea de retorno</strong> (baja presión), en paralelo con una válvula antirretorno regulada a <strong>65 psi</strong> para que una onda de presión no los dañe. La temperatura del aceite no debe exceder 50 °C sobre el ambiente (máx. 85 °C).</div>
+
+  <div class="stitle"><span class="ico">🧹</span>Filtros hidráulicos</div>
+  <p>El <strong>grado de filtración</strong> indica la partícula más chica que retiene el filtro (en micrones, de 1 a 250 µm). Un filtro de 10 µm retiene lo mayor a 10 µm; lo menor pasa.</p>
+
+  <div class="twrap"><table>
+    <tr><th>Filtro</th><th>Ubicación</th><th>Filtración</th><th>Clave</th><th>Vel. máx</th></tr>
+    <tr><td><strong>Colador</strong></td><td>Dentro del tanque (extremo de succión)</td><td>Malla ~100 µm</td><td>Tosco y barato, sin carcasa ni indicador; protege de partículas grandes; sobredimensionarlo</td><td>2 m/s</td></tr>
+    <tr><td><strong>De succión/aspiración</strong></td><td>Fuera del tanque, antes de la bomba</td><td>100–250 µm</td><td>Evita fallas catastróficas; con indicador y by-pass (~50 psi); ΔP máx 15 psi</td><td>&lt; 2 m/s</td></tr>
+    <tr><td><strong>De presión</strong></td><td>Salida de la bomba</td><td><strong>6–20 µm</strong></td><td>Filtra muy fino (la presión empuja el aceite); carcasa robusta hasta 5000 psi; protege válvulas sensibles</td><td>&lt; 5 m/s</td></tr>
+    <tr><td><strong>De retorno</strong></td><td>Colector de retorno, antes del enfriador</td><td><strong>20–50 µm</strong></td><td>Casi obligatorio con bombas de pistones; retiene lo que genera el propio circuito</td><td>&lt; 3 m/s</td></tr>
+    <tr><td><strong>Respiradero (ambiente)</strong></td><td>Sobre el tanque</td><td>Aire</td><td>Filtra el aire que entra al variar el nivel; cambiarlo 2 veces/año o produce vacío y cavitación</td><td>—</td></tr>
+  </table></div>
+
+  <div class="grid g2">
+    <div class="card">
+      <h3>Válvula by-pass (derivación)</h3>
+      <p>Detecta la <strong>diferencia de presión</strong> entre aceite sucio y limpio. Cuando el elemento se tapa y la ΔP vence al resorte, el poppet se abre y el aceite pasa <strong>sin filtrar</strong>: limita la ΔP máxima para que la suciedad no atraviese el elemento ni lo rompa.</p>
+    </div>
+    <div class="card">
+      <h3>Indicador de filtro</h3>
+      <p>Muestra la condición del elemento: <strong style="color:var(--gray-lt)">blanco</strong> = limpio · <strong style="color:var(--green)">verde</strong> = aceptable · <strong style="color:var(--red)">rojo</strong> = hay que cambiarlo.</p>
+      <p style="margin-top:.4rem">Los drenajes de válvulas y motores retornan directo al tanque (caudales muy bajos, no se filtran).</p>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">🔗</span>Mangueras hidráulicas</div>
+  <div class="grid g2">
+    <div class="card">
+      <h3>Construcción (4 capas)</h3>
+      <ol>
+        <li><strong>Manguera interior:</strong> conduce y retiene el aceite (Buna N, Neopreno, Nylon, Teflón)</li>
+        <li><strong>Refuerzos:</strong> dan resistencia a la presión (acero/lona; tejidos, entrelazados o en espiral)</li>
+        <li><strong>Separadores:</strong> evitan abrasión entre refuerzos</li>
+        <li><strong>Cubierta exterior:</strong> protege de abrasión, sol, temperatura y químicos</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Designación DASH</h3>
+      <p>Por el <strong>diámetro interior en 1/16"</strong>: el número es el numerador de una fracción con denominador 16.</p>
+      <p style="margin-top:.4rem">Ej.: <span style="font-family:monospace"><strong>#4</strong> = 4/16 = 1/4" · <strong>#8</strong> = 8/16 = 1/2" · <strong>#16</strong> = 1" · <strong>#32</strong> = 2"</span></p>
+      <p style="margin-top:.4rem"><strong>Presión de ruptura:</strong> test estático que indica a qué presión revienta.</p>
+    </div>
+  </div>
+  <div class="card re" style="margin-top:1rem">
+    <h3>Las 10 causas de falla de mangueras</h3>
+    <p>1) Sobrepresiones y picos · 2) Sobretemperatura · 3) Incompatibilidad con el fluido · 4) Radio de curvatura reducido · 5) Tamaño incorrecto de manguera · 6) Conector de tamaño equivocado · 7) Mala instalación/conducción · 8) Mala alineación · 9) Desgaste y abrasión · 10) Uso inapropiado</p>
+  </div>
+
+  <div class="stitle"><span class="ico">🔩</span>Conectores y adaptadores</div>
+  <p>Van <strong>prensados permanentemente</strong> a la manguera. Partes: <strong>casco (ferrule)</strong> que sella a presión y <strong>espiga (stem)</strong>. El <strong>adaptador</strong> es el intermedio entre conector y vía. Usan numeración DASH igual que las mangueras.</p>
+  <div class="twrap"><table>
+    <tr><th>Conector</th><th>Rosca / asiento</th><th>Sella con</th><th>Uso</th></tr>
+    <tr><td><strong>NPTF</strong></td><td>Cónica (pulgadas), asiento cónico interior</td><td>La propia rosca</td><td>Muy usado aunque NO recomendado en hidráulica</td></tr>
+    <tr><td><strong>JIC 37°</strong></td><td>Cilíndrica, asiento cónico exterior 37°</td><td>El cono (la rosca une)</td><td>Todas las aplicaciones hidráulicas (SAE)</td></tr>
+    <tr><td><strong>ORB</strong></td><td>Cilíndrica, sin asiento (plano)</td><td>O-ring en la base</td><td>Recomendado por NFPA para medias/altas presiones</td></tr>
+    <tr><td><strong>ORFS</strong></td><td>Cilíndrica con asiento</td><td>O-ring en la cara</td><td><strong>Mejor control de fugas disponible</strong> (ej. Volvo)</td></tr>
+    <tr><td><strong>BSPP</strong></td><td>Británica, rosca paralela, asiento cónico</td><td>O-ring en la base</td><td>Estándar británico</td></tr>
+    <tr><td><strong>Milimétrico</strong></td><td>Cilíndrica milimétrica, paso fino, cono 30°</td><td>El cono</td><td>Equipos japoneses (Komatsu, ISO)</td></tr>
+    <tr><td><strong>Brida</strong></td><td>Serie liviana / pesada</td><td>O-ring + brida</td><td>Transmisiones de muy alta presión (Caterpillar usa la pesada)</td></tr>
+  </table></div>
+
+</div></div>
+
+<!-- ═══════════════════════ BOMBAS Y ACTUADORES ═══════════════════════ -->
+<div id="bombas" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">⚙️</span>La bomba hidráulica</div>
+  <div class="warn">🔑 <strong>Concepto estrella del parcial:</strong> la bomba <strong>solo produce CAUDAL, no presión</strong>. La presión aparece cuando el caudal encuentra <strong>resistencia</strong> (mangueras, orificios, cilindros, carga). Y al revés: <em>"si un actuador está lento es porque no le llega caudal, no porque le falte presión".</em></div>
+
+  <div class="grid g2">
+    <div class="card bl">
+      <h3>¿Cómo genera flujo?</h3>
+      <p>Se crea un <strong>vacío en la entrada</strong>; la presión atmosférica empuja el aceite del tanque hacia la bomba. Los elementos internos llevan el aceite a la cámara de salida, cuyo volumen disminuye y expulsa el aceite.</p>
+    </div>
+    <div class="card tl">
+      <h3>Desplazamiento volumétrico (DV)</h3>
+      <p>Volumen que desplaza <strong>por revolución</strong> (cm³/rev). Es el parámetro más importante para seleccionar bomba o motor: DV chico = poco caudal; DV grande = mucho caudal.</p>
+      <div class="fbox" style="margin-bottom:0"><span class="big">Q = DV × n</span><span class="sub-f">caudal = desplazamiento × rpm</span></div>
+    </div>
+  </div>
+
+  <div class="sub">Clasificación</div>
+  <div class="grid g2">
+    <div class="card">
+      <h3>Desplazamiento POSITIVO vs NO positivo</h3>
+      <ul>
+        <li><strong>Positivo:</strong> elementos móviles generan un volumen fijo (cilindrada) por revolución, independiente de la contrapresión. La energía mecánica pasa directamente a presión.</li>
+        <li><strong>No positivo:</strong> órgano propulsor de una sola pieza; la contrapresión regula la descarga (puede girar con descarga cerrada sin generar caudal).</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Caudal FIJO vs VARIABLE</h3>
+      <ul>
+        <li><strong>Fijo:</strong> el flujo solo cambia con las rpm (ej. bomba de engranajes).</li>
+        <li><strong>Variable:</strong> el flujo puede cambiar sin cambiar las rpm (paletas y pistones; control manual, automático o mixto).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub">Tipos de bombas</div>
+  <div class="grid g2">
+    <div class="card or">
+      <h3>🦷 De engranajes (caudal fijo)</h3>
+      <ul>
+        <li>Presión máx ≈ <strong>4000 psi</strong> (limita el desequilibrio hidráulico → carga lateral en ejes)</li>
+        <li>Eficiencia volumétrica <strong>&gt; 90%</strong> en su rango</li>
+        <li>El caudal lo definen profundidad y <strong>ancho del diente</strong></li>
+        <li>El aceite viaja <strong>entre los dientes y la caja</strong>, por la parte externa</li>
+        <li>Partes: sellos, plancha de presión, engranaje loco, engranaje de impulsión, caja</li>
+      </ul>
+    </div>
+    <div class="card pu">
+      <h3>🌀 De paletas (fijo o variable)</h3>
+      <ul>
+        <li>Rotor ranurado: las paletas salen y entran sellando contra el <strong>anillo excéntrico</strong></li>
+        <li>Anillo elíptico → caudal fijo · anillo redondo desplazable → caudal variable</li>
+        <li>El volumen entre paletas crece (succión, vacío) y decrece (descarga)</li>
+      </ul>
+    </div>
+    <div class="card re">
+      <h3>🔫 De pistones (axiales / radiales)</h3>
+      <ul>
+        <li>Para las presiones más altas: hasta <strong>700 bar</strong> (equipos móviles ≤ 7000 psi)</li>
+        <li><strong>Plato inclinado (caja recta):</strong> el ángulo de la placa basculante define la carrera del pistón → a mayor ángulo, mayor caudal por vuelta</li>
+        <li><strong>Caja angular:</strong> el ángulo caja-eje controla la salida</li>
+        <li>Tolerancias finísimas (holgura pistón-cilindro 0,005–0,008 mm) → exigen aceite muy limpio</li>
+        <li>Casi todas las bombas de pistones de equipos móviles son <strong>axiales</strong></li>
+      </ul>
+    </div>
+    <div class="card gr">
+      <h3>⚙️ Gerotor (curva conjugada)</h3>
+      <ul>
+        <li>Engranaje interior gira dentro del exterior; bombea al engranar los lóbulos</li>
+        <li>Entrada y salida en las tapas extremas</li>
+        <li>Versión modificada: en unidades de dosificación manual (HMU) de dirección</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">💪</span>Actuadores: cilindros</div>
+  <div class="note">Transforman potencia hidráulica en mecánica: <strong>fuerza × desplazamiento</strong> (motores lineales). La velocidad del émbolo se controla con el <strong>caudal</strong>; la fuerza máxima se fija con una <strong>válvula de presión</strong>.</div>
+  <div class="grid g2">
+    <div class="card bl">
+      <h3>Simple efecto</h3>
+      <p>Fuerza en <strong>un solo sentido</strong>, una sola vía de aceite. El retorno se logra por: a) fuerza externa, b) el propio peso, c) muelle. La cámara sin presión ventila a la atmósfera. Se manda con válvula <strong>3/2</strong>.</p>
+    </div>
+    <div class="card tl">
+      <h3>Doble efecto</h3>
+      <p>Trabaja en ambos sentidos: cuerpo + émbolo con vástago. Se manda mínimo con <strong>4/2</strong> (solo sale/entra); con <strong>4/3</strong> podés además posicionarlo a mitad de carrera según el centro de la válvula. También: telescópicos, tándem, dúplex, con amortiguamiento.</p>
+    </div>
+  </div>
+  <div class="grid g2" style="margin-top:1rem">
+    <div class="card">
+      <h3>Fuerzas sobre el cilindro</h3>
+      <ul>
+        <li><strong>Positivas:</strong> el actuador transfiere energía a un cuerpo (resisten el movimiento del pistón)</li>
+        <li><strong>Negativas:</strong> el exterior transfiere energía al pistón (el pistón no las controla)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Sellos</h3>
+      <p>Sello alrededor del émbolo y en el prensaestopas del vástago (en V o acopado: cuero, poliuretano, nitrilo, vitón) + <strong>sello limpiador</strong> que impide que entren materiales extraños. El material debe ser <strong>compatible con el fluido</strong>.</p>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">🔄</span>Actuadores: motores hidráulicos</div>
+  <div class="grid g2">
+    <div class="card">
+      <h3>Concepto</h3>
+      <p>Transforman potencia hidráulica en mecánica como <strong>torque × desplazamiento angular</strong>. Actúan al revés que las bombas, con geometría muy similar (misma clasificación). Pueden girar en uno o ambos sentidos.</p>
+    </div>
+    <div class="card">
+      <h3>Motor de pistones axiales</h3>
+      <p>La fuerza F sobre cada pistón se descompone en F<sub>normal</sub> y F<sub>tangencial</sub>; esta última, a distancia r del eje, genera el par <span class="fi">M = Ft · r</span>. Varios pistones dan rotación continua. La velocidad del eje solo cambia con el <strong>caudal de entrada</strong>.</p>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">🔋</span>Acumuladores hidráulicos</div>
+  <p>"Tanques presurizados" con 2 funciones: <strong>absorber choques/amortiguar pulsaciones</strong> y <strong>aportar caudal suplementario</strong> ante caídas de presión.</p>
+  <div class="grid g3">
+    <div class="card"><h3>De pesa</h3><p>Descarga a presión constante, pero para altas presiones la pesa sería enorme y solo funciona vertical.</p></div>
+    <div class="card"><h3>De resorte</h3><p>Se monta en cualquier posición; la presión disminuye a medida que el resorte se extiende.</p></div>
+    <div class="card gr"><h3>De gas presurizado ⭐</h3><p>El más popular. Subtipos: <strong>vejiga (bladder)</strong>, <strong>diafragma</strong> y <strong>pistón</strong>. Los scooptrams usan de gas; los jumbos perforadores, de diafragma.</p></div>
+  </div>
+
+</div></div>
+
+<!-- ═══════════════════════ VÁLVULAS ═══════════════════════ -->
+<div id="valvulas" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">🎛️</span>Válvulas de control de PRESIÓN</div>
+  <div class="grid g2">
+    <div class="card re">
+      <h3>Válvula de alivio (seguridad / limitadora)</h3>
+      <p>Mantiene la presión dentro de límites: al abrirse deja pasar el exceso de aceite a tanque u otro circuito. Cerrada por un <strong>resorte</strong>; la presión a la que empieza a abrir es la <strong>presión de apertura</strong> (no es exactamente la de regulación).</p>
+      <ul style="margin-top:.4rem">
+        <li><strong>Simple (accionamiento directo):</strong> el aceite vence directamente al resorte</li>
+        <li><strong>Pilotada:</strong> una válvula piloto chica regula a la válvula de descarga grande → control más preciso, sin ruido, ideal con grandes caudales y poca diferencia entre apertura y flujo pleno</li>
+      </ul>
+    </div>
+    <div class="card or">
+      <h3>Válvula de secuencia</h3>
+      <p>Es una alivio pilotada <strong>en serie con un segundo circuito</strong>: cuando una bomba alimenta dos circuitos y uno tiene <strong>prioridad</strong>, bloquea el flujo al circuito 2 hasta que el circuito 1 esté lleno y con presión.</p>
+    </div>
+    <div class="card pu">
+      <h3>Válvula reductora de presión</h3>
+      <p><strong>Normalmente ABIERTA</strong> (la alivio es normalmente cerrada). Sensa la presión de <strong>SALIDA</strong>: si supera la regulación, se cierra parcialmente y limita la presión en la línea secundaria, sin importar la presión del circuito primario. El símbolo ISO lleva la línea piloto desde la salida.</p>
+    </div>
+    <div class="card bl">
+      <h3>Comparación rápida</h3>
+      <div class="twrap"><table>
+        <tr><th></th><th>Alivio</th><th>Reductora</th></tr>
+        <tr><td>Estado normal</td><td>Cerrada</td><td>Abierta</td></tr>
+        <tr><td>Sensa</td><td>Entrada</td><td>Salida</td></tr>
+        <tr><td>Protege</td><td>Todo el sistema</td><td>Línea secundaria</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">🔀</span>Válvulas distribuidoras (de vías)</div>
+  <p>Abren, cierran o modifican los pasos del flujo: controlan <strong>dirección del movimiento y parada</strong> de los actuadores. Simbología según <strong>DIN ISO 1219</strong>.</p>
+  <div class="grid g2">
+    <div class="card">
+      <h3>Cómo leer el símbolo</h3>
+      <ul>
+        <li>Cada <strong>cuadrado = una posición</strong></li>
+        <li>Líneas = conductos · flechas = direcciones · barras transversales = cierre</li>
+        <li>Se dibuja en su <strong>posición normal</strong> (sin accionar)</li>
+        <li>Nomenclatura <strong>vías / posiciones</strong>: 2/2, 3/2, 4/2, 4/3, 6/3… (la 5/2 es típica de neumática)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Letras de las vías</h3>
+      <ul>
+        <li><strong>P</strong> = presión (entrada desde la bomba)</li>
+        <li><strong>T, R, Y</strong> = tanque (retorno)</li>
+        <li><strong>A, B</strong> = salidas hacia los actuadores</li>
+        <li><strong>X, Y</strong> = líneas de pilotaje (alimentación/drenaje del piloto)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid g2" style="margin-top:1rem">
+    <div class="card tl">
+      <h3>De cierre (asiento)</h3>
+      <ul>
+        <li><strong>Estancas</strong> (sin fugas)</li>
+        <li>Necesitan <strong>gran fuerza</strong> de accionamiento (hay que vencer la presión)</li>
+        <li>Limitadas en número de vías</li>
+      </ul>
+    </div>
+    <div class="card bl">
+      <h3>De corredera (spool)</h3>
+      <ul>
+        <li>Un carrete se desliza dentro del cuerpo</li>
+        <li><strong>Poca fuerza</strong> de accionamiento, muchas vías posibles</li>
+        <li><strong>No estancas:</strong> pequeña fuga interna (depende de viscosidad y temperatura)</li>
+        <li>No les afecta la presión de trabajo</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub">Centros de la válvula 4/3 (¡los toman seguro!)</div>
+  <div class="twrap"><table>
+    <tr><th>Centro</th><th>Conexión</th><th>¿Qué hace el cilindro?</th><th>¿Y la bomba?</th></tr>
+    <tr><td><strong>Bloqueado (cerrado)</strong></td><td>P, T, A, B bloqueados</td><td>Queda clavado en posición</td><td>Sigue a presión (descarga por la alivio)</td></tr>
+    <tr><td><strong>Tándem</strong></td><td>P→T; A y B bloqueados</td><td>Posicionado en su lugar</td><td><strong>Descarga libre a tanque</strong> (sin calentar)</td></tr>
+    <tr><td><strong>Flotante</strong></td><td>A, B y T unidos</td><td>Se puede mover desde afuera</td><td>P bloqueada</td></tr>
+    <tr><td><strong>Abierto (H)</strong></td><td>P, A, B y T unidos</td><td>Libre, y la línea de presión descargada</td><td>Descarga a tanque</td></tr>
+  </table></div>
+
+  <div class="sub">Accionamientos</div>
+  <div class="grid g4">
+    <div class="card"><h3>Manual</h3><p>General, pulsador, palanca, pedal</p></div>
+    <div class="card"><h3>Mecánico</h3><p>Palpador, resorte, rodillo, enclavamiento</p></div>
+    <div class="card"><h3>Eléctrico</h3><p>Solenoide simple, proporcional, doble solenoide</p></div>
+    <div class="card"><h3>Por señal</h3><p>Presión directa/indirecta (pilotada), neumática, depresión</p></div>
+  </div>
+  <div class="note">Por desplazamiento de la corredera: <strong>digitales/discretas</strong> (posiciones definidas: electroválvulas, enclavamiento) vs <strong>continuas</strong> (infinitas posiciones intermedias: <strong>válvulas proporcionales y servoválvulas</strong>).</div>
+
+  <div class="grid g2" style="margin-top:1rem">
+    <div class="card pu">
+      <h3>Válvulas pilotadas hidráulicamente</h3>
+      <p>Para tamaños grandes (TN &gt; 10) el accionamiento directo no alcanza: una <strong>válvula piloto</strong> chica (eléctrica) acciona hidráulicamente a la <strong>válvula principal</strong>. La línea X se alimenta de la presión del sistema; la <strong>Y drena independiente a tanque</strong> para evitar la contrapresión del filtro/enfriador de la línea T.</p>
+    </div>
+    <div class="card or">
+      <h3>Solenoides</h3>
+      <ul>
+        <li><strong>De espacio de aire:</strong> bobina + inducido + pasador de empuje; con accionador manual de emergencia</li>
+        <li><strong>De inducido húmedo:</strong> el inducido está bañado en aceite (mejor conductor del campo) → <strong>más fuerza</strong></li>
+        <li><strong>Falla típica:</strong> carrete pegado por contaminación o barniz → la bobina recibe corriente constante, se sobrecalienta y <strong>se quema</strong> (también por bajo voltaje)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note">🚜 <strong>En maquinaria pesada</strong> se usan válvulas de <strong>6 vías</strong>: la línea P siempre descarga por T en el centro, llevan válvulas check de protección y se ensamblan en paquetes (paralelo, tándem o serie) que incluyen la limitadora de presión.</div>
+
+  <div class="stitle"><span class="ico">↩️</span>Válvulas de control DIRECCIONAL (retención)</div>
+  <div class="grid g2">
+    <div class="card gr">
+      <h3>Retención (check)</h3>
+      <p>Deja pasar el aceite en <strong>un solo sentido</strong>. Resorte + asiento cónico (o bola); a veces flota libre sin resorte. Abre cuando la presión de la bomba vence la contrapresión + resorte.</p>
+    </div>
+    <div class="card tl">
+      <h3>Retención pilotada</h3>
+      <p>Permite además el <strong>flujo inverso</strong>: el aceite piloto empuja un vástago que desasienta la check. Relación típica de presiones <strong>3:1</strong> (para abrir con 600 psi de carga hacen falta 200 psi de piloto). Ideal para sostener cargas variables con precisión.</p>
+    </div>
+    <div class="card pu">
+      <h3>Válvula de lanzadera (shuttle)</h3>
+      <p>Dos circuitos pueden alimentar a un tercero manteniéndose <strong>separados entre sí</strong>: siempre gana el de mayor presión.</p>
+    </div>
+    <div class="card or">
+      <h3>Válvula de compensación</h3>
+      <p>Anticavitación: si la presión del cilindro cae ~2 psi por debajo de la del tanque (ej. cucharón bajando por gravedad más rápido de lo que la bomba llena), <strong>abre y deja entrar aceite del tanque</strong> al cilindro. Mismo símbolo ISO que la retención.</p>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">🚰</span>Válvulas de control de CAUDAL (flujo)</div>
+  <div class="grid g2">
+    <div class="card">
+      <h3>El orificio</h3>
+      <p>Una abertura pequeña en el paso del aceite: restringe → sube la presión → parte del aceite toma otro camino (otro circuito o la alivio). El flujo por el orificio depende de:</p>
+      <ol>
+        <li><strong>Temperatura</strong> del aceite (cambia la viscosidad)</li>
+        <li><strong>Tamaño</strong> del orificio (fijo o variable)</li>
+        <li><strong>Presión diferencial</strong> a través del orificio</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Tipos</h3>
+      <ul>
+        <li><strong>Orificio fijo:</strong> ej. check con agujero central — libre en un sentido, controlado en el otro</li>
+        <li><strong>Orificio variable → válvula de aguja:</strong> girando el tornillo cambia la luz entre punta y asiento (izquierda = más flujo, derecha = menos)</li>
+        <li>Con o sin <strong>compensación de presión</strong> (la compensada mantiene el caudal aunque varíe la carga)</li>
+      </ul>
+    </div>
+  </div>
+
+</div></div>
+
+<!-- ═══════════════════════ CAUDAL Y VELOCIDAD ═══════════════════════ -->
+<div id="caudal" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">🌊</span>¿De dónde sale el caudal de trabajo (Q)?</div>
+  <div class="note">El caudal <strong>no es una variable libre</strong>: lo define la necesidad del proceso.</div>
+  <div class="grid g2">
+    <div class="card bl">
+      <h3>En cañerías (transporte)</h3>
+      <ul>
+        <li><strong>Llenado de tanques:</strong> Q = Volumen / Tiempo</li>
+        <li><strong>Intercambiadores:</strong> el caudal necesario para retirar el calor generado</li>
+        <li><strong>Llenadoras:</strong> según los litros/hora del producto</li>
+        <li><strong>Incendio:</strong> caudal normado por ley según superficie</li>
+      </ul>
+    </div>
+    <div class="card tl">
+      <h3>En sistemas oleohidráulicos (trabajo)</h3>
+      <ul>
+        <li><strong>Prensa:</strong> más caudal = matrices que cierran más rápido = más piezas/hora</li>
+        <li><strong>Pala cargadora:</strong> el <strong>caudal</strong> define qué tan rápido sube; la <strong>presión</strong> define cuánto peso levanta</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">🏎️</span>Velocidades de diseño: ni muy lento ni muy rápido</div>
+  <div class="grid g2">
+    <div class="card re">
+      <h3>Velocidad muy BAJA</h3>
+      <ul>
+        <li>El sedimento se deposita en el fondo (cañerías de agua)</li>
+        <li>Diámetros enormes → cañería <strong>cara</strong>, pesada y difícil de conexionar</li>
+      </ul>
+    </div>
+    <div class="card re">
+      <h3>Velocidad muy ALTA</h3>
+      <ul>
+        <li>Las pérdidas por fricción suben <strong>al cuadrado</strong> → calor</li>
+        <li>Ruido, erosión, caídas de presión, destrucción de sellos</li>
+        <li>Riesgo de <strong>cavitación</strong> y <strong>golpe de ariete</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub">Valores recomendados</div>
+  <div class="grid g2">
+    <div class="twrap"><table>
+      <tr><th colspan="3">💧 Agua limpia (cañerías)</th></tr>
+      <tr><th>Línea</th><th>Velocidad</th><th>Objetivo</th></tr>
+      <tr><td>Succión</td><td><strong>0,6 – 1,2 m/s</strong></td><td>Evitar cavitación</td></tr>
+      <tr><td>Impulsión</td><td><strong>1,5 – 2,5 m/s</strong></td><td>Equilibrio costo de caño vs pérdida de energía</td></tr>
+    </table></div>
+    <div class="twrap"><table>
+      <tr><th colspan="3">🛢️ Oleohidráulica</th></tr>
+      <tr><th>Línea</th><th>Velocidad</th><th>Objetivo</th></tr>
+      <tr><td>Succión</td><td><strong>0,5 – 1,2 m/s</strong></td><td>Evitar cavitación (el aceite viscoso entra despacio)</td></tr>
+      <tr><td>Retorno</td><td><strong>1,5 – 3,0 m/s</strong></td><td>Evitar contrapresiones que frenen los actuadores</td></tr>
+      <tr><td>Presión</td><td><strong>3,0 – 6,0 m/s</strong></td><td>Líneas compactas de alta potencia</td></tr>
+    </table></div>
+  </div>
+  <div class="tip"><span class="tip-i">💡</span><div>El apunte de componentes da límites similares: succión &lt; 1,5 m/s · retorno &lt; 3 m/s · presión &lt; 5 m/s · <strong>actuadores &lt; 1 m/s</strong>. Quedate con la idea: <strong>succión lenta, presión rápida, retorno intermedio</strong>.</div></div>
+
+  <div class="stitle"><span class="ico">📐</span>Caudal, continuidad y desplazamiento</div>
+  <div class="grid g3">
+    <div class="fbox"><span class="big">Q = V / t</span><span class="sub-f">volumen sobre tiempo</span><span class="unit">l/min · gpm · m³/s (1 gal = 3,785 l)</span></div>
+    <div class="fbox"><span class="big">Q = v × A</span><span class="sub-f">continuidad: v₁A₁ = v₂A₂</span><span class="unit">práctica: Q [l/min] = 6 · v [m/s] · A [cm²]</span></div>
+    <div class="fbox"><span class="big">Q = DV × n</span><span class="sub-f">bomba/motor: desplazamiento × rpm</span><span class="unit">cm³/rev × rev/min</span></div>
+  </div>
+  <div class="grid g2">
+    <div class="card">
+      <h3>Conclusiones de continuidad (bomba–cilindro)</h3>
+      <ul>
+        <li>El caudal es el mismo en succión y descarga; la <strong>velocidad</strong> es menor en la succión (mayor diámetro)</li>
+        <li>El caudal define la <strong>velocidad del actuador</strong></li>
+        <li>Lado émbolo vs lado vástago: distinto caudal, misma velocidad</li>
+        <li>La señal hidráulica se transmite a ~<strong>600 m/s</strong> (no confundir con la velocidad del fluido)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Caudales que tenés que distinguir</h3>
+      <ul>
+        <li><strong>Nominal (Qn):</strong> el de la bomba nueva, a velocidad nominal, sin fugas</li>
+        <li><strong>Real (Qr):</strong> el que entrega hoy, con su desgaste y su velocidad actual</li>
+        <li><strong>Contraflujo:</strong> caudal en sentido contrario al de la bomba — <strong>peligroso</strong>, puede dañarla</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">⚡</span>Presión, resistencias y caída de presión</div>
+  <div class="grid g2">
+    <div class="card or">
+      <h3>Caminos en PARALELO</h3>
+      <p>El fluido toma el camino de <strong>menor resistencia</strong>. Con resistencias de 10, 30 y 50 bar, pasa más por la de 10 (y el manómetro marca menos que la menor: combinación en paralelo).</p>
+    </div>
+    <div class="card pu">
+      <h3>Resistencias en SERIE</h3>
+      <p>Las resistencias <strong>se suman</strong> en términos de presión: 30 bar + 10 bar = el manómetro marca 40 bar (en cualquier orden).</p>
+    </div>
+  </div>
+  <div class="grid g2" style="margin-top:1rem">
+    <div class="card">
+      <h3>Caída de presión (Δp)</h3>
+      <p>Al pasar por una restricción, la presión a la salida es menor que a la entrada: <span class="fi">Δp = p₁ − p₂</span>. Depende sobre todo de la <strong>velocidad</strong> (Δp = k·v² = k·Q²) y además de viscosidad, temperatura, diámetro, rugosidad, longitud y forma. <strong>Sin caudal no hay caída de presión.</strong></p>
+    </div>
+    <div class="card bl">
+      <h3>Lectura de diagnóstico</h3>
+      <p><strong>Generar presión = energía disponible. Caídas de presión = energía perdida</strong> (calor). Leyendo los manómetros del circuito podés diagnosticar el funcionamiento o la falla del sistema.</p>
+    </div>
+  </div>
+
+  <div class="sub">Potencia hidráulica</div>
+  <div class="grid g2">
+    <div class="fbox"><span class="big">Pot [kW] = p [bar] × Q [l/min] / 600</span><span class="sub-f">sistema métrico</span></div>
+    <div class="fbox"><span class="big">Pot [hp] = p [psi] × Q [gpm] / 1714</span><span class="sub-f">sistema inglés · 1 hp = 0,746 kW</span></div>
+  </div>
+
+  <div class="sub">Unidades de presión (sabelas convertir)</div>
+  <div class="twrap"><table>
+    <tr><th>Unidad</th><th>Equivalencia clave</th></tr>
+    <tr><td>1 bar</td><td>= 10⁵ Pa = 100 kPa ≈ 14,5 psi ≈ 1,02 kgf/cm² ≈ 10,2 m H₂O</td></tr>
+    <tr><td>1 atm</td><td>≈ 1,013 bar ≈ 14,7 psi ≈ 1,033 kgf/cm²</td></tr>
+    <tr><td>1 kgf/cm²</td><td>≈ 0,981 bar ≈ 14,2 psi</td></tr>
+    <tr><td>1 MPa</td><td>= 10 bar</td></tr>
+  </table></div>
+  <div class="note">Acordate: <strong>p_absoluta = p_atmosférica + p_manométrica</strong>. Los manómetros miden presión relativa; los vacuómetros, presión negativa (mínimo −1 atm); los barómetros, la atmosférica. Y no confundas: estática, dinámica, manométrica, absoluta, de vacío, <strong>contrapresión</strong> (obstrucción en el retorno), nominal y sobrepresión (mayor a la nominal → daños).</div>
+
+</div></div>
+
+<!-- ═══════════════════════ FENÓMENOS ═══════════════════════ -->
+<div id="fenomenos" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">🚨</span>Patologías hidráulicas: los 3 fenómenos destructivos</div>
+  <div class="grid g3">
+    <div class="card re"><h3>1. Cavitación</h3><p>"Ebullición en frío": la presión cae bajo la <strong>presión de vapor</strong> en el ojo del impulsor → burbujas de <strong>vapor del propio fluido</strong> que implosionan y erosionan el metal.</p></div>
+    <div class="card pu"><h3>2. Golpe de ariete</h3><p>Impacto inercial: variación brusca de velocidad (cierre rápido de válvula, arranque/parada de bomba) → la energía cinética se vuelve <strong>ondas de sobrepresión y vacío</strong>.</p></div>
+    <div class="card or"><h3>3. Aireación</h3><p>Burbujas de <strong>aire atmosférico externo</strong> que entra por fisuras en la succión, sellos defectuosos o bajo nivel de tanque → ruido, pérdida de rendimiento, oxidación del aceite.</p></div>
+  </div>
+
+  <div class="stitle"><span class="ico">💥</span>Cavitación paso a paso</div>
+  <div class="grid g2">
+    <div class="card">
+      <h3>El proceso de destrucción</h3>
+      <ol>
+        <li><strong>Caída de presión:</strong> en el ojo del impulsor el fluido tiene su velocidad máxima y presión mínima (Bernoulli)</li>
+        <li><strong>Ebullición local:</strong> miles de microburbujas de vapor (¡el agua puede "hervir" a 40 °C si la presión baja lo suficiente!)</li>
+        <li><strong>Implosión:</strong> al avanzar por el álabe la presión sube y las burbujas colapsan violentamente</li>
+        <li><strong>Micro-jet:</strong> ondas de choque de altísima presión arrancan partículas del impulsor</li>
+      </ol>
+    </div>
+    <div class="card or">
+      <h3>¿Cómo la detectás en planta?</h3>
+      <ul>
+        <li><strong>Ruido característico:</strong> como si la bomba bombeara <strong>piedras</strong></li>
+        <li><strong>Vibraciones excesivas</strong> que destruyen las partes mecánicas</li>
+        <li><strong>Caída de rendimiento:</strong> ya no entrega el caudal ni la presión de diseño</li>
+      </ul>
+      <p style="margin-top:.4rem">En tuberías también aparece en <strong>angostamientos</strong>: al reducir la sección sube v y baja p (Bernoulli).</p>
+    </div>
+  </div>
+
+  <div class="sub">NPSH: la condición anticavitación</div>
+  <div class="fbox"><span class="big">NPSH disponible &gt; NPSH requerido (margen ≥ 0,5 m)</span><span class="sub-f">NPSHr lo da el fabricante (depende del caudal) · NPSHd lo da tu instalación</span></div>
+  <div class="grid g2">
+    <div class="card gr">
+      <h3>¿Cómo evitarla?</h3>
+      <ul>
+        <li><strong>Subir el tanque</strong> de aspiración (succión positiva)</li>
+        <li><strong>Aumentar el diámetro</strong> de la succión (bajar la velocidad)</li>
+        <li><strong>Limpiar filtros</strong> de succión obstruidos</li>
+        <li>Succión <strong>corta y recta</strong>, con pocas pérdidas y sin altura excesiva</li>
+      </ul>
+    </div>
+    <div class="card bl">
+      <h3>Succión positiva vs negativa</h3>
+      <ul>
+        <li><strong>Positiva:</strong> el líquido está POR ENCIMA de la brida de succión → la gravedad empuja, margen de seguridad. Siempre que se pueda, elegila.</li>
+        <li><strong>Negativa:</strong> el líquido está por debajo → la bomba debe "hacer fuerza", la presión cae peligrosamente en el ojo del impulsor.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="tip"><span class="tip-i">🛠️</span><div><strong>Diseño de la succión:</strong> corta y recta · válvula antirretorno con filtro en la entrada · sin acumulación de aire ni infiltraciones (bridas, juntas, sellos) · sin cambios bruscos de dirección · mínimos accesorios.</div></div>
+
+  <div class="stitle"><span class="ico">🫧</span>Cavitación vs Aireación: ¿vapor o aire?</div>
+  <div class="twrap"><table>
+    <tr><th></th><th>Cavitación</th><th>Aireación</th></tr>
+    <tr><td><strong>Las burbujas son de…</strong></td><td>VAPOR del propio líquido (cambio de fase)</td><td>AIRE atmosférico externo</td></tr>
+    <tr><td><strong>Causa</strong></td><td>Falta de presión (vacío excesivo): el líquido hierve a esa presión y temperatura</td><td>Sello roto, junta floja en la succión, vórtice en el tanque que "traga" aire</td></tr>
+    <tr><td><strong>Comportamiento</strong></td><td>Las burbujas se crean e implosionan DENTRO de la bomba</td><td>Existen desde antes de entrar; se comprimen pero no implosionan con esa violencia</td></tr>
+    <tr><td><strong>Efecto</strong></td><td>Ruido a "piedras", erosión destructiva, vibración de alta frecuencia</td><td>Pérdida de cebado, ruido de burbujeo, caudal que fluctúa</td></tr>
+  </table></div>
+
+  <div class="stitle"><span class="ico">🔨</span>Golpe de ariete (choque hidráulico)</div>
+  <p>Ondas de choque de alta presión que se propagan cuando un fluido en movimiento <strong>se detiene o cambia de dirección bruscamente</strong> (cierre de válvula, parada de bomba). Los picos pueden superar <strong>10 veces la presión de trabajo</strong>. Se reconoce por el golpeteo metálico inmediatamente después del cierre.</p>
+
+  <div class="sub">Las 4 fases de la onda</div>
+  <div class="grid g4">
+    <div class="card bl"><h3>1. Impacto</h3><p>La primera "capa" de fluido se detiene: su energía cinética se vuelve presión; la cañería se expande microscópicamente.</p></div>
+    <div class="card tl"><h3>2. Viaje de la onda</h3><p>La sobrepresión viaja hacia el tanque a la velocidad del sonido en el fluido (~<strong>1200–1400 m/s</strong>).</p></div>
+    <div class="card pu"><h3>3. Reflexión</h3><p>El tanque absorbe el exceso; vuelve una onda de <strong>baja presión (depresión)</strong> hacia la válvula.</p></div>
+    <div class="card or"><h3>4. Rebotes</h3><p>La onda va y viene (martilleo y vibraciones) hasta que la fricción frena el fluido.</p></div>
+  </div>
+
+  <div class="sub">Tiempo de cierre: crítico vs lento</div>
+  <div class="fbox"><span class="big">t&#8346; = 2L / a</span><span class="sub-f">tiempo de ida y vuelta de la onda · L = largo de cañería · a = velocidad de la onda</span></div>
+  <div class="grid g2">
+    <div class="card re"><h3>Cierre rápido o CRÍTICO (tc &lt; tp)</h3><p>La válvula cierra antes de que la onda vaya y vuelva: la presión máxima golpea con toda su fuerza contra la válvula. <strong>Acá se rompen cañerías, bombas y accesorios.</strong></p></div>
+    <div class="card gr"><h3>Cierre lento o SEGURO (tc &gt; tp)</h3><p>Cuando la onda regresa encuentra la válvula "medio abierta": parte de la presión se libera y el impacto se amortigua naturalmente.</p></div>
+  </div>
+
+  <div class="sub">Transitorios de bombas</div>
+  <div class="grid g2">
+    <div class="card re">
+      <h3>Paro brusco (el escenario MÁS peligroso)</h3>
+      <p>Se corta el motor → el impulsor se frena → <strong>depresión/vacío</strong> a la salida (la columna sigue avanzando por inercia) → la columna se detiene, <strong>retrocede</strong> y choca contra la válvula de retención cerrada: golpe de ariete destructivo.</p>
+    </div>
+    <div class="card or">
+      <h3>Arranque con línea vacía</h3>
+      <p>La bomba inyecta caudal masivo a una cañería vacía o con aire: el frente de líquido avanza a altísima velocidad y al chocar contra el final de línea o un codo pasa a velocidad cero → <strong>pico de sobrepresión instantáneo</strong>.</p>
+    </div>
+  </div>
+
+  <div class="sub">Efectos y daños</div>
+  <div class="grid g2">
+    <div class="card"><h3>Sobrepresión</h3><p>Picos de 4–5× la presión nominal en milisegundos: deforman y rajan cañerías rígidas, rompen mangueras y dañan uniones soldadas o bridadas (ruptura por fatiga).</p></div>
+    <div class="card"><h3>Vacío (implosión)</h3><p>La depresión puede caer bajo la atmosférica: <strong>aplasta cañerías de pared delgada</strong> y arranca los sellos internos de las válvulas.</p></div>
+    <div class="card"><h3>Instrumentos y bombas</h3><p>Transductores, manómetros y caudalímetros se descalibran o dañan; la onda de retorno fisura carcasa y álabes.</p></div>
+    <div class="card"><h3>Soportes</h3><p>Las vibraciones cortan espárragos de soportes y anclajes → línea suelta → más fallas por fatiga.</p></div>
+  </div>
+
+  <div class="sub">5 métodos de mitigación</div>
+  <div class="grid g3">
+    <div class="card gr"><h3>1. Cierre progresivo</h3><p>Programar actuadores para cierre lento: la onda regresa y se libera antes del sellado total.</p></div>
+    <div class="card gr"><h3>2. Acumuladores / amortiguadores</h3><p>Tanques hidroneumáticos con vejiga de nitrógeno cerca de las válvulas rápidas: el gas se comprime y absorbe el impacto.</p></div>
+    <div class="card gr"><h3>3. Válvulas antigolpe</h3><p>Alivio rápido: abren instantáneamente ante el pico y desvían caudal al retorno.</p></div>
+    <div class="card gr"><h3>4. Bajar la velocidad</h3><p>Diámetros más amplios → menos energía cinética disponible para transformarse en sobrepresión.</p></div>
+    <div class="card gr"><h3>5. Retención de disco partido</h3><p>A la salida de bombas: cierran ultra rápido antes de que la columna invierta el sentido.</p></div>
+  </div>
+
+  <div class="stitle"><span class="ico">🔩</span>Bonus: origen de fallas en sistemas hidráulicos</div>
+  <div class="grid g3">
+    <div class="card"><h3>Desgaste</h3><p><strong>Adhesivo</strong> (falta de aceite o viscosidad baja), <strong>abrasivo</strong> (partículas extrañas), <strong>corrosivo</strong> (ácidos, sales), <strong>por cavitación</strong> (implosión de burbujas).</p></div>
+    <div class="card"><h3>Impacto y sobrecargas</h3><p>Trabajo severo, golpeteo, sobrepresiones.</p></div>
+    <div class="card"><h3>Fatiga</h3><p>Cargas repetidas y excesivas sobre superficies ya desgastadas.</p></div>
+  </div>
+  <div class="note">La <strong>contaminación + degradación</strong> del aceite explican más del <strong>70%</strong> de las fallas de bombas, válvulas y cilindros.</div>
+
+</div></div>
+
+<!-- ═══════════════════════ REPASO PARCIAL ═══════════════════════ -->
+<div id="repaso" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">📝</span>Repaso exprés: lo que tenés que saber sí o sí</div>
+
+  <div class="grid g2">
+    <div class="card bl">
+      <h3>🛢️ Fluidos</h3>
+      <ul>
+        <li>5 funciones: transmitir energía, lubricar, sellar, disipar calor, transportar partículas</li>
+        <li>Viscosidad: mín 10 cSt · óptimo 16–36 cSt · arranque máx 800–1000 cSt · ISO VG se mide a <strong>40 °C</strong></li>
+        <li>IV alto = curva plana = estable (multigrado &gt; 140; monogrado ≈ 95)</li>
+        <li>DIN 51524: HH → HL → <strong>HLP (estándar industrial)</strong> → HVLP (alto IV, intemperie)</li>
+        <li>ISO 4406: 3 números = partículas &gt; 4/6/14 µm en 1 ml</li>
+        <li>Contaminación sólida → microfiltrar; degradación química → cambiar</li>
+      </ul>
+    </div>
+    <div class="card tl">
+      <h3>🔧 Componentes</h3>
+      <ul>
+        <li>Tanque: almacena, enfría, sedimenta, libera aire/agua; respiradero y deflectores</li>
+        <li>Filtros: colador (100 µm, en tanque) · succión (100–250 µm) · presión (<strong>6–20 µm</strong>) · retorno (20–50 µm)</li>
+        <li>By-pass: abre por ΔP cuando el filtro se tapa</li>
+        <li>Mangueras: número DASH = diámetro interior en 1/16"</li>
+        <li>Conectores: JIC 37° (universal) · ORB (o-ring base) · <strong>ORFS = mejor anti-fugas</strong></li>
+      </ul>
+    </div>
+    <div class="card or">
+      <h3>⚙️ Bombas y actuadores</h3>
+      <ul>
+        <li><strong>La bomba da CAUDAL, no presión</strong> (la presión la hace la resistencia)</li>
+        <li>Q = DV × n · engranajes: fijo, 4000 psi · paletas: fijo/variable · pistones: hasta 700 bar, lo más preciso</li>
+        <li>Actuador lento = falta caudal (no presión)</li>
+        <li>Cilindro simple efecto → válvula 3/2 · doble efecto → 4/2 o 4/3</li>
+        <li>Motor: M = Ft · r; velocidad ∝ caudal de entrada</li>
+        <li>Acumuladores: pesa, resorte, <strong>gas (vejiga/diafragma/pistón)</strong></li>
+      </ul>
+    </div>
+    <div class="card pu">
+      <h3>🎛️ Válvulas</h3>
+      <ul>
+        <li>Alivio: <strong>normalmente cerrada</strong>, sensa entrada · Reductora: <strong>normalmente abierta</strong>, sensa salida</li>
+        <li>Secuencia: prioridad entre 2 circuitos · Pilotada: piloto chica controla la principal</li>
+        <li>Distribuidoras: vías/posiciones (4/3 la estrella) · P, T, A, B</li>
+        <li>Centros 4/3: bloqueado · tándem (P→T) · flotante (A,B,T) · abierto H</li>
+        <li>Corredera: no estanca, poca fuerza · Asiento: estanca, mucha fuerza</li>
+        <li>Check pilotada: relación 3:1 · Compensación: anticavitación (~2 psi)</li>
+      </ul>
+    </div>
+    <div class="card gr">
+      <h3>🌊 Caudal y velocidad</h3>
+      <ul>
+        <li>Q lo define el proceso, no es libre</li>
+        <li>Oleo: succión 0,5–1,2 · retorno 1,5–3 · presión 3–6 m/s</li>
+        <li>Agua: succión 0,6–1,2 · impulsión 1,5–2,5 m/s</li>
+        <li>Serie: presiones se suman · Paralelo: gana el camino de menor resistencia</li>
+        <li>Δp = k·Q² · sin caudal no hay Δp</li>
+        <li>Pot [kW] = p·Q/600 · Pot [hp] = psi·gpm/1714</li>
+      </ul>
+    </div>
+    <div class="card re">
+      <h3>🚨 Fenómenos</h3>
+      <ul>
+        <li>Cavitación = burbujas de VAPOR por baja presión · Aireación = AIRE externo</li>
+        <li>NPSHd &gt; NPSHr + 0,5 m · succión positiva mejor que negativa</li>
+        <li>Golpe de ariete: tp = 2L/a · crítico si tc &lt; tp · onda a 1200–1400 m/s · picos hasta 10×</li>
+        <li>Peor escenario: <strong>paro brusco de bomba</strong></li>
+        <li>Mitigación: cierre lento, acumulador, válvula antigolpe, más diámetro, check de disco partido</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">❓</span>Preguntas de oral típicas</div>
+  <div class="grid g2">
+    <div class="card"><h3>"¿La bomba genera presión?"</h3><p>No: genera caudal. La presión se origina cuando el caudal encuentra resistencia.</p></div>
+    <div class="card"><h3>"¿Puede hervir el agua a 40 °C?"</h3><p>Sí: la ebullición depende de presión y temperatura. Si la presión cae bajo la presión de vapor, hierve "en frío" → cavitación.</p></div>
+    <div class="card"><h3>"¿Por qué la succión va lenta?"</h3><p>Para no sacrificar presión (Bernoulli): si acelerás el fluido en la succión, la presión cae y puede entrar en cavitación.</p></div>
+    <div class="card"><h3>"¿Diferencia entre cavitación y aireación?"</h3><p>Cavitación: vapor del propio fluido, implosiona adentro. Aireación: aire externo que entra por sellos/vórtices, no implosiona igual pero hace perder cebado y rendimiento.</p></div>
+    <div class="card"><h3>"¿Qué pasa si cierro una válvula de golpe?"</h3><p>Golpe de ariete: la energía cinética se transforma en una onda de sobrepresión que viaja a ~1200–1400 m/s, rebota y martillea hasta disiparse.</p></div>
+    <div class="card"><h3>"¿Por qué no mezclar aceites?"</h3><p>Las características (antiespumante, demulsibilidad, etc.) las da el fluido formulado; mezclar o aditivar por tu cuenta las arruina.</p></div>
+  </div>
+
+</div></div>
+
+<!-- ═══════════════════════ EJERCICIOS ═══════════════════════ -->
+<div id="ejercicios" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">✏️</span>Ejercicios resueltos paso a paso</div>
+  <div class="ej-filter">
+    <button class="ej-filter-btn active" onclick="filterEj('all',this)">Todos</button>
+    <button class="ej-filter-btn" onclick="filterEj('pres',this)">Presión</button>
+    <button class="ej-filter-btn" onclick="filterEj('caudal',this)">Caudal</button>
+    <button class="ej-filter-btn" onclick="filterEj('pot',this)">Potencia</button>
+    <button class="ej-filter-btn" onclick="filterEj('ariete',this)">Golpe de ariete</button>
+  </div>
+
+  <div class="ej-card" data-tag="pres">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>1 · Conversión de unidades de presión</h3><span class="ej-badge t-pres">PRESIÓN</span></div>
+    <div class="ej-body">
+      <div class="ej-enunciado"><strong>Convertí:</strong> a) 120 bar a psi · b) 1200 psi a bar · c) 90 psi (neumático de cargador) a kgf/cm² · d) una válvula regulada a 2200 psi, ¿a cuántos bar equivale?</div>
+      <div class="step"><span class="step-num">1</span><div class="step-body">Usá las equivalencias: <span class="fi">1 bar ≈ 14,5 psi</span> · <span class="fi">1 kgf/cm² ≈ 14,2 psi</span></div></div>
+      <div class="step"><span class="step-num">2</span><div class="step-body">a) <span class="fi">120 × 14,5 ≈ 1740 psi</span> &nbsp; b) <span class="fi">1200 / 14,5 ≈ 83 bar</span></div></div>
+      <div class="step"><span class="step-num">3</span><div class="step-body">c) <span class="fi">90 / 14,2 ≈ 6,3 kgf/cm²</span> &nbsp; d) <span class="fi">2200 / 14,5 ≈ 152 bar</span></div></div>
+      <div class="result-box">a) ≈1740 psi · b) ≈83 bar · c) ≈6,3 kgf/cm² · d) ≈152 bar</div>
+    </div>
+  </div>
+
+  <div class="ej-card" data-tag="pres">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>2 · Multiplicación de fuerzas (Pascal)</h3><span class="ej-badge t-pres">PRESIÓN</span></div>
+    <div class="ej-body">
+      <div class="ej-enunciado"><strong>En un recipiente con dos émbolos:</strong> en el punto A (área 3,14 cm², pistón Ø2 cm) se aplican 50 kgf. ¿Qué presión hay en el fluido y qué fuerza puede mover el pistón B de Ø10 cm (78,5 cm²)?</div>
+      <div class="step"><span class="step-num">1</span><div class="step-body">Presión generada: <span class="fi">p = F/A = 50 / 3,14 ≈ 15,9 kgf/cm²</span></div></div>
+      <div class="step"><span class="step-num">2</span><div class="step-body">Por Pascal, esa presión es igual en todo el fluido.</div></div>
+      <div class="step"><span class="step-num">3</span><div class="step-body">Fuerza en B: <span class="fi">F = p × A = 15,9 × 78,5 ≈ 1250 kgf</span>. Las fuerzas son proporcionales a sus áreas: ganás fuerza pero perdés desplazamiento (S₁/S₂ = A₂/A₁).</div></div>
+      <div class="result-box">p ≈ 15,9 kgf/cm² · F_B ≈ 1250 kgf</div>
+    </div>
+  </div>
+
+  <div class="ej-card" data-tag="caudal">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>3 · Caudal de una bomba: Q = DV × n</h3><span class="ej-badge t-caudal">CAUDAL</span></div>
+    <div class="ej-body">
+      <div class="ej-enunciado"><strong>Una bomba de engranajes</strong> tiene desplazamiento volumétrico DV = 10 cm³/rev y está acoplada a un motor eléctrico de 1800 rpm. Calculá el caudal en l/min y gpm.</div>
+      <div class="step"><span class="step-num">1</span><div class="step-body"><span class="fi">Q = DV × n = 10 cm³/rev × 1800 rev/min = 18 000 cm³/min</span></div></div>
+      <div class="step"><span class="step-num">2</span><div class="step-body">Pasaje a litros: <span class="fi">18 000 cm³ = 18 l → Q = 18 l/min</span></div></div>
+      <div class="step"><span class="step-num">3</span><div class="step-body">A galones: <span class="fi">18 / 3,785 ≈ 4,76 gpm</span></div></div>
+      <div class="result-box">Q = 18 l/min ≈ 4,76 GPM</div>
+    </div>
+  </div>
+
+  <div class="ej-card" data-tag="caudal">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>4 · Caudal que llega a un pistón (Q = 6·v·A)</h3><span class="ej-badge t-caudal">CAUDAL</span></div>
+    <div class="ej-body">
+      <div class="ej-enunciado"><strong>Un pistón de Ø10 cm</strong> sale a v = 0,1 m/s. ¿Qué caudal le llega, en l/min y gpm?</div>
+      <div class="step"><span class="step-num">1</span><div class="step-body">Área del émbolo: <span class="fi">A = π·D²/4 = π·10²/4 ≈ 78,54 cm²</span></div></div>
+      <div class="step"><span class="step-num">2</span><div class="step-body">Fórmula práctica (v en m/s, A en cm²): <span class="fi">Q [l/min] = 6 × v × A = 6 × 0,1 × 78,54 ≈ 47,13 l/min</span></div></div>
+      <div class="step"><span class="step-num">3</span><div class="step-body">A galones: <span class="fi">47,13 / 3,785 ≈ 12,45 gpm</span></div></div>
+      <div class="result-box">Q ≈ 47,1 l/min ≈ 12,45 GPM</div>
+    </div>
+  </div>
+
+  <div class="ej-card" data-tag="pot">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>5 · Potencia de bomba para levantar una carga</h3><span class="ej-badge t-pot">POTENCIA</span></div>
+    <div class="ej-body">
+      <div class="ej-enunciado"><strong>Un pistón soporta 10 000 lb</strong> con área de 10 pulg². ¿Qué potencia necesita la bomba para levantar la carga a 0,1 pies/s?</div>
+      <div class="step"><span class="step-num">1</span><div class="step-body">Presión: <span class="fi">p = F/A = 10 000 / 10 = 1000 psi</span></div></div>
+      <div class="step"><span class="step-num">2</span><div class="step-body">Caudal: <span class="fi">Q [gpm] = v × A × 3,117 = 0,1 × 10 × 3,117 ≈ 3,12 gpm</span></div></div>
+      <div class="step"><span class="step-num">3</span><div class="step-body">Potencia: <span class="fi">Pot = p × Q / 1714 = 1000 × 3,117 / 1714 ≈ 1,8 hp</span></div></div>
+      <div class="result-box">Pot ≈ 1,8 hp (≈ 1,36 kW)</div>
+    </div>
+  </div>
+
+  <div class="ej-card" data-tag="pot">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>6 · Potencia hidráulica en unidades métricas</h3><span class="ej-badge t-pot">POTENCIA</span></div>
+    <div class="ej-body">
+      <div class="ej-enunciado"><strong>Una bomba entrega 40 l/min a 150 bar.</strong> ¿Qué potencia hidráulica desarrolla? ¿Y si el conjunto motor-bomba tiene un rendimiento del 85%, qué potencia eléctrica consume?</div>
+      <div class="step"><span class="step-num">1</span><div class="step-body"><span class="fi">Pot [kW] = p × Q / 600 = 150 × 40 / 600 = 10 kW</span></div></div>
+      <div class="step"><span class="step-num">2</span><div class="step-body">Potencia eléctrica: <span class="fi">P_ele = 10 / 0,85 ≈ 11,8 kW</span></div></div>
+      <div class="result-box">P_hid = 10 kW · P_ele ≈ 11,8 kW</div>
+    </div>
+  </div>
+
+  <div class="ej-card" data-tag="caudal">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>7 · Verificar la velocidad en una línea</h3><span class="ej-badge t-caudal">CAUDAL</span></div>
+    <div class="ej-body">
+      <div class="ej-enunciado"><strong>Por una línea de presión de Ø interior 12 mm</strong> circulan 30 l/min de aceite. ¿La velocidad está dentro del rango recomendado (3–6 m/s)?</div>
+      <div class="step"><span class="step-num">1</span><div class="step-body">Área: <span class="fi">A = π·1,2²/4 ≈ 1,13 cm²</span></div></div>
+      <div class="step"><span class="step-num">2</span><div class="step-body">De Q = 6·v·A → <span class="fi">v = Q / (6·A) = 30 / (6 × 1,13) ≈ 4,4 m/s</span></div></div>
+      <div class="step"><span class="step-num">3</span><div class="step-body">4,4 m/s está entre 3 y 6 m/s → ✅ correcto para línea de presión. (Si fuera succión, ¡sería un desastre: el límite es 1,2 m/s!)</div></div>
+      <div class="result-box">v ≈ 4,4 m/s → OK para presión</div>
+    </div>
+  </div>
+
+  <div class="ej-card" data-tag="ariete">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>8 · Tiempo crítico de cierre (golpe de ariete)</h3><span class="ej-badge t-ariete">ARIETE</span></div>
+    <div class="ej-body">
+      <div class="ej-enunciado"><strong>Una cañería de 700 m</strong> transporta agua; la onda de presión viaja a a = 1400 m/s. Una válvula al final cierra en tc = 0,8 s. ¿El cierre es crítico o seguro?</div>
+      <div class="step"><span class="step-num">1</span><div class="step-body">Tiempo de ida y vuelta de la onda: <span class="fi">tp = 2L/a = 2 × 700 / 1400 = 1 s</span></div></div>
+      <div class="step"><span class="step-num">2</span><div class="step-body">Comparación: <span class="fi">tc = 0,8 s &lt; tp = 1 s</span> → la válvula termina de cerrar ANTES de que la onda regrese.</div></div>
+      <div class="step"><span class="step-num">3</span><div class="step-body">Es un <strong>cierre crítico</strong>: la sobrepresión máxima golpea la válvula. Solución: programar un cierre más lento que 1 s (idealmente varias veces tp), o instalar un acumulador/válvula antigolpe.</div></div>
+      <div class="result-box">tp = 1 s · tc = 0,8 s &lt; tp → CIERRE CRÍTICO ⚠️</div>
+    </div>
+  </div>
+
+  <div class="ej-card" data-tag="caudal">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>9 · Llenado de tanque: definir el caudal de trabajo</h3><span class="ej-badge t-caudal">CAUDAL</span></div>
+    <div class="ej-body">
+      <div class="ej-enunciado"><strong>Hay que llenar un depósito de 20 litros en 2 minutos.</strong> ¿Qué caudal necesita el proceso?</div>
+      <div class="step"><span class="step-num">1</span><div class="step-body"><span class="fi">Q = V/t = 20 l / 2 min = 10 l/min</span></div></div>
+      <div class="step"><span class="step-num">2</span><div class="step-body">Este es el concepto de que el caudal "sale" de la necesidad del proceso. Con un balde graduado y un cronómetro podés medir el caudal real de cualquier bomba.</div></div>
+      <div class="result-box">Q = 10 l/min</div>
+    </div>
+  </div>
+
+  <div class="ej-card" data-tag="pres">
+    <div class="ej-header" onclick="toggleEj(this)"><h3>10 · Resistencias en serie y caída de presión</h3><span class="ej-badge t-pres">PRESIÓN</span></div>
+    <div class="ej-body">
+      <div class="ej-enunciado"><strong>Un único camino tiene dos restricciones</strong> que generan 30 bar y 10 bar. a) ¿Qué marca el manómetro a la salida de la bomba? b) Si en otro tramo p₁ = 180 bar y p₂ = 20 bar, ¿cuál es la caída de presión?</div>
+      <div class="step"><span class="step-num">1</span><div class="step-body">a) En serie las resistencias se suman: <span class="fi">30 + 10 = 40 bar</span> (en cualquier orden).</div></div>
+      <div class="step"><span class="step-num">2</span><div class="step-body">b) <span class="fi">Δp = p₁ − p₂ = 180 − 20 = 160 bar</span>. Esa energía se pierde como calor.</div></div>
+      <div class="step"><span class="step-num">3</span><div class="step-body">Si no hay caudal, Δp = 0: la presión es igual en todos los puntos del fluido en reposo.</div></div>
+      <div class="result-box">a) 40 bar · b) Δp = 160 bar</div>
+    </div>
+  </div>
+
+</div></div>
+
+<!-- ═══════════════════════ SIMULADORES ═══════════════════════ -->
+<div id="simuladores" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">🔬</span>Simuladores interactivos</div>
+  <p style="margin-bottom:1.5rem">Mové los deslizadores y mirá cómo cambian los resultados. Son las mismas cuentas que vas a hacer en el parcial.</p>
+
+  <!-- SIM 1: Q = DV x n -->
+  <div class="lab">
+    <div class="lab-head"><h3>⚙️ Caudal de bomba: Q = DV × n</h3><div class="ctx">El desplazamiento volumétrico es el "tamaño" de la bomba: cuánto aceite mueve por vuelta.</div></div>
+    <div class="lab-body">
+      <div class="lab-viz">
+        <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="90" cy="90" r="55" fill="#bae6fd" stroke="#0369a1" stroke-width="3"/>
+          <g id="sim1-rotor" transform="rotate(0 90 90)">
+            <circle cx="90" cy="90" r="14" fill="#0369a1"/>
+            <rect x="86" y="35" width="8" height="40" rx="3" fill="#0284c7"/>
+            <rect x="86" y="105" width="8" height="40" rx="3" fill="#0284c7"/>
+            <rect x="35" y="86" width="40" height="8" rx="3" fill="#0284c7"/>
+            <rect x="105" y="86" width="40" height="8" rx="3" fill="#0284c7"/>
+          </g>
+          <rect x="160" y="78" width="140" height="24" rx="6" fill="#e0f2fe" stroke="#7dd3fc"/>
+          <g id="sim1-flow">
+            <circle cx="180" cy="90" r="5" fill="#0284c7"/>
+            <circle cx="215" cy="90" r="5" fill="#0284c7"/>
+            <circle cx="250" cy="90" r="5" fill="#0284c7"/>
+            <circle cx="285" cy="90" r="5" fill="#0284c7"/>
+          </g>
+          <text x="230" y="65" font-size="12" fill="#075985" text-anchor="middle" font-weight="700" id="sim1-flowtxt">caudal →</text>
+        </svg>
+      </div>
+      <div class="lab-ctrls">
+        <div class="row"><label>Desplazamiento DV <span class="val" id="sim1-dv-v">10 cm³/rev</span></label><input type="range" id="sim1-dv" min="2" max="100" step="1" value="10" oninput="sim1()"></div>
+        <div class="row"><label>Velocidad del motor n <span class="val" id="sim1-n-v">1800 rpm</span></label><input type="range" id="sim1-n" min="500" max="3600" step="100" value="1800" oninput="sim1()"></div>
+        <div class="lab-result" id="sim1-out"></div>
+        <div class="lab-fact"><strong>Acordate:</strong> bomba de caudal fijo → solo cambiás Q cambiando las rpm. Bomba variable (pistones/paletas) → cambiás el DV con el ángulo del plato o el anillo.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIM 2: velocidad en línea -->
+  <div class="lab">
+    <div class="lab-head"><h3>🌊 Verificador de velocidad en línea</h3><div class="ctx">¿Tu diámetro aguanta el caudal sin salirte del rango recomendado?</div></div>
+    <div class="lab-body">
+      <div class="lab-viz">
+        <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="60" width="320" height="60" rx="10" fill="#e0f2fe" stroke="#0369a1" stroke-width="3" id="sim2-pipe"/>
+          <g id="sim2-dots">
+            <circle cx="60" cy="90" r="6" fill="#0284c7"/>
+            <circle cx="130" cy="90" r="6" fill="#0284c7"/>
+            <circle cx="200" cy="90" r="6" fill="#0284c7"/>
+            <circle cx="270" cy="90" r="6" fill="#0284c7"/>
+          </g>
+          <text x="180" y="45" font-size="13" text-anchor="middle" font-weight="800" fill="#075985" id="sim2-vtxt">v = ?</text>
+          <text x="180" y="150" font-size="12" text-anchor="middle" font-weight="700" fill="#64748b" id="sim2-status">—</text>
+        </svg>
+      </div>
+      <div class="lab-ctrls">
+        <div class="row"><label>Caudal Q <span class="val" id="sim2-q-v">30 l/min</span></label><input type="range" id="sim2-q" min="5" max="200" step="5" value="30" oninput="sim2()"></div>
+        <div class="row"><label>Diámetro interior <span class="val" id="sim2-d-v">12 mm</span></label><input type="range" id="sim2-d" min="4" max="60" step="1" value="12" oninput="sim2()"></div>
+        <div class="row"><label>Tipo de línea</label><select class="sel" id="sim2-tipo" onchange="sim2()">
+          <option value="succion">Succión (0,5 – 1,2 m/s)</option>
+          <option value="retorno">Retorno (1,5 – 3,0 m/s)</option>
+          <option value="presion" selected>Presión (3,0 – 6,0 m/s)</option>
+        </select></div>
+        <div class="lab-result" id="sim2-out"></div>
+        <div class="lab-fact"><strong>Tip:</strong> velocidad alta en la succión = cavitación casi asegurada. Si te da alto, agrandá el diámetro: v cae con el cuadrado de D.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIM 3: golpe de ariete -->
+  <div class="lab">
+    <div class="lab-head"><h3>🔨 Golpe de ariete: ¿cierre crítico o seguro?</h3><div class="ctx">Compará el tiempo de cierre de tu válvula contra el tiempo de ida y vuelta de la onda.</div></div>
+    <div class="lab-body">
+      <div class="lab-viz">
+        <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+          <rect x="15" y="40" width="50" height="80" rx="6" fill="#bae6fd" stroke="#0369a1" stroke-width="2"/>
+          <text x="40" y="138" font-size="11" text-anchor="middle" fill="#075985" font-weight="700">TANQUE</text>
+          <rect x="65" y="72" width="240" height="26" rx="5" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"/>
+          <rect x="305" y="60" width="16" height="50" rx="3" fill="#475569"/>
+          <text x="313" y="130" font-size="11" text-anchor="middle" fill="#475569" font-weight="700">VÁLVULA</text>
+          <circle id="sim3-wave" cx="300" cy="85" r="9" fill="#dc2626" opacity=".85"/>
+          <text x="180" y="30" font-size="13" text-anchor="middle" font-weight="800" fill="#075985" id="sim3-tp">tp = ?</text>
+        </svg>
+      </div>
+      <div class="lab-ctrls">
+        <div class="row"><label>Largo de la cañería L <span class="val" id="sim3-l-v">700 m</span></label><input type="range" id="sim3-l" min="50" max="3000" step="50" value="700" oninput="sim3()"></div>
+        <div class="row"><label>Velocidad de la onda a <span class="val" id="sim3-a-v">1400 m/s</span></label><input type="range" id="sim3-a" min="1000" max="1500" step="50" value="1400" oninput="sim3()"></div>
+        <div class="row"><label>Tiempo de cierre tc <span class="val" id="sim3-tc-v">0.8 s</span></label><input type="range" id="sim3-tc" min="0.1" max="10" step="0.1" value="0.8" oninput="sim3()"></div>
+        <div class="lab-result" id="sim3-out"></div>
+        <div class="lab-fact"><strong>Regla:</strong> tc &lt; tp = 2L/a → cierre crítico (la onda vuelve y encuentra todo cerrado). Cerrá más lento o poné un acumulador cerca de la válvula.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIM 4: potencia -->
+  <div class="lab">
+    <div class="lab-head"><h3>⚡ Potencia hidráulica</h3><div class="ctx">Presión y caudal definen la potencia: Pot [kW] = p·Q/600.</div></div>
+    <div class="lab-body">
+      <div class="lab-viz">
+        <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+          <rect x="40" y="150" width="60" height="0" fill="#0284c7" id="sim4-barp"/>
+          <rect x="150" y="150" width="60" height="0" fill="#0d9488" id="sim4-barq"/>
+          <rect x="260" y="150" width="60" height="0" fill="#d97706" id="sim4-barw"/>
+          <text x="70" y="168" font-size="11" text-anchor="middle" fill="#075985" font-weight="700">p (bar)</text>
+          <text x="180" y="168" font-size="11" text-anchor="middle" fill="#0d9488" font-weight="700">Q (l/min)</text>
+          <text x="290" y="168" font-size="11" text-anchor="middle" fill="#92400e" font-weight="700">Pot (kW)</text>
+          <text x="70" y="20" font-size="12" text-anchor="middle" fill="#075985" font-weight="800" id="sim4-tp">—</text>
+          <text x="180" y="20" font-size="12" text-anchor="middle" fill="#0d9488" font-weight="800" id="sim4-tq">—</text>
+          <text x="290" y="20" font-size="12" text-anchor="middle" fill="#92400e" font-weight="800" id="sim4-tw">—</text>
+        </svg>
+      </div>
+      <div class="lab-ctrls">
+        <div class="row"><label>Presión p <span class="val" id="sim4-p-v">150 bar</span></label><input type="range" id="sim4-p" min="10" max="350" step="10" value="150" oninput="sim4()"></div>
+        <div class="row"><label>Caudal Q <span class="val" id="sim4-q-v">40 l/min</span></label><input type="range" id="sim4-q" min="5" max="200" step="5" value="40" oninput="sim4()"></div>
+        <div class="row"><label>Rendimiento η <span class="val" id="sim4-e-v">85 %</span></label><input type="range" id="sim4-e" min="50" max="100" step="1" value="85" oninput="sim4()"></div>
+        <div class="lab-result" id="sim4-out"></div>
+        <div class="lab-fact"><strong>Mirá:</strong> la potencia crece linealmente con AMBOS. Doblar la presión o doblar el caudal duplica los kW que consume el motor.</div>
+      </div>
+    </div>
+  </div>
+
+</div></div>
+
+<!-- ═══════════════════════ JUEGOS ═══════════════════════ -->
+<div id="juegos" class="page"><div class="container">
+
+  <div class="game-section">
+    <h3>🃏 Flashcards de repaso</h3>
+    <p class="desc">Tocá la tarjeta para dar vuelta. Pasá a la siguiente con los botones.</p>
+    <div class="flashcard-wrap" onclick="flipCard()">
+      <div class="flashcard" id="flashcard">
+        <div class="fc-front"><div class="fc-label">Pregunta</div><div class="fc-content" id="fc-q"></div></div>
+        <div class="fc-back"><div class="fc-answer" id="fc-a"></div></div>
+      </div>
+    </div>
+    <div class="fc-controls">
+      <button class="fc-btn" onclick="prevCard(event)">← Anterior</button>
+      <span class="fc-counter" id="fc-counter"></span>
+      <button class="fc-btn" onclick="nextCard(event)">Siguiente →</button>
+    </div>
+  </div>
+
+  <div class="game-section">
+    <h3>🔗 Uní componente con función</h3>
+    <p class="desc">Seleccioná un elemento de cada columna para formar la pareja correcta.</p>
+    <div class="match-grid">
+      <div class="match-col"><h4>Componente</h4><div id="match-left"></div></div>
+      <div class="match-col"><h4>Función</h4><div id="match-right"></div></div>
+    </div>
+    <div class="match-status" id="match-status"></div>
+    <button class="btn-reset" onclick="initMatch()">🔄 Reiniciar</button>
+  </div>
+
+  <div class="game-section">
+    <h3>🎛️ Uní la válvula con su característica</h3>
+    <p class="desc">Segunda ronda: válvulas.</p>
+    <div class="match-grid">
+      <div class="match-col"><h4>Válvula</h4><div id="match2-left"></div></div>
+      <div class="match-col"><h4>Característica</h4><div id="match2-right"></div></div>
+    </div>
+    <div class="match-status" id="match2-status"></div>
+    <button class="btn-reset" onclick="initMatch2()">🔄 Reiniciar</button>
+  </div>
+
+</div></div>
+
+<!-- ═══════════════════════ QUIZ ═══════════════════════ -->
+<div id="quiz" class="page"><div class="container">
+  <div class="stitle"><span class="ico">🧠</span>Quiz de autoevaluación</div>
+  <div id="quiz-container"></div>
+</div></div>
+
+<!-- ═══════════════════════ CHEATSHEET ═══════════════════════ -->
+<div id="cheatsheet" class="page"><div class="container">
+
+  <div class="cheat">
+    <h2>📋 Fórmulas y valores para el parcial</h2>
+    <div class="cgrid">
+      <div class="citem"><div class="lbl">Caudal</div><div class="cf">Q = V / t</div><div class="cu">l/min · 1 gal = 3,785 l</div></div>
+      <div class="citem"><div class="lbl">Continuidad</div><div class="cf">Q = v·A · v₁A₁ = v₂A₂</div><div class="cu">Q[l/min] = 6·v[m/s]·A[cm²]</div></div>
+      <div class="citem"><div class="lbl">Bomba / motor</div><div class="cf">Q = DV × n</div><div class="cu">cm³/rev × rpm</div></div>
+      <div class="citem"><div class="lbl">Presión</div><div class="cf">p = F / A</div><div class="cu">Pascal: igual en todo el fluido</div></div>
+      <div class="citem"><div class="lbl">Multiplicación de fuerza</div><div class="cf">F₂ = F₁ · (A₂/A₁)</div><div class="cu">se gana fuerza, se pierde carrera</div></div>
+      <div class="citem"><div class="lbl">Multiplicador de presión</div><div class="cf">p₂ = p₁ · (A₁/A₂)</div><div class="cu">presiones ∝ inversa de áreas</div></div>
+      <div class="citem"><div class="lbl">Potencia (SI)</div><div class="cf">Pot[kW] = p[bar]·Q[l/min] / 600</div><div class="cu">1 hp = 0,746 kW</div></div>
+      <div class="citem"><div class="lbl">Potencia (inglés)</div><div class="cf">Pot[hp] = p[psi]·Q[gpm] / 1714</div><div class="cu">Q[gpm] = v[pies/s]·A[pulg²]·3,117</div></div>
+      <div class="citem"><div class="lbl">Caída de presión</div><div class="cf">Δp = p₁ − p₂ = k·Q²</div><div class="cu">sin caudal → Δp = 0</div></div>
+      <div class="citem"><div class="lbl">Presión absoluta</div><div class="cf">p_abs = p_atm + p_man</div><div class="cu">vacío: mínimo −1 atm relativa</div></div>
+      <div class="citem"><div class="lbl">Golpe de ariete</div><div class="cf">tp = 2L / a</div><div class="cu">crítico si tc &lt; tp · a ≈ 1200–1400 m/s</div></div>
+      <div class="citem"><div class="lbl">Anticavitación</div><div class="cf">NPSHd &gt; NPSHr + 0,5 m</div><div class="cu">NPSHr lo da el fabricante</div></div>
+      <div class="citem"><div class="lbl">Torque motor</div><div class="cf">M = Ft · r</div><div class="cu">pistones axiales</div></div>
+      <div class="citem"><div class="lbl">Conversiones</div><div class="cf">1 bar ≈ 14,5 psi · 1 atm ≈ 1,013 bar</div><div class="cu">1 kgf/cm² ≈ 0,981 bar · 1 MPa = 10 bar</div></div>
+    </div>
+  </div>
+
+  <div class="cheat">
+    <h2>🔢 Valores que conviene memorizar</h2>
+    <div class="cgrid">
+      <div class="citem"><div class="lbl">Velocidades oleo</div><div class="cf">succión 0,5–1,2 · retorno 1,5–3 · presión 3–6</div><div class="cu">m/s</div></div>
+      <div class="citem"><div class="lbl">Velocidades agua</div><div class="cf">succión 0,6–1,2 · impulsión 1,5–2,5</div><div class="cu">m/s</div></div>
+      <div class="citem"><div class="lbl">Viscosidad</div><div class="cf">mín 10 · óptimo 16–36 · arranque 800–1000</div><div class="cu">cSt · ISO VG a 40 °C</div></div>
+      <div class="citem"><div class="lbl">Índice de viscosidad</div><div class="cf">monogrado ≈ 95 · multigrado &gt; 140</div><div class="cu">curva plana = estable</div></div>
+      <div class="citem"><div class="lbl">Filtros (micrones)</div><div class="cf">colador 100 · succión 100–250 · presión 6–20 · retorno 20–50</div><div class="cu">µm</div></div>
+      <div class="citem"><div class="lbl">Bombas (presión máx)</div><div class="cf">engranajes 4000 psi · pistones 700 bar</div><div class="cu">engranajes: η_vol &gt; 90%</div></div>
+      <div class="citem"><div class="lbl">Fallas por contaminación</div><div class="cf">70 – 80 %</div><div class="cu">partículas críticas: 1–10 µm</div></div>
+      <div class="citem"><div class="lbl">ISO 4406</div><div class="cf">XX/XX/XX → &gt;4, &gt;6, &gt;14 µm</div><div class="cu">en 1 ml de muestra</div></div>
+      <div class="citem"><div class="lbl">Presiones típicas</div><div class="cf">hidráulica 20–350 bar · neumática ~6 bar</div><div class="cu">señal hidráulica ~600 m/s</div></div>
+      <div class="citem"><div class="lbl">Temperatura aceite</div><div class="cf">máx 85 °C (50 °C sobre ambiente)</div><div class="cu">oxidación se duplica cada +10 °C</div></div>
+      <div class="citem"><div class="lbl">Check pilotada</div><div class="cf">relación 3:1</div><div class="cu">600 psi de carga → 200 psi de piloto</div></div>
+      <div class="citem"><div class="lbl">Golpe de ariete</div><div class="cf">picos hasta 10× · daños 4–5× nominal</div><div class="cu">onda 1200–1400 m/s</div></div>
+    </div>
+  </div>
+
+</div></div>
+
+<script>
+/* ========== NAVEGACIÓN TABS ========== */
+function showPage(id, btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ========== EJERCICIOS ========== */
+function toggleEj(h){ h.nextElementSibling.classList.toggle('open'); }
+function filterEj(tag, btn){
+  document.querySelectorAll('.ej-filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.ej-card').forEach(c=>{
+    c.style.display = (tag==='all' || c.dataset.tag===tag) ? '' : 'none';
+  });
+}
+
+/* ========== SIM 1: Q = DV x n ========== */
+function sim1(){
+  const dv = parseFloat(document.getElementById('sim1-dv').value);
+  const n  = parseFloat(document.getElementById('sim1-n').value);
+  document.getElementById('sim1-dv-v').textContent = dv+' cm³/rev';
+  document.getElementById('sim1-n-v').textContent  = n+' rpm';
+  const Q = dv*n/1000;            // l/min
+  const gpm = Q/3.785;
+  document.getElementById('sim1-out').innerHTML =
+    '<span class="res-line"><span class="res-key">Q = '+dv+' × '+n+'</span> = '+(dv*n).toLocaleString('es-AR')+' cm³/min</span>'+
+    '<span class="res-line">Q = '+Q.toFixed(1)+' l/min ≈ '+gpm.toFixed(2)+' GPM</span>';
+  // animación: velocidad de giro proporcional a n
+  const rotor = document.getElementById('sim1-rotor');
+  rotor.style.transformOrigin = '90px 90px';
+  rotor.style.animation = 'none'; void rotor.offsetWidth;
+  rotor.style.animation = 'girar '+(3600/n*2).toFixed(2)+'s linear infinite';
+}
+
+/* ========== SIM 2: velocidad en línea ========== */
+const RANGOS = {succion:[0.5,1.2,'Succión'], retorno:[1.5,3.0,'Retorno'], presion:[3.0,6.0,'Presión']};
+function sim2(){
+  const Q = parseFloat(document.getElementById('sim2-q').value);
+  const d = parseFloat(document.getElementById('sim2-d').value);
+  const tipo = document.getElementById('sim2-tipo').value;
+  document.getElementById('sim2-q-v').textContent = Q+' l/min';
+  document.getElementById('sim2-d-v').textContent = d+' mm';
+  const A = Math.PI*Math.pow(d/10,2)/4;        // cm²
+  const v = Q/(6*A);                            // m/s
+  const [lo,hi,nom] = RANGOS[tipo];
+  let estado, color;
+  if(v < lo){ estado='⬇️ LENTO: cañería sobredimensionada (cara)'; color='#d97706'; }
+  else if(v > hi){ estado='⚠️ RÁPIDO: fricción, calor'+(tipo==='succion'?' y CAVITACIÓN':' y ruido'); color='#dc2626'; }
+  else { estado='✅ Dentro del rango recomendado'; color='#16a34a'; }
+  document.getElementById('sim2-vtxt').textContent = 'v = '+v.toFixed(2)+' m/s';
+  const st = document.getElementById('sim2-status');
+  st.textContent = estado; st.setAttribute('fill', color);
+  document.getElementById('sim2-pipe').setAttribute('stroke', color);
+  document.getElementById('sim2-out').innerHTML =
+    '<span class="res-line"><span class="res-key">A = π·D²/4</span> = '+A.toFixed(2)+' cm²</span>'+
+    '<span class="res-line">v = Q/(6·A) = '+v.toFixed(2)+' m/s</span>'+
+    '<span class="res-line">'+nom+': rango '+lo+' – '+hi+' m/s</span>';
+}
+
+/* ========== SIM 3: golpe de ariete ========== */
+function sim3(){
+  const L  = parseFloat(document.getElementById('sim3-l').value);
+  const a  = parseFloat(document.getElementById('sim3-a').value);
+  const tc = parseFloat(document.getElementById('sim3-tc').value);
+  document.getElementById('sim3-l-v').textContent = L+' m';
+  document.getElementById('sim3-a-v').textContent = a+' m/s';
+  document.getElementById('sim3-tc-v').textContent = tc.toFixed(1)+' s';
+  const tp = 2*L/a;
+  const critico = tc < tp;
+  document.getElementById('sim3-tp').textContent = 'tp = 2·'+L+'/'+a+' = '+tp.toFixed(2)+' s';
+  const wave = document.getElementById('sim3-wave');
+  wave.setAttribute('fill', critico ? '#dc2626' : '#16a34a');
+  wave.style.animation = 'none'; void wave.offsetWidth;
+  wave.style.animation = 'onda '+Math.max(tp,0.6).toFixed(2)+'s ease-in-out infinite alternate';
+  document.getElementById('sim3-out').innerHTML =
+    '<span class="res-line"><span class="res-key">tp = '+tp.toFixed(2)+' s</span> · tc = '+tc.toFixed(1)+' s</span>'+
+    '<span class="res-line" style="color:'+(critico?'#fca5a5':'#86efac')+'">'+
+    (critico ? '⚠️ tc < tp → CIERRE CRÍTICO: ¡golpe de ariete!' : '✅ tc > tp → cierre seguro, la onda se amortigua')+'</span>';
+}
+
+/* ========== SIM 4: potencia ========== */
+function sim4(){
+  const p = parseFloat(document.getElementById('sim4-p').value);
+  const Q = parseFloat(document.getElementById('sim4-q').value);
+  const e = parseFloat(document.getElementById('sim4-e').value);
+  document.getElementById('sim4-p-v').textContent = p+' bar';
+  document.getElementById('sim4-q-v').textContent = Q+' l/min';
+  document.getElementById('sim4-e-v').textContent = e+' %';
+  const Pot = p*Q/600;
+  const Pele = Pot/(e/100);
+  const hBarP = Math.min(p/350*120, 120), hBarQ = Math.min(Q/200*120, 120), hBarW = Math.min(Pot/116*120, 120);
+  const set = (id,h)=>{const el=document.getElementById(id); el.setAttribute('height',h); el.setAttribute('y',150-h);};
+  set('sim4-barp',hBarP); set('sim4-barq',hBarQ); set('sim4-barw',hBarW);
+  document.getElementById('sim4-tp').textContent = p+' bar';
+  document.getElementById('sim4-tq').textContent = Q+' l/min';
+  document.getElementById('sim4-tw').textContent = Pot.toFixed(1)+' kW';
+  document.getElementById('sim4-out').innerHTML =
+    '<span class="res-line"><span class="res-key">Pot = '+p+' × '+Q+' / 600</span> = '+Pot.toFixed(2)+' kW</span>'+
+    '<span class="res-line">P_eléctrica (η='+e+'%) = '+Pele.toFixed(2)+' kW ≈ '+(Pele/0.746).toFixed(1)+' hp</span>';
+}
+
+/* ========== FLASHCARDS ========== */
+const CARDS = [
+  ['¿La bomba produce presión?','NO. La bomba produce CAUDAL. La presión se origina cuando el caudal encuentra resistencia (carga, orificios, mangueras).'],
+  ['Las 5 funciones del fluido hidráulico','1) Transmitir energía · 2) Lubricar y proteger · 3) Sellar · 4) Disipar calor · 5) Transportar partículas a los filtros.'],
+  ['¿A qué temperatura se mide el grado ISO VG?','A 40 °C (norma ISO 3448). VG = Viscosity Grade: un VG 68 es más espeso que un VG 32.'],
+  ['Rango óptimo de viscosidad en operación','16 a 36 cSt. Mínimo absoluto: 10 cSt (contacto metal-metal). Arranque en frío máximo: 800–1000 cSt.'],
+  ['¿Qué es el Índice de Viscosidad (IV)?','Cuánto varía la viscosidad con la temperatura. Curva plana = IV alto = estable. Monogrado ≈ 95; multigrado > 140.'],
+  ['HLP vs HVLP (DIN 51524)','HLP: estándar industrial con antidesgaste (parte 2). HVLP: igual pero con alto IV para intemperie/maquinaria vial (parte 3).'],
+  ['¿Qué significan los 3 números de ISO 4406 (ej. 18/16/13)?','Cantidad de partículas mayores a 4, 6 y 14 micrones en 1 ml de muestra.'],
+  ['¿Cuándo se cambia el aceite y cuándo solo se filtra?','Solo contaminación sólida/agua → microfiltrar (ahorro 70%). Degradación química (oxidado, olor a quemado, aditivos agotados) → cambio total.'],
+  ['Grados de filtración típicos','Colador: 100 µm · Succión: 100–250 µm · Presión: 6–20 µm · Retorno: 20–50 µm.'],
+  ['¿Qué hace la válvula by-pass del filtro?','Detecta la ΔP entre aceite sucio y limpio: si el filtro se tapa, abre y deja pasar el aceite sin filtrar para no romper el elemento.'],
+  ['¿Qué es el número DASH de una manguera?','El diámetro interior en dieciseisavos de pulgada: #4 = 4/16 = 1/4"; #8 = 1/2"; #16 = 1".'],
+  ['¿Qué conector tiene el mejor control de fugas?','El ORFS (O-ring en la cara de sellado). El JIC 37° es el de uso general; el NPTF no está recomendado en hidráulica.'],
+  ['Q = DV × n, ¿qué es DV?','El desplazamiento volumétrico: volumen que la bomba desplaza por revolución (cm³/rev). Es sinónimo de tamaño de bomba.'],
+  ['¿Qué bomba aguanta más presión?','La de pistones (hasta 700 bar; equipos móviles ≤ 7000 psi). Engranajes ≈ 4000 psi. Casi todas las de equipos móviles son de pistones axiales.'],
+  ['¿Cómo varía el caudal en una bomba de pistones de caudal variable?','Cambiando el ángulo del plato basculante (mayor ángulo = mayor carrera del pistón = más caudal), sin cambiar las rpm.'],
+  ['Alivio vs reductora de presión','Alivio: normalmente CERRADA, sensa la ENTRADA, protege el sistema. Reductora: normalmente ABIERTA, sensa la SALIDA, limita la línea secundaria.'],
+  ['¿Qué es una válvula 4/3?','4 vías (P, T, A, B) y 3 posiciones. La más usada para cilindros de doble efecto; su posición central define el comportamiento (bloqueado, tándem, flotante, H).'],
+  ['Centro tándem de una 4/3','P conectada a T (la bomba descarga libre, sin calentar) con A y B bloqueados: el cilindro queda posicionado.'],
+  ['Válvula de corredera vs de asiento','Corredera: poca fuerza, muchas vías, NO estanca (fuga interna). Asiento/cierre: estanca, mucha fuerza, pocas vías.'],
+  ['¿Para qué sirve la válvula de lanzadera (shuttle)?','Permite que dos circuitos alimenten a un tercero manteniéndose separados: siempre pasa el de mayor presión.'],
+  ['Velocidades recomendadas en oleohidráulica','Succión: 0,5–1,2 m/s · Retorno: 1,5–3,0 m/s · Presión: 3,0–6,0 m/s. Succión lenta para evitar cavitación.'],
+  ['¿Por qué la succión debe ser corta, recta y de buen diámetro?','Cada pérdida de carga "roba" presión antes de la bomba: si la presión cae bajo la presión de vapor, aparece cavitación.'],
+  ['Condición para evitar cavitación','NPSH disponible > NPSH requerido, con margen de al menos 0,5 m. El NPSHr lo da el fabricante y depende del caudal.'],
+  ['Cavitación vs aireación','Cavitación: burbujas de VAPOR del propio fluido (por baja presión) que implosionan adentro. Aireación: AIRE externo que entra por sellos flojos o vórtices.'],
+  ['¿Cómo suena una bomba cavitando?','Como si bombeara piedras, con vibración de alta frecuencia y caída de caudal y presión.'],
+  ['Fórmula del tiempo crítico (golpe de ariete)','tp = 2L/a. Si la válvula cierra en tc < tp, el cierre es crítico y la sobrepresión golpea con toda su fuerza.'],
+  ['¿Cuál es el peor transitorio en bombas?','El paro brusco: se genera vacío a la salida, la columna retrocede y choca contra la válvula de retención cerrada.'],
+  ['3 formas de mitigar el golpe de ariete','Cierre progresivo de válvulas · acumuladores con vejiga de nitrógeno · válvulas de alivio rápido (también: más diámetro y check de disco partido).'],
+  ['Potencia hidráulica en kW','Pot [kW] = p [bar] × Q [l/min] / 600. En inglés: Pot [hp] = psi × gpm / 1714.'],
+  ['¿Qué pasa si el nivel del tanque está muy alto?','Se reduce la cámara de aire calculada para enfriar: el aceite no se enfría. Muy bajo: la bomba puede aspirar aire.'],
+];
+let fcIdx = 0;
+function renderCard(){
+  document.getElementById('fc-q').textContent = CARDS[fcIdx][0];
+  document.getElementById('fc-a').textContent = CARDS[fcIdx][1];
+  document.getElementById('fc-counter').textContent = (fcIdx+1)+' / '+CARDS.length;
+  document.getElementById('flashcard').classList.remove('flipped');
+}
+function flipCard(){ document.getElementById('flashcard').classList.toggle('flipped'); }
+function nextCard(e){ e.stopPropagation(); fcIdx = (fcIdx+1)%CARDS.length; renderCard(); }
+function prevCard(e){ e.stopPropagation(); fcIdx = (fcIdx-1+CARDS.length)%CARDS.length; renderCard(); }
+
+/* ========== MATCHING genérico ========== */
+function buildMatch(pairs, leftId, rightId, statusId){
+  const left = document.getElementById(leftId), right = document.getElementById(rightId), status = document.getElementById(statusId);
+  left.innerHTML=''; right.innerHTML=''; status.textContent=''; status.className='match-status';
+  let selL=null, selR=null, matched=0;
+  const shuffle = a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
+  const mk=(txt,idx,col)=>{
+    const d=document.createElement('div');
+    d.className='match-item'; d.textContent=txt; d.dataset.idx=idx;
+    d.onclick=()=>{
+      if(d.classList.contains('matched')) return;
+      const colSel = col==='L'? selL : selR;
+      if(colSel) colSel.classList.remove('selected');
+      if(col==='L') selL=d; else selR=d;
+      d.classList.add('selected');
+      if(selL && selR){
+        if(selL.dataset.idx===selR.dataset.idx){
+          selL.classList.remove('selected'); selR.classList.remove('selected');
+          selL.classList.add('matched'); selR.classList.add('matched');
+          matched++;
+          if(matched===pairs.length){ status.textContent='🎉 ¡Completaste todas las parejas!'; status.classList.add('win'); }
+          selL=null; selR=null;
+        } else {
+          const a=selL,b=selR;
+          a.classList.remove('selected'); b.classList.remove('selected');
+          a.classList.add('selected-wrong'); b.classList.add('selected-wrong');
+          status.textContent='❌ No es pareja, probá de nuevo'; status.classList.add('err');
+          setTimeout(()=>{a.classList.remove('selected-wrong'); b.classList.remove('selected-wrong'); status.textContent=''; status.classList.remove('err');},700);
+          selL=null; selR=null;
+        }
+      }
+    };
+    return d;
+  };
+  shuffle(pairs.map((p,i)=>[p[0],i])).forEach(([t,i])=>left.appendChild(mk(t,i,'L')));
+  shuffle(pairs.map((p,i)=>[p[1],i])).forEach(([t,i])=>right.appendChild(mk(t,i,'R')));
+}
+const PAIRS1 = [
+  ['Tanque','Almacena, enfría, sedimenta y libera aire del aceite'],
+  ['Respiradero','Filtra el aire que entra al variar el nivel'],
+  ['Filtro de presión','Filtra 6–20 µm a la salida de la bomba'],
+  ['Enfriador de agua','Tubos con agua fría dentro de una coraza con aceite'],
+  ['Acumulador de vejiga','Absorbe choques con gas nitrógeno presurizado'],
+  ['Bomba de engranajes','Caudal fijo, hasta 4000 psi, η>90%'],
+  ['Bomba de pistones','Las presiones más altas (700 bar), caudal variable'],
+  ['Cilindro de simple efecto','Fuerza en un solo sentido, retorna por muelle o peso'],
+];
+const PAIRS2 = [
+  ['Válvula de alivio','Normalmente cerrada; limita la presión máxima del sistema'],
+  ['Válvula reductora','Normalmente abierta; sensa la salida y limita la línea secundaria'],
+  ['Válvula de secuencia','Da prioridad a un circuito hasta que se llena'],
+  ['Válvula de retención (check)','Deja pasar el flujo en un solo sentido'],
+  ['Check pilotada','Permite flujo inverso al recibir presión piloto (3:1)'],
+  ['Válvula de lanzadera','Dos circuitos alimentan a un tercero sin mezclarse'],
+  ['Válvula de aguja','Orificio variable que regula el caudal'],
+  ['Distribuidora 4/3','Maneja un cilindro de doble efecto con posición central'],
+];
+function initMatch(){ buildMatch(PAIRS1,'match-left','match-right','match-status'); }
+function initMatch2(){ buildMatch(PAIRS2,'match2-left','match2-right','match2-status'); }
+
+/* ========== QUIZ ========== */
+const QUIZ = [
+  {q:'¿Qué produce una bomba hidráulica?', opts:['Presión','Caudal','Presión y caudal por igual','Torque'], ok:1,
+   fb:'La bomba SOLO produce caudal. La presión aparece cuando ese caudal encuentra resistencia al desplazarse.'},
+  {q:'Un actuador se mueve lento. ¿Cuál es la causa más probable?', opts:['Le falta presión','Le falta caudal','El aceite tiene mucho IV','La válvula de alivio está baja'], ok:1,
+   fb:'La velocidad del actuador la define el caudal que le llega; la presión define cuánta carga puede mover.'},
+  {q:'El grado ISO VG de un aceite se mide a…', opts:['0 °C','25 °C','40 °C','100 °C'], ok:2,
+   fb:'ISO 3448 define la viscosidad cinemática a 40 °C. Es el punto de comparación estándar entre fluidos.'},
+  {q:'¿Cuál es el rango óptimo de viscosidad en operación?', opts:['1–10 cSt','16–36 cSt','100–300 cSt','800–1000 cSt'], ok:1,
+   fb:'16–36 cSt equilibra lubricación, disipación de calor y transferencia de potencia. 10 cSt es el mínimo absoluto y 800–1000 cSt el máximo de arranque en frío.'},
+  {q:'Un aceite con IV mayor a 140 es…', opts:['Monogrado','Multigrado','Sintético siempre','De baja calidad'], ok:1,
+   fb:'IV > 140 indica características multigrado: su viscosidad cae poco con la temperatura (curva plana). El monogrado ronda IV ≈ 95.'},
+  {q:'¿Qué aceite es el estándar industrial según DIN 51524?', opts:['HH','HL','HLP','HVLP'], ok:2,
+   fb:'HLP incluye aditivos antidesgaste (AW); lo usan la mayoría de prensas y máquinas. HVLP agrega alto IV para intemperie.'},
+  {q:'El código ISO 4406 "18/16/13" indica…', opts:['La viscosidad a 3 temperaturas','Partículas >4, >6 y >14 µm en 1 ml','El grado de filtración de 3 filtros','Porcentaje de agua, aire y sólidos'], ok:1,
+   fb:'Los tres números cuentan partículas mayores a 4, 6 y 14 micrones por mililitro de muestra.'},
+  {q:'El análisis indica solo contaminación sólida; las propiedades físico-químicas están bien. ¿Qué hacés?', opts:['Cambio total de aceite','Microfiltración y cambio de filtros','Agrego aditivos','Mezclo con aceite nuevo'], ok:1,
+   fb:'Si el aceite no está degradado químicamente, se microfiltra (riñón externo): ahorrás hasta 70% frente al cambio total.'},
+  {q:'¿Qué filtro tiene el grado de filtración más fino?', opts:['Colador','De succión','De presión','De retorno'], ok:2,
+   fb:'El de presión filtra 6–20 µm: la presión del sistema empuja el aceite a través del elemento. Succión: 100–250 µm; retorno: 20–50 µm.'},
+  {q:'Una manguera #8 tiene diámetro interior de…', opts:['8 mm','8 pulgadas','1/2 pulgada','8/32 de pulgada'], ok:2,
+   fb:'El número DASH es el numerador sobre 16: #8 = 8/16 = 1/2".'},
+  {q:'¿Qué conector ofrece el mejor control de fugas?', opts:['NPTF','JIC 37°','ORB','ORFS'], ok:3,
+   fb:'El ORFS (O-ring en la cara de sellado) es el mejor disponible. El NPTF ni siquiera está recomendado para hidráulica.'},
+  {q:'Una bomba con DV = 20 cm³/rev gira a 1500 rpm. ¿Qué caudal entrega?', opts:['3 l/min','30 l/min','300 l/min','75 l/min'], ok:1,
+   fb:'Q = DV × n = 20 × 1500 = 30 000 cm³/min = 30 l/min.'},
+  {q:'¿Cómo se varía el caudal en una bomba de pistones axiales de caudal variable?', opts:['Cambiando las rpm únicamente','Cambiando el ángulo del plato basculante','Cerrando la succión','Con la válvula de alivio'], ok:1,
+   fb:'El ángulo del plato define la carrera de los pistones: más ángulo, más caudal por revolución, a rpm constantes.'},
+  {q:'La válvula reductora de presión es…', opts:['Normalmente cerrada y sensa la entrada','Normalmente abierta y sensa la salida','Normalmente cerrada y sensa la salida','Normalmente abierta y sensa la entrada'], ok:1,
+   fb:'Al revés que la alivio: está abierta y se va cerrando cuando la presión de SALIDA supera su regulación, protegiendo la línea secundaria.'},
+  {q:'¿Qué centro de una 4/3 deja descargar la bomba a tanque con el cilindro bloqueado?', opts:['Centro bloqueado','Centro tándem (P→T)','Centro flotante (A,B,T)','Centro abierto H'], ok:1,
+   fb:'El tándem conecta P con T (la bomba no calienta el aceite) y bloquea A y B (el cilindro queda posicionado).'},
+  {q:'Las válvulas de corredera se caracterizan por…', opts:['Ser totalmente estancas','Necesitar gran fuerza de accionamiento','Tener una pequeña fuga interna','Estar limitadas a 2 vías'], ok:2,
+   fb:'No son estancas: existe una fuga por la corredera que depende de la viscosidad y la temperatura. A cambio, necesitan poca fuerza y permiten muchas vías.'},
+  {q:'En una check pilotada con relación 3:1, ¿qué presión piloto abre una carga de 900 psi?', opts:['2700 psi','900 psi','300 psi','90 psi'], ok:2,
+   fb:'La presión piloto necesaria es un tercio de la de carga: 900/3 = 300 psi.'},
+  {q:'Velocidad recomendada para la línea de SUCCIÓN en oleohidráulica:', opts:['0,5–1,2 m/s','1,5–3,0 m/s','3,0–6,0 m/s','6–10 m/s'], ok:0,
+   fb:'La succión va lenta para no sacrificar presión: si acelerás el fluido, la presión cae y aparece la cavitación.'},
+  {q:'Las burbujas de la cavitación son de…', opts:['Aire atmosférico','Vapor del propio fluido','Nitrógeno','Espuma de aditivos'], ok:1,
+   fb:'El líquido "hierve en frío" cuando la presión cae bajo su presión de vapor; las burbujas implosionan al llegar a zonas de mayor presión. El aire externo es AIREACIÓN.'},
+  {q:'¿Cómo se evita la cavitación?', opts:['NPSHd > NPSHr (+0,5 m)','NPSHr > NPSHd','Achicando el diámetro de succión','Subiendo la temperatura del aceite'], ok:0,
+   fb:'El NPSH disponible de la instalación debe superar al requerido por la bomba con margen mínimo de 0,5 m. Ayudan: tanque elevado, succión corta y de buen diámetro, filtros limpios.'},
+  {q:'Una cañería de 1000 m con onda a 1250 m/s. ¿Tiempo crítico tp?', opts:['0,8 s','1,6 s','2,5 s','0,4 s'], ok:1,
+   fb:'tp = 2L/a = 2×1000/1250 = 1,6 s. Si la válvula cierra en menos de 1,6 s, el cierre es crítico.'},
+  {q:'El escenario MÁS peligroso de golpe de ariete es…', opts:['El arranque de la bomba','El paro brusco de la bomba','Abrir una válvula despacio','El llenado del tanque'], ok:1,
+   fb:'Al cortarse el motor se genera vacío a la salida; la columna retrocede y choca contra la válvula de retención cerrada.'},
+  {q:'Una bomba entrega 60 l/min a 200 bar. ¿Potencia hidráulica?', opts:['12 kW','20 kW','2 kW','120 kW'], ok:1,
+   fb:'Pot = p×Q/600 = 200×60/600 = 20 kW.'},
+  {q:'¿Qué porcentaje de las fallas hidráulicas se atribuye a la contaminación?', opts:['10–20%','30–40%','50%','70–80%'], ok:3,
+   fb:'La suciedad (sumada a la degradación) explica el 70–80% de las fallas. Las partículas más dañinas (1–10 µm) ni se ven: el ojo distingue desde 40 µm.'},
+];
+let qIdx=0, qScore=0, qAnswered=false;
+function renderQuiz(){
+  const c = document.getElementById('quiz-container');
+  if(qIdx >= QUIZ.length){
+    const pct = Math.round(qScore/QUIZ.length*100);
+    const best = Math.max(pct, parseInt(localStorage.getItem('hidro2_best')||'0'));
+    localStorage.setItem('hidro2_best', best);
+    const emoji = pct>=80?'🏆':pct>=60?'💪':'📚';
+    const msg = pct>=80?'¡Excelente! Estás para rendir.':pct>=60?'Bien, pero repasá los temas que fallaste.':'Volvé a las secciones de teoría y repaso antes del parcial.';
+    c.innerHTML = '<div class="result-card"><span class="emoji">'+emoji+'</span><h2>Quiz terminado</h2>'+
+      '<span class="score-big">'+pct+'%</span><p>'+msg+'</p>'+
+      '<div class="result-detail"><div class="rstat ok">✔ '+qScore+' correctas</div><div class="rstat ko">✘ '+(QUIZ.length-qScore)+' incorrectas</div></div>'+
+      '<p>🥇 Tu mejor puntaje: <strong>'+best+'%</strong></p>'+
+      '<button class="btn-retry" onclick="restartQuiz()">🔄 Intentar de nuevo</button></div>';
+    return;
+  }
+  const q = QUIZ[qIdx];
+  qAnswered=false;
+  c.innerHTML =
+    '<div class="quiz-header"><span class="quiz-score-display">Puntaje: '+qScore+' / '+QUIZ.length+'</span>'+
+    '<span class="quiz-score-display">🥇 Mejor: '+(localStorage.getItem('hidro2_best')||'—')+'%</span></div>'+
+    '<div class="progress-bar-wrap"><div class="progress-bar" style="width:'+(qIdx/QUIZ.length*100)+'%"></div></div>'+
+    '<div class="quiz-card"><div class="q-num">Pregunta '+(qIdx+1)+' de '+QUIZ.length+'</div>'+
+    '<div class="q-text">'+q.q+'</div>'+
+    '<div class="options">'+q.opts.map((o,i)=>'<button class="opt-btn" onclick="answer('+i+',this)">'+o+'</button>').join('')+'</div>'+
+    '<div class="feedback-box" id="qfb"></div>'+
+    '<div class="quiz-nav"><button class="btn-next" id="qnext" disabled onclick="qIdx++;renderQuiz()">Siguiente →</button></div></div>';
+}
+function answer(i, btn){
+  if(qAnswered) return; qAnswered=true;
+  const q = QUIZ[qIdx];
+  const btns = document.querySelectorAll('.opt-btn');
+  btns.forEach(b=>b.disabled=true);
+  btns[q.ok].classList.add('correct');
+  const fb = document.getElementById('qfb');
+  if(i===q.ok){ qScore++; fb.className='feedback-box show ok'; fb.innerHTML='✅ ¡Correcto! '+q.fb; }
+  else { btn.classList.add('wrong'); fb.className='feedback-box show ko'; fb.innerHTML='❌ No. '+q.fb; }
+  document.getElementById('qnext').disabled=false;
+}
+function restartQuiz(){ qIdx=0; qScore=0; renderQuiz(); }
+
+/* ========== ANIMACIONES CSS dinámicas ========== */
+const styleAnim = document.createElement('style');
+styleAnim.textContent = '@keyframes girar{from{transform:rotate(0deg)}to{transform:rotate(360deg)}} @keyframes onda{from{cx:300}to{cx:80}} @keyframes ondaT{from{transform:translateX(0)}to{transform:translateX(-220px)}}';
+document.head.appendChild(styleAnim);
+/* fallback para navegadores sin animación de atributo cx: usamos transform */
+(function(){
+  const w = document.getElementById('sim3-wave');
+  if(w){ styleAnim.textContent = styleAnim.textContent.replace('@keyframes onda{from{cx:300}to{cx:80}}','@keyframes onda{from{transform:translateX(0)}to{transform:translateX(-220px)}}'); }
+})();
+
+/* ========== INIT ========== */
+sim1(); sim2(); sim3(); sim4();
+renderCard(); initMatch(); initMatch2(); renderQuiz();
+</script>
+
+</body>
+</html>

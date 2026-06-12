@@ -176,6 +176,78 @@ details.reveal[open]{padding-bottom:14px}
                    z-index:10; white-space:normal; line-height:1.4; box-shadow:0 4px 12px rgba(0,0,0,0.4);
                    position:fixed}
 
+/* ── Intentá primero ── */
+.tryfirst{background:#0a1929; border:1px dashed var(--accent); border-radius:8px;
+          padding:10px 14px; margin:8px 0 2px; font-size:13.5px}
+.tryfirst .tf-q{color:var(--accent); font-weight:600; margin-bottom:6px}
+.tryfirst input{background:#0b1220; color:var(--text); border:1px solid var(--border);
+                border-radius:6px; padding:6px 10px; font-size:14px; width:130px}
+.tryfirst .tf-fb{margin-top:6px; font-size:13px}
+.tryfirst.ok{border-style:solid; border-color:var(--good)}
+
+/* ── Checkpoint ── */
+.checkpoint{background:var(--panel); border:1px solid var(--accent); border-radius:10px;
+            padding:16px 20px; margin:22px 0}
+.checkpoint h3{margin-top:0; color:var(--accent)}
+.cp-done{display:inline-block; background:#143526; color:var(--good); padding:3px 10px;
+         border-radius:12px; font-size:12px; font-weight:600; margin-left:8px}
+
+/* ── Flashcards ── */
+.flash-wrap{perspective:1000px; max-width:560px; margin:14px auto}
+.flash-card{position:relative; width:100%; height:250px; cursor:pointer;
+            transform-style:preserve-3d; transition:transform .5s}
+.flash-card.flipped{transform:rotateY(180deg)}
+.flash-face{position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden;
+            display:flex; flex-direction:column; align-items:center; justify-content:center;
+            border-radius:12px; padding:20px; text-align:center}
+.flash-front{background:var(--panel2); border:2px solid var(--accent)}
+.flash-back{background:#1a0d18; border:2px solid var(--pink); transform:rotateY(180deg); overflow:auto}
+.flash-controls{display:flex; gap:10px; justify-content:center; margin-top:14px; flex-wrap:wrap}
+.flash-meta{text-align:center; color:var(--muted); font-size:13px; margin-top:10px}
+.flash-topic{font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-bottom:10px}
+
+/* ── Árbol de decisión ── */
+.tree-box{background:var(--panel2); border-radius:10px; padding:18px 22px; min-height:160px}
+.tree-q{font-size:17px; font-weight:600; color:white; margin-bottom:14px}
+.tree-opts{display:flex; flex-direction:column; gap:10px}
+.tree-opt{background:#0b1220; border:2px solid var(--border); border-radius:8px; padding:12px 16px;
+          cursor:pointer; font-size:14px; transition:all .15s}
+.tree-opt:hover{border-color:var(--accent); transform:translateX(4px)}
+.tree-crumbs{font-size:12.5px; color:var(--muted); margin-bottom:12px; line-height:1.8}
+.tree-crumbs b{color:var(--accent)}
+.tree-result{border-left:4px solid var(--good); background:#0d1f16; border-radius:8px; padding:14px 18px}
+
+/* ── Generador ── */
+.gen-enun{background:#1c1a0e; border-left:4px solid var(--warn); border-radius:8px;
+          padding:14px 18px; margin:12px 0; font-size:14.5px}
+
+/* ── Sidebar: progreso + scrollspy ── */
+.side-progress{margin:10px 0 4px; padding:8px 10px; background:var(--panel2); border-radius:8px}
+.side-progress .sp-bar{height:7px; background:var(--border); border-radius:4px; overflow:hidden; margin-top:5px}
+.side-progress .sp-fill{height:100%; background:linear-gradient(90deg,var(--accent),var(--good)); width:0%; transition:width .4s}
+.side-progress .sp-txt{font-size:11px; color:var(--muted)}
+nav.sidebar a.visited::after{content:'✓'; color:var(--good); margin-left:auto; font-size:11px}
+
+/* ── Barra de lectura ── */
+#readBar{position:fixed; top:0; left:0; height:3px; width:0%; z-index:60;
+         background:linear-gradient(90deg,var(--accent),var(--accent2))}
+
+/* ── Hamburguesa / responsive ── */
+#navToggle{display:none; position:fixed; top:12px; left:12px; z-index:70; background:var(--panel);
+           color:var(--text); border:1px solid var(--border); border-radius:8px; padding:8px 12px;
+           font-size:18px; cursor:pointer}
+#navOverlay{display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:49}
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  #navToggle{display:block}
+  nav.sidebar{position:fixed; left:0; top:0; width:270px; z-index:50; transform:translateX(-100%);
+              transition:transform .25s}
+  body.nav-open nav.sidebar{transform:translateX(0)}
+  body.nav-open #navOverlay{display:block}
+  main{padding:60px 16px 28px}
+  .compare-box{grid-template-columns:1fr}
+}
+
 hr{border:none; border-top:1px solid var(--border); margin:30px 0}
 .footer{margin-top:60px; padding:20px; text-align:center; color:var(--muted); font-size:12px;
         border-top:1px solid var(--border)}
@@ -196,11 +268,18 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
 </style>
 </head>
 <body>
+<div id="readBar"></div>
+<button id="navToggle" aria-label="Abrir menú">☰</button>
+<div id="navOverlay"></div>
 <div class="layout">
 
 <!-- ════════════════ SIDEBAR ════════════════ -->
 <nav class="sidebar">
   <div class="brand">📊 Estadística · P2<br><small>Discretos + Normal · Lic. Automatización</small></div>
+  <div class="side-progress">
+    <div class="sp-txt"><span id="spPct">0%</span> completado</div>
+    <div class="sp-bar"><div class="sp-fill" id="spFill"></div></div>
+  </div>
 
   <div class="nav-level">🟢 Binomial · Clase 8</div>
   <a href="#intro">👋 Presentación</a>
@@ -218,6 +297,7 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
   <a href="#comparacion">4. Bi vs Poisson</a>
   <a href="#convergencia">⚡ Demo convergencia</a>
   <a href="#cuando-usar">5. ¿Cuándo usar cada una?</a>
+  <a href="#arbol">🌳 Árbol de decisión</a>
 
   <div class="nav-level">🟣 Normal · Clase 9</div>
   <a href="#normal-teoria">7. Distribución Normal</a>
@@ -250,6 +330,8 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
   <div class="nav-level">⚙️ Referencia</div>
   <a href="#integradores">6. Problemas integradores</a>
   <a href="#r-code">🔵 Código en R</a>
+  <a href="#generador">🎲 Generador de ejercicios</a>
+  <a href="#flashcards">🃏 Flashcards</a>
   <a href="#quiz">🎓 Quiz final</a>
   <a href="#errores">⚠️ Errores comunes</a>
 </nav>
@@ -497,6 +579,8 @@ $$P(X \ge k) = 1 - P(X \le k-1)$$
 </div>
 </details>
 
+<div class="checkpoint" data-cp="binomial"></div>
+
 <!-- ── 3. POISSON ── -->
 <h2 id="poisson-teoria"><span class="badge poisson">Poisson</span>3. Distribución de Poisson</h2>
 
@@ -678,6 +762,8 @@ $$\lambda_{30\text{min}} = 5 \times \frac{30}{60} = 2{,}5$$
 </div>
 </details>
 
+<div class="checkpoint" data-cp="poisson"></div>
+
 <!-- ── 4. COMPARACIÓN ── -->
 <h2 id="comparacion"><span class="badge compare">Comparación</span>4. Binomial vs Poisson — ¿cuándo se parecen?</h2>
 
@@ -805,6 +891,16 @@ $$\lambda_{30\text{min}} = 5 \times \frac{30}{60} = 2{,}5$$
   <li>Para "al menos uno": siempre usá <strong>1 − P(X=0)</strong></li>
   <li>Para cambiar intervalo en Poisson: <strong>λ_nuevo = λ × (intervalo nuevo / original)</strong></li>
 </ul>
+</div>
+
+<!-- ── ÁRBOL DE DECISIÓN ── -->
+<h2 id="arbol">🌳 Árbol de decisión — ¿Qué modelo uso?</h2>
+
+<div class="card game">
+<p>El error #1 del parcial es elegir mal el modelo. Respondé las preguntas como si estuvieras leyendo un enunciado real y el árbol te lleva a la distribución correcta, con su fórmula y el siguiente paso.</p>
+<div class="tree-crumbs" id="treeCrumbs"></div>
+<div class="tree-box" id="treeBox"></div>
+<button class="btn-2" style="margin-top:12px" onclick="treeReset()">↺ Empezar de nuevo</button>
 </div>
 
 <!-- ── 6. PROBLEMAS INTEGRADORES ── -->
@@ -944,6 +1040,17 @@ $$X \sim N(\mu,\, \sigma)$$
 <div class="card tip" style="margin-top:10px">
 <strong>Control de calidad:</strong> Si el proceso es Normal y está centrado, solo el 0,3% de las piezas cae fuera de los límites ±3σ. Ese es el fundamento de las cartas de control de Shewhart.
 </div>
+</div>
+
+<div class="card game">
+<h3 style="margin-top:0">🎮 Visualizá la regla empírica</h3>
+<p>Cambiá μ y σ: las bandas muestran el <span class="hl-good">68%</span> (verde), <span class="hl-warn">95%</span> (amarillo) y <span class="hl-bad">99,7%</span> (rojo). Los intervalos se recalculan solos.</p>
+<div class="controls">
+  <label>μ (media) <input type="number" id="empMu" value="120" step="1" oninput="plotEmpirica()"></label>
+  <label>σ (desvío) <input type="number" id="empSigma" value="4" min="0.1" step="0.5" oninput="plotEmpirica()"></label>
+</div>
+<div id="empStats" class="stat-output"></div>
+<div id="empPlot" class="plot"></div>
 </div>
 
 <!-- ── ESTANDARIZACIÓN ── -->
@@ -1259,6 +1366,8 @@ $$\Phi(-z) = 1 - \Phi(z)$$
 </div>
 </details>
 
+<div class="checkpoint" data-cp="normal"></div>
+
 <!-- ══════════════════════════════════════════════════
      CLASE 10: DISTRIBUCIÓN MUESTRAL Y TCL
 ══════════════════════════════════════════════════ -->
@@ -1317,6 +1426,42 @@ $$n \times 4 \quad\Rightarrow\quad \sigma_{\bar{X}} \div 2$$
 <h2 id="tcl-sim">🎮 Simulador TCL — Efecto del tamaño de muestra</h2>
 
 <div class="card game">
+<h3 style="margin-top:0">🧪 Experimento: el TCL en acción</h3>
+<p>Elegí una población (¡incluso una nada Normal!) y un tamaño de muestra n. Cada clic extrae una muestra real al azar, calcula su media x̄ y la suma al histograma. Mirá cómo <strong>emerge la campana</strong> centrada en μ con ancho σ/√n — aunque la población tenga dos picos.</p>
+<div class="controls">
+  <label>Población
+    <select id="simPop" onchange="tclSimReset()">
+      <option value="uniform">Uniforme [50, 150]</option>
+      <option value="exp">Exponencial (media 100)</option>
+      <option value="bimodal" selected>Bimodal (dos picos)</option>
+      <option value="normal">Normal (100, 20)</option>
+    </select>
+  </label>
+  <label>n (tamaño de muestra)
+    <select id="simN" onchange="tclSimReset()">
+      <option>1</option><option>2</option><option>5</option><option>10</option><option selected>30</option><option>50</option><option>100</option>
+    </select>
+  </label>
+  <button class="btn" onclick="tclSimAdd(1)">+1 muestra</button>
+  <button class="btn-good" onclick="tclSimAdd(100)">+100</button>
+  <button class="btn-warn" id="simAnimBtn" onclick="tclSimAnim()">▶ Animar</button>
+  <button class="btn-2" onclick="tclSimReset()">↺ Reiniciar</button>
+</div>
+<div id="simStats" class="stat-output"></div>
+<div class="grid2" style="margin-top:10px">
+  <div>
+    <p style="text-align:center;font-size:13px;color:var(--muted);margin-bottom:6px">Población (de acá salen los datos) · 🟡 última muestra</p>
+    <div id="simPopPlot" class="plot-sm"></div>
+  </div>
+  <div>
+    <p style="text-align:center;font-size:13px;color:var(--good);font-weight:600;margin-bottom:6px">Histograma de las medias x̄ · ─ ─ curva teórica N(μ, σ/√n)</p>
+    <div id="simMeansPlot" class="plot-sm"></div>
+  </div>
+</div>
+</div>
+
+<div class="card game">
+<h3 style="margin-top:0">Curvas teóricas: cómo se estrecha X̄ al crecer n</h3>
 <p>Ajustá μ y σ de la población. El gráfico muestra cómo la distribución de X̄ se vuelve más <em>angosta y concentrada</em> alrededor de μ a medida que n crece.</p>
 <div class="controls">
   <label>μ (media poblacional)<input type="number" id="tclMu" value="100" step="5"></label>
@@ -1664,6 +1809,8 @@ $$P = \mathbf{0{,}9545}$$
 </div>
 </div>
 </details>
+
+<div class="checkpoint" data-cp="tcl"></div>
 
 <!-- ══════════════════════════════════════════════════
      CLASE 11 — INTERVALOS DE CONFIANZA
@@ -2528,13 +2675,69 @@ n_min &lt;- ceiling((z_alpha2 * sigma / E)^2)
 cat("n mínimo para E ≤", E, ":", n_min, "\n")</pre>
 </div>
 
+<!-- ── GENERADOR DE EJERCICIOS ── -->
+<h2 id="generador">🎲 Generador de ejercicios — Modo examen</h2>
+
+<div class="card game">
+<p>Práctica infinita: genera enunciados estilo parcial con números aleatorios. Resolvelo en papel con calculadora y tabla, ingresá tu respuesta y recién después compará con la solución paso a paso.</p>
+<div class="controls">
+  <label>Tema
+    <select id="genTopic">
+      <option value="random">🎲 Sorprendeme</option>
+      <option value="binomial">Binomial</option>
+      <option value="poisson">Poisson</option>
+      <option value="normal">Normal</option>
+      <option value="tcl">TCL / Media muestral</option>
+    </select>
+  </label>
+  <button class="btn" onclick="genNew()">Generar ejercicio</button>
+  <span id="genScore" style="font-size:13px;color:var(--muted)"></span>
+</div>
+<div id="genArea"></div>
+</div>
+
+<!-- ── FLASHCARDS ── -->
+<h2 id="flashcards">🃏 Flashcards — Memorizá las fórmulas</h2>
+
+<div class="card game">
+<p>Hacé clic en la tarjeta para voltearla. Marcá <strong>"La sé"</strong> si la recordaste sin mirar, o <strong>"Repasar"</strong> para que vuelva a aparecer al final del mazo. Las marcadas quedan guardadas para tu próxima sesión de estudio.</p>
+<div class="flash-wrap">
+  <div class="flash-card" id="flashCard" onclick="flashFlip()">
+    <div class="flash-face flash-front" id="flashFront"></div>
+    <div class="flash-face flash-back" id="flashBack"></div>
+  </div>
+</div>
+<div class="flash-controls">
+  <button class="btn-2" onclick="flashFlip()">🔄 Voltear</button>
+  <button class="btn-good" onclick="flashAnswer(true)">✅ La sé</button>
+  <button class="btn-warn" onclick="flashAnswer(false)">🔁 Repasar</button>
+  <button class="btn-2" onclick="flashStart(true)">🃏 Mezclar todo</button>
+  <button class="btn-2" id="flashRevBtn" onclick="flashStart(true, true)" style="display:none">📌 Solo "repasar"</button>
+</div>
+<div class="flash-meta" id="flashMeta"></div>
+</div>
+
 <!-- ── QUIZ ── -->
 <h2 id="quiz">🎓 Quiz final — Parcial 2</h2>
 
 <div class="card game">
-<p>25 preguntas de opción múltiple (Binomial, Poisson, Normal, TCL e Intervalos de Confianza). Respondé cada una y recibís feedback inmediato.</p>
-<button class="btn" onclick="startQuiz()">Empezar quiz</button>
-<button class="btn-2" onclick="resetQuiz()" style="margin-left:8px">Reiniciar</button>
+<p>Preguntas de opción múltiple con feedback inmediato. Elegí un tema o hacé el quiz completo — las preguntas y opciones se mezclan en cada intento. Al final te muestro exactamente qué repasar.</p>
+<div class="controls">
+  <label>Tema
+    <select id="quizTopic">
+      <option value="all">Todos los temas (25 preguntas)</option>
+      <option value="binomial">Binomial</option>
+      <option value="poisson">Poisson</option>
+      <option value="aprox">Aproximación Bi→Poisson</option>
+      <option value="normal">Normal</option>
+      <option value="tcl">TCL / Distribución muestral</option>
+      <option value="ic">Intervalos de confianza</option>
+    </select>
+  </label>
+  <button class="btn" onclick="startQuiz()">Empezar quiz</button>
+  <button class="btn-2" onclick="resetQuiz()">Reiniciar</button>
+</div>
+<span id="quizBest" style="font-size:13px;color:var(--muted)"></span>
 <div id="quizContainer" style="margin-top:18px"></div>
 <div id="quizFinalScore"></div>
 </div>
@@ -2985,10 +3188,27 @@ const quizQs = [
    correct:1, exp:'El intervalo [0,1 ; 1,7] no contiene 0 → hay evidencia estadística de que b > 0, es decir, existe relación lineal positiva significativa.'},
 ];
 
-let quizIdx=0, quizScore=0;
+// Tema de cada pregunta (mismo orden que quizQs) + anclas para repasar
+const quizTopicByIdx=['binomial','poisson','binomial','poisson','poisson','binomial','aprox','binomial',
+                      'poisson','aprox','poisson','binomial','normal','normal','normal','normal','normal',
+                      'tcl','tcl','tcl','tcl','tcl','tcl','ic','ic'];
+quizQs.forEach((q,i)=>q.t=quizTopicByIdx[i]||'normal');
+const quizSec ={binomial:'#binomial-teoria',poisson:'#poisson-teoria',aprox:'#comparacion',
+                normal:'#normal-teoria',tcl:'#tcl',ic:'#ic'};
+const quizName={binomial:'Binomial',poisson:'Poisson',aprox:'Aproximación Bi→Poisson',
+                normal:'Normal',tcl:'TCL / Distribución muestral',ic:'Intervalos de confianza'};
+
+function shuffleArr(a){
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+let quizOrder=[], quizPos=0, quizScore=0, quizWrong=[], quizPerm=[], quizFilter='all';
 
 function startQuiz(){
-  quizIdx=0; quizScore=0;
+  quizFilter=document.getElementById('quizTopic').value;
+  quizOrder=shuffleArr(quizQs.map((_,i)=>i).filter(i=>quizFilter==='all'||quizQs[i].t===quizFilter));
+  quizPos=0; quizScore=0; quizWrong=[];
   document.getElementById('quizFinalScore').innerHTML='';
   showQuizQ();
 }
@@ -2996,36 +3216,29 @@ function startQuiz(){
 function resetQuiz(){
   document.getElementById('quizContainer').innerHTML='';
   document.getElementById('quizFinalScore').innerHTML='';
-  quizIdx=0; quizScore=0;
+  quizOrder=[]; quizPos=0; quizScore=0; quizWrong=[];
 }
 
 function showQuizQ(){
-  if(quizIdx >= quizQs.length){
-    const pct = Math.round(quizScore/quizQs.length*100);
-    const msg = pct>=80 ? '🏆 ¡Excelente! Estás listo para el parcial.' :
-                pct>=60 ? '👍 Bien, repasá lo que erraste.' : '📚 Seguí estudiando, dale!';
-    document.getElementById('quizContainer').innerHTML='';
-    document.getElementById('quizFinalScore').innerHTML =
-      `<div class="quiz-score">${quizScore}/${quizQs.length} (${pct}%)<br>
-       <span style="font-size:18px">${msg}</span></div>`;
-    return;
-  }
-  const q = quizQs[quizIdx];
-  const dots = quizQs.map((_,i)=>`<div class="step ${i<quizIdx?'done':''}"></div>`).join('');
-  document.getElementById('quizContainer').innerHTML = `
+  if(quizPos>=quizOrder.length){ showQuizFinal(); return; }
+  const q=quizQs[quizOrder[quizPos]];
+  quizPerm=shuffleArr(q.ops.map((_,i)=>i));
+  const dots=quizOrder.map((_,i)=>`<div class="step ${i<quizPos?'done':''}"></div>`).join('');
+  document.getElementById('quizContainer').innerHTML=`
     <div class="progress-bar">${dots}</div>
     <div class="quiz-q">
-      <div><b>${quizIdx+1}/${quizQs.length}.</b> ${q.q}</div>
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">${quizName[q.t]}</div>
+      <div><b>${quizPos+1}/${quizOrder.length}.</b> ${q.q}</div>
       <div class="opts">
-        ${q.ops.map((o,i)=>`<div class="opt" onclick="answerQuiz(${i})" id="qo-${i}">${o}</div>`).join('')}
+        ${quizPerm.map(oi=>`<div class="opt" onclick="answerQuiz(${oi})" id="qo-${oi}">${q.ops[oi]}</div>`).join('')}
       </div>
       <div id="qFb"></div>
     </div>`;
 }
 
 function answerQuiz(oi){
-  const q = quizQs[quizIdx];
-  for(let j=0;j<q.ops.length;j++){
+  const q=quizQs[quizOrder[quizPos]];
+  for(const j of quizPerm){
     const el=document.getElementById(`qo-${j}`);
     if(el){
       if(j===q.correct) el.classList.add('correct');
@@ -3033,15 +3246,44 @@ function answerQuiz(oi){
       el.onclick=null;
     }
   }
-  document.getElementById('qFb').innerHTML =
+  if(oi===q.correct) quizScore++; else quizWrong.push(quizOrder[quizPos]);
+  document.getElementById('qFb').innerHTML=
     `<div class="quiz-feedback">${oi===q.correct?'✅ ¡Correcto!':'❌ Incorrecto.'} ${q.exp}
      <br><button class="btn" style="margin-top:10px; padding:6px 14px" onclick="nextQ()">Siguiente →</button></div>`;
-  if(oi===q.correct) quizScore++;
 }
 
 function nextQ(){
-  quizIdx++;
+  quizPos++;
   showQuizQ();
+}
+
+function showQuizFinal(){
+  const total=quizOrder.length;
+  const pct=total?Math.round(quizScore/total*100):0;
+  const prev=store.get('quiz_'+quizFilter,0);
+  if(pct>prev) store.set('quiz_'+quizFilter,pct);
+  updateQuizBest(); updateProgress();
+  const msg=pct>=80?'🏆 ¡Excelente! Estás listo para el parcial.':
+            pct>=60?'👍 Bien, repasá los temas marcados abajo.':'📚 Seguí estudiando — abajo tenés exactamente qué releer.';
+  let review='';
+  if(quizWrong.length){
+    review=`<h3 style="margin-top:18px">🔍 Para repasar (${quizWrong.length} error${quizWrong.length>1?'es':''})</h3>`+
+      quizWrong.map(qi=>{const q=quizQs[qi];return `<div class="card warn" style="font-size:13.5px">
+        <b>${q.q}</b><br>
+        <span style="color:var(--good)">✔ ${q.ops[q.correct]}</span><br>
+        <span style="color:var(--muted)">${q.exp}</span><br>
+        <a href="${quizSec[q.t]}" style="color:var(--accent)">↗ Releer: ${quizName[q.t]}</a></div>`;}).join('');
+  }
+  document.getElementById('quizContainer').innerHTML='';
+  document.getElementById('quizFinalScore').innerHTML=`
+    <div class="quiz-score">${quizScore}/${total} (${pct}%)<br><span style="font-size:18px">${msg}</span>
+    ${pct>prev&&prev>0?`<br><span style="font-size:14px;color:var(--good)">¡Nuevo récord! (anterior: ${prev}%)</span>`:''}</div>${review}`;
+}
+
+function updateQuizBest(){
+  const t=document.getElementById('quizTopic').value;
+  const b=store.get('quiz_'+t,0);
+  document.getElementById('quizBest').textContent=b?`⭐ Tu mejor puntaje en este tema: ${b}%`:'';
 }
 
 /* ══════════════════════════════════════
@@ -3394,6 +3636,677 @@ function lookupZ(){
 }
 
 /* ══════════════════════════════════════
+   UTILIDADES (persistencia, KaTeX, random)
+══════════════════════════════════════ */
+
+const store={
+  get(k,d){ try{const v=localStorage.getItem('ep2_'+k); return v!==null?JSON.parse(v):d;}catch(e){return d;} },
+  set(k,v){ try{localStorage.setItem('ep2_'+k, JSON.stringify(v));}catch(e){} }
+};
+
+function ktx(el){
+  if(window.renderMathInElement){
+    renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+  } else { setTimeout(()=>ktx(el),200); }
+}
+
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+function parseNum(s){ if(typeof s!=='string') return NaN; return parseFloat(s.trim().replace(',','.')); }
+function randn(){
+  let u=0,v=0; while(!u)u=Math.random(); while(!v)v=Math.random();
+  return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
+}
+
+/* ══════════════════════════════════════
+   PROGRESO + SCROLLSPY + NAV MÓVIL
+══════════════════════════════════════ */
+
+function updateProgress(){
+  const visited=new Set(store.get('visited',[]));
+  const secs=[...document.querySelectorAll('main h2[id]')].map(h=>h.id);
+  let done=0;
+  const total=secs.length+5; // + 4 checkpoints + quiz completo
+  secs.forEach(id=>{ if(visited.has(id)) done++; });
+  ['binomial','poisson','normal','tcl'].forEach(c=>{ if(store.get('cp_'+c,null)!==null) done++; });
+  if(store.get('quiz_all',0)>=60) done++;
+  const pct=Math.min(100,Math.round(done/total*100));
+  document.getElementById('spFill').style.width=pct+'%';
+  document.getElementById('spPct').textContent=pct+'%';
+  document.querySelectorAll('nav.sidebar a').forEach(a=>{
+    const id=(a.getAttribute('href')||'').slice(1);
+    a.classList.toggle('visited', visited.has(id));
+  });
+}
+
+function initScrollSpy(){
+  const links={};
+  document.querySelectorAll('nav.sidebar a').forEach(a=>links[(a.getAttribute('href')||'').slice(1)]=a);
+  const visited=new Set(store.get('visited',[]));
+  const heads=[...document.querySelectorAll('main h2[id]')];
+  let lastActive=null;
+  const tick=()=>{
+    const y=window.scrollY+window.innerHeight*0.3;
+    let cur=null;
+    for(const h of heads){
+      if(h.getBoundingClientRect().top+window.scrollY<=y) cur=h; else break;
+    }
+    if(cur && cur.id!==lastActive){
+      lastActive=cur.id;
+      document.querySelectorAll('nav.sidebar a.active').forEach(x=>x.classList.remove('active'));
+      if(links[cur.id]) links[cur.id].classList.add('active');
+      if(!visited.has(cur.id)){ visited.add(cur.id); store.set('visited',[...visited]); updateProgress(); }
+    }
+    const d=document.documentElement;
+    const p=d.scrollHeight>d.clientHeight ? d.scrollTop/(d.scrollHeight-d.clientHeight)*100 : 0;
+    document.getElementById('readBar').style.width=p+'%';
+  };
+  window.addEventListener('scroll',tick,{passive:true});
+  setInterval(tick,1500);
+  tick();
+}
+
+function initNav(){
+  document.getElementById('navToggle').onclick=()=>document.body.classList.toggle('nav-open');
+  document.getElementById('navOverlay').onclick=()=>document.body.classList.remove('nav-open');
+  document.querySelectorAll('nav.sidebar a').forEach(a=>
+    a.addEventListener('click',()=>document.body.classList.remove('nav-open')));
+}
+
+/* ══════════════════════════════════════
+   INTENTÁ PRIMERO (active recall en ejercicios)
+══════════════════════════════════════ */
+
+const tryConfig=[
+  {m:'Máquina con 5%',            q:'Calculá P(X = 2)',                       a:0.1887},
+  {m:'8 sensores',                q:'Calculá P(X = 2)',                       a:0.1488},
+  {m:'98% aceptables',            q:'Calculá P(X = 0) — todas aceptables',    a:0.5455},
+  {m:'Robot de soldadura',        q:'Calculá P(X = 12)',                      a:0.1285},
+  {m:'2 fallas por día',          q:'Calculá P(X = 3)',                       a:0.1804},
+  {m:'5 llamadas por hora',       q:'Calculá P(X = 0) en 30 min (¡ojo con λ!)', a:0.0821},
+  {m:'0,8 defectos',              q:'Calculá P(X = 1) en 1 m²',               a:0.3595},
+  {m:'1,2 accidentes',            q:'Calculá P(X = 2) en 1 mes',              a:0.2169},
+  {m:'lote de 100',               q:'Calculá P(X ≥ 6)',                       a:0.0839},
+  {m:'2,5 fallas/semana',         q:'Calculá P(X ≥ 5)',                       a:0.1088},
+  {m:'lote de 150',               q:'Calculá P(X ≥ 5) con Binomial exacta',   a:0.1848},
+  {m:'Regla empírica · μ=120',    q:'¿Límite superior del intervalo del 95%?', a:128, tol:0.5},
+  {m:'X~N(100, 10)',              q:'Calculá P(X ≤ 110)',                     a:0.8413},
+  {m:'Percentiles · X~N(50, 2)',  q:'Calculá el percentil 90',                a:52.56, tol:0.05},
+  {m:'σ=3 ml',                    q:'Calculá P(244 ≤ X ≤ 256)',               a:0.9545},
+  {m:'μ=120, σ=20, n=25',         q:'Calculá σ_X̄ (error estándar)',          a:4, tol:0.05},
+  {m:'μ=75, σ=15, n=36',          q:'Calculá P(X̄ > 78)',                     a:0.1151},
+  {m:'μ=100, σ=15, n=49',         q:'Calculá P(X̄ > 103)',                    a:0.0808},
+  {m:'Ejercicio 3.2 — μ=250',     q:'Calculá P(X̄ < 245)',                    a:0.1587},
+  {m:'bolsas de café',            q:'Calculá P(X̄ < 498)',                    a:0.0228},
+  {m:'Sensor industrial: μ=100°C',q:'Calculá P(X̄ > 101)',                    a:0.0228},
+  {m:'comparar n=25 vs n=100',    q:'Calculá P(48 ≤ X̄ ≤ 52) con n = 25',     a:0.6827},
+  {m:'comparar n=36 vs n=144',    q:'Calculá σ_X̄ con n = 144',               a:2.5, tol:0.05},
+  {m:'Ej. 1 — μ=150',             q:'Calculá P(X̄ > 153)',                    a:0.1151},
+  {m:'Ej. 2 — μ=300',             q:'Calculá P(X̄ < 295)',                    a:0.1587},
+  {m:'Ej. 3 — μ=80',              q:'Calculá P(X̄ > 83)',                     a:0.0401},
+  {m:'σ=5 ml, n=36',              q:'Calculá P(X̄ > 252)',                    a:0.0082},
+];
+
+function initTryFirst(){
+  const done=new Set(store.get('try',[]));
+  document.querySelectorAll('.card.enunciado').forEach(card=>{
+    const h=card.querySelector('h4'); if(!h) return;
+    const cfg=tryConfig.find(c=>h.textContent.includes(c.m));
+    if(!cfg) return;
+    const id='tf_'+cfg.m.replace(/\W+/g,'_');
+    const solved=done.has(id);
+    const div=document.createElement('div');
+    div.className='tryfirst'+(solved?' ok':'');
+    div.innerHTML=`<div class="tf-q">✏️ Intentá primero: ${cfg.q}</div>
+      <input type="text" inputmode="decimal" placeholder="tu respuesta" ${solved?'disabled':''}>
+      <button class="btn" style="padding:6px 14px;margin-left:8px">Comprobar</button>
+      <div class="tf-fb">${solved?'✅ Ya lo resolviste correctamente en otra sesión.':''}</div>`;
+    const inp=div.querySelector('input'), btn=div.querySelector('button'), fb=div.querySelector('.tf-fb');
+    let tries=0;
+    const check=()=>{
+      const v=parseNum(inp.value);
+      if(isNaN(v)){ fb.innerHTML='<span style="color:var(--warn)">Ingresá un número (vale coma o punto decimal).</span>'; return; }
+      const tol=cfg.tol!=null?cfg.tol:Math.max(0.005,Math.abs(cfg.a)*0.01);
+      if(Math.abs(v-cfg.a)<=tol){
+        div.classList.add('ok'); inp.disabled=true;
+        fb.innerHTML=`<span style="color:var(--good)">✅ ¡Correcto! (${String(cfg.a).replace('.',',')}). Ahora abrí la solución y compará tu procedimiento.</span>`;
+        done.add(id); store.set('try',[...done]);
+      } else {
+        tries++;
+        fb.innerHTML=`<span style="color:var(--bad)">❌ No es. ${tries>=2?'Abrí la solución paso a paso y buscá dónde te desviaste.':'Revisá qué modelo corresponde y probá de nuevo.'}</span>`;
+      }
+    };
+    btn.onclick=check;
+    inp.addEventListener('keydown',e=>{ if(e.key==='Enter') check(); });
+    card.insertAdjacentElement('afterend',div);
+  });
+}
+
+/* ══════════════════════════════════════
+   CHECKPOINTS POR TEMA
+══════════════════════════════════════ */
+
+const cpData={
+ binomial:{title:'Checkpoint — Binomial', qs:[
+  {q:'X ~ Bi(12; 0,2). ¿Cuánto vale E[X]?', ops:['2,4','9,6','12','0,2'], c:0,
+   exp:'E[X] = n·p = 12 × 0,2 = 2,4.'},
+  {q:'¿Cuál de estas NO es una condición para usar Binomial?',
+   ops:['n fijo y conocido','p constante en todos los ensayos','Ensayos independientes','La tasa λ escala con el intervalo de tiempo'], c:3,
+   exp:'Lo de la tasa λ es de Poisson. La Binomial exige n fijo, p constante e independencia.'},
+  {q:'Si P(X=0) = 0,35, ¿cuánto vale P(X ≥ 1)?', ops:['0,35','0,65','1','No se puede saber'], c:1,
+   exp:'Complemento: P(X≥1) = 1 − P(X=0) = 1 − 0,35 = 0,65.'}]},
+ poisson:{title:'Checkpoint — Poisson', qs:[
+  {q:'Ocurren 3 fallas/hora en promedio. ¿Qué λ usás para 2 horas?', ops:['3','1,5','6','9'], c:2,
+   exp:'λ escala con el intervalo: 3 × 2 = 6.'},
+  {q:'X ~ Poisson(5). ¿Cuánto vale Var(X)?', ops:['√5','5','25','No se puede saber'], c:1,
+   exp:'En Poisson, E[X] = Var(X) = λ = 5. Es su propiedad distintiva.'},
+  {q:'¿Cuándo conviene modelar con Poisson en vez de Binomial?',
+   ops:['Cuando hay n ensayos fijos','Cuando contás eventos a una tasa promedio en un intervalo','Cuando p > 0,5','Cuando los datos son continuos'], c:1,
+   exp:'Poisson modela conteos de eventos por intervalo de tiempo/espacio, sin "n ensayos" fijo.'}]},
+ normal:{title:'Checkpoint — Normal', qs:[
+  {q:'X ~ N(80; 5). ¿Cuánto vale P(X ≤ 80)?', ops:['0','0,5','0,8','1'], c:1,
+   exp:'La media parte la campana en dos mitades iguales: P(X ≤ μ) = 0,5 siempre.'},
+  {q:'X ~ N(80; 5). ¿Qué z corresponde a x = 95?', ops:['1','2','3','15'], c:2,
+   exp:'z = (95 − 80)/5 = 3. X está 3 desvíos por encima de la media.'},
+  {q:'¿Qué intervalo contiene ≈68% de los datos en una Normal?', ops:['μ ± σ','μ ± 2σ','μ ± 3σ','μ ± 0,68σ'], c:0,
+   exp:'Regla empírica: 68% en μ±σ, 95% en μ±2σ, 99,7% en μ±3σ.'}]},
+ tcl:{title:'Checkpoint — TCL y distribución muestral', qs:[
+  {q:'σ = 20 y n = 25. ¿Cuánto vale el error estándar de X̄?', ops:['20','5','4','0,8'], c:2,
+   exp:'σ_X̄ = σ/√n = 20/√25 = 20/5 = 4.'},
+  {q:'¿Cuánto vale E[X̄]?', ops:['μ, siempre','μ/√n','μ/n','Depende de n'], c:0,
+   exp:'X̄ es estimador insesgado de μ: E[X̄] = μ sin importar el tamaño de muestra.'},
+  {q:'Si n aumenta, la distribución de X̄…',
+   ops:['Se hace más ancha','Se hace más angosta alrededor de μ','No cambia','Se desplaza a la derecha'], c:1,
+   exp:'σ_X̄ = σ/√n decrece con n: las medias muestrales se concentran cada vez más alrededor de μ.'}]}
+};
+
+function initCheckpoints(){
+  document.querySelectorAll('.checkpoint').forEach(box=>{
+    const key=box.dataset.cp, data=cpData[key]; if(!data) return;
+    const saved=store.get('cp_'+key,null);
+    box.innerHTML=`<h3>🚦 ${data.title}${saved!==null?` <span class="cp-done">✓ Completado ${saved}/${data.qs.length}</span>`:''}</h3>
+      <p style="font-size:13px;color:var(--muted)">Antes de seguir, comprobá que esto te quedó claro.${saved!==null?' Podés repetirlo cuando quieras.':''}</p>
+      <div class="cp-qs"></div>`;
+    const wrap=box.querySelector('.cp-qs');
+    let answered=0, score=0;
+    data.qs.forEach((q,qi)=>{
+      const qd=document.createElement('div'); qd.className='quiz-q';
+      qd.innerHTML=`<div><b>${qi+1}.</b> ${q.q}</div>
+        <div class="opts">${q.ops.map((o,i)=>`<div class="opt" data-i="${i}">${o}</div>`).join('')}</div>
+        <div class="cp-fb"></div>`;
+      qd.querySelectorAll('.opt').forEach(opt=>{
+        opt.onclick=()=>{
+          if(qd.dataset.done) return; qd.dataset.done='1';
+          const i=+opt.dataset.i;
+          qd.querySelectorAll('.opt').forEach(o2=>{
+            const j=+o2.dataset.i;
+            if(j===q.c) o2.classList.add('correct'); else if(j===i) o2.classList.add('wrong');
+          });
+          qd.querySelector('.cp-fb').innerHTML=`<div class="quiz-feedback">${i===q.c?'✅ ¡Correcto!':'❌ Incorrecto.'} ${q.exp}</div>`;
+          if(i===q.c) score++;
+          answered++;
+          if(answered===data.qs.length){
+            store.set('cp_'+key,score);
+            box.querySelector('h3').innerHTML=`🚦 ${data.title} <span class="cp-done">✓ Completado ${score}/${data.qs.length}</span>`;
+            updateProgress();
+          }
+        };
+      });
+      wrap.appendChild(qd);
+    });
+  });
+}
+
+/* ══════════════════════════════════════
+   FLASHCARDS
+══════════════════════════════════════ */
+
+const flashData=[
+ {t:'Binomial', f:'PMF de la Binomial:<br>P(X = k) = ?', b:'$$P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$$'},
+ {t:'Binomial', f:'E[X] y Var(X) de Bi(n, p)', b:'$$E[X]=np \\qquad \\text{Var}(X)=np(1-p)$$'},
+ {t:'Poisson', f:'PMF de Poisson:<br>P(X = k) = ?', b:'$$P(X=k)=\\frac{e^{-\\lambda}\\,\\lambda^k}{k!}$$'},
+ {t:'Poisson', f:'E[X] y Var(X) de Poisson(λ)', b:'$$E[X]=\\text{Var}(X)=\\lambda$$<p style="font-size:13px">¡Son iguales! Propiedad única de Poisson.</p>'},
+ {t:'Poisson', f:'Cambio de intervalo:<br>λ = 4/hora → ¿λ en 30 min?', b:'$$\\lambda_{nuevo}=\\lambda\\cdot\\frac{t_{nuevo}}{t_{original}}$$<p style="font-size:13px">4 × (30/60) = <b>2</b></p>'},
+ {t:'Aproximación', f:'¿Cuándo vale Bi(n, p) ≈ Poisson?', b:'<p>n grande (≥ 20) y p pequeño (≤ 0,05)</p>$$\\lambda = n\\cdot p$$'},
+ {t:'Truco clave', f:'¿Cómo calculás "al menos uno"?', b:'$$P(X\\ge 1)=1-P(X=0)$$'},
+ {t:'Normal', f:'Fórmula de estandarización', b:'$$Z=\\frac{X-\\mu}{\\sigma}\\;\\sim\\;N(0,1)$$'},
+ {t:'Normal', f:'Regla empírica:<br>μ±1σ · μ±2σ · μ±3σ → ¿qué %?', b:'<p style="font-size:22px"><b>68% · 95% · 99,7%</b></p>'},
+ {t:'Normal', f:'Z negativo:<br>Φ(−z) = ?', b:'$$\\Phi(-z)=1-\\Phi(z)$$<p style="font-size:13px">Por simetría de la campana.</p>'},
+ {t:'Normal', f:'Percentil p (Normal inversa):<br>x = ?', b:'$$x=\\mu+z_p\\cdot\\sigma$$'},
+ {t:'Normal', f:'Valores z de memoria:<br>para 90% · 95% · 97,5% · 99%', b:'<p style="font-size:18px"><b>1,282 · 1,645 · 1,960 · 2,326</b></p>'},
+ {t:'TCL', f:'Error estándar de X̄', b:'$$\\sigma_{\\bar X}=\\frac{\\sigma}{\\sqrt n}$$'},
+ {t:'TCL', f:'¿Qué dice el Teorema Central del Límite?', b:'$$\\bar X\\sim N\\!\\left(\\mu,\\;\\tfrac{\\sigma}{\\sqrt n}\\right)\\;\\;(n\\ge 30)$$<p style="font-size:13px">Sin importar la forma de la población.</p>'},
+ {t:'TCL', f:'¿Cómo estandarizás X̄?', b:'$$Z=\\frac{\\bar X-\\mu}{\\sigma/\\sqrt n}$$'},
+ {t:'IC', f:'IC para μ con σ conocida', b:'$$\\bar x\\pm z_{\\alpha/2}\\cdot\\frac{\\sigma}{\\sqrt n}$$'},
+ {t:'IC', f:'¿Cómo reducís el margen de error a la mitad?', b:'<p style="font-size:17px">Cuadruplicando n</p>$$n\\times 4\\;\\Rightarrow\\;E\\div 2$$'},
+];
+
+let flashDeck=[], flashPos=0, flashFlipped=false;
+
+function flashStart(shuffle=true, reviewOnly=false){
+  const review=new Set(store.get('flash_review',[]));
+  let idxs=flashData.map((_,i)=>i);
+  if(reviewOnly){ idxs=idxs.filter(i=>review.has(i)); if(!idxs.length) idxs=flashData.map((_,i)=>i); }
+  flashDeck=shuffle?shuffleArr(idxs):idxs;
+  flashPos=0;
+  flashShow();
+}
+
+function flashShow(){
+  const review=new Set(store.get('flash_review',[]));
+  document.getElementById('flashRevBtn').style.display=review.size?'inline-block':'none';
+  const front=document.getElementById('flashFront'), back=document.getElementById('flashBack');
+  document.getElementById('flashCard').classList.remove('flipped'); flashFlipped=false;
+  if(flashPos>=flashDeck.length){
+    front.innerHTML=`<p style="font-size:18px">🎉 ¡Terminaste el mazo!</p>
+      <p style="font-size:13px;color:var(--muted)">${review.size?review.size+' tarjeta(s) quedaron marcadas para repasar.':'Nada pendiente de repaso. 💪'}</p>`;
+    back.innerHTML='';
+    document.getElementById('flashMeta').textContent='';
+    return;
+  }
+  const c=flashData[flashDeck[flashPos]];
+  front.innerHTML=`<div class="flash-topic">${c.t}</div><div style="font-size:17px">${c.f}</div>
+    <p style="font-size:11px;color:var(--muted);margin-top:14px">(clic para voltear)</p>`;
+  back.innerHTML=`<div class="flash-topic">${c.t}</div><div>${c.b}</div>`;
+  ktx(back);
+  document.getElementById('flashMeta').textContent=
+    `Tarjeta ${flashPos+1} de ${flashDeck.length}${review.size?' · '+review.size+' en repaso':''}`;
+}
+
+function flashFlip(){
+  flashFlipped=!flashFlipped;
+  document.getElementById('flashCard').classList.toggle('flipped',flashFlipped);
+}
+
+function flashAnswer(know){
+  if(flashPos>=flashDeck.length) return;
+  const i=flashDeck[flashPos];
+  const review=new Set(store.get('flash_review',[]));
+  if(know) review.delete(i); else { review.add(i); flashDeck.push(i); }
+  store.set('flash_review',[...review]);
+  flashPos++;
+  flashShow();
+}
+
+/* ══════════════════════════════════════
+   ÁRBOL DE DECISIÓN
+══════════════════════════════════════ */
+
+const treeNodes={
+ start:{q:'¿Qué describe la variable del problema?', opts:[
+   {l:'🔢 Un conteo: número de éxitos o eventos (0, 1, 2, …)', n:'count'},
+   {l:'📏 Una medición continua: peso, longitud, temperatura, tiempo, volumen…', n:'cont'}]},
+ count:{q:'¿Hay un número FIJO de pruebas n, cada una con éxito/fracaso y probabilidad p constante?', opts:[
+   {l:'Sí — "se inspeccionan n piezas", "se instalan n sensores"…', n:'fixedn'},
+   {l:'No — los eventos ocurren a una TASA promedio en un intervalo de tiempo o espacio', n:'rPoisson'}]},
+ fixedn:{q:'¿n es grande (≥ 20) y p muy pequeño (≤ 0,05)?', opts:[
+   {l:'Sí', n:'rBinApprox'},
+   {l:'No', n:'rBinomial'}]},
+ cont:{q:'¿La pregunta es sobre UNA observación X, o sobre la MEDIA X̄ de una muestra?', opts:[
+   {l:'Una sola observación X — "una pieza", "un envase"…', n:'rNormal'},
+   {l:'La media muestral X̄ — "la media de n piezas", "el promedio de la muestra"…', n:'meanq'}]},
+ meanq:{q:'¿n ≥ 30, o la población ya es Normal?', opts:[
+   {l:'Sí', n:'rTCL'},
+   {l:'No', n:'rSmall'}]},
+};
+
+const treeResults={
+ rBinomial:`<div class="tree-result"><h4 style="margin:0 0 8px;color:var(--good)">✅ Binomial</h4>
+   $$X \\sim Bi(n,\\,p) \\qquad P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$$
+   <p style="font-size:13px">E[X] = np · Var = np(1−p). En R: <code>dbinom / pbinom</code>.</p>
+   <p style="font-size:13px"><a href="#binomial-teoria" style="color:var(--accent)">↗ Ir a la teoría Binomial</a></p></div>`,
+ rBinApprox:`<div class="tree-result"><h4 style="margin:0 0 8px;color:var(--good)">✅ Binomial — y podés aproximar con Poisson</h4>
+   <p style="font-size:13.5px">El modelo exacto es $Bi(n, p)$. Pero como n es grande y p pequeño, si el enunciado pide aproximar usás:</p>
+   $$X \\approx \\text{Poisson}(\\lambda) \\quad \\text{con} \\quad \\lambda = n\\cdot p$$
+   <p style="font-size:13px"><a href="#comparacion" style="color:var(--accent)">↗ Ver la comparación y la demo de convergencia</a></p></div>`,
+ rPoisson:`<div class="tree-result"><h4 style="margin:0 0 8px;color:var(--warn)">✅ Poisson</h4>
+   $$X \\sim \\text{Poisson}(\\lambda) \\qquad P(X=k)=\\frac{e^{-\\lambda}\\lambda^k}{k!}$$
+   <p style="font-size:13.5px">⚡ Antes de calcular: ¿el intervalo del enunciado coincide con el de λ? Si no:
+   $\\lambda_{nuevo} = \\lambda \\times \\frac{t_{nuevo}}{t_{original}}$</p>
+   <p style="font-size:13px"><a href="#poisson-teoria" style="color:var(--accent)">↗ Ir a la teoría Poisson</a></p></div>`,
+ rNormal:`<div class="tree-result"><h4 style="margin:0 0 8px;color:#818cf8">✅ Normal — estandarizá con σ</h4>
+   $$X \\sim N(\\mu,\\,\\sigma) \\qquad Z=\\frac{x-\\mu}{\\sigma}$$
+   <p style="font-size:13.5px">Después buscás Φ(z) en la tabla (o <code>pnorm</code> en R).</p>
+   <p style="font-size:13px"><a href="#normal-z" style="color:var(--accent)">↗ Ir a estandarización y tabla Z</a></p></div>`,
+ rTCL:`<div class="tree-result"><h4 style="margin:0 0 8px;color:var(--accent)">✅ TCL — Normal con error estándar σ/√n</h4>
+   $$\\bar X \\sim N\\!\\left(\\mu,\\;\\frac{\\sigma}{\\sqrt n}\\right) \\qquad Z=\\frac{\\bar x-\\mu}{\\sigma/\\sqrt n}$$
+   <p style="font-size:13.5px">⚠️ El error más común: usar σ en vez de σ/√n. Si la pregunta es sobre X̄, SIEMPRE divide por √n.</p>
+   <p style="font-size:13px"><a href="#tcl" style="color:var(--accent)">↗ Ir a distribución muestral y TCL</a></p></div>`,
+ rSmall:`<div class="tree-result" style="border-left-color:var(--bad);background:#1f1212"><h4 style="margin:0 0 8px;color:var(--bad)">⚠️ El TCL no está garantizado</h4>
+   <p style="font-size:13.5px">Con n &lt; 30 y población no Normal, no podés asumir que X̄ es Normal. Opciones: verificar si la población es Normal, o usar la distribución t de Student con n−1 grados de libertad (se ve en Clase 11).</p>
+   <p style="font-size:13px"><a href="#ic" style="color:var(--accent)">↗ Ver el preview de Clase 11</a></p></div>`,
+};
+
+let treePath=[];
+function treeReset(){ treePath=[]; treeRender('start'); }
+function treeRender(key){
+  document.getElementById('treeCrumbs').innerHTML=
+    treePath.map((p,i)=>`${i+1}. ${p.q}<br>&nbsp;&nbsp;→ <b>${p.a}</b>`).join('<br>');
+  const box=document.getElementById('treeBox');
+  if(treeResults[key]){ box.innerHTML=treeResults[key]; ktx(box); return; }
+  const n=treeNodes[key];
+  box.innerHTML=`<div class="tree-q">${n.q}</div>
+    <div class="tree-opts">${n.opts.map((o,i)=>`<div class="tree-opt" data-i="${i}">${o.l}</div>`).join('')}</div>`;
+  box.querySelectorAll('.tree-opt').forEach(el=>{
+    el.onclick=()=>{ const o=n.opts[+el.dataset.i]; treePath.push({q:n.q,a:o.l}); treeRender(o.n); };
+  });
+}
+
+/* ══════════════════════════════════════
+   GENERADOR DE EJERCICIOS
+══════════════════════════════════════ */
+
+function genBinomialEx(){
+  const p=pick([0.02,0.03,0.05,0.08,0.1]);
+  const n=pick([10,15,20,25,30,40]);
+  const enun=pick([
+    `Una máquina produce piezas con <b>${(p*100).toFixed(0)}%</b> de probabilidad de defecto. Se inspecciona un lote de <b>n = ${n}</b> piezas. Sea X = número de defectuosas.`,
+    `Se instalan <b>${n} sensores</b> idénticos; cada uno falla durante el turno con probabilidad <b>${p}</b>. Sea X = número de sensores que fallan.`,
+    `En una línea, cada unidad sale fuera de especificación con probabilidad <b>${p}</b>. Se controlan <b>${n} unidades</b>. Sea X = unidades fuera de especificación.`]);
+  const model=`<p><b>Modelo:</b> $X \\sim Bi(${n};\\, ${p})$ — n fijo, p constante, ensayos independientes.</p>`;
+  const t=pick(['eq','atleast1','ge','exp']);
+  if(t==='eq'){
+    const k=Math.max(0,Math.round(n*p)+pick([0,1,1,2]));
+    const ans=pmfBinomial(n,p,k);
+    return {enun, ask:`Calculá P(X = ${k})`, ans, sol:model+
+      `$$P(X=${k})=\\binom{${n}}{${k}}(${p})^{${k}}(1-${p})^{${n-k}} = ${ans.toFixed(4)}$$
+       <p>En R: <code>dbinom(${k}, ${n}, ${p})</code> → ${ans.toFixed(4)}</p>`};
+  }
+  if(t==='atleast1'){
+    const p0=pmfBinomial(n,p,0), ans=1-p0;
+    return {enun, ask:'Calculá P(X ≥ 1) — al menos una', ans, sol:model+
+      `<p>Truco del complemento:</p>
+       $$P(X\\ge 1)=1-P(X=0)=1-(1-${p})^{${n}} = 1-${p0.toFixed(4)} = ${ans.toFixed(4)}$$
+       <p>En R: <code>1 - dbinom(0, ${n}, ${p})</code></p>`};
+  }
+  if(t==='ge'){
+    const k=Math.max(1,Math.round(n*p))+pick([1,2]);
+    const c=cdfBinomial(n,p,k-1), ans=1-c;
+    return {enun, ask:`Calculá P(X ≥ ${k})`, ans, sol:model+
+      `$$P(X\\ge ${k}) = 1 - P(X\\le ${k-1}) = 1 - ${c.toFixed(4)} = ${ans.toFixed(4)}$$
+       <p>En R: <code>1 - pbinom(${k-1}, ${n}, ${p})</code></p>`};
+  }
+  const ans=n*p;
+  return {enun, ask:'Calculá E[X] (valor esperado)', ans, tol:0.01, dec:2, sol:model+
+    `$$E[X]=n\\cdot p = ${n}\\times ${p} = ${+ans.toFixed(2)}$$
+     <p>Además: $\\text{Var}(X)=np(1-p)=${(n*p*(1-p)).toFixed(3)}$ y $\\sigma=${Math.sqrt(n*p*(1-p)).toFixed(3)}$</p>`};
+}
+
+function genPoissonEx(){
+  const lam=pick([1.5,2,2.5,3,4,5]);
+  const u=pick([['fallas','día'],['llamadas','hora'],['defectos','m²'],['accidentes','mes']]);
+  const enun=`Un proceso registra en promedio <b>λ = ${lam} ${u[0]} por ${u[1]}</b>. Sea X = número de ${u[0]} en el intervalo indicado.`;
+  const t=pick(['eq','zero','ge','interval']);
+  if(t==='eq'){
+    const k=Math.max(0,Math.round(lam)+pick([-1,0,1]));
+    const ans=pmfPoisson(lam,k);
+    return {enun, ask:`Calculá P(X = ${k}) en 1 ${u[1]}`, ans, sol:
+      `<p><b>Modelo:</b> $X \\sim \\text{Poisson}(${lam})$</p>
+       $$P(X=${k})=\\frac{e^{-${lam}}\\cdot ${lam}^{${k}}}{${k}!} = ${ans.toFixed(4)}$$
+       <p>En R: <code>dpois(${k}, ${lam})</code></p>`};
+  }
+  if(t==='zero'){
+    const ans=Math.exp(-lam);
+    return {enun, ask:`Calculá P(X = 0) en 1 ${u[1]}`, ans, sol:
+      `$$P(X=0)=e^{-${lam}} = ${ans.toFixed(4)}$$<p>En R: <code>dpois(0, ${lam})</code></p>`};
+  }
+  if(t==='ge'){
+    const k=Math.round(lam)+pick([1,2]);
+    const c=cdfPoisson(lam,k-1), ans=1-c;
+    return {enun, ask:`Calculá P(X ≥ ${k}) en 1 ${u[1]}`, ans, sol:
+      `<p><b>Modelo:</b> $X \\sim \\text{Poisson}(${lam})$</p>
+       $$P(X\\ge ${k})=1-P(X\\le ${k-1}) = 1 - ${c.toFixed(4)} = ${ans.toFixed(4)}$$
+       <p>En R: <code>1 - ppois(${k-1}, ${lam})</code></p>`};
+  }
+  const f=pick([0.5,2,3]);
+  const lam2=+(lam*f).toFixed(2), ans=Math.exp(-lam2);
+  const desc=f===0.5?`medio ${u[1]}`:`${f} ${u[1]}s`;
+  return {enun, ask:`Calculá P(X = 0) en ${desc} — ¡ojo, hay que ajustar λ!`, ans, sol:
+    `<p><b>Paso 1 — cambio de intervalo:</b></p>
+     $$\\lambda_{nuevo} = ${lam}\\times ${f} = ${lam2}$$
+     <p><b>Paso 2:</b></p>
+     $$P(X=0)=e^{-${lam2}} = ${ans.toFixed(4)}$$
+     <p>En R: <code>dpois(0, ${lam2})</code></p>`};
+}
+
+function genNormalEx(){
+  const s0=pick([
+    {mu:250,s:5,ctx:'El volumen de llenado de una envasadora se distribuye Normal con',unit:'ml'},
+    {mu:100,s:10,ctx:'La resistencia de un componente se distribuye Normal con',unit:'Ω'},
+    {mu:120,s:4,ctx:'La temperatura de un horno bajo control es Normal con',unit:'°C'},
+    {mu:50,s:2,ctx:'El diámetro de una pieza maquinada es Normal con',unit:'mm'}]);
+  const {mu,s,ctx,unit}=s0;
+  const enun=`${ctx} <b>μ = ${mu} ${unit}</b> y <b>σ = ${s} ${unit}</b>.`;
+  const t=pick(['le','ge','between','pct']);
+  const ks=[-2,-1.5,-1,1,1.5,2];
+  if(t==='le'){
+    const k=pick(ks), a=mu+k*s, ans=phi(k);
+    return {enun, ask:`Calculá P(X ≤ ${a})`, ans, sol:
+      `$$z=\\frac{${a}-${mu}}{${s}} = ${k}$$
+       $$P(X\\le ${a})=\\Phi(${k}) = ${ans.toFixed(4)}$$
+       <p>En R: <code>pnorm(${a}, ${mu}, ${s})</code></p>`};
+  }
+  if(t==='ge'){
+    const k=pick(ks), a=mu+k*s, ans=1-phi(k);
+    return {enun, ask:`Calculá P(X ≥ ${a})`, ans, sol:
+      `$$z = \\frac{${a}-${mu}}{${s}} = ${k}$$
+       $$P(X\\ge ${a})=1-\\Phi(${k}) = ${ans.toFixed(4)}$$
+       <p>En R: <code>1 - pnorm(${a}, ${mu}, ${s})</code></p>`};
+  }
+  if(t==='between'){
+    const k1=pick([-2,-1.5,-1]), k2=pick([1,1.5,2]);
+    const a=mu+k1*s, b=mu+k2*s, ans=phi(k2)-phi(k1);
+    return {enun, ask:`Calculá P(${a} ≤ X ≤ ${b})`, ans, sol:
+      `$$z_1=\\frac{${a}-${mu}}{${s}}=${k1} \\qquad z_2=\\frac{${b}-${mu}}{${s}}=${k2}$$
+       $$P = \\Phi(${k2})-\\Phi(${k1}) = ${phi(k2).toFixed(4)} - ${phi(k1).toFixed(4)} = ${ans.toFixed(4)}$$
+       <p>En R: <code>pnorm(${b},${mu},${s}) - pnorm(${a},${mu},${s})</code></p>`};
+  }
+  const pp=pick([0.90,0.95,0.99,0.10,0.05]);
+  const zp=qnormStd(pp), ans=mu+zp*s;
+  return {enun, ask:`Calculá el percentil ${Math.round(pp*100)} de X`, ans, tol:Math.max(0.05,s*0.02), dec:2, sol:
+    `<p>Normal inversa: $x = \\mu + z_p\\cdot\\sigma$, con $z_{${pp}} = ${zp.toFixed(3)}$</p>
+     $$x = ${mu} + (${zp.toFixed(3)})\\times ${s} = ${ans.toFixed(2)}$$
+     <p>En R: <code>qnorm(${pp}, ${mu}, ${s})</code></p>`};
+}
+
+function genTCLEx(){
+  const mu=pick([80,100,120,200,250,500]);
+  const s=pick([8,10,12,15,20,30]);
+  const n=pick([25,36,49,64,100]);
+  const se=s/Math.sqrt(n);
+  const enun=`Una población tiene <b>μ = ${mu}</b> y <b>σ = ${s}</b>. Se toma una muestra aleatoria de <b>n = ${n}</b> observaciones y se calcula la media muestral X̄.`;
+  const model=`<p><b>Error estándar:</b></p>$$\\sigma_{\\bar X}=\\frac{${s}}{\\sqrt{${n}}} = ${se.toFixed(3)}$$`;
+  const t=pick(['se','gt','lt','between']);
+  if(t==='se')
+    return {enun, ask:'Calculá el error estándar σ_X̄', ans:se, tol:Math.max(0.01,se*0.02), dec:3,
+      sol:model+`<p>Por TCL: $\\bar X \\sim N(${mu};\\; ${se.toFixed(3)})$</p>`};
+  if(t==='gt'){
+    const k=pick([1,1.5,2]), a=+(mu+k*se).toFixed(2), z=(a-mu)/se, ans=1-phi(z);
+    return {enun, ask:`Calculá P(X̄ > ${a})`, ans, sol:model+
+      `$$Z=\\frac{${a}-${mu}}{${se.toFixed(3)}} = ${z.toFixed(2)}$$
+       $$P(\\bar X > ${a}) = 1-\\Phi(${z.toFixed(2)}) = ${ans.toFixed(4)}$$
+       <p>En R: <code>1 - pnorm(${a}, ${mu}, ${s}/sqrt(${n}))</code></p>`};
+  }
+  if(t==='lt'){
+    const k=pick([1,1.5,2]), a=+(mu-k*se).toFixed(2), z=(a-mu)/se, ans=phi(z);
+    return {enun, ask:`Calculá P(X̄ < ${a})`, ans, sol:model+
+      `$$Z=\\frac{${a}-${mu}}{${se.toFixed(3)}} = ${z.toFixed(2)} \\qquad P(\\bar X < ${a}) = \\Phi(${z.toFixed(2)}) = ${ans.toFixed(4)}$$
+       <p>En R: <code>pnorm(${a}, ${mu}, ${s}/sqrt(${n}))</code></p>`};
+  }
+  const k=pick([1,1.5,2]);
+  const a=+(mu-k*se).toFixed(2), b=+(mu+k*se).toFixed(2), ans=phi(k)-phi(-k);
+  return {enun, ask:`Calculá P(${a} ≤ X̄ ≤ ${b})`, ans, sol:model+
+    `$$Z=\\pm${k} \\qquad P = \\Phi(${k})-\\Phi(-${k}) = ${ans.toFixed(4)}$$
+     <p>En R: <code>pnorm(${b},${mu},${se.toFixed(3)}) - pnorm(${a},${mu},${se.toFixed(3)})</code></p>`};
+}
+
+let genCur=null;
+
+function genNew(){
+  let t=document.getElementById('genTopic').value;
+  if(t==='random') t=pick(['binomial','poisson','normal','tcl']);
+  genCur={binomial:genBinomialEx,poisson:genPoissonEx,normal:genNormalEx,tcl:genTCLEx}[t]();
+  const area=document.getElementById('genArea');
+  area.innerHTML=`
+    <div class="gen-enun">${genCur.enun}<br><br><b>👉 ${genCur.ask}</b></div>
+    <div class="controls">
+      <label>Tu respuesta <input type="text" id="genAns" inputmode="decimal" placeholder="ej: 0,1887"></label>
+      <button class="btn" onclick="genCheck()">Comprobar</button>
+    </div>
+    <div id="genFb" style="font-size:14px;margin:6px 0"></div>
+    <details class="reveal"><summary>Ver solución paso a paso</summary><div style="margin-top:12px">${genCur.sol}</div></details>`;
+  ktx(area);
+  document.getElementById('genAns').addEventListener('keydown',e=>{ if(e.key==='Enter') genCheck(); });
+  genUpdateScore();
+}
+
+function genCheck(){
+  if(!genCur) return;
+  const v=parseNum(document.getElementById('genAns').value);
+  const fb=document.getElementById('genFb');
+  if(isNaN(v)){ fb.innerHTML='<span style="color:var(--warn)">Ingresá un número (vale coma o punto decimal).</span>'; return; }
+  const tol=genCur.tol!=null?genCur.tol:Math.max(0.005,Math.abs(genCur.ans)*0.01);
+  const st=store.get('gen',{ok:0,tot:0});
+  if(Math.abs(v-genCur.ans)<=tol){
+    fb.innerHTML=`<span style="color:var(--good)">✅ ¡Correcto! Respuesta: ${genCur.ans.toFixed(genCur.dec!=null?genCur.dec:4).replace('.',',')}</span>`;
+    if(!genCur.scored){ st.ok++; st.tot++; genCur.scored=true; store.set('gen',st); }
+  } else {
+    fb.innerHTML='<span style="color:var(--bad)">❌ Todavía no. Revisá el planteo o abrí la solución paso a paso.</span>';
+    if(!genCur.scored){ st.tot++; genCur.scored=true; store.set('gen',st); }
+  }
+  genUpdateScore();
+}
+
+function genUpdateScore(){
+  const st=store.get('gen',{ok:0,tot:0});
+  document.getElementById('genScore').textContent=st.tot?`Aciertos: ${st.ok}/${st.tot}`:'';
+}
+
+/* ══════════════════════════════════════
+   REGLA EMPÍRICA INTERACTIVA
+══════════════════════════════════════ */
+
+function plotEmpirica(){
+  const mu=+document.getElementById('empMu').value||0;
+  const s=+document.getElementById('empSigma').value||1;
+  if(s<=0) return;
+  const traces=[];
+  [[3,'rgba(248,113,113,0.18)'],[2,'rgba(251,191,36,0.22)'],[1,'rgba(52,211,153,0.32)']].forEach(([k,col])=>{
+    const xs=[],ys=[];
+    for(let i=0;i<=200;i++){const x=mu-k*s+(2*k*s)*i/200; xs.push(x); ys.push(dnormJS(x,mu,s));}
+    xs.push(mu+k*s); ys.push(0); xs.push(mu-k*s); ys.push(0);
+    traces.push({x:xs,y:ys,type:'scatter',fill:'toself',fillcolor:col,line:{width:0},hoverinfo:'skip',showlegend:false});
+  });
+  const xs=[],ys=[];
+  for(let i=0;i<=400;i++){const x=mu-4*s+(8*s)*i/400; xs.push(x); ys.push(dnormJS(x,mu,s));}
+  traces.push({x:xs,y:ys,type:'scatter',mode:'lines',line:{color:'#818cf8',width:2.5},showlegend:false});
+  const ann=[[0.5,'68%','#34d399'],[1.5,'95%','#fbbf24'],[2.5,'99,7%','#f87171']].map(([k,t,c])=>({
+    x:mu+k*s, y:dnormJS(mu+k*s,mu,s)/2, text:`<b>${t}</b>`, showarrow:false, font:{color:c,size:13}
+  }));
+  document.getElementById('empStats').innerHTML=`
+    <div class="stat-box"><div class="label">68% → μ±σ</div><div class="value" style="color:var(--good);font-size:16px">[${+(mu-s).toFixed(2)} ; ${+(mu+s).toFixed(2)}]</div></div>
+    <div class="stat-box"><div class="label">95% → μ±2σ</div><div class="value" style="color:var(--warn);font-size:16px">[${+(mu-2*s).toFixed(2)} ; ${+(mu+2*s).toFixed(2)}]</div></div>
+    <div class="stat-box"><div class="label">99,7% → μ±3σ</div><div class="value" style="color:var(--bad);font-size:16px">[${+(mu-3*s).toFixed(2)} ; ${+(mu+3*s).toFixed(2)}]</div></div>
+    <div class="stat-box"><div class="label">Fuera de ±3σ</div><div class="value" style="font-size:16px">0,3%</div></div>`;
+  Plotly.newPlot('empPlot',traces,{
+    ...layoutBase,
+    title:{text:`Regla 68 · 95 · 99,7 — N(${mu}, ${s})`, font:{color:'#e2e8f0',size:13}},
+    xaxis:{...layoutBase.xaxis, title:'x'},
+    yaxis:{...layoutBase.yaxis, title:'f(x)'},
+    annotations:ann
+  },{responsive:true,displayModeBar:false});
+}
+
+/* ══════════════════════════════════════
+   TCL: SIMULADOR DE MUESTREO REAL
+══════════════════════════════════════ */
+
+const simPops={
+  uniform:{mu:100, sigma:100/Math.sqrt(12), range:[40,160],
+    sample:()=>50+Math.random()*100,
+    density:x=>(x>=50&&x<=150)?0.01:0},
+  exp:{mu:100, sigma:100, range:[0,450],
+    sample:()=>-100*Math.log(1-Math.random()),
+    density:x=>x>=0?Math.exp(-x/100)/100:0},
+  bimodal:{mu:100, sigma:Math.sqrt(1000), range:[30,170],
+    sample:()=>(Math.random()<0.5?70:130)+randn()*10,
+    density:x=>0.5*dnormJS(x,70,10)+0.5*dnormJS(x,130,10)},
+  normal:{mu:100, sigma:20, range:[30,170],
+    sample:()=>100+randn()*20,
+    density:x=>dnormJS(x,100,20)}
+};
+
+let simMeans=[], simTimer=null, simLastSample=[];
+
+function tclSimReset(){
+  simMeans=[]; simLastSample=[];
+  if(simTimer){ clearInterval(simTimer); simTimer=null; document.getElementById('simAnimBtn').textContent='▶ Animar'; }
+  tclSimDraw();
+}
+
+function tclSimAdd(m){
+  const pop=simPops[document.getElementById('simPop').value];
+  const n=+document.getElementById('simN').value;
+  for(let i=0;i<m;i++){
+    const s=[];
+    for(let j=0;j<n;j++) s.push(pop.sample());
+    simLastSample=s;
+    simMeans.push(s.reduce((a,b)=>a+b,0)/n);
+  }
+  if(simMeans.length>5000) simMeans=simMeans.slice(-5000);
+  tclSimDraw();
+}
+
+function tclSimAnim(){
+  const btn=document.getElementById('simAnimBtn');
+  if(simTimer){ clearInterval(simTimer); simTimer=null; btn.textContent='▶ Animar'; return; }
+  btn.textContent='⏸ Parar';
+  simTimer=setInterval(()=>{
+    tclSimAdd(simMeans.length<100?1:5);
+    if(simMeans.length>=3000){ clearInterval(simTimer); simTimer=null; btn.textContent='▶ Animar'; }
+  },80);
+}
+
+function tclSimDraw(){
+  const pop=simPops[document.getElementById('simPop').value];
+  const n=+document.getElementById('simN').value;
+  const se=pop.sigma/Math.sqrt(n);
+
+  // Población + última muestra
+  const xs=[],ys=[]; const [x0,x1]=pop.range;
+  for(let i=0;i<=300;i++){const x=x0+(x1-x0)*i/300; xs.push(x); ys.push(pop.density(x));}
+  const tr=[{x:xs,y:ys,type:'scatter',mode:'lines',line:{color:'#94a3b8',width:2},
+             fill:'tozeroy',fillcolor:'rgba(148,163,184,0.15)'}];
+  if(simLastSample.length)
+    tr.push({x:simLastSample,y:simLastSample.map(()=>0),type:'scatter',mode:'markers',
+             marker:{color:'#fbbf24',size:9,symbol:'line-ns-open'}});
+  Plotly.react('simPopPlot',tr,{...layoutBase,margin:{t:10,r:10,b:35,l:45},showlegend:false,
+    xaxis:{...layoutBase.xaxis,range:pop.range}},{responsive:true,displayModeBar:false});
+
+  // Histograma de medias + curva teórica
+  const mt=[];
+  if(simMeans.length)
+    mt.push({x:simMeans,type:'histogram',histnorm:'probability density',
+             marker:{color:'rgba(52,211,153,0.55)',line:{color:'#34d399',width:1}}});
+  const txs=[],tys=[];
+  for(let i=0;i<=300;i++){const x=pop.mu-4*se+(8*se)*i/300; txs.push(x); tys.push(dnormJS(x,pop.mu,se));}
+  mt.push({x:txs,y:tys,type:'scatter',mode:'lines',line:{color:'#fbbf24',width:2.5,dash:'dash'}});
+  const halfw=4*Math.max(se,pop.sigma/4);
+  Plotly.react('simMeansPlot',mt,{...layoutBase,margin:{t:10,r:10,b:35,l:45},showlegend:false,
+    xaxis:{...layoutBase.xaxis,range:[pop.mu-halfw,pop.mu+halfw]}},{responsive:true,displayModeBar:false});
+
+  // Stats
+  const N=simMeans.length;
+  const mm=N?simMeans.reduce((a,b)=>a+b,0)/N:0;
+  const sd=N>1?Math.sqrt(simMeans.reduce((a,b)=>a+(b-mm)*(b-mm),0)/(N-1)):0;
+  document.getElementById('simStats').innerHTML=`
+    <div class="stat-box"><div class="label"># muestras</div><div class="value">${N}</div></div>
+    <div class="stat-box"><div class="label">μ poblacional</div><div class="value">${pop.mu.toFixed(1)}</div></div>
+    <div class="stat-box"><div class="label">media de las x̄</div><div class="value" style="color:var(--good)">${N?mm.toFixed(2):'—'}</div></div>
+    <div class="stat-box"><div class="label">σ/√n teórico</div><div class="value" style="color:var(--warn)">${se.toFixed(3)}</div></div>
+    <div class="stat-box"><div class="label">desvío de las x̄</div><div class="value" style="color:var(--good)">${N>1?sd.toFixed(3):'—'}</div></div>`;
+}
+
+/* ══════════════════════════════════════
    INICIALIZACIÓN
 ══════════════════════════════════════ */
 
@@ -3554,6 +4467,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
   plotTCL();
   lookupZ();
   loadRegPreset('puntos');
+  plotEmpirica();
+  tclSimReset();
+  initNav();
+  initScrollSpy();
+  initTryFirst();
+  initCheckpoints();
+  treeReset();
+  flashStart();
+  genUpdateScore();
+  updateProgress();
+  updateQuizBest();
+  document.getElementById('quizTopic').addEventListener('change',updateQuizBest);
 });
 </script>
 </body>

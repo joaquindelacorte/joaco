@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repaso 2do Parcial - Estadística interactiva</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --border-radius: 8px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            background: var(--primary-color);
+            color: #fff;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 { margin: 0; font-size: 24px; }
+        p.subtitle { margin: 5px 0 0 0; opacity: 0.8; }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+
+        h3 { color: #2980b9; }
+
+        .card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .formula {
+            background: #eef2f5;
+            padding: 15px;
+            border-left: 5px solid var(--accent-color);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .code-block {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+
+        details {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin: 10px 0;
+            cursor: pointer;
+        }
+
+        details[open] {
+            background: #d4eafd;
+        }
+
+        summary {
+            font-weight: bold;
+            color: #1b4f72;
+            outline: none;
+        }
+
+        .details-content {
+            margin-top: 10px;
+            cursor: default;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .badge {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>📊 Panel de Aprendizaje Interactivo</h1>
+        <p class="subtitle">Estadística - Automatización y Control (Repaso 2do Parcial)</p>
+    </header>
+
+    <h2>🧩 MÓDULO 1: Distribuciones Discretas (Binomial y Poisson)</h2>
+
+    <div class="card">
+        <h3>💡 Conceptos Clave</h3>
+        <ul>
+            <li><strong>Distribución Binomial:</strong> Aplica cuando hay un número fijo de ensayos independientes ($n$) con dos resultados posibles ("éxito" o "fracaso") y probabilidad constante ($p$).
+                <div class="formula">P(X = k) = (n! / (k!(n-k)!)) * p^k * (1-p)^(n-k)</div>
+            </li>
+            <li><strong>Distribución de Poisson:</strong> Se usa para contar eventos en un intervalo continuo de tiempo o espacio, conociendo una tasa promedio ($\lambda$).
+                <div class="formula">P(X = k) = (e^(-λ) * λ^k) / k!</div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h3>💻 Laboratorio de Simulación (Python)</h3>
+        <p>Copia este script para comprobar las probabilidades exactas y acumuladas en tu entorno local:</p>
+        <pre class="code-block">
+import scipy.stats as stats
+
+# === EJERCICIO 1.1: Piezas Defectuosas (n=25, p=0.04) ===
+n, p = 25, 0.04
+prob_exacta_2 = stats.binom.pmf(2, n, p)
+prob_3_o_mas = 1 - stats.binom.cdf(2, n, p)
+
+print(f"Binomial 1.1 - P(X=2): {prob_exacta_2:.4f}")
+print(f"Binomial 1.1 - P(X>=3): {prob_3_o_mas:.4f}")
+
+# === EJERCICIO 2.1: Sensor de fallas (Media = 2 por día) ===
+lam = 2
+prob_3_fallas = stats.poisson.pmf(3, lam)
+print(f"Poisson 2.1 - P(X=3 en 1 día): {prob_3_fallas:.4f}")
+        </pre>
+    </div>
+
+    <div class="card">
+        <h3>🧠 Desafío Interactivo: Tarjetas de Auto-Evaluación</h3>
+        <p>Intenta responder antes de desplegar la solución.</p>
+
+        <details>
+            <summary>Pregunta: Si un centro recibe en promedio 5 llamadas por hora, ¿cuál es el nuevo λ para 30 minutos?</summary>
+            <div class="details-content">
+                <p><strong>Respuesta:</strong> El parámetro λ se ajusta proporcionalmente al intervalo. Si en 60 minutos se reciben 5 llamadas, en 30 minutos se espera recibir la mitad:</p>
+                <div class="formula">λ_nuevo = 5 * (30 / 60) = 2.5 llamadas</div>
+                <p>Para calcular la probabilidad de 0 llamadas (k=0):</p>
+                <div class="formula">P(X = 0) = (e^(-2.5) * 2.5^0) / 0! = e^(-2.5) ≈ 0.0821 (8.21%)</div>
+            </div>
+        </details>
+    </div>
+
+
+    <h2>📈 MÓDULO 2: Distribución Normal e Intervalos de Confianza</h2>
+
+    <div class="card">
+        <h3>💡 Conceptos Clave</h3>
+        <ul>
+            <li><strong>Estandarización:</strong> Convierte cualquier variable normal X ~ N(μ, σ) a la distribución estándar Z ~ N(0, 1) mediante:
+                <div class="formula">Z = (X - μ) / σ</div>
+            </li>
+            <li><strong>¿Z o t de Student?:</strong> Usamos <strong>Z</strong> si la desviación estándar poblacional (σ) es conocida. Usamos <strong>t de Student</strong> si es desconocida y la estimamos mediante la desviación muestral (s).</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h3>📝 Guía de Resolución Paso a Paso</h3>
+        <p><strong>Resolución del Ejercicio 4.2 (Muestra de piezas):</strong></p>
+        <p>Datos: n = 16, x̄ = 50.2 mm, s = 1.2 mm, Confianza = 95%.</p>
+
+        <ol>
+            <li><strong>Grados de libertad (gl):</strong> gl = n - 1 = 16 - 1 = 15.</li>
+            <li><strong>Valor crítico (t):</strong> Para un nivel de confianza del 95% (α = 0.05) con 15 gl en dos colas, el valor de tabla es t(0.025, 15) = 2.131.</li>
+            <li><strong>Margen de error (E):</strong>
+                <div class="formula">E = t * (s / √n) = 2.131 * (1.2 / √16) = 2.131 * 0.3 = 0.6393 mm</div>
+            </li>
+            <li><strong>Intervalo de Confianza:</strong>
+                <div class="formula">IC = [50.2 - 0.6393; 50.2 + 0.6393] = [49.56 mm; 50.84 mm]</div>
+            </li>
+        </ol>
+    </div>
+
+    <div class="card">
+        <h3>🧠 Desafío Interactivo: Análisis Conceptual</h3>
+        <details>
+            <summary>Pregunta: ¿Qué sucede con el intervalo de confianza si el nivel de confianza aumenta al 99%? ¿Por qué?</summary>
+            <div class="details-content">
+                <p><strong>Respuesta:</strong> El intervalo se vuelve <strong>más ancho</strong>. Al exigir una mayor certeza (99% en lugar de 95%), el valor crítico de la distribución (Z o t) aumenta. Esto incrementa el margen de error y amplía la longitud del intervalo para asegurar que contenga el verdadero parámetro.</p>
+            </div>
+        </details>
+    </div>
+
+
+    <h2>📐 MÓDULO 3: Tamaño de Muestra y Regresión Lineal</h2>
+
+    <div class="card">
+        <h3>💡 Conceptos Clave</h3>
+        <ul>
+            <li><strong>Tamaño de Muestra:</strong> Determina cuántas observaciones mínimas necesitas para no superar un error máximo (E) dado.
+                <div class="formula">n = ((Z_(α/2) * σ) / E)^2</div>
+            </li>
+            <li><strong>Regresión Lineal Simple (ŷ = a + bx):</strong> Modela la tendencia entre una variable predictora (X) y una de respuesta (Y). La pendiente (b) indica cuánto cambia Y por cada unidad de incremento en X.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h3>📊 Calculadora de Regresión (Datos del Ejercicio 6)</h3>
+        <p>A partir de la tabla proporcionada (Horas de estudio vs Nota):</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Horas de Estudio (X)</th>
+                    <th>Nota Obtenida (Y)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>2</td><td>4</td></tr>
+                <tr><td>4</td><td>5</td></tr>
+                <tr><td>6</td><td>7</td></tr>
+                <tr><td>8</td><td>8</td></tr>
+                <tr><td>10</td><td>9</td></tr>
+            </tbody>
+        </table>
+
+        <p>Efectuando las sumatorias correspondientes para ajustar por mínimos cuadrados, se obtienen los siguientes parámetros:</p>
+        <ul>
+            <li><strong>Pendiente (b):</strong> <span class="badge">0.65</span> (Por cada hora adicional de estudio, la nota aumenta en promedio 0.65 puntos).</li>
+            <li><strong>Intersección (a):</strong> <span class="badge">2.70</span> (La nota estimada si se estudian 0 horas).</li>
+        </ul>
+        <div class="formula">Ecuación de la recta: ŷ = 2.7 + 0.65 * x</div>
+
+        <details>
+            <summary>Predecir: ¿Qué nota se estima para un alumno que estudia 5 horas?</summary>
+            <div class="details-content">
+                <p>Sustituimos x = 5 directamente en la ecuación de nuestra recta estimada:</p>
+                <div class="formula">ŷ = 2.7 + 0.65 * (5) = 2.7 + 3.25 = 5.95</div>
+                <p><strong>Resultado:</strong> Se predice una nota de <strong>5.95</strong>.</p>
+            </div>
+        </details>
+    </div>
+
+    <div class="card" style="background-color: #fcf3cf; border-left: 5px solid #f1c40f;">
+        <h3>🛠️ Recordatorio para el Examen</h3>
+        <ul>
+            <li><strong>¡Redondeo en Tamaño de Muestra!</strong> El valor de n siempre se redondea hacia el <strong>entero superior</strong> inmediatamente (ej: si da 61.2, se usa 62), asegurando así cumplir con el margen de error máximo requerido.</li>
+            <li><strong>Poisson:</strong> Ajusta siempre la tasa λ si cambia la unidad de tiempo o espacio en la pregunta.</li>
+        </ul>
+    </div>
+
+</div>
+
+</body>
+</html>

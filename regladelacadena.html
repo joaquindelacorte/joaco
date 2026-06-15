@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Regla de la Cadena - Explicación Simple</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+        }
+        .caja-formula {
+            background-color: #e8f4f8;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 1.2em;
+            text-align: center;
+            border-radius: 4px;
+        }
+        .analogia {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .pasos {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .resaltado {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        code {
+            background-color: #f1f1f1;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Derivadas: La Regla de la Cadena</h1>
+    
+    <p>La regla de la cadena se usa cuando tenemos <strong>funciones compuestas</strong>, es decir, una función que depende de otra función que a su vez depende de una variable.</p>
+
+    <div class="analogia">
+        <h2>💡 La analogía del Lazo de Control</h2>
+        <p>Imagina un sistema de automatización básico:</p>
+        <ul>
+            <li>La temperatura de un motor (<strong>T</strong>) depende de cuánta corriente eléctrica recibe (<strong>I</strong>).</li>
+            <li>La corriente eléctrica (<strong>I</strong>) cambia dependiendo del tiempo (<strong>t</strong>).</li>
+        </ul>
+        <p>Si quieres saber <em>qué tan rápido cambia la temperatura respecto al tiempo</em>, no puedes hacerlo directamente. Tienes que multiplicar cómo cambia la temperatura con la corriente, por cómo cambia la corriente con el tiempo. ¡Eso es la regla de la cadena!</p>
+    </div>
+
+    <h2>La Fórmula</h2>
+    <div class="caja-formula">
+        Derivada de f(g(x)) = <code>f'(g(x)) * g'(x)</code>
+    </div>
+    <p>En palabras simples: <strong>Deriva la capa de afuera (dejando lo de adentro intacto) y multiplica por la derivada de lo de adentro.</strong></p>
+
+    <div class="pasos">
+        <h2>Ejemplo Paso a Paso</h2>
+        <p>Vamos a derivar la función: <strong>y = sen(3x + 1)</strong></p>
+        
+        <ol>
+            <li>
+                <strong>Identifica las capas:</strong><br>
+                Capa externa: <em>sen(algo)</em><br>
+                Capa interna: <em>3x + 1</em>
+            </li>
+            <br>
+            <li>
+                <strong>Deriva la capa externa:</strong><br>
+                La derivada de <em>sen</em> es <em>cos</em>. Dejamos lo de adentro igual: <br>
+                <code>cos(3x + 1)</code>
+            </li>
+            <br>
+            <li>
+                <strong>Deriva la capa interna:</strong><br>
+                La derivada de <em>3x + 1</em> es simplemente: <br>
+                <code>3</code>
+            </li>
+            <br>
+            <li>
+                <strong>Multiplica ambas partes:</strong><br>
+                Resultado final: <span class="resaltado">3 * cos(3x + 1)</span>
+            </li>
+        </ol>
+    </div>
+
+</body>
+</html>

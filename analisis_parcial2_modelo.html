@@ -90,12 +90,13 @@ th{background:var(--panel2); color:var(--accent)}
 .step-why{font-size:13px; color:var(--muted); font-style:italic; margin-top:6px;
           padding:6px 12px; background:#0b1220; border-radius:6px; border-left:2px solid var(--accent)}
 
-.controls{display:flex; flex-wrap:wrap; gap:14px; margin:14px 0; align-items:flex-end;
-          background:var(--panel2); padding:14px; border-radius:8px}
-.controls label{display:flex; flex-direction:column; font-size:13px; color:var(--muted); min-width:140px}
-.controls input[type=range]{margin-top:4px; width:100%}
-.controls input[type=number]{background:#0b1220; color:var(--text); border:1px solid var(--border);
-  border-radius:6px; padding:6px 10px; font-size:14px; margin-top:4px}
+.controls{display:flex; flex-wrap:wrap; gap:18px; margin:14px 0; align-items:flex-start;
+          background:var(--panel2); padding:16px; border-radius:8px}
+.ctrl{display:flex; flex-direction:column; font-size:13px; color:var(--muted); min-width:170px; flex:1}
+.ctrl .ctrl-lbl{margin-bottom:6px; line-height:1.4}
+.ctrl input[type=range]{margin-top:0; width:100%}
+.ctrl input[type=number]{background:#0b1220; color:var(--text); border:1px solid var(--border);
+  border-radius:6px; padding:6px 10px; font-size:14px; margin-top:4px; width:100%}
 
 .stat-output{display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));
              gap:10px; margin-top:12px}
@@ -187,6 +188,7 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
   <a href="#p2-b">b) Solución particular</a>
   <a href="#p2-c">c) Asíntota</a>
   <a href="#p2-sim">🎮 Simulador interactivo</a>
+  <a href="#p2-profundo">📚 Profundización</a>
   <a href="#p2-variaciones">Variaciones</a>
   <a href="#p2-errores">Errores comunes</a>
 
@@ -464,18 +466,22 @@ $$\boxed{\;\text{Error} \approx 41{,}67\%\;}$$
 <div class="card connect">
 <p>Cambiá los parámetros y mirá cómo se modifican los valores. <strong>Observación clave:</strong> con $\Delta t$ pequeño, el error tiende a cero.</p>
 <div class="controls">
-  <label>Coeficiente $a$ (de $at^2$) = <span id="p1-a-val" class="hl-accent">3</span>
+  <div class="ctrl">
+    <div class="ctrl-lbl">Coeficiente <b>a</b> (de a·t²) = <span id="p1-a-val" class="hl-accent">3</span></div>
     <input type="range" id="p1-a" min="1" max="6" step="1" value="3">
-  </label>
-  <label>Constante $b$ = <span id="p1-b-val" class="hl-accent">2</span>
+  </div>
+  <div class="ctrl">
+    <div class="ctrl-lbl">Constante <b>b</b> = <span id="p1-b-val" class="hl-accent">2</span></div>
     <input type="range" id="p1-b" min="0" max="5" step="1" value="2">
-  </label>
-  <label>Extremo $T$ = <span id="p1-T-val" class="hl-accent">2</span>
+  </div>
+  <div class="ctrl">
+    <div class="ctrl-lbl">Extremo <b>T</b> = <span id="p1-T-val" class="hl-accent">2</span></div>
     <input type="range" id="p1-T" min="1" max="5" step="0.5" value="2">
-  </label>
-  <label>$\Delta t$ del PLC = <span id="p1-dt-val" class="hl-accent">1</span>
+  </div>
+  <div class="ctrl">
+    <div class="ctrl-lbl"><b>Δt</b> del PLC = <span id="p1-dt-val" class="hl-accent">1</span></div>
     <input type="range" id="p1-dt" min="0.05" max="2" step="0.05" value="1">
-  </label>
+  </div>
 </div>
 <div id="p1-plot" class="plot"></div>
 <div class="stat-output">
@@ -754,18 +760,22 @@ $\displaystyle\lim_{t\to\infty} T(t) = 25 + 100\cdot 0 = \boxed{25\text{ °C}}$
 <div class="card connect">
 <p>Cambiá los parámetros y mirá cómo cambia la curva de enfriamiento. <strong>Observaciones clave:</strong> la asíntota es siempre $T_a$, y a mayor $k$, más rápido converge.</p>
 <div class="controls">
-  <label>$T_a$ (ambiente, °C) = <span id="p2-Ta-val" class="hl-accent">25</span>
+  <div class="ctrl">
+    <div class="ctrl-lbl"><b>T<sub>a</sub></b> (ambiente, °C) = <span id="p2-Ta-val" class="hl-accent">25</span></div>
     <input type="range" id="p2-Ta" min="10" max="40" step="1" value="25">
-  </label>
-  <label>$T_0$ (inicial, °C) = <span id="p2-T0-val" class="hl-accent">125</span>
+  </div>
+  <div class="ctrl">
+    <div class="ctrl-lbl"><b>T<sub>0</sub></b> (inicial, °C) = <span id="p2-T0-val" class="hl-accent">125</span></div>
     <input type="range" id="p2-T0" min="50" max="200" step="5" value="125">
-  </label>
-  <label>$k$ (1/min) = <span id="p2-k-val" class="hl-accent">0.2</span>
+  </div>
+  <div class="ctrl">
+    <div class="ctrl-lbl"><b>k</b> (1/min) = <span id="p2-k-val" class="hl-accent">0.20</span></div>
     <input type="range" id="p2-k" min="0.05" max="1" step="0.05" value="0.2">
-  </label>
-  <label>Tiempo máx (min) = <span id="p2-tmax-val" class="hl-accent">30</span>
+  </div>
+  <div class="ctrl">
+    <div class="ctrl-lbl">Tiempo máx (min) = <span id="p2-tmax-val" class="hl-accent">30</span></div>
     <input type="range" id="p2-tmax" min="5" max="60" step="5" value="30">
-  </label>
+  </div>
 </div>
 <div id="p2-plot" class="plot"></div>
 <div class="stat-output">
@@ -774,6 +784,287 @@ $\displaystyle\lim_{t\to\infty} T(t) = 25 + 100\cdot 0 = \boxed{25\text{ °C}}$
   <div class="stat-box"><div class="label">Asíntota</div><div class="value" id="p2-asint">25 °C</div></div>
   <div class="stat-box"><div class="label">$\tau = 1/k$</div><div class="value" id="p2-tau">5.0 min</div></div>
 </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- ──────────────── PROFUNDIZACIÓN DEL PROBLEMA 2 ──────────────── -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+
+<h2 id="p2-profundo">📚 Profundización del Problema 2</h2>
+
+<div class="card intuition">
+<p>Esta sección profundiza la resolución para que <strong>no solo sepas resolver este problema</strong>, sino que entiendas la estructura completa de la familia de EDOs a la que pertenece. Si te toca un problema variante en el parcial, vas a poder mapearlo en segundos.</p>
+</div>
+
+<!-- ── VERIFICACIÓN RIGUROSA ── -->
+<h3>🔍 Verificación rigurosa: ¿la solución realmente satisface la EDO?</h3>
+
+<div class="card connect">
+<p>Antes de entregar el parcial, <strong>siempre verificá derivando</strong>. Es la prueba más rápida de que no te equivocaste.</p>
+
+<div class="steps">
+<div class="step">
+<div class="step-header"><div class="step-num">1</div><div class="step-title">Tomar la solución particular y derivarla</div></div>
+<div class="step-body">
+<p>Solución: $T(t) = 25 + 100\,e^{-0{,}2t}$</p>
+<div class="work">
+$\dfrac{dT}{dt} = 0 + 100\cdot(-0{,}2)\cdot e^{-0{,}2t} = -20\,e^{-0{,}2t}$
+</div>
+<div class="step-why">Regla de la cadena: derivada de la constante 25 es 0; derivada de $e^{-0{,}2t}$ es $-0{,}2\,e^{-0{,}2t}$.</div>
+</div>
+</div>
+
+<div class="step">
+<div class="step-header"><div class="step-num">2</div><div class="step-title">Calcular el lado derecho de la EDO</div></div>
+<div class="step-body">
+<p>EDO original: $\dfrac{dT}{dt} = -0{,}2(T - 25)$</p>
+<p>Reemplazo $T(t) = 25 + 100\,e^{-0{,}2t}$:</p>
+<div class="work">
+$-0{,}2 \cdot (T - 25) = -0{,}2 \cdot (25 + 100\,e^{-0{,}2t} - 25) = -0{,}2 \cdot 100\,e^{-0{,}2t} = -20\,e^{-0{,}2t}$
+</div>
+</div>
+</div>
+
+<div class="step">
+<div class="step-header"><div class="step-num">3</div><div class="step-title">Comparar ambos lados</div></div>
+<div class="step-body">
+<div class="work">
+$\dfrac{dT}{dt}$ (lado izquierdo) $= -20\,e^{-0{,}2t}$ <br><br>
+$-0{,}2(T-25)$ (lado derecho) $= -20\,e^{-0{,}2t}$ <br><br>
+$\boxed{\;\dfrac{dT}{dt} = -0{,}2(T-25)\;\checkmark\;}$
+</div>
+<div class="step-why"><strong>Listo: la solución satisface la EDO.</strong> Además, en $t=0$: $T(0) = 25 + 100 = 125$ ✓ — coincide con la CI. Doble validación.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ── ANÁLISIS DIMENSIONAL ── -->
+<h3>📏 Análisis dimensional (lo que la cátedra valora)</h3>
+
+<div class="card formula">
+<p>Cada término debe tener unidades coherentes. Sin esto, físicamente no tiene sentido.</p>
+<table>
+<tr><th>Elemento</th><th>Unidad</th><th>Justificación</th></tr>
+<tr><td>$T(t)$</td><td>°C</td><td>Temperatura.</td></tr>
+<tr><td>$t$</td><td>min</td><td>Tiempo en minutos.</td></tr>
+<tr><td>$dT/dt$</td><td>°C/min</td><td>Razón de cambio de temperatura.</td></tr>
+<tr><td>$k = 0{,}2$</td><td>1/min ó min⁻¹</td><td>Para que $k(T-T_a)$ tenga unidades de °C/min.</td></tr>
+<tr><td>$T - T_a$</td><td>°C</td><td>Diferencia de temperaturas.</td></tr>
+<tr><td>$kt$ (exponente)</td><td>adimensional</td><td>min⁻¹ × min = 1 → puro número.</td></tr>
+<tr><td>$A = 100$</td><td>°C</td><td>Tiene unidades de temperatura (es $T_0 - T_a$).</td></tr>
+<tr><td>$e^{-kt}$</td><td>adimensional</td><td>Exponencial de un número adimensional.</td></tr>
+</table>
+<p class="hl-good">✓ Cada término de $T(t) = 25 + 100\,e^{-0{,}2t}$ tiene unidades de °C. Consistencia dimensional confirmada.</p>
+</div>
+
+<!-- ── CONSTANTE DE TIEMPO ── -->
+<h3>⏱️ Constante de tiempo τ — el parámetro físico clave</h3>
+
+<div class="card key" style="background:#1a0d18; border-left:4px solid var(--pink); padding:16px 20px; border-radius:10px; margin:12px 0; border:1px solid var(--border)">
+<p>Reescribimos la solución usando $\tau = 1/k$:</p>
+<div class="formula-box">$T(t) = T_a + A\,e^{-t/\tau}$ &nbsp;&nbsp;con $\tau = 1/k$</div>
+<p>En nuestro problema: $\tau = 1/0{,}2 = \mathbf{5}$ min.</p>
+<p>$\tau$ es el <strong>tiempo característico</strong> del sistema: indica qué tan rápido responde.</p>
+</div>
+
+<div class="card formula">
+<h4>La "regla de los 5τ"</h4>
+<p>Es una regla práctica de ingeniería de control: después de $5\tau$, el sistema está prácticamente en régimen permanente.</p>
+<table>
+<tr><th>Tiempo</th><th>$e^{-t/\tau}$</th><th>% del exceso restante</th><th>$T(t)$ en nuestro caso</th></tr>
+<tr><td>$t = 0$</td><td>1,000</td><td>100% (sin enfriar)</td><td>125 °C</td></tr>
+<tr><td>$t = \tau = 5$ min</td><td>0,368</td><td>36,8%</td><td>61,8 °C</td></tr>
+<tr><td>$t = 2\tau = 10$ min</td><td>0,135</td><td>13,5%</td><td>38,5 °C</td></tr>
+<tr><td>$t = 3\tau = 15$ min</td><td>0,050</td><td>5,0% (95% enfriado)</td><td>30,0 °C</td></tr>
+<tr><td>$t = 4\tau = 20$ min</td><td>0,018</td><td>1,8%</td><td>26,8 °C</td></tr>
+<tr><td>$t = 5\tau = 25$ min</td><td>0,0067</td><td>0,67% (~práct. equilibrado)</td><td>25,7 °C</td></tr>
+</table>
+<p class="hl-accent">→ A los $\tau$ (5 min), ya bajó el 63,2% del camino hacia $T_a$. A los $5\tau$ (25 min), está al 99,3% del equilibrio.</p>
+</div>
+
+<!-- ── TIEMPO PARA ALCANZAR TEMPERATURAS ── -->
+<h3>🎯 ¿En qué instante la caldera alcanza una temperatura específica?</h3>
+
+<div class="card connect">
+<p>Una pregunta típica del parcial: "¿cuándo $T = $ ...?". Hay que <strong>invertir la solución</strong>: pasar de $T(t)$ a $t(T)$.</p>
+
+<div class="steps">
+<div class="step">
+<div class="step-header"><div class="step-num">1</div><div class="step-title">Partir de la solución particular</div></div>
+<div class="step-body">
+<div class="work">$T = 25 + 100\,e^{-0{,}2\,t}$</div>
+</div>
+</div>
+
+<div class="step">
+<div class="step-header"><div class="step-num">2</div><div class="step-title">Despejar el exponencial</div></div>
+<div class="step-body">
+<div class="work">
+$T - 25 = 100\,e^{-0{,}2\,t}$ <br><br>
+$\dfrac{T - 25}{100} = e^{-0{,}2\,t}$
+</div>
+</div>
+</div>
+
+<div class="step">
+<div class="step-header"><div class="step-num">3</div><div class="step-title">Aplicar logaritmo natural</div></div>
+<div class="step-body">
+<div class="work">
+$\ln\!\left(\dfrac{T - 25}{100}\right) = -0{,}2\,t$ <br><br>
+$$t(T) = -\dfrac{1}{0{,}2}\ln\!\left(\dfrac{T - 25}{100}\right) = -5\ln\!\left(\dfrac{T - 25}{100}\right)$$
+</div>
+</div>
+</div>
+</div>
+
+<h4>Aplicaciones inmediatas</h4>
+<table>
+<tr><th>Pregunta</th><th>Cálculo</th><th>Respuesta</th></tr>
+<tr><td>¿Cuándo $T = 75$ °C?</td><td>$-5\ln(50/100) = -5\ln(0{,}5) = -5\cdot(-0{,}693) = 3{,}47$</td><td>≈ 3,47 min</td></tr>
+<tr><td>¿Cuándo $T = 50$ °C?</td><td>$-5\ln(25/100) = -5\ln(0{,}25) = -5\cdot(-1{,}386) = 6{,}93$</td><td>≈ 6,93 min</td></tr>
+<tr><td>¿Cuándo $T = 30$ °C?</td><td>$-5\ln(5/100) = -5\ln(0{,}05) = -5\cdot(-2{,}996) = 14{,}98$</td><td>≈ 14,98 min</td></tr>
+<tr><td>¿Cuándo $T = 26$ °C?</td><td>$-5\ln(1/100) = -5\ln(0{,}01) = -5\cdot(-4{,}605) = 23{,}03$</td><td>≈ 23,03 min</td></tr>
+<tr><td><strong>¿Cuándo $T = 25$ °C?</strong></td><td>$-5\ln(0)$ → no definido</td><td><span class="hl-bad">Nunca exacto</span> (es asíntota)</td></tr>
+</table>
+
+<div class="card warn">
+<p><strong>Lección importante:</strong> el sistema NO llega exactamente a $T_a$ en tiempo finito — se aproxima asintóticamente. Cuando un ingeniero dice "alcanzó el equilibrio", normalmente significa "llegó al 99% (5τ)".</p>
+</div>
+</div>
+
+<!-- ── TIEMPO DE VIDA MEDIO ── -->
+<h3>⏳ "Vida media" del exceso térmico</h3>
+
+<div class="card formula">
+<p>Por analogía con desintegración radioactiva, podemos calcular el tiempo $t_{1/2}$ en que el <strong>exceso sobre el ambiente se reduce a la mitad</strong>.</p>
+<div class="formula-box">$T(t_{1/2}) - T_a = \dfrac{T_0 - T_a}{2}$</div>
+<p>Esto da:</p>
+<div class="work">
+$A\,e^{-k\,t_{1/2}} = \dfrac{A}{2}$ <br><br>
+$e^{-k\,t_{1/2}} = \dfrac{1}{2}$ <br><br>
+$-k\,t_{1/2} = \ln(1/2) = -\ln 2$ <br><br>
+$$\boxed{\;t_{1/2} = \dfrac{\ln 2}{k} = \tau\cdot\ln 2 \approx 0{,}693\,\tau\;}$$
+</div>
+<p>En nuestro caso: $t_{1/2} = 5 \cdot 0{,}693 \approx \mathbf{3{,}47}$ min. (Mismo que $T=75$°C en la tabla anterior, ¡tiene sentido!)</p>
+</div>
+
+<!-- ── MÉTODOS ALTERNATIVOS ── -->
+<h3>🛠️ Métodos alternativos para resolver esta EDO</h3>
+
+<div class="grid2">
+<div class="card tip">
+<h4>Método 1: Variables separables (el que usamos)</h4>
+<p>El método estándar. Funciona porque la EDO es del tipo $\dfrac{dy}{dt}=g(t)h(y)$.</p>
+<p><strong>Cuándo usarlo:</strong> siempre que se pueda. Es el más mecánico.</p>
+</div>
+<div class="card tip">
+<h4>Método 2: Sustitución $u = T - T_a$</h4>
+<p>Hago el cambio de variable $u = T - 25$. Entonces $du/dt = dT/dt$ y la EDO se vuelve $du/dt = -0{,}2\,u$, que es separable directa.</p>
+<p>Resultado: $u(t) = A\,e^{-0{,}2t} \Rightarrow T = 25 + A\,e^{-0{,}2t}$.</p>
+<p><strong>Cuándo usarlo:</strong> cuando hay un término constante que "ensucia" la separación. Limpia la notación.</p>
+</div>
+<div class="card tip">
+<h4>Método 3: Factor integrante (EDO lineal)</h4>
+<p>Reescribiendo como $\dfrac{dT}{dt} + 0{,}2\,T = 0{,}2\cdot 25 = 5$, es lineal con $P(t)=0{,}2$, $Q(t)=5$.</p>
+<p>Factor: $\mu(t) = e^{0{,}2t}$.</p>
+<p>$(T\cdot e^{0{,}2t})' = 5\,e^{0{,}2t} \Rightarrow T\,e^{0{,}2t} = 25\,e^{0{,}2t}+C$.</p>
+<p>$T = 25 + C\,e^{-0{,}2t}$. Mismo resultado.</p>
+<p><strong>Cuándo usarlo:</strong> es la herramienta universal para EDOs lineales de 1er orden. Más potente pero más complejo.</p>
+</div>
+<div class="card tip">
+<h4>Método 4: Reconocimiento directo (Newton)</h4>
+<p>Si reconocés que es la <strong>Ley de Newton de enfriamiento</strong>, sabés que la solución es siempre:</p>
+<div class="formula-box" style="font-size:14px">$T(t) = T_a + (T_0 - T_a)\,e^{-kt}$</div>
+<p><strong>Cuándo usarlo:</strong> en el parcial, si reconocés el patrón y querés ahorrar tiempo. ⚠️ <strong>Justificá igual</strong> el método separable para que no te bajen puntos por "saltarte pasos".</p>
+</div>
+</div>
+
+<!-- ── ANALOGÍAS ── -->
+<h3>🔄 Analogías con otros sistemas dinámicos</h3>
+
+<div class="card connect">
+<p>Esta EDO es <strong>la misma forma</strong> que aparece en circuitos eléctricos, hidráulica y química. Si dominás esta, dominás todas.</p>
+<table>
+<tr><th>Sistema</th><th>EDO</th><th>Variable dinámica</th><th>$\tau$</th><th>Régimen final</th></tr>
+<tr><td>🌡️ Newton (térmico)</td><td>$\dfrac{dT}{dt} = -k(T - T_a)$</td><td>T(t)</td><td>$1/k$</td><td>$T_a$</td></tr>
+<tr><td>⚡ Circuito RL (carga)</td><td>$L\dfrac{di}{dt} + Ri = E$</td><td>i(t)</td><td>$L/R$</td><td>$E/R$</td></tr>
+<tr><td>⚡ Circuito RC (descarga)</td><td>$\dfrac{dq}{dt} = -\dfrac{q}{RC}$</td><td>q(t)</td><td>$RC$</td><td>0</td></tr>
+<tr><td>💧 Tanque con desagüe</td><td>$A\dfrac{dh}{dt} = Q_e - kh$</td><td>h(t)</td><td>$A/k$</td><td>$Q_e/k$</td></tr>
+<tr><td>🧪 Decaimiento radioactivo</td><td>$\dfrac{dN}{dt} = -\lambda N$</td><td>N(t)</td><td>$1/\lambda$</td><td>0</td></tr>
+</table>
+<p><strong>Receta universal:</strong> todas tienen forma $\dfrac{dy}{dt} = -\dfrac{1}{\tau}(y - y_\infty)$ con solución $y(t) = y_\infty + (y_0 - y_\infty)e^{-t/\tau}$.</p>
+</div>
+
+<!-- ── ANÁLISIS DE SENSIBILIDAD ── -->
+<h3>📊 Análisis de sensibilidad — ¿qué pasa si cambia cada parámetro?</h3>
+
+<div class="grid3">
+<div class="card formula">
+<h4>↑ $k$ aumenta</h4>
+<p><strong>Físico:</strong> mejor transferencia de calor (mejor aislamiento, más área, mejor convección).</p>
+<p><strong>Matemático:</strong> $\tau = 1/k$ disminuye → la curva cae más rápido.</p>
+<p><strong>Asíntota:</strong> no cambia (sigue siendo $T_a$).</p>
+</div>
+<div class="card formula">
+<h4>↑ $T_0$ aumenta</h4>
+<p><strong>Físico:</strong> arrancamos más caliente.</p>
+<p><strong>Matemático:</strong> $A = T_0 - T_a$ aumenta proporcionalmente.</p>
+<p><strong>Forma:</strong> la curva es la misma, solo "estirada" hacia arriba. Tiempo a equilibrio NO cambia.</p>
+</div>
+<div class="card formula">
+<h4>↑ $T_a$ aumenta</h4>
+<p><strong>Físico:</strong> ambiente más cálido.</p>
+<p><strong>Matemático:</strong> asíntota sube y $A = T_0 - T_a$ disminuye.</p>
+<p><strong>Caso límite:</strong> si $T_a = T_0$, no hay enfriamiento ($A = 0$).</p>
+</div>
+</div>
+
+<!-- ── CASOS LÍMITE ── -->
+<h3>🧠 Casos límite — para entender la física profunda</h3>
+
+<div class="card warn">
+<table>
+<tr><th>Caso</th><th>¿Qué pasa matemáticamente?</th><th>¿Tiene sentido físico?</th></tr>
+<tr><td>$k = 0$</td><td>$T(t) = 25 + 100 = 125$ (constante).</td><td>Sí: sistema perfectamente aislado, no se enfría jamás.</td></tr>
+<tr><td>$k \to \infty$</td><td>$e^{-kt}$ → 0 instantáneamente → $T(t) = 25$ desde $t=0^+$.</td><td>Sí: contacto térmico ideal — se equilibra al instante.</td></tr>
+<tr><td>$T_0 = T_a$</td><td>$A = 0$ → $T(t) = T_a$ siempre.</td><td>Sí: ya estamos en equilibrio, no hay transferencia.</td></tr>
+<tr><td>$T_0 < T_a$</td><td>$A < 0$ → la exponencial decreciente <em>suma</em> calor.</td><td>Sí: la "caldera" se calienta hacia el ambiente. La EDO sigue funcionando.</td></tr>
+<tr><td>$T_0 \gg T_a$</td><td>$A$ enorme, pero el ritmo de enfriamiento también ($-k\cdot A$).</td><td>Sí: a más diferencia, más velocidad de enfriamiento (es lo que dice la EDO).</td></tr>
+</table>
+</div>
+
+<!-- ── PUNTOS QUE TE BAJAN NOTA ── -->
+<h3>📝 Puntos finos que el corrector busca</h3>
+
+<div class="card error">
+<ol>
+<li><strong>Escribir explícitamente "+C" en cada integración</strong>: aunque después la pases al otro lado, el corrector quiere ver que sabés que existe.</li>
+<li><strong>Usar valor absoluto en $\ln|T - 25|$</strong>: dentro del log debe ir el módulo. Después lo absorbés en $A$.</li>
+<li><strong>Definir explícitamente $A = \pm e^C$</strong>: muestra que entendés de dónde viene la constante final.</li>
+<li><strong>Justificar por qué $T > 25$ siempre</strong> en este problema: el sistema arranca caliente y baja → siempre $T \geq T_a$, por eso $|T-25| = T-25$ (sin signo).</li>
+<li><strong>Mencionar "principio de equilibrio térmico"</strong> en la interpretación de la asíntota.</li>
+<li><strong>Anotar unidades en la respuesta final</strong>: $T(t)$ en °C, $t$ en min.</li>
+<li><strong>Verificar derivando</strong>: si tenés tiempo, escribilo. Muestra rigurosidad.</li>
+<li><strong>Notación clara</strong>: $T(0)$ vs $T_0$, $T_a$ vs $T_\infty$. Usá una sola convención y mantenela.</li>
+</ol>
+</div>
+
+<!-- ── PARALELISMO P1-P2 ── -->
+<h3>🔗 Conexión profunda con el Problema 1</h3>
+
+<div class="card connect">
+<p>Los dos problemas del parcial parecen distintos, pero tienen <strong>una estructura común</strong>:</p>
+<table>
+<tr><th>Concepto</th><th>Problema 1 (caudal)</th><th>Problema 2 (caldera)</th></tr>
+<tr><td>Variable dinámica</td><td>$V(t)$ (volumen)</td><td>$T(t)$ (temperatura)</td></tr>
+<tr><td>Tasa de cambio</td><td>$dV/dt = Q(t)$</td><td>$dT/dt = -k(T - T_a)$</td></tr>
+<tr><td>Tipo de EDO</td><td>Trivial (separable, $Q$ solo depende de $t$)</td><td>Separable de 1er orden</td></tr>
+<tr><td>Método de solución</td><td>Integración directa (Barrow)</td><td>Separar variables + integrar</td></tr>
+<tr><td>Verificación</td><td>$F'(t) = Q(t)$</td><td>$T'(t) = -k(T - T_a)$</td></tr>
+<tr><td>Pregunta de "régimen"</td><td>Volumen final acumulado</td><td>Asíntota cuando $t\to\infty$</td></tr>
+</table>
+<p class="hl-purple"><strong>Patrón general:</strong> en automatización, casi todo se reduce a "integrar una tasa de cambio en el tiempo". Si dominás ese concepto, ya tenés gran parte del parcial.</p>
 </div>
 
 <!-- ── VARIACIONES P2 ── -->
@@ -928,15 +1219,25 @@ $\displaystyle\lim_{t\to\infty} T(t) = 25 + 100\cdot 0 = \boxed{25\text{ °C}}$
 
 <script>
 /* ════════════════ SIMULADOR P1 ════════════════ */
+function getNum(id, fallback){
+  const el = document.getElementById(id);
+  if(!el) return fallback;
+  const v = parseFloat(el.value);
+  return isNaN(v) ? fallback : v;
+}
+function setText(id, txt){
+  const el = document.getElementById(id);
+  if(el) el.textContent = txt;
+}
 function p1Update(){
-  const a = parseFloat(document.getElementById('p1-a').value);
-  const b = parseFloat(document.getElementById('p1-b').value);
-  const T = parseFloat(document.getElementById('p1-T').value);
-  const dt = parseFloat(document.getElementById('p1-dt').value);
-  document.getElementById('p1-a-val').textContent = a;
-  document.getElementById('p1-b-val').textContent = b;
-  document.getElementById('p1-T-val').textContent = T;
-  document.getElementById('p1-dt-val').textContent = dt;
+  const a = getNum('p1-a', 3);
+  const b = getNum('p1-b', 2);
+  const T = getNum('p1-T', 2);
+  const dt = getNum('p1-dt', 1);
+  setText('p1-a-val', a);
+  setText('p1-b-val', b);
+  setText('p1-T-val', T);
+  setText('p1-dt-val', dt);
 
   // Curva continua
   const xs = [], ys = [];
@@ -951,10 +1252,10 @@ function p1Update(){
     Vplc += h*dt;
     rects.push({x0:x, x1:Math.min(x+dt,T), h:h});
   }
-  const err = Math.abs(Vex - Vplc)/Vex*100;
-  document.getElementById('p1-vex').textContent = Vex.toFixed(2)+' L';
-  document.getElementById('p1-vplc').textContent = Vplc.toFixed(2)+' L';
-  document.getElementById('p1-err').textContent = err.toFixed(2)+'%';
+  const err = Vex !== 0 ? Math.abs(Vex - Vplc)/Vex*100 : 0;
+  setText('p1-vex', Vex.toFixed(2)+' L');
+  setText('p1-vplc', Vplc.toFixed(2)+' L');
+  setText('p1-err', err.toFixed(2)+'%');
 
   const traces = [{
     x:xs, y:ys, type:'scatter', mode:'lines',
@@ -987,14 +1288,14 @@ function p1Update(){
 
 /* ════════════════ SIMULADOR P2 ════════════════ */
 function p2Update(){
-  const Ta = parseFloat(document.getElementById('p2-Ta').value);
-  const T0 = parseFloat(document.getElementById('p2-T0').value);
-  const k = parseFloat(document.getElementById('p2-k').value);
-  const tmax = parseFloat(document.getElementById('p2-tmax').value);
-  document.getElementById('p2-Ta-val').textContent = Ta;
-  document.getElementById('p2-T0-val').textContent = T0;
-  document.getElementById('p2-k-val').textContent = k.toFixed(2);
-  document.getElementById('p2-tmax-val').textContent = tmax;
+  const Ta = getNum('p2-Ta', 25);
+  const T0 = getNum('p2-T0', 125);
+  const k = getNum('p2-k', 0.2);
+  const tmax = getNum('p2-tmax', 30);
+  setText('p2-Ta-val', Ta);
+  setText('p2-T0-val', T0);
+  setText('p2-k-val', k.toFixed(2));
+  setText('p2-tmax-val', tmax);
 
   const A = T0 - Ta;
   const xs = [], ys = [];
@@ -1003,11 +1304,11 @@ function p2Update(){
     ys.push(Ta + A*Math.exp(-k*t));
   }
   const Tt = Ta + A*Math.exp(-k*tmax);
-  const tau = 1/k;
-  document.getElementById('p2-A').textContent = A;
-  document.getElementById('p2-Tt').textContent = Tt.toFixed(2)+' °C';
-  document.getElementById('p2-asint').textContent = Ta+' °C';
-  document.getElementById('p2-tau').textContent = tau.toFixed(2)+' min';
+  const tau = k > 0 ? 1/k : 0;
+  setText('p2-A', A);
+  setText('p2-Tt', Tt.toFixed(2)+' °C');
+  setText('p2-asint', Ta+' °C');
+  setText('p2-tau', tau.toFixed(2)+' min');
 
   Plotly.react('p2-plot',[
     {x:xs, y:ys, type:'scatter', mode:'lines', line:{color:'#fb923c', width:3}, name:'T(t)'},

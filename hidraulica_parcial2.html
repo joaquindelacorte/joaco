@@ -215,6 +215,21 @@ tr:nth-child(even) td{background:var(--blue-bg)}
 .lab-fact strong{color:#78350f}
 @media(max-width:780px){.lab-body{grid-template-columns:1fr;gap:1rem}.lab-viz{min-height:180px}}
 
+/* VISORES 3D BOMBAS */
+.v3d{position:relative;height:340px;border-radius:12px;border:1px solid #bae6fd;background:linear-gradient(180deg,#0c1a2e,#1e3a5f);overflow:hidden;margin-bottom:.8rem}
+.v3d canvas{display:block;touch-action:none;cursor:grab}
+.v3d canvas:active{cursor:grabbing}
+.v3d-hint{position:absolute;bottom:10px;left:12px;background:rgba(255,255,255,.12);color:#bae6fd;font-size:.72rem;font-weight:600;padding:.3rem .7rem;border-radius:2rem;pointer-events:none}
+.v3d-off{display:flex;align-items:center;justify-content:center;height:100%;color:#bae6fd;font-size:.9rem;padding:1rem;text-align:center}
+.v3d-bar{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;margin-bottom:.6rem}
+.v3d-bar .row{flex:1;min-width:170px}
+.v3d-bar label{font-size:.83rem;font-weight:700;color:var(--gray);display:flex;justify-content:space-between;margin-bottom:.2rem}
+.v3d-bar label .val{font-family:'Courier New',monospace;color:var(--blue);font-weight:700;background:var(--blue-bg);padding:.1rem .55rem;border-radius:6px}
+.v3d-bar input[type=range]{width:100%}
+.v3d-btn{padding:.45rem 1.1rem;border:2px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-weight:700;font-size:.85rem;color:var(--gray);font-family:inherit;transition:.2s}
+.v3d-btn:hover{border-color:var(--blue);color:var(--blue)}
+@media(max-width:600px){.v3d{height:260px}}
+
 /* RESPONSIVE */
 @media(max-width:768px){
   body{font-size:15px}
@@ -629,6 +644,50 @@ tr:nth-child(even) td{background:var(--blue-bg)}
         <li>Versión modificada: en unidades de dosificación manual (HMU) de dirección</li>
       </ul>
     </div>
+  </div>
+
+  <div class="stitle"><span class="ico">🧊</span>Visualización 3D: así funcionan por dentro</div>
+  <div class="note">🖱️ <strong>Arrastrá sobre cada modelo para girarlo</strong> y mirá el mecanismo desde cualquier ángulo. Regulá la velocidad con el deslizador. Los modelos necesitan conexión a internet la primera vez (cargan Three.js).</div>
+
+  <div class="lab">
+    <div class="lab-head"><h3>🦷 Bomba de engranajes — 3D</h3><div class="ctx">El aceite (esferas celestes) viaja atrapado ENTRE los dientes y la carcasa, por la parte externa: de la succión (abajo) a la descarga (arriba).</div></div>
+    <div class="v3d" id="v3d-eng"><div class="v3d-hint">🖱️ arrastrá para girar</div></div>
+    <div class="v3d-bar">
+      <div class="row"><label>Velocidad del motor <span class="val" id="v3d-eng-s-v">1800 rpm</span></label><input type="range" id="v3d-eng-s" min="0" max="3600" step="100" value="1800" oninput="setPumpSpeed('eng')"></div>
+      <button class="v3d-btn" id="v3d-eng-btn" onclick="togglePump('eng')">⏸ Pausar</button>
+    </div>
+    <div class="lab-fact"><strong>Fijate:</strong> los dos engranajes giran en sentidos opuestos. Donde los dientes se separan (abajo) se genera el vacío que succiona; donde se vuelven a engranar (arriba) el aceite es expulsado. Caudal fijo: solo cambia con las rpm.</div>
+  </div>
+
+  <div class="lab">
+    <div class="lab-head"><h3>🌀 Bomba de paletas — 3D</h3><div class="ctx">El rotor está descentrado respecto del anillo: las paletas entran y salen de sus ranuras para mantener el sello contra el anillo.</div></div>
+    <div class="v3d" id="v3d-pal"><div class="v3d-hint">🖱️ arrastrá para girar</div></div>
+    <div class="v3d-bar">
+      <div class="row"><label>Velocidad del motor <span class="val" id="v3d-pal-s-v">1800 rpm</span></label><input type="range" id="v3d-pal-s" min="0" max="3600" step="100" value="1800" oninput="setPumpSpeed('pal')"></div>
+      <button class="v3d-btn" id="v3d-pal-btn" onclick="togglePump('pal')">⏸ Pausar</button>
+    </div>
+    <div class="lab-fact"><strong>Fijate:</strong> por la excentricidad, el volumen entre paletas CRECE de un lado (succión: leve vacío que llena la cámara) y DECRECE del otro (descarga: el aceite es empujado afuera). Si el anillo se puede desplazar, la bomba pasa a ser de caudal variable.</div>
+  </div>
+
+  <div class="lab">
+    <div class="lab-head"><h3>🔫 Bomba de pistones axiales — 3D</h3><div class="ctx">El tambor gira y los pistones apoyan sobre el plato inclinado fijo: al recorrer la vuelta, entran y salen de sus cámaras.</div></div>
+    <div class="v3d" id="v3d-pis"><div class="v3d-hint">🖱️ arrastrá para girar</div></div>
+    <div class="v3d-bar">
+      <div class="row"><label>Velocidad del motor <span class="val" id="v3d-pis-s-v">1800 rpm</span></label><input type="range" id="v3d-pis-s" min="0" max="3600" step="100" value="1800" oninput="setPumpSpeed('pis')"></div>
+      <div class="row"><label>Ángulo del plato β <span class="val" id="v3d-pis-a-v">14°</span></label><input type="range" id="v3d-pis-a" min="0" max="22" step="1" value="14" oninput="setPlateAngle()"></div>
+      <button class="v3d-btn" id="v3d-pis-btn" onclick="togglePump('pis')">⏸ Pausar</button>
+    </div>
+    <div class="lab-fact" id="v3d-pis-fact"><strong>¡Probá el slider del ángulo!</strong> A mayor ángulo del plato, mayor carrera del pistón y más caudal por vuelta (DV más grande). Con β = 0° la carrera es nula: caudal CERO sin cambiar las rpm — esa es la gracia de la bomba de caudal variable.</div>
+  </div>
+
+  <div class="lab">
+    <div class="lab-head"><h3>⚙️ Bomba gerotor — 3D</h3><div class="ctx">Rotor interno de 6 lóbulos dentro de un rotor externo de 7: giran casi juntos, y las cámaras entre lóbulos se agrandan y achican.</div></div>
+    <div class="v3d" id="v3d-ger"><div class="v3d-hint">🖱️ arrastrá para girar</div></div>
+    <div class="v3d-bar">
+      <div class="row"><label>Velocidad del motor <span class="val" id="v3d-ger-s-v">1200 rpm</span></label><input type="range" id="v3d-ger-s" min="0" max="3600" step="100" value="1200" oninput="setPumpSpeed('ger')"></div>
+      <button class="v3d-btn" id="v3d-ger-btn" onclick="togglePump('ger')">⏸ Pausar</button>
+    </div>
+    <div class="lab-fact"><strong>Fijate:</strong> el interno tiene un diente MENOS que el externo, y por eso el externo gira un poco más despacio (relación 6/7). El bombeo ocurre porque los lóbulos se engranan y desengranan; entrada y salida están en las tapas de los extremos.</div>
   </div>
 
   <div class="stitle"><span class="ico">💪</span>Actuadores: cilindros</div>
@@ -1509,6 +1568,7 @@ function showPage(id, btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='bombas') init3D();
 }
 
 /* ========== EJERCICIOS ========== */
@@ -1811,6 +1871,304 @@ document.head.appendChild(styleAnim);
   const w = document.getElementById('sim3-wave');
   if(w){ styleAnim.textContent = styleAnim.textContent.replace('@keyframes onda{from{cx:300}to{cx:80}}','@keyframes onda{from{transform:translateX(0)}to{transform:translateX(-220px)}}'); }
 })();
+
+/* ════════════════ BOMBAS EN 3D (Three.js) ════════════════ */
+const PUMPS = {};        // id -> {viewer, update, speed(rad/s factor), paused}
+let three3dReady = false, threeLoading = false;
+
+function init3D(){
+  if(three3dReady) return;
+  if(typeof THREE === 'undefined'){
+    if(!threeLoading){
+      threeLoading = true;
+      const sc = document.createElement('script');
+      sc.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js';
+      sc.onload = ()=>{ init3D(); };
+      sc.onerror = ()=>{ document.querySelectorAll('.v3d').forEach(el=>{ el.innerHTML='<div class="v3d-off">📡 No se pudo cargar Three.js.<br>Conectate a internet y recargá la página para ver los modelos 3D.</div>'; }); };
+      document.head.appendChild(sc);
+    }
+    return;
+  }
+  three3dReady = true;
+  makeViewer('eng','v3d-eng', buildEngranajes, 4.6, .35, 1.25);
+  makeViewer('pal','v3d-pal', buildPaletas, 4.4, .35, 1.25);
+  makeViewer('pis','v3d-pis', buildPistones, 5.4, 1.25, 1.2);
+  makeViewer('ger','v3d-ger', buildGerotor, 4.4, .3, 1.3);
+  requestAnimationFrame(loop3D);
+}
+
+function makeViewer(key, elId, builder, dist, az0, pol0){
+  const host = document.getElementById(elId);
+  const W = host.clientWidth, H = host.clientHeight;
+  const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(W,H);
+  host.insertBefore(renderer.domElement, host.firstChild);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, W/H, 0.1, 100);
+  scene.add(new THREE.AmbientLight(0xbfdcff, .75));
+  const d1 = new THREE.DirectionalLight(0xffffff, .9); d1.position.set(3,4,6); scene.add(d1);
+  const d2 = new THREE.DirectionalLight(0x7dd3fc, .35); d2.position.set(-4,-2,-3); scene.add(d2);
+  const orb = {az:az0!==undefined?az0:.45, pol:pol0!==undefined?pol0:1.15, dist:dist};   // órbita inicial
+  const update = builder(scene);
+  const v = {renderer, scene, camera, orb, host};
+  PUMPS[key] = {viewer:v, update, speed:parseFloat(document.getElementById('v3d-'+key+'-s').value), paused:false, rot:0};
+  // drag para orbitar (mouse + touch via pointer events)
+  let drag=null;
+  renderer.domElement.addEventListener('pointerdown', e=>{ drag={x:e.clientX,y:e.clientY}; renderer.domElement.setPointerCapture(e.pointerId); });
+  renderer.domElement.addEventListener('pointermove', e=>{
+    if(!drag) return;
+    orb.az  -= (e.clientX-drag.x)*0.008;
+    orb.pol -= (e.clientY-drag.y)*0.008;
+    orb.pol = Math.max(0.15, Math.min(Math.PI-0.15, orb.pol));
+    drag={x:e.clientX,y:e.clientY};
+  });
+  renderer.domElement.addEventListener('pointerup', ()=>{ drag=null; });
+  placeCam(v);
+}
+function placeCam(v){
+  const o=v.orb;
+  v.camera.position.set(o.dist*Math.sin(o.pol)*Math.sin(o.az), o.dist*Math.cos(o.pol), o.dist*Math.sin(o.pol)*Math.cos(o.az));
+  v.camera.lookAt(0,0,0);
+}
+
+let last3D = 0;
+function loop3D(t){
+  requestAnimationFrame(loop3D);
+  const dt = Math.min((t-last3D)/1000, 0.05); last3D = t;
+  if(!document.getElementById('bombas').classList.contains('active')) return;
+  for(const key in PUMPS){
+    const p = PUMPS[key];
+    if(!p.paused) p.rot += dt * p.speed/60 * 2*Math.PI * 0.06;  // rpm a rad/s, escalado x0.06 para que se aprecie
+    p.update(p.rot);
+    placeCam(p.viewer);
+    p.viewer.renderer.render(p.viewer.scene, p.viewer.camera);
+  }
+}
+
+function setPumpSpeed(key){
+  const s = parseFloat(document.getElementById('v3d-'+key+'-s').value);
+  PUMPS[key] && (PUMPS[key].speed = s);
+  document.getElementById('v3d-'+key+'-s-v').textContent = s+' rpm';
+}
+function togglePump(key){
+  const p = PUMPS[key]; if(!p) return;
+  p.paused = !p.paused;
+  document.getElementById('v3d-'+key+'-btn').textContent = p.paused ? '▶ Reanudar' : '⏸ Pausar';
+}
+
+/* materiales compartidos */
+function matMetal(c){ return new THREE.MeshStandardMaterial({color:c, metalness:.55, roughness:.4}); }
+function matOil(){ return new THREE.MeshStandardMaterial({color:0x38bdf8, emissive:0x0ea5e9, emissiveIntensity:.45, metalness:.1, roughness:.3}); }
+function flecha(color, x,y,z, rotZ){
+  const g = new THREE.Group();
+  const c1 = new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,.5,10), new THREE.MeshStandardMaterial({color}));
+  const c2 = new THREE.Mesh(new THREE.ConeGeometry(.13,.3,12), new THREE.MeshStandardMaterial({color}));
+  c2.position.y = .4; g.add(c1); g.add(c2);
+  g.position.set(x,y,z); g.rotation.z = rotZ||0;
+  return g;
+}
+
+/* perfil de engranaje (dientes trapezoidales) */
+function gearShape(teeth, rOut, rRoot, hole){
+  const s = new THREE.Shape();
+  const st = Math.PI*2/teeth;
+  s.moveTo(rRoot, 0);
+  for(let i=0;i<teeth;i++){
+    const a = i*st;
+    s.lineTo(Math.cos(a+st*.22)*rRoot, Math.sin(a+st*.22)*rRoot);
+    s.lineTo(Math.cos(a+st*.34)*rOut,  Math.sin(a+st*.34)*rOut);
+    s.lineTo(Math.cos(a+st*.62)*rOut,  Math.sin(a+st*.62)*rOut);
+    s.lineTo(Math.cos(a+st*.74)*rRoot, Math.sin(a+st*.74)*rRoot);
+    s.lineTo(Math.cos(a+st)*rRoot,     Math.sin(a+st)*rRoot);
+  }
+  s.closePath();
+  if(hole){ const h = new THREE.Path(); h.absarc(0,0,hole,0,Math.PI*2,true); s.holes.push(h); }
+  return s;
+}
+const EXTR = {depth:.5, bevelEnabled:true, bevelThickness:.04, bevelSize:.04, bevelSegments:1};
+
+/* ── 1) ENGRANAJES ── */
+function buildEngranajes(scene){
+  const TEETH=9, RO=1.05, RR=.78, CX=.92;
+  const geo = new THREE.ExtrudeGeometry(gearShape(TEETH,RO,RR,.22), EXTR);
+  geo.translate(0,0,-.25);
+  const g1 = new THREE.Mesh(geo, matMetal(0xf59e0b));
+  const g2 = new THREE.Mesh(geo.clone(), matMetal(0x94a3b8));
+  g1.position.x = -CX; g2.position.x = CX;
+  scene.add(g1); scene.add(g2);
+  // ejes
+  [ -CX, CX ].forEach(x=>{
+    const eje = new THREE.Mesh(new THREE.CylinderGeometry(.16,.16,1.3,16), matMetal(0x475569));
+    eje.rotation.x = Math.PI/2; eje.position.x = x; scene.add(eje);
+  });
+  // carcasa: placa trasera + anillos
+  const placa = new THREE.Mesh(new THREE.BoxGeometry(4.4,3.1,.12), new THREE.MeshStandardMaterial({color:0x1e3a5f, metalness:.3, roughness:.7}));
+  placa.position.z = -.48; scene.add(placa);
+  [ -CX, CX ].forEach(x=>{
+    const an = new THREE.Mesh(new THREE.TorusGeometry(1.18,.05,10,48), new THREE.MeshStandardMaterial({color:0x7dd3fc, transparent:true, opacity:.45}));
+    an.position.x = x; scene.add(an);
+  });
+  // flechas: succión abajo (azul), descarga arriba (roja)
+  scene.add(flecha(0x38bdf8, 0,-1.95,0, 0));
+  scene.add(flecha(0xef4444, 0, 1.95,0, 0));
+  // partículas de aceite alrededor del exterior de cada engranaje
+  const parts = [];
+  for(let i=0;i<14;i++){
+    const m = new THREE.Mesh(new THREE.SphereGeometry(.07,10,10), matOil());
+    scene.add(m);
+    parts.push({m, side: i%2? 1 : -1, off: (i/14)});
+  }
+  return function(rot){
+    g1.rotation.z = -rot;                      // izquierdo horario: sube el aceite por su lado externo
+    g2.rotation.z =  rot + Math.PI/TEETH;      // derecho antihorario
+    parts.forEach(p=>{
+      const t = ((rot*0.55/Math.PI + p.off) % 1 + 1) % 1;       // progreso 0..1
+      const ang = p.side<0 ? (-Math.PI/2 - t*Math.PI) : (-Math.PI/2 + t*Math.PI);  // de abajo hacia arriba por afuera
+      p.m.position.set(p.side*CX + Math.cos(ang)*(RO+.13), Math.sin(ang)*(RO+.13), 0);
+    });
+  };
+}
+
+/* ── 2) PALETAS ── */
+function buildPaletas(scene){
+  const R=1.35, E=.28, NR=.85, NV=8;
+  // anillo excéntrico
+  const an = new THREE.Mesh(new THREE.TorusGeometry(R,.1,12,64), matMetal(0x64748b));
+  scene.add(an);
+  const placa = new THREE.Mesh(new THREE.CylinderGeometry(1.75,1.75,.1,48), new THREE.MeshStandardMaterial({color:0x1e3a5f, metalness:.3, roughness:.7}));
+  placa.rotation.x = Math.PI/2; placa.position.z = -.42; scene.add(placa);
+  // rotor descentrado (hacia abajo)
+  const rotor = new THREE.Mesh(new THREE.CylinderGeometry(NR,NR,.5,40), matMetal(0xf59e0b));
+  rotor.rotation.x = Math.PI/2; rotor.position.y = -E; scene.add(rotor);
+  const eje = new THREE.Mesh(new THREE.CylinderGeometry(.15,.15,1.2,16), matMetal(0x475569));
+  eje.rotation.x = Math.PI/2; eje.position.y = -E; scene.add(eje);
+  // paletas
+  const vanes = [];
+  for(let i=0;i<NV;i++){
+    const v = new THREE.Mesh(new THREE.BoxGeometry(.07,.8,.46), matMetal(0xe2e8f0));
+    scene.add(v); vanes.push(v);
+  }
+  // flechas: succión derecha (azul, el volumen crece), descarga izquierda (roja)
+  scene.add(flecha(0x38bdf8,  1.95,-.2,0,  Math.PI/2));
+  scene.add(flecha(0xef4444, -1.95, .2,0,  Math.PI/2));
+  return function(rot){
+    rotor.rotation.y = rot;            // giro visual del cilindro
+    for(let i=0;i<NV;i++){
+      const a = rot + i*2*Math.PI/NV;
+      const dx=Math.cos(a), dy=Math.sin(a);
+      const cd = -E*dy;                                   // c·d con c=(0,-E)
+      const t  = -cd + Math.sqrt(cd*cd + R*R - E*E);      // distancia centro rotor → anillo
+      const cx = dx*(t-.4), cy = -E + dy*(t-.4);
+      vanes[i].position.set(cx, cy, 0);
+      vanes[i].rotation.z = a - Math.PI/2;
+    }
+  };
+}
+
+/* ── 3) PISTONES AXIALES ── */
+let plateAngle = 14*Math.PI/180;
+function buildPistones(scene){
+  const NP=7, RP=.78, ZPLATE=-1.0;
+  // tambor (barrel) con marcas para ver el giro
+  const barrel = new THREE.Group();
+  const cuerpo = new THREE.Mesh(new THREE.CylinderGeometry(1.15,1.15,1.5,40), new THREE.MeshStandardMaterial({color:0x475569, metalness:.5, roughness:.45, transparent:true, opacity:.82}));
+  cuerpo.rotation.x = Math.PI/2; cuerpo.position.z = .9; barrel.add(cuerpo);
+  for(let i=0;i<NP;i++){
+    const marca = new THREE.Mesh(new THREE.BoxGeometry(.1,.1,1.5), matMetal(0x94a3b8));
+    const a=i*2*Math.PI/NP;
+    marca.position.set(Math.cos(a)*1.15, Math.sin(a)*1.15, .9);
+    barrel.add(marca);
+  }
+  scene.add(barrel);
+  // eje
+  const eje = new THREE.Mesh(new THREE.CylinderGeometry(.14,.14,3.4,16), matMetal(0xf59e0b));
+  eje.rotation.x = Math.PI/2; eje.position.z = .6; scene.add(eje);
+  // plato inclinado (fijo)
+  const plato = new THREE.Mesh(new THREE.CylinderGeometry(1.5,1.5,.1,48), matMetal(0x0d9488));
+  plato.position.z = ZPLATE; scene.add(plato);
+  // pistones + zapatas
+  const pist=[], shoes=[];
+  for(let i=0;i<NP;i++){
+    const p = new THREE.Mesh(new THREE.CylinderGeometry(.15,.15,1.15,16), matMetal(0xe2e8f0));
+    p.rotation.x = Math.PI/2;
+    const s = new THREE.Mesh(new THREE.SphereGeometry(.17,12,12), matMetal(0xfbbf24));
+    scene.add(p); scene.add(s); pist.push(p); shoes.push(s);
+  }
+  // flechas entrada/salida axiales en la tapa trasera
+  const fIn = flecha(0x38bdf8, -.6,0,2.3, 0);  fIn.rotation.x =  Math.PI/2;  scene.add(fIn);   // entra hacia el tambor
+  const fOut = flecha(0xef4444, .6,0,1.9, 0);  fOut.rotation.x = -Math.PI/2; scene.add(fOut);  // sale hacia afuera
+  return function(rot){
+    barrel.rotation.z = rot;
+    plato.rotation.set(0,0,0);
+    plato.rotateX(Math.PI/2);            // disco con eje z
+    plato.rotateX(plateAngle);           // inclinación β alrededor de x (eje local)
+    for(let i=0;i<pist.length;i++){
+      const a = rot + i*2*Math.PI/pist.length;
+      const x = Math.cos(a)*.78, y = Math.sin(a)*.78;
+      const zc = ZPLATE + y*Math.tan(plateAngle);   // contacto con el plato
+      pist[i].position.set(x, y, zc + .75);
+      shoes[i].position.set(x, y, zc + .12);
+    }
+  };
+}
+function setPlateAngle(){
+  const deg = parseFloat(document.getElementById('v3d-pis-a').value);
+  plateAngle = deg*Math.PI/180;
+  document.getElementById('v3d-pis-a-v').textContent = deg+'°';
+  const carrera = 2*0.78*Math.tan(plateAngle);
+  document.getElementById('v3d-pis-fact').innerHTML =
+    '<strong>Carrera del pistón:</strong> 2·r·tan(β) = '+carrera.toFixed(2)+' (unidades del modelo). '+
+    (deg===0 ? 'Con β = 0° los pistones NO se mueven axialmente: caudal CERO aunque el tambor siga girando.' :
+    'A mayor β, mayor carrera y más caudal por vuelta (DV más grande), a rpm constantes. Eso la hace de caudal variable.');
+}
+
+/* ── 4) GEROTOR ── */
+function buildGerotor(scene){
+  const NI=6, E=.14;
+  const polarShape = (n, base, amp, samples)=>{
+    const s = new THREE.Shape();
+    for(let i=0;i<=samples;i++){
+      const a = i/samples*Math.PI*2;
+      const r = base + amp*Math.cos(n*a);
+      const x = Math.cos(a)*r, y = Math.sin(a)*r;
+      i===0 ? s.moveTo(x,y) : s.lineTo(x,y);
+    }
+    s.closePath(); return s;
+  };
+  // rotor interno: 6 lóbulos
+  const si = polarShape(NI, .72, .18, 160);
+  const hi = new THREE.Path(); hi.absarc(0,0,.18,0,Math.PI*2,true); si.holes.push(hi);
+  const inner = new THREE.Mesh(new THREE.ExtrudeGeometry(si, EXTR), matMetal(0xf59e0b));
+  inner.geometry.translate(0,0,-.25);
+  inner.position.y = E;
+  scene.add(inner);
+  // rotor externo: anillo con 7 lóbulos internos
+  const so = new THREE.Shape(); so.absarc(0,0,1.5,0,Math.PI*2,false);
+  const ho = polarShape(NI+1, .95, .2, 180);
+  so.holes.push(ho);
+  const outer = new THREE.Mesh(new THREE.ExtrudeGeometry(so, EXTR), matMetal(0x64748b));
+  outer.geometry.translate(0,0,-.25);
+  scene.add(outer);
+  const placa = new THREE.Mesh(new THREE.CylinderGeometry(1.7,1.7,.1,48), new THREE.MeshStandardMaterial({color:0x1e3a5f, metalness:.3, roughness:.7}));
+  placa.rotation.x = Math.PI/2; placa.position.z = -.45; scene.add(placa);
+  // flechas (entrada por un lado, salida por el otro; en la bomba real son axiales, por las tapas)
+  scene.add(flecha(0x38bdf8, -1.95,0,0, -Math.PI/2));
+  scene.add(flecha(0xef4444,  1.95,0,0, -Math.PI/2));
+  return function(rot){
+    inner.rotation.z = rot;
+    outer.rotation.z = rot*NI/(NI+1) + Math.PI/(NI+1);
+  };
+}
+
+window.addEventListener('resize', ()=>{
+  for(const key in PUMPS){
+    const v = PUMPS[key].viewer;
+    const W = v.host.clientWidth, H = v.host.clientHeight;
+    v.renderer.setSize(W,H);
+    v.camera.aspect = W/H; v.camera.updateProjectionMatrix();
+  }
+});
 
 /* ========== INIT ========== */
 sim1(); sim2(); sim3(); sim4();

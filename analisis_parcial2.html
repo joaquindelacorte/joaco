@@ -213,6 +213,33 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
 .sb-streak.fire{background:var(--orange); animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
 .sb-empty{color:var(--muted); text-align:center; padding:30px; font-style:italic}
+
+/* ── Flashcards modelo de parcial ── */
+.flash-prob{background:#0a1929; border:1px solid var(--border); border-radius:12px; padding:18px; margin:18px 0}
+.flash-prob-title{font-size:16px; color:var(--warn); font-weight:700; margin-bottom:6px}
+.flash-prob-stm{background:var(--panel2); border-left:4px solid var(--warn); padding:12px 16px;
+                border-radius:8px; margin-bottom:14px; font-size:14.5px}
+.flash-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:12px}
+.flash-card{perspective:1200px; height:220px; cursor:pointer}
+.flash-inner{position:relative; width:100%; height:100%; transition:transform .6s cubic-bezier(.4,0,.2,1);
+             transform-style:preserve-3d}
+.flash-card.flipped .flash-inner{transform:rotateY(180deg)}
+.flash-face{position:absolute; width:100%; height:100%; backface-visibility:hidden;
+            border-radius:10px; padding:14px 16px; display:flex; flex-direction:column;
+            overflow-y:auto; border:1px solid var(--border)}
+.flash-face.front{background:var(--panel); justify-content:center; align-items:center; text-align:center}
+.flash-face.back{background:var(--panel2); transform:rotateY(180deg); border-left:4px solid var(--good)}
+.flash-step-n{background:var(--accent2); color:#0b1220; width:28px; height:28px; border-radius:50%;
+              display:inline-flex; align-items:center; justify-content:center; font-weight:700;
+              font-size:13px; margin-bottom:10px}
+.flash-q{font-size:14.5px; font-weight:600; color:var(--yellow); margin-bottom:10px}
+.flash-hint{font-size:12px; color:var(--muted); margin-top:10px; font-style:italic}
+.flash-a{font-size:14px; color:var(--text); margin-top:auto}
+.flash-tag{display:inline-block; background:var(--accent); color:#0b1220; font-size:10px;
+           padding:2px 8px; border-radius:10px; font-weight:700; letter-spacing:.5px;
+           margin-bottom:8px; align-self:flex-start}
+.flash-flip-hint{font-size:11px; color:var(--muted); text-align:center; margin-top:8px}
+@media(max-width:600px){.flash-card{height:240px}}
 </style>
 </head>
 <body>
@@ -253,6 +280,7 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
 
   <div class="nav-level">🎯 Práctica</div>
   <a href="#sandbox">🕹️ Sandbox paso a paso</a>
+  <a href="#modelo">🎴 Modelo de parcial (tarjetas)</a>
 
   <div class="nav-level">🏆 Cierre</div>
   <a href="#cheatsheet">📋 Cheat sheet</a>
@@ -974,6 +1002,39 @@ $$h(t)=\frac{Q_{in}}{K}\left(1-e^{-Kt/A}\right)$$
   </div>
 </div>
 
+<h2 id="modelo">🎴 Modelo de parcial — tarjetas paso a paso</h2>
+
+<div class="card intuition">
+<p>Estos son los <strong>dos problemas reales del simulacro</strong> (Clase 12). Cada paso de la resolución está en una tarjeta interactiva: <span class="hl-good">hacé clic para girarla</span> y ver el cálculo. La idea es que primero pienses cómo lo harías, y después confirmes/aprendas con el reverso.</p>
+<p><strong>🎯 Cómo usar:</strong> tapate la respuesta, leé la pregunta, pensá la solución en la cabeza, después das vuelta la tarjeta. Repetí hasta que <em>no necesites darla vuelta</em> para saberla.</p>
+</div>
+
+<!-- ─── PROBLEMA 1 ─── -->
+<div class="flash-prob">
+  <div class="flash-prob-title">📝 Problema 1 — Acumulación de caudal y error de muestreo</div>
+  <div class="flash-prob-stm">
+    Sensor de caudal: $Q(t) = 3t^2 + 2$ [L/s] en el intervalo $[0, 2]$ s.<br>
+    <strong>a)</strong> Volumen exacto por Regla de Barrow. &nbsp;
+    <strong>b)</strong> Aproximación PLC con $\Delta t = 1$ s (Riemann izquierda, $t_0=0$ y $t_1=1$). &nbsp;
+    <strong>c)</strong> Error porcentual e interpretación crítica.
+  </div>
+  <div class="flash-grid" id="flash-p1"></div>
+  <p class="flash-flip-hint">↑ tocá las tarjetas para girarlas</p>
+</div>
+
+<!-- ─── PROBLEMA 2 ─── -->
+<div class="flash-prob">
+  <div class="flash-prob-title">📝 Problema 2 — EDO y PVI (enfriamiento de caldera)</div>
+  <div class="flash-prob-stm">
+    Caldera apagada: $\dfrac{dT}{dt} = -0{,}2(T - 25)$ con $T$ en °C, $t$ en min.<br>
+    <strong>a)</strong> Solución general por variables separables. &nbsp;
+    <strong>b)</strong> Solución particular con $T(0) = 125$°C. &nbsp;
+    <strong>c)</strong> $\lim_{t\to\infty}T(t)$ y significado físico.
+  </div>
+  <div class="flash-grid" id="flash-p2"></div>
+  <p class="flash-flip-hint">↑ tocá las tarjetas para girarlas</p>
+</div>
+
 <h2 id="cheatsheet">📋 Cheat sheet rápido para el parcial</h2>
 
 <div class="grid3">
@@ -1272,9 +1333,9 @@ renderQuiz();
 const rint=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
 const choice=arr=>arr[Math.floor(Math.random()*arr.length)];
 const shuffle=arr=>{const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
-const km=(c,v)=>{ // KaTeX inline render
-  try{return katex.renderToString(c,{throwOnError:false, displayMode:!!v});}catch(e){return c;}
-};
+// km: devuelve LaTeX crudo con delimitadores para que KaTeX auto-render lo procese
+// (evita race conditions con la carga deferred de KaTeX)
+const km=(c,v)=> v ? '$$'+c+'$$' : '$'+c+'$';
 
 /* ─── PROBLEMAS DE DERIVADAS ─── */
 const SB_DERIV = {
@@ -2087,8 +2148,126 @@ if(document.readyState === 'loading'){
 window.addEventListener('load', ()=>{
   setTimeout(()=>{
     sbRenderMath(document.querySelector('.sb-wrap'));
-  }, 100);
+    sbRenderMath(document.querySelector('#modelo')?.parentElement);
+    // render flashcards math
+    document.querySelectorAll('.flash-card').forEach(c=>sbRenderMath(c));
+  }, 200);
 });
+
+/* ════════════════ FLASHCARDS MODELO PARCIAL ════════════════ */
+const FLASH_P1 = [
+  {tag:'IDENTIFICAR', n:0,
+   q:'¿Qué tipo de problema es y qué herramientas se usan?',
+   a:'<strong>Acumulación de caudal</strong> sobre el tiempo. Para el exacto: <span class="hl-accent">integral por Barrow</span>. Para el PLC: <span class="hl-accent">suma de Riemann por izquierda</span>.',
+   hint:'Caudal = tasa → integro para obtener volumen.'},
+  {tag:'a) PASO 1', n:1,
+   q:'Plantear la integral exacta del volumen entre 0 y 2 s.',
+   a:'$$V_{exacto}=\\displaystyle\\int_0^2 (3t^2+2)\\,dt$$',
+   hint:'Volumen = ∫Q dt en el intervalo dado.'},
+  {tag:'a) PASO 2', n:2,
+   q:'Hallar la primitiva $F(t)$ de $Q(t)=3t^2+2$.',
+   a:'Subo el exponente y divido: $\\int 3t^2\\,dt = t^3$, &nbsp; $\\int 2\\,dt = 2t$. <br><br>$$F(t) = t^3 + 2t$$',
+   hint:'Regla de potencia inversa: $\\int t^n = t^{n+1}/(n+1)$.'},
+  {tag:'a) PASO 3', n:3,
+   q:'Evaluar por Barrow: $F(2) - F(0)$.',
+   a:'$F(2) = 2^3 + 2\\cdot 2 = 8 + 4 = 12$<br>$F(0) = 0$<br><br>$$\\boxed{\\;V_{exacto} = 12 \\text{ L}\\;}$$',
+   hint:'Reemplazo en el extremo superior y resto el inferior.'},
+  {tag:'b) PASO 1', n:4,
+   q:'¿En qué instantes evalúa el PLC y cuánto vale $Q$ ahí?',
+   a:'Δt = 1 s → toma muestras en $t_0=0$ y $t_1=1$.<br>$Q(0) = 3(0)^2 + 2 = \\mathbf{2}$ L/s<br>$Q(1) = 3(1)^2 + 2 = \\mathbf{5}$ L/s',
+   hint:'Por izquierda: extremo izquierdo de cada subintervalo.'},
+  {tag:'b) PASO 2', n:5,
+   q:'Calcular la suma de Riemann por izquierda.',
+   a:'$V_{PLC} = Q(0)\\cdot\\Delta t + Q(1)\\cdot\\Delta t$<br>$= 2\\cdot 1 + 5\\cdot 1 = 2 + 5$<br><br>$$\\boxed{\\;V_{PLC} = 7 \\text{ L}\\;}$$',
+   hint:'Cada rectángulo: altura × ancho.'},
+  {tag:'c) PASO 1', n:6,
+   q:'Calcular el error porcentual del PLC vs el valor exacto.',
+   a:'$\\text{Error \\%} = \\dfrac{|V_{exacto} - V_{PLC}|}{V_{exacto}} \\cdot 100\\%$<br>$= \\dfrac{|12 - 7|}{12} \\cdot 100\\% = \\dfrac{5}{12}\\cdot 100\\%$<br><br>$$\\boxed{\\;\\text{Error} \\approx 41{,}67\\%\\;}$$',
+   hint:'|exacto − aprox| / exacto.'},
+  {tag:'c) INTERP.', n:7,
+   q:'¿Qué pasa físicamente si esto controla un tanque?',
+   a:'El PLC <span class="hl-bad">subestima el volumen real en ~42%</span>: cree que entró menos agua de la que entró. <span class="hl-warn">Riesgo de desborde catastrófico</span> del tanque crítico. <br><br><strong>Solución:</strong> reducir Δt (muestreo más rápido) o usar regla del trapecio.',
+   hint:'Si el cálculo está mal, la decisión de control también.'}
+];
+
+const FLASH_P2 = [
+  {tag:'IDENTIFICAR', n:0,
+   q:'¿Qué tipo de EDO es y qué método se usa?',
+   a:'EDO de <strong>primer orden, lineal, variables separables</strong>.<br>Forma: $\\dfrac{dT}{dt} = g(t)\\cdot h(T)$, con $g(t)=-0{,}2$ (constante) y $h(T)=T-25$.<br><br>Método: <span class="hl-accent">separación de variables</span>.',
+   hint:'Si podés escribir dT/dt = (algo de t)·(algo de T), es separable.'},
+  {tag:'a) PASO 1', n:1,
+   q:'Separar variables: ¿cómo agrupo $T$ a la izquierda y $t$ a la derecha?',
+   a:'$\\dfrac{dT}{dt} = -0{,}2(T-25)$<br><br>$$\\dfrac{dT}{T-25} = -0{,}2\\,dt$$',
+   hint:'Divido por $(T-25)$ y multiplico por $dt$.'},
+  {tag:'a) PASO 2', n:2,
+   q:'Integrar ambos lados.',
+   a:'$\\displaystyle\\int\\dfrac{dT}{T-25} = \\int -0{,}2\\,dt$<br><br>$$\\ln|T-25| = -0{,}2\\,t + C$$',
+   hint:'$\\int 1/u\\,du = \\ln|u|$; la constante $C$ va de un lado solo.'},
+  {tag:'a) PASO 3', n:3,
+   q:'Despejar $T(t)$ aplicando exponencial.',
+   a:'$|T-25| = e^{-0{,}2t + C} = e^C\\cdot e^{-0{,}2t}$<br>Llamo $A = \\pm e^C$ (absorbe el signo y la constante):<br><br>$$\\boxed{\\;T(t) = 25 + A\\,e^{-0{,}2\\,t}\\;}\\quad\\text{(solución general)}$$',
+   hint:'$\\ln|x|=y \\Rightarrow x=\\pm e^y$. Absorbés signo y $e^C$ en una sola constante.'},
+  {tag:'b) PASO 1', n:4,
+   q:'Aplicar la condición inicial $T(0)=125$°C para hallar $A$.',
+   a:'En $t=0$:<br>$T(0) = 25 + A\\cdot e^{0} = 25 + A = 125$<br><br>$$\\boxed{\\;A = 100\\;}$$',
+   hint:'Reemplazo $t=0$ en la solución general y resuelvo la igualdad.'},
+  {tag:'b) FINAL', n:5,
+   q:'Escribir la solución particular completa.',
+   a:'$$\\boxed{\\;T(t) = 25 + 100\\,e^{-0{,}2\\,t}\\;}$$<br><br>Es la <strong>trayectoria térmica</strong> exacta de la caldera tras apagarse.',
+   hint:'Reemplazo $A$ en la solución general.'},
+  {tag:'c) PASO 1', n:6,
+   q:'Calcular $\\displaystyle\\lim_{t\\to\\infty} T(t)$.',
+   a:'Cuando $t\\to\\infty$: $e^{-0{,}2\\,t}\\to 0$<br><br>$$\\lim_{t\\to\\infty} T(t) = 25 + 100\\cdot 0 = \\boxed{25\\text{ °C}}$$',
+   hint:'Exponencial decreciente → 0.'},
+  {tag:'c) INTERP.', n:7,
+   q:'¿Qué significado físico tiene esa asíntota?',
+   a:'La caldera se <strong>equilibra térmicamente con el ambiente</strong> (25 °C).<br><br>Físicamente: <span class="hl-good">no puede enfriarse por debajo de la temperatura ambiente</span> sin un sistema activo de refrigeración. Es un proceso pasivo: cede calor hasta que ya no hay gradiente.',
+   hint:'25 °C era el "−25" de la EDO → temperatura ambiente.'}
+];
+
+function renderFlashCards(targetId, cards){
+  const cont = document.getElementById(targetId);
+  if(!cont) return;
+  let html = '';
+  cards.forEach((c,i)=>{
+    html += `
+      <div class="flash-card" data-idx="${i}">
+        <div class="flash-inner">
+          <div class="flash-face front">
+            <span class="flash-tag">${c.tag}</span>
+            <div class="flash-step-n">${c.n}</div>
+            <div class="flash-q">${c.q}</div>
+            <div class="flash-hint">💡 ${c.hint}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:6px">↻ tocá para girar</div>
+          </div>
+          <div class="flash-face back">
+            <span class="flash-tag" style="background:var(--good)">SOLUCIÓN</span>
+            <div class="flash-a">${c.a}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:8px;text-align:right">↻ tocá para volver</div>
+          </div>
+        </div>
+      </div>`;
+  });
+  cont.innerHTML = html;
+  sbRenderMath(cont);
+}
+
+function initFlashCards(){
+  renderFlashCards('flash-p1', FLASH_P1);
+  renderFlashCards('flash-p2', FLASH_P2);
+}
+
+// Click delegation para flip
+document.addEventListener('click', function(ev){
+  const card = ev.target.closest('.flash-card');
+  if(card) card.classList.toggle('flipped');
+});
+
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', initFlashCards);
+} else {
+  initFlashCards();
+}
 </script>
 </body>
 </html>

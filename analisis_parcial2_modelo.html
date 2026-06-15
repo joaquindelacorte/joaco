@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modelo de Parcial 2 — Análisis Matemático I</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+
+<style>
+:root{
+  --bg:#0f172a; --panel:#1e293b; --panel2:#273449; --border:#334155;
+  --text:#e2e8f0; --muted:#94a3b8; --accent:#38bdf8; --accent2:#a78bfa;
+  --good:#34d399; --warn:#fbbf24; --bad:#f87171; --pink:#ec4899;
+  --yellow:#fde68a; --orange:#fb923c;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+     background:var(--bg); color:var(--text); line-height:1.6}
+
+.layout{display:grid; grid-template-columns:290px 1fr; min-height:100vh}
+
+nav.sidebar{background:var(--panel); border-right:1px solid var(--border);
+            padding:18px 14px; position:sticky; top:0; height:100vh; overflow-y:auto}
+.brand{font-weight:700; font-size:16px; color:white; margin-bottom:4px}
+.brand small{display:block; font-weight:400; color:var(--muted); font-size:11px; margin-top:2px}
+.nav-level{font-size:10px; color:var(--muted); letter-spacing:1px; text-transform:uppercase;
+           padding:14px 4px 4px}
+nav.sidebar a{display:flex; align-items:center; gap:8px; color:var(--text); text-decoration:none;
+              padding:6px 10px; border-radius:6px; font-size:13px; margin:1px 0; transition:background .15s}
+nav.sidebar a:hover,nav.sidebar a.active{background:var(--panel2); color:var(--accent)}
+.back-home{display:inline-block; margin-bottom:14px; color:var(--accent);
+           text-decoration:none; font-size:13px}
+.back-home:hover{text-decoration:underline}
+
+main{padding:28px 40px; max-width:980px}
+h1{font-size:30px; color:white; margin-bottom:4px}
+.subtitle{color:var(--muted); font-size:14px; margin-bottom:28px}
+h2{font-size:22px; color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:7px; margin:40px 0 14px}
+h3{font-size:17px; color:var(--accent2); margin:22px 0 8px}
+h4{font-size:14px; color:var(--yellow); margin:14px 0 6px; font-weight:600}
+p,li{font-size:14.5px}
+ul,ol{padding-left:22px; margin:6px 0}
+
+.card{background:var(--panel); border:1px solid var(--border); border-radius:10px;
+      padding:16px 20px; margin:12px 0}
+.card.formula{border-left:4px solid var(--accent2); background:var(--panel2)}
+.card.tip{border-left:4px solid var(--good)}
+.card.warn{border-left:4px solid var(--warn); background:#1c1a0e}
+.card.intuition{border-left:4px solid var(--pink); background:#2a1d2e}
+.card.enunciado{border-left:4px solid var(--orange); background:#1a1208}
+.card.answer{border-left:4px solid var(--good); background:#0d1f16}
+.card.error{border-left:4px solid var(--bad); background:#1a0d0d}
+.card.connect{border-left:4px solid var(--accent); background:#0a1929}
+
+.badge{display:inline-block; padding:3px 10px; border-radius:12px;
+       font-size:12px; font-weight:600; margin-right:6px; margin-bottom:4px}
+.badge.p1{background:#143526; color:var(--good)}
+.badge.p2{background:#3a1c1c; color:var(--bad)}
+.badge.tip{background:#1a1a3e; color:#818cf8}
+.badge.warn{background:#3d2e0a; color:var(--warn)}
+
+table{border-collapse:collapse; width:100%; margin:10px 0; font-size:14px}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--panel2); color:var(--accent)}
+
+.formula-box{background:#0b1220; border:1px solid var(--border); border-radius:8px;
+             padding:12px 16px; margin:8px 0; text-align:center; font-size:16px}
+
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+@media(max-width:860px){.grid2,.grid3{grid-template-columns:1fr}}
+
+.steps{margin:14px 0}
+.step{background:var(--panel); border:1px solid var(--border); border-left:4px solid var(--accent2);
+      border-radius:8px; padding:14px 18px; margin:10px 0}
+.step-header{display:flex; align-items:center; gap:10px; margin-bottom:6px}
+.step-num{width:30px; height:30px; border-radius:50%; background:var(--accent2);
+          color:#0b1220; font-weight:700; display:flex; align-items:center; justify-content:center;
+          font-size:14px; flex-shrink:0}
+.step-title{font-weight:700; color:var(--accent2); font-size:15px}
+.step-body{padding-left:40px; font-size:14px}
+.step-body .work{background:#0b1220; padding:10px 14px; border-radius:6px; margin:8px 0;
+                 border:1px solid var(--border)}
+.step-why{font-size:13px; color:var(--muted); font-style:italic; margin-top:6px;
+          padding:6px 12px; background:#0b1220; border-radius:6px; border-left:2px solid var(--accent)}
+
+.controls{display:flex; flex-wrap:wrap; gap:14px; margin:14px 0; align-items:flex-end;
+          background:var(--panel2); padding:14px; border-radius:8px}
+.controls label{display:flex; flex-direction:column; font-size:13px; color:var(--muted); min-width:140px}
+.controls input[type=range]{margin-top:4px; width:100%}
+.controls input[type=number]{background:#0b1220; color:var(--text); border:1px solid var(--border);
+  border-radius:6px; padding:6px 10px; font-size:14px; margin-top:4px}
+
+.stat-output{display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));
+             gap:10px; margin-top:12px}
+.stat-box{background:#0b1220; padding:10px 12px; border-radius:8px; border:1px solid var(--border)}
+.stat-box .label{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px}
+.stat-box .value{font-size:20px; font-weight:700; color:var(--accent)}
+
+.plot{width:100%; height:340px; background:#0b1220; border-radius:8px; border:1px solid var(--border); margin-top:10px}
+
+.btn{background:var(--accent); color:#0b1220; border:none; padding:8px 18px;
+     border-radius:6px; font-weight:600; cursor:pointer; font-size:14px; transition:filter .15s}
+.btn:hover{filter:brightness(1.1)}
+.btn-2{background:var(--panel2); color:var(--text); border:1px solid var(--border);
+       padding:8px 16px; border-radius:6px; cursor:pointer; font-size:14px}
+
+code{background:#0b1220; padding:2px 6px; border-radius:4px; font-size:13px; color:#fcd34d}
+
+details.reveal{background:var(--panel2); border-radius:8px; padding:10px 16px; margin:10px 0;
+               border:1px solid var(--border)}
+details.reveal summary{cursor:pointer; color:var(--accent); font-weight:600; padding:4px 0; font-size:14px}
+details.reveal[open]{padding-bottom:14px}
+
+.hl-good{color:var(--good); font-weight:700}
+.hl-warn{color:var(--warn); font-weight:700}
+.hl-bad{color:var(--bad); font-weight:700}
+.hl-accent{color:var(--accent); font-weight:700}
+.hl-purple{color:var(--accent2); font-weight:700}
+.hl-orange{color:var(--orange); font-weight:700}
+
+hr{border:none; border-top:1px solid var(--border); margin:30px 0}
+.footer{margin-top:60px; padding:20px; text-align:center; color:var(--muted); font-size:12px;
+        border-top:1px solid var(--border)}
+
+/* Quiz */
+.quiz-q{background:var(--panel2); padding:14px 18px; border-radius:8px; margin:10px 0}
+.quiz-q .opts{display:flex; flex-direction:column; gap:8px; margin-top:10px}
+.quiz-q .opt{background:#0b1220; padding:10px 14px; border-radius:6px; border:2px solid transparent;
+             cursor:pointer; transition:all .15s}
+.quiz-q .opt:hover{border-color:var(--accent)}
+.quiz-q .opt.correct{background:#143526; border-color:var(--good)}
+.quiz-q .opt.wrong{background:#3a1c1c; border-color:var(--bad)}
+.quiz-feedback{margin-top:8px; font-size:13.5px; color:var(--muted); padding:8px 10px;
+               background:#0b1220; border-radius:6px; border-left:3px solid var(--accent)}
+.quiz-score{font-size:28px; font-weight:700; text-align:center; padding:16px; color:var(--accent)}
+
+/* Variants table */
+.var-table th{background:var(--panel)}
+.var-table td.formula{font-family:'Courier New',monospace; background:#0b1220}
+
+/* Hero callout */
+.hero{background:linear-gradient(135deg,#1a1230,#0a1929); border:1px solid var(--accent);
+      border-radius:12px; padding:20px 24px; margin:18px 0; box-shadow:0 4px 20px rgba(56,189,248,0.1)}
+.hero h3{margin-top:0; color:var(--accent)}
+
+@media(max-width:860px){
+  .layout{grid-template-columns:1fr}
+  nav.sidebar{position:relative; height:auto; max-height:50vh}
+  main{padding:20px 16px}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav class="sidebar">
+  <div class="brand">🎯 Modelo Parcial 2<br><small>Análisis Mat. I · Simulacro oficial</small></div>
+
+  <a href="analisis_parcial2.html" class="back-home">← Volver al apunte principal</a>
+
+  <div class="nav-level">📋 Contexto</div>
+  <a href="#intro">👋 Presentación</a>
+  <a href="#estructura">Estructura del examen</a>
+  <a href="#tips">Tips antes de empezar</a>
+
+  <div class="nav-level">🟢 Problema 1</div>
+  <a href="#p1-enunciado">Enunciado</a>
+  <a href="#p1-analisis">Análisis previo</a>
+  <a href="#p1-a">a) Volumen exacto (Barrow)</a>
+  <a href="#p1-b">b) PLC (Riemann)</a>
+  <a href="#p1-c">c) Error e interpretación</a>
+  <a href="#p1-sim">🎮 Simulador interactivo</a>
+  <a href="#p1-variaciones">Variaciones</a>
+  <a href="#p1-errores">Errores comunes</a>
+
+  <div class="nav-level">🟠 Problema 2</div>
+  <a href="#p2-enunciado">Enunciado</a>
+  <a href="#p2-analisis">Análisis previo</a>
+  <a href="#p2-a">a) Solución general</a>
+  <a href="#p2-b">b) Solución particular</a>
+  <a href="#p2-c">c) Asíntota</a>
+  <a href="#p2-sim">🎮 Simulador interactivo</a>
+  <a href="#p2-variaciones">Variaciones</a>
+  <a href="#p2-errores">Errores comunes</a>
+
+  <div class="nav-level">🏆 Cierre</div>
+  <a href="#patrones">🔍 Patrones de reconocimiento</a>
+  <a href="#receta">📜 Receta universal</a>
+  <a href="#quiz">🎓 Quiz del modelo</a>
+  <a href="#consejos">💡 Consejos finales</a>
+</nav>
+
+<main>
+
+<h1 id="intro">🎯 Modelo de Parcial 2 — Análisis detallado</h1>
+<p class="subtitle">Resolución exhaustiva del simulacro oficial · Clase 12 · Análisis Mat. I · Lic. en Automatización y Control</p>
+
+<div class="hero">
+<h3>🚀 ¿Qué vas a encontrar acá?</h3>
+<p>Los <strong>dos problemas exactos</strong> del simulacro de parcial, pero desarrollados al máximo nivel de detalle:</p>
+<ul>
+  <li>📝 Enunciado oficial palabra por palabra</li>
+  <li>🧠 Análisis previo: <em>cómo identificás de qué tipo es el problema antes de empezar a calcular</em></li>
+  <li>📐 Resolución paso a paso con justificación de <em>por qué</em> hacés cada cosa</li>
+  <li>🎮 Simuladores interactivos: cambiá los parámetros y mirá cómo cambia la solución</li>
+  <li>🔄 Variaciones: <em>"¿y si los números fueran otros?"</em> — el método no cambia</li>
+  <li>⚠️ Errores comunes que se cobran puntos</li>
+  <li>🔍 Patrones de reconocimiento para identificar tipos similares</li>
+  <li>🎓 Quiz final sobre el modelo</li>
+</ul>
+<p><strong>Objetivo:</strong> que cuando recibas el parcial real, identifiques el tipo en 5 segundos y reproduzcas el método sin titubear.</p>
+</div>
+
+<h2 id="estructura">📋 Estructura oficial del examen</h2>
+
+<div class="card formula">
+<h4>Lo que dice la cátedra (Clase 12)</h4>
+<table>
+<tr><th>Eje temático</th><th>Qué evalúa</th></tr>
+<tr><td><strong>Cálculo Diferencial</strong></td><td>Derivada como razón de cambio. Reglas avanzadas. Interpretación física (sensores, actuadores).</td></tr>
+<tr><td><strong>Cálculo Integral</strong></td><td>Integral definida como acumulación de variables físicas. Regla de Barrow.</td></tr>
+<tr><td><strong>Procesamiento Digital</strong></td><td>Sumas de Riemann. Cómo el muestreo Δt del PLC introduce error vs solución exacta.</td></tr>
+<tr><td><strong>EDOs de 1er orden</strong></td><td>Variables separables. PVI aplicado a circuitos RL, Torricelli, Newton.</td></tr>
+</table>
+</div>
+
+<div class="card tip">
+<h4>📦 Materiales obligatorios</h4>
+<ul>
+  <li>Hojas de examen</li>
+  <li>Calculadora científica estándar (no programable)</li>
+  <li>Netbook con GeoGebra instalado (para validación gráfica)</li>
+</ul>
+</div>
+
+<h2 id="tips">💡 Tips antes de empezar el parcial</h2>
+
+<div class="grid3">
+<div class="card tip">
+<h4>1️⃣ Leé los DOS enunciados</h4>
+<p>Antes de escribir nada, leé los dos problemas. Identificá cuál te resulta más cómodo y empezá por ese. <strong>No tenés que resolverlos en orden.</strong></p>
+</div>
+<div class="card tip">
+<h4>2️⃣ Subrayá los datos</h4>
+<p>Con el lápiz: subrayá la función, el intervalo, las condiciones iniciales y la pregunta exacta. Evita confundir variables.</p>
+</div>
+<div class="card tip">
+<h4>3️⃣ Anotá unidades</h4>
+<p>L/s, m, °C, min. Las unidades son el 50% de la justificación física en la interpretación final.</p>
+</div>
+</div>
+
+<hr>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- ──────────────────────────── PROBLEMA 1 ────────────────────────────── -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+
+<h2 id="p1-enunciado"><span class="badge p1">PROBLEMA 1</span>Enunciado oficial</h2>
+
+<div class="card enunciado">
+<h4>📝 Acumulación de Caudal y Error de Muestreo Digital</h4>
+<p>El sensor de caudal de entrada a un nodo de distribución industrial registra una tasa de flujo de agua gobernada por la función continua:</p>
+<div class="formula-box">$Q(t) = 3t^2 + 2$ &nbsp;[Litros/segundo]</div>
+<p>en el intervalo de tiempo $[0, 2]$ segundos.</p>
+<p><strong>a)</strong> Determine el <em>volumen analítico exacto</em> de agua acumulado al finalizar los 2 segundos aplicando la <strong>Regla de Barrow</strong>.</p>
+<p><strong>b)</strong> Simule el procesamiento de un PLC cuyo tiempo de adquisición de datos es lento ($\Delta t = 1$ s). Calcule el volumen aproximado utilizando una <strong>Suma de Riemann por izquierda</strong> evaluando en $t_0 = 0$ s y $t_1 = 1$ s.</p>
+<p><strong>c)</strong> Calcule el <em>error porcentual</em> introducido por la discretización del PLC respecto al valor exacto e interprete críticamente qué consecuencias físicas reales provocaría este error si el lazo de control tuviese que evitar el desborde de un tanque crítico.</p>
+</div>
+
+<h2 id="p1-analisis"><span class="badge p1">PROBLEMA 1</span>🧠 Análisis previo — ¿cómo lo reconozco?</h2>
+
+<div class="card intuition">
+<h4>Señales del enunciado que te dicen "esto es integración":</h4>
+<ul>
+  <li>🔑 La palabra <span class="hl-accent">"acumulado"</span> → siempre integral.</li>
+  <li>🔑 <span class="hl-accent">"Tasa de flujo"</span> → te dan la derivada, pedís la cantidad acumulada.</li>
+  <li>🔑 <span class="hl-accent">"Intervalo de tiempo"</span> → integral definida con extremos.</li>
+  <li>🔑 La unidad de la función ($Q$ en L/<strong>s</strong>) tiene tiempo en el denominador → integrarla con respecto a $t$ da unidades de volumen (L).</li>
+</ul>
+</div>
+
+<div class="card formula">
+<h4>Mapeo a la teoría</h4>
+<table>
+<tr><th>Pista del enunciado</th><th>Herramienta matemática</th></tr>
+<tr><td>"Volumen acumulado" + función continua</td><td>Integral definida $\int_a^b Q(t)\,dt$</td></tr>
+<tr><td>"Regla de Barrow"</td><td>$\int_a^b f = F(b) - F(a)$ con $F' = f$</td></tr>
+<tr><td>"Suma de Riemann por izquierda"</td><td>$\sum_{i=0}^{n-1} f(t_i)\cdot\Delta t$</td></tr>
+<tr><td>"PLC" + "tiempo de muestreo Δt"</td><td>Discretización numérica</td></tr>
+<tr><td>"Error porcentual"</td><td>$\dfrac{|exacto - aprox|}{exacto}\cdot 100\%$</td></tr>
+</table>
+</div>
+
+<!-- ── P1 PARTE A ── -->
+<h2 id="p1-a"><span class="badge p1">P1 a)</span>Volumen exacto por Regla de Barrow</h2>
+
+<div class="steps">
+
+<div class="step">
+<div class="step-header"><div class="step-num">1</div><div class="step-title">Plantear la integral definida</div></div>
+<div class="step-body">
+<p>Volumen = acumulación de caudal en el tiempo:</p>
+<div class="work">$$V_{exacto} = \displaystyle\int_0^2 Q(t)\,dt = \int_0^2 (3t^2 + 2)\,dt$$</div>
+<div class="step-why"><strong>¿Por qué?</strong> El Teorema Fundamental dice que la derivada del volumen acumulado es el caudal. Para "deshacer" la derivada, integramos.</div>
+</div>
+</div>
+
+<div class="step">
+<div class="step-header"><div class="step-num">2</div><div class="step-title">Hallar la primitiva F(t) término por término</div></div>
+<div class="step-body">
+<p>Aplico la <strong>regla de potencia inversa</strong>: $\displaystyle\int t^n\,dt = \dfrac{t^{n+1}}{n+1}$</p>
+<table>
+<tr><th>Término</th><th>Primitiva</th><th>Cálculo</th></tr>
+<tr><td>$3t^2$</td><td>$3\cdot\dfrac{t^3}{3} = t^3$</td><td>Subo exponente: $2\to 3$. Divido por 3. El coeficiente 3 se cancela.</td></tr>
+<tr><td>$2$</td><td>$2t$</td><td>Constante × variable.</td></tr>
+</table>
+<div class="work">$$F(t) = t^3 + 2t$$</div>
+<div class="step-why"><strong>Verificación:</strong> $F'(t) = 3t^2 + 2 = Q(t)$ ✓</div>
+</div>
+</div>
+
+<div class="step">
+<div class="step-header"><div class="step-num">3</div><div class="step-title">Aplicar Regla de Barrow: F(2) − F(0)</div></div>
+<div class="step-body">
+<p>Evalúo en el extremo superior:</p>
+<div class="work">$F(2) = 2^3 + 2\cdot 2 = 8 + 4 = 12$</div>
+<p>Evalúo en el extremo inferior:</p>
+<div class="work">$F(0) = 0^3 + 2\cdot 0 = 0$</div>
+<p>Resto:</p>
+<div class="work">$$V_{exacto} = F(2) - F(0) = 12 - 0 = \boxed{12 \text{ L}}$$</div>
+<div class="step-why"><strong>Sentido físico:</strong> En 2 segundos, el sensor midió un caudal que totaliza 12 litros de agua entrando al sistema.</div>
+</div>
+</div>
+
+</div>
+
+<div class="card answer">
+<h4>✅ Respuesta a):</h4>
+<p style="font-size:18px; text-align:center">$$V_{exacto} = 12 \text{ L}$$</p>
+</div>
+
+<!-- ── P1 PARTE B ── -->
+<h2 id="p1-b"><span class="badge p1">P1 b)</span>Aproximación PLC por Riemann izquierda</h2>
+
+<div class="card intuition">
+<h4>🧠 ¿Qué hace un PLC realmente?</h4>
+<p>Un PLC no sabe integrar simbólicamente. Lo único que hace es:</p>
+<ol>
+  <li>Cada $\Delta t$ segundos, <em>muestrea</em> el sensor.</li>
+  <li>Multiplica el valor leído por $\Delta t$ (área de un rectángulo).</li>
+  <li>Suma todos los rectángulos.</li>
+</ol>
+<p>Esa es la <strong>suma de Riemann</strong>. Cuanto más chico el Δt, menor el error — pero más carga de procesamiento.</p>
+</div>
+
+<div class="steps">
+
+<div class="step">
+<div class="step-header"><div class="step-num">1</div><div class="step-title">Identificar los instantes de muestreo</div></div>
+<div class="step-body">
+<p>El enunciado dice $\Delta t = 1$ s en $[0, 2]$. Subdividimos el intervalo:</p>
+<table>
+<tr><th>Subintervalo</th><th>Inicio ($t_i$)</th><th>Fin</th></tr>
+<tr><td>1</td><td>$t_0 = 0$</td><td>$t = 1$</td></tr>
+<tr><td>2</td><td>$t_1 = 1$</td><td>$t = 2$</td></tr>
+</table>
+<p>Por <strong>Riemann izquierda</strong>, evaluamos $Q$ en el <em>extremo izquierdo</em> de cada subintervalo: $t_0 = 0$ y $t_1 = 1$.</p>
+<div class="step-why"><strong>¿Por qué izquierda y no derecha?</strong> El PLC lee el sensor <em>al inicio</em> del intervalo y asume que el valor se mantiene constante hasta la próxima lectura. Es lo más simple computacionalmente.</div>
+</div>
+</div>
+
+<div class="step">
+<div class="step-header"><div class="step-num">2</div><div class="step-title">Calcular Q en cada instante de muestreo</div></div>
+<div class="step-body">
+<div class="work">
+$Q(0) = 3(0)^2 + 2 = 0 + 2 = \mathbf{2}$ L/s<br><br>
+$Q(1) = 3(1)^2 + 2 = 3 + 2 = \mathbf{5}$ L/s
+</div>
+<div class="step-why">Estos son los valores que el PLC realmente "ve" del sensor. Notá que entre $t=0$ y $t=1$ el caudal pasó de 2 a 5 L/s, pero el PLC nunca se entera de los valores intermedios.</div>
+</div>
+</div>
+
+<div class="step">
+<div class="step-header"><div class="step-num">3</div><div class="step-title">Sumar los rectángulos de Riemann</div></div>
+<div class="step-body">
+<div class="work">
+$V_{PLC} = Q(t_0)\cdot\Delta t + Q(t_1)\cdot\Delta t$ <br><br>
+$V_{PLC} = 2\cdot 1 + 5\cdot 1 = 2 + 5$<br><br>
+$$\boxed{\;V_{PLC} = 7 \text{ L}\;}$$
+</div>
+<div class="step-why"><strong>Interpretación gráfica:</strong> Imaginá la curva de $Q(t)$ que es una parábola creciente. Los rectángulos del PLC quedan <em>por debajo</em> de la curva (área subestimada). Por eso el PLC cree que entraron solo 7 L cuando en realidad fueron 12.</div>
+</div>
+</div>
+
+</div>
+
+<div class="card answer">
+<h4>✅ Respuesta b):</h4>
+<p style="font-size:18px; text-align:center">$$V_{PLC} = 7 \text{ L}$$</p>
+</div>
+
+<!-- ── P1 PARTE C ── -->
+<h2 id="p1-c"><span class="badge p1">P1 c)</span>Error porcentual e interpretación crítica</h2>
+
+<div class="steps">
+
+<div class="step">
+<div class="step-header"><div class="step-num">1</div><div class="step-title">Fórmula del error porcentual</div></div>
+<div class="step-body">
+<div class="work">$$\text{Error \%} = \dfrac{|V_{exacto} - V_{PLC}|}{V_{exacto}}\cdot 100\%$$</div>
+<div class="step-why"><strong>Atención al denominador:</strong> el error porcentual siempre se calcula respecto al <em>valor verdadero</em> (exacto). Nunca dividas por el aproximado.</div>
+</div>
+</div>
+
+<div class="step">
+<div class="step-header"><div class="step-num">2</div><div class="step-title">Reemplazar y calcular</div></div>
+<div class="step-body">
+<div class="work">
+$\text{Error \%} = \dfrac{|12 - 7|}{12}\cdot 100\% = \dfrac{5}{12}\cdot 100\%$<br><br>
+$\text{Error \%} = 0{,}4167 \cdot 100\%$<br><br>
+$$\boxed{\;\text{Error} \approx 41{,}67\%\;}$$
+</div>
+</div>
+</div>
+
+<div class="step">
+<div class="step-header"><div class="step-num">3</div><div class="step-title">Interpretación física crítica</div></div>
+<div class="step-body">
+<p>El PLC <strong>cree</strong> que entraron 7 L cuando <strong>realmente</strong> entraron 12 L. Es decir: <span class="hl-bad">subestima la entrada en casi un 42%</span>.</p>
+<p><strong>Consecuencias en el control:</strong></p>
+<ul>
+  <li>🚨 Si el tanque tiene capacidad máxima y el PLC dice "todavía hay margen" cuando en realidad está al borde → <span class="hl-bad">desborde físico real</span>.</li>
+  <li>🚨 La alarma de nivel alto se dispara <em>tarde</em> o no se dispara.</li>
+  <li>🚨 Daño a equipos, contaminación, riesgo para operarios.</li>
+</ul>
+<p><strong>Soluciones de ingeniería:</strong></p>
+<ul>
+  <li>✅ <span class="hl-good">Reducir Δt</span>: muestrear más rápido (ej. cada 0,1 s) reduce el error drásticamente.</li>
+  <li>✅ Usar <span class="hl-good">regla del trapecio</span> en vez de rectángulos: aproxima mucho mejor.</li>
+  <li>✅ Sensor de nivel redundante (no fiarse solo del caudal integrado).</li>
+  <li>✅ Margen de seguridad: capacidad del tanque ≫ volumen máximo esperado.</li>
+</ul>
+</div>
+</div>
+
+</div>
+
+<div class="card answer">
+<h4>✅ Respuesta c):</h4>
+<p>Error ≈ <strong>41,67%</strong>. El PLC subestima el volumen ingresado, lo que en el contexto del control de desborde implica un riesgo de fallo catastrófico. Se mitiga reduciendo Δt o usando métodos de integración numérica de mayor orden.</p>
+</div>
+
+<!-- ── SIMULADOR P1 ── -->
+<h2 id="p1-sim">🎮 Simulador interactivo del Problema 1</h2>
+
+<div class="card connect">
+<p>Cambiá los parámetros y mirá cómo se modifican los valores. <strong>Observación clave:</strong> con $\Delta t$ pequeño, el error tiende a cero.</p>
+<div class="controls">
+  <label>Coeficiente $a$ (de $at^2$) = <span id="p1-a-val" class="hl-accent">3</span>
+    <input type="range" id="p1-a" min="1" max="6" step="1" value="3">
+  </label>
+  <label>Constante $b$ = <span id="p1-b-val" class="hl-accent">2</span>
+    <input type="range" id="p1-b" min="0" max="5" step="1" value="2">
+  </label>
+  <label>Extremo $T$ = <span id="p1-T-val" class="hl-accent">2</span>
+    <input type="range" id="p1-T" min="1" max="5" step="0.5" value="2">
+  </label>
+  <label>$\Delta t$ del PLC = <span id="p1-dt-val" class="hl-accent">1</span>
+    <input type="range" id="p1-dt" min="0.05" max="2" step="0.05" value="1">
+  </label>
+</div>
+<div id="p1-plot" class="plot"></div>
+<div class="stat-output">
+  <div class="stat-box"><div class="label">$V_{exacto}$ (Barrow)</div><div class="value" id="p1-vex">12.00 L</div></div>
+  <div class="stat-box"><div class="label">$V_{PLC}$ (Riemann izq)</div><div class="value" id="p1-vplc">7.00 L</div></div>
+  <div class="stat-box"><div class="label">Error %</div><div class="value" id="p1-err">41.67%</div></div>
+</div>
+</div>
+
+<!-- ── VARIACIONES P1 ── -->
+<h2 id="p1-variaciones">🔄 Variaciones del Problema 1</h2>
+
+<div class="card warn">
+<p>El método es el mismo aunque cambien los números. Acá tenés casos típicos que podrían aparecer:</p>
+</div>
+
+<table class="var-table">
+<tr><th>Variación</th><th>Cambio</th><th>Cómo afecta</th></tr>
+<tr>
+  <td>Función distinta</td>
+  <td>$Q(t) = 4t^3 + t$</td>
+  <td>Misma receta: primitiva = $t^4 + t^2/2$. El método NO cambia.</td>
+</tr>
+<tr>
+  <td>Intervalo distinto</td>
+  <td>$[1, 4]$ en vez de $[0, 2]$</td>
+  <td>$F(4) - F(1)$. Cuidado: $F(1) \ne 0$.</td>
+</tr>
+<tr>
+  <td>Δt más fino</td>
+  <td>$\Delta t = 0{,}5$ s</td>
+  <td>4 muestras: $t = 0; 0{,}5; 1; 1{,}5$. Error baja a ~21%.</td>
+</tr>
+<tr>
+  <td>Riemann por derecha</td>
+  <td>Evaluar en $t_1, t_2$ (no $t_0, t_1$)</td>
+  <td>Para función creciente, sobreestima. $V_{PLC} = 5 + 14 = 19$ L (¡error opuesto!).</td>
+</tr>
+<tr>
+  <td>Regla del trapecio</td>
+  <td>Promedio de extremos × Δt</td>
+  <td>$\frac{Q(0)+Q(1)}{2}\cdot 1 + \frac{Q(1)+Q(2)}{2}\cdot 1 = 3{,}5+8{,}5 = 12$. ¡Da exacto para este caso!</td>
+</tr>
+</table>
+
+<!-- ── ERRORES COMUNES P1 ── -->
+<h2 id="p1-errores">⚠️ Errores comunes que cuestan puntos en P1</h2>
+
+<div class="card error">
+<ol>
+  <li><strong>Confundir Riemann izquierda con derecha</strong>: para izquierda usás $t_0$ y $t_1$ (NO $t_1$ y $t_2$).</li>
+  <li><strong>Olvidar multiplicar por Δt</strong>: la suma es $\sum f(t_i)\cdot\Delta t$, NO solo $\sum f(t_i)$.</li>
+  <li><strong>Dividir por el aproximado</strong> en el error %: siempre se divide por el exacto (verdadero).</li>
+  <li><strong>No verificar la primitiva</strong>: derivá $F$ y confirmá que da $Q$. Es la salvaguarda más fácil.</li>
+  <li><strong>Confundir signos</strong> en $F(b) - F(a)$: el orden importa. Si el intervalo es $[0,2]$, es $F(2) - F(0)$.</li>
+  <li><strong>No interpretar físicamente</strong> en la parte c): la cátedra valora la justificación con sentido físico, no solo el número.</li>
+</ol>
+</div>
+
+<hr>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- ──────────────────────────── PROBLEMA 2 ────────────────────────────── -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+
+<h2 id="p2-enunciado"><span class="badge p2">PROBLEMA 2</span>Enunciado oficial</h2>
+
+<div class="card enunciado">
+<h4>📝 Modelado Dinámico mediante EDO y PVI</h4>
+<p>El transitorio de enfriamiento pasivo de una caldera industrial al apagarse el quemador principal sigue la ley de transferencia térmica modelada por la EDO:</p>
+<div class="formula-box">$\dfrac{dT}{dt} = -0{,}2(T - 25)$</div>
+<p>Donde $T(t)$ es la temperatura interna en °C y $t$ el tiempo en minutos.</p>
+<p><strong>a)</strong> Encuentre la <strong>solución general</strong> del sistema utilizando el método de variables separables.</p>
+<p><strong>b)</strong> Sabiendo que en el instante exacto del apagado ($t = 0$ min) los sensores registran una temperatura inicial de $T(0) = 125$°C, determine la <strong>solución particular</strong> de la trayectoria térmica.</p>
+<p><strong>c)</strong> Calcule a qué valor numérico converge la temperatura cuando $t \to \infty$ y explique el significado físico de dicha asíntota.</p>
+</div>
+
+<h2 id="p2-analisis"><span class="badge p2">PROBLEMA 2</span>🧠 Análisis previo — ¿cómo lo reconozco?</h2>
+
+<div class="card intuition">
+<h4>Señales del enunciado que te dicen "esto es EDO separable":</h4>
+<ul>
+  <li>🔑 <span class="hl-accent">"dT/dt = ..."</span> → es una EDO de primer orden.</li>
+  <li>🔑 La parte derecha es $g(t)\cdot h(T)$: acá $g(t) = -0{,}2$ (constante) y $h(T) = T - 25$. → <strong>separable</strong>.</li>
+  <li>🔑 <span class="hl-accent">"Solución general"</span> + <span class="hl-accent">"variables separables"</span> → el método ya te lo dicen.</li>
+  <li>🔑 <span class="hl-accent">"$T(0) = 125$"</span> → es una condición inicial (PVI).</li>
+  <li>🔑 <span class="hl-accent">"$t \to \infty$"</span> → te piden el comportamiento asintótico.</li>
+</ul>
+</div>
+
+<div class="card formula">
+<h4>Clasificación de la EDO</h4>
+<table>
+<tr><th>Característica</th><th>Valor</th><th>¿Por qué?</th></tr>
+<tr><td><strong>Orden</strong></td><td>1</td><td>La derivada más alta es $dT/dt$.</td></tr>
+<tr><td><strong>Linealidad</strong></td><td>Lineal</td><td>$T$ aparece a la potencia 1, sin $T^2$ ni $\sin T$ ni $e^T$.</td></tr>
+<tr><td><strong>Tipo</strong></td><td>Variables separables</td><td>$\dfrac{dT}{dt} = -0{,}2 \cdot (T - 25)$ se puede dividir por $(T-25)$.</td></tr>
+<tr><td><strong>Subtipo físico</strong></td><td>Ley de Newton</td><td>$\dfrac{dT}{dt} = -k(T - T_a)$, con $k = 0{,}2$ y $T_a = 25$.</td></tr>
+</table>
+</div>
+
+<!-- ── P2 PARTE A ── -->
+<h2 id="p2-a"><span class="badge p2">P2 a)</span>Solución general por variables separables</h2>
+
+<div class="steps">
+
+<div class="step">
+<div class="step-header"><div class="step-num">1</div><div class="step-title">Separar las variables</div></div>
+<div class="step-body">
+<p>Llevo todo lo que tiene $T$ al lado izquierdo y todo lo que tiene $t$ al derecho:</p>
+<div class="work">
+$\dfrac{dT}{dt} = -0{,}2(T - 25)$ <br><br>
+Multiplico por $dt$ y divido por $(T-25)$: <br><br>
+$$\dfrac{dT}{T - 25} = -0{,}2\,dt$$
+</div>
+<div class="step-why"><strong>¿Por qué dividir por (T−25)?</strong> Porque esa es la función de $T$ que multiplica al lado derecho. Necesitamos que el lado izquierdo dependa <em>solo</em> de $T$.</div>
+</div>
+</div>
+
+<div class="step">
+<div class="step-header"><div class="step-num">2</div><div class="step-title">Integrar ambos lados</div></div>
+<div class="step-body">
+<div class="work">
+$\displaystyle\int\dfrac{dT}{T - 25} = \int -0{,}2\,dt$
+</div>
+<p><strong>Lado izquierdo:</strong> sustitución $u = T - 25 \Rightarrow du = dT$. Entonces $\int\dfrac{du}{u} = \ln|u| = \ln|T - 25|$.</p>
+<p><strong>Lado derecho:</strong> $\int -0{,}2\,dt = -0{,}2\,t$.</p>
+<div class="work">
+$$\ln|T - 25| = -0{,}2\,t + C$$
+</div>
+<div class="step-why"><strong>¿Por qué solo una constante C?</strong> Cada integral indefinida tiene su propia constante, pero las podemos juntar en una sola del lado derecho (la diferencia entre las dos sigue siendo una constante arbitraria).</div>
+</div>
+</div>
+
+<div class="step">
+<div class="step-header"><div class="step-num">3</div><div class="step-title">Despejar T(t) aplicando exponencial</div></div>
+<div class="step-body">
+<p>Aplico exponencial a ambos lados:</p>
+<div class="work">
+$|T - 25| = e^{-0{,}2t + C} = e^C \cdot e^{-0{,}2t}$
+</div>
+<p>Defino $A = \pm e^C$ (una nueva constante que absorbe el signo del valor absoluto y $e^C$):</p>
+<div class="work">
+$T - 25 = A\,e^{-0{,}2t}$ <br><br>
+$$\boxed{\;T(t) = 25 + A\,e^{-0{,}2t}\;}\quad\text{(solución general)}$$
+</div>
+<div class="step-why"><strong>El truco de absorber constantes:</strong> $\pm e^C$ es una constante real cualquiera (excepto 0). La llamamos $A$ para limpiar la expresión. Esa $A$ se determinará con la condición inicial.</div>
+</div>
+</div>
+
+</div>
+
+<div class="card answer">
+<h4>✅ Respuesta a):</h4>
+<p style="font-size:18px; text-align:center">$$T(t) = 25 + A\,e^{-0{,}2t}$$</p>
+<p style="text-align:center">con $A$ constante a determinar.</p>
+</div>
+
+<!-- ── P2 PARTE B ── -->
+<h2 id="p2-b"><span class="badge p2">P2 b)</span>Solución particular con T(0) = 125</h2>
+
+<div class="steps">
+
+<div class="step">
+<div class="step-header"><div class="step-num">1</div><div class="step-title">Reemplazar la condición inicial en la solución general</div></div>
+<div class="step-body">
+<p>Sé que $T(0) = 125$. Reemplazo $t = 0$:</p>
+<div class="work">
+$T(0) = 25 + A\,e^{-0{,}2\cdot 0} = 25 + A\cdot e^0 = 25 + A\cdot 1 = 25 + A$
+</div>
+</div>
+</div>
+
+<div class="step">
+<div class="step-header"><div class="step-num">2</div><div class="step-title">Despejar A</div></div>
+<div class="step-body">
+<div class="work">
+$25 + A = 125$ <br><br>
+$$\boxed{\;A = 100\;}$$
+</div>
+<div class="step-why"><strong>¿Qué representa A físicamente?</strong> Es el "exceso inicial" de temperatura sobre el ambiente: $T(0) - T_a = 125 - 25 = 100$°C.</div>
+</div>
+</div>
+
+<div class="step">
+<div class="step-header"><div class="step-num">3</div><div class="step-title">Sustituir A en la solución general</div></div>
+<div class="step-body">
+<div class="work">
+$$\boxed{\;T(t) = 25 + 100\,e^{-0{,}2t}\;}\quad\text{(solución particular)}$$
+</div>
+<div class="step-why"><strong>Verificación rápida:</strong> $T(0) = 25 + 100\cdot 1 = 125$ ✓ — coincide con la CI.</div>
+</div>
+</div>
+
+</div>
+
+<details class="reveal">
+<summary>📊 Tabla de valores de la solución particular</summary>
+<table>
+<tr><th>$t$ (min)</th><th>$e^{-0,2t}$</th><th>$T(t)$ (°C)</th></tr>
+<tr><td>0</td><td>1,000</td><td>125,00</td></tr>
+<tr><td>5</td><td>0,368</td><td>61,79</td></tr>
+<tr><td>10</td><td>0,135</td><td>38,53</td></tr>
+<tr><td>15</td><td>0,050</td><td>29,98</td></tr>
+<tr><td>20</td><td>0,018</td><td>26,83</td></tr>
+<tr><td>30</td><td>0,0025</td><td>25,25</td></tr>
+<tr><td>50</td><td>$4{,}5\cdot 10^{-5}$</td><td>25,00</td></tr>
+</table>
+<p>Observación: a los 15 minutos ya está prácticamente equilibrada (29,98°C ≈ 25°C ambiente).</p>
+</details>
+
+<div class="card answer">
+<h4>✅ Respuesta b):</h4>
+<p style="font-size:18px; text-align:center">$$T(t) = 25 + 100\,e^{-0{,}2\,t}$$</p>
+</div>
+
+<!-- ── P2 PARTE C ── -->
+<h2 id="p2-c"><span class="badge p2">P2 c)</span>Asíntota y significado físico</h2>
+
+<div class="steps">
+
+<div class="step">
+<div class="step-header"><div class="step-num">1</div><div class="step-title">Plantear el límite</div></div>
+<div class="step-body">
+<div class="work">
+$\displaystyle\lim_{t\to\infty} T(t) = \lim_{t\to\infty}\left[25 + 100\,e^{-0{,}2\,t}\right]$
+</div>
+</div>
+</div>
+
+<div class="step">
+<div class="step-header"><div class="step-num">2</div><div class="step-title">Evaluar el término exponencial</div></div>
+<div class="step-body">
+<p>Como el exponente es negativo y $t$ crece, el exponencial tiende a cero:</p>
+<div class="work">
+$\displaystyle\lim_{t\to\infty} e^{-0{,}2t} = e^{-\infty} = 0$
+</div>
+<div class="step-why">Por eso $A$ "se desactiva" en el infinito — la temperatura inicial se olvida con el tiempo.</div>
+</div>
+</div>
+
+<div class="step">
+<div class="step-header"><div class="step-num">3</div><div class="step-title">Calcular el límite total</div></div>
+<div class="step-body">
+<div class="work">
+$\displaystyle\lim_{t\to\infty} T(t) = 25 + 100\cdot 0 = \boxed{25\text{ °C}}$
+</div>
+</div>
+</div>
+
+<div class="step">
+<div class="step-header"><div class="step-num">4</div><div class="step-title">Significado físico</div></div>
+<div class="step-body">
+<p>La caldera <strong>se equilibra térmicamente con el ambiente</strong>. Después de un tiempo suficientemente largo, su temperatura interna iguala los 25 °C del entorno.</p>
+<p><strong>¿Por qué este resultado tiene sentido?</strong></p>
+<ul>
+  <li>🔥 Mientras existía gradiente ($T > T_a$), había transferencia de calor hacia afuera.</li>
+  <li>❄️ A medida que $T$ baja, el gradiente $(T - T_a)$ disminuye, y la tasa de enfriamiento se hace cada vez más lenta.</li>
+  <li>⚖️ En el límite, no hay gradiente → no hay transferencia → equilibrio.</li>
+</ul>
+<p><strong>Implicancia industrial:</strong> el enfriamiento pasivo no puede llevar la caldera <em>por debajo</em> de 25 °C. Si se necesita más frío, hay que usar un sistema activo (ventiladores, refrigerante).</p>
+</div>
+</div>
+
+</div>
+
+<div class="card answer">
+<h4>✅ Respuesta c):</h4>
+<p style="font-size:18px; text-align:center">$$\lim_{t\to\infty} T(t) = 25\text{ °C}$$</p>
+<p style="text-align:center">La temperatura converge a la temperatura ambiente — equilibrio térmico pasivo.</p>
+</div>
+
+<!-- ── SIMULADOR P2 ── -->
+<h2 id="p2-sim">🎮 Simulador interactivo del Problema 2</h2>
+
+<div class="card connect">
+<p>Cambiá los parámetros y mirá cómo cambia la curva de enfriamiento. <strong>Observaciones clave:</strong> la asíntota es siempre $T_a$, y a mayor $k$, más rápido converge.</p>
+<div class="controls">
+  <label>$T_a$ (ambiente, °C) = <span id="p2-Ta-val" class="hl-accent">25</span>
+    <input type="range" id="p2-Ta" min="10" max="40" step="1" value="25">
+  </label>
+  <label>$T_0$ (inicial, °C) = <span id="p2-T0-val" class="hl-accent">125</span>
+    <input type="range" id="p2-T0" min="50" max="200" step="5" value="125">
+  </label>
+  <label>$k$ (1/min) = <span id="p2-k-val" class="hl-accent">0.2</span>
+    <input type="range" id="p2-k" min="0.05" max="1" step="0.05" value="0.2">
+  </label>
+  <label>Tiempo máx (min) = <span id="p2-tmax-val" class="hl-accent">30</span>
+    <input type="range" id="p2-tmax" min="5" max="60" step="5" value="30">
+  </label>
+</div>
+<div id="p2-plot" class="plot"></div>
+<div class="stat-output">
+  <div class="stat-box"><div class="label">Constante $A$</div><div class="value" id="p2-A">100</div></div>
+  <div class="stat-box"><div class="label">$T(t_{max})$</div><div class="value" id="p2-Tt">25.30</div></div>
+  <div class="stat-box"><div class="label">Asíntota</div><div class="value" id="p2-asint">25 °C</div></div>
+  <div class="stat-box"><div class="label">$\tau = 1/k$</div><div class="value" id="p2-tau">5.0 min</div></div>
+</div>
+</div>
+
+<!-- ── VARIACIONES P2 ── -->
+<h2 id="p2-variaciones">🔄 Variaciones del Problema 2</h2>
+
+<table class="var-table">
+<tr><th>Variación</th><th>Cambio</th><th>Cómo afecta</th></tr>
+<tr>
+  <td>Cambia $T_a$</td>
+  <td>$T_a = 30$°C en vez de 25</td>
+  <td>Asíntota es 30°C. La forma de la curva es idéntica, solo se desplaza.</td>
+</tr>
+<tr>
+  <td>Cambia $k$</td>
+  <td>$k = 0{,}5$ en vez de 0,2</td>
+  <td>Enfriamiento más rápido. Mismo método, distinto exponente.</td>
+</tr>
+<tr>
+  <td>Cambia $T_0$</td>
+  <td>$T(0) = 80$°C</td>
+  <td>$A = 80 - 25 = 55$. Misma forma, distinto exceso inicial.</td>
+</tr>
+<tr>
+  <td>EDO de calentamiento</td>
+  <td>$dT/dt = +k(T_a - T)$</td>
+  <td>Mismo método, pero arranca por debajo del ambiente y sube.</td>
+</tr>
+<tr>
+  <td>Otra aplicación física</td>
+  <td>RL: $L\,di/dt + Ri = E$</td>
+  <td>Mismo formato matemático. Cambia la interpretación (corriente en vez de temperatura).</td>
+</tr>
+</table>
+
+<!-- ── ERRORES COMUNES P2 ── -->
+<h2 id="p2-errores">⚠️ Errores comunes que cuestan puntos en P2</h2>
+
+<div class="card error">
+<ol>
+  <li><strong>Olvidar el +C</strong>: sin la constante de integración no podés aplicar la CI. Es el error más común.</li>
+  <li><strong>Mal pasaje del $\ln$ al exponencial</strong>: $\ln|T-25| = X$ NO es $T - 25 = X$. Hay que aplicar $e^X$.</li>
+  <li><strong>No absorber el signo del valor absoluto</strong>: $|T-25| = e^X$ ⟹ $T - 25 = \pm e^X = A$. Hay que reconocer que $A$ puede ser negativa.</li>
+  <li><strong>Confundir $T_a$ con $T_0$</strong>: $T_a = 25$ es el ambiente (asíntota), $T_0 = 125$ es la temperatura inicial.</li>
+  <li><strong>Despeje incorrecto de A</strong>: $T_0 = T_a + A$ ⟹ $A = T_0 - T_a$, NO $A = T_0$.</li>
+  <li><strong>Concluir mal la asíntota</strong>: el límite es $T_a$ (el ambiente), NO 0.</li>
+  <li><strong>No interpretar físicamente</strong>: la parte c) pide explicación física, no solo el número.</li>
+</ol>
+</div>
+
+<hr>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- ──────────────────────────── CIERRE ────────────────────────────── -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+
+<h2 id="patrones">🔍 Patrones de reconocimiento — identificá el tipo en 5 segundos</h2>
+
+<div class="card formula">
+<table>
+<tr><th>Pistas del enunciado</th><th>Tipo de problema</th><th>Herramienta</th></tr>
+<tr><td>"Velocidad de un actuador", "sensibilidad de un sensor", "razón de cambio"</td><td>Derivada</td><td>Reglas de derivación</td></tr>
+<tr><td>"Volumen acumulado", "distancia recorrida", "trabajo realizado", "tasa de flujo"</td><td>Integral</td><td>Barrow + primitiva</td></tr>
+<tr><td>"PLC", "tiempo de muestreo Δt", "lectura digital"</td><td>Integral numérica</td><td>Sumas de Riemann</td></tr>
+<tr><td>"dT/dt = ...", "evolución temporal", "transitorio"</td><td>EDO</td><td>Variables separables</td></tr>
+<tr><td>"$T(0) = $...", "condición inicial", "PVI"</td><td>EDO con CI</td><td>Sep. variables + aplicar CI</td></tr>
+<tr><td>"$t \to \infty$", "estado estacionario", "régimen permanente"</td><td>Límite asintótico</td><td>Cálculo de límites</td></tr>
+<tr><td>"Ley de Newton", "Torricelli", "RL"</td><td>EDO conocida</td><td>Aplicar fórmula estándar</td></tr>
+</table>
+</div>
+
+<h2 id="receta">📜 Receta universal para cualquier parcial de este tipo</h2>
+
+<div class="grid2">
+<div class="card tip">
+<h4>📐 Si es INTEGRAL</h4>
+<ol>
+  <li>Leé la función y el intervalo.</li>
+  <li>Identificá si es exacta (Barrow) o numérica (Riemann).</li>
+  <li>Para Barrow: primitiva → $F(b) - F(a)$.</li>
+  <li>Para Riemann: muestrear → multiplicar por Δt → sumar.</li>
+  <li>Verificá unidades.</li>
+  <li>Interpretá físicamente el resultado.</li>
+</ol>
+</div>
+<div class="card tip">
+<h4>📊 Si es EDO</h4>
+<ol>
+  <li>Verificá orden y linealidad.</li>
+  <li>Identificá si es separable.</li>
+  <li>Separá: todo $y$ a la izquierda, todo $t$ a la derecha.</li>
+  <li>Integrá ambos lados (¡no olvides +C!).</li>
+  <li>Despejá $y(t)$.</li>
+  <li>Aplicá CI para hallar la constante.</li>
+  <li>Si pide límite, evaluá $t\to\infty$.</li>
+  <li>Interpretá físicamente.</li>
+</ol>
+</div>
+</div>
+
+<!-- ── QUIZ ── -->
+<h2 id="quiz">🎓 Quiz del modelo de parcial</h2>
+
+<div id="quiz-container"></div>
+<div class="quiz-score" id="quiz-score" style="display:none"></div>
+<button class="btn" id="quiz-reset" style="display:none; margin:10px auto">🔄 Reintentar</button>
+
+<!-- ── CONSEJOS ── -->
+<h2 id="consejos">💡 Consejos finales — el día del parcial</h2>
+
+<div class="grid3">
+<div class="card tip">
+<h4>🧘 Antes</h4>
+<ul style="font-size:13px; padding-left:18px">
+  <li>Dormí bien la noche anterior.</li>
+  <li>Llevá calculadora con batería cargada y de respaldo.</li>
+  <li>Imprimí o anotá el cheat sheet de fórmulas.</li>
+</ul>
+</div>
+<div class="card tip">
+<h4>⏱️ Durante</h4>
+<ul style="font-size:13px; padding-left:18px">
+  <li>Leé los DOS problemas primero.</li>
+  <li>Empezá por el que más cómodo te queda.</li>
+  <li>Justificá cada paso con palabras.</li>
+  <li>Anotá unidades.</li>
+</ul>
+</div>
+<div class="card tip">
+<h4>✅ Al final</h4>
+<ul style="font-size:13px; padding-left:18px">
+  <li>Verificá derivando la solución de la EDO.</li>
+  <li>Verificá derivando la primitiva.</li>
+  <li>Releé las interpretaciones físicas.</li>
+  <li>Validá con GeoGebra si te queda tiempo.</li>
+</ul>
+</div>
+</div>
+
+<div class="hero">
+<h3>🎯 Resumen ejecutivo</h3>
+<p>El parcial es <strong>muy predecible</strong> en su estructura. Dos problemas: uno de integración (con análisis de error de PLC) y uno de EDO (con CI y asíntota). Si dominás la receta universal, estás listo.</p>
+<p>Los <strong>números</strong> pueden cambiar, los <strong>métodos no</strong>.</p>
+</div>
+
+<div class="footer">
+  Hecho con ❤️ para preparar el Parcial 2 de Análisis Matemático I · Lic. Automatización y Control · 2026<br>
+  <a href="analisis_parcial2.html" style="color:var(--accent)">← Volver al apunte principal</a> · joaquin.delacorte.ar
+</div>
+
+</main>
+</div>
+
+<script>
+/* ════════════════ SIMULADOR P1 ════════════════ */
+function p1Update(){
+  const a = parseFloat(document.getElementById('p1-a').value);
+  const b = parseFloat(document.getElementById('p1-b').value);
+  const T = parseFloat(document.getElementById('p1-T').value);
+  const dt = parseFloat(document.getElementById('p1-dt').value);
+  document.getElementById('p1-a-val').textContent = a;
+  document.getElementById('p1-b-val').textContent = b;
+  document.getElementById('p1-T-val').textContent = T;
+  document.getElementById('p1-dt-val').textContent = dt;
+
+  // Curva continua
+  const xs = [], ys = [];
+  for(let x=0; x<=T; x+=T/200){ xs.push(x); ys.push(a*x*x + b); }
+  // Barrow: F(t) = (a/3)t^3 + bt
+  const Vex = (a/3)*Math.pow(T,3) + b*T;
+  // Riemann izquierda
+  let Vplc = 0;
+  const rects = [];
+  for(let x=0; x<T - 1e-9; x+=dt){
+    const h = a*x*x + b;
+    Vplc += h*dt;
+    rects.push({x0:x, x1:Math.min(x+dt,T), h:h});
+  }
+  const err = Math.abs(Vex - Vplc)/Vex*100;
+  document.getElementById('p1-vex').textContent = Vex.toFixed(2)+' L';
+  document.getElementById('p1-vplc').textContent = Vplc.toFixed(2)+' L';
+  document.getElementById('p1-err').textContent = err.toFixed(2)+'%';
+
+  const traces = [{
+    x:xs, y:ys, type:'scatter', mode:'lines',
+    line:{color:'#38bdf8', width:3}, name:'Q(t) real',
+    fill:'tozeroy', fillcolor:'rgba(56,189,248,0.1)'
+  }];
+  rects.forEach((r,i)=>{
+    traces.push({
+      x:[r.x0, r.x0, r.x1, r.x1, r.x0],
+      y:[0, r.h, r.h, 0, 0],
+      type:'scatter', mode:'lines', fill:'toself',
+      fillcolor:'rgba(251,146,60,0.3)',
+      line:{color:'#fb923c', width:1},
+      showlegend:i===0, name:'PLC (rectángulos)'
+    });
+  });
+  Plotly.react('p1-plot', traces, {
+    paper_bgcolor:'#0b1220', plot_bgcolor:'#0b1220',
+    font:{color:'#e2e8f0'},
+    margin:{t:20,r:20,b:50,l:50},
+    xaxis:{gridcolor:'#334155', title:'t (s)'},
+    yaxis:{gridcolor:'#334155', title:'Q (L/s)', rangemode:'tozero'},
+    legend:{orientation:'h', y:-0.18}
+  }, {displayModeBar:false, responsive:true});
+}
+['p1-a','p1-b','p1-T','p1-dt'].forEach(id=>{
+  const el = document.getElementById(id);
+  if(el) el.addEventListener('input', p1Update);
+});
+
+/* ════════════════ SIMULADOR P2 ════════════════ */
+function p2Update(){
+  const Ta = parseFloat(document.getElementById('p2-Ta').value);
+  const T0 = parseFloat(document.getElementById('p2-T0').value);
+  const k = parseFloat(document.getElementById('p2-k').value);
+  const tmax = parseFloat(document.getElementById('p2-tmax').value);
+  document.getElementById('p2-Ta-val').textContent = Ta;
+  document.getElementById('p2-T0-val').textContent = T0;
+  document.getElementById('p2-k-val').textContent = k.toFixed(2);
+  document.getElementById('p2-tmax-val').textContent = tmax;
+
+  const A = T0 - Ta;
+  const xs = [], ys = [];
+  for(let t=0; t<=tmax; t+=tmax/200){
+    xs.push(t);
+    ys.push(Ta + A*Math.exp(-k*t));
+  }
+  const Tt = Ta + A*Math.exp(-k*tmax);
+  const tau = 1/k;
+  document.getElementById('p2-A').textContent = A;
+  document.getElementById('p2-Tt').textContent = Tt.toFixed(2)+' °C';
+  document.getElementById('p2-asint').textContent = Ta+' °C';
+  document.getElementById('p2-tau').textContent = tau.toFixed(2)+' min';
+
+  Plotly.react('p2-plot',[
+    {x:xs, y:ys, type:'scatter', mode:'lines', line:{color:'#fb923c', width:3}, name:'T(t)'},
+    {x:[0, tmax], y:[Ta, Ta], type:'scatter', mode:'lines',
+     line:{color:'#34d399', width:2, dash:'dash'}, name:'asíntota T_a'},
+    {x:[0], y:[T0], type:'scatter', mode:'markers',
+     marker:{color:'#a78bfa', size:14}, name:'T(0)'}
+  ],{
+    paper_bgcolor:'#0b1220', plot_bgcolor:'#0b1220',
+    font:{color:'#e2e8f0'},
+    margin:{t:20,r:20,b:50,l:50},
+    xaxis:{gridcolor:'#334155', title:'t (min)'},
+    yaxis:{gridcolor:'#334155', title:'T (°C)'},
+    legend:{orientation:'h', y:-0.18}
+  },{displayModeBar:false, responsive:true});
+}
+['p2-Ta','p2-T0','p2-k','p2-tmax'].forEach(id=>{
+  const el = document.getElementById(id);
+  if(el) el.addEventListener('input', p2Update);
+});
+
+/* ════════════════ QUIZ ════════════════ */
+const quizData = [
+  {q:'En el problema 1, ¿por qué el resultado de Barrow es 12 L?',
+   opts:['Porque F(2)−F(0) = (8+4)−0 = 12','Porque Q(2) = 14','Porque sumamos 3+2 = 5','Porque integramos 3+2 = 5'],
+   correct:0,
+   fb:'F(t) = t³+2t. Evaluamos en los extremos del intervalo.'},
+  {q:'En Riemann por izquierda con Δt=1 s en [0,2], ¿en qué instantes se evalúa Q?',
+   opts:['t=0 y t=1','t=1 y t=2','t=0,5 y t=1,5','t=0 y t=2'],
+   correct:0,
+   fb:'Por izquierda: extremo izquierdo de cada subintervalo. Los subintervalos son [0,1] y [1,2], así que evaluamos en 0 y 1.'},
+  {q:'¿Por qué el PLC subestima el caudal en el problema 1?',
+   opts:['Porque Q es creciente: el extremo izquierdo es siempre menor','Porque Q es decreciente','Porque Δt es muy chico','Porque hay ruido en el sensor'],
+   correct:0,
+   fb:'Q(t)=3t²+2 es creciente. El valor en el extremo izquierdo es el mínimo del subintervalo → área subestimada.'},
+  {q:'¿Cómo se reduce el error porcentual del PLC?',
+   opts:['Reduciendo Δt o usando trapecios','Aumentando Δt','Sacando la raíz cuadrada','No se puede reducir'],
+   correct:0,
+   fb:'A menor Δt, más rectángulos y mejor aproximación. Trapecios aproxima aún mejor que rectángulos.'},
+  {q:'En el problema 2, ¿qué método usaste para resolver la EDO?',
+   opts:['Variables separables','Factor integrante','Sustitución u','Series de Taylor'],
+   correct:0,
+   fb:'dT/dt = g(t)·h(T) con g(t)=-0.2 constante y h(T)=T-25. Es separable.'},
+  {q:'Al separar variables en dT/(T-25) = -0.2 dt e integrar, ¿qué obtenés?',
+   opts:['ln|T−25| = −0.2t + C','T−25 = −0.2t + C','T = −0.2t + C','(T−25)² = −0.4t + C'],
+   correct:0,
+   fb:'∫du/u = ln|u|. Del lado derecho, ∫-0.2 dt = -0.2t.'},
+  {q:'¿Cuánto vale la constante A en la solución general T(t)=25+A·e^(-0.2t)?',
+   opts:['A = 100','A = 125','A = 25','A = 0.2'],
+   correct:0,
+   fb:'A = T(0) − Tₐ = 125 − 25 = 100.'},
+  {q:'¿Cuál es la temperatura cuando t→∞?',
+   opts:['25 °C (temperatura ambiente)','0 °C','125 °C (la inicial)','Tiende a infinito'],
+   correct:0,
+   fb:'e^(-0.2t) → 0, así que T → 25 = Tₐ.'},
+  {q:'¿Qué significa físicamente la asíntota?',
+   opts:['Equilibrio térmico con el ambiente','Que el sistema se rompe','Que el reloj se detiene','Que la EDO no tiene solución'],
+   correct:0,
+   fb:'Sin gradiente, no hay transferencia de calor. El sistema se equilibra pasivamente.'},
+  {q:'Si en el problema 2 fuera T(0)=50 °C en lugar de 125, ¿cuánto sería A?',
+   opts:['A = 25','A = 50','A = 100','A = −25'],
+   correct:0,
+   fb:'A = T₀ − Tₐ = 50 − 25 = 25.'},
+  {q:'En problema 1 con Δt=0.5 s, ¿cuántos subintervalos hay en [0,2]?',
+   opts:['4','2','5','8'],
+   correct:0,
+   fb:'2 / 0.5 = 4 subintervalos.'},
+  {q:'¿Cuál es el orden de la EDO del problema 2?',
+   opts:['Orden 1','Orden 2','Orden 0','No tiene orden'],
+   correct:0,
+   fb:'La derivada más alta es dT/dt → orden 1.'}
+];
+
+function renderQuiz(){
+  const qc = document.getElementById('quiz-container');
+  if(!qc) return;
+  qc.innerHTML = '';
+  const userAnswers = window.__quizAns = new Array(quizData.length).fill(null);
+  quizData.forEach((q,i)=>{
+    const div = document.createElement('div'); div.className='quiz-q';
+    div.innerHTML = `<strong>${i+1}. ${q.q}</strong>`;
+    const opts = document.createElement('div'); opts.className='opts';
+    q.opts.forEach((opt,j)=>{
+      const o = document.createElement('div'); o.className='opt';
+      o.textContent = opt;
+      o.addEventListener('click', ()=>{
+        if(userAnswers[i]!==null) return;
+        userAnswers[i] = j;
+        const correct = j===q.correct;
+        o.classList.add(correct?'correct':'wrong');
+        if(!correct){ opts.children[q.correct].classList.add('correct'); }
+        const fb = document.createElement('div'); fb.className='quiz-feedback';
+        fb.innerHTML = (correct?'✅ Correcto. ':'❌ No. ') + q.fb;
+        div.appendChild(fb);
+        if(userAnswers.every(a=>a!==null)){
+          const score = userAnswers.filter((a,i)=>a===quizData[i].correct).length;
+          const out = document.getElementById('quiz-score');
+          out.style.display='block';
+          out.innerHTML = `🎯 ${score} / ${quizData.length} correctas` +
+            (score>=11?'<br><span style="color:var(--good)">¡Listo para el parcial! 🚀</span>':
+             score>=8?'<br><span style="color:var(--good)">Muy bien — repasá lo que erraste.</span>':
+             score>=5?'<br><span style="color:var(--warn)">Tenés que reforzar. Volvé a leer las resoluciones.</span>':
+             '<br><span style="color:var(--bad)">Releé toda la página antes de continuar.</span>');
+          document.getElementById('quiz-reset').style.display='block';
+        }
+      });
+      opts.appendChild(o);
+    });
+    div.appendChild(opts);
+    qc.appendChild(div);
+  });
+}
+document.getElementById('quiz-reset').addEventListener('click', ()=>{
+  document.getElementById('quiz-score').style.display='none';
+  document.getElementById('quiz-reset').style.display='none';
+  renderQuiz();
+});
+
+/* ════════════════ INIT ════════════════ */
+function init(){
+  if(document.getElementById('p1-plot')) p1Update();
+  if(document.getElementById('p2-plot')) p2Update();
+  renderQuiz();
+}
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>

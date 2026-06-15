@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Autoevaluación · Parcial 2 — Análisis Matemático I</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+
+<style>
+:root{
+  --bg:#fefcf7; --panel:#ffffff; --panel2:#f5f0e6; --panel3:#faf7f0;
+  --border:#e5dfd0; --border-strong:#cbc4b0;
+  --text:#1f2937; --text-soft:#374151; --muted:#6b7280; --muted-soft:#9ca3af;
+  --accent:#0369a1; --accent-bg:#dbeafe;
+  --accent2:#7c3aed; --accent2-bg:#ede9fe;
+  --good:#15803d; --good-bg:#dcfce7;
+  --warn:#b45309; --warn-bg:#fef3c7;
+  --bad:#b91c1c; --bad-bg:#fee2e2;
+  --pink:#be185d; --pink-bg:#fce7f3;
+  --orange:#c2410c; --orange-bg:#ffedd5;
+  --yellow-hl:#fef08a;
+  --teal:#0f766e; --teal-bg:#ccfbf1;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+     background:var(--bg); color:var(--text); line-height:1.65}
+
+.layout{display:grid; grid-template-columns:290px 1fr; min-height:100vh}
+
+nav.sidebar{background:var(--panel2); border-right:1px solid var(--border);
+            padding:18px 14px; position:sticky; top:0; height:100vh; overflow-y:auto}
+.brand{font-weight:700; font-size:16px; color:var(--accent); margin-bottom:4px}
+.brand small{display:block; font-weight:400; color:var(--muted); font-size:11px; margin-top:2px}
+.nav-level{font-size:10px; color:var(--muted); letter-spacing:1.2px; text-transform:uppercase;
+           padding:14px 4px 4px; font-weight:600}
+nav.sidebar a{display:flex; align-items:center; gap:8px; color:var(--text-soft); text-decoration:none;
+              padding:6px 10px; border-radius:6px; font-size:13px; margin:1px 0;
+              transition:background .15s, color .15s}
+nav.sidebar a:hover{background:var(--accent-bg); color:var(--accent)}
+.back-home{display:inline-block; margin-bottom:14px; color:var(--accent);
+           text-decoration:none; font-size:13px; font-weight:600}
+.back-home:hover{text-decoration:underline}
+
+main{padding:28px 40px; max-width:980px}
+h1{font-size:30px; color:#1e3a8a; margin-bottom:4px; letter-spacing:-0.5px}
+.subtitle{color:var(--muted); font-size:14.5px; margin-bottom:28px}
+h2{font-size:22px; color:#1e40af; border-bottom:2px solid var(--accent-bg); padding-bottom:8px;
+   margin:40px 0 14px; font-weight:700}
+h3{font-size:16px; color:var(--accent2); margin:20px 0 6px; font-weight:600}
+p,li{font-size:15px}
+ul,ol{padding-left:22px; margin:6px 0}
+
+/* Cards de ejercicio */
+.ex{background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:16px 20px; margin:14px 0; box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.ex-head{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:8px}
+.ex-num{display:inline-flex; align-items:center; justify-content:center;
+        background:var(--accent); color:white; width:auto; min-width:64px; height:30px;
+        padding:0 12px; border-radius:15px; font-weight:700; font-size:13px;
+        letter-spacing:0.3px}
+.ex-title{font-weight:700; color:var(--text); font-size:15.5px; flex:1}
+.ex-stmt{background:var(--panel3); padding:12px 16px; border-radius:8px;
+         border-left:3px solid var(--orange); margin:8px 0; font-size:14.5px; color:var(--text)}
+.ex-stmt ul{margin:6px 0; padding-left:22px}
+.ex-stmt strong{color:var(--text)}
+
+/* Botón de revelar solución */
+.reveal-btn{background:var(--accent); color:white; border:none; padding:9px 18px;
+            border-radius:6px; font-weight:600; cursor:pointer; font-size:13.5px;
+            transition:background .15s, transform .1s; margin-top:8px;
+            box-shadow:0 2px 4px rgba(3,105,161,0.2); display:inline-flex; align-items:center; gap:6px}
+.reveal-btn:hover{background:#075985; transform:translateY(-1px)}
+.reveal-btn.opened{background:var(--good)}
+.reveal-btn.opened:hover{background:#166534}
+
+.sol{display:none; margin-top:12px; padding:14px 18px; background:var(--good-bg);
+     border-left:4px solid var(--good); border-radius:8px}
+.sol.show{display:block}
+.sol h4{margin:0 0 8px; color:var(--good); font-size:13px; text-transform:uppercase;
+        letter-spacing:0.5px; font-weight:700}
+
+/* Pasos dentro de solución */
+.step{background:white; border:1px solid var(--border); border-left:3px solid var(--accent2);
+      border-radius:6px; padding:10px 14px; margin:8px 0}
+.step-h{display:flex; align-items:center; gap:10px; margin-bottom:4px}
+.step-n{width:24px; height:24px; border-radius:50%; background:var(--accent2);
+        color:white; font-weight:700; display:flex; align-items:center; justify-content:center;
+        font-size:11px; flex-shrink:0}
+.step-t{font-weight:600; color:var(--accent2); font-size:13.5px}
+.step-b{padding-left:32px; font-size:14px; color:var(--text)}
+.work{background:var(--panel3); padding:8px 12px; border-radius:5px; margin:6px 0;
+      border:1px solid var(--border); font-size:13.5px}
+.why{font-size:12.5px; color:var(--text-soft); font-style:italic; margin-top:5px;
+     padding:5px 10px; background:var(--accent-bg); border-radius:5px;
+     border-left:2px solid var(--accent)}
+.final{background:linear-gradient(135deg,var(--good-bg),#ecfdf5); padding:10px 14px;
+       border-radius:6px; border:1px solid var(--good); margin-top:8px;
+       text-align:center; color:var(--good); font-weight:700}
+
+/* Hero */
+.hero{background:linear-gradient(135deg, var(--accent-bg) 0%, var(--accent2-bg) 100%);
+      border:1px solid var(--accent); border-radius:12px; padding:22px 26px;
+      margin:20px 0; box-shadow:0 4px 16px rgba(3,105,161,0.1)}
+.hero h3{margin-top:0; color:var(--accent); font-size:18px}
+
+/* Toolbar */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:14px 0 24px;
+         padding:14px; background:var(--panel3); border-radius:8px; border:1px solid var(--border)}
+.btn{background:var(--accent); color:white; border:none; padding:9px 18px;
+     border-radius:6px; font-weight:600; cursor:pointer; font-size:13.5px;
+     transition:background .15s, transform .1s}
+.btn:hover{background:#075985; transform:translateY(-1px)}
+.btn-2{background:var(--panel); color:var(--text); border:1px solid var(--border-strong);
+       padding:9px 18px; border-radius:6px; cursor:pointer; font-size:13.5px; font-weight:500;
+       transition:background .15s}
+.btn-2:hover{background:var(--accent-bg)}
+
+/* Resumen tabla */
+table{border-collapse:collapse; width:100%; margin:12px 0; font-size:14px;
+      background:var(--panel); border-radius:8px; overflow:hidden;
+      box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+th,td{border:1px solid var(--border); padding:10px 12px; text-align:left; vertical-align:top}
+th{background:var(--accent-bg); color:var(--accent); font-weight:700; font-size:13px;
+   text-transform:uppercase; letter-spacing:0.5px}
+tr:nth-child(even) td{background:var(--panel3)}
+
+.hl-good{color:var(--good); font-weight:700}
+.hl-warn{color:var(--warn); font-weight:700}
+.hl-bad{color:var(--bad); font-weight:700}
+.hl-accent{color:var(--accent); font-weight:700}
+
+/* Progress tracker */
+.progress{position:sticky; top:0; background:var(--panel); padding:10px 16px;
+          border-bottom:1px solid var(--border); margin:-28px -40px 20px;
+          font-size:13px; color:var(--muted); z-index:10}
+.progress strong{color:var(--accent)}
+.progress-bar{height:4px; background:var(--accent-bg); border-radius:2px; margin-top:6px;
+              overflow:hidden}
+.progress-fill{height:100%; background:var(--accent); transition:width .3s; width:0%}
+
+hr{border:none; border-top:2px solid var(--border); margin:32px 0}
+.footer{margin-top:60px; padding:20px; text-align:center; color:var(--muted); font-size:12px;
+        border-top:1px solid var(--border)}
+
+@media(max-width:860px){
+  .layout{grid-template-columns:1fr}
+  nav.sidebar{position:relative; height:auto; max-height:50vh}
+  main{padding:20px 16px}
+  .progress{margin:-20px -16px 16px}
+  h1{font-size:24px}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav class="sidebar">
+  <div class="brand">📝 Autoevaluación P2<br><small>30+ ejercicios con resolución oculta</small></div>
+
+  <a href="analisis_parcial2.html" class="back-home">← Volver al apunte principal</a>
+
+  <div class="nav-level">📚 Temas</div>
+  <a href="#t0">Tema 0 · Derivadas</a>
+  <a href="#t1">Tema 1 · Integral (Barrow)</a>
+  <a href="#t2">Tema 2 · Trabajo mecánico</a>
+  <a href="#t3">Tema 3 · Posición desde velocidad</a>
+  <a href="#t4">Tema 4 · Área entre curvas</a>
+  <a href="#t5">Tema 5 · Riemann vs Barrow (PLC)</a>
+  <a href="#t6">Tema 6 · Acción integral PID</a>
+  <a href="#t7">Tema 7 · Clasificación EDOs</a>
+  <a href="#t8">Tema 8 · Separables (general)</a>
+  <a href="#t9">Tema 9 · PVI</a>
+  <a href="#t10">Tema 10 · Newton (térmico)</a>
+  <a href="#t11">Tema 11 · Hidráulico</a>
+  <a href="#t12">Tema 12 · Circuito RL</a>
+
+  <div class="nav-level">🏆 Cierre</div>
+  <a href="#resumen">📋 Resumen de fórmulas</a>
+</nav>
+
+<main>
+<div class="progress">
+  <strong id="prog-count">0</strong> de <strong id="prog-total">30</strong> resoluciones reveladas
+  <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+</div>
+
+<h1>📝 Autoevaluación — Parcial 2</h1>
+<p class="subtitle">30+ ejercicios oficiales de la guía de repaso · Análisis Matemático I · Lic. Automatización y Control</p>
+
+<div class="hero">
+<h3>🎯 Cómo usar esta página</h3>
+<p>Cada ejercicio tiene la <strong>resolución completa paso a paso oculta</strong>. La idea es que:</p>
+<ol>
+  <li>Leas el enunciado.</li>
+  <li>Lo resuelvas en papel <em>sin mirar</em> la solución.</li>
+  <li>Hagas clic en <strong style="color:var(--accent)">"Ver resolución"</strong> para comparar.</li>
+  <li>Si erraste o tardaste, marcalo mentalmente para repasar el método.</li>
+</ol>
+<p>El progreso de revelados se trackea arriba — usalo como guía de cuánto avanzaste.</p>
+</div>
+
+<div class="toolbar">
+  <button class="btn" onclick="toggleAll(true)">📂 Mostrar todas las soluciones</button>
+  <button class="btn-2" onclick="toggleAll(false)">📁 Ocultar todas</button>
+  <button class="btn-2" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆️ Ir al inicio</button>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- ─────────────────────── TEMA 0: DERIVADAS ─────────────────────── -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+
+<h2 id="t0">📐 Tema 0 · Reglas de derivación</h2>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 0.1</div><div class="ex-title">Derivación básica (potencia y suma)</div></div>
+<div class="ex-stmt">
+Derivar las siguientes funciones:
+<ul>
+<li><strong>a)</strong> $f(x) = 3x^5 - 2x^3 + 7x - 4$</li>
+<li><strong>b)</strong> $g(x) = \dfrac{1}{x^2}$ (escribir como $x^{-2}$)</li>
+<li><strong>c)</strong> $h(x) = \sqrt{x}$ (escribir como $x^{1/2}$)</li>
+</ul>
+</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">a</div><div class="step-t">Regla de potencia + suma/resta + múltiplo constante</div></div>
+<div class="step-b">
+<div class="why">Cada término es un monomio: $(c\cdot x^n)' = c\cdot n\cdot x^{n-1}$, y las derivadas se suman.</div>
+<div class="work">$f'(x) = 3\cdot 5x^4 - 2\cdot 3x^2 + 7\cdot 1 - 0 = 15x^4 - 6x^2 + 7$</div>
+<div class="final">$f'(x) = 15x^4 - 6x^2 + 7$</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">b</div><div class="step-t">Reescribir como potencia y aplicar regla</div></div>
+<div class="step-b">
+<div class="work">$g(x) = x^{-2} \Rightarrow g'(x) = -2\cdot x^{-3}$</div>
+<div class="why">Cuando hay fracciones del tipo $1/x^n$, conviene reescribir con exponente negativo. Evita usar la regla del cociente.</div>
+<div class="final">$g'(x) = -\dfrac{2}{x^3}$</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">c</div><div class="step-t">Raíz como potencia fraccionaria</div></div>
+<div class="step-b">
+<div class="work">$h(x) = x^{1/2} \Rightarrow h'(x) = \tfrac{1}{2}\cdot x^{-1/2}$</div>
+<div class="why">$\sqrt{x} = x^{1/2}$. Bajo el exponente y se le resta 1: $1/2 - 1 = -1/2$.</div>
+<div class="final">$h'(x) = \dfrac{1}{2\sqrt{x}}$</div>
+</div></div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 0.2</div><div class="ex-title">Regla del producto</div></div>
+<div class="ex-stmt">Derivar $f(x) = (x^2 + 1)(x^3 - 2x)$</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Identificar u, v, u', v'</div></div>
+<div class="step-b">
+<div class="work">$u = x^2 + 1 \Rightarrow u' = 2x$<br>$v = x^3 - 2x \Rightarrow v' = 3x^2 - 2$</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Aplicar $(uv)' = u'v + uv'$</div></div>
+<div class="step-b">
+<div class="work">$f'(x) = (2x)(x^3 - 2x) + (x^2 + 1)(3x^2 - 2)$</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">Desarrollar y simplificar</div></div>
+<div class="step-b">
+<div class="work">
+$f'(x) = 2x^4 - 4x^2 + 3x^4 - 2x^2 + 3x^2 - 2$<br>
+$f'(x) = 5x^4 - 3x^2 - 2$
+</div>
+<div class="why"><strong>Verificación:</strong> expandiendo primero $f(x) = x^5 - x^3 - 2x$, su derivada es $5x^4 - 3x^2 - 2$ ✓</div>
+<div class="final">$f'(x) = 5x^4 - 3x^2 - 2$</div>
+</div></div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 0.3</div><div class="ex-title">Regla del cociente</div></div>
+<div class="ex-stmt">Derivar $f(x) = \dfrac{2x}{x^2 + 1}$</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Identificar u, v, u', v'</div></div>
+<div class="step-b">
+<div class="work">$u = 2x \Rightarrow u' = 2$<br>$v = x^2 + 1 \Rightarrow v' = 2x$</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Aplicar $\left(\dfrac{u}{v}\right)' = \dfrac{u'v - uv'}{v^2}$</div></div>
+<div class="step-b">
+<div class="work">$f'(x) = \dfrac{2(x^2+1) - 2x(2x)}{(x^2+1)^2}$</div>
+<div class="why">⚠️ El orden es <strong>u'v menos uv'</strong> (no al revés).</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">Simplificar el numerador</div></div>
+<div class="step-b">
+<div class="work">
+$f'(x) = \dfrac{2x^2 + 2 - 4x^2}{(x^2+1)^2} = \dfrac{2 - 2x^2}{(x^2+1)^2}$
+</div>
+<div class="final">$f'(x) = \dfrac{2(1 - x^2)}{(x^2 + 1)^2}$</div>
+</div></div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 0.4</div><div class="ex-title">Sensibilidad de sensor de temperatura</div></div>
+<div class="ex-stmt">
+$V(T) = 0{,}01T^2 + 0{,}5T + 2$ (T en °C, V en voltios).
+<ul>
+<li><strong>a)</strong> Hallar la sensibilidad $V'(T)$.</li>
+<li><strong>b)</strong> Sensibilidad en $T = 50$°C y $T = 100$°C.</li>
+<li><strong>c)</strong> ¿Qué significa que la sensibilidad aumente con T?</li>
+</ul>
+</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">a</div><div class="step-t">Derivar V(T)</div></div>
+<div class="step-b">
+<div class="work">$V'(T) = 0{,}02T + 0{,}5$ V/°C</div>
+<div class="why">La sensibilidad es la derivada: cuánto cambia el voltaje por cada °C extra.</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">b</div><div class="step-t">Evaluar en los puntos pedidos</div></div>
+<div class="step-b">
+<div class="work">
+$V'(50) = 0{,}02(50) + 0{,}5 = 1{,}0 + 0{,}5 = \mathbf{1{,}5}$ V/°C<br><br>
+$V'(100) = 0{,}02(100) + 0{,}5 = 2{,}0 + 0{,}5 = \mathbf{2{,}5}$ V/°C
+</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">c</div><div class="step-t">Interpretación física</div></div>
+<div class="step-b">
+<p>Significa que el sensor es <span class="hl-warn">no lineal</span>: a temperaturas más altas, un mismo $\Delta T$ produce mayor $\Delta V$.</p>
+<p>El PLC debe <strong>linealizar</strong> la lectura antes de tomar decisiones (mediante tabla de conversión o algoritmo de compensación). Si no, las lecturas a alta temperatura tendrán mayor error relativo.</p>
+</div></div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 0.5</div><div class="ex-title">Velocidad de actuador lineal</div></div>
+<div class="ex-stmt">
+$x(t) = 2t^3 - 9t^2 + 12t$ (cm, s).
+<ul>
+<li><strong>a)</strong> Hallar $v(t) = x'(t)$.</li>
+<li><strong>b)</strong> ¿En qué instante(s) $v = 0$?</li>
+<li><strong>c)</strong> ¿Qué ocurre físicamente?</li>
+</ul>
+</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">a</div><div class="step-t">Derivar la posición</div></div>
+<div class="step-b">
+<div class="work">$v(t) = x'(t) = 6t^2 - 18t + 12$ cm/s</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">b</div><div class="step-t">Buscar instantes con velocidad nula</div></div>
+<div class="step-b">
+<div class="work">
+$6t^2 - 18t + 12 = 0$<br>
+$6(t^2 - 3t + 2) = 0$<br>
+$6(t-1)(t-2) = 0$<br><br>
+$\Rightarrow t = 1$ s &nbsp;ó&nbsp; $t = 2$ s
+</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">c</div><div class="step-t">Interpretación física</div></div>
+<div class="step-b">
+<p>El actuador <strong>cambia de sentido</strong> en esos instantes. Analizando los intervalos:</p>
+<ul>
+<li>$0 < t < 1$: $v > 0$ → avanza</li>
+<li>$1 < t < 2$: $v < 0$ → retrocede</li>
+<li>$t > 2$: $v > 0$ → avanza de nuevo</li>
+</ul>
+<p>Es un movimiento típico de pick &amp; place: avanza → vuelve → sigue.</p>
+</div></div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- ─────────────────── TEMA 1: INTEGRAL (BARROW) ─────────────────── -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+
+<h2 id="t1">∫ Tema 1 · Integral definida (Regla de Barrow)</h2>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 1.1</div><div class="ex-title">Llenado de tanque con caudal variable</div></div>
+<div class="ex-stmt">
+$Q(t) = 8 - 2t$ L/s, intervalo $[0, 4]$ s.
+<ul>
+<li><strong>a)</strong> Volumen entre $t=0$ y $t=2$ s.</li>
+<li><strong>b)</strong> Volumen entre $t=2$ y $t=4$ s.</li>
+<li><strong>c)</strong> Volumen total con una sola integral.</li>
+</ul>
+</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">0</div><div class="step-t">Hallar la primitiva común</div></div>
+<div class="step-b">
+<div class="work">$\int (8-2t)\,dt = 8t - t^2 + C \Rightarrow F(t) = 8t - t^2$</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">a</div><div class="step-t">Volumen en [0, 2]</div></div>
+<div class="step-b">
+<div class="work">
+$V_{[0,2]} = F(2) - F(0) = (16 - 4) - 0 = 12$ L
+</div>
+<div class="final">$V_{[0,2]} = 12$ L</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">b</div><div class="step-t">Volumen en [2, 4]</div></div>
+<div class="step-b">
+<div class="work">
+$V_{[2,4]} = F(4) - F(2) = (32 - 16) - (16 - 4) = 16 - 12 = 4$ L
+</div>
+<div class="final">$V_{[2,4]} = 4$ L</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">c</div><div class="step-t">Volumen total [0, 4]</div></div>
+<div class="step-b">
+<div class="work">
+$V_{total} = F(4) - F(0) = 16 - 0 = 16$ L
+</div>
+<div class="why"><strong>Verificación:</strong> $12 + 4 = 16$ ✓. En $t=4$ el caudal $Q(4) = 0$: el llenado se detiene justo al final.</div>
+<div class="final">$V_{total} = 16$ L</div>
+</div></div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 1.2</div><div class="ex-title">Nodo de distribución industrial</div></div>
+<div class="ex-stmt">$Q(t) = 3t^2 + 2$ L/s, intervalo $[0, 2]$ s. Volumen exacto por Barrow.</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Hallar la primitiva</div></div>
+<div class="step-b">
+<div class="work">$F(t) = t^3 + 2t$</div>
+<div class="why">$\int 3t^2 \,dt = t^3$ (subo exponente, divido por 3 nuevo, cancela con 3 coef.); $\int 2\,dt = 2t$.</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Aplicar Barrow</div></div>
+<div class="step-b">
+<div class="work">
+$V = F(2) - F(0) = (8 + 4) - 0 = 12$ L
+</div>
+<div class="final">$V = 12$ L</div>
+</div></div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 1.3</div><div class="ex-title">Tanque con caudal Q(t) = 4t</div></div>
+<div class="ex-stmt">$Q(t) = 4t$ L/s durante 5 s. Volumen acumulado.</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Primitiva</div></div>
+<div class="step-b">
+<div class="work">$F(t) = 2t^2$</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Barrow</div></div>
+<div class="step-b">
+<div class="work">$V = F(5) - F(0) = 2\cdot 25 - 0 = 50$ L</div>
+<div class="final">$V = 50$ L</div>
+</div></div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 1.4</div><div class="ex-title">Sensor de caudal decreciente</div></div>
+<div class="ex-stmt">$Q(t) = 5 - 0{,}5t$ L/s durante 10 s. Volumen total y instante en que Q se anula.</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Hallar la primitiva</div></div>
+<div class="step-b">
+<div class="work">$F(t) = 5t - 0{,}25\,t^2$</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Volumen total</div></div>
+<div class="step-b">
+<div class="work">
+$V = F(10) - F(0) = (50 - 25) - 0 = 25$ L
+</div>
+<div class="final">$V = 25$ L</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">¿Cuándo se anula Q?</div></div>
+<div class="step-b">
+<div class="work">
+$Q(t) = 0 \Rightarrow 5 - 0{,}5t = 0 \Rightarrow t = 10$ s
+</div>
+<div class="why">El caudal se anula <em>justo al final</em> del intervalo evaluado. El llenado para en t=10.</div>
+</div></div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 1.5</div><div class="ex-title">Llenado de tanque (ejemplo base)</div></div>
+<div class="ex-stmt">$Q(t) = 2t + 1$ L/min durante 5 minutos. Volumen acumulado.</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Primitiva y Barrow</div></div>
+<div class="step-b">
+<div class="work">
+$F(t) = t^2 + t$ <br>
+$V = F(5) - F(0) = (25 + 5) - 0 = 30$ L
+</div>
+<div class="final">$V = 30$ L</div>
+</div></div>
+</div>
+</div>
+
+<!-- ────────────── TEMA 2: TRABAJO ────────────── -->
+
+<h2 id="t2">⚙️ Tema 2 · Trabajo mecánico</h2>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 2.1</div><div class="ex-title">Actuador lineal neumático</div></div>
+<div class="ex-stmt">
+$F(x) = 4x + 2$ N, x en metros.
+<ul>
+<li><strong>a)</strong> Trabajo desde $x=1$ m hasta $x=3$ m.</li>
+<li><strong>b)</strong> Análisis dimensional (verificar Joules).</li>
+</ul>
+</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Plantear la integral del trabajo</div></div>
+<div class="step-b">
+<div class="work">$W = \displaystyle\int_1^3 (4x + 2)\,dx$</div>
+<div class="why">Trabajo con fuerza variable = integral de F sobre el desplazamiento.</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Primitiva</div></div>
+<div class="step-b">
+<div class="work">$\Phi(x) = 2x^2 + 2x$</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">Barrow</div></div>
+<div class="step-b">
+<div class="work">
+$W = \Phi(3) - \Phi(1) = (18 + 6) - (2 + 2) = 24 - 4 = 20$ J
+</div>
+<div class="final">$W = 20$ J</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">b</div><div class="step-t">Análisis dimensional</div></div>
+<div class="step-b">
+<div class="work">$[F]\cdot[x] = \text{N}\cdot\text{m} = \text{J}$ ✓</div>
+</div></div>
+</div>
+</div>
+
+<!-- ────────────── TEMA 3: POSICIÓN ────────────── -->
+
+<h2 id="t3">📏 Tema 3 · Posición a partir de velocidad</h2>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 3.1</div><div class="ex-title">Carro transportador (encoder)</div></div>
+<div class="ex-stmt">$v(t) = 6t^2 - 4t + 2$ m/s, $x(0) = 0$. Posición a los $t = 2$ s.</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Posición = integral de velocidad</div></div>
+<div class="step-b">
+<div class="work">
+$x(2) = \displaystyle\int_0^2 (6t^2 - 4t + 2)\,dt$<br><br>
+Primitiva: $2t^3 - 2t^2 + 2t$<br><br>
+$x(2) = (16 - 8 + 4) - 0 = 12$ m
+</div>
+<div class="final">$x(2) = 12$ m</div>
+</div></div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 3.2</div><div class="ex-title">Actuador lineal</div></div>
+<div class="ex-stmt">$v(t) = 3t^2 + 2$ m/s, $x(0) = 0$. Posición en $t = 2$ s.</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Integrar v(t)</div></div>
+<div class="step-b">
+<div class="work">
+Primitiva: $t^3 + 2t$<br><br>
+$x(2) = (8 + 4) - 0 = 12$ m
+</div>
+<div class="final">$x(2) = 12$ m</div>
+</div></div>
+</div>
+</div>
+
+<!-- ────────────── TEMA 4: ÁREA ENTRE CURVAS ────────────── -->
+
+<h2 id="t4">📊 Tema 4 · Área entre curvas (Efecto Joule)</h2>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 4.1</div><div class="ex-title">Eficiencia energética en servomotor</div></div>
+<div class="ex-stmt">
+$f(x) = \sqrt{x}$ kW (eléctrica), $g(x) = x^2$ kW (mecánica útil), $x \in [0, 1]$ min.
+<ul>
+<li><strong>a)</strong> Intersecciones.</li>
+<li><strong>b)</strong> Área encerrada.</li>
+<li><strong>c)</strong> Interpretación técnica (Efecto Joule).</li>
+</ul>
+</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">a</div><div class="step-t">Encontrar las intersecciones</div></div>
+<div class="step-b">
+<div class="work">
+$\sqrt{x} = x^2 \Rightarrow x = x^4 \Rightarrow x(x^3 - 1) = 0$<br>
+$\Rightarrow x = 0$ ó $x = 1$
+</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">b</div><div class="step-t">Identificar cuál curva está arriba en [0,1]</div></div>
+<div class="step-b">
+<p>Probando en $x = 0{,}5$: $\sqrt{0{,}5} \approx 0{,}71$, $(0{,}5)^2 = 0{,}25$.</p>
+<p>Entonces $\sqrt{x} \geq x^2$ en $[0,1]$ → la eléctrica está por encima de la mecánica útil.</p>
+<div class="work">
+Área = $\displaystyle\int_0^1 (\sqrt{x} - x^2)\,dx$<br><br>
+$= \left[\tfrac{2}{3}x^{3/2} - \tfrac{1}{3}x^3\right]_0^1 = \tfrac{2}{3} - \tfrac{1}{3} = \tfrac{1}{3}$
+</div>
+<div class="final">Área $= \dfrac{1}{3}$ kW·min ≈ 20 kJ</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">c</div><div class="step-t">Interpretación técnica</div></div>
+<div class="step-b">
+<p>El área entre la potencia eléctrica suministrada y la potencia mecánica útil representa la <span class="hl-warn">pérdida térmica por Efecto Joule</span>.</p>
+<p>Es energía eléctrica que <em>no se convirtió</em> en trabajo mecánico: se disipa como calor en bobinados y resistencias internas del servomotor.</p>
+<p><strong>Implicancia ingenieril:</strong> hay que dimensionar correctamente el <strong>disipador térmico</strong> y la ventilación del servomotor para esos ~20 kJ por minuto.</p>
+</div></div>
+</div>
+</div>
+
+<!-- ────────────── TEMA 5: RIEMANN ────────────── -->
+
+<h2 id="t5">📊 Tema 5 · Sumas de Riemann vs Barrow (PLC)</h2>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 5.1</div><div class="ex-title">Distancia de frenado de motor</div></div>
+<div class="ex-stmt">
+$v(t) = 3t^2 + 1$ m/s, $[0, 1]$ s.
+<ul>
+<li><strong>a)</strong> Distancia exacta por Barrow.</li>
+<li><strong>b)</strong> PLC con $\Delta t = 0{,}5$ s (Riemann izquierda, $t_0=0$ y $t_1=0{,}5$).</li>
+<li><strong>c)</strong> Error porcentual.</li>
+<li><strong>d)</strong> Análisis crítico: consecuencias en un brazo robótico y cómo solucionarlo.</li>
+</ul>
+</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">a</div><div class="step-t">Distancia exacta (Barrow)</div></div>
+<div class="step-b">
+<div class="work">
+Primitiva: $F(t) = t^3 + t$<br><br>
+$d_{exacta} = F(1) - F(0) = (1 + 1) - 0 = 2$ m
+</div>
+<div class="final">$d_{exacta} = 2$ m</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">b</div><div class="step-t">PLC Riemann izquierda</div></div>
+<div class="step-b">
+<div class="work">
+$v(0) = 1$ m/s &nbsp; $v(0{,}5) = 3(0{,}25) + 1 = 1{,}75$ m/s<br><br>
+$d_{PLC} = v(0)\cdot 0{,}5 + v(0{,}5)\cdot 0{,}5 = 0{,}5 + 0{,}875 = 1{,}375$ m
+</div>
+<div class="final">$d_{PLC} = 1{,}375$ m</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">c</div><div class="step-t">Error porcentual</div></div>
+<div class="step-b">
+<div class="work">
+$\text{Error \%} = \dfrac{|2 - 1{,}375|}{2}\cdot 100\% = \dfrac{0{,}625}{2}\cdot 100\% = 31{,}25\%$
+</div>
+<div class="final">Error ≈ 31,25%</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">d</div><div class="step-t">Análisis crítico</div></div>
+<div class="step-b">
+<p>En un brazo robótico, un error del 31% en la distancia de frenado significa que el robot puede <span class="hl-bad">pasarse del punto previsto</span> en casi un tercio. Si la lógica activa una parada de emergencia, llegaría tarde → colisión.</p>
+<p><strong>Soluciones:</strong></p>
+<ul>
+<li>✅ Reducir $\Delta t$ (muestrear más rápido)</li>
+<li>✅ Usar regla del <strong>trapecio</strong> en vez de rectángulos</li>
+<li>✅ Sensor de proximidad redundante</li>
+<li>✅ Margen de seguridad en el setpoint de parada</li>
+</ul>
+</div></div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 5.2</div><div class="ex-title">PLC con datos tabulados</div></div>
+<div class="ex-stmt">
+$\Delta t = 0{,}2$ s. Datos:
+<table style="margin:10px 0">
+<tr><th>t (s)</th><td>0,0</td><td>0,2</td><td>0,4</td><td>0,6</td><td>0,8</td><td>1,0</td></tr>
+<tr><th>v (m/s)</th><td>1,00</td><td>1,12</td><td>1,48</td><td>2,08</td><td>2,92</td><td>4,00</td></tr>
+</table>
+Distancia por Riemann izquierda. Reflexión sobre ventajas/desventajas.
+</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Identificar las muestras "por izquierda"</div></div>
+<div class="step-b">
+<p>Riemann izquierda: extremo izquierdo de cada subintervalo. Tenemos 5 subintervalos en [0,1], evaluamos en $t = 0; 0{,}2; 0{,}4; 0{,}6; 0{,}8$ (NO usamos $t=1$).</p>
+<div class="work">
+Valores: 1,00 + 1,12 + 1,48 + 2,08 + 2,92 = 8,60
+</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Aplicar la suma de Riemann</div></div>
+<div class="step-b">
+<div class="work">
+$d_{PLC} = \sum v(t_i)\cdot \Delta t = 8{,}60 \cdot 0{,}2 = 1{,}72$ m
+</div>
+<div class="final">$d_{PLC} = 1{,}72$ m</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">Reflexión</div></div>
+<div class="step-b">
+<p><strong>Ventajas:</strong></p>
+<ul><li>Computacionalmente trivial: suma + multiplicación.</li><li>El PLC lo ejecuta en microsegundos.</li><li>No requiere conocer la fórmula analítica de v(t).</li></ul>
+<p><strong>Desventajas:</strong></p>
+<ul><li>Error de discretización.</li><li>Subestima si v es creciente, sobreestima si es decreciente.</li><li>Requiere muestreo fino para precisión.</li></ul>
+</div></div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 5.3</div><div class="ex-title">Error del PLC vs Barrow (continuación 5.2)</div></div>
+<div class="ex-stmt">
+Velocidad teórica: $v(t) = 3t^2 + 1$ m/s.
+<ol>
+<li>Distancia exacta entre $t=0$ y $t=1$ por Barrow.</li>
+<li>Error porcentual del PLC (Ej. 5.2) respecto al valor exacto.</li>
+</ol>
+¿Es aceptable para alta precisión? ¿Cómo reducirlo?
+</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Distancia exacta</div></div>
+<div class="step-b">
+<div class="work">
+$d_{exacta} = \displaystyle\int_0^1 (3t^2 + 1)\,dt = [t^3 + t]_0^1 = 2$ m
+</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Error porcentual</div></div>
+<div class="step-b">
+<div class="work">
+$\text{Error \%} = \dfrac{|2 - 1{,}72|}{2}\cdot 100\% = \dfrac{0{,}28}{2}\cdot 100\% = 14\%$
+</div>
+<div class="final">Error ≈ 14%</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">Análisis crítico</div></div>
+<div class="step-b">
+<p>14% es <span class="hl-warn">demasiado alto</span> para un brazo robótico de alta precisión (típicamente se requiere &lt; 1%).</p>
+<p><strong>Soluciones:</strong></p>
+<ul>
+<li>Reducir aún más $\Delta t$ (ej. 0,05 s).</li>
+<li>Usar <strong>regla del trapecio</strong>: promedio de extremos.</li>
+<li>Usar regla de <strong>Simpson</strong> (parábolas) si el hardware lo permite.</li>
+</ul>
+</div></div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 5.4</div><div class="ex-title">Error de muestreo en nodo industrial (simulacro)</div></div>
+<div class="ex-stmt">
+$Q(t) = 3t^2 + 2$ L/s, $[0, 2]$ s, $\Delta t = 1$ s.
+<ul>
+<li><strong>a)</strong> Volumen exacto.</li>
+<li><strong>b)</strong> Volumen aproximado (Riemann izq, $t_0=0, t_1=1$).</li>
+<li><strong>c)</strong> Error % y consecuencias.</li>
+</ul>
+</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">a</div><div class="step-t">Volumen exacto (Barrow)</div></div>
+<div class="step-b">
+<div class="work">
+$F(t) = t^3 + 2t$<br>
+$V_{exacto} = F(2) - F(0) = 12 - 0 = 12$ L
+</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">b</div><div class="step-t">PLC Riemann izquierda</div></div>
+<div class="step-b">
+<div class="work">
+$Q(0) = 2$, $Q(1) = 5$<br>
+$V_{PLC} = 2\cdot 1 + 5\cdot 1 = 7$ L
+</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">c</div><div class="step-t">Error y consecuencias críticas</div></div>
+<div class="step-b">
+<div class="work">
+$\text{Error \%} = \dfrac{|12 - 7|}{12}\cdot 100\% \approx 41{,}67\%$
+</div>
+<p>El PLC <span class="hl-bad">subestima el volumen real en ~42%</span>. Si el lazo de control evita el desborde de un tanque crítico:</p>
+<ul>
+<li>🚨 No detectará a tiempo la condición de riesgo.</li>
+<li>🚨 La alarma de nivel alto se dispararía tarde o no se dispararía.</li>
+<li>🚨 Posible desborde físico real → daño a equipos, riesgo ambiental.</li>
+</ul>
+<p><strong>Solución:</strong> reducir $\Delta t$ drásticamente (ej. 0,1 s o menos) o agregar sensor de nivel redundante.</p>
+<div class="final">Error ≈ 41,67%</div>
+</div></div>
+</div>
+</div>
+
+<!-- ────────────── TEMA 6: WINDUP ────────────── -->
+
+<h2 id="t6">🎚️ Tema 6 · Acción integral del PID (Windup)</h2>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 6.1</div><div class="ex-title">Diagnóstico de falla por saturación</div></div>
+<div class="ex-stmt">
+Motor trabado mecánicamente. Error fijo $e(t) = 5$ unidades durante 4 s. PID con $K_i = 2$:
+$$u_i(t) = K_i\int_0^t e(\tau)\,d\tau$$
+<ol>
+<li>Valor analítico de $u_i$ a los 4 s.</li>
+<li>¿Qué pasa si no se soluciona? ($t \to \infty$)</li>
+<li>Cuando la traba se suelta de golpe, ¿qué ocurre? Nombre del fenómeno.</li>
+</ol>
+</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Señal integral a los 4 s</div></div>
+<div class="step-b">
+<div class="work">
+$u_i(4) = 2\cdot\displaystyle\int_0^4 5\,d\tau = 2\cdot 5\cdot 4 = 40$
+</div>
+<div class="final">$u_i(4) = 40$ unidades</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Comportamiento si no se soluciona</div></div>
+<div class="step-b">
+<div class="work">
+$u_i(t) = 2\cdot 5\cdot t = 10t$<br><br>
+$\displaystyle\lim_{t\to\infty} u_i(t) = +\infty$
+</div>
+<p>La señal de control <span class="hl-bad">crece sin límite</span>.</p>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">Análisis técnico</div></div>
+<div class="step-b">
+<p>Cuando la traba se suelta de golpe, el motor recibe una señal de control acumulada enorme:</p>
+<ul>
+<li>🚨 Arranque violento</li>
+<li>🚨 Posibles daños mecánicos (sobre-par, sobre-velocidad)</li>
+<li>🚨 Pérdida de precisión durante el transitorio brusco</li>
+</ul>
+<p><strong>Nombre del fenómeno:</strong> <span class="hl-bad">Integral Windup</span> (saturación integral).</p>
+<p><strong>Solución de ingeniería:</strong> implementar <strong>anti-windup</strong>: limitar la acumulación cuando el actuador satura, o resetear el integrador.</p>
+</div></div>
+</div>
+</div>
+
+<!-- ────────────── TEMA 7: CLASIFICACIÓN ────────────── -->
+
+<h2 id="t7">🔍 Tema 7 · Clasificación de EDOs</h2>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 7.1</div><div class="ex-title">Clasificar orden y linealidad</div></div>
+<div class="ex-stmt">
+Determinar orden y linealidad de:
+<ul>
+<li><strong>a)</strong> $\dfrac{dy}{dt} + 4t^2 y = \cos(t)$</li>
+<li><strong>b)</strong> $\dfrac{d^2y}{dt^2} + 3\dfrac{dy}{dt} - y^2 = 0$</li>
+<li><strong>c)</strong> $L\dfrac{di}{dt} + Ri = E\sin(\omega t)$</li>
+<li><strong>d)</strong> $\dfrac{dx}{dt} = k\sqrt{x}$</li>
+</ul>
+</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+<table>
+<tr><th>EDO</th><th>Orden</th><th>Linealidad</th><th>Justificación</th></tr>
+<tr><td>a)</td><td>1</td><td class="hl-good">Lineal</td><td>$y$ a la potencia 1, coef en $t$ permitidos</td></tr>
+<tr><td>b)</td><td>2</td><td class="hl-bad">NO lineal</td><td>$y^2$ rompe linealidad</td></tr>
+<tr><td>c)</td><td>1</td><td class="hl-good">Lineal</td><td>$i$ a la 1, coeficientes constantes</td></tr>
+<tr><td>d)</td><td>1</td><td class="hl-bad">NO lineal</td><td>$\sqrt{x} = x^{1/2}$ rompe linealidad</td></tr>
+</table>
+<div class="why"><strong>Recordá:</strong> el ORDEN es la derivada más alta. La LINEALIDAD requiere que $y$ y sus derivadas aparezcan a la potencia 1, sin funciones no lineales de $y$ (no $\sin y$, no $y^2$, no $\sqrt{y}$).</div>
+</div>
+</div>
+
+<!-- ────────────── TEMA 8: SEPARABLES (GENERAL) ────────────── -->
+
+<h2 id="t8">📐 Tema 8 · Variables separables (solución general)</h2>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 8.1</div><div class="ex-title">Tres EDOs separables</div></div>
+<div class="ex-stmt">
+Hallar solución general:
+<ul>
+<li><strong>a)</strong> $\dfrac{dy}{dt} = \dfrac{t^2}{y}$</li>
+<li><strong>b)</strong> $\dfrac{dy}{dt} = 3t^2(y - 1)$</li>
+<li><strong>c)</strong> $t\dfrac{dx}{dt} = x\ln(x)$</li>
+</ul>
+</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">a</div><div class="step-t">Caso a)</div></div>
+<div class="step-b">
+<div class="work">
+Separar: $y\,dy = t^2\,dt$ <br><br>
+Integrar: $\dfrac{y^2}{2} = \dfrac{t^3}{3} + C$ <br><br>
+Despejar: $y^2 = \dfrac{2t^3}{3} + C_1$
+</div>
+<div class="final">$y(t) = \pm\sqrt{\dfrac{2t^3}{3} + C_1}$</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">b</div><div class="step-t">Caso b)</div></div>
+<div class="step-b">
+<div class="work">
+Separar: $\dfrac{dy}{y-1} = 3t^2\,dt$ <br><br>
+Integrar: $\ln|y-1| = t^3 + C$ <br><br>
+Despejar: $y - 1 = A\,e^{t^3}$
+</div>
+<div class="final">$y(t) = 1 + A\,e^{t^3}$</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">c</div><div class="step-t">Caso c)</div></div>
+<div class="step-b">
+<div class="work">
+Separar: $\dfrac{dx}{x\ln x} = \dfrac{dt}{t}$ <br><br>
+Sustitución $u = \ln x$, $du = dx/x$:<br>
+$\displaystyle\int\dfrac{du}{u} = \ln|u| = \ln|\ln x|$ <br><br>
+$\ln|\ln x| = \ln|t| + C \Rightarrow \ln x = A\cdot t$
+</div>
+<div class="final">$x(t) = e^{At}$</div>
+</div></div>
+</div>
+</div>
+
+<!-- ────────────── TEMA 9: PVI ────────────── -->
+
+<h2 id="t9">🎯 Tema 9 · Problemas de valor inicial (PVI)</h2>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 9.1</div><div class="ex-title">PVI básicos</div></div>
+<div class="ex-stmt">
+<ul>
+<li><strong>a)</strong> $\dfrac{dy}{dt} = -2ty$ con $y(0) = 5$</li>
+<li><strong>b)</strong> $\dfrac{dx}{dt} = \dfrac{e^t}{x}$ con $x(0) = 2$</li>
+</ul>
+</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">a</div><div class="step-t">Caso a)</div></div>
+<div class="step-b">
+<div class="work">
+Separar: $\dfrac{dy}{y} = -2t\,dt$ <br><br>
+Integrar: $\ln|y| = -t^2 + C$ <br><br>
+Despejar: $y = A\,e^{-t^2}$ <br><br>
+Aplicar CI: $y(0) = A = 5$
+</div>
+<div class="final">$y(t) = 5\,e^{-t^2}$</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">b</div><div class="step-t">Caso b)</div></div>
+<div class="step-b">
+<div class="work">
+Separar: $x\,dx = e^t\,dt$ <br><br>
+Integrar: $\dfrac{x^2}{2} = e^t + C$ <br><br>
+Aplicar CI $x(0)=2$: $\dfrac{4}{2} = e^0 + C \Rightarrow 2 = 1 + C \Rightarrow C = 1$ <br><br>
+$x^2 = 2e^t + 2$
+</div>
+<div class="final">$x(t) = \sqrt{2e^t + 2}$</div>
+</div></div>
+</div>
+</div>
+
+<!-- ────────────── TEMA 10: NEWTON ────────────── -->
+
+<h2 id="t10">🌡️ Tema 10 · EDO de Newton (térmico)</h2>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 10.1</div><div class="ex-title">Tanque mezclador industrial</div></div>
+<div class="ex-stmt">
+$\dfrac{dT}{dt} = -k(T - T_a)$ con $k = 0{,}1$ min⁻¹, $T_a = 20$°C, $T(0) = 80$°C.
+<ul>
+<li><strong>a)</strong> Resolver y hallar $T(t)$ particular.</li>
+<li><strong>b)</strong> Calcular $T$ a los 10 min.</li>
+<li><strong>c)</strong> $\lim_{t\to\infty} T(t)$ y significado físico.</li>
+</ul>
+</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Separar y resolver</div></div>
+<div class="step-b">
+<div class="work">
+$\dfrac{dT}{T-20} = -0{,}1\,dt$ <br><br>
+$\ln|T-20| = -0{,}1\,t + C$ <br><br>
+$T - 20 = A\,e^{-0{,}1 t}$ <br><br>
+$T(t) = 20 + A\,e^{-0{,}1 t}$ (general)
+</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">a</div><div class="step-t">Aplicar T(0) = 80</div></div>
+<div class="step-b">
+<div class="work">$80 = 20 + A \Rightarrow A = 60$</div>
+<div class="final">$T(t) = 20 + 60\,e^{-0{,}1 t}$</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">b</div><div class="step-t">T a los 10 min</div></div>
+<div class="step-b">
+<div class="work">
+$T(10) = 20 + 60\cdot e^{-1} = 20 + 60\cdot 0{,}3679 \approx 20 + 22{,}07$
+</div>
+<div class="final">$T(10) \approx 42{,}07$ °C</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">c</div><div class="step-t">Asíntota e interpretación</div></div>
+<div class="step-b">
+<div class="work">$\displaystyle\lim_{t\to\infty} T(t) = 20 + 60\cdot 0 = 20$ °C</div>
+<p>Significado: el fluido <strong>se equilibra térmicamente con el ambiente</strong>. No puede enfriarse por debajo de los 20°C sin un sistema activo de refrigeración.</p>
+</div></div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 10.2</div><div class="ex-title">Enfriamiento de caldera (simulacro)</div></div>
+<div class="ex-stmt">
+$\dfrac{dT}{dt} = -0{,}2(T - 25)$, $T(0) = 125$°C.
+<ul>
+<li><strong>a)</strong> Solución general.</li>
+<li><strong>b)</strong> Solución particular.</li>
+<li><strong>c)</strong> Asíntota y significado.</li>
+</ul>
+</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">a</div><div class="step-t">Solución general (separar e integrar)</div></div>
+<div class="step-b">
+<div class="work">
+$\dfrac{dT}{T-25} = -0{,}2\,dt \Rightarrow \ln|T-25| = -0{,}2\,t + C$ <br><br>
+$T - 25 = A\,e^{-0{,}2 t}$
+</div>
+<div class="final">$T(t) = 25 + A\,e^{-0{,}2 t}$</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">b</div><div class="step-t">Aplicar CI T(0) = 125</div></div>
+<div class="step-b">
+<div class="work">$125 = 25 + A \Rightarrow A = 100$</div>
+<div class="final">$T(t) = 25 + 100\,e^{-0{,}2 t}$</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">c</div><div class="step-t">Asíntota</div></div>
+<div class="step-b">
+<div class="work">$\displaystyle\lim_{t\to\infty} T(t) = 25$ °C</div>
+<p>La caldera se enfría hasta equilibrio térmico con el ambiente (25 °C). Es un transitorio exponencial — nunca llega exactamente, pero a los $5\tau = 25$ min está al 99,3%.</p>
+</div></div>
+</div>
+</div>
+
+<!-- ────────────── TEMA 11: HIDRÁULICO ────────────── -->
+
+<h2 id="t11">💧 Tema 11 · EDO hidráulica</h2>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 11.1</div><div class="ex-title">Llenado con caudal de entrada constante</div></div>
+<div class="ex-stmt">
+$A = 2$ m², $Q_{in} = 4$ m³/min, $Q_{out} = 2h$, $h(0) = 0$.<br>
+$A\dfrac{dh}{dt} = Q_{in} - Q_{out}$
+<ul>
+<li><strong>a)</strong> Hallar $h(t)$.</li>
+<li><strong>b)</strong> Altura estacionaria con límites.</li>
+</ul>
+</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Sustituir y simplificar</div></div>
+<div class="step-b">
+<div class="work">
+$2\dfrac{dh}{dt} = 4 - 2h \Rightarrow \dfrac{dh}{dt} = 2 - h$
+</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Separar e integrar</div></div>
+<div class="step-b">
+<div class="work">
+$\dfrac{dh}{2-h} = dt \Rightarrow -\ln|2-h| = t + C$ <br><br>
+$2 - h = A\,e^{-t} \Rightarrow h(t) = 2 - A\,e^{-t}$
+</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">a</div><div class="step-t">Aplicar CI h(0) = 0</div></div>
+<div class="step-b">
+<div class="work">$0 = 2 - A \Rightarrow A = 2$</div>
+<div class="final">$h(t) = 2(1 - e^{-t})$ m</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">b</div><div class="step-t">Altura estacionaria</div></div>
+<div class="step-b">
+<div class="work">$\displaystyle\lim_{t\to\infty} h(t) = 2(1 - 0) = 2$ m</div>
+<div class="why">En régimen permanente $dh/dt = 0$, así que $Q_{in} = Q_{out}$: $4 = 2h \Rightarrow h = 2$ ✓</div>
+<div class="final">$h_\infty = 2$ m</div>
+</div></div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 11.2</div><div class="ex-title">Vaciado por Torricelli</div></div>
+<div class="ex-stmt">$\dfrac{dh}{dt} = -k\sqrt{h}$, $h(0) = H_0$. Solución particular.</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Separar e integrar</div></div>
+<div class="step-b">
+<div class="work">
+$h^{-1/2}\,dh = -k\,dt$ <br><br>
+$2h^{1/2} = -kt + C$ <br><br>
+$\sqrt{h} = \dfrac{-kt + C}{2}$
+</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Aplicar CI h(0) = H₀</div></div>
+<div class="step-b">
+<div class="work">
+$\sqrt{H_0} = \dfrac{C}{2} \Rightarrow C = 2\sqrt{H_0}$
+</div>
+<div class="final">$h(t) = \left(\sqrt{H_0} - \dfrac{k\,t}{2}\right)^2$</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">Tiempo de vaciado</div></div>
+<div class="step-b">
+<div class="work">$h = 0 \Rightarrow \sqrt{H_0} = \dfrac{kt}{2} \Rightarrow t_{vac} = \dfrac{2\sqrt{H_0}}{k}$</div>
+<div class="why">A diferencia del enfriamiento exponencial, Torricelli SÍ se vacía en tiempo finito.</div>
+</div></div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 11.3</div><div class="ex-title">Descarga constante</div></div>
+<div class="ex-stmt">$Q_s = 2$ L/s constante, $Q_e = 0$, $V_0 = 10$ L. Tiempo de vaciado.</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Balance de masa con Q constante</div></div>
+<div class="step-b">
+<div class="work">
+$\dfrac{dV}{dt} = -2 \Rightarrow V(t) = V_0 - 2t = 10 - 2t$ <br><br>
+$V = 0 \Rightarrow t = 5$ s
+</div>
+<div class="final">$t_{vac} = 5$ s</div>
+</div></div>
+</div>
+</div>
+
+<!-- ────────────── TEMA 12: RL ────────────── -->
+
+<h2 id="t12">⚡ Tema 12 · Circuito RL</h2>
+
+<div class="ex">
+<div class="ex-head"><div class="ex-num">EJ 12.1</div><div class="ex-title">Transitorio en circuito RL</div></div>
+<div class="ex-stmt">
+$L\dfrac{di}{dt} + Ri = E$, con $i(0) = 0$.
+<ul>
+<li>Resolver por variables separables.</li>
+<li>Demostrar que $i(t) = \dfrac{E}{R}(1 - e^{-Rt/L})$.</li>
+<li>Valor estacionario.</li>
+</ul>
+</div>
+<button class="reveal-btn" onclick="toggleSol(this)">👁️ Ver resolución</button>
+<div class="sol">
+<h4>✅ Resolución paso a paso</h4>
+
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Reescribir y separar</div></div>
+<div class="step-b">
+<div class="work">
+$L\dfrac{di}{dt} = E - Ri \Rightarrow \dfrac{L\,di}{E - Ri} = dt$
+</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Integrar</div></div>
+<div class="step-b">
+<p>Sustitución $u = E - Ri$, $du = -R\,di$:</p>
+<div class="work">
+$\displaystyle\int\dfrac{L}{u}\cdot\dfrac{du}{-R} = \int dt$ <br><br>
+$-\dfrac{L}{R}\ln|u| = t + C$ <br><br>
+$\ln|E - Ri| = -\dfrac{R}{L}t + C_1$ <br><br>
+$E - Ri = A\,e^{-Rt/L}$ <br><br>
+$i(t) = \dfrac{E}{R} - \dfrac{A}{R}\,e^{-Rt/L}$
+</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">Aplicar CI i(0) = 0</div></div>
+<div class="step-b">
+<div class="work">
+$0 = \dfrac{E}{R} - \dfrac{A}{R} \Rightarrow A = E$
+</div>
+<div class="final">$i(t) = \dfrac{E}{R}\left(1 - e^{-Rt/L}\right)$ ✓</div>
+</div></div>
+
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">Valor estacionario</div></div>
+<div class="step-b">
+<div class="work">
+$\displaystyle\lim_{t\to\infty} i(t) = \dfrac{E}{R}(1 - 0) = \dfrac{E}{R}$
+</div>
+<div class="why">Es la <strong>Ley de Ohm</strong>: en régimen permanente, la inductancia no aporta resistencia.</div>
+<div class="final">$I_{ss} = \dfrac{E}{R}$</div>
+</div></div>
+</div>
+</div>
+
+<!-- ────────────── RESUMEN FÓRMULAS ────────────── -->
+
+<h2 id="resumen">📋 Resumen de fórmulas clave</h2>
+
+<table>
+<tr><th>Herramienta</th><th>Fórmula</th></tr>
+<tr><td>Derivada (definición)</td><td>$f'(a) = \lim_{h\to 0}\dfrac{f(a+h) - f(a)}{h}$</td></tr>
+<tr><td>Regla potencia</td><td>$\dfrac{d}{dx}[x^n] = nx^{n-1}$</td></tr>
+<tr><td>Regla producto</td><td>$(f\cdot g)' = f'g + fg'$</td></tr>
+<tr><td>Regla cociente</td><td>$\left(\dfrac{f}{g}\right)' = \dfrac{f'g - fg'}{g^2}$</td></tr>
+<tr><td>Regla de Barrow</td><td>$\displaystyle\int_a^b f(x)\,dx = F(b) - F(a)$</td></tr>
+<tr><td>Volumen desde caudal</td><td>$V = \displaystyle\int_a^b Q(t)\,dt$</td></tr>
+<tr><td>Posición desde velocidad</td><td>$x = \displaystyle\int_a^b v(t)\,dt$</td></tr>
+<tr><td>Trabajo mecánico</td><td>$W = \displaystyle\int_a^b F(x)\,dx$</td></tr>
+<tr><td>Riemann izquierda</td><td>$\sum_{i=0}^{n-1} f(t_i)\cdot\Delta t$</td></tr>
+<tr><td>Error porcentual</td><td>$\dfrac{|exacto - aprox|}{exacto}\cdot 100\%$</td></tr>
+<tr><td>Variables separables</td><td>$\dfrac{1}{h(y)}\,dy = g(t)\,dt$ → integrar</td></tr>
+<tr><td>PID integral</td><td>$u_i(t) = K_i\displaystyle\int_0^t e(\tau)\,d\tau$</td></tr>
+<tr><td>Newton (térmico)</td><td>$T(t) = T_a + (T_0 - T_a)e^{-kt}$</td></tr>
+<tr><td>RL (carga)</td><td>$i(t) = \dfrac{E}{R}(1 - e^{-Rt/L})$</td></tr>
+<tr><td>Torricelli</td><td>$h(t) = \left(\sqrt{H_0} - \dfrac{kt}{2}\right)^2$</td></tr>
+</table>
+
+<div class="footer">
+  Hecho con ❤️ para el parcial de Análisis Mat. I · Lic. Automatización y Control · 2026<br>
+  <a href="analisis_parcial2.html" style="color:var(--accent)">← Volver al apunte principal</a>
+</div>
+
+</main>
+</div>
+
+<script>
+const allEx = () => document.querySelectorAll('.reveal-btn');
+const allSols = () => document.querySelectorAll('.sol');
+
+function updateProgress(){
+  const total = allEx().length;
+  const opened = document.querySelectorAll('.reveal-btn.opened').length;
+  document.getElementById('prog-count').textContent = opened;
+  document.getElementById('prog-total').textContent = total;
+  document.getElementById('prog-fill').style.width = (opened/total*100)+'%';
+}
+
+function toggleSol(btn){
+  const sol = btn.nextElementSibling;
+  const isOpen = sol.classList.toggle('show');
+  btn.classList.toggle('opened', isOpen);
+  btn.innerHTML = isOpen ? '🙈 Ocultar resolución' : '👁️ Ver resolución';
+  updateProgress();
+}
+
+function toggleAll(open){
+  allEx().forEach(btn=>{
+    const sol = btn.nextElementSibling;
+    if(open){
+      sol.classList.add('show');
+      btn.classList.add('opened');
+      btn.innerHTML = '🙈 Ocultar resolución';
+    } else {
+      sol.classList.remove('show');
+      btn.classList.remove('opened');
+      btn.innerHTML = '👁️ Ver resolución';
+    }
+  });
+  updateProgress();
+}
+
+// Init
+updateProgress();
+</script>
+</body>
+</html>

@@ -12,113 +12,202 @@
 <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
 
 <style>
+/* ════════════════════════════════════════════════════════════════════
+   PALETA OPTIMIZADA PARA RETENCIÓN (basada en research educacional)
+   ════════════════════════════════════════════════════════════════════
+   • Fondo crema cálido (no blanco puro): reduce fatiga ocular, mejora
+     comprensión sostenida (Hall & Hanna, 2004).
+   • Texto slate oscuro (no negro puro): alto contraste sin agresión.
+   • Color coding semántico — cada concepto tiene su color asignado para
+     que el cerebro lo categorice automáticamente:
+       azul   → información, navegación (calma/foco)
+       púrpura → fórmulas, técnica (engagement cognitivo)
+       verde  → correcto, éxito, respuesta (refuerzo positivo)
+       ámbar  → atención, ojo, advertencia (highlight tipo resaltador)
+       coral  → error, peligro (alerta sin agresión)
+       rosa   → intuición, "aha moment" (creatividad)
+   • Pasteles suaves en cards: separación visual sin sobrecarga sensorial.
+   ════════════════════════════════════════════════════════════════════ */
 :root{
-  --bg:#0f172a; --panel:#1e293b; --panel2:#273449; --border:#334155;
-  --text:#e2e8f0; --muted:#94a3b8; --accent:#38bdf8; --accent2:#a78bfa;
-  --good:#34d399; --warn:#fbbf24; --bad:#f87171; --pink:#ec4899;
-  --yellow:#fde68a; --orange:#fb923c;
+  /* Fondos */
+  --bg:#fefcf7;          /* crema cálido (warm white) */
+  --panel:#ffffff;       /* blanco puro para cards */
+  --panel2:#f5f0e6;      /* beige claro para sidebar/secundario */
+  --panel3:#faf7f0;      /* crema entre bg y panel2 */
+  --border:#e5dfd0;      /* borde sutil cálido */
+  --border-strong:#cbc4b0;
+
+  /* Texto */
+  --text:#1f2937;        /* slate oscuro (no negro puro) */
+  --text-soft:#374151;
+  --muted:#6b7280;       /* gris medio */
+  --muted-soft:#9ca3af;
+
+  /* Colores semánticos (vibrantes pero no saturados) */
+  --accent:#0369a1;      /* deep sky blue — info/links */
+  --accent-bg:#dbeafe;   /* fondo pastel */
+  --accent2:#7c3aed;     /* púrpura — fórmulas/técnica */
+  --accent2-bg:#ede9fe;
+  --good:#15803d;        /* forest green — correcto */
+  --good-bg:#dcfce7;
+  --warn:#b45309;        /* ámbar oscuro — atención */
+  --warn-bg:#fef3c7;
+  --bad:#b91c1c;         /* coral oscuro — error */
+  --bad-bg:#fee2e2;
+  --pink:#be185d;        /* rosa intenso — intuición */
+  --pink-bg:#fce7f3;
+  --orange:#c2410c;      /* naranja terracota — enunciado */
+  --orange-bg:#ffedd5;
+  --yellow-hl:#fef08a;   /* highlight tipo resaltador */
+  --teal:#0f766e;        /* teal — conexión */
+  --teal-bg:#ccfbf1;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-     background:var(--bg); color:var(--text); line-height:1.6}
+     background:var(--bg); color:var(--text); line-height:1.65; font-feature-settings:"kern" 1}
 
 .layout{display:grid; grid-template-columns:290px 1fr; min-height:100vh}
 
-nav.sidebar{background:var(--panel); border-right:1px solid var(--border);
+/* ── Sidebar (panel cálido contrastante) ── */
+nav.sidebar{background:var(--panel2); border-right:1px solid var(--border);
             padding:18px 14px; position:sticky; top:0; height:100vh; overflow-y:auto}
-.brand{font-weight:700; font-size:16px; color:white; margin-bottom:4px}
+.brand{font-weight:700; font-size:16px; color:var(--accent); margin-bottom:4px}
 .brand small{display:block; font-weight:400; color:var(--muted); font-size:11px; margin-top:2px}
-.nav-level{font-size:10px; color:var(--muted); letter-spacing:1px; text-transform:uppercase;
-           padding:14px 4px 4px}
-nav.sidebar a{display:flex; align-items:center; gap:8px; color:var(--text); text-decoration:none;
-              padding:6px 10px; border-radius:6px; font-size:13px; margin:1px 0; transition:background .15s}
-nav.sidebar a:hover,nav.sidebar a.active{background:var(--panel2); color:var(--accent)}
+.nav-level{font-size:10px; color:var(--muted); letter-spacing:1.2px; text-transform:uppercase;
+           padding:14px 4px 4px; font-weight:600}
+nav.sidebar a{display:flex; align-items:center; gap:8px; color:var(--text-soft); text-decoration:none;
+              padding:6px 10px; border-radius:6px; font-size:13px; margin:1px 0;
+              transition:background .15s, color .15s}
+nav.sidebar a:hover{background:var(--accent-bg); color:var(--accent)}
+nav.sidebar a.active{background:var(--accent); color:white}
 .back-home{display:inline-block; margin-bottom:14px; color:var(--accent);
-           text-decoration:none; font-size:13px}
+           text-decoration:none; font-size:13px; font-weight:600}
 .back-home:hover{text-decoration:underline}
 
+/* ── Main ── */
 main{padding:28px 40px; max-width:980px}
-h1{font-size:30px; color:white; margin-bottom:4px}
-.subtitle{color:var(--muted); font-size:14px; margin-bottom:28px}
-h2{font-size:22px; color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:7px; margin:40px 0 14px}
-h3{font-size:17px; color:var(--accent2); margin:22px 0 8px}
-h4{font-size:14px; color:var(--yellow); margin:14px 0 6px; font-weight:600}
-p,li{font-size:14.5px}
+h1{font-size:30px; color:#1e3a8a; margin-bottom:4px; letter-spacing:-0.5px; font-weight:700}
+.subtitle{color:var(--muted); font-size:14.5px; margin-bottom:28px}
+h2{font-size:22px; color:#1e40af; border-bottom:2px solid var(--accent-bg); padding-bottom:8px;
+   margin:40px 0 14px; font-weight:700}
+h3{font-size:17px; color:var(--accent2); margin:24px 0 8px; font-weight:600}
+h4{font-size:14px; color:var(--warn); margin:14px 0 6px; font-weight:700; text-transform:uppercase;
+   letter-spacing:0.5px}
+p,li{font-size:15px; color:var(--text)}
 ul,ol{padding-left:22px; margin:6px 0}
+strong{color:var(--text); font-weight:700}
+em{color:var(--text-soft); font-style:italic}
 
+/* ── Cards (pasteles suaves con borde lateral marcado) ── */
 .card{background:var(--panel); border:1px solid var(--border); border-radius:10px;
-      padding:16px 20px; margin:12px 0}
-.card.formula{border-left:4px solid var(--accent2); background:var(--panel2)}
-.card.tip{border-left:4px solid var(--good)}
-.card.warn{border-left:4px solid var(--warn); background:#1c1a0e}
-.card.intuition{border-left:4px solid var(--pink); background:#2a1d2e}
-.card.enunciado{border-left:4px solid var(--orange); background:#1a1208}
-.card.answer{border-left:4px solid var(--good); background:#0d1f16}
-.card.error{border-left:4px solid var(--bad); background:#1a0d0d}
-.card.connect{border-left:4px solid var(--accent); background:#0a1929}
+      padding:16px 20px; margin:14px 0; box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.card.formula{border-left:4px solid var(--accent2); background:var(--accent2-bg)}
+.card.tip{border-left:4px solid var(--good); background:var(--good-bg)}
+.card.warn{border-left:4px solid var(--warn); background:var(--warn-bg)}
+.card.intuition{border-left:4px solid var(--pink); background:var(--pink-bg)}
+.card.enunciado{border-left:4px solid var(--orange); background:var(--orange-bg)}
+.card.answer{border-left:4px solid var(--good); background:var(--good-bg);
+             box-shadow:0 2px 8px rgba(21,128,61,0.12)}
+.card.error{border-left:4px solid var(--bad); background:var(--bad-bg)}
+.card.connect{border-left:4px solid var(--teal); background:var(--teal-bg)}
+.card.key{border-left:4px solid var(--pink); background:var(--pink-bg)}
 
+/* ── Badges (chips redondeados) ── */
 .badge{display:inline-block; padding:3px 10px; border-radius:12px;
-       font-size:12px; font-weight:600; margin-right:6px; margin-bottom:4px}
-.badge.p1{background:#143526; color:var(--good)}
-.badge.p2{background:#3a1c1c; color:var(--bad)}
-.badge.tip{background:#1a1a3e; color:#818cf8}
-.badge.warn{background:#3d2e0a; color:var(--warn)}
+       font-size:12px; font-weight:700; margin-right:6px; margin-bottom:4px;
+       letter-spacing:0.3px}
+.badge.p1{background:var(--good); color:white}
+.badge.p2{background:var(--orange); color:white}
+.badge.tip{background:var(--accent); color:white}
+.badge.warn{background:var(--warn); color:white}
 
-table{border-collapse:collapse; width:100%; margin:10px 0; font-size:14px}
-th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
-th{background:var(--panel2); color:var(--accent)}
+/* ── Tables (clean & legible) ── */
+table{border-collapse:collapse; width:100%; margin:12px 0; font-size:14px;
+      background:var(--panel); border-radius:8px; overflow:hidden;
+      box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+th,td{border:1px solid var(--border); padding:10px 12px; text-align:left; vertical-align:top}
+th{background:var(--accent-bg); color:var(--accent); font-weight:700; font-size:13px;
+   text-transform:uppercase; letter-spacing:0.5px}
+tr:nth-child(even) td{background:var(--panel3)}
 
-.formula-box{background:#0b1220; border:1px solid var(--border); border-radius:8px;
-             padding:12px 16px; margin:8px 0; text-align:center; font-size:16px}
+/* ── Formula box (highlight matemático) ── */
+.formula-box{background:linear-gradient(135deg,var(--accent2-bg),#f5f0ff);
+             border:1px solid var(--accent2); border-radius:8px;
+             padding:14px 18px; margin:10px 0; text-align:center; font-size:16px;
+             color:var(--accent2); font-weight:500}
 
+/* ── Grids ── */
 .grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px}
 .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
 @media(max-width:860px){.grid2,.grid3{grid-template-columns:1fr}}
 
-.steps{margin:14px 0}
-.step{background:var(--panel); border:1px solid var(--border); border-left:4px solid var(--accent2);
-      border-radius:8px; padding:14px 18px; margin:10px 0}
-.step-header{display:flex; align-items:center; gap:10px; margin-bottom:6px}
-.step-num{width:30px; height:30px; border-radius:50%; background:var(--accent2);
-          color:#0b1220; font-weight:700; display:flex; align-items:center; justify-content:center;
-          font-size:14px; flex-shrink:0}
-.step-title{font-weight:700; color:var(--accent2); font-size:15px}
-.step-body{padding-left:40px; font-size:14px}
-.step-body .work{background:#0b1220; padding:10px 14px; border-radius:6px; margin:8px 0;
-                 border:1px solid var(--border)}
-.step-why{font-size:13px; color:var(--muted); font-style:italic; margin-top:6px;
-          padding:6px 12px; background:#0b1220; border-radius:6px; border-left:2px solid var(--accent)}
+/* ── Steps (resolución paso a paso, ALTAMENTE retention-friendly) ── */
+.steps{margin:16px 0}
+.step{background:var(--panel); border:1px solid var(--border);
+      border-left:4px solid var(--accent2); border-radius:8px;
+      padding:14px 18px; margin:12px 0; box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.step-header{display:flex; align-items:center; gap:12px; margin-bottom:8px}
+.step-num{width:32px; height:32px; border-radius:50%; background:var(--accent2);
+          color:white; font-weight:700; display:flex; align-items:center; justify-content:center;
+          font-size:14px; flex-shrink:0; box-shadow:0 2px 6px rgba(124,58,237,0.25)}
+.step-title{font-weight:700; color:var(--accent2); font-size:15.5px}
+.step-body{padding-left:44px; font-size:14.5px}
+.step-body .work{background:#fdfbf5; padding:12px 16px; border-radius:6px; margin:10px 0;
+                 border:1px solid var(--border); color:var(--text)}
+.step-why{font-size:13.5px; color:var(--text-soft); font-style:italic; margin-top:8px;
+          padding:8px 14px; background:var(--accent-bg); border-radius:6px;
+          border-left:3px solid var(--accent)}
 
+/* ── Controls (interactive sliders) ── */
 .controls{display:flex; flex-wrap:wrap; gap:18px; margin:14px 0; align-items:flex-start;
-          background:var(--panel2); padding:16px; border-radius:8px}
-.ctrl{display:flex; flex-direction:column; font-size:13px; color:var(--muted); min-width:170px; flex:1}
-.ctrl .ctrl-lbl{margin-bottom:6px; line-height:1.4}
-.ctrl input[type=range]{margin-top:0; width:100%}
-.ctrl input[type=number]{background:#0b1220; color:var(--text); border:1px solid var(--border);
-  border-radius:6px; padding:6px 10px; font-size:14px; margin-top:4px; width:100%}
+          background:var(--panel3); padding:16px; border-radius:8px;
+          border:1px solid var(--border)}
+.ctrl{display:flex; flex-direction:column; font-size:13px; color:var(--text-soft);
+      min-width:170px; flex:1}
+.ctrl .ctrl-lbl{margin-bottom:8px; line-height:1.4; color:var(--text)}
+.ctrl input[type=range]{margin-top:0; width:100%; accent-color:var(--accent)}
+.ctrl input[type=number]{background:var(--panel); color:var(--text);
+  border:1px solid var(--border); border-radius:6px; padding:6px 10px;
+  font-size:14px; margin-top:4px; width:100%}
 
-.stat-output{display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));
+/* ── Stat boxes (output) ── */
+.stat-output{display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
              gap:10px; margin-top:12px}
-.stat-box{background:#0b1220; padding:10px 12px; border-radius:8px; border:1px solid var(--border)}
-.stat-box .label{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px}
-.stat-box .value{font-size:20px; font-weight:700; color:var(--accent)}
+.stat-box{background:var(--panel); padding:12px 14px; border-radius:8px;
+          border:1px solid var(--border); box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.stat-box .label{font-size:11px; color:var(--muted); text-transform:uppercase;
+                 letter-spacing:.6px; font-weight:600}
+.stat-box .value{font-size:22px; font-weight:700; color:var(--accent); margin-top:2px}
 
-.plot{width:100%; height:340px; background:#0b1220; border-radius:8px; border:1px solid var(--border); margin-top:10px}
+/* ── Plot ── */
+.plot{width:100%; height:340px; background:var(--panel); border-radius:8px;
+      border:1px solid var(--border); margin-top:10px}
 
-.btn{background:var(--accent); color:#0b1220; border:none; padding:8px 18px;
-     border-radius:6px; font-weight:600; cursor:pointer; font-size:14px; transition:filter .15s}
-.btn:hover{filter:brightness(1.1)}
-.btn-2{background:var(--panel2); color:var(--text); border:1px solid var(--border);
-       padding:8px 16px; border-radius:6px; cursor:pointer; font-size:14px}
+/* ── Buttons ── */
+.btn{background:var(--accent); color:white; border:none; padding:9px 20px;
+     border-radius:6px; font-weight:600; cursor:pointer; font-size:14px;
+     transition:background .15s, transform .1s; box-shadow:0 2px 4px rgba(3,105,161,0.2)}
+.btn:hover{background:#075985; transform:translateY(-1px)}
+.btn-2{background:var(--panel); color:var(--text); border:1px solid var(--border-strong);
+       padding:9px 18px; border-radius:6px; cursor:pointer; font-size:14px; font-weight:500;
+       transition:background .15s}
+.btn-2:hover{background:var(--accent-bg)}
 
-code{background:#0b1220; padding:2px 6px; border-radius:4px; font-size:13px; color:#fcd34d}
+/* ── Code ── */
+code{background:var(--warn-bg); padding:2px 6px; border-radius:4px;
+     font-size:13px; color:var(--warn); font-family:'SF Mono',Monaco,Consolas,monospace}
 
-details.reveal{background:var(--panel2); border-radius:8px; padding:10px 16px; margin:10px 0;
-               border:1px solid var(--border)}
-details.reveal summary{cursor:pointer; color:var(--accent); font-weight:600; padding:4px 0; font-size:14px}
-details.reveal[open]{padding-bottom:14px}
+/* ── Reveal (details/summary) ── */
+details.reveal{background:var(--panel); border-radius:8px; padding:12px 18px; margin:12px 0;
+               border:1px solid var(--border); box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+details.reveal summary{cursor:pointer; color:var(--accent); font-weight:600;
+                       padding:4px 0; font-size:14px}
+details.reveal summary:hover{color:#075985}
+details.reveal[open]{padding-bottom:16px}
+details.reveal[open] summary{margin-bottom:8px; border-bottom:1px solid var(--border)}
 
+/* ── Highlight inline (research: yellow improves recall) ── */
 .hl-good{color:var(--good); font-weight:700}
 .hl-warn{color:var(--warn); font-weight:700}
 .hl-bad{color:var(--bad); font-weight:700}
@@ -126,35 +215,65 @@ details.reveal[open]{padding-bottom:14px}
 .hl-purple{color:var(--accent2); font-weight:700}
 .hl-orange{color:var(--orange); font-weight:700}
 
-hr{border:none; border-top:1px solid var(--border); margin:30px 0}
+/* Resaltador amarillo para conceptos clave */
+mark, .highlight{background:var(--yellow-hl); color:var(--text); padding:1px 4px;
+                 border-radius:3px; font-weight:500}
+
+hr{border:none; border-top:2px solid var(--border); margin:32px 0}
+
 .footer{margin-top:60px; padding:20px; text-align:center; color:var(--muted); font-size:12px;
         border-top:1px solid var(--border)}
+.footer a{color:var(--accent)}
 
-/* Quiz */
-.quiz-q{background:var(--panel2); padding:14px 18px; border-radius:8px; margin:10px 0}
+/* ── Quiz ── */
+.quiz-q{background:var(--panel); padding:16px 20px; border-radius:8px; margin:12px 0;
+        border:1px solid var(--border); box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.quiz-q strong{display:block; margin-bottom:6px; color:var(--text); font-size:15px}
 .quiz-q .opts{display:flex; flex-direction:column; gap:8px; margin-top:10px}
-.quiz-q .opt{background:#0b1220; padding:10px 14px; border-radius:6px; border:2px solid transparent;
-             cursor:pointer; transition:all .15s}
-.quiz-q .opt:hover{border-color:var(--accent)}
-.quiz-q .opt.correct{background:#143526; border-color:var(--good)}
-.quiz-q .opt.wrong{background:#3a1c1c; border-color:var(--bad)}
-.quiz-feedback{margin-top:8px; font-size:13.5px; color:var(--muted); padding:8px 10px;
-               background:#0b1220; border-radius:6px; border-left:3px solid var(--accent)}
-.quiz-score{font-size:28px; font-weight:700; text-align:center; padding:16px; color:var(--accent)}
+.quiz-q .opt{background:var(--panel3); padding:11px 16px; border-radius:6px;
+             border:2px solid var(--border); cursor:pointer; transition:all .15s;
+             font-size:14px; color:var(--text)}
+.quiz-q .opt:hover{border-color:var(--accent); background:var(--accent-bg)}
+.quiz-q .opt.correct{background:var(--good-bg); border-color:var(--good); color:var(--good)}
+.quiz-q .opt.wrong{background:var(--bad-bg); border-color:var(--bad); color:var(--bad)}
+.quiz-feedback{margin-top:10px; font-size:13.5px; color:var(--text-soft); padding:10px 12px;
+               background:var(--accent-bg); border-radius:6px;
+               border-left:3px solid var(--accent)}
+.quiz-score{font-size:28px; font-weight:700; text-align:center; padding:18px;
+            color:var(--accent); background:var(--accent-bg); border-radius:10px;
+            margin:14px 0}
 
-/* Variants table */
-.var-table th{background:var(--panel)}
-.var-table td.formula{font-family:'Courier New',monospace; background:#0b1220}
+/* ── Variants table ── */
+.var-table th{background:var(--accent2-bg); color:var(--accent2)}
+.var-table td.formula{font-family:'SF Mono',Monaco,Consolas,monospace; background:var(--panel3)}
 
-/* Hero callout */
-.hero{background:linear-gradient(135deg,#1a1230,#0a1929); border:1px solid var(--accent);
-      border-radius:12px; padding:20px 24px; margin:18px 0; box-shadow:0 4px 20px rgba(56,189,248,0.1)}
-.hero h3{margin-top:0; color:var(--accent)}
+/* ── Hero callout (gradient suave) ── */
+.hero{background:linear-gradient(135deg, var(--accent-bg) 0%, var(--accent2-bg) 100%);
+      border:1px solid var(--accent); border-radius:12px; padding:22px 26px;
+      margin:20px 0; box-shadow:0 4px 16px rgba(3,105,161,0.1)}
+.hero h3{margin-top:0; color:var(--accent); font-size:18px; font-weight:700}
+.hero p{color:var(--text)}
+.hero strong{color:var(--accent)}
 
+/* ── KaTeX legibility on light background ── */
+.katex{color:var(--text); font-size:1em}
+.katex-display{color:var(--text); margin:0.8em 0}
+
+/* ── Mobile responsive ── */
 @media(max-width:860px){
   .layout{grid-template-columns:1fr}
   nav.sidebar{position:relative; height:auto; max-height:50vh}
   main{padding:20px 16px}
+  h1{font-size:24px}
+  h2{font-size:19px; margin:30px 0 12px}
+}
+
+/* Smooth print mode */
+@media print{
+  nav.sidebar{display:none}
+  main{padding:0; max-width:none}
+  .card{break-inside:avoid; box-shadow:none}
+  .plot{display:none}
 }
 </style>
 </head>
@@ -1259,26 +1378,26 @@ function p1Update(){
 
   const traces = [{
     x:xs, y:ys, type:'scatter', mode:'lines',
-    line:{color:'#38bdf8', width:3}, name:'Q(t) real',
-    fill:'tozeroy', fillcolor:'rgba(56,189,248,0.1)'
+    line:{color:'#0369a1', width:3}, name:'Q(t) real',
+    fill:'tozeroy', fillcolor:'rgba(3,105,161,0.12)'
   }];
   rects.forEach((r,i)=>{
     traces.push({
       x:[r.x0, r.x0, r.x1, r.x1, r.x0],
       y:[0, r.h, r.h, 0, 0],
       type:'scatter', mode:'lines', fill:'toself',
-      fillcolor:'rgba(251,146,60,0.3)',
-      line:{color:'#fb923c', width:1},
+      fillcolor:'rgba(194,65,12,0.25)',
+      line:{color:'#c2410c', width:1.5},
       showlegend:i===0, name:'PLC (rectángulos)'
     });
   });
   Plotly.react('p1-plot', traces, {
-    paper_bgcolor:'#0b1220', plot_bgcolor:'#0b1220',
-    font:{color:'#e2e8f0'},
+    paper_bgcolor:'#ffffff', plot_bgcolor:'#fdfbf5',
+    font:{color:'#1f2937', family:'-apple-system, BlinkMacSystemFont, Segoe UI, Roboto'},
     margin:{t:20,r:20,b:50,l:50},
-    xaxis:{gridcolor:'#334155', title:'t (s)'},
-    yaxis:{gridcolor:'#334155', title:'Q (L/s)', rangemode:'tozero'},
-    legend:{orientation:'h', y:-0.18}
+    xaxis:{gridcolor:'#e5dfd0', title:'t (s)', linecolor:'#cbc4b0', zerolinecolor:'#cbc4b0'},
+    yaxis:{gridcolor:'#e5dfd0', title:'Q (L/s)', rangemode:'tozero', linecolor:'#cbc4b0', zerolinecolor:'#cbc4b0'},
+    legend:{orientation:'h', y:-0.18, font:{color:'#374151'}}
   }, {displayModeBar:false, responsive:true});
 }
 ['p1-a','p1-b','p1-T','p1-dt'].forEach(id=>{
@@ -1311,18 +1430,18 @@ function p2Update(){
   setText('p2-tau', tau.toFixed(2)+' min');
 
   Plotly.react('p2-plot',[
-    {x:xs, y:ys, type:'scatter', mode:'lines', line:{color:'#fb923c', width:3}, name:'T(t)'},
+    {x:xs, y:ys, type:'scatter', mode:'lines', line:{color:'#c2410c', width:3}, name:'T(t)'},
     {x:[0, tmax], y:[Ta, Ta], type:'scatter', mode:'lines',
-     line:{color:'#34d399', width:2, dash:'dash'}, name:'asíntota T_a'},
+     line:{color:'#15803d', width:2, dash:'dash'}, name:'asíntota T_a'},
     {x:[0], y:[T0], type:'scatter', mode:'markers',
-     marker:{color:'#a78bfa', size:14}, name:'T(0)'}
+     marker:{color:'#7c3aed', size:14, line:{color:'white', width:2}}, name:'T(0)'}
   ],{
-    paper_bgcolor:'#0b1220', plot_bgcolor:'#0b1220',
-    font:{color:'#e2e8f0'},
+    paper_bgcolor:'#ffffff', plot_bgcolor:'#fdfbf5',
+    font:{color:'#1f2937', family:'-apple-system, BlinkMacSystemFont, Segoe UI, Roboto'},
     margin:{t:20,r:20,b:50,l:50},
-    xaxis:{gridcolor:'#334155', title:'t (min)'},
-    yaxis:{gridcolor:'#334155', title:'T (°C)'},
-    legend:{orientation:'h', y:-0.18}
+    xaxis:{gridcolor:'#e5dfd0', title:'t (min)', linecolor:'#cbc4b0', zerolinecolor:'#cbc4b0'},
+    yaxis:{gridcolor:'#e5dfd0', title:'T (°C)', linecolor:'#cbc4b0', zerolinecolor:'#cbc4b0'},
+    legend:{orientation:'h', y:-0.18, font:{color:'#374151'}}
   },{displayModeBar:false, responsive:true});
 }
 ['p2-Ta','p2-T0','p2-k','p2-tmax'].forEach(id=>{

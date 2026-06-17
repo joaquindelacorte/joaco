@@ -265,6 +265,65 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
 .compare-cell h4{margin:0 0 8px; font-size:13px}
 .compare-cell.left{border-top:3px solid var(--good)}
 .compare-cell.right{border-top:3px solid var(--warn)}
+
+/* ══════════════════════════════════════
+   SIMULACRO PARCIAL 2 — zona clara (alta retención)
+══════════════════════════════════════ */
+.exam-zone{background:#f1f5f9; border-radius:16px; padding:6px 26px 26px;
+           margin:18px 0; color:#0f172a; box-shadow:0 8px 30px rgba(0,0,0,.45)}
+.exam-zone .exam-head{display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+           padding:22px 0 6px; border-bottom:2px solid #cbd5e1; margin-bottom:6px}
+.exam-zone .exam-head h3{color:#0f172a; font-size:21px; margin:0}
+.exam-zone .exam-head p{color:#475569; font-size:13px; margin:2px 0 0; width:100%}
+.exam-zone .exam-tip{background:#fef9c3; border:1px solid #fde047; border-radius:10px;
+           padding:12px 16px; margin:16px 0; color:#713f12; font-size:13.5px}
+.exam-zone .exam-tip strong{color:#854d0e}
+
+.exam-card{background:#ffffff; border:1px solid #e2e8f0; border-radius:14px;
+           padding:18px 22px; margin:16px 0; border-left:6px solid #94a3b8;
+           box-shadow:0 2px 8px rgba(15,23,42,.06)}
+.exam-card .exam-q-head{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px}
+.exam-card h4{color:#0f172a; font-size:16px; margin:0; font-weight:700}
+.exam-card p,.exam-card li{color:#1e293b; font-size:14.5px}
+.exam-card .enunciado{color:#334155; font-size:14.5px; margin:6px 0}
+.exam-card ol.partes{margin:8px 0; padding-left:20px}
+.exam-card ol.partes li{margin:4px 0; color:#334155}
+
+/* Topic colour-coding (left border + tag) */
+.exam-tag{display:inline-block; padding:3px 11px; border-radius:20px; font-size:11.5px;
+          font-weight:700; letter-spacing:.3px}
+.exam-card.t-bin{border-left-color:#16a34a}      .exam-tag.t-bin{background:#dcfce7; color:#15803d}
+.exam-card.t-poi{border-left-color:#d97706}      .exam-tag.t-poi{background:#fef3c7; color:#b45309}
+.exam-card.t-nor{border-left-color:#4f46e5}      .exam-tag.t-nor{background:#e0e7ff; color:#4338ca}
+.exam-card.t-tcl{border-left-color:#0891b2}      .exam-tag.t-tcl{background:#cffafe; color:#0e7490}
+.exam-card.t-ic{border-left-color:#0d9488}       .exam-tag.t-ic{background:#ccfbf1; color:#0f766e}
+.exam-card.t-n{border-left-color:#7c3aed}        .exam-tag.t-n{background:#ede9fe; color:#6d28d9}
+.exam-card.t-reg{border-left-color:#e11d48}      .exam-tag.t-reg{background:#ffe4e6; color:#be123c}
+
+/* Reveal-on-demand solution */
+details.exam-answer{margin-top:12px}
+details.exam-answer summary{list-style:none; cursor:pointer; display:inline-flex; align-items:center;
+          gap:7px; background:#0f766e; color:#fff; font-weight:600; font-size:13px;
+          padding:8px 16px; border-radius:8px; transition:background .15s; user-select:none}
+details.exam-answer summary::-webkit-details-marker{display:none}
+details.exam-answer summary:hover{background:#0d9488}
+details.exam-answer summary::before{content:'🔓 '}
+details.exam-answer summary .closed-txt{display:inline}
+details.exam-answer[open] summary{background:#475569}
+details.exam-answer[open] summary::before{content:'🔒 '}
+details.exam-answer[open] summary .closed-txt{display:none}
+details.exam-answer[open] summary .open-txt{display:inline}
+details.exam-answer summary .open-txt{display:none}
+.exam-sol{background:#f0fdf4; border:1px solid #bbf7d0; border-left:4px solid #16a34a;
+          border-radius:10px; padding:14px 18px; margin-top:12px; color:#14532d}
+.exam-sol p,.exam-sol li{color:#166534; font-size:14px}
+.exam-sol .res{background:#dcfce7; border-radius:6px; padding:2px 8px; font-weight:700; color:#14532d}
+.exam-sol .katex{color:#14532d}
+.exam-sol code{background:#dcfce7; color:#166534; padding:1px 6px}
+.exam-sol .step-n{background:#16a34a; color:#fff}
+.exam-sol .step-body{color:#166534}
+.exam-zone .katex{color:#0f172a}
+@media print{.exam-answer{display:none}}
 </style>
 </head>
 <body>
@@ -326,6 +385,9 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
   <a href="#formulas">📐 Hoja de fórmulas</a>
   <a href="#repaso">🔁 Repaso 2do parcial</a>
   <a href="#autoevaluacion">🏆 Autoevaluación</a>
+
+  <div class="nav-level">🎯 Simulacro de examen</div>
+  <a href="#parcial2">📝 Simulacro Parcial 2</a>
 
   <div class="nav-level">⚙️ Referencia</div>
   <a href="#integradores">6. Problemas integradores</a>
@@ -2521,6 +2583,202 @@ $z_{0{,}05}=-1{,}645$ → $x=100-1{,}645\times4=\mathbf{93{,}42}$ °C · <code>q
 
 </div>
 <p style="margin-top:14px;font-size:13px">Para el quiz de preguntas múltiple opción → <a href="#quiz" style="color:var(--accent2)">ir al Quiz Final ↓</a></p>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     SIMULACRO PARCIAL 2 — examen completo (zona clara)
+══════════════════════════════════════════════════ -->
+<h2 id="parcial2">🎯 Simulacro Parcial 2 — Examen completo</h2>
+
+<div class="exam-zone">
+  <div class="exam-head">
+    <h3>📝 Simulacro de Parcial 2</h3>
+    <p>7 ejercicios que cubren todos los temas del parcial. Resolvé cada uno <strong>en papel primero</strong>, sin mirar la respuesta. Recién después abrí la solución para corregirte.</p>
+  </div>
+
+  <div class="exam-tip">
+    <strong>💡 Cómo estudiar con esto (recuerdo activo):</strong> intentá resolver el ejercicio completo antes de revelar la solución. El esfuerzo de recordar — aunque te equivoques — fija el contenido mucho mejor que releer. Las respuestas están ocultas a propósito.
+  </div>
+
+  <!-- ── Ej 1: Binomial ── -->
+  <div class="exam-card t-bin">
+    <div class="exam-q-head"><span class="exam-tag t-bin">Binomial</span><h4>Ejercicio 1 — Distribución Binomial</h4></div>
+    <p class="enunciado"><strong>1.1)</strong> Una máquina produce piezas con probabilidad de defecto del 4%. Se inspecciona un lote de 25 piezas.</p>
+    <ol class="partes">
+      <li>¿Qué distribución corresponde? ¿Cuáles son los parámetros?</li>
+      <li>P(exactamente 2 defectuosas)</li>
+      <li>P(3 o más defectuosas)</li>
+      <li>Número esperado de defectuosas y desvío estándar</li>
+    </ol>
+    <p class="enunciado"><strong>1.2)</strong> Un sistema de seguridad tiene 12 sensores independientes; cada uno falla con probabilidad 0,05. Calcular P(X=2), P(X≥3), P(X=0) y E[X].</p>
+    <details class="exam-answer">
+      <summary><span class="closed-txt">Ver solución</span><span class="open-txt">Ocultar solución</span></summary>
+      <div class="exam-sol">
+        <p><strong>1.1)</strong></p>
+        <div class="step"><div class="step-n">a</div><div class="step-body">$X \sim B(n=25,\ p=0{,}04)$. Parámetros: n=25, p=0,04.</div></div>
+        <div class="step"><div class="step-n">b</div><div class="step-body">$P(X=2)=\binom{25}{2}(0{,}04)^2(0{,}96)^{23}=300\cdot0{,}0016\cdot0{,}397\approx$ <span class="res">0,1906</span></div></div>
+        <div class="step"><div class="step-n">c</div><div class="step-body">$P(0)=0{,}96^{25}\approx0{,}3604$; $P(1)\approx0{,}3754$; $P(2)\approx0{,}1906$<br>$P(X\ge3)=1-(0{,}3604+0{,}3754+0{,}1906)\approx$ <span class="res">0,0736</span></div></div>
+        <div class="step"><div class="step-n">d</div><div class="step-body">$E[X]=np=25(0{,}04)=$ <span class="res">1</span>; $\sigma=\sqrt{np(1-p)}=\sqrt{0{,}96}\approx$ <span class="res">0,98</span></div></div>
+        <p style="margin-top:10px"><strong>1.2)</strong></p>
+        <div class="step"><div class="step-n">a</div><div class="step-body">$P(X=2)=\binom{12}{2}(0{,}05)^2(0{,}95)^{10}\approx66\cdot0{,}0025\cdot0{,}5987\approx$ <span class="res">0,0988</span></div></div>
+        <div class="step"><div class="step-n">b</div><div class="step-body">$P(0)=0{,}95^{12}\approx0{,}5404$; $P(1)\approx0{,}3413$; $P(2)\approx0{,}0988$ → $P(X\ge3)\approx$ <span class="res">0,0195</span></div></div>
+        <div class="step"><div class="step-n">c</div><div class="step-body">$P(X=0)=0{,}95^{12}\approx$ <span class="res">0,5404</span></div></div>
+        <div class="step"><div class="step-n">d</div><div class="step-body">$E[X]=12(0{,}05)=$ <span class="res">0,6 sensores</span></div></div>
+        <p style="font-size:12.5px;margin-top:8px">R: <code>dbinom(2,25,0.04)</code> · <code>1-pbinom(2,25,0.04)</code></p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── Ej 2: Poisson ── -->
+  <div class="exam-card t-poi">
+    <div class="exam-q-head"><span class="exam-tag t-poi">Poisson</span><h4>Ejercicio 2 — Distribución Poisson</h4></div>
+    <p class="enunciado"><strong>2.1)</strong> Un sensor registra en promedio 2 fallas por día (λ=2).</p>
+    <ol class="partes">
+      <li>P(exactamente 3 fallas en un día)</li>
+      <li>P(0 fallas en dos días)</li>
+      <li>P(4 o más fallas en un día)</li>
+    </ol>
+    <p class="enunciado"><strong>2.2)</strong> Un centro de monitoreo recibe en promedio 5 llamadas por hora. Calcular P(X=3 en 1 h), P(X=0 en 30 min) y P(X&gt;6 en 1 h).</p>
+    <details class="exam-answer">
+      <summary><span class="closed-txt">Ver solución</span><span class="open-txt">Ocultar solución</span></summary>
+      <div class="exam-sol">
+        <p><strong>2.1)</strong> λ=2</p>
+        <div class="step"><div class="step-n">a</div><div class="step-body">$P(X=3)=\dfrac{e^{-2}2^3}{3!}=\dfrac{0{,}1353\cdot8}{6}\approx$ <span class="res">0,1804</span></div></div>
+        <div class="step"><div class="step-n">b</div><div class="step-body">En 2 días λ=4: $P(X=0)=e^{-4}\approx$ <span class="res">0,0183</span></div></div>
+        <div class="step"><div class="step-n">c</div><div class="step-body">$P(0)=0{,}1353,\ P(1)=0{,}2707,\ P(2)=0{,}2707,\ P(3)=0{,}1804$<br>$P(X\ge4)=1-0{,}8571\approx$ <span class="res">0,1429</span></div></div>
+        <p style="margin-top:10px"><strong>2.2)</strong> λ=5</p>
+        <div class="step"><div class="step-n">a</div><div class="step-body">$P(X=3)=\dfrac{e^{-5}5^3}{3!}\approx$ <span class="res">0,1404</span></div></div>
+        <div class="step"><div class="step-n">b</div><div class="step-body">En 30 min λ=2,5: $P(X=0)=e^{-2{,}5}\approx$ <span class="res">0,0821</span></div></div>
+        <div class="step"><div class="step-n">c</div><div class="step-body">$P(X\le6)\approx0{,}7622$ → $P(X>6)=1-0{,}7622\approx$ <span class="res">0,2378</span></div></div>
+        <p style="font-size:12.5px;margin-top:8px">R: <code>dpois(3,2)</code> · <code>1-ppois(3,2)</code> · <code>1-ppois(6,5)</code></p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── Ej 3: Normal ── -->
+  <div class="exam-card t-nor">
+    <div class="exam-q-head"><span class="exam-tag t-nor">Normal</span><h4>Ejercicio 3 — Distribución Normal</h4></div>
+    <p class="enunciado"><strong>3.1)</strong> Proceso de llenado: μ=500 g, σ=4 g. Especificaciones 490–510 g.</p>
+    <ol class="partes">
+      <li>% de productos dentro de especificaciones</li>
+      <li>% por debajo del límite inferior</li>
+      <li>¿Qué peso es superado por el 90% de los productos? (percentil 10%)</li>
+    </ol>
+    <p class="enunciado"><strong>3.2)</strong> Sensor de temperatura: μ=100 °C, σ=2 °C, especificaciones 95–105 °C. Calcular % dentro, % por debajo de 95 °C y percentil 5%.</p>
+    <details class="exam-answer">
+      <summary><span class="closed-txt">Ver solución</span><span class="open-txt">Ocultar solución</span></summary>
+      <div class="exam-sol">
+        <p><strong>3.1)</strong></p>
+        <div class="step"><div class="step-n">a</div><div class="step-body">$z_1=\frac{490-500}{4}=-2{,}5,\ z_2=\frac{510-500}{4}=2{,}5$ → $P(-2{,}5<Z<2{,}5)=$ <span class="res">98,76%</span></div></div>
+        <div class="step"><div class="step-n">b</div><div class="step-body">$P(Z<-2{,}5)=$ <span class="res">0,62%</span></div></div>
+        <div class="step"><div class="step-n">c</div><div class="step-body">Percentil 10%: $z_{0{,}10}=-1{,}28$ → $x=500+(-1{,}28)(4)\approx$ <span class="res">494,88 g</span></div></div>
+        <p style="margin-top:10px"><strong>3.2)</strong></p>
+        <div class="step"><div class="step-n">a</div><div class="step-body">$z=\pm2{,}5$ → <span class="res">98,76%</span></div></div>
+        <div class="step"><div class="step-n">b</div><div class="step-body">$P(Z<-2{,}5)=$ <span class="res">0,62%</span></div></div>
+        <div class="step"><div class="step-n">c</div><div class="step-body">$z_{0{,}05}=-1{,}645$ → $x=100+(-1{,}645)(2)\approx$ <span class="res">96,71 °C</span></div></div>
+        <p style="font-size:12.5px;margin-top:8px">R: <code>pnorm(510,500,4)-pnorm(490,500,4)</code> · <code>qnorm(0.10,500,4)</code></p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── Ej 4: TCL ── -->
+  <div class="exam-card t-tcl">
+    <div class="exam-q-head"><span class="exam-tag t-tcl">TCL</span><h4>Ejercicio 4 — Teorema Central del Límite</h4></div>
+    <p class="enunciado"><strong>4.1)</strong> Vida de un componente: distribución exponencial con μ=1000 h y σ=1000 h. Muestra de n=50.</p>
+    <ol class="partes">
+      <li>¿Qué dice el TCL sobre la media muestral X̄?</li>
+      <li>Media y desvío estándar de X̄</li>
+      <li>P(X̄ &gt; 1100 h)</li>
+      <li>¿Cambiaría si la población fuera normal?</li>
+    </ol>
+    <p class="enunciado"><strong>4.2)</strong> Llenado: μ=500 ml, σ=8 ml, n=64. Calcular P(498 &lt; X̄ &lt; 502), el n para que el error estándar sea 1 ml, y la ventaja de una muestra más grande.</p>
+    <details class="exam-answer">
+      <summary><span class="closed-txt">Ver solución</span><span class="open-txt">Ocultar solución</span></summary>
+      <div class="exam-sol">
+        <p><strong>4.1)</strong></p>
+        <div class="step"><div class="step-n">a</div><div class="step-body">Con n=50 (≥30), el TCL dice que X̄ es aproximadamente Normal, sin importar la distribución original.</div></div>
+        <div class="step"><div class="step-n">b</div><div class="step-body">$\mu_{\bar X}=1000$ h; $\sigma_{\bar X}=\frac{1000}{\sqrt{50}}\approx$ <span class="res">141,42 h</span></div></div>
+        <div class="step"><div class="step-n">c</div><div class="step-body">$z=\frac{1100-1000}{141{,}42}\approx0{,}707$ → $P(Z>0{,}707)=1-0{,}7602\approx$ <span class="res">23,98%</span></div></div>
+        <div class="step"><div class="step-n">d</div><div class="step-body">Si fuera normal, X̄ sería <em>exactamente</em> normal para cualquier n. Con n=50 la aproximación ya es excelente.</div></div>
+        <p style="margin-top:10px"><strong>4.2)</strong></p>
+        <div class="step"><div class="step-n">a</div><div class="step-body">$\bar X\sim N(500,\ 8/\sqrt{64})=N(500,1)$; $z=\pm2$ → $P(-2<Z<2)=$ <span class="res">95,44%</span></div></div>
+        <div class="step"><div class="step-n">b</div><div class="step-body">$\frac{8}{\sqrt n}=1\Rightarrow\sqrt n=8\Rightarrow$ <span class="res">n=64</span></div></div>
+        <div class="step"><div class="step-n">c</div><div class="step-body">Una muestra más grande reduce el error estándar → X̄ más concentrada en μ → estimaciones más precisas.</div></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── Ej 5: IC ── -->
+  <div class="exam-card t-ic">
+    <div class="exam-q-head"><span class="exam-tag t-ic">Intervalos de confianza</span><h4>Ejercicio 5 — Intervalos de Confianza</h4></div>
+    <p class="enunciado"><strong>5.1)</strong> σ=4 ml conocida, n=36, x̄=498 ml.</p>
+    <ol class="partes">
+      <li>IC del 95% para μ</li>
+      <li>Interpretar el intervalo</li>
+      <li>¿Qué pasa con el IC al 99%? ¿Por qué?</li>
+    </ol>
+    <p class="enunciado"><strong>5.2)</strong> n=16, x̄=50,2 mm, s=1,2 mm. Construir el IC del 95% para μ, justificar por qué se usa t de Student e indicar el valor crítico.</p>
+    <details class="exam-answer">
+      <summary><span class="closed-txt">Ver solución</span><span class="open-txt">Ocultar solución</span></summary>
+      <div class="exam-sol">
+        <p><strong>5.1)</strong> σ conocida → z</p>
+        <div class="step"><div class="step-n">a</div><div class="step-body">$z_{0{,}025}=1{,}96$; $498\pm1{,}96\cdot\frac{4}{\sqrt{36}}=498\pm1{,}307$ → <span class="res">[496,69 ; 499,31]</span></div></div>
+        <div class="step"><div class="step-n">b</div><div class="step-body">Hay un 95% de confianza de que la media poblacional μ esté en ese intervalo.</div></div>
+        <div class="step"><div class="step-n">c</div><div class="step-body">Al 99% ($z=2{,}576$): $498\pm1{,}717$ → <span class="res">[496,28 ; 499,72]</span>. Más ancho: mayor confianza requiere más margen.</div></div>
+        <p style="margin-top:10px"><strong>5.2)</strong> σ desconocida → t</p>
+        <div class="step"><div class="step-n">a</div><div class="step-body">gl=15, $t_{0{,}025,15}=2{,}131$; $50{,}2\pm2{,}131\cdot\frac{1{,}2}{\sqrt{16}}=50{,}2\pm0{,}639$ → <span class="res">[49,56 ; 50,84]</span></div></div>
+        <div class="step"><div class="step-n">b</div><div class="step-body">Se usa t porque σ es desconocida y se estima con s.</div></div>
+        <div class="step"><div class="step-n">c</div><div class="step-body">Valor crítico: $t_{0{,}025,\,15}=$ <span class="res">2,131</span></div></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── Ej 6: Tamaño de muestra ── -->
+  <div class="exam-card t-n">
+    <div class="exam-q-head"><span class="exam-tag t-n">Tamaño de muestra</span><h4>Ejercicio 6 — Cálculo del Tamaño de Muestra</h4></div>
+    <p class="enunciado"><strong>6.1)</strong> Error máximo E=2, confianza 95%, σ=8. ¿Qué n se necesita? ¿Y si E baja a 1?</p>
+    <p class="enunciado"><strong>6.2)</strong> Error máximo E=1,5, confianza 90%, σ=5. Calcular n e interpretar por qué se redondea hacia arriba.</p>
+    <details class="exam-answer">
+      <summary><span class="closed-txt">Ver solución</span><span class="open-txt">Ocultar solución</span></summary>
+      <div class="exam-sol">
+        <p><strong>6.1)</strong> $z=1{,}96$</p>
+        <div class="step"><div class="step-n">a</div><div class="step-body">$n=\left(\frac{1{,}96\cdot8}{2}\right)^2=(7{,}84)^2\approx61{,}47$ → <span class="res">n=62</span></div></div>
+        <div class="step"><div class="step-n">b</div><div class="step-body">Si E=1: $n=(15{,}68)^2\approx245{,}86$ → <span class="res">n=246</span> (se cuadruplica al reducir E a la mitad)</div></div>
+        <p style="margin-top:10px"><strong>6.2)</strong> $z=1{,}645$</p>
+        <div class="step"><div class="step-n">a</div><div class="step-body">$n=\left(\frac{1{,}645\cdot5}{1{,}5}\right)^2=(5{,}483)^2\approx30{,}07$ → <span class="res">n=31</span></div></div>
+        <div class="step"><div class="step-n">b</div><div class="step-body">Se redondea hacia arriba (⌈⌉) porque n debe garantizar el error máximo: con 30 el error real superaría el permitido.</div></div>
+        <p style="font-size:12.5px;margin-top:8px">R: <code>ceiling((qnorm(0.975)*8/2)^2)</code></p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── Ej 7: Regresión ── -->
+  <div class="exam-card t-reg">
+    <div class="exam-q-head"><span class="exam-tag t-reg">Regresión lineal</span><h4>Ejercicio 7 — Regresión Lineal Simple</h4></div>
+    <p class="enunciado">Relación entre horas de estudio (X) y nota (Y):</p>
+    <table style="width:auto;color:#1e293b;background:#fff">
+      <tr><th style="background:#fee2e2;color:#be123c">X (horas)</th><td>2</td><td>4</td><td>6</td><td>8</td><td>10</td></tr>
+      <tr><th style="background:#fee2e2;color:#be123c">Y (nota)</th><td>4</td><td>5</td><td>7</td><td>8</td><td>9</td></tr>
+    </table>
+    <ol class="partes">
+      <li>Calcular la recta de regresión ŷ = a + bx</li>
+      <li>Interpretar la pendiente</li>
+      <li>Predecir la nota para 5 horas de estudio</li>
+      <li>Calcular e interpretar R²</li>
+    </ol>
+    <details class="exam-answer">
+      <summary><span class="closed-txt">Ver solución</span><span class="open-txt">Ocultar solución</span></summary>
+      <div class="exam-sol">
+        <div class="step"><div class="step-n">·</div><div class="step-body">$\bar x=6,\ \bar y=6{,}6$; $\sum(x_i-\bar x)^2=40$; $\sum(x_i-\bar x)(y_i-\bar y)=28$; $\sum(y_i-\bar y)^2=14{,}8$</div></div>
+        <div class="step"><div class="step-n">a</div><div class="step-body">$b=\frac{28}{40}=0{,}7$; $a=6{,}6-0{,}7(6)=2{,}4$ → <span class="res">ŷ = 2,4 + 0,7x</span></div></div>
+        <div class="step"><div class="step-n">b</div><div class="step-body">Por cada hora adicional de estudio, la nota aumenta en promedio <span class="res">0,7 puntos</span>.</div></div>
+        <div class="step"><div class="step-n">c</div><div class="step-body">$\hat y=2{,}4+0{,}7(5)=$ <span class="res">5,9</span></div></div>
+        <div class="step"><div class="step-n">d</div><div class="step-body">$R^2=\frac{28^2}{40\cdot14{,}8}=\frac{784}{592}\approx$ <span class="res">0,973</span> → el 97,3% de la variabilidad de la nota se explica por las horas de estudio.</div></div>
+        <p style="font-size:12.5px;margin-top:8px">R: <code>modelo &lt;- lm(y ~ x); summary(modelo)</code></p>
+      </div>
+    </details>
+  </div>
+
 </div>
 
 <!-- ── R CODE ── -->

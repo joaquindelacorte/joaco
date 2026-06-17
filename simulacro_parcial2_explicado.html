@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulacro Parcial 2 — Explicado paso a paso · Estadística</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+
+<style>
+:root{
+  --bg:#0b1120; --panel:#111c30; --panel2:#1a2740; --border:#2a3a55;
+  --text:#e8eef7; --muted:#93a3bb; --accent:#38bdf8; --accent2:#a78bfa;
+  --good:#34d399; --warn:#fbbf24; --bad:#f87171;
+  --bin:#22c55e; --poi:#f59e0b; --nor:#6366f1; --tcl:#06b6d4; --ic:#14b8a6; --nn:#a855f7; --reg:#f43f5e;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+     background:radial-gradient(1200px 600px at 70% -10%,#16233c 0%,var(--bg) 55%);
+     color:var(--text);line-height:1.6}
+
+/* ── Top bar ── */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(11,17,32,.88);backdrop-filter:blur(10px);
+        border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;
+        padding:10px 22px;flex-wrap:wrap}
+.topbar .back{color:var(--muted);text-decoration:none;font-size:13px;display:inline-flex;align-items:center;gap:5px}
+.topbar .back:hover{color:var(--accent)}
+.topbar .tnav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+.topbar .tnav a{font-size:12px;color:var(--text);text-decoration:none;padding:5px 10px;border-radius:20px;
+        border:1px solid var(--border);transition:all .15s}
+.topbar .tnav a:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── Hero ── */
+.hero{max-width:1000px;margin:0 auto;padding:46px 24px 10px;text-align:center}
+.hero h1{font-size:34px;margin:0 0 8px;color:#fff;letter-spacing:-.5px}
+.hero h1 span{background:linear-gradient(90deg,#38bdf8,#a78bfa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--muted);font-size:15px;max-width:640px;margin:0 auto}
+.hero .pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:18px 0 6px}
+.hero .pills span{font-size:12px;padding:4px 12px;border-radius:20px;background:var(--panel2);border:1px solid var(--border);color:var(--muted)}
+
+/* ── Layout ── */
+main{max-width:1000px;margin:0 auto;padding:10px 24px 80px}
+
+/* ── Concept map ── */
+.cmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin:24px 0}
+.cmap a{text-decoration:none;display:block;background:var(--panel);border:1px solid var(--border);
+        border-radius:12px;padding:14px;transition:transform .15s,border-color .15s}
+.cmap a:hover{transform:translateY(-3px)}
+.cmap .ico{font-size:22px}
+.cmap .nm{font-weight:700;font-size:13.5px;margin-top:6px;color:#fff}
+.cmap .ds{font-size:11.5px;color:var(--muted);margin-top:2px}
+
+/* ── Exercise blocks ── */
+.ex{margin:42px 0;scroll-margin-top:70px}
+.ex-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--border);padding-bottom:10px}
+.ex-num{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+        font-weight:800;font-size:17px;color:#0b1120;flex-shrink:0}
+.ex-head h2{font-size:21px;margin:0;color:#fff}
+.tag{font-size:11.5px;font-weight:700;padding:3px 11px;border-radius:20px}
+
+.t-bin .ex-num,.tag.b-bin{background:var(--bin)} .tag.b-bin{color:#04240f}
+.t-poi .ex-num,.tag.b-poi{background:var(--poi)} .tag.b-poi{color:#3a2400}
+.t-nor .ex-num,.tag.b-nor{background:var(--nor)} .tag.b-nor{color:#fff}
+.t-tcl .ex-num,.tag.b-tcl{background:var(--tcl)} .tag.b-tcl{color:#012a33}
+.t-ic  .ex-num,.tag.b-ic {background:var(--ic)}  .tag.b-ic{color:#012b27}
+.t-nn  .ex-num,.tag.b-nn {background:var(--nn)}  .tag.b-nn{color:#fff}
+.t-reg .ex-num,.tag.b-reg{background:var(--reg)} .tag.b-reg{color:#3a0011}
+
+.card{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:16px 20px;margin:14px 0}
+.card h3{margin:0 0 8px;font-size:15px;display:flex;align-items:center;gap:8px}
+.card.concept{border-left:4px solid var(--accent2);background:linear-gradient(180deg,#1a1730,#141d30)}
+.card.think{border-left:4px solid var(--accent)}
+.card.dev{border-left:4px solid var(--good)}
+.card.err{border-left:4px solid var(--warn);background:#1c190d}
+.card.game{border-left:4px solid var(--reg);background:#15101a}
+.concept ul{margin:6px 0;padding-left:4px;list-style:none}
+.concept ul li{padding:5px 0 5px 26px;position:relative;font-size:14px}
+.concept ul li::before{content:'▹';position:absolute;left:6px;color:var(--accent2);font-weight:700}
+.concept .must{color:var(--accent2);font-weight:700}
+.formula{background:#0a1322;border:1px solid var(--border);border-radius:9px;padding:10px 14px;margin:8px 0;text-align:center;font-size:15px}
+
+/* steps */
+.step{display:flex;gap:12px;margin:9px 0;align-items:flex-start}
+.step-n{flex-shrink:0;width:25px;height:25px;border-radius:50%;background:var(--good);color:#04240f;
+        font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.step-b{flex:1;font-size:14px;padding-top:3px}
+.res{background:#0d3a2a;color:#6ee7b7;border-radius:6px;padding:1px 8px;font-weight:700}
+
+/* ── Controls / games ── */
+.controls{display:flex;flex-wrap:wrap;gap:16px;margin:12px 0;align-items:flex-end}
+.ctl{display:flex;flex-direction:column;font-size:12px;color:var(--muted);min-width:120px}
+.ctl input[type=range]{margin-top:6px;accent-color:var(--accent);width:160px}
+.ctl input[type=number],.ctl select{margin-top:5px;background:#0a1322;color:var(--text);border:1px solid var(--border);
+        border-radius:6px;padding:6px 9px;font-size:14px}
+.ctl b{color:var(--accent);font-size:15px}
+.btn{background:var(--accent);color:#04243a;border:none;padding:9px 18px;border-radius:8px;font-weight:700;
+     cursor:pointer;font-size:13.5px;transition:filter .15s}
+.btn:hover{filter:brightness(1.12)}
+.btn.alt{background:var(--panel2);color:var(--text);border:1px solid var(--border)}
+.plot{width:100%;height:300px;background:#0a1322;border-radius:10px;border:1px solid var(--border);margin-top:8px}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:10px}
+.ro{background:#0a1322;border:1px solid var(--border);border-radius:9px;padding:9px 11px;text-align:center}
+.ro .l{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.ro .v{font-size:19px;font-weight:800;color:var(--accent)}
+
+/* detector game */
+.scn{background:#0a1322;border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-size:14.5px;min-height:48px}
+.opts3{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.opts3 button{flex:1;min-width:120px;padding:11px;border-radius:9px;border:2px solid var(--border);
+        background:#0a1322;color:var(--text);cursor:pointer;font-size:13.5px;font-weight:600;transition:all .15s}
+.opts3 button:hover{border-color:var(--accent)}
+.opts3 button.ok{background:#0d3a2a;border-color:var(--good);color:#6ee7b7}
+.opts3 button.no{background:#3a1818;border-color:var(--bad);color:#fca5a5}
+.gfb{margin-top:12px;font-size:13.5px;padding:10px 13px;border-radius:9px;background:#0a1322;border-left:3px solid var(--accent);display:none}
+.gscore{font-size:13px;color:var(--muted)}
+.gscore b{color:var(--good)}
+
+canvas.lsq{width:100%;height:300px;background:#0a1322;border:1px solid var(--border);border-radius:10px;cursor:crosshair;display:block;margin-top:8px;touch-action:none}
+
+.note{font-size:12.5px;color:var(--muted);margin-top:8px}
+code{background:#0a1322;padding:2px 6px;border-radius:4px;font-size:12.5px;color:#fcd34d}
+.footer{text-align:center;color:var(--muted);font-size:12px;border-top:1px solid var(--border);margin-top:50px;padding:22px}
+.katex{font-size:1.02em}
+@media(max-width:640px){.hero h1{font-size:26px}.ctl input[type=range]{width:130px}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back" href="estadistica_parcial2.html">← Volver al resumen</a>
+  <div class="tnav">
+    <a href="#e1">Binomial</a>
+    <a href="#e2">Poisson</a>
+    <a href="#e3">Normal</a>
+    <a href="#e4">TCL</a>
+    <a href="#e5">IC</a>
+    <a href="#e6">Tamaño n</a>
+    <a href="#e7">Regresión</a>
+    <a href="#final">🎮 Juego final</a>
+  </div>
+</div>
+
+<div class="hero">
+  <h1>Simulacro Parcial 2 — <span>Explicado a fondo</span></h1>
+  <p>Cada ejercicio del simulacro, desarrollado paso a paso, con los conceptos que tenés que dominar y un juego interactivo para entenderlo de verdad — no para memorizarlo.</p>
+  <div class="pills"><span>🧠 Conceptos clave</span><span>📝 Desarrollo guiado</span><span>🎮 7 juegos interactivos</span><span>⚠️ Errores típicos</span></div>
+</div>
+
+<main>
+
+<div class="cmap">
+  <a href="#e1" class="t-bin"><div class="ico">🎲</div><div class="nm">1 · Binomial</div><div class="ds">Éxitos en n ensayos</div></a>
+  <a href="#e2" class="t-poi"><div class="ico">⏱️</div><div class="nm">2 · Poisson</div><div class="ds">Eventos por intervalo</div></a>
+  <a href="#e3" class="t-nor"><div class="ico">🔔</div><div class="nm">3 · Normal</div><div class="ds">Campana y tabla Z</div></a>
+  <a href="#e4" class="t-tcl"><div class="ico">📊</div><div class="nm">4 · TCL</div><div class="ds">Media muestral X̄</div></a>
+  <a href="#e5" class="t-ic"><div class="ico">🎯</div><div class="nm">5 · Int. confianza</div><div class="ds">z vs t de Student</div></a>
+  <a href="#e6" class="t-nn"><div class="ico">📐</div><div class="nm">6 · Tamaño n</div><div class="ds">Despejar la muestra</div></a>
+  <a href="#e7" class="t-reg"><div class="ico">📈</div><div class="nm">7 · Regresión</div><div class="ds">Mínimos cuadrados</div></a>
+</div>
+
+<!-- ══════════════ EJ 1 — BINOMIAL ══════════════ -->
+<section class="ex t-bin" id="e1">
+  <div class="ex-head"><div class="ex-num">1</div><span class="tag b-bin">Distribución Binomial</span><h2>Piezas defectuosas y sensores que fallan</h2></div>
+
+  <div class="card concept">
+    <h3>🧠 Conceptos que tenés que saber</h3>
+    <ul>
+      <li><span class="must">Ensayo de Bernoulli:</span> un experimento con sólo dos resultados — éxito (prob. $p$) o fracaso (prob. $1-p$).</li>
+      <li><span class="must">Cuándo es Binomial:</span> hay un número <em>fijo</em> de ensayos $n$, la probabilidad $p$ es <em>constante</em>, los ensayos son <em>independientes</em> y contás cuántos éxitos ocurren.</li>
+      <li><span class="must">Función de probabilidad:</span> el combinatorio $\binom{n}{k}$ cuenta de cuántas formas pueden ubicarse los $k$ éxitos.</li>
+      <li><span class="must">Esperanza y desvío:</span> $E[X]=np$ y $\sigma=\sqrt{np(1-p)}$. Ojo: la varianza <em>no</em> es $np$ (eso es Poisson).</li>
+      <li><span class="must">Truco del complemento:</span> "3 o más" se calcula como $1-P(X\le2)$, no sumando infinitos términos.</li>
+    </ul>
+    <div class="formula">$$P(X=k)=\binom{n}{k}\,p^{k}(1-p)^{\,n-k}\qquad k=0,1,\dots,n$$</div>
+  </div>
+
+  <div class="card think">
+    <h3>🔑 Cómo pensar el ejercicio</h3>
+    <p>1) Identificá <b>n</b> (cantidad de piezas/sensores) y <b>p</b> (prob. de defecto/falla). 2) Preguntate qué tipo de probabilidad piden: <em>exacta</em> ($P(X=k)$), <em>acumulada</em> ($P(X\le k)$) o <em>complemento</em> ($P(X\ge k)$). 3) Para "ninguno" usá $P(X=0)=(1-p)^n$.</p>
+  </div>
+
+  <div class="card dev">
+    <h3>📝 Desarrollo guiado — 1.1 (n=25, p=0,04)</h3>
+    <div class="step"><div class="step-n">a</div><div class="step-b">Es Binomial porque hay 25 piezas independientes, cada una defectuosa con prob. constante 0,04 → $X\sim B(25,\,0{,}04)$.</div></div>
+    <div class="step"><div class="step-n">b</div><div class="step-b">$P(X=2)=\binom{25}{2}(0{,}04)^2(0{,}96)^{23}=300\cdot0{,}0016\cdot0{,}397\approx$ <span class="res">0,1906</span></div></div>
+    <div class="step"><div class="step-n">c</div><div class="step-b">$P(X\ge3)=1-[P(0)+P(1)+P(2)]=1-(0{,}3604+0{,}3754+0{,}1906)\approx$ <span class="res">0,0736</span></div></div>
+    <div class="step"><div class="step-n">d</div><div class="step-b">$E[X]=25\cdot0{,}04=$ <span class="res">1</span> &nbsp;·&nbsp; $\sigma=\sqrt{25\cdot0{,}04\cdot0{,}96}=\sqrt{0{,}96}\approx$ <span class="res">0,98</span></div></div>
+    <p class="note">1.2 (n=12, p=0,05) se resuelve igual: $P(X=2)\approx0{,}0988$, $P(X\ge3)\approx0{,}0195$, $P(X=0)=0{,}95^{12}\approx0{,}5404$, $E[X]=0{,}6$.</p>
+  </div>
+
+  <div class="card game">
+    <h3>🎮 Juego 1 — Constructor Binomial</h3>
+    <p class="note">Movés $n$ y $p$ y ves cómo cambia toda la distribución. Elegí un valor de $k$ y leé su probabilidad exacta. ¿Qué le pasa a la campana cuando $p=0{,}5$? ¿Y cuando $p$ es chico?</p>
+    <div class="controls">
+      <label class="ctl">n (ensayos): <b id="bN">25</b><input id="binN" type="range" min="1" max="40" value="25"></label>
+      <label class="ctl">p (prob. éxito): <b id="bP">0,04</b><input id="binP" type="range" min="1" max="99" value="4"></label>
+      <label class="ctl">k (resaltar): <b id="bK">2</b><input id="binK" type="range" min="0" max="40" value="2"></label>
+    </div>
+    <div id="binPlot" class="plot"></div>
+    <div class="readout">
+      <div class="ro"><div class="l">P(X = k)</div><div class="v" id="binPk">—</div></div>
+      <div class="ro"><div class="l">P(X ≤ k)</div><div class="v" id="binCdf">—</div></div>
+      <div class="ro"><div class="l">E[X] = np</div><div class="v" id="binE">—</div></div>
+      <div class="ro"><div class="l">σ</div><div class="v" id="binSd">—</div></div>
+    </div>
+  </div>
+
+  <div class="card err"><h3>⚠️ Errores típicos</h3><p>Usar $np$ como varianza (es de Poisson) · olvidar el combinatorio · sumar muchos términos en vez de usar el complemento · confundir $P(X\le k)$ con $P(X<k)$.</p></div>
+</section>
+
+<!-- ══════════════ EJ 2 — POISSON ══════════════ -->
+<section class="ex t-poi" id="e2">
+  <div class="ex-head"><div class="ex-num">2</div><span class="tag b-poi">Distribución Poisson</span><h2>Fallas por día y llamadas por hora</h2></div>
+
+  <div class="card concept">
+    <h3>🧠 Conceptos que tenés que saber</h3>
+    <ul>
+      <li><span class="must">Cuándo es Poisson:</span> contás eventos que ocurren en un <em>intervalo continuo</em> (tiempo, espacio, longitud) a una <em>tasa media</em> $\lambda$, sin un "n" de ensayos.</li>
+      <li><span class="must">Propiedad única:</span> $E[X]=\text{Var}(X)=\lambda$. Media y varianza son iguales.</li>
+      <li><span class="must">Escalado del intervalo (¡lo más importante!):</span> si la tasa es $\lambda$ por hora y te preguntan por 30 min, usás $\lambda/2$; por 2 días, $2\lambda$. $\lambda$ se reescala proporcional a la ventana.</li>
+      <li><span class="must">Complemento:</span> "4 o más" = $1-P(X\le3)$.</li>
+    </ul>
+    <div class="formula">$$P(X=k)=\dfrac{e^{-\lambda}\,\lambda^{k}}{k!}\qquad \lambda=\text{tasa}\times\text{intervalo}$$</div>
+  </div>
+
+  <div class="card think">
+    <h3>🔑 Cómo pensar el ejercicio</h3>
+    <p>1) Anotá la tasa base y <b>la unidad de tiempo</b>. 2) Ajustá $\lambda$ a la ventana que pide la pregunta (este es el paso donde más se falla). 3) Decidí exacto vs complemento. Si dice "ningún/0 eventos", es $P(X=0)=e^{-\lambda}$.</p>
+  </div>
+
+  <div class="card dev">
+    <h3>📝 Desarrollo guiado — 2.1 (λ = 2 fallas/día)</h3>
+    <div class="step"><div class="step-n">a</div><div class="step-b">$P(X=3)=\dfrac{e^{-2}\,2^3}{3!}=\dfrac{0{,}1353\cdot8}{6}\approx$ <span class="res">0,1804</span></div></div>
+    <div class="step"><div class="step-n">b</div><div class="step-b">En <b>dos días</b> la tasa es $\lambda=4$: $P(X=0)=e^{-4}\approx$ <span class="res">0,0183</span></div></div>
+    <div class="step"><div class="step-n">c</div><div class="step-b">$P(X\ge4)=1-[P(0)+P(1)+P(2)+P(3)]=1-0{,}8571\approx$ <span class="res">0,1429</span></div></div>
+    <p class="note">2.2 (λ=5/hora): $P(X=3)\approx0{,}1404$; en 30 min λ=2,5 → $P(X=0)=e^{-2{,}5}\approx0{,}0821$; $P(X>6)=1-P(X\le6)\approx0{,}2378$.</p>
+  </div>
+
+  <div class="card game">
+    <h3>🎮 Juego 2 — Reescalador de λ</h3>
+    <p class="note">Mismo proceso, distinta ventana de tiempo. Cambiá el intervalo y mirá cómo $\lambda$ efectivo (y toda la distribución) se mueve. Es el concepto que más se evalúa.</p>
+    <div class="controls">
+      <label class="ctl">Tasa base (por hora): <b id="poR">5</b><input id="poiR" type="range" min="1" max="20" value="5"></label>
+      <label class="ctl">Ventana de tiempo: <b id="poW">1 h</b><input id="poiW" type="range" min="1" max="8" value="2"></label>
+      <label class="ctl">k (resaltar): <b id="poK">3</b><input id="poiK" type="range" min="0" max="30" value="3"></label>
+    </div>
+    <div id="poiPlot" class="plot"></div>
+    <div class="readout">
+      <div class="ro"><div class="l">λ efectivo</div><div class="v" id="poiLam">—</div></div>
+      <div class="ro"><div class="l">P(X = k)</div><div class="v" id="poiPk">—</div></div>
+      <div class="ro"><div class="l">P(X = 0)</div><div class="v" id="poiP0">—</div></div>
+      <div class="ro"><div class="l">E = Var = λ</div><div class="v" id="poiEV">—</div></div>
+    </div>
+  </div>
+
+  <div class="card err"><h3>⚠️ Errores típicos</h3><p>No reescalar $\lambda$ al cambiar de intervalo · confundir Binomial con Poisson (si hay "n ensayos" es Binomial) · olvidar el $k!$ en el denominador.</p></div>
+</section>
+
+<!-- ══════════════ EJ 3 — NORMAL ══════════════ -->
+<section class="ex t-nor" id="e3">
+  <div class="ex-head"><div class="ex-num">3</div><span class="tag b-nor">Distribución Normal</span><h2>Llenado de bolsas y sensor de temperatura</h2></div>
+
+  <div class="card concept">
+    <h3>🧠 Conceptos que tenés que saber</h3>
+    <ul>
+      <li><span class="must">Variable continua</span> con forma de campana simétrica alrededor de $\mu$; $\sigma$ controla el ancho.</li>
+      <li><span class="must">Estandarización:</span> $Z=\dfrac{X-\mu}{\sigma}$ convierte cualquier Normal en la estándar $N(0,1)$ para usar la tabla.</li>
+      <li><span class="must">Tabla Z:</span> da $\Phi(z)=P(Z\le z)$. Por simetría, $\Phi(-z)=1-\Phi(z)$ (la tabla suele tener sólo positivos).</li>
+      <li><span class="must">"Entre", "debajo", "encima":</span> $P(a<X<b)=\Phi(z_b)-\Phi(z_a)$; $P(X>a)=1-\Phi(z_a)$.</li>
+      <li><span class="must">Percentiles (problema inverso):</span> del percentil al valor → $x=\mu+z_p\cdot\sigma$. El percentil 10% usa $z=-1{,}28$.</li>
+    </ul>
+  </div>
+
+  <div class="card think">
+    <h3>🔑 Cómo pensar el ejercicio</h3>
+    <p>1) <b>Dibujá la campana</b> y marcá lo que piden (un área o un punto de corte). 2) Estandarizá los límites a valores $z$. 3) Si piden un área → tabla directa. Si piden "el valor que deja tal %" → es inverso: buscás el $z$ del percentil y despejás $x$.</p>
+  </div>
+
+  <div class="card dev">
+    <h3>📝 Desarrollo guiado — 3.1 (μ=500 g, σ=4 g, espec. 490–510)</h3>
+    <div class="step"><div class="step-n">a</div><div class="step-b">$z_1=\frac{490-500}{4}=-2{,}5,\ z_2=\frac{510-500}{4}=2{,}5$ → $\Phi(2{,}5)-\Phi(-2{,}5)=0{,}9938-0{,}0062=$ <span class="res">98,76%</span></div></div>
+    <div class="step"><div class="step-n">b</div><div class="step-b">$P(X<490)=\Phi(-2{,}5)=$ <span class="res">0,62%</span></div></div>
+    <div class="step"><div class="step-n">c</div><div class="step-b">Percentil 10%: $z_{0{,}10}=-1{,}28$ → $x=500+(-1{,}28)(4)\approx$ <span class="res">494,88 g</span></div></div>
+    <p class="note">3.2 (μ=100, σ=2): mismos $z=\pm2{,}5$ → 98,76% dentro y 0,62% debajo; percentil 5% con $z=-1{,}645$ → $x\approx96{,}71$ °C.</p>
+  </div>
+
+  <div class="card game">
+    <h3>🎮 Juego 3 — Explorador de área bajo la campana</h3>
+    <p class="note">Movés el corte $x$ y elegís el tipo de área. La curva se sombrea y ves la probabilidad y el $z$ en tiempo real. Probá replicar el inciso (a): "entre 490 y 510".</p>
+    <div class="controls">
+      <label class="ctl">μ: <b id="nMu">500</b><input id="norMu" type="range" min="0" max="1000" value="500" step="10"></label>
+      <label class="ctl">σ: <b id="nSd">4</b><input id="norSd" type="range" min="1" max="40" value="4"></label>
+      <label class="ctl">Tipo de área:
+        <select id="norType"><option value="lt">P(X &lt; a)</option><option value="gt">P(X &gt; a)</option><option value="bt" selected>P(a &lt; X &lt; b)</option></select>
+      </label>
+    </div>
+    <div class="controls">
+      <label class="ctl">a: <b id="nA">490</b><input id="norA" type="range" min="0" max="1000" value="490" step="1"></label>
+      <label class="ctl" id="norBwrap">b: <b id="nB">510</b><input id="norB" type="range" min="0" max="1000" value="510" step="1"></label>
+    </div>
+    <div id="norPlot" class="plot"></div>
+    <div class="readout">
+      <div class="ro"><div class="l">z de a</div><div class="v" id="norZa">—</div></div>
+      <div class="ro"><div class="l">z de b</div><div class="v" id="norZb">—</div></div>
+      <div class="ro"><div class="l">Probabilidad</div><div class="v" id="norProb">—</div></div>
+    </div>
+  </div>
+
+  <div class="card err"><h3>⚠️ Errores típicos</h3><p>No estandarizar antes de usar la tabla · buscar un $z$ negativo en una tabla de positivos (usar simetría) · confundir $N(\mu,\sigma)$ con $N(\mu,\sigma^2)$ según el libro · mezclar problema directo (área) con inverso (percentil).</p></div>
+</section>
+
+<!-- ══════════════ EJ 4 — TCL ══════════════ -->
+<section class="ex t-tcl" id="e4">
+  <div class="ex-head"><div class="ex-num">4</div><span class="tag b-tcl">Teorema Central del Límite</span><h2>Vida de componentes y proceso de llenado</h2></div>
+
+  <div class="card concept">
+    <h3>🧠 Conceptos que tenés que saber</h3>
+    <ul>
+      <li><span class="must">Distribución muestral de X̄:</span> si tomás muchas muestras de tamaño $n$ y promediás cada una, esos promedios forman su propia distribución.</li>
+      <li><span class="must">El TCL:</span> para $n\ge30$, X̄ es aproximadamente Normal <em>aunque la población no lo sea</em>. Si la población ya es Normal, X̄ es Normal exacta para cualquier $n$.</li>
+      <li><span class="must">Parámetros de X̄:</span> $\mu_{\bar X}=\mu$ (no cambia) y el <em>error estándar</em> $\sigma_{\bar X}=\dfrac{\sigma}{\sqrt{n}}$ (se achica con $n$).</li>
+      <li><span class="must">Clave:</span> para probabilidades sobre X̄ usás $\sigma/\sqrt{n}$, <em>no</em> $\sigma$. Esa es la diferencia con el Ej. 3.</li>
+    </ul>
+    <div class="formula">$$\bar X\sim N\!\left(\mu,\ \dfrac{\sigma}{\sqrt n}\right)\qquad Z=\dfrac{\bar X-\mu}{\sigma/\sqrt n}$$</div>
+  </div>
+
+  <div class="card think">
+    <h3>🔑 Cómo pensar el ejercicio</h3>
+    <p>1) ¿Hablan de <em>una</em> observación $X$ o del <em>promedio</em> X̄ de $n$? Si es promedio → TCL. 2) Calculá el error estándar $\sigma/\sqrt n$. 3) Estandarizá con ese error estándar y seguí como una Normal común.</p>
+  </div>
+
+  <div class="card dev">
+    <h3>📝 Desarrollo guiado — 4.1 (exponencial, μ=1000, σ=1000, n=50)</h3>
+    <div class="step"><div class="step-n">a</div><div class="step-b">Con $n=50\ge30$, el TCL dice que X̄ es aproximadamente Normal, sin importar que la población sea exponencial.</div></div>
+    <div class="step"><div class="step-n">b</div><div class="step-b">$\mu_{\bar X}=1000$; $\sigma_{\bar X}=\frac{1000}{\sqrt{50}}\approx$ <span class="res">141,42 h</span></div></div>
+    <div class="step"><div class="step-n">c</div><div class="step-b">$z=\frac{1100-1000}{141{,}42}\approx0{,}707$ → $P(\bar X>1100)=1-\Phi(0{,}707)\approx$ <span class="res">23,98%</span></div></div>
+    <div class="step"><div class="step-n">d</div><div class="step-b">Si la población fuera Normal, X̄ sería Normal <em>exacta</em> para cualquier $n$; con $n=50$ la aproximación ya es excelente.</div></div>
+    <p class="note">4.2 (μ=500, σ=8, n=64): $\sigma_{\bar X}=1$ → $P(498<\bar X<502)=P(-2<Z<2)=95{,}44\%$. Para error estándar 1 se necesita $n=64$.</p>
+  </div>
+
+  <div class="card game">
+    <h3>🎮 Juego 4 — La máquina del TCL</h3>
+    <p class="note">La población es <b>muy asimétrica</b> (nada normal). Aun así, al promediar muestras de tamaño $n$, el histograma de las X̄ se vuelve una campana. Subí $n$ y miralo aparecer.</p>
+    <div class="controls">
+      <label class="ctl">Tamaño de muestra n: <b id="tN">30</b><input id="tclN" type="range" min="1" max="100" value="30"></label>
+      <button class="btn" id="tclRun">▶ Simular 2000 muestras</button>
+    </div>
+    <div id="tclPlot" class="plot"></div>
+    <div class="readout">
+      <div class="ro"><div class="l">Media de X̄</div><div class="v" id="tclMean">—</div></div>
+      <div class="ro"><div class="l">σ teórico /√n</div><div class="v" id="tclSeT">—</div></div>
+      <div class="ro"><div class="l">σ observado</div><div class="v" id="tclSeO">—</div></div>
+    </div>
+  </div>
+
+  <div class="card err"><h3>⚠️ Errores típicos</h3><p>Usar $\sigma$ en lugar de $\sigma/\sqrt n$ para X̄ · aplicar el TCL con $n<30$ sin que la población sea Normal · creer que la media de X̄ cambia con $n$ (no: siempre es $\mu$).</p></div>
+</section>
+
+<!-- ══════════════ EJ 5 — IC ══════════════ -->
+<section class="ex t-ic" id="e5">
+  <div class="ex-head"><div class="ex-num">5</div><span class="tag b-ic">Intervalos de Confianza</span><h2>σ conocida (z) vs σ desconocida (t)</h2></div>
+
+  <div class="card concept">
+    <h3>🧠 Conceptos que tenés que saber</h3>
+    <ul>
+      <li><span class="must">Estimación por intervalo:</span> en vez de un único número, damos un rango que probablemente contiene a $\mu$.</li>
+      <li><span class="must">z o t — la decisión clave:</span> si $\sigma$ es <em>conocida</em> usás $z$; si es <em>desconocida</em> (la estimás con $s$) usás $t$ de Student con $n-1$ grados de libertad.</li>
+      <li><span class="must">Margen de error:</span> $E=(\text{crítico})\cdot\dfrac{\sigma}{\sqrt n}$. Mayor confianza → crítico mayor → intervalo más ancho.</li>
+      <li><span class="must">Interpretación correcta:</span> "95% de confianza" significa que si repitiéramos el muestreo muchas veces, el 95% de los intervalos contendría a $\mu$. $\mu$ es fijo, no aleatorio.</li>
+    </ul>
+    <div class="formula">$$\text{σ conocida: } \bar x\pm z_{\alpha/2}\dfrac{\sigma}{\sqrt n}\qquad\qquad \text{σ desconocida: } \bar x\pm t_{\alpha/2,\,n-1}\dfrac{s}{\sqrt n}$$</div>
+  </div>
+
+  <div class="card think">
+    <h3>🔑 Cómo pensar el ejercicio</h3>
+    <p>1) ¿El dato es $\sigma$ (poblacional) o $s$ (muestral)? Eso decide z vs t. 2) Buscá el valor crítico según la confianza (z: 1,96 al 95% · t: depende de los gl). 3) Armá $\bar x\pm \text{crítico}\cdot se$.</p>
+  </div>
+
+  <div class="card dev">
+    <h3>📝 Desarrollo guiado</h3>
+    <div class="step"><div class="step-n">5.1</div><div class="step-b">σ=4 conocida, n=36, x̄=498 → $z=1{,}96$: $498\pm1{,}96\cdot\frac{4}{6}=498\pm1{,}31$ → <span class="res">[496,69 ; 499,31]</span>. Al 99% ($z=2{,}576$): <span class="res">[496,28 ; 499,72]</span>, más ancho.</div></div>
+    <div class="step"><div class="step-n">5.2</div><div class="step-b">σ desconocida (s=1,2), n=16 → t con gl=15, $t=2{,}131$: $50{,}2\pm2{,}131\cdot\frac{1{,}2}{4}=50{,}2\pm0{,}64$ → <span class="res">[49,56 ; 50,84]</span>.</div></div>
+  </div>
+
+  <div class="card game">
+    <h3>🎮 Juego 5 — ¿Por qué "95% de confianza"? (el más importante)</h3>
+    <p class="note">Generamos 100 muestras de una población con $\mu$ conocido (línea blanca) y construimos los 100 intervalos. Contá cuántos <span style="color:#34d399">capturan a μ (verdes)</span> y cuántos <span style="color:#f87171">fallan (rojos)</span>: van a ser ~95. Eso <b>es</b> la confianza — el intervalo varía, μ no.</p>
+    <div class="controls">
+      <label class="ctl">Confianza: <select id="ciConf"><option value="0.90">90%</option><option value="0.95" selected>95%</option><option value="0.99">99%</option></select></label>
+      <label class="ctl">n por muestra: <b id="ciN">30</b><input id="ciNr" type="range" min="5" max="80" value="30"></label>
+      <button class="btn" id="ciRun">▶ Generar 100 intervalos</button>
+    </div>
+    <div id="ciPlot" class="plot" style="height:340px"></div>
+    <div class="readout">
+      <div class="ro"><div class="l">Capturan μ</div><div class="v" id="ciHit" style="color:#34d399">—</div></div>
+      <div class="ro"><div class="l">Fallan</div><div class="v" id="ciMiss" style="color:#f87171">—</div></div>
+      <div class="ro"><div class="l">Esperado</div><div class="v" id="ciExp">—</div></div>
+    </div>
+  </div>
+
+  <div class="card err"><h3>⚠️ Errores típicos</h3><p>Usar z cuando σ es desconocida · decir "μ tiene 95% de prob. de estar en este intervalo" (μ es fijo) · olvidar los grados de libertad en t · creer que más confianza es siempre mejor (achica precisión).</p></div>
+</section>
+
+<!-- ══════════════ EJ 6 — TAMAÑO DE MUESTRA ══════════════ -->
+<section class="ex t-nn" id="e6">
+  <div class="ex-head"><div class="ex-num">6</div><span class="tag b-nn">Tamaño de Muestra</span><h2>¿Cuántos datos necesito?</h2></div>
+
+  <div class="card concept">
+    <h3>🧠 Conceptos que tenés que saber</h3>
+    <ul>
+      <li><span class="must">Idea:</span> despejamos $n$ de la fórmula del margen de error $E$. Antes de muestrear, decidimos qué precisión queremos.</li>
+      <li><span class="must">Relación inversa-cuadrática:</span> $n$ depende de $1/E^2$. Reducir $E$ a la mitad → $n$ se multiplica por 4. Triplicar la precisión → $n\times9$.</li>
+      <li><span class="must">Redondeo hacia arriba siempre (techo ⌈⌉):</span> si da 61,47 el mínimo es 62; con 61 el error real superaría $E$.</li>
+    </ul>
+    <div class="formula">$$n=\left\lceil\left(\dfrac{z_{\alpha/2}\cdot\sigma}{E}\right)^{2}\right\rceil$$</div>
+  </div>
+
+  <div class="card think">
+    <h3>🔑 Cómo pensar el ejercicio</h3>
+    <p>1) Identificá $E$ (error máximo), $\sigma$ y la confianza (que da $z$). 2) Reemplazá en la fórmula. 3) Redondeá <b>hacia arriba</b>. Si te piden comparar dos $E$, recordá la regla del cuadrado.</p>
+  </div>
+
+  <div class="card dev">
+    <h3>📝 Desarrollo guiado</h3>
+    <div class="step"><div class="step-n">6.1</div><div class="step-b">$E=2,\ \sigma=8,\ z=1{,}96$: $n=\left(\frac{1{,}96\cdot8}{2}\right)^2=(7{,}84)^2\approx61{,}47$ → <span class="res">n=62</span>. Si $E=1$: $n\approx245{,}86$ → <span class="res">n=246</span> (×4).</div></div>
+    <div class="step"><div class="step-n">6.2</div><div class="step-b">$E=1{,}5,\ \sigma=5,\ 90\%\Rightarrow z=1{,}645$: $n=\left(\frac{1{,}645\cdot5}{1{,}5}\right)^2\approx30{,}07$ → <span class="res">n=31</span>.</div></div>
+  </div>
+
+  <div class="card game">
+    <h3>🎮 Juego 6 — Curva n vs error</h3>
+    <p class="note">Movés el error máximo $E$ y ves cómo se dispara $n$ cuando exigís más precisión. La curva muestra la relación $1/E^2$: pequeñas mejoras en $E$ cuestan muchísimos datos.</p>
+    <div class="controls">
+      <label class="ctl">Error máximo E: <b id="ssE">2</b><input id="ssEr" type="range" min="5" max="80" value="20"></label>
+      <label class="ctl">σ: <b id="ssS">8</b><input id="ssSr" type="range" min="1" max="20" value="8"></label>
+      <label class="ctl">Confianza: <select id="ssConf"><option value="1.645">90%</option><option value="1.96" selected>95%</option><option value="2.576">99%</option></select></label>
+    </div>
+    <div id="ssPlot" class="plot"></div>
+    <div class="readout">
+      <div class="ro"><div class="l">n necesario</div><div class="v" id="ssN">—</div></div>
+      <div class="ro"><div class="l">Si E→E/2</div><div class="v" id="ssN2">—</div></div>
+      <div class="ro"><div class="l">factor</div><div class="v" id="ssFac">×4</div></div>
+    </div>
+  </div>
+
+  <div class="card err"><h3>⚠️ Errores típicos</h3><p>Redondear hacia abajo · olvidar elevar al cuadrado · usar el $z$ equivocado para la confianza · confundir $E$ (semiancho) con el ancho total del intervalo.</p></div>
+</section>
+
+<!-- ══════════════ EJ 7 — REGRESIÓN ══════════════ -->
+<section class="ex t-reg" id="e7">
+  <div class="ex-head"><div class="ex-num">7</div><span class="tag b-reg">Regresión Lineal Simple</span><h2>Horas de estudio vs nota del examen</h2></div>
+
+  <div class="card concept">
+    <h3>🧠 Conceptos que tenés que saber</h3>
+    <ul>
+      <li><span class="must">Objetivo:</span> encontrar la recta $\hat y=a+bx$ que mejor describe la relación entre $X$ e $Y$.</li>
+      <li><span class="must">Mínimos cuadrados:</span> la "mejor" recta es la que minimiza la suma de los cuadrados de los errores verticales (residuos).</li>
+      <li><span class="must">Coeficientes:</span> $b=\dfrac{S_{xy}}{S_{xx}}$ (pendiente) y $a=\bar y-b\bar x$. La recta siempre pasa por $(\bar x,\bar y)$.</li>
+      <li><span class="must">$R^2$:</span> proporción de la variabilidad de $Y$ explicada por $X$. $R^2=0{,}97$ → el 97% de la variación de las notas se explica por las horas.</li>
+      <li><span class="must">Interpretar la pendiente:</span> por cada unidad que sube $X$, $Y$ cambia en promedio $b$.</li>
+    </ul>
+    <div class="formula">$$b=\dfrac{\sum(x_i-\bar x)(y_i-\bar y)}{\sum(x_i-\bar x)^2}\qquad a=\bar y-b\bar x\qquad R^2=\dfrac{b\,S_{xy}}{S_{yy}}$$</div>
+  </div>
+
+  <div class="card think">
+    <h3>🔑 Cómo pensar el ejercicio</h3>
+    <p>1) Calculá $\bar x,\bar y$. 2) Armá $S_{xx}=\sum(x_i-\bar x)^2$ y $S_{xy}=\sum(x_i-\bar x)(y_i-\bar y)$ (una tablita ayuda). 3) $b$, luego $a$. 4) Predecí reemplazando en la recta. 5) $R^2$ con $S_{yy}$.</p>
+  </div>
+
+  <div class="card dev">
+    <h3>📝 Desarrollo guiado — X=[2,4,6,8,10], Y=[4,5,7,8,9]</h3>
+    <div class="step"><div class="step-n">·</div><div class="step-b">$\bar x=6,\ \bar y=6{,}6$; $S_{xx}=40$; $S_{xy}=28$; $S_{yy}=14{,}8$</div></div>
+    <div class="step"><div class="step-n">a</div><div class="step-b">$b=\frac{28}{40}=0{,}7$; $a=6{,}6-0{,}7(6)=2{,}4$ → <span class="res">ŷ = 2,4 + 0,7x</span></div></div>
+    <div class="step"><div class="step-n">b</div><div class="step-b">Cada hora extra de estudio sube la nota en promedio <span class="res">0,7 puntos</span>.</div></div>
+    <div class="step"><div class="step-n">c</div><div class="step-b">Para 5 horas: $\hat y=2{,}4+0{,}7(5)=$ <span class="res">5,9</span></div></div>
+    <div class="step"><div class="step-n">d</div><div class="step-b">$R^2=\frac{28^2}{40\cdot14{,}8}=\frac{784}{592}\approx$ <span class="res">0,973</span> → 97,3% de la variabilidad explicada.</div></div>
+  </div>
+
+  <div class="card game">
+    <h3>🎮 Juego 7 — Laboratorio de mínimos cuadrados</h3>
+    <p class="note"><b>Hacé clic en el gráfico</b> para agregar puntos (o cargá el dataset del ejercicio). La recta de mejor ajuste y los <span style="color:#f87171">residuos</span> se recalculan solos. Observá cómo cada punto "tira" de la recta y cómo cambia $R^2$.</p>
+    <div class="controls">
+      <button class="btn" id="lsqLoad">📈 Cargar datos del Ej. 7</button>
+      <button class="btn alt" id="lsqClear">🗑️ Limpiar</button>
+      <label class="ctl" style="flex-direction:row;align-items:center;gap:7px"><input type="checkbox" id="lsqRes" checked> mostrar residuos</label>
+    </div>
+    <canvas class="lsq" id="lsqCanvas" width="900" height="300"></canvas>
+    <div class="readout">
+      <div class="ro"><div class="l">pendiente b</div><div class="v" id="lsqB">—</div></div>
+      <div class="ro"><div class="l">ordenada a</div><div class="v" id="lsqA">—</div></div>
+      <div class="ro"><div class="l">R²</div><div class="v" id="lsqR2">—</div></div>
+      <div class="ro"><div class="l">puntos</div><div class="v" id="lsqNpts">0</div></div>
+    </div>
+  </div>
+
+  <div class="card err"><h3>⚠️ Errores típicos</h3><p>Confundir $S_{xy}$ con $S_{xx}$ · invertir X e Y · concluir causalidad por un $R^2$ alto (sólo indica relación lineal) · errores de signo en las desviaciones.</p></div>
+</section>
+
+<!-- ══════════════ JUEGO FINAL ══════════════ -->
+<section class="ex" id="final">
+  <div class="ex-head"><div class="ex-num" style="background:linear-gradient(135deg,#38bdf8,#a78bfa);color:#fff">🎮</div><h2>Juego final — Detector de distribución</h2></div>
+  <div class="card game" style="border-left-color:var(--accent)">
+    <h3>🕵️ ¿Qué herramienta usarías?</h3>
+    <p class="note">Lo más difícil del parcial no es calcular: es <b>reconocer qué modelo aplica</b>. Leé cada situación y elegí. Te explico el porqué en cada caso.</p>
+    <div class="gscore" id="detScore">Puntaje: <b>0</b> / <span id="detTotal">0</span></div>
+    <div class="scn" id="detScn" style="margin-top:10px">—</div>
+    <div class="opts3" id="detOpts"></div>
+    <div class="gfb" id="detFb"></div>
+    <div style="margin-top:14px"><button class="btn" id="detNext">Siguiente situación →</button></div>
+  </div>
+</section>
+
+<div class="footer">
+  Simulacro Parcial 2 · Explicado — Estadística · Lic. en Automatización y Control · UNI Pilar<br>
+  Página complementaria del <a href="estadistica_parcial2.html" style="color:var(--accent)">resumen interactivo</a>. Conceptos + desarrollo + juegos para aprender, no memorizar.
+</div>
+</main>
+
+<script>
+/* ════════ Helpers matemáticos ════════ */
+function logFact(n){let s=0;for(let i=2;i<=n;i++)s+=Math.log(i);return s;}
+function comb(n,k){if(k<0||k>n)return 0;return Math.exp(logFact(n)-logFact(k)-logFact(n-k));}
+function binomPMF(n,p,k){if(k<0||k>n)return 0;return comb(n,k)*Math.pow(p,k)*Math.pow(1-p,n-k);}
+function poisPMF(l,k){if(k<0)return 0;return Math.exp(-l+k*Math.log(l)-logFact(k));}
+function phi(z){const t=1/(1+0.2316419*Math.abs(z));const d=0.3989423*Math.exp(-z*z/2);
+  let p=d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return z>0?1-p:p;}
+function qnorm(p){
+  const a=[-3.969683028665376e+01,2.209460984245205e+02,-2.759285104469687e+02,1.383577518672690e+02,-3.066479806614716e+01,2.506628277459239e+00];
+  const b=[-5.447609879822406e+01,1.615858368580409e+02,-1.556989798598866e+02,6.680131188771972e+01,-1.328068155288572e+01];
+  const c=[-7.784894002430293e-03,-3.223964580411365e-01,-2.400758277161838e+00,-2.549732539343734e+00,4.374664141464968e+00,2.938163982698783e+00];
+  const d=[7.784695709041462e-03,3.224671290700398e-01,2.445134137142996e+00,3.754408661907416e+00];
+  const plow=0.02425,phigh=1-plow;let q,r;
+  if(p<plow){q=Math.sqrt(-2*Math.log(p));return(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+  else if(p<=phigh){q=p-0.5;r=q*q;return(((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);}
+  else{q=Math.sqrt(-2*Math.log(1-p));return-(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+}
+function randn(){let u=0,v=0;while(u===0)u=Math.random();while(v===0)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+const fmt=(x,d=3)=>(typeof x==='number'?x.toFixed(d).replace('.',','):x);
+const baseLayout=t=>({paper_bgcolor:'transparent',plot_bgcolor:'#0a1322',font:{color:'#93a3bb',size:11},
+  margin:{t:10,b:38,l:46,r:12},xaxis:{gridcolor:'#1c2942',zeroline:false},yaxis:{gridcolor:'#1c2942',zeroline:false},...t});
+const PCFG={displayModeBar:false,responsive:true};
+
+/* ════════ Juego 1 — Binomial ════════ */
+function drawBinom(){
+  const n=+binN.value, p=binP.value/100, k=Math.min(+binK.value,n);
+  binK.max=n; bN.textContent=n; bP.textContent=fmt(p,2); bK.textContent=k;
+  const xs=[],ys=[],cols=[];
+  for(let i=0;i<=n;i++){xs.push(i);ys.push(binomPMF(n,p,i));cols.push(i===k?'#22c55e':'#2f6b46');}
+  Plotly.react('binPlot',[{type:'bar',x:xs,y:ys,marker:{color:cols}}],
+    baseLayout({xaxis:{title:'k (éxitos)',gridcolor:'#1c2942'},yaxis:{title:'P(X=k)',gridcolor:'#1c2942'}}),PCFG);
+  let cdf=0;for(let i=0;i<=k;i++)cdf+=binomPMF(n,p,i);
+  binPk.textContent=fmt(binomPMF(n,p,k)); binCdf.textContent=fmt(cdf);
+  binE.textContent=fmt(n*p,2); binSd.textContent=fmt(Math.sqrt(n*p*(1-p)),2);
+}
+['binN','binP','binK'].forEach(id=>document.getElementById(id).addEventListener('input',drawBinom));
+
+/* ════════ Juego 2 — Poisson ════════ */
+function drawPoi(){
+  const base=+poiR.value, w=+poiW.value, lam=base*w, k=+poiK.value;
+  poR.textContent=base; poW.textContent=w+(w===1?' h':' h'); poK.textContent=k;
+  const top=Math.max(15,Math.ceil(lam+4*Math.sqrt(lam)));
+  const xs=[],ys=[],cols=[];
+  for(let i=0;i<=top;i++){xs.push(i);ys.push(poisPMF(lam,i));cols.push(i===k?'#f59e0b':'#7a5410');}
+  Plotly.react('poiPlot',[{type:'bar',x:xs,y:ys,marker:{color:cols}}],
+    baseLayout({xaxis:{title:'k (eventos)'},yaxis:{title:'P(X=k)'}}),PCFG);
+  poiLam.textContent=fmt(lam,2); poiPk.textContent=fmt(poisPMF(lam,k)); poiP0.textContent=fmt(Math.exp(-lam)); poiEV.textContent=fmt(lam,2);
+}
+['poiR','poiW','poiK'].forEach(id=>document.getElementById(id).addEventListener('input',drawPoi));
+
+/* ════════ Juego 3 — Normal ════════ */
+function drawNor(){
+  const mu=+norMu.value, sd=+norSd.value, type=norType.value;
+  let a=+norA.value, b=+norB.value;
+  nMu.textContent=mu; nSd.textContent=sd; nA.textContent=a; nB.textContent=b;
+  norBwrap.style.display=(type==='bt')?'flex':'none';
+  const lo=mu-4*sd, hi=mu+4*sd, N=200, xs=[],ys=[];
+  for(let i=0;i<=N;i++){const x=lo+(hi-lo)*i/N;xs.push(x);ys.push(Math.exp(-0.5*((x-mu)/sd)**2)/(sd*Math.sqrt(2*Math.PI)));}
+  const sx=[],sy=[];
+  for(let i=0;i<=N;i++){const x=xs[i];let inside=false;
+    if(type==='lt')inside=x<=a; else if(type==='gt')inside=x>=a; else inside=(x>=Math.min(a,b)&&x<=Math.max(a,b));
+    if(inside){sx.push(x);sy.push(ys[i]);}}
+  const za=(a-mu)/sd, zb=(b-mu)/sd; let prob;
+  if(type==='lt')prob=phi(za); else if(type==='gt')prob=1-phi(za); else prob=Math.abs(phi(zb)-phi(za));
+  const traces=[
+    {x:xs,y:ys,mode:'lines',line:{color:'#6366f1',width:2},hoverinfo:'skip'},
+    {x:sx,y:sy,fill:'tozeroy',mode:'none',fillcolor:'rgba(99,102,241,.38)',hoverinfo:'skip'}
+  ];
+  Plotly.react('norPlot',traces,baseLayout({xaxis:{title:'X'},yaxis:{title:'densidad',showticklabels:false},showlegend:false}),PCFG);
+  norZa.textContent=fmt(za,2); norZb.textContent=(type==='bt')?fmt(zb,2):'—'; norProb.textContent=(prob*100).toFixed(2).replace('.',',')+'%';
+}
+['norMu','norSd','norA','norB','norType'].forEach(id=>document.getElementById(id).addEventListener('input',drawNor));
+
+/* ════════ Juego 4 — TCL ════════ */
+// población muy asimétrica: exponencial (media 1)
+function expSample(){return -Math.log(Math.random());}
+function runTCL(){
+  const n=+tclN.value, M=2000, means=[];
+  for(let m=0;m<M;m++){let s=0;for(let i=0;i<n;i++)s+=expSample();means.push(s/n);}
+  const mean=means.reduce((a,b)=>a+b,0)/M;
+  const sdObs=Math.sqrt(means.reduce((a,b)=>a+(b-mean)**2,0)/M);
+  Plotly.react('tclPlot',[{type:'histogram',x:means,marker:{color:'#06b6d4'},nbinsx:40,histnorm:'probability density'}],
+    baseLayout({xaxis:{title:'valor de X̄'},yaxis:{title:'densidad'},bargap:0.02}),PCFG);
+  tclMean.textContent=fmt(mean,3); tclSeT.textContent=fmt(1/Math.sqrt(n),3); tclSeO.textContent=fmt(sdObs,3);
+}
+tclN.addEventListener('input',()=>{tN.textContent=tclN.value;});
+tclRun.addEventListener('click',runTCL);
+
+/* ════════ Juego 5 — IC ════════ */
+function runCI(){
+  const conf=+ciConf.value, n=+ciNr.value, mu=50, sigma=10, M=100;
+  const z=qnorm(1-(1-conf)/2); let hit=0;
+  const shapes=[{type:'line',x0:mu,x1:mu,y0:0,y1:M+1,line:{color:'#fff',width:1.5,dash:'dot'}}];
+  const gx=[],gy=[],rx=[],ry=[];
+  for(let i=0;i<M;i++){
+    let s=0;for(let j=0;j<n;j++)s+=mu+sigma*randn(); const xb=s/n;
+    const e=z*sigma/Math.sqrt(n), lo=xb-e, hi=xb+e, ok=(mu>=lo&&mu<=hi); if(ok)hit++;
+    const arr_x=ok?gx:rx, arr_y=ok?gy:ry;
+    arr_x.push(lo,hi,null); arr_y.push(i+1,i+1,null);
+  }
+  ciN.textContent=n;
+  Plotly.react('ciPlot',[
+    {x:gx,y:gy,mode:'lines',line:{color:'#34d399',width:2},hoverinfo:'skip'},
+    {x:rx,y:ry,mode:'lines',line:{color:'#f87171',width:2.5},hoverinfo:'skip'}
+  ],baseLayout({xaxis:{title:'media estimada ± margen'},yaxis:{title:'muestra #',showticklabels:false},shapes,showlegend:false}),PCFG);
+  ciHit.textContent=hit; ciMiss.textContent=M-hit; ciExp.textContent=Math.round(conf*100)+'%';
+}
+ciNr.addEventListener('input',()=>{ciN.textContent=ciNr.value;});
+ciRun.addEventListener('click',runCI);
+
+/* ════════ Juego 6 — Tamaño de muestra ════════ */
+function drawSS(){
+  const E=ssEr.value/10, sigma=+ssSr.value, z=+ssConf.value;
+  ssE.textContent=fmt(E,1); ssS.textContent=sigma;
+  const xs=[],ys=[];
+  for(let e=5;e<=80;e++){const ee=e/10;xs.push(ee);ys.push(Math.ceil(Math.pow(z*sigma/ee,2)));}
+  const nNow=Math.ceil(Math.pow(z*sigma/E,2)), nHalf=Math.ceil(Math.pow(z*sigma/(E/2),2));
+  Plotly.react('ssPlot',[
+    {x:xs,y:ys,mode:'lines',line:{color:'#a855f7',width:2.5},hoverinfo:'skip'},
+    {x:[E],y:[nNow],mode:'markers',marker:{color:'#fff',size:11,line:{color:'#a855f7',width:2}},hoverinfo:'skip'}
+  ],baseLayout({xaxis:{title:'error máximo E'},yaxis:{title:'n necesario'},showlegend:false}),PCFG);
+  ssN.textContent=nNow; ssN2.textContent=nHalf; ssFac.textContent='×'+(nHalf/nNow).toFixed(1).replace('.',',');
+}
+['ssEr','ssSr','ssConf'].forEach(id=>document.getElementById(id).addEventListener('input',drawSS));
+
+/* ════════ Juego 7 — Mínimos cuadrados (canvas) ════════ */
+const cv=document.getElementById('lsqCanvas'), cx=cv.getContext('2d');
+let pts=[];
+const PAD={l:46,r:18,t:16,b:34};
+function dataBounds(){
+  let xmin=0,xmax=10,ymin=0,ymax=10;
+  if(pts.length){xmin=Math.min(...pts.map(p=>p.x));xmax=Math.max(...pts.map(p=>p.x));
+    ymin=Math.min(...pts.map(p=>p.y));ymax=Math.max(...pts.map(p=>p.y));}
+  const padx=(xmax-xmin||4)*0.15, pady=(ymax-ymin||4)*0.15;
+  return{xmin:xmin-padx,xmax:xmax+padx,ymin:ymin-pady,ymax:ymax+pady};
+}
+function toPx(x,y,B,W,H){
+  const px=PAD.l+(x-B.xmin)/(B.xmax-B.xmin)*(W-PAD.l-PAD.r);
+  const py=H-PAD.b-(y-B.ymin)/(B.ymax-B.ymin)*(H-PAD.t-PAD.b);
+  return[px,py];
+}
+function fitLSQ(){
+  const n=pts.length; if(n<2)return null;
+  const mx=pts.reduce((a,p)=>a+p.x,0)/n, my=pts.reduce((a,p)=>a+p.y,0)/n;
+  let Sxx=0,Sxy=0,Syy=0;
+  pts.forEach(p=>{Sxx+=(p.x-mx)**2;Sxy+=(p.x-mx)*(p.y-my);Syy+=(p.y-my)**2;});
+  if(Sxx===0)return null;
+  const b=Sxy/Sxx, a=my-b*mx, R2=Syy>0?(b*Sxy)/Syy:0;
+  return{a,b,R2};
+}
+function drawLSQ(){
+  const W=cv.width,H=cv.height; cx.clearRect(0,0,W,H);
+  const B=dataBounds();
+  // grid + axes
+  cx.strokeStyle='#1c2942';cx.lineWidth=1;cx.fillStyle='#5b6b85';cx.font='11px sans-serif';
+  for(let i=0;i<=5;i++){
+    const gx=PAD.l+i/5*(W-PAD.l-PAD.r);
+    cx.beginPath();cx.moveTo(gx,PAD.t);cx.lineTo(gx,H-PAD.b);cx.stroke();
+    const gy=PAD.t+i/5*(H-PAD.t-PAD.b);
+    cx.beginPath();cx.moveTo(PAD.l,gy);cx.lineTo(W-PAD.r,gy);cx.stroke();
+  }
+  const fit=fitLSQ();
+  if(fit && document.getElementById('lsqRes').checked){
+    cx.strokeStyle='#f87171';cx.lineWidth=1.5;
+    pts.forEach(p=>{const yhat=fit.a+fit.b*p.x;const[px,py]=toPx(p.x,p.y,B,W,H);const[,py2]=toPx(p.x,yhat,B,W,H);
+      cx.beginPath();cx.moveTo(px,py);cx.lineTo(px,py2);cx.stroke();});
+  }
+  if(fit){
+    cx.strokeStyle='#34d399';cx.lineWidth=2.5;
+    const[x1,y1]=toPx(B.xmin,fit.a+fit.b*B.xmin,B,W,H);
+    const[x2,y2]=toPx(B.xmax,fit.a+fit.b*B.xmax,B,W,H);
+    cx.beginPath();cx.moveTo(x1,y1);cx.lineTo(x2,y2);cx.stroke();
+  }
+  pts.forEach(p=>{const[px,py]=toPx(p.x,p.y,B,W,H);
+    cx.fillStyle='#38bdf8';cx.beginPath();cx.arc(px,py,5,0,2*Math.PI);cx.fill();
+    cx.strokeStyle='#0a1322';cx.lineWidth=1.5;cx.stroke();});
+  lsqNpts.textContent=pts.length;
+  if(fit){lsqB.textContent=fmt(fit.b,2);lsqA.textContent=fmt(fit.a,2);lsqR2.textContent=fmt(fit.R2,3);}
+  else{lsqB.textContent='—';lsqA.textContent='—';lsqR2.textContent='—';}
+}
+cv.addEventListener('click',e=>{
+  const r=cv.getBoundingClientRect();
+  const sx=(e.clientX-r.left)*(cv.width/r.width), sy=(e.clientY-r.top)*(cv.height/r.height);
+  const B=dataBounds(),W=cv.width,H=cv.height;
+  const x=B.xmin+(sx-PAD.l)/(W-PAD.l-PAD.r)*(B.xmax-B.xmin);
+  const y=B.ymin+(H-PAD.b-sy)/(H-PAD.t-PAD.b)*(B.ymax-B.ymin);
+  pts.push({x,y}); drawLSQ();
+});
+document.getElementById('lsqLoad').addEventListener('click',()=>{
+  pts=[[2,4],[4,5],[6,7],[8,8],[10,9]].map(([x,y])=>({x,y})); drawLSQ();
+});
+document.getElementById('lsqClear').addEventListener('click',()=>{pts=[];drawLSQ();});
+document.getElementById('lsqRes').addEventListener('change',drawLSQ);
+
+/* ════════ Juego final — Detector ════════ */
+const detData=[
+  {t:'Se inspeccionan 30 soldaduras; cada una falla con probabilidad 0,02. ¿Cuántas fallan?',ans:'Binomial',
+   why:'n fijo (30), p constante (0,02), ensayos independientes, contamos éxitos → Binomial.'},
+  {t:'Un cajero recibe en promedio 8 clientes por hora. ¿Probabilidad de 12 en una hora?',ans:'Poisson',
+   why:'Eventos en un intervalo continuo de tiempo con tasa media λ, sin "n ensayos" → Poisson.'},
+  {t:'La altura de las piezas tiene μ=50 mm y σ=2 mm. ¿% entre 48 y 52 mm?',ans:'Normal',
+   why:'Variable continua con media y desvío, forma de campana → Normal (estandarizar con Z).'},
+  {t:'Promedio de 3 baches por km en una ruta. ¿Probabilidad de 0 baches en 500 m?',ans:'Poisson',
+   why:'Eventos por unidad de longitud (intervalo continuo); además reescalás λ a 1,5 para 500 m → Poisson.'},
+  {t:'De 15 LEDs, cada uno encendido con prob 0,9. ¿Probabilidad de que enciendan exactamente 13?',ans:'Binomial',
+   why:'15 ensayos independientes con p constante, contamos éxitos → Binomial.'},
+  {t:'El tiempo de vida de un motor sigue una campana con μ=2000 h, σ=150 h. ¿% que dura más de 2300 h?',ans:'Normal',
+   why:'Variable continua acampanada → Normal; z=(2300−2000)/150 ≈ 2.'},
+  {t:'Una central recibe en promedio 2 alarmas por minuto. ¿Probabilidad de más de 5 en un minuto?',ans:'Poisson',
+   why:'Conteo de eventos por intervalo de tiempo con tasa λ → Poisson, complemento 1−P(X≤5).'},
+  {t:'Se prueban 50 fusibles; 3% defectuosos. ¿Probabilidad de a lo sumo 1 defectuoso?',ans:'Binomial',
+   why:'n=50 ensayos, p=0,03 constante → Binomial. (También se aproxima por Poisson con λ=np=1,5.)'}
+];
+let detOrder=[],detI=0,detScoreN=0,detTotalN=0;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function detLoad(){
+  if(detI>=detOrder.length)detOrder=shuffle([...Array(detData.length).keys()]),detI=0;
+  const d=detData[detOrder[detI]];
+  detScn.textContent=d.t; detFb.style.display='none';
+  const opts=['Binomial','Poisson','Normal'];
+  detOpts.innerHTML='';
+  opts.forEach(o=>{const btn=document.createElement('button');btn.textContent=o;
+    btn.onclick=()=>detAnswer(btn,o,d);detOpts.appendChild(btn);});
+}
+function detAnswer(btn,choice,d){
+  if(detFb.style.display==='block')return;
+  detTotalN++;
+  [...detOpts.children].forEach(b=>{if(b.textContent===d.ans)b.classList.add('ok');});
+  if(choice===d.ans){detScoreN++;}else{btn.classList.add('no');}
+  detFb.style.display='block';
+  detFb.innerHTML=(choice===d.ans?'✅ <b>¡Correcto!</b> ':'❌ <b>Era '+d.ans+'.</b> ')+d.why;
+  detScore.innerHTML='Puntaje: <b>'+detScoreN+'</b> / '+detTotalN; detTotal.textContent=detTotalN;
+}
+document.getElementById('detNext').addEventListener('click',()=>{detI++;detLoad();});
+
+/* ════════ Init ════════ */
+document.addEventListener('DOMContentLoaded',()=>{
+  drawBinom(); drawPoi(); drawNor(); runTCL(); runCI(); drawSS();
+  pts=[[2,4],[4,5],[6,7],[8,8],[10,9]].map(([x,y])=>({x,y})); drawLSQ();
+  detOrder=shuffle([...Array(detData.length).keys()]); detLoad();
+});
+</script>
+</body>
+</html>

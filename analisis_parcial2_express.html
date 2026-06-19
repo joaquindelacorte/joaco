@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análisis II · Resumen en 20 min</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+
+<style>
+:root{
+  /* Paleta cálida-clara optimizada para retención (unificada con el resumen P2) */
+  --bg:#fefcf7; --panel:#ffffff; --panel2:#f5f0e6; --panel3:#faf7f0;
+  --border:#e5dfd0; --border-strong:#cbc4b0;
+  --text:#1f2937; --text-soft:#374151; --muted:#6b7280;
+  --accent:#0369a1; --accent-bg:#dbeafe;
+  --accent2:#7c3aed; --accent2-bg:#ede9fe;
+  --good:#15803d; --good-bg:#dcfce7;
+  --warn:#b45309; --warn-bg:#fef3c7;
+  --bad:#b91c1c; --bad-bg:#fee2e2;
+  --pink:#be185d; --pink-bg:#fce7f3;
+  --orange:#c2410c; --orange-bg:#ffedd5;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+     background:var(--bg); color:var(--text); line-height:1.6}
+main{max-width:920px; margin:0 auto; padding:28px 22px 80px}
+
+.back-home{display:inline-block; margin-bottom:14px; color:var(--accent);
+           text-decoration:none; font-size:13px; font-weight:600}
+.back-home:hover{text-decoration:underline}
+
+/* ── Header ── */
+.hero{background:linear-gradient(135deg,var(--accent2-bg),var(--accent-bg));
+      border:1px solid var(--border-strong); border-radius:16px; padding:26px 28px; margin-bottom:8px}
+h1{font-size:30px; color:#1e3a8a; margin:0 0 6px; letter-spacing:-0.5px}
+.hero p{margin:0; color:var(--text-soft); font-size:15px}
+.timer{display:inline-block; background:var(--warn); color:#fff; font-weight:700; font-size:12px;
+       padding:4px 12px; border-radius:20px; margin-bottom:10px; letter-spacing:.4px}
+
+/* ── Progreso de lectura ── */
+.bar{position:sticky; top:0; z-index:20; height:5px; background:var(--panel2); margin:0 -22px 22px}
+.bar > i{display:block; height:100%; width:0; background:var(--accent); transition:width .1s}
+
+/* ── Bloques temáticos ── */
+.block{border-radius:14px; padding:2px 18px 18px; margin:22px 0; border:1px solid var(--border)}
+.block-deriv{background:#f3faf5; border-color:#bfe6cd}
+.block-integ{background:#f7f4fe; border-color:#d9cdf6}
+.block-edo{background:#fdf6ef; border-color:#f0d8bf}
+.block h2{display:flex; align-items:center; gap:10px; font-size:20px; margin:16px 0 4px}
+.block-deriv h2{color:var(--good)}
+.block-integ h2{color:var(--accent2)}
+.block-edo h2{color:var(--orange)}
+.block .lead{font-size:13.5px; color:var(--muted); margin:0 0 12px}
+.dot{display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px;
+     border-radius:9px; font-size:17px; flex-shrink:0}
+.block-deriv .dot{background:var(--good-bg)}
+.block-integ .dot{background:var(--accent2-bg)}
+.block-edo .dot{background:var(--orange-bg)}
+
+/* ── Tarjetas clave ── */
+.keys{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin:12px 0}
+.key{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:13px 16px;
+     box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.key .t{font-size:11px; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); font-weight:700; margin-bottom:4px}
+.key .f{font-size:15.5px}
+
+/* ── Tabla relámpago (referencia por color) ── */
+.flash{display:grid; gap:10px; margin:14px 0}
+.flash-group{border-radius:11px; overflow:hidden; border:1px solid rgba(0,0,0,.16);
+             box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.flash-cat{padding:7px 16px; font-weight:800; font-size:12.5px; letter-spacing:.3px; color:#1b1408}
+.flash-row{display:grid; grid-template-columns:1fr 30px 1.1fr; align-items:center; gap:6px;
+           padding:9px 16px; background:#fffdf7; color:#1e293b; border-top:1px solid #ece5d5}
+.flash-row:nth-child(odd){background:#f7f2e8}
+.flash-op{text-align:center; color:#c2aa7e; font-weight:800}
+.flash-r{font-weight:700; color:var(--rc)}
+.fp{--rc:#b45309}.fp .flash-cat{background:#fcd34d}
+.fe{--rc:#15803d}.fe .flash-cat{background:#86efac}
+.ft{--rc:#be185d}.ft .flash-cat{background:#f9a8d4}
+.fc{--rc:#6d28d9}.fc .flash-cat{background:#c4b5fd}
+
+/* ── Tabla EDOs en 1 línea ── */
+.edos{width:100%; border-collapse:collapse; margin:12px 0; font-size:13.5px; background:var(--panel);
+      border-radius:10px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.edos th,.edos td{border:1px solid var(--border); padding:9px 12px; text-align:left; vertical-align:middle}
+.edos th{background:var(--orange-bg); color:var(--orange); font-size:11px; text-transform:uppercase; letter-spacing:.5px}
+.edos tr:nth-child(even) td{background:var(--panel3)}
+.edos .sol{font-weight:700; color:var(--orange)}
+
+/* ── Avisos ── */
+.note{border-radius:10px; padding:12px 16px; margin:12px 0; font-size:14px; border-left:4px solid}
+.note.warn{background:var(--warn-bg); border-color:var(--warn)}
+.note.bad{background:var(--bad-bg); border-color:var(--bad)}
+.note.tip{background:var(--good-bg); border-color:var(--good)}
+.note h4{margin:0 0 6px; font-size:13px; text-transform:uppercase; letter-spacing:.5px}
+.note.warn h4{color:var(--warn)} .note.bad h4{color:var(--bad)} .note.tip h4{color:var(--good)}
+.note ul{margin:6px 0 0; padding-left:20px}
+.note li{margin:4px 0; font-size:13.5px}
+
+/* ── Checklist ── */
+h2.sec{font-size:21px; color:#1e40af; border-bottom:2px solid var(--accent-bg); padding-bottom:8px; margin:34px 0 12px}
+.check{display:grid; gap:8px; margin:12px 0}
+.check label{display:flex; gap:10px; align-items:flex-start; background:var(--panel); border:1px solid var(--border);
+             border-radius:8px; padding:11px 14px; cursor:pointer; font-size:14px; transition:background .15s}
+.check label:hover{background:var(--panel3)}
+.check input{margin-top:3px; width:17px; height:17px; accent-color:var(--good); flex-shrink:0}
+.check input:checked + span{color:var(--muted); text-decoration:line-through}
+
+/* ── Quiz ── */
+.quiz-q{background:var(--panel); border:1px solid var(--border); padding:14px 18px; border-radius:10px; margin:12px 0;
+        box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.quiz-q .opts{display:flex; flex-direction:column; gap:8px; margin-top:10px}
+.quiz-q .opt{background:var(--panel3); padding:10px 14px; border-radius:6px; border:2px solid var(--border);
+             cursor:pointer; transition:all .15s; font-size:14px}
+.quiz-q .opt:hover{border-color:var(--accent)}
+.quiz-q .opt.correct{background:var(--good-bg); border-color:var(--good)}
+.quiz-q .opt.wrong{background:var(--bad-bg); border-color:var(--bad)}
+.quiz-feedback{margin-top:8px; font-size:13px; color:var(--text-soft); padding:8px 12px;
+               background:var(--panel3); border-radius:6px; border-left:3px solid var(--accent)}
+.quiz-score{font-size:26px; font-weight:800; text-align:center; padding:16px; color:var(--accent);
+            background:var(--accent-bg); border-radius:10px; margin-top:14px; display:none}
+.btn{background:var(--accent); color:#fff; border:none; padding:9px 18px; border-radius:7px;
+     font-weight:700; cursor:pointer; font-size:14px}
+.btn:hover{filter:brightness(1.08)}
+
+.hl-good{color:var(--good); font-weight:700}
+.hl-warn{color:var(--warn); font-weight:700}
+.hl-bad{color:var(--bad); font-weight:700}
+.hl-accent{color:var(--accent); font-weight:700}
+.hl-purple{color:var(--accent2); font-weight:700}
+
+.foot{text-align:center; color:var(--muted); font-size:12px; margin-top:40px; padding-top:18px; border-top:1px solid var(--border)}
+.foot a{color:var(--accent); text-decoration:none; font-weight:600}
+
+@media(max-width:600px){
+  .flash-row{grid-template-columns:1fr 22px 1.1fr; padding:8px 12px; font-size:13.5px}
+  main{padding:20px 14px 60px}
+}
+</style>
+</head>
+<body>
+<div class="bar"><i id="progress"></i></div>
+<main>
+
+<a href="analisis_parcial2.html" class="back-home">← Volver al resumen completo</a>
+
+<div class="hero">
+  <div class="timer">⏱️ REPASO EN 20 MINUTOS</div>
+  <h1>📐 Análisis I · Parcial 2 — Express</h1>
+  <p>Todo lo imprescindible de <strong>derivadas, integrales y EDOs</strong> en una sola pantalla. Las fórmulas que sí o sí entran, las soluciones tipo y los errores que cuestan puntos. Leelo de arriba a abajo y cerrá con el mini-quiz.</p>
+</div>
+
+<!-- ═══════════ DERIVADAS ═══════════ -->
+<div class="block block-deriv">
+  <h2><span class="dot">🟢</span> 1 · Derivadas <span style="font-size:12px;color:var(--muted);font-weight:400">(razón de cambio · pendiente)</span></h2>
+  <p class="lead">La derivada mide qué tan rápido cambia algo. Geométricamente: pendiente de la tangente. Físicamente: velocidad / sensibilidad.</p>
+
+  <div class="keys">
+    <div class="key"><div class="t">Definición</div><div class="f">$f'(a)=\displaystyle\lim_{h\to0}\frac{f(a+h)-f(a)}{h}$</div></div>
+    <div class="key"><div class="t">Significado físico</div><div class="f">posición → <strong>velocidad</strong>; lectura → <strong>sensibilidad</strong></div></div>
+    <div class="key"><div class="t">Puntos críticos</div><div class="f">$f'(x)=0$ → máximos, mínimos o <em>parada</em> de un actuador</div></div>
+  </div>
+
+  <div class="flash">
+    <div class="flash-group fp">
+      <div class="flash-cat">🟡 Potencias y básicas</div>
+      <div class="flash-row"><div>$c$</div><div class="flash-op">→</div><div class="flash-r">$0$</div></div>
+      <div class="flash-row"><div>$x^n$</div><div class="flash-op">→</div><div class="flash-r">$n\,x^{n-1}$</div></div>
+      <div class="flash-row"><div>$\sqrt{x}$</div><div class="flash-op">→</div><div class="flash-r">$\dfrac{1}{2\sqrt{x}}$</div></div>
+      <div class="flash-row"><div>$\dfrac{1}{x}$</div><div class="flash-op">→</div><div class="flash-r">$-\dfrac{1}{x^2}$</div></div>
+    </div>
+    <div class="flash-group fe">
+      <div class="flash-cat">🟢 Exponencial y log</div>
+      <div class="flash-row"><div>$e^{kx}$</div><div class="flash-op">→</div><div class="flash-r">$k\,e^{kx}$</div></div>
+      <div class="flash-row"><div>$\ln x$</div><div class="flash-op">→</div><div class="flash-r">$\dfrac{1}{x}$</div></div>
+    </div>
+    <div class="flash-group ft">
+      <div class="flash-cat">🩷 Trigonométricas</div>
+      <div class="flash-row"><div>$\sin x$</div><div class="flash-op">→</div><div class="flash-r">$\cos x$</div></div>
+      <div class="flash-row"><div>$\cos x$</div><div class="flash-op">→</div><div class="flash-r">$-\sin x$</div></div>
+    </div>
+    <div class="flash-group fc">
+      <div class="flash-cat">🟣 Reglas combinadas (¡las más evaluadas!)</div>
+      <div class="flash-row"><div>Producto $f\cdot g$</div><div class="flash-op">→</div><div class="flash-r">$f'g+fg'$</div></div>
+      <div class="flash-row"><div>Cociente $\dfrac{f}{g}$</div><div class="flash-op">→</div><div class="flash-r">$\dfrac{f'g-fg'}{g^2}$</div></div>
+      <div class="flash-row"><div>Cadena $f(g(x))$</div><div class="flash-op">→</div><div class="flash-r">$f'(g)\cdot g'$</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ INTEGRALES ═══════════ -->
+<div class="block block-integ">
+  <h2><span class="dot">🟣</span> 2 · Integrales <span style="font-size:12px;color:var(--muted);font-weight:400">(acumulación · área)</span></h2>
+  <p class="lead">Integrar es acumular: volumen, distancia, trabajo. La integral <strong>deshace</strong> la derivada.</p>
+
+  <div class="keys">
+    <div class="key"><div class="t">Regla de Barrow</div><div class="f">$\displaystyle\int_a^b f\,dx = F(b)-F(a)$, &nbsp;$F'=f$</div></div>
+    <div class="key"><div class="t">TFC</div><div class="f">$\dfrac{d}{dx}\displaystyle\int_a^x f(t)\,dt = f(x)$</div></div>
+    <div class="key"><div class="t">Área entre curvas</div><div class="f">$\displaystyle\int_a^b\big(f-g\big)\,dx$ &nbsp;(arriba − abajo)</div></div>
+  </div>
+
+  <div class="flash">
+    <div class="flash-group fp">
+      <div class="flash-cat">🟡 Potencias y básicas &nbsp;<small style="font-weight:600">(¡siempre $+C$!)</small></div>
+      <div class="flash-row"><div>$k$</div><div class="flash-op">→</div><div class="flash-r">$kx+C$</div></div>
+      <div class="flash-row"><div>$x^n\ (n\neq-1)$</div><div class="flash-op">→</div><div class="flash-r">$\dfrac{x^{n+1}}{n+1}+C$</div></div>
+      <div class="flash-row"><div>$\dfrac{1}{x}$</div><div class="flash-op">→</div><div class="flash-r">$\ln|x|+C$</div></div>
+    </div>
+    <div class="flash-group fe">
+      <div class="flash-cat">🟢 Exponencial</div>
+      <div class="flash-row"><div>$e^{kx}$</div><div class="flash-op">→</div><div class="flash-r">$\dfrac{1}{k}e^{kx}+C$</div></div>
+    </div>
+    <div class="flash-group ft">
+      <div class="flash-cat">🩷 Trigonométricas</div>
+      <div class="flash-row"><div>$\sin x$</div><div class="flash-op">→</div><div class="flash-r">$-\cos x+C$</div></div>
+      <div class="flash-row"><div>$\cos x$</div><div class="flash-op">→</div><div class="flash-r">$\sin x+C$</div></div>
+    </div>
+  </div>
+
+  <div class="note tip">
+    <h4>🧮 Sumas de Riemann (cómo integra un PLC)</h4>
+    Un PLC no integra exacto: <strong>aproxima</strong> sumando rectángulos de ancho $\Delta t$. Más muestras (mayor $n$) → menor error. Izquierda/derecha sub o sobreestiman; el <strong>trapecio</strong> es el más preciso.
+  </div>
+</div>
+
+<!-- ═══════════ EDOs ═══════════ -->
+<div class="block block-edo">
+  <h2><span class="dot">🟠</span> 3 · Ecuaciones diferenciales (EDOs) <span style="font-size:12px;color:var(--muted);font-weight:400">(evolución en el tiempo)</span></h2>
+  <p class="lead">Una EDO relaciona una función con sus derivadas: describe cómo evoluciona un sistema. <strong>Orden</strong> = derivada más alta. <strong>Lineal</strong> = la incógnita y sus derivadas no se multiplican ni van al cuadrado.</p>
+
+  <div class="keys">
+    <div class="key"><div class="t">Variables separables · receta</div><div class="f">$\dfrac{dy}{dx}=g(x)h(y)\Rightarrow \displaystyle\int\frac{dy}{h(y)}=\int g(x)\,dx$</div></div>
+    <div class="key"><div class="t">Estado estacionario</div><div class="f">$t\to\infty$: los términos $e^{-kt}\to0$ → queda el valor final</div></div>
+  </div>
+
+  <table class="edos">
+    <tr><th>Modelo</th><th>EDO</th><th>Solución</th></tr>
+    <tr><td>Separable</td><td>$y'=-2ty,\ y(0)=5$</td><td class="sol">$y=5\,e^{-t^2}$</td></tr>
+    <tr><td>Enfriamiento (Newton)</td><td>$T'=-k(T-T_a)$</td><td class="sol">$T=T_a+(T_0-T_a)e^{-kt}$</td></tr>
+    <tr><td>Circuito RL</td><td>$L\,i'+R\,i=E$</td><td class="sol">$i=\dfrac{E}{R}\big(1-e^{-Rt/L}\big)$</td></tr>
+    <tr><td>Vaciado (Torricelli)</td><td>$h'=-k\sqrt{h},\ h(0)=H_0$</td><td class="sol">$h=\big(\sqrt{H_0}-\tfrac{kt}{2}\big)^2$</td></tr>
+    <tr><td>Llenado de tanque</td><td>$A\,h'=Q-K\,h$</td><td class="sol">$h=\tfrac{Q}{K}\big(1-e^{-Kt/A}\big)$</td></tr>
+  </table>
+  <p style="font-size:12.5px;color:var(--muted);margin:4px 2px">💡 Patrón común: todas tienden a un valor final con forma $1-e^{-t/\tau}$ o $e^{-t/\tau}$. El estacionario sale haciendo $t\to\infty$.</p>
+</div>
+
+<!-- ═══════════ ERRORES ═══════════ -->
+<h2 class="sec">⚠️ Errores que cuestan puntos</h2>
+<div class="note bad">
+  <h4>Los 5 clásicos</h4>
+  <ul>
+    <li><strong>Olvidar el $+C$</strong> en toda integral <em>indefinida</em> (en la definida desaparece al restar).</li>
+    <li><strong>Regla de potencia con $x^{-1}$</strong>: ahí la primitiva es <span class="hl-bad">$\ln|x|$</span>, no $\frac{x^0}{0}$.</li>
+    <li><strong>Olvidar $g'(x)$ en la cadena</strong>: $\frac{d}{dx}\sin(3x)=3\cos(3x)$, no $\cos(3x)$.</li>
+    <li><strong>$e^{kx}$</strong>: al derivar se <em>multiplica</em> por $k$; al integrar se <em>divide</em> por $k$.</li>
+    <li><strong>Orden ≠ linealidad</strong>: $y''+3y'-y^2=0$ es orden 2 <em>pero no lineal</em> (por el $y^2$).</li>
+  </ul>
+</div>
+
+<!-- ═══════════ CHECKLIST ═══════════ -->
+<h2 class="sec">✅ Checklist antes de entrar</h2>
+<p style="font-size:13.5px;color:var(--muted);margin:0 2px 10px">Marcá cada ítem solo si lo podés hacer <strong>sin mirar</strong>. Si te queda alguno sin tildar, volvé a esa fila de la tabla.</p>
+<div class="check" id="check">
+  <label><input type="checkbox"><span>Derivo producto, cociente y cadena de memoria.</span></label>
+  <label><input type="checkbox"><span>Paso raíces y fracciones a potencias ($\sqrt{x}=x^{1/2}$, $\tfrac1{x^2}=x^{-2}$) antes de derivar.</span></label>
+  <label><input type="checkbox"><span>Aplico Barrow: busco primitiva y evalúo $F(b)-F(a)$.</span></label>
+  <label><input type="checkbox"><span>Recuerdo las primitivas básicas y le pongo $+C$ a las indefinidas.</span></label>
+  <label><input type="checkbox"><span>Reconozco orden y linealidad de una EDO de un vistazo.</span></label>
+  <label><input type="checkbox"><span>Resuelvo una separable y saco el estacionario con $t\to\infty$.</span></label>
+  <label><input type="checkbox"><span>Identifico los 5 modelos tipo (Newton, RL, Torricelli, tanque, separable).</span></label>
+</div>
+
+<!-- ═══════════ MINI-QUIZ ═══════════ -->
+<h2 class="sec">🎓 Mini-quiz relámpago</h2>
+<p style="font-size:13.5px;color:var(--muted);margin:0 2px 10px">6 preguntas para fijar. Tocá una opción para ver el resultado.</p>
+<div id="quiz"></div>
+<div class="quiz-score" id="score"></div>
+<div style="text-align:center;margin-top:14px"><button class="btn" id="reset" style="display:none">↻ Reintentar</button></div>
+
+<div class="foot">
+  📐 Resumen express · Análisis Matemático I — Parcial 2 ·
+  <a href="analisis_parcial2.html">resumen completo</a> ·
+  <a href="analisis_parcial2_modelo.html">modelo de parcial</a> ·
+  <a href="index.html">inicio</a>
+</div>
+
+</main>
+
+<script>
+/* ── Barra de progreso de lectura ── */
+const prog = document.getElementById('progress');
+addEventListener('scroll', ()=>{
+  const h = document.documentElement;
+  const pct = (h.scrollTop)/(h.scrollHeight - h.clientHeight) * 100;
+  prog.style.width = Math.min(100, pct) + '%';
+});
+
+/* ── Mini-quiz ── */
+const quizData = [
+  {q:"¿Derivada de $f(x)=\\sin(3x)$?",
+   opts:["$3\\cos(3x)$","$\\cos(3x)$","$3\\cos(x)$","$-3\\cos(3x)$"], correct:0,
+   fb:"Regla de la cadena: derivada de afuera $\\cos(3x)$ por derivada de adentro $3$."},
+  {q:"$\\displaystyle\\int x^{-1}\\,dx = ?$",
+   opts:["$\\ln|x|+C$","$\\dfrac{x^0}{0}+C$","$-x^{-2}+C$","$\\dfrac{x^{0}}{1}+C$"], correct:0,
+   fb:"La regla de potencia falla en $n=-1$: la primitiva de $1/x$ es $\\ln|x|+C$."},
+  {q:"Por Barrow, $\\displaystyle\\int_0^2 (8-2t)\\,dt = ?$",
+   opts:["$12$","$16$","$8$","$4$"], correct:0,
+   fb:"$[8t-t^2]_0^2 = (16-4)-0 = 12$."},
+  {q:"¿Solución de $y'=-2ty$ con $y(0)=5$?",
+   opts:["$y=5e^{-t^2}$","$y=5e^{-2t}$","$y=5-t^2$","$y=5e^{t^2}$"], correct:0,
+   fb:"Separando $dy/y=-2t\\,dt \\Rightarrow \\ln|y|=-t^2+C$; con $y(0)=5$: $y=5e^{-t^2}$."},
+  {q:"En $L\\,i'+R\\,i=E$, la corriente estacionaria ($t\\to\\infty$) es...",
+   opts:["$E/R$","$E\\cdot R$","$R/E$","$0$"], correct:0,
+   fb:"El término transitorio $e^{-Rt/L}\\to0$; queda la ley de Ohm $i_\\infty=E/R$."},
+  {q:"¿Orden y linealidad de $y''+3y'-y^2=0$?",
+   opts:["Orden 2, no lineal","Orden 2, lineal","Orden 1, no lineal","Orden 3, no lineal"], correct:0,
+   fb:"La derivada más alta es $y''$ (orden 2); el término $y^2$ rompe la linealidad."}
+];
+
+const qc = document.getElementById('quiz');
+let answers = new Array(quizData.length).fill(null);
+function render(){
+  qc.innerHTML='';
+  quizData.forEach((q,i)=>{
+    const div=document.createElement('div'); div.className='quiz-q';
+    div.innerHTML='<strong>'+(i+1)+'. '+q.q+'</strong>';
+    const opts=document.createElement('div'); opts.className='opts';
+    q.opts.forEach((opt,j)=>{
+      const o=document.createElement('div'); o.className='opt'; o.innerHTML=opt;
+      o.addEventListener('click',()=>{
+        if(answers[i]!==null) return;
+        answers[i]=j;
+        const ok=j===q.correct;
+        o.classList.add(ok?'correct':'wrong');
+        if(!ok) opts.children[q.correct].classList.add('correct');
+        const fb=document.createElement('div'); fb.className='quiz-feedback';
+        fb.innerHTML=(ok?'✅ Correcto. ':'❌ No. ')+q.fb;
+        div.appendChild(fb);
+        if(window.renderMathInElement) renderMathInElement(div,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+        checkDone();
+      });
+      opts.appendChild(o);
+    });
+    div.appendChild(opts);
+    qc.appendChild(div);
+  });
+  if(window.renderMathInElement) renderMathInElement(qc,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+}
+function checkDone(){
+  if(answers.every(a=>a!==null)){
+    const score=answers.filter((a,i)=>a===quizData[i].correct).length;
+    const el=document.getElementById('score');
+    el.style.display='block';
+    el.innerHTML='🎯 '+score+' / '+quizData.length+(score===quizData.length?' — ¡Listo para el parcial! 🚀':score>=4?' — Bien, repasá lo que fallaste.':' — Volvé a leer el resumen completo.');
+    document.getElementById('reset').style.display='inline-block';
+  }
+}
+document.getElementById('reset').addEventListener('click',()=>{
+  answers=new Array(quizData.length).fill(null);
+  document.getElementById('score').style.display='none';
+  document.getElementById('reset').style.display='none';
+  render();
+});
+render();
+</script>
+</body>
+</html>

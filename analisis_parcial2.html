@@ -13,69 +13,79 @@
 
 <style>
 :root{
-  --bg:#0f172a; --panel:#1e293b; --panel2:#273449; --border:#334155;
-  --text:#e2e8f0; --muted:#94a3b8; --accent:#38bdf8; --accent2:#a78bfa;
-  --good:#34d399; --warn:#fbbf24; --bad:#f87171; --pink:#ec4899;
-  --yellow:#fde68a; --orange:#fb923c;
+  /* Paleta CÁLIDA-CLARA optimizada para retención (unificada con el modelo de parcial) */
+  --bg:#fefcf7; --panel:#ffffff; --panel2:#f5f0e6; --panel3:#faf7f0;
+  --border:#e5dfd0; --border-strong:#cbc4b0;
+  --text:#1f2937; --text-soft:#374151; --muted:#6b7280;
+  --accent:#0369a1; --accent-bg:#dbeafe;
+  --accent2:#7c3aed; --accent2-bg:#ede9fe;
+  --good:#15803d; --good-bg:#dcfce7;
+  --warn:#b45309; --warn-bg:#fef3c7;
+  --bad:#b91c1c; --bad-bg:#fee2e2;
+  --pink:#be185d; --pink-bg:#fce7f3;
+  --orange:#c2410c; --orange-bg:#ffedd5;
+  --yellow:#ca8a04; --teal:#0f766e; --teal-bg:#ccfbf1;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-     background:var(--bg); color:var(--text); line-height:1.55}
+     background:var(--bg); color:var(--text); line-height:1.65}
 
 .layout{display:grid; grid-template-columns:280px 1fr; min-height:100vh}
 
 /* ── Sidebar ── */
-nav.sidebar{background:var(--panel); border-right:1px solid var(--border);
+nav.sidebar{background:var(--panel2); border-right:1px solid var(--border);
             padding:18px 14px; position:sticky; top:0; height:100vh; overflow-y:auto}
-.brand{font-weight:700; font-size:17px; color:white; margin-bottom:4px}
+.brand{font-weight:700; font-size:17px; color:var(--accent); margin-bottom:4px}
 .brand small{display:block; font-weight:400; color:var(--muted); font-size:11px; margin-top:2px}
 .nav-level{font-size:10px; color:var(--muted); letter-spacing:1px; text-transform:uppercase;
            padding:14px 4px 4px}
 nav.sidebar a{display:flex; align-items:center; gap:8px; color:var(--text); text-decoration:none;
               padding:6px 10px; border-radius:6px; font-size:13px; margin:1px 0; transition:background .15s}
-nav.sidebar a:hover,nav.sidebar a.active{background:var(--panel2); color:var(--accent)}
+nav.sidebar a:hover{background:var(--accent-bg); color:var(--accent)}
+nav.sidebar a.active{background:var(--accent); color:#fff}
 
 /* ── Main ── */
 main{padding:28px 40px; max-width:980px}
-h1{font-size:30px; color:white; margin-bottom:4px}
+h1{font-size:30px; color:#1e3a8a; margin-bottom:4px; letter-spacing:-0.5px}
 .subtitle{color:var(--muted); font-size:14px; margin-bottom:28px}
-h2{font-size:22px; color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:7px; margin:40px 0 14px}
+h2{font-size:22px; color:#1e40af; border-bottom:2px solid var(--accent-bg); padding-bottom:7px; margin:40px 0 14px}
 h3{font-size:17px; color:var(--accent2); margin:22px 0 8px}
-h4{font-size:14px; color:var(--yellow); margin:14px 0 6px; font-weight:600}
+h4{font-size:14px; color:var(--warn); margin:14px 0 6px; font-weight:700}
 p,li{font-size:14.5px}
 ul,ol{padding-left:22px; margin:6px 0}
 
 /* ── Cards ── */
 .card{background:var(--panel); border:1px solid var(--border); border-radius:10px;
-      padding:16px 20px; margin:12px 0}
-.card.formula{border-left:4px solid var(--accent2); background:var(--panel2)}
-.card.tip{border-left:4px solid var(--good)}
-.card.warn{border-left:4px solid var(--warn)}
-.card.intuition{border-left:4px solid var(--pink); background:#2a1d2e}
-.card.game{border-left:4px solid var(--accent); background:#0a1929}
-.card.answer{border-left:4px solid var(--good); background:#0d1f16}
-.card.enunciado{border-left:4px solid var(--warn); background:#1c1a0e}
-.card.key{border-left:4px solid var(--pink); background:#1a0d18}
-.card.edo{border-left:4px solid var(--orange); background:#1a1208}
+      padding:16px 20px; margin:12px 0; box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.card.formula{border-left:4px solid var(--accent2); background:var(--accent2-bg)}
+.card.tip{border-left:4px solid var(--good); background:var(--good-bg)}
+.card.warn{border-left:4px solid var(--warn); background:var(--warn-bg)}
+.card.intuition{border-left:4px solid var(--pink); background:var(--pink-bg)}
+.card.game{border-left:4px solid var(--accent); background:var(--accent-bg)}
+.card.answer{border-left:4px solid var(--good); background:var(--good-bg)}
+.card.enunciado{border-left:4px solid var(--orange); background:var(--orange-bg)}
+.card.key{border-left:4px solid var(--pink); background:var(--pink-bg)}
+.card.edo{border-left:4px solid var(--orange); background:var(--orange-bg)}
 
 /* ── Badges ── */
 .badge{display:inline-block; padding:3px 10px; border-radius:12px;
        font-size:12px; font-weight:600; margin-right:6px; margin-bottom:4px}
-.badge.deriv{background:#143526; color:var(--good)}
-.badge.integ{background:#1a1a3e; color:#818cf8}
-.badge.edo{background:#3d2e0a; color:var(--warn)}
-.badge.aplic{background:#3a1c1c; color:var(--bad)}
+.badge.deriv{background:var(--good); color:#fff}
+.badge.integ{background:var(--accent2); color:#fff}
+.badge.edo{background:var(--orange); color:#fff}
+.badge.aplic{background:var(--bad); color:#fff}
 
 /* ── Tables ── */
 table{border-collapse:collapse; width:100%; margin:10px 0; font-size:14px}
 th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
-th{background:var(--panel2); color:var(--accent)}
-td code{background:#0b1220; padding:1px 5px; border-radius:3px; font-size:12px; color:var(--yellow)}
+th{background:var(--accent-bg); color:var(--accent)}
+tr:nth-child(even) td{background:var(--panel3)}
+td code{background:var(--accent2-bg); padding:1px 5px; border-radius:3px; font-size:12px; color:var(--accent2)}
 
 /* ── Formula box ── */
-.formula-box{background:#0b1220; border:1px solid var(--border); border-radius:8px;
-             padding:12px 16px; margin:8px 0; text-align:center; font-size:16px}
+.formula-box{background:linear-gradient(135deg,var(--accent2-bg),#f5f0ff); border:1px solid var(--accent2); border-radius:8px;
+             padding:12px 16px; margin:8px 0; text-align:center; font-size:16px; color:var(--accent2)}
 
 /* ── Grid ── */
 .grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px}
@@ -86,7 +96,7 @@ td code{background:#0b1220; padding:1px 5px; border-radius:3px; font-size:12px; 
 .steps{margin:10px 0}
 .step{display:flex; gap:12px; margin:8px 0; align-items:flex-start}
 .step-n{flex-shrink:0; width:26px; height:26px; border-radius:50%;
-        background:var(--accent2); color:#0b1220; font-size:12px; font-weight:700;
+        background:var(--accent2); color:#fff; font-size:12px; font-weight:700;
         display:flex; align-items:center; justify-content:center}
 .step-body{flex:1; font-size:14px; padding-top:4px}
 
@@ -94,45 +104,45 @@ td code{background:#0b1220; padding:1px 5px; border-radius:3px; font-size:12px; 
 .controls{display:flex; flex-wrap:wrap; gap:12px; margin:14px 0; align-items:flex-end}
 .controls label{display:flex; flex-direction:column; font-size:13px; color:var(--muted); min-width:130px}
 .controls input[type=number],.controls select{
-  background:#0b1220; color:var(--text); border:1px solid var(--border); border-radius:6px;
+  background:var(--panel); color:var(--text); border:1px solid var(--border-strong); border-radius:6px;
   padding:6px 10px; font-size:14px; margin-top:4px}
 .controls input[type=range]{background:transparent; margin-top:4px; width:100%}
 
 /* ── Stats output ── */
 .stat-output{display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));
              gap:10px; margin-top:12px}
-.stat-box{background:#0b1220; padding:10px 12px; border-radius:8px; border:1px solid var(--border)}
+.stat-box{background:var(--accent-bg); padding:10px 12px; border-radius:8px; border:1px solid var(--border)}
 .stat-box .label{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px}
 .stat-box .value{font-size:20px; font-weight:700; color:var(--accent)}
 
 /* ── Plot ── */
-.plot{width:100%; height:340px; background:#0b1220; border-radius:8px; border:1px solid var(--border); margin-top:10px}
-.plot-sm{width:100%; height:240px; background:#0b1220; border-radius:8px; border:1px solid var(--border)}
+.plot{width:100%; height:340px; background:var(--panel); border-radius:8px; border:1px solid var(--border); margin-top:10px}
+.plot-sm{width:100%; height:240px; background:var(--panel); border-radius:8px; border:1px solid var(--border)}
 
 /* ── Buttons ── */
-.btn{background:var(--accent); color:#0b1220; border:none; padding:8px 18px;
+.btn{background:var(--accent); color:#fff; border:none; padding:8px 18px;
      border-radius:6px; font-weight:600; cursor:pointer; font-size:14px; transition:filter .15s}
 .btn:hover{filter:brightness(1.1)}
 .btn-2{background:var(--panel2); color:var(--text); border:1px solid var(--border);
        padding:8px 16px; border-radius:6px; cursor:pointer; font-size:14px}
-.btn-good{background:var(--good); color:#0b1220; border:none; padding:8px 18px;
+.btn-good{background:var(--good); color:#fff; border:none; padding:8px 18px;
           border-radius:6px; font-weight:600; cursor:pointer; font-size:14px}
 
 /* ── Code ── */
-code{background:#0b1220; padding:2px 6px; border-radius:4px; font-size:13px; color:#fcd34d}
-pre{background:#0b1220; border:1px solid var(--border); border-radius:6px;
-    padding:12px 16px; overflow-x:auto; font-size:13px; color:#e2e8f0; line-height:1.6}
+code{background:var(--accent2-bg); padding:2px 6px; border-radius:4px; font-size:13px; color:var(--accent2)}
+pre{background:var(--panel2); border:1px solid var(--border); border-radius:6px;
+    padding:12px 16px; overflow-x:auto; font-size:13px; color:var(--text); line-height:1.6}
 
 /* ── Quiz ── */
 .quiz-q{background:var(--panel2); padding:14px 18px; border-radius:8px; margin:10px 0}
 .quiz-q .opts{display:flex; flex-direction:column; gap:8px; margin-top:10px}
-.quiz-q .opt{background:#0b1220; padding:10px 14px; border-radius:6px; border:2px solid transparent;
+.quiz-q .opt{background:var(--panel); padding:10px 14px; border-radius:6px; border:2px solid var(--border);
              cursor:pointer; transition:all .15s}
 .quiz-q .opt:hover{border-color:var(--accent)}
-.quiz-q .opt.correct{background:#143526; border-color:var(--good)}
-.quiz-q .opt.wrong{background:#3a1c1c; border-color:var(--bad)}
-.quiz-feedback{margin-top:8px; font-size:13.5px; color:var(--muted); padding:8px 10px;
-               background:#0b1220; border-radius:6px; border-left:3px solid var(--accent)}
+.quiz-q .opt.correct{background:var(--good-bg); border-color:var(--good)}
+.quiz-q .opt.wrong{background:var(--bad-bg); border-color:var(--bad)}
+.quiz-feedback{margin-top:8px; font-size:13.5px; color:var(--text-soft); padding:8px 10px;
+               background:var(--panel); border-radius:6px; border-left:3px solid var(--accent)}
 .quiz-score{font-size:28px; font-weight:700; text-align:center; padding:16px; color:var(--accent)}
 
 /* ── Reveal ── */
@@ -166,20 +176,20 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
 .back-home:hover{text-decoration:underline}
 
 /* ── Sandbox ── */
-.sb-wrap{background:#0a1929; border:1px solid var(--border); border-radius:12px; padding:18px; margin:14px 0}
+.sb-wrap{background:var(--panel3); border:1px solid var(--border); border-radius:12px; padding:18px; margin:14px 0}
 .sb-tabs{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px}
 .sb-tab{background:var(--panel2); color:var(--text); border:1px solid var(--border);
         padding:8px 14px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;
         transition:all .15s}
 .sb-tab:hover{border-color:var(--accent)}
-.sb-tab.active{background:var(--accent); color:#0b1220; border-color:var(--accent)}
+.sb-tab.active{background:var(--accent); color:#fff; border-color:var(--accent)}
 .sb-types{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px}
-.sb-type{background:#0b1220; color:var(--muted); border:1px solid var(--border);
+.sb-type{background:var(--panel); color:var(--text-soft); border:1px solid var(--border);
          padding:6px 12px; border-radius:20px; cursor:pointer; font-size:12px; transition:all .15s}
 .sb-type:hover{border-color:var(--accent2); color:var(--text)}
-.sb-type.active{background:var(--accent2); color:#0b1220; border-color:var(--accent2); font-weight:600}
+.sb-type.active{background:var(--accent2); color:#fff; border-color:var(--accent2); font-weight:600}
 .sb-stats{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:14px; padding:10px 14px;
-          background:#0b1220; border-radius:8px; border:1px solid var(--border)}
+          background:var(--accent-bg); border-radius:8px; border:1px solid var(--border)}
 .sb-stat{display:flex; flex-direction:column}
 .sb-stat .lbl{font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px}
 .sb-stat .val{font-size:18px; font-weight:700; color:var(--accent)}
@@ -189,33 +199,33 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
 .sb-step{background:var(--panel); border:1px solid var(--border); border-radius:8px;
          padding:12px 16px; margin:10px 0}
 .sb-step .num{display:inline-block; width:22px; height:22px; border-radius:50%;
-              background:var(--accent2); color:#0b1220; text-align:center; line-height:22px;
+              background:var(--accent2); color:#fff; text-align:center; line-height:22px;
               font-size:12px; font-weight:700; margin-right:8px}
 .sb-step.locked{opacity:0.4}
 .sb-step .qst{font-weight:600; color:var(--yellow); margin-bottom:10px; font-size:14px}
 .sb-opts{display:grid; grid-template-columns:1fr 1fr; gap:8px}
 @media(max-width:600px){.sb-opts{grid-template-columns:1fr}}
-.sb-opt{background:#0b1220; padding:10px 14px; border-radius:6px; border:2px solid transparent;
+.sb-opt{background:var(--panel); padding:10px 14px; border-radius:6px; border:2px solid var(--border);
         cursor:pointer; font-size:14px; transition:all .15s; text-align:left}
 .sb-opt:hover{border-color:var(--accent)}
-.sb-opt.correct{background:#143526; border-color:var(--good)}
-.sb-opt.wrong{background:#3a1c1c; border-color:var(--bad)}
-.sb-fb{margin-top:10px; padding:8px 12px; background:#0b1220; border-radius:6px;
-       border-left:3px solid var(--accent); font-size:13px; color:var(--muted)}
-.sb-result{background:#0d1f16; border-left:4px solid var(--good); padding:14px 18px;
+.sb-opt.correct{background:var(--good-bg); border-color:var(--good)}
+.sb-opt.wrong{background:var(--bad-bg); border-color:var(--bad)}
+.sb-fb{margin-top:10px; padding:8px 12px; background:var(--panel); border-radius:6px;
+       border-left:3px solid var(--accent); font-size:13px; color:var(--text-soft)}
+.sb-result{background:var(--good-bg); border-left:4px solid var(--good); padding:14px 18px;
            border-radius:8px; margin-top:14px; display:none}
 .sb-result.show{display:block}
 .sb-result .lbl{font-size:11px; color:var(--good); text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px}
 .sb-actions{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap}
 .sb-hint{font-size:12px; color:var(--muted); margin-top:6px; font-style:italic}
 .sb-streak{display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:700;
-           background:var(--warn); color:#0b1220; margin-left:6px}
+           background:var(--warn); color:#fff; margin-left:6px}
 .sb-streak.fire{background:var(--orange); animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
 .sb-empty{color:var(--muted); text-align:center; padding:30px; font-style:italic}
 
 /* ── Flashcards modelo de parcial ── */
-.flash-prob{background:#0a1929; border:1px solid var(--border); border-radius:12px; padding:18px; margin:18px 0}
+.flash-prob{background:var(--panel3); border:1px solid var(--border); border-radius:12px; padding:18px; margin:18px 0}
 .flash-prob-title{font-size:16px; color:var(--warn); font-weight:700; margin-bottom:6px}
 .flash-prob-stm{background:var(--panel2); border-left:4px solid var(--warn); padding:12px 16px;
                 border-radius:8px; margin-bottom:14px; font-size:14.5px}
@@ -229,13 +239,13 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
             overflow-y:auto; border:1px solid var(--border)}
 .flash-face.front{background:var(--panel); justify-content:center; align-items:center; text-align:center}
 .flash-face.back{background:var(--panel2); transform:rotateY(180deg); border-left:4px solid var(--good)}
-.flash-step-n{background:var(--accent2); color:#0b1220; width:28px; height:28px; border-radius:50%;
+.flash-step-n{background:var(--accent2); color:#fff; width:28px; height:28px; border-radius:50%;
               display:inline-flex; align-items:center; justify-content:center; font-weight:700;
               font-size:13px; margin-bottom:10px}
 .flash-q{font-size:14.5px; font-weight:600; color:var(--yellow); margin-bottom:10px}
 .flash-hint{font-size:12px; color:var(--muted); margin-top:10px; font-style:italic}
 .flash-a{font-size:14px; color:var(--text); margin-top:auto}
-.flash-tag{display:inline-block; background:var(--accent); color:#0b1220; font-size:10px;
+.flash-tag{display:inline-block; background:var(--accent); color:#fff; font-size:10px;
            padding:2px 8px; border-radius:10px; font-weight:700; letter-spacing:.5px;
            margin-bottom:8px; align-self:flex-start}
 .flash-flip-hint{font-size:11px; color:var(--muted); text-align:center; margin-top:8px}
@@ -313,6 +323,7 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
   <a href="#modelo">🎴 Modelo de parcial (tarjetas)</a>
 
   <div class="nav-level">🏆 Cierre</div>
+  <a href="analisis_parcial2_express.html">⏱️ Resumen en 20 min</a>
   <a href="#cheatsheet">📋 Cheat sheet</a>
   <a href="#errores">⚠️ Errores comunes</a>
   <a href="#quiz">🎓 Quiz final (12 preguntas)</a>
@@ -1142,7 +1153,7 @@ $$h(t)=\frac{Q_{in}}{K}\left(1-e^{-Kt/A}\right)$$
 <p><strong>🎯 Cómo usar:</strong> tapate la respuesta, leé la pregunta, pensá la solución en la cabeza, después das vuelta la tarjeta. Repetí hasta que <em>no necesites darla vuelta</em> para saberla.</p>
 </div>
 
-<a href="analisis_parcial2_modelo.html" style="display:block; background:linear-gradient(135deg,#1a1230,#0a1929); border:1px solid var(--accent); border-radius:12px; padding:20px 24px; margin:18px 0; box-shadow:0 4px 20px rgba(56,189,248,0.15); text-decoration:none; color:inherit; transition:transform .15s, box-shadow .15s">
+<a href="analisis_parcial2_modelo.html" style="display:block; background:linear-gradient(135deg,var(--accent2-bg),var(--accent-bg)); border:1px solid var(--accent); border-radius:12px; padding:20px 24px; margin:18px 0; box-shadow:0 3px 14px rgba(3,105,161,0.12); text-decoration:none; color:inherit; transition:transform .15s, box-shadow .15s">
   <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap">
     <div style="font-size:32px">🎯</div>
     <div style="flex:1; min-width:200px">
@@ -1274,15 +1285,15 @@ function drawDeriv(){
   document.getElementById('dfa').textContent = isFinite(fa)?fa.toFixed(2):'—';
   document.getElementById('dfpa').textContent = isFinite(fpa)?fpa.toFixed(2):'—';
   Plotly.react('dplot',[
-    {x:xs, y:ys, type:'scatter', mode:'lines', line:{color:'#38bdf8', width:3}, name:F.lbl},
-    {x:tx, y:ty, type:'scatter', mode:'lines', line:{color:'#fb923c', width:2, dash:'dash'}, name:'tangente'},
-    {x:[a], y:[fa], type:'scatter', mode:'markers', marker:{color:'#a78bfa', size:12}, name:'(a, f(a))'}
+    {x:xs, y:ys, type:'scatter', mode:'lines', line:{color:'#0369a1', width:3}, name:F.lbl},
+    {x:tx, y:ty, type:'scatter', mode:'lines', line:{color:'#c2410c', width:2, dash:'dash'}, name:'tangente'},
+    {x:[a], y:[fa], type:'scatter', mode:'markers', marker:{color:'#7c3aed', size:12}, name:'(a, f(a))'}
   ],{
-    paper_bgcolor:'#0b1220', plot_bgcolor:'#0b1220',
-    font:{color:'#e2e8f0'},
+    paper_bgcolor:'#ffffff', plot_bgcolor:'#fdfbf5',
+    font:{color:'#1f2937'},
     margin:{t:20,r:20,b:40,l:40},
-    xaxis:{gridcolor:'#334155', zerolinecolor:'#64748b'},
-    yaxis:{gridcolor:'#334155', zerolinecolor:'#64748b'},
+    xaxis:{gridcolor:'#e5dfd0', zerolinecolor:'#cbc4b0'},
+    yaxis:{gridcolor:'#e5dfd0', zerolinecolor:'#cbc4b0'},
     legend:{orientation:'h', y:-0.15}
   },{displayModeBar:false, responsive:true});
 }
@@ -1309,7 +1320,7 @@ function drawRiemann(){
   const xs=[], ys=[];
   for(let x=0; x<=b; x+=b/200){ xs.push(x); ys.push(F.f(x)); }
   // rectángulos
-  const traces=[{x:xs, y:ys, type:'scatter', mode:'lines', line:{color:'#38bdf8', width:3}, name:F.lbl, fill:'tozeroy', fillcolor:'rgba(56,189,248,0.1)'}];
+  const traces=[{x:xs, y:ys, type:'scatter', mode:'lines', line:{color:'#0369a1', width:3}, name:F.lbl, fill:'tozeroy', fillcolor:'rgba(56,189,248,0.1)'}];
   let approx=0;
   for(let i=0; i<n; i++){
     const x0=i*dt, x1=(i+1)*dt;
@@ -1318,9 +1329,9 @@ function drawRiemann(){
     else if(method==='right'){ h=F.f(x1); approx+=h*dt; }
     else { h=(F.f(x0)+F.f(x1))/2; approx+=h*dt; }
     if(method==='trap'){
-      traces.push({x:[x0,x0,x1,x1], y:[0,F.f(x0),F.f(x1),0], type:'scatter', mode:'lines', fill:'toself', fillcolor:'rgba(251,146,60,0.25)', line:{color:'#fb923c', width:1}, showlegend:i===0, name:'PLC'});
+      traces.push({x:[x0,x0,x1,x1], y:[0,F.f(x0),F.f(x1),0], type:'scatter', mode:'lines', fill:'toself', fillcolor:'rgba(251,146,60,0.25)', line:{color:'#c2410c', width:1}, showlegend:i===0, name:'PLC'});
     } else {
-      traces.push({x:[x0,x0,x1,x1,x0], y:[0,h,h,0,0], type:'scatter', mode:'lines', fill:'toself', fillcolor:'rgba(251,146,60,0.25)', line:{color:'#fb923c', width:1}, showlegend:i===0, name:'PLC'});
+      traces.push({x:[x0,x0,x1,x1,x0], y:[0,h,h,0,0], type:'scatter', mode:'lines', fill:'toself', fillcolor:'rgba(251,146,60,0.25)', line:{color:'#c2410c', width:1}, showlegend:i===0, name:'PLC'});
     }
   }
   const exact=F.F(b)-F.F(0);
@@ -1329,11 +1340,11 @@ function drawRiemann(){
   document.getElementById('rexact').textContent=exact.toFixed(3);
   document.getElementById('rerr').textContent=err.toFixed(2)+'%';
   Plotly.react('rplot', traces, {
-    paper_bgcolor:'#0b1220', plot_bgcolor:'#0b1220',
-    font:{color:'#e2e8f0'},
+    paper_bgcolor:'#ffffff', plot_bgcolor:'#fdfbf5',
+    font:{color:'#1f2937'},
     margin:{t:20,r:20,b:40,l:40},
-    xaxis:{gridcolor:'#334155', title:'t'},
-    yaxis:{gridcolor:'#334155', title:'v(t)'},
+    xaxis:{gridcolor:'#e5dfd0', title:'t'},
+    yaxis:{gridcolor:'#e5dfd0', title:'v(t)'},
     legend:{orientation:'h', y:-0.15}
   },{displayModeBar:false, responsive:true});
 }
@@ -1357,14 +1368,14 @@ function drawEdo(){
   document.getElementById('tau').textContent=tau.toFixed(2);
   document.getElementById('hfin').textContent=ys[ys.length-1].toFixed(2)+' m';
   Plotly.react('eplot',[
-    {x:xs, y:ys, type:'scatter', mode:'lines', line:{color:'#fb923c', width:3}, name:'h(t)'},
-    {x:[0,tmax], y:[hss,hss], type:'scatter', mode:'lines', line:{color:'#34d399', width:2, dash:'dash'}, name:'h estacionario'}
+    {x:xs, y:ys, type:'scatter', mode:'lines', line:{color:'#c2410c', width:3}, name:'h(t)'},
+    {x:[0,tmax], y:[hss,hss], type:'scatter', mode:'lines', line:{color:'#15803d', width:2, dash:'dash'}, name:'h estacionario'}
   ],{
-    paper_bgcolor:'#0b1220', plot_bgcolor:'#0b1220',
-    font:{color:'#e2e8f0'},
+    paper_bgcolor:'#ffffff', plot_bgcolor:'#fdfbf5',
+    font:{color:'#1f2937'},
     margin:{t:20,r:20,b:40,l:40},
-    xaxis:{gridcolor:'#334155', title:'tiempo (min)'},
-    yaxis:{gridcolor:'#334155', title:'altura h (m)', rangemode:'tozero'},
+    xaxis:{gridcolor:'#e5dfd0', title:'tiempo (min)'},
+    yaxis:{gridcolor:'#e5dfd0', title:'altura h (m)', rangemode:'tozero'},
     legend:{orientation:'h', y:-0.15}
   },{displayModeBar:false, responsive:true});
 }

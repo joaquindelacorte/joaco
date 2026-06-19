@@ -240,6 +240,34 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
            margin-bottom:8px; align-self:flex-start}
 .flash-flip-hint{font-size:11px; color:var(--muted); text-align:center; margin-top:8px}
 @media(max-width:600px){.flash-card{height:240px}}
+
+/* ── Tablas de retención (derivadas / integrales) ── */
+/* Paleta CLARA sobre fondo oscuro: alto contraste + color por familia = mejor memoria */
+.reftab{display:grid; gap:16px; margin:18px 0}
+.reftab-group{border-radius:12px; overflow:hidden; border:1px solid rgba(0,0,0,.2);
+              box-shadow:0 3px 14px rgba(0,0,0,.4)}
+.reftab-cat{padding:9px 18px; font-weight:800; font-size:13.5px; letter-spacing:.4px;
+            color:#1b1408; display:flex; align-items:center; gap:8px}
+.reftab-row{display:grid; grid-template-columns:1fr 40px 1.15fr; align-items:center;
+            gap:6px; padding:11px 18px; background:#fffdf7; color:#1e293b;
+            border-top:1px solid #ece5d5}
+.reftab-row:nth-child(odd){background:#f7f2e8}
+.reftab-f{font-size:15.5px}
+.reftab-op{text-align:center; font-size:18px; font-weight:800; color:#c2aa7e}
+.reftab-r{font-size:15.5px; font-weight:700; color:var(--rc)}
+.reftab-hd{display:grid; grid-template-columns:1fr 40px 1.15fr; gap:6px;
+           padding:7px 18px; background:#efe7d6; color:#57534e;
+           font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.6px}
+.reftab-hd span:nth-child(2){text-align:center}
+/* familias de color */
+.fam-pot{--rc:#b45309}  .fam-pot .reftab-cat{background:#fcd34d}
+.fam-exp{--rc:#15803d}  .fam-exp .reftab-cat{background:#86efac}
+.fam-trig{--rc:#be185d} .fam-trig .reftab-cat{background:#f9a8d4}
+.fam-comp{--rc:#6d28d9} .fam-comp .reftab-cat{background:#c4b5fd}
+@media(max-width:600px){
+  .reftab-row,.reftab-hd{grid-template-columns:1fr 26px 1.15fr; padding-left:12px; padding-right:12px}
+  .reftab-f,.reftab-r{font-size:13.5px}
+}
 </style>
 </head>
 <body>
@@ -255,6 +283,7 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
   <a href="#intro">👋 Presentación</a>
   <a href="#deriv-concepto">1. Razón de cambio</a>
   <a href="#deriv-reglas">2. Reglas de derivación</a>
+  <a href="#tabla-deriv">📋 Tabla de derivadas</a>
   <a href="#deriv-sim">🎮 Simulador tangente</a>
   <a href="#deriv-aplic">3. Aplicaciones (sensor / actuador)</a>
   <a href="#deriv-ej">📝 Ejercicios derivadas</a>
@@ -262,6 +291,7 @@ hr{border:none; border-top:1px solid var(--border); margin:30px 0}
   <div class="nav-level">🟣 Bloque 2 · Integrales</div>
   <a href="#int-concepto">4. Integral como acumulación</a>
   <a href="#tfc">5. TFC y Regla de Barrow</a>
+  <a href="#tabla-integ">📋 Tabla de integrales</a>
   <a href="#riemann">6. Sumas de Riemann (PLC)</a>
   <a href="#riemann-sim">🎮 Simulador Riemann vs Barrow</a>
   <a href="#hidro">7. Variables hidromecánicas</a>
@@ -369,6 +399,56 @@ $$f'(a) = \lim_{h \to 0} \frac{f(a+h) - f(a)}{h}$$
   <li>$\dfrac{1}{x^2} = x^{-2}$ ⟹ $\dfrac{d}{dx}\!\left[\tfrac{1}{x^2}\right]=-2x^{-3}=-\dfrac{2}{x^3}$</li>
 </ul>
 <p>Así evitás regla del cociente cuando hay potencias y fracciones simples.</p>
+</div>
+
+<!-- ── TABLA MAESTRA DE DERIVADAS ── -->
+<h2 id="tabla-deriv"><span class="badge deriv">Derivadas</span>📋 Tabla maestra de derivadas</h2>
+
+<p>Tu <strong>chuleta de memoria</strong>. Cada familia tiene un <span class="hl-accent">color propio</span>: al estudiar, asociá el color con el tipo de función — recordás mejor "lo amarillo son potencias, lo rosa es trigonometría". Leé cada fila como <em>"derivada de la izquierda = la derecha"</em>.</p>
+
+<div class="reftab">
+
+  <div class="reftab-group fam-pot">
+    <div class="reftab-cat">🟡 Básicas y potencias</div>
+    <div class="reftab-hd"><span>$f(x)$</span><span></span><span>$f'(x)$</span></div>
+    <div class="reftab-row"><div class="reftab-f">$c$ (constante)</div><div class="reftab-op">→</div><div class="reftab-r">$0$</div></div>
+    <div class="reftab-row"><div class="reftab-f">$x$</div><div class="reftab-op">→</div><div class="reftab-r">$1$</div></div>
+    <div class="reftab-row"><div class="reftab-f">$x^n$</div><div class="reftab-op">→</div><div class="reftab-r">$n\,x^{n-1}$</div></div>
+    <div class="reftab-row"><div class="reftab-f">$\sqrt{x}=x^{1/2}$</div><div class="reftab-op">→</div><div class="reftab-r">$\dfrac{1}{2\sqrt{x}}$</div></div>
+    <div class="reftab-row"><div class="reftab-f">$\dfrac{1}{x}=x^{-1}$</div><div class="reftab-op">→</div><div class="reftab-r">$-\dfrac{1}{x^2}$</div></div>
+  </div>
+
+  <div class="reftab-group fam-exp">
+    <div class="reftab-cat">🟢 Exponencial y logaritmo</div>
+    <div class="reftab-hd"><span>$f(x)$</span><span></span><span>$f'(x)$</span></div>
+    <div class="reftab-row"><div class="reftab-f">$e^{x}$</div><div class="reftab-op">→</div><div class="reftab-r">$e^{x}$</div></div>
+    <div class="reftab-row"><div class="reftab-f">$e^{kx}$</div><div class="reftab-op">→</div><div class="reftab-r">$k\,e^{kx}$</div></div>
+    <div class="reftab-row"><div class="reftab-f">$a^{x}$</div><div class="reftab-op">→</div><div class="reftab-r">$a^{x}\ln a$</div></div>
+    <div class="reftab-row"><div class="reftab-f">$\ln x$</div><div class="reftab-op">→</div><div class="reftab-r">$\dfrac{1}{x}$</div></div>
+    <div class="reftab-row"><div class="reftab-f">$\log_a x$</div><div class="reftab-op">→</div><div class="reftab-r">$\dfrac{1}{x\ln a}$</div></div>
+  </div>
+
+  <div class="reftab-group fam-trig">
+    <div class="reftab-cat">🩷 Trigonométricas</div>
+    <div class="reftab-hd"><span>$f(x)$</span><span></span><span>$f'(x)$</span></div>
+    <div class="reftab-row"><div class="reftab-f">$\sin x$</div><div class="reftab-op">→</div><div class="reftab-r">$\cos x$</div></div>
+    <div class="reftab-row"><div class="reftab-f">$\cos x$</div><div class="reftab-op">→</div><div class="reftab-r">$-\sin x$</div></div>
+    <div class="reftab-row"><div class="reftab-f">$\tan x$</div><div class="reftab-op">→</div><div class="reftab-r">$\sec^2 x=\dfrac{1}{\cos^2 x}$</div></div>
+  </div>
+
+  <div class="reftab-group fam-comp">
+    <div class="reftab-cat">🟣 Reglas para funciones combinadas</div>
+    <div class="reftab-hd"><span>operación</span><span></span><span>derivada</span></div>
+    <div class="reftab-row"><div class="reftab-f">Producto&nbsp; $f\cdot g$</div><div class="reftab-op">→</div><div class="reftab-r">$f'g+fg'$</div></div>
+    <div class="reftab-row"><div class="reftab-f">Cociente&nbsp; $\dfrac{f}{g}$</div><div class="reftab-op">→</div><div class="reftab-r">$\dfrac{f'g-fg'}{g^2}$</div></div>
+    <div class="reftab-row"><div class="reftab-f">Cadena&nbsp; $f\big(g(x)\big)$</div><div class="reftab-op">→</div><div class="reftab-r">$f'\big(g(x)\big)\cdot g'(x)$</div></div>
+  </div>
+
+</div>
+
+<div class="card tip">
+<h4>💡 Cómo usar los colores para retener</h4>
+<p>Tapá la columna derecha y reconstruila de memoria, familia por familia. Si te trabás, el color te recuerda <em>qué tipo de regla</em> aplica antes de recordar la fórmula exacta. La <span class="hl-purple">violeta (combinadas)</span> es la que más se evalúa en el parcial: producto, cociente y cadena.</p>
 </div>
 
 <!-- ── SIMULADOR TANGENTE ── -->
@@ -548,6 +628,59 @@ $$\int_a^b f(x)\,dx = F(b)-F(a)\quad \text{donde } F'=f$$
 <p>Primitiva: $F(t)=t^3+t$</p>
 <p>$F(1)-F(0)=(1+1)-(0+0)=2$</p>
 <p>→ La distancia exacta recorrida por el motor entre $t=0$ y $t=1$ es <span class="hl-good">2 m</span>.</p>
+</div>
+
+<!-- ── TABLA MAESTRA DE INTEGRALES ── -->
+<h2 id="tabla-integ"><span class="badge integ">Integrales</span>📋 Tabla maestra de integrales</h2>
+
+<p>La integral <strong>deshace</strong> la derivada, así que esta tabla es la de derivadas <em>leída al revés</em>. Mismos colores por familia para anclar la memoria. <span class="hl-warn">Toda integral indefinida lleva $+\,C$</span> — no te lo olvides en el parcial.</p>
+
+<div class="reftab">
+
+  <div class="reftab-group fam-pot">
+    <div class="reftab-cat">🟡 Básicas y potencias</div>
+    <div class="reftab-hd"><span>$f(x)$</span><span></span><span>$\int f(x)\,dx$</span></div>
+    <div class="reftab-row"><div class="reftab-f">$k$ (constante)</div><div class="reftab-op">→</div><div class="reftab-r">$k\,x+C$</div></div>
+    <div class="reftab-row"><div class="reftab-f">$x^n$ &nbsp;$(n\neq-1)$</div><div class="reftab-op">→</div><div class="reftab-r">$\dfrac{x^{n+1}}{n+1}+C$</div></div>
+    <div class="reftab-row"><div class="reftab-f">$\dfrac{1}{x}$</div><div class="reftab-op">→</div><div class="reftab-r">$\ln|x|+C$</div></div>
+    <div class="reftab-row"><div class="reftab-f">$\sqrt{x}=x^{1/2}$</div><div class="reftab-op">→</div><div class="reftab-r">$\dfrac{2}{3}x^{3/2}+C$</div></div>
+  </div>
+
+  <div class="reftab-group fam-exp">
+    <div class="reftab-cat">🟢 Exponencial y logaritmo</div>
+    <div class="reftab-hd"><span>$f(x)$</span><span></span><span>$\int f(x)\,dx$</span></div>
+    <div class="reftab-row"><div class="reftab-f">$e^{x}$</div><div class="reftab-op">→</div><div class="reftab-r">$e^{x}+C$</div></div>
+    <div class="reftab-row"><div class="reftab-f">$e^{kx}$</div><div class="reftab-op">→</div><div class="reftab-r">$\dfrac{1}{k}e^{kx}+C$</div></div>
+    <div class="reftab-row"><div class="reftab-f">$a^{x}$</div><div class="reftab-op">→</div><div class="reftab-r">$\dfrac{a^{x}}{\ln a}+C$</div></div>
+    <div class="reftab-row"><div class="reftab-f">$\ln x$</div><div class="reftab-op">→</div><div class="reftab-r">$x\ln x-x+C$</div></div>
+  </div>
+
+  <div class="reftab-group fam-trig">
+    <div class="reftab-cat">🩷 Trigonométricas</div>
+    <div class="reftab-hd"><span>$f(x)$</span><span></span><span>$\int f(x)\,dx$</span></div>
+    <div class="reftab-row"><div class="reftab-f">$\sin x$</div><div class="reftab-op">→</div><div class="reftab-r">$-\cos x+C$</div></div>
+    <div class="reftab-row"><div class="reftab-f">$\cos x$</div><div class="reftab-op">→</div><div class="reftab-r">$\sin x+C$</div></div>
+    <div class="reftab-row"><div class="reftab-f">$\sec^2 x$</div><div class="reftab-op">→</div><div class="reftab-r">$\tan x+C$</div></div>
+  </div>
+
+  <div class="reftab-group fam-comp">
+    <div class="reftab-cat">🟣 Propiedades y técnicas</div>
+    <div class="reftab-hd"><span>operación</span><span></span><span>resultado</span></div>
+    <div class="reftab-row"><div class="reftab-f">Múltiplo&nbsp; $\displaystyle\int k\,f\,dx$</div><div class="reftab-op">→</div><div class="reftab-r">$k\displaystyle\int f\,dx$</div></div>
+    <div class="reftab-row"><div class="reftab-f">Suma&nbsp; $\displaystyle\int (f\pm g)\,dx$</div><div class="reftab-op">→</div><div class="reftab-r">$\displaystyle\int f\,dx \pm \int g\,dx$</div></div>
+    <div class="reftab-row"><div class="reftab-f">Sustitución&nbsp; $\displaystyle\int f(g)\,g'\,dx$</div><div class="reftab-op">→</div><div class="reftab-r">$\displaystyle\int f(u)\,du$, &nbsp;$u=g(x)$</div></div>
+    <div class="reftab-row"><div class="reftab-f">Definida (Barrow)&nbsp; $\displaystyle\int_a^b f\,dx$</div><div class="reftab-op">→</div><div class="reftab-r">$F(b)-F(a)$</div></div>
+  </div>
+
+</div>
+
+<div class="card warn">
+<h4>⚠️ Errores que mata el color olvidar</h4>
+<ul>
+  <li><strong>El $+C$</strong> en toda integral <em>indefinida</em> (en la definida desaparece al restar).</li>
+  <li>La regla de potencia <span class="hl-bad">no sirve para $x^{-1}$</span>: ahí la primitiva es $\ln|x|$, no $\frac{x^0}{0}$.</li>
+  <li>En $\int e^{kx}dx$ va dividido por $k$ — es lo contrario de derivar (donde se multiplica por $k$).</li>
+</ul>
 </div>
 
 <!-- ── 6. RIEMANN ── -->
@@ -1477,7 +1610,7 @@ const SB_DERIV = {
              {t:km(`u=${a}x,\\ v=x^2+${b},\\ u'=${a},\\ v'=2x`), ok:true, fb:'Bien.'},
              {t:km(`u=${a}x,\\ v=x^2+${b},\\ u'=${a}x,\\ v'=2x+${b}`), ok:false, fb:'No derivaste u y v.'},
              {t:km(`u=x^2+${b},\\ v=${a}x`), ok:false, fb:'Invertiste numerador y denominador.'},
-             {t:km(`u'=1,\\ v'=2x`), ok:false, fb:'Te olvidaste del coeficiente $${a}$ en $u\'$.`.replace('${a}',a)}
+             {t:km(`u'=1,\\ v'=2x`), ok:false, fb:'Te olvidaste del coeficiente $${a}$ en $u\'$.'.replace('${a}',a)}
            ])},
           {q:'Aplicá $\\dfrac{u\'v-uv\'}{v^2}$',
            opts:shuffle([

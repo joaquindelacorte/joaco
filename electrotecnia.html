@@ -225,6 +225,7 @@ details[open] summary{background:var(--blue-bg);color:var(--blue)}
     <button class="tab-btn"         onclick="showPage('juegos',this)">🎮 Juegos</button>
     <button class="tab-btn"         onclick="showPage('quiz',this)">🧠 Quiz</button>
     <button class="tab-btn"         onclick="showPage('cheatsheet',this)">📋 Fórmulas</button>
+    <button class="tab-btn"         onclick="showPage('parcial',this)">📝 Parcial</button>
   </div>
 </nav>
 
@@ -1210,6 +1211,523 @@ details[open] summary{background:var(--blue-bg);color:var(--blue)}
       <tr><td>Potencia</td><td>W</td><td>mW</td><td>kW</td><td>MW</td></tr>
       <tr><td>Energía</td><td>J</td><td>mJ</td><td>kJ</td><td>MJ</td></tr>
     </tbody></table></div>
+  </div>
+
+</div></div>
+
+<!-- ═══════════════════════ PARCIAL ═══════════════════════ -->
+<div id="parcial" class="page"><div class="container">
+
+  <div style="background:linear-gradient(135deg,#0f2d5a,#1a4e8a);color:#fff;border-radius:14px;padding:1.5rem 1.8rem;margin-bottom:2rem">
+    <div style="font-size:.75rem;font-weight:700;letter-spacing:1px;opacity:.7;text-transform:uppercase;margin-bottom:.3rem">Universidad Nacional de Pilar</div>
+    <div style="font-size:1.3rem;font-weight:900;margin-bottom:.2rem">1° Examen — Electrotecnia &nbsp;·&nbsp; Modelo 3</div>
+    <div style="font-size:.88rem;opacity:.8">Comisión 2 · 4 ejercicios · 100 puntos · Resolución completa paso a paso</div>
+  </div>
+
+  <!-- EJ 1, 2, 3 rápidos -->
+  <div class="stitle"><span class="ico">⚡</span>Ejercicios Rápidos (10 pts c/u)</div>
+  <div class="grid g3" style="margin-bottom:2rem">
+    <div class="card bl">
+      <h3>Ej 1 — Carga eléctrica</h3>
+      <p style="margin:.4rem 0 .6rem">Por un cable circula una corriente de <strong>3 A</strong> durante <strong>10 s</strong>. ¿Qué cantidad de carga ha pasado?</p>
+      <div class="fbox" style="padding:.6rem 1rem"><span class="big">Q = I · t = 3 × 10</span><span class="sub" style="color:#7dd3fc;font-size:1rem;font-weight:700">Q = 30 C</span></div>
+    </div>
+    <div class="card gr">
+      <h3>Ej 2 — Resistividad</h3>
+      <p style="margin:.4rem 0 .6rem">Conductor de cobre: largo <strong>1 km</strong>, sección <strong>1,5 mm²</strong>, ρ = 0,018 Ω·mm²/m. Calcular R.</p>
+      <div class="fbox" style="padding:.6rem 1rem"><span class="big">R = ρ · L / S = 0,018 · 1000 / 1,5</span><span class="sub" style="color:#7dd3fc;font-size:1rem;font-weight:700">R = 12 Ω</span></div>
+    </div>
+    <div class="card or">
+      <h3>Ej 3 — Variación con temperatura</h3>
+      <p style="margin:.4rem 0 .6rem">R₀ = 10 Ω a 0°C, α = 0,00382/K. Calcular R a 45°C.</p>
+      <div class="fbox" style="padding:.6rem 1rem"><span class="big">R = 10·(1 + 0,00382 · 45)</span><span class="sub" style="color:#7dd3fc;font-size:1rem;font-weight:700">R ≈ 11,71 Ω</span></div>
+    </div>
+  </div>
+
+  <!-- EJ 4 CIRCUITO -->
+  <div class="stitle"><span class="ico">🔌</span>Ejercicio 4 — Circuito Complejo (70 pts)</div>
+  <div class="tip" style="margin-bottom:1rem"><span>📋</span><span><strong>Consignas:</strong> a) Circuitos equivalentes y R total · b) Indicar corrientes · c) Calcular corrientes y verificar LKC · d) Calcular tensiones y verificar LKT</span></div>
+
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)">
+      <h3>Circuito con 9 resistencias — U = 30 V</h3>
+      <span class="ej-badge">70 puntos</span>
+    </div>
+    <div class="ej-body">
+
+      <!-- Datos -->
+      <div class="ej-enunciado">
+        <strong>Datos:</strong> U = 30 V &nbsp;|&nbsp; R1 = 8 Ω &nbsp;|&nbsp; R2 = 12 Ω &nbsp;|&nbsp; R3 = 36 Ω &nbsp;|&nbsp; R4 = 20 Ω &nbsp;|&nbsp; R5 = 24 Ω &nbsp;|&nbsp; R6 = 46 Ω &nbsp;|&nbsp; R7 = 10 Ω &nbsp;|&nbsp; R8 = 28 Ω &nbsp;|&nbsp; R9 = 14 Ω
+      </div>
+
+      <!-- Circuito original siempre visible -->
+      <div style="margin:1rem 0">
+        <div style="font-size:.78rem;font-weight:700;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.5rem;text-align:center">Circuito original — identificá los nodos A, B, C, D, E, F</div>
+        <svg viewBox="0 0 575 305" style="width:100%;max-width:560px;display:block;margin:0 auto;background:#fafafa;border-radius:12px;border:1px solid var(--border)">
+          <!-- BATERÍA -->
+          <line x1="45" y1="25" x2="45" y2="105" stroke="#333" stroke-width="2"/>
+          <line x1="28" y1="105" x2="62" y2="105" stroke="#333" stroke-width="2.5"/>
+          <line x1="35" y1="115" x2="55" y2="115" stroke="#333" stroke-width="1.5"/>
+          <line x1="28" y1="128" x2="62" y2="128" stroke="#333" stroke-width="2.5"/>
+          <line x1="35" y1="138" x2="55" y2="138" stroke="#333" stroke-width="1.5"/>
+          <line x1="45" y1="138" x2="45" y2="278" stroke="#333" stroke-width="2"/>
+          <text x="66" y="113" font-size="12" fill="#1a4e8a" font-weight="bold">+</text>
+          <text x="66" y="140" font-size="12" fill="#1a4e8a" font-weight="bold">−</text>
+          <text x="13" y="125" font-size="12" fill="#c05c00" font-weight="bold" text-anchor="middle" transform="rotate(-90,13,125)">30 V</text>
+          <!-- R9 horizontal -->
+          <line x1="45" y1="25" x2="80" y2="25" stroke="#333" stroke-width="2"/>
+          <rect x="80" y="15" width="72" height="20" rx="4" fill="#e8f0fb" stroke="#1a4e8a" stroke-width="2"/>
+          <text x="116" y="28" font-size="11" fill="#1a4e8a" font-weight="bold" text-anchor="middle">R9 = 14 Ω</text>
+          <line x1="152" y1="25" x2="172" y2="25" stroke="#333" stroke-width="2"/>
+          <!-- NODO A -->
+          <circle cx="172" cy="25" r="5" fill="#1a4e8a"/>
+          <text x="172" y="12" font-size="11" fill="#1a4e8a" font-weight="bold" text-anchor="middle">A</text>
+          <!-- RAMA IZQUIERDA R1+R2 -->
+          <line x1="172" y1="25" x2="172" y2="57" stroke="#333" stroke-width="2"/>
+          <rect x="147" y="57" width="50" height="22" rx="4" fill="#e8f0fb" stroke="#1a4e8a" stroke-width="2"/>
+          <text x="172" y="71" font-size="10" fill="#1a4e8a" font-weight="bold" text-anchor="middle">R1=8Ω</text>
+          <line x1="172" y1="79" x2="172" y2="108" stroke="#333" stroke-width="2"/>
+          <rect x="147" y="108" width="50" height="22" rx="4" fill="#e8f0fb" stroke="#1a4e8a" stroke-width="2"/>
+          <text x="172" y="122" font-size="10" fill="#1a4e8a" font-weight="bold" text-anchor="middle">R2=12Ω</text>
+          <line x1="172" y1="130" x2="172" y2="278" stroke="#333" stroke-width="2"/>
+          <!-- R3 horizontal -->
+          <line x1="172" y1="25" x2="210" y2="25" stroke="#333" stroke-width="2"/>
+          <rect x="210" y="15" width="80" height="20" rx="4" fill="#fff3e0" stroke="#c05c00" stroke-width="2"/>
+          <text x="250" y="28" font-size="11" fill="#c05c00" font-weight="bold" text-anchor="middle">R3 = 36 Ω</text>
+          <line x1="290" y1="25" x2="332" y2="25" stroke="#333" stroke-width="2"/>
+          <!-- NODO C -->
+          <circle cx="332" cy="25" r="5" fill="#15803d"/>
+          <text x="332" y="12" font-size="11" fill="#15803d" font-weight="bold" text-anchor="middle">C</text>
+          <!-- R4 (rama izquierda del paralelo C→D) -->
+          <line x1="332" y1="25" x2="332" y2="57" stroke="#333" stroke-width="2"/>
+          <rect x="307" y="57" width="50" height="22" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+          <text x="332" y="71" font-size="10" fill="#15803d" font-weight="bold" text-anchor="middle">R4=20Ω</text>
+          <line x1="332" y1="79" x2="332" y2="170" stroke="#333" stroke-width="2"/>
+          <!-- R5 horizontal (inicio de RA) -->
+          <line x1="332" y1="25" x2="374" y2="25" stroke="#333" stroke-width="2"/>
+          <rect x="374" y="15" width="80" height="20" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+          <text x="414" y="28" font-size="11" fill="#7c3aed" font-weight="bold" text-anchor="middle">R5 = 24 Ω</text>
+          <line x1="454" y1="25" x2="512" y2="25" stroke="#333" stroke-width="2"/>
+          <!-- NODO E -->
+          <circle cx="512" cy="25" r="4" fill="#7c3aed"/>
+          <text x="512" y="12" font-size="10" fill="#7c3aed" font-weight="bold" text-anchor="middle">E</text>
+          <!-- R6 vertical -->
+          <line x1="512" y1="25" x2="512" y2="60" stroke="#333" stroke-width="2"/>
+          <rect x="487" y="60" width="50" height="22" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+          <text x="512" y="74" font-size="10" fill="#7c3aed" font-weight="bold" text-anchor="middle">R6=46Ω</text>
+          <line x1="512" y1="82" x2="512" y2="170" stroke="#333" stroke-width="2"/>
+          <!-- NODO F -->
+          <circle cx="512" cy="170" r="4" fill="#7c3aed"/>
+          <text x="530" y="174" font-size="10" fill="#7c3aed" font-weight="bold">F</text>
+          <!-- R7 horizontal -->
+          <line x1="512" y1="170" x2="456" y2="170" stroke="#333" stroke-width="2"/>
+          <rect x="374" y="160" width="80" height="20" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+          <text x="414" y="173" font-size="11" fill="#7c3aed" font-weight="bold" text-anchor="middle">R7 = 10 Ω</text>
+          <line x1="374" y1="170" x2="332" y2="170" stroke="#333" stroke-width="2"/>
+          <!-- NODO D -->
+          <circle cx="332" cy="170" r="5" fill="#15803d"/>
+          <text x="350" y="175" font-size="11" fill="#15803d" font-weight="bold">D</text>
+          <!-- R8 vertical -->
+          <line x1="332" y1="170" x2="332" y2="200" stroke="#333" stroke-width="2"/>
+          <rect x="307" y="200" width="50" height="22" rx="4" fill="#fff3e0" stroke="#c05c00" stroke-width="2"/>
+          <text x="332" y="214" font-size="10" fill="#c05c00" font-weight="bold" text-anchor="middle">R8=28Ω</text>
+          <line x1="332" y1="222" x2="332" y2="278" stroke="#333" stroke-width="2"/>
+          <!-- RAIL INFERIOR -->
+          <line x1="45" y1="278" x2="172" y2="278" stroke="#333" stroke-width="2"/>
+          <line x1="172" y1="278" x2="332" y2="278" stroke="#333" stroke-width="2"/>
+          <circle cx="172" cy="278" r="4" fill="#1a4e8a"/>
+          <circle cx="332" cy="278" r="4" fill="#1a4e8a"/>
+          <text x="172" y="292" font-size="10" fill="#1a4e8a" text-anchor="middle">B</text>
+          <!-- Labels de corriente -->
+          <text x="108" y="18" font-size="10" fill="#c05c00" text-anchor="middle">→ IT</text>
+          <text x="130" y="80" font-size="10" fill="#1a4e8a" text-anchor="middle">↓ I1</text>
+          <text x="230" y="18" font-size="10" fill="#c05c00" text-anchor="middle">→ I2</text>
+          <text x="315" y="110" font-size="9" fill="#15803d" text-anchor="end">↓ I4</text>
+          <text x="350" y="60" font-size="9" fill="#7c3aed">→ I3</text>
+        </svg>
+      </div>
+
+      <button class="show-sol-btn" onclick="toggleSol(this)">Ver solución completa ▾</button>
+      <div class="sol" style="display:none;margin-top:1.2rem">
+
+        <!-- A) CIRCUITOS EQUIVALENTES -->
+        <div style="font-size:1rem;font-weight:800;color:var(--blue);margin:1rem 0 .5rem;border-bottom:2px solid var(--blue-bg);padding-bottom:.3rem">a) Circuitos equivalentes → R total</div>
+
+        <div class="step"><div class="step-num">1</div><div class="step-body">
+          <strong>RA = R5 + R6 + R7</strong> (rama derecha del paralelo, en serie):<br>
+          <span class="formula-inline">RA = 24 + 46 + 10 = 80 Ω</span>
+        </div></div>
+
+        <div class="step"><div class="step-num">2</div><div class="step-body">
+          <strong>RB = R4 ∥ RA</strong> (paralelo entre C y D):<br>
+          <span class="formula-inline">RB = (20 × 80) / (20 + 80) = 1600 / 100 = 16 Ω</span>
+        </div></div>
+
+        <div class="step"><div class="step-num">3</div><div class="step-body">
+          <strong>RC = R3 + RB + R8</strong> (rama derecha del paralelo principal, en serie):<br>
+          <span class="formula-inline">RC = 36 + 16 + 28 = 80 Ω</span>
+        </div></div>
+
+        <div style="margin:.8rem 0">
+          <div style="font-size:.78rem;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem;text-align:center">Después de pasos 1-3: dos ramas paralelas entre A y B</div>
+          <svg viewBox="0 0 380 225" style="width:100%;max-width:360px;display:block;margin:0 auto;background:#fafafa;border-radius:10px;border:1px solid var(--border)">
+            <!-- Batería -->
+            <line x1="40" y1="22" x2="40" y2="80" stroke="#333" stroke-width="2"/>
+            <line x1="24" y1="80" x2="56" y2="80" stroke="#333" stroke-width="2.5"/>
+            <line x1="31" y1="90" x2="49" y2="90" stroke="#333" stroke-width="1.5"/>
+            <line x1="24" y1="100" x2="56" y2="100" stroke="#333" stroke-width="2.5"/>
+            <line x1="31" y1="110" x2="49" y2="110" stroke="#333" stroke-width="1.5"/>
+            <line x1="40" y1="110" x2="40" y2="205" stroke="#333" stroke-width="2"/>
+            <text x="60" y="89" font-size="11" fill="#1a4e8a" font-weight="bold">+</text>
+            <text x="60" y="113" font-size="11" fill="#1a4e8a" font-weight="bold">−</text>
+            <text x="12" y="100" font-size="11" fill="#c05c00" font-weight="bold" text-anchor="middle" transform="rotate(-90,12,100)">30 V</text>
+            <!-- R9 -->
+            <line x1="40" y1="22" x2="75" y2="22" stroke="#333" stroke-width="2"/>
+            <rect x="75" y="12" width="72" height="20" rx="4" fill="#e8f0fb" stroke="#1a4e8a" stroke-width="2"/>
+            <text x="111" y="25" font-size="11" fill="#1a4e8a" font-weight="bold" text-anchor="middle">R9 = 14 Ω</text>
+            <line x1="147" y1="22" x2="165" y2="22" stroke="#333" stroke-width="2"/>
+            <!-- Nodo A -->
+            <circle cx="165" cy="22" r="5" fill="#1a4e8a"/>
+            <text x="165" y="10" font-size="11" fill="#1a4e8a" font-weight="bold" text-anchor="middle">A</text>
+            <!-- Rama RD=R1+R2=20Ω izq -->
+            <line x1="165" y1="22" x2="165" y2="55" stroke="#333" stroke-width="2"/>
+            <rect x="130" y="55" width="70" height="60" rx="4" fill="#e8f0fb" stroke="#1a4e8a" stroke-width="2"/>
+            <text x="165" y="83" font-size="11" fill="#1a4e8a" font-weight="bold" text-anchor="middle">RD</text>
+            <text x="165" y="97" font-size="10" fill="#1a4e8a" text-anchor="middle">= 20 Ω</text>
+            <text x="165" y="108" font-size="9" fill="#555" text-anchor="middle">(R1+R2)</text>
+            <line x1="165" y1="115" x2="165" y2="205" stroke="#333" stroke-width="2"/>
+            <!-- Rama RC=80Ω der -->
+            <line x1="165" y1="22" x2="290" y2="22" stroke="#333" stroke-width="2"/>
+            <line x1="290" y1="22" x2="290" y2="55" stroke="#333" stroke-width="2"/>
+            <rect x="255" y="55" width="70" height="60" rx="4" fill="#fff3e0" stroke="#c05c00" stroke-width="2"/>
+            <text x="290" y="83" font-size="11" fill="#c05c00" font-weight="bold" text-anchor="middle">RC</text>
+            <text x="290" y="97" font-size="10" fill="#c05c00" text-anchor="middle">= 80 Ω</text>
+            <text x="290" y="108" font-size="9" fill="#555" text-anchor="middle">(R3+RB+R8)</text>
+            <line x1="290" y1="115" x2="290" y2="205" stroke="#333" stroke-width="2"/>
+            <!-- Rail inferior -->
+            <line x1="40" y1="205" x2="165" y2="205" stroke="#333" stroke-width="2"/>
+            <line x1="165" y1="205" x2="290" y2="205" stroke="#333" stroke-width="2"/>
+            <circle cx="165" cy="205" r="4" fill="#1a4e8a"/>
+            <text x="165" y="218" font-size="10" fill="#1a4e8a" text-anchor="middle">B</text>
+            <!-- Current labels -->
+            <text x="112" y="15" font-size="10" fill="#c05c00" text-anchor="middle">→ IT=1A</text>
+            <text x="148" y="88" font-size="10" fill="#1a4e8a" text-anchor="end">↓ I1</text>
+            <text x="308" y="88" font-size="10" fill="#c05c00">↓ I2</text>
+          </svg>
+        </div>
+
+        <div class="step"><div class="step-num">4</div><div class="step-body">
+          <strong>RE = RC ∥ RD</strong> (paralelo entre A y B):<br>
+          <span class="formula-inline">RD = R1 + R2 = 8 + 12 = 20 Ω</span><br>
+          <span class="formula-inline">RE = (RC × RD) / (RC + RD) = (80 × 20) / (80 + 20) = 1600 / 100 = 16 Ω</span>
+        </div></div>
+
+        <div class="step"><div class="step-num">5</div><div class="step-body">
+          <strong>RT = R9 + RE</strong> (resistencia total):<br>
+          <span class="formula-inline">RT = 14 + 16 = 30 Ω</span>
+          <div style="margin:.7rem 0">
+            <div style="font-size:.78rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem;text-align:center">Circuito equivalente final</div>
+            <svg viewBox="0 0 360 120" style="width:100%;max-width:340px;display:block;margin:0 auto;background:#fafafa;border-radius:10px;border:1px solid var(--border)">
+              <line x1="40" y1="18" x2="40" y2="40" stroke="#333" stroke-width="2"/>
+              <line x1="24" y1="40" x2="56" y2="40" stroke="#333" stroke-width="2.5"/>
+              <line x1="31" y1="50" x2="49" y2="50" stroke="#333" stroke-width="1.5"/>
+              <line x1="24" y1="60" x2="56" y2="60" stroke="#333" stroke-width="2.5"/>
+              <line x1="31" y1="70" x2="49" y2="70" stroke="#333" stroke-width="1.5"/>
+              <line x1="40" y1="70" x2="40" y2="105" stroke="#333" stroke-width="2"/>
+              <text x="60" y="49" font-size="11" fill="#1a4e8a" font-weight="bold">+</text>
+              <text x="60" y="72" font-size="11" fill="#1a4e8a" font-weight="bold">−</text>
+              <text x="12" y="62" font-size="11" fill="#c05c00" font-weight="bold" text-anchor="middle" transform="rotate(-90,12,62)">30 V</text>
+              <line x1="40" y1="18" x2="135" y2="18" stroke="#7c3aed" stroke-width="2"/>
+              <rect x="135" y="8" width="180" height="20" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5"/>
+              <text x="225" y="21" font-size="12" fill="#7c3aed" font-weight="bold" text-anchor="middle">RT = 30 Ω</text>
+              <line x1="315" y1="18" x2="320" y2="18" stroke="#7c3aed" stroke-width="2"/>
+              <line x1="320" y1="18" x2="320" y2="105" stroke="#333" stroke-width="2"/>
+              <line x1="320" y1="105" x2="40" y2="105" stroke="#333" stroke-width="2"/>
+              <text x="182" y="11" font-size="10" fill="#c05c00" text-anchor="middle">→ IT = 1 A</text>
+            </svg>
+          </div>
+        </div></div>
+
+        <div class="result-box" style="margin-bottom:1.2rem">✅ RA=80Ω | RB=16Ω | RC=80Ω | RD=20Ω | RE=16Ω | <strong>RT = 30 Ω</strong></div>
+
+        <!-- B) CORRIENTES -->
+        <div style="font-size:1rem;font-weight:800;color:var(--blue);margin:1.2rem 0 .5rem;border-bottom:2px solid var(--blue-bg);padding-bottom:.3rem">b) y c) Circulación de corrientes — cálculo y verificación LKC</div>
+
+        <div class="step"><div class="step-num">1</div><div class="step-body">
+          <strong>Corriente total:</strong><br>
+          <span class="formula-inline">IT = U / RT = 30 / 30 = 1 A</span>
+        </div></div>
+
+        <div class="step"><div class="step-num">2</div><div class="step-body">
+          <strong>Tensión en el paralelo A-B:</strong><br>
+          <span class="formula-inline">U_RE = IT × RE = 1 × 16 = 16 V</span><br>
+          <span class="formula-inline">U_R9 = IT × R9 = 1 × 14 = 14 V</span><br>
+          <em style="font-size:.82rem;color:var(--gray-lt)">Verificación: 16 + 14 = 30 V ✓</em>
+        </div></div>
+
+        <div class="step"><div class="step-num">3</div><div class="step-body">
+          <strong>Corrientes en las dos ramas paralelas (misma U_RE = 16 V):</strong><br>
+          <span class="formula-inline">I1 = U_RE / RD = 16 / 20 = 0,8 A</span> (por R1 y R2)<br>
+          <span class="formula-inline">I2 = U_RE / RC = 16 / 80 = 0,2 A</span> (por R3, RB, R8)
+        </div></div>
+
+        <div class="step"><div class="step-num">4</div><div class="step-body">
+          <strong>Corrientes en el paralelo interno (C-D), tensión = U_RB = I2 × RB:</strong><br>
+          <span class="formula-inline">U_RB = 0,2 × 16 = 3,2 V</span><br>
+          <span class="formula-inline">I4 = U_RB / R4 = 3,2 / 20 = 0,16 A</span> (por R4)<br>
+          <span class="formula-inline">I3 = U_RB / RA = 3,2 / 80 = 0,04 A</span> (por R5, R6, R7)
+        </div></div>
+
+        <div class="step"><div class="step-num">5</div><div class="step-body">
+          <strong>Verificación LKC:</strong><br>
+          <em>Nodo A:</em> <span class="formula-inline">IT = I1 + I2 → 1 = 0,8 + 0,2 = 1 A ✓</span><br>
+          <em>Nodo C-D:</em> <span class="formula-inline">I2 = I3 + I4 → 0,2 = 0,04 + 0,16 = 0,2 A ✓</span>
+        </div></div>
+
+        <!-- D) TENSIONES -->
+        <div style="font-size:1rem;font-weight:800;color:var(--blue);margin:1.2rem 0 .5rem;border-bottom:2px solid var(--blue-bg);padding-bottom:.3rem">d) Caídas de tensión en cada resistencia — verificación LKT</div>
+
+        <div class="twrap" style="margin:.8rem 0">
+          <table>
+            <thead><tr><th>Resistencia</th><th>Corriente</th><th>R (Ω)</th><th>Tensión (V)</th></tr></thead>
+            <tbody>
+              <tr><td>R9</td><td>IT = 1 A</td><td>14</td><td><strong>14 V</strong></td></tr>
+              <tr><td>R1</td><td>I1 = 0,8 A</td><td>8</td><td><strong>6,4 V</strong></td></tr>
+              <tr><td>R2</td><td>I1 = 0,8 A</td><td>12</td><td><strong>9,6 V</strong></td></tr>
+              <tr><td>R3</td><td>I2 = 0,2 A</td><td>36</td><td><strong>7,2 V</strong></td></tr>
+              <tr><td>R4</td><td>I4 = 0,16 A</td><td>20</td><td><strong>3,2 V</strong></td></tr>
+              <tr><td>R5</td><td>I3 = 0,04 A</td><td>24</td><td><strong>0,96 V</strong></td></tr>
+              <tr><td>R6</td><td>I3 = 0,04 A</td><td>46</td><td><strong>1,84 V</strong></td></tr>
+              <tr><td>R7</td><td>I3 = 0,04 A</td><td>10</td><td><strong>0,4 V</strong></td></tr>
+              <tr><td>R8</td><td>I2 = 0,2 A</td><td>28</td><td><strong>5,6 V</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="step"><div class="step-num">✓</div><div class="step-body">
+          <strong>Verificación LKT — Malla exterior A-B (rama R1+R2):</strong><br>
+          <span class="formula-inline">UR1 + UR2 = 6,4 + 9,6 = 16 V = U_RE ✓</span><br><br>
+          <strong>Verificación LKT — Malla exterior A-B (rama RC):</strong><br>
+          <span class="formula-inline">UR3 + URB + UR8 = 7,2 + 3,2 + 5,6 = 16 V = U_RE ✓</span><br><br>
+          <strong>Verificación LKT — Malla interna C-D (paralelo RB):</strong><br>
+          <span class="formula-inline">UR5 + UR6 + UR7 = 0,96 + 1,84 + 0,4 = 3,2 V = URB ✓</span><br><br>
+          <strong>Verificación LKT — Malla total (R9 + rama R1+R2):</strong><br>
+          <span class="formula-inline">UR9 + UR1 + UR2 = 14 + 6,4 + 9,6 = 30 V = U ✓</span>
+        </div></div>
+
+        <div class="result-box">✅ IT=1A | I1=0,8A | I2=0,2A | I3=0,04A | I4=0,16A<br>UR9=14V | UR1=6,4V | UR2=9,6V | UR3=7,2V | UR4=3,2V | UR5=0,96V | UR6=1,84V | UR7=0,4V | UR8=5,6V</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJERCICIOS EXTRA -->
+  <div class="stitle" style="margin-top:3rem"><span class="ico">🎯</span>Práctica extra — Mismo tipo de circuito</div>
+  <p style="margin-bottom:1.2rem;color:var(--gray-lt);font-size:.9rem">Dos ejercicios con la misma topología del Ej 4 pero distintos valores. Resolvelos vos antes de ver la solución.</p>
+
+  <!-- EXTRA A -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)">
+      <h3>Práctica A — Circuito mixto con 9 resistencias (U = 40 V)</h3>
+      <span class="ej-badge">Avanzado</span>
+    </div>
+    <div class="ej-body">
+      <div class="ej-enunciado">
+        <strong>Datos:</strong> U = 40 V · R1 = 20 Ω · R2 = 20 Ω · R3 = 10 Ω · R4 = 80 Ω · R5 = 40 Ω · R6 = 20 Ω · R7 = 20 Ω · R8 = 10 Ω · R9 = 16 Ω<br>
+        <em style="font-size:.85rem">Misma topología: R9 serie · rama izq (R1+R2) paralela con rama der (R3 + R4∥(R5+R6+R7) + R8)</em>
+      </div>
+
+      <div style="margin:1rem 0">
+        <div style="font-size:.78rem;font-weight:700;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem;text-align:center">Circuito (misma topología)</div>
+        <svg viewBox="0 0 575 305" style="width:100%;max-width:540px;display:block;margin:0 auto;background:#fafafa;border-radius:12px;border:1px solid var(--border)">
+          <line x1="45" y1="25" x2="45" y2="105" stroke="#333" stroke-width="2"/>
+          <line x1="28" y1="105" x2="62" y2="105" stroke="#333" stroke-width="2.5"/>
+          <line x1="35" y1="115" x2="55" y2="115" stroke="#333" stroke-width="1.5"/>
+          <line x1="28" y1="128" x2="62" y2="128" stroke="#333" stroke-width="2.5"/>
+          <line x1="35" y1="138" x2="55" y2="138" stroke="#333" stroke-width="1.5"/>
+          <line x1="45" y1="138" x2="45" y2="278" stroke="#333" stroke-width="2"/>
+          <text x="66" y="113" font-size="12" fill="#1a4e8a" font-weight="bold">+</text>
+          <text x="66" y="140" font-size="12" fill="#1a4e8a" font-weight="bold">−</text>
+          <text x="13" y="125" font-size="12" fill="#c05c00" font-weight="bold" text-anchor="middle" transform="rotate(-90,13,125)">40 V</text>
+          <line x1="45" y1="25" x2="80" y2="25" stroke="#333" stroke-width="2"/>
+          <rect x="80" y="15" width="72" height="20" rx="4" fill="#e8f0fb" stroke="#1a4e8a" stroke-width="2"/>
+          <text x="116" y="28" font-size="11" fill="#1a4e8a" font-weight="bold" text-anchor="middle">R9 = 16 Ω</text>
+          <line x1="152" y1="25" x2="172" y2="25" stroke="#333" stroke-width="2"/>
+          <circle cx="172" cy="25" r="5" fill="#1a4e8a"/>
+          <text x="172" y="12" font-size="11" fill="#1a4e8a" font-weight="bold" text-anchor="middle">A</text>
+          <line x1="172" y1="25" x2="172" y2="57" stroke="#333" stroke-width="2"/>
+          <rect x="147" y="57" width="50" height="22" rx="4" fill="#e8f0fb" stroke="#1a4e8a" stroke-width="2"/>
+          <text x="172" y="71" font-size="10" fill="#1a4e8a" font-weight="bold" text-anchor="middle">R1=20Ω</text>
+          <line x1="172" y1="79" x2="172" y2="108" stroke="#333" stroke-width="2"/>
+          <rect x="147" y="108" width="50" height="22" rx="4" fill="#e8f0fb" stroke="#1a4e8a" stroke-width="2"/>
+          <text x="172" y="122" font-size="10" fill="#1a4e8a" font-weight="bold" text-anchor="middle">R2=20Ω</text>
+          <line x1="172" y1="130" x2="172" y2="278" stroke="#333" stroke-width="2"/>
+          <line x1="172" y1="25" x2="210" y2="25" stroke="#333" stroke-width="2"/>
+          <rect x="210" y="15" width="80" height="20" rx="4" fill="#fff3e0" stroke="#c05c00" stroke-width="2"/>
+          <text x="250" y="28" font-size="11" fill="#c05c00" font-weight="bold" text-anchor="middle">R3 = 10 Ω</text>
+          <line x1="290" y1="25" x2="332" y2="25" stroke="#333" stroke-width="2"/>
+          <circle cx="332" cy="25" r="5" fill="#15803d"/>
+          <text x="332" y="12" font-size="11" fill="#15803d" font-weight="bold" text-anchor="middle">C</text>
+          <line x1="332" y1="25" x2="332" y2="57" stroke="#333" stroke-width="2"/>
+          <rect x="307" y="57" width="50" height="22" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+          <text x="332" y="71" font-size="10" fill="#15803d" font-weight="bold" text-anchor="middle">R4=80Ω</text>
+          <line x1="332" y1="79" x2="332" y2="170" stroke="#333" stroke-width="2"/>
+          <line x1="332" y1="25" x2="374" y2="25" stroke="#333" stroke-width="2"/>
+          <rect x="374" y="15" width="80" height="20" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+          <text x="414" y="28" font-size="11" fill="#7c3aed" font-weight="bold" text-anchor="middle">R5 = 40 Ω</text>
+          <line x1="454" y1="25" x2="512" y2="25" stroke="#333" stroke-width="2"/>
+          <circle cx="512" cy="25" r="4" fill="#7c3aed"/>
+          <line x1="512" y1="25" x2="512" y2="60" stroke="#333" stroke-width="2"/>
+          <rect x="487" y="60" width="50" height="22" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+          <text x="512" y="74" font-size="10" fill="#7c3aed" font-weight="bold" text-anchor="middle">R6=20Ω</text>
+          <line x1="512" y1="82" x2="512" y2="170" stroke="#333" stroke-width="2"/>
+          <circle cx="512" cy="170" r="4" fill="#7c3aed"/>
+          <line x1="512" y1="170" x2="456" y2="170" stroke="#333" stroke-width="2"/>
+          <rect x="374" y="160" width="80" height="20" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+          <text x="414" y="173" font-size="11" fill="#7c3aed" font-weight="bold" text-anchor="middle">R7 = 20 Ω</text>
+          <line x1="374" y1="170" x2="332" y2="170" stroke="#333" stroke-width="2"/>
+          <circle cx="332" cy="170" r="5" fill="#15803d"/>
+          <text x="350" y="175" font-size="11" fill="#15803d" font-weight="bold">D</text>
+          <line x1="332" y1="170" x2="332" y2="200" stroke="#333" stroke-width="2"/>
+          <rect x="307" y="200" width="50" height="22" rx="4" fill="#fff3e0" stroke="#c05c00" stroke-width="2"/>
+          <text x="332" y="214" font-size="10" fill="#c05c00" font-weight="bold" text-anchor="middle">R8=10Ω</text>
+          <line x1="332" y1="222" x2="332" y2="278" stroke="#333" stroke-width="2"/>
+          <line x1="45" y1="278" x2="332" y2="278" stroke="#333" stroke-width="2"/>
+          <circle cx="172" cy="278" r="4" fill="#1a4e8a"/>
+          <circle cx="332" cy="278" r="4" fill="#1a4e8a"/>
+        </svg>
+      </div>
+
+      <button class="show-sol-btn" onclick="toggleSol(this)">Ver solución ▾</button>
+      <div class="sol" style="display:none;margin-top:1rem">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>RA = R5+R6+R7 = 40+20+20 = 80 Ω</strong></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>RB = R4∥RA = (80×80)/(80+80) = 6400/160 = <u>40 Ω</u></strong></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><strong>RC = R3+RB+R8 = 10+40+10 = <u>60 Ω</u></strong></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><strong>RD = R1+R2 = 20+20 = <u>40 Ω</u></strong></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body"><strong>RE = RC∥RD = (60×40)/(60+40) = 2400/100 = <u>24 Ω</u></strong></div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-body"><strong>RT = RE+R9 = 24+16 = <u>40 Ω</u></strong></div></div>
+        <div class="step"><div class="step-num">7</div><div class="step-body">
+          <strong>Corrientes:</strong><br>
+          <span class="formula-inline">IT = 40/40 = 1 A</span><br>
+          <span class="formula-inline">U_RE = 1×24 = 24 V &nbsp;|&nbsp; U_R9 = 1×16 = 16 V</span><br>
+          <span class="formula-inline">I1 = 24/40 = 0,6 A &nbsp;(R1,R2)</span><br>
+          <span class="formula-inline">I2 = 24/60 = 0,4 A &nbsp;(R3, RB, R8)</span><br>
+          <span class="formula-inline">U_RB = 0,4×40 = 16 V</span><br>
+          <span class="formula-inline">I4 = 16/80 = 0,2 A &nbsp;(R4)</span><br>
+          <span class="formula-inline">I3 = 16/80 = 0,2 A &nbsp;(R5,R6,R7)</span><br>
+          LKC: <span class="formula-inline">I1+I2 = 0,6+0,4 = 1A=IT ✓ &nbsp;|&nbsp; I3+I4 = 0,2+0,2 = 0,4A=I2 ✓</span>
+        </div></div>
+        <div class="step"><div class="step-num">8</div><div class="step-body">
+          <strong>Tensiones:</strong><br>
+          <span class="formula-inline">UR1=0,6×20=12V · UR2=0,6×20=12V → 24V ✓</span><br>
+          <span class="formula-inline">UR3=0,4×10=4V · URB=16V · UR8=0,4×10=4V → 24V ✓</span><br>
+          <span class="formula-inline">UR5=0,2×40=8V · UR6=0,2×20=4V · UR7=0,2×20=4V → 16V=URB ✓</span><br>
+          <span class="formula-inline">UR9+UR_RE = 16+24 = 40V=U ✓</span>
+        </div></div>
+        <div class="result-box">✅ RT=40Ω | IT=1A | I1=0,6A | I2=0,4A | I3=I4=0,2A<br>UR1=UR2=12V | UR3=4V | UR4=UR_RA=16V | UR8=4V | UR5=8V | UR6=UR7=4V | UR9=16V</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXTRA B -->
+  <div class="ej-card">
+    <div class="ej-header" onclick="toggleEj(this)">
+      <h3>Práctica B — Circuito mixto con 9 resistencias (U = 60 V)</h3>
+      <span class="ej-badge">Avanzado</span>
+    </div>
+    <div class="ej-body">
+      <div class="ej-enunciado">
+        <strong>Datos:</strong> U = 60 V · R1 = 16 Ω · R2 = 24 Ω · R3 = 10 Ω · R4 = 40 Ω · R5 = 16 Ω · R6 = 16 Ω · R7 = 8 Ω · R8 = 10 Ω · R9 = 10 Ω
+      </div>
+
+      <div style="margin:1rem 0">
+        <div style="font-size:.78rem;font-weight:700;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem;text-align:center">Circuito (misma topología)</div>
+        <svg viewBox="0 0 575 305" style="width:100%;max-width:540px;display:block;margin:0 auto;background:#fafafa;border-radius:12px;border:1px solid var(--border)">
+          <line x1="45" y1="25" x2="45" y2="105" stroke="#333" stroke-width="2"/>
+          <line x1="28" y1="105" x2="62" y2="105" stroke="#333" stroke-width="2.5"/>
+          <line x1="35" y1="115" x2="55" y2="115" stroke="#333" stroke-width="1.5"/>
+          <line x1="28" y1="128" x2="62" y2="128" stroke="#333" stroke-width="2.5"/>
+          <line x1="35" y1="138" x2="55" y2="138" stroke="#333" stroke-width="1.5"/>
+          <line x1="45" y1="138" x2="45" y2="278" stroke="#333" stroke-width="2"/>
+          <text x="66" y="113" font-size="12" fill="#1a4e8a" font-weight="bold">+</text>
+          <text x="66" y="140" font-size="12" fill="#1a4e8a" font-weight="bold">−</text>
+          <text x="13" y="125" font-size="12" fill="#c05c00" font-weight="bold" text-anchor="middle" transform="rotate(-90,13,125)">60 V</text>
+          <line x1="45" y1="25" x2="80" y2="25" stroke="#333" stroke-width="2"/>
+          <rect x="80" y="15" width="72" height="20" rx="4" fill="#e8f0fb" stroke="#1a4e8a" stroke-width="2"/>
+          <text x="116" y="28" font-size="11" fill="#1a4e8a" font-weight="bold" text-anchor="middle">R9 = 10 Ω</text>
+          <line x1="152" y1="25" x2="172" y2="25" stroke="#333" stroke-width="2"/>
+          <circle cx="172" cy="25" r="5" fill="#1a4e8a"/>
+          <text x="172" y="12" font-size="11" fill="#1a4e8a" font-weight="bold" text-anchor="middle">A</text>
+          <line x1="172" y1="25" x2="172" y2="57" stroke="#333" stroke-width="2"/>
+          <rect x="147" y="57" width="50" height="22" rx="4" fill="#e8f0fb" stroke="#1a4e8a" stroke-width="2"/>
+          <text x="172" y="71" font-size="10" fill="#1a4e8a" font-weight="bold" text-anchor="middle">R1=16Ω</text>
+          <line x1="172" y1="79" x2="172" y2="108" stroke="#333" stroke-width="2"/>
+          <rect x="147" y="108" width="50" height="22" rx="4" fill="#e8f0fb" stroke="#1a4e8a" stroke-width="2"/>
+          <text x="172" y="122" font-size="10" fill="#1a4e8a" font-weight="bold" text-anchor="middle">R2=24Ω</text>
+          <line x1="172" y1="130" x2="172" y2="278" stroke="#333" stroke-width="2"/>
+          <line x1="172" y1="25" x2="210" y2="25" stroke="#333" stroke-width="2"/>
+          <rect x="210" y="15" width="80" height="20" rx="4" fill="#fff3e0" stroke="#c05c00" stroke-width="2"/>
+          <text x="250" y="28" font-size="11" fill="#c05c00" font-weight="bold" text-anchor="middle">R3 = 10 Ω</text>
+          <line x1="290" y1="25" x2="332" y2="25" stroke="#333" stroke-width="2"/>
+          <circle cx="332" cy="25" r="5" fill="#15803d"/>
+          <text x="332" y="12" font-size="11" fill="#15803d" font-weight="bold" text-anchor="middle">C</text>
+          <line x1="332" y1="25" x2="332" y2="57" stroke="#333" stroke-width="2"/>
+          <rect x="307" y="57" width="50" height="22" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+          <text x="332" y="71" font-size="10" fill="#15803d" font-weight="bold" text-anchor="middle">R4=40Ω</text>
+          <line x1="332" y1="79" x2="332" y2="170" stroke="#333" stroke-width="2"/>
+          <line x1="332" y1="25" x2="374" y2="25" stroke="#333" stroke-width="2"/>
+          <rect x="374" y="15" width="80" height="20" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+          <text x="414" y="28" font-size="11" fill="#7c3aed" font-weight="bold" text-anchor="middle">R5 = 16 Ω</text>
+          <line x1="454" y1="25" x2="512" y2="25" stroke="#333" stroke-width="2"/>
+          <circle cx="512" cy="25" r="4" fill="#7c3aed"/>
+          <line x1="512" y1="25" x2="512" y2="60" stroke="#333" stroke-width="2"/>
+          <rect x="487" y="60" width="50" height="22" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+          <text x="512" y="74" font-size="10" fill="#7c3aed" font-weight="bold" text-anchor="middle">R6=16Ω</text>
+          <line x1="512" y1="82" x2="512" y2="170" stroke="#333" stroke-width="2"/>
+          <circle cx="512" cy="170" r="4" fill="#7c3aed"/>
+          <line x1="512" y1="170" x2="456" y2="170" stroke="#333" stroke-width="2"/>
+          <rect x="374" y="160" width="80" height="20" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+          <text x="414" y="173" font-size="11" fill="#7c3aed" font-weight="bold" text-anchor="middle">R7 = 8 Ω</text>
+          <line x1="374" y1="170" x2="332" y2="170" stroke="#333" stroke-width="2"/>
+          <circle cx="332" cy="170" r="5" fill="#15803d"/>
+          <text x="350" y="175" font-size="11" fill="#15803d" font-weight="bold">D</text>
+          <line x1="332" y1="170" x2="332" y2="200" stroke="#333" stroke-width="2"/>
+          <rect x="307" y="200" width="50" height="22" rx="4" fill="#fff3e0" stroke="#c05c00" stroke-width="2"/>
+          <text x="332" y="214" font-size="10" fill="#c05c00" font-weight="bold" text-anchor="middle">R8=10Ω</text>
+          <line x1="332" y1="222" x2="332" y2="278" stroke="#333" stroke-width="2"/>
+          <line x1="45" y1="278" x2="332" y2="278" stroke="#333" stroke-width="2"/>
+          <circle cx="172" cy="278" r="4" fill="#1a4e8a"/>
+          <circle cx="332" cy="278" r="4" fill="#1a4e8a"/>
+        </svg>
+      </div>
+
+      <button class="show-sol-btn" onclick="toggleSol(this)">Ver solución ▾</button>
+      <div class="sol" style="display:none;margin-top:1rem">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>RA = R5+R6+R7 = 16+16+8 = 40 Ω</strong></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>RB = R4∥RA = (40×40)/(40+40) = 1600/80 = <u>20 Ω</u></strong></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><strong>RC = R3+RB+R8 = 10+20+10 = <u>40 Ω</u></strong></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><strong>RD = R1+R2 = 16+24 = <u>40 Ω</u></strong></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body"><strong>RE = RC∥RD = (40×40)/(40+40) = <u>20 Ω</u></strong></div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-body"><strong>RT = RE+R9 = 20+10 = <u>30 Ω</u></strong></div></div>
+        <div class="step"><div class="step-num">7</div><div class="step-body">
+          <strong>Corrientes:</strong><br>
+          <span class="formula-inline">IT = 60/30 = 2 A</span><br>
+          <span class="formula-inline">U_RE = 2×20 = 40 V &nbsp;|&nbsp; U_R9 = 2×10 = 20 V</span><br>
+          <span class="formula-inline">I1 = 40/40 = 1 A &nbsp;(R1,R2)</span><br>
+          <span class="formula-inline">I2 = 40/40 = 1 A &nbsp;(R3, RB, R8)</span><br>
+          <span class="formula-inline">U_RB = 1×20 = 20 V</span><br>
+          <span class="formula-inline">I3 = I4 = 20/40 = 0,5 A &nbsp;(R4 y RA, simétricos)</span><br>
+          LKC: <span class="formula-inline">I1+I2 = 1+1 = 2A=IT ✓ &nbsp;|&nbsp; I3+I4 = 0,5+0,5 = 1A=I2 ✓</span>
+        </div></div>
+        <div class="step"><div class="step-num">8</div><div class="step-body">
+          <strong>Tensiones:</strong><br>
+          <span class="formula-inline">UR1=1×16=16V · UR2=1×24=24V → 40V ✓</span><br>
+          <span class="formula-inline">UR3=1×10=10V · URB=20V · UR8=1×10=10V → 40V ✓</span><br>
+          <span class="formula-inline">UR5=0,5×16=8V · UR6=0,5×16=8V · UR7=0,5×8=4V → 20V=URB ✓</span><br>
+          <span class="formula-inline">UR9+U_RE = 20+40 = 60V=U ✓</span>
+        </div></div>
+        <div class="result-box">✅ RT=30Ω | IT=2A | I1=I2=1A | I3=I4=0,5A<br>UR1=16V | UR2=24V | UR3=10V | UR4=UR_RA=20V | UR8=10V | UR5=UR6=8V | UR7=4V | UR9=20V</div>
+      </div>
+    </div>
   </div>
 
 </div></div>

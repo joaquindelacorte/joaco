@@ -97,6 +97,27 @@ tr:nth-child(even) td{background:var(--blue-bg)}
 .diagram svg{max-width:100%;height:auto}
 .dcap{font-size:.82rem;color:var(--gray-lt);margin-top:.5rem;font-style:italic}
 
+/* SÍMBOLOS ISO */
+.sym{background:#fff;border:1px solid var(--border);border-radius:10px;padding:.4rem;margin-bottom:.7rem;display:flex;align-items:center;justify-content:center}
+.sym svg{width:130px;height:130px;display:block}
+.sym-grid .card h3{font-size:.92rem}
+.sym-grid .card p{font-size:.84rem}
+#symgame{max-width:600px;margin:0 auto}
+
+/* AUTOEVALUACIÓN ORAL */
+.oral-tools{display:flex;gap:.6rem;justify-content:center;margin-bottom:1.2rem;flex-wrap:wrap}
+.oral-item{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:.8rem;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,.05)}
+.oral-q{padding:.9rem 1.2rem;display:flex;gap:.7rem;align-items:flex-start;cursor:pointer;font-weight:600;color:var(--gray);font-size:.93rem}
+.oral-q:hover{background:var(--blue-bg)}
+.oral-n{background:var(--green);color:#fff;border-radius:50%;width:26px;height:26px;min-width:26px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;margin-top:.05rem}
+.oral-q .arrow{margin-left:auto;color:var(--blue-lt);font-size:.8rem;transition:.2s}
+.oral-item.open .oral-q .arrow{transform:rotate(180deg)}
+.oral-a{display:none;padding:.2rem 1.2rem 1.1rem 3rem;font-size:.9rem;line-height:1.65;color:var(--gray);border-top:1px solid var(--border)}
+.oral-item.open .oral-a{display:block}
+.oral-a strong{color:var(--green)}
+.symq-figure{background:#fff;border:2px solid var(--border);border-radius:12px;padding:1rem;display:flex;align-items:center;justify-content:center;margin-bottom:1.1rem}
+.symq-figure svg{width:150px;height:150px}
+
 /* CHEAT DARK */
 .cheat{background:linear-gradient(135deg,#0c1a2e 0%,#1e3a5f 100%);color:#e2e8f0;border-radius:14px;padding:1.8rem;margin:1rem 0}
 .cheat h2{color:#7dd3fc;font-size:1.15rem;margin-bottom:1.1rem;text-align:center}
@@ -264,9 +285,11 @@ tr:nth-child(even) td{background:var(--blue-bg)}
     <button class="tab-btn" onclick="showPage('componentes',this)">🔧 Componentes</button>
     <button class="tab-btn" onclick="showPage('bombas',this)">⚙️ Bombas y Actuadores</button>
     <button class="tab-btn" onclick="showPage('valvulas',this)">🎛️ Válvulas</button>
+    <button class="tab-btn" onclick="showPage('simbolos',this)">🔣 Símbolos ISO</button>
     <button class="tab-btn" onclick="showPage('caudal',this)">🌊 Caudal y Velocidad</button>
     <button class="tab-btn" onclick="showPage('fenomenos',this)">🚨 Fenómenos</button>
     <button class="tab-btn" style="background:#facc15;color:#0c4a6e;font-weight:800;border-bottom:3px solid #f59e0b" onclick="showPage('repaso',this)">📝 Repaso Parcial</button>
+    <button class="tab-btn" style="background:#34d399;color:#064e3b;font-weight:800;border-bottom:3px solid #059669" onclick="showPage('autoeval',this)">📋 Autoevaluación</button>
     <button class="tab-btn" onclick="showPage('ejercicios',this)">✏️ Ejercicios</button>
     <button class="tab-btn" onclick="showPage('simuladores',this)">🔬 Simuladores</button>
     <button class="tab-btn" onclick="showPage('juegos',this)">🎮 Juegos</button>
@@ -646,6 +669,135 @@ tr:nth-child(even) td{background:var(--blue-bg)}
     </div>
   </div>
 
+  <div class="stitle"><span class="ico">📐</span>Esquemas rotulados (para identificar en el parcial)</div>
+  <div class="note">Estos son los cortes que el temario te pide <strong>dibujar e identificar</strong>: partes principales, elemento motriz/conducido, sentido de giro, flujo del aceite y elementos móviles.</div>
+
+  <!-- ENGRANAJES -->
+  <div class="diagram">
+    <svg viewBox="0 0 460 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Esquema de bomba de engranajes">
+      <rect x="100" y="35" width="220" height="180" rx="14" fill="#eef6fc" stroke="#0369a1" stroke-width="2.5"/>
+      <!-- engranaje motriz (superior) -->
+      <g>
+        <circle cx="210" cy="95" r="48" fill="#dbeafe" stroke="#0369a1" stroke-width="2"/>
+        <g fill="#93c5fd" stroke="#0369a1" stroke-width="1">
+          <rect x="205" y="42" width="10" height="14"/><rect x="205" y="134" width="10" height="14"/>
+          <rect x="157" y="90" width="14" height="10"/><rect x="249" y="90" width="14" height="10"/>
+          <rect x="172" y="57" width="12" height="12" transform="rotate(45 178 63)"/>
+          <rect x="236" y="57" width="12" height="12" transform="rotate(-45 242 63)"/>
+          <rect x="172" y="121" width="12" height="12" transform="rotate(-45 178 127)"/>
+          <rect x="236" y="121" width="12" height="12" transform="rotate(45 242 127)"/>
+        </g>
+        <circle cx="210" cy="95" r="8" fill="#0369a1"/>
+        <path d="M195 95 a15 15 0 0 1 30 0" fill="none" stroke="#0c4a6e" stroke-width="2" marker-end="url(#arrH)"/>
+      </g>
+      <!-- engranaje conducido (inferior) -->
+      <g>
+        <circle cx="210" cy="158" r="40" fill="#e2e8f0" stroke="#475569" stroke-width="2"/>
+        <g fill="#cbd5e1" stroke="#475569" stroke-width="1">
+          <rect x="205" y="113" width="10" height="12"/><rect x="205" y="191" width="10" height="12"/>
+          <rect x="165" y="153" width="12" height="10"/><rect x="243" y="153" width="12" height="10"/>
+        </g>
+        <circle cx="210" cy="158" r="7" fill="#475569"/>
+      </g>
+      <!-- entrada / salida -->
+      <path d="M40 158 H100" stroke="#0284c7" stroke-width="9" fill="none"/>
+      <path d="M40 158 H92" stroke="#0284c7" stroke-width="9" fill="none" marker-end="url(#arrB)"/>
+      <path d="M320 95 H420" stroke="#ef4444" stroke-width="9" fill="none" marker-end="url(#arrR)"/>
+      <!-- flujo por los costados -->
+      <path d="M150 70 Q120 126 150 182" fill="none" stroke="#0284c7" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#arrB2)"/>
+      <path d="M270 182 Q300 126 270 70" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#arrR2)"/>
+      <text x="55" y="148" font-size="12" font-weight="700" fill="#0369a1">SUCCIÓN</text>
+      <text x="350" y="85" font-size="12" font-weight="700" fill="#b91c1c">DESCARGA</text>
+      <text x="210" y="30" font-size="12" font-weight="700" fill="#0c4a6e" text-anchor="middle">⟲ motriz (eje motor)</text>
+      <text x="210" y="232" font-size="12" font-weight="700" fill="#475569" text-anchor="middle">conducido (loco)</text>
+      <text x="125" y="118" font-size="10.5" fill="#0369a1" font-style="italic">flujo por la caja →</text>
+      <defs>
+        <marker id="arrB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#0284c7"/></marker>
+        <marker id="arrB2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#0284c7"/></marker>
+        <marker id="arrR" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#ef4444"/></marker>
+        <marker id="arrR2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#ef4444"/></marker>
+        <marker id="arrH" markerWidth="9" markerHeight="9" refX="3" refY="4" orient="auto"><path d="M0 0 L6 4 L0 8 z" fill="#0c4a6e"/></marker>
+      </defs>
+    </svg>
+    <div class="dcap"><strong>Engranajes externos.</strong> El aceite entra (azul), queda atrapado entre los dientes y la carcasa, viaja por los <em>costados externos</em> y sale a presión (rojo). Caudal FIJO: solo cambia con las rpm.</div>
+  </div>
+
+  <!-- PISTONES AXIALES -->
+  <div class="diagram">
+    <svg viewBox="0 0 460 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Esquema de bomba de pistones axiales de plato basculante">
+      <!-- eje -->
+      <rect x="40" y="118" width="120" height="14" rx="3" fill="#f59e0b" stroke="#b45309" stroke-width="1.5"/>
+      <text x="70" y="110" font-size="11" font-weight="700" fill="#b45309">eje motriz</text>
+      <!-- tambor / bloque de cilindros -->
+      <rect x="160" y="60" width="120" height="130" rx="8" fill="#dbeafe" stroke="#0369a1" stroke-width="2.5"/>
+      <text x="220" y="208" font-size="11" font-weight="700" fill="#0369a1" text-anchor="middle">tambor (bloque cilindros)</text>
+      <!-- pistones (móviles) -->
+      <g fill="#94a3b8" stroke="#475569" stroke-width="1.5">
+        <rect x="220" y="78" width="70" height="16" rx="3"/>
+        <rect x="200" y="117" width="90" height="16" rx="3"/>
+        <rect x="220" y="156" width="70" height="16" rx="3"/>
+      </g>
+      <!-- zapatas sobre el plato -->
+      <g fill="#fbbf24" stroke="#b45309" stroke-width="1.2">
+        <rect x="286" y="74" width="10" height="24" rx="2"/>
+        <rect x="286" y="113" width="10" height="24" rx="2"/>
+        <rect x="286" y="152" width="10" height="24" rx="2"/>
+      </g>
+      <!-- plato inclinado -->
+      <line x1="305" y1="55" x2="335" y2="195" stroke="#0d9488" stroke-width="10" stroke-linecap="round"/>
+      <text x="330" y="48" font-size="11" font-weight="700" fill="#0f766e">plato</text>
+      <text x="320" y="62" font-size="11" font-weight="700" fill="#0f766e">basculante</text>
+      <!-- ángulo β -->
+      <line x1="320" y1="125" x2="320" y2="60" stroke="#64748b" stroke-width="1" stroke-dasharray="3 3"/>
+      <path d="M320 95 A30 30 0 0 1 327 70" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+      <text x="332" y="92" font-size="13" font-weight="800" fill="#dc2626">β</text>
+      <!-- entrada/salida (placa de distribución) -->
+      <path d="M155 150 H120 V210 H60" fill="none" stroke="#0284c7" stroke-width="8" marker-end="url(#axB)"/>
+      <path d="M155 95 H120 V35 H60" fill="none" stroke="#ef4444" stroke-width="8" marker-end="url(#axR)"/>
+      <text x="60" y="228" font-size="11" font-weight="700" fill="#0369a1">SUCCIÓN</text>
+      <text x="60" y="28" font-size="11" font-weight="700" fill="#b91c1c">DESCARGA</text>
+      <defs>
+        <marker id="axB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#0284c7"/></marker>
+        <marker id="axR" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#ef4444"/></marker>
+      </defs>
+    </svg>
+    <div class="dcap"><strong>Pistones axiales (plato basculante).</strong> Elementos móviles: eje, tambor y pistones. Caudal VARIABLE: cambiando el <strong>ángulo β</strong> del plato cambia la carrera del pistón (β=0° → caudal cero). A mayor β, más caudal por vuelta.</div>
+  </div>
+
+  <!-- PALETAS -->
+  <div class="diagram">
+    <svg viewBox="0 0 460 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Esquema de bomba de paletas">
+      <!-- anillo estator -->
+      <circle cx="210" cy="125" r="95" fill="#eef6fc" stroke="#0369a1" stroke-width="3"/>
+      <text x="210" y="22" font-size="12" font-weight="700" fill="#0369a1" text-anchor="middle">anillo estator</text>
+      <!-- rotor excéntrico (desplazado hacia abajo) -->
+      <circle cx="210" cy="150" r="58" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2.5"/>
+      <circle cx="210" cy="150" r="9" fill="#1d4ed8"/>
+      <text x="210" y="153" font-size="9" fill="#fff" text-anchor="middle" font-weight="700">⟲</text>
+      <!-- paletas (radiales, sobresalen distinto por la excentricidad) -->
+      <g stroke="#b45309" stroke-width="1.5" fill="#fbbf24">
+        <rect x="206" y="32" width="8" height="118" rx="2"/>
+        <rect x="206" y="150" width="8" height="62" rx="2"/>
+        <rect x="150" y="146" width="62" height="8" rx="2"/>
+        <rect x="208" y="146" width="62" height="8" rx="2"/>
+        <rect x="168" y="92" width="8" height="84" rx="2" transform="rotate(45 172 134)"/>
+        <rect x="244" y="92" width="8" height="84" rx="2" transform="rotate(-45 248 134)"/>
+      </g>
+      <!-- cámara que crece (succión, izq-arriba) y decrece (descarga, der) -->
+      <path d="M150 70 A95 95 0 0 0 130 150" fill="none" stroke="#0284c7" stroke-width="3" stroke-dasharray="6 4"/>
+      <text x="92" y="95" font-size="11" font-weight="700" fill="#0369a1">cámara</text>
+      <text x="92" y="109" font-size="11" font-weight="700" fill="#0369a1">CRECE</text>
+      <text x="100" y="123" font-size="9.5" fill="#0369a1" font-style="italic">(succión)</text>
+      <path d="M270 70 A95 95 0 0 1 290 150" fill="none" stroke="#ef4444" stroke-width="3" stroke-dasharray="6 4"/>
+      <text x="300" y="95" font-size="11" font-weight="700" fill="#b91c1c">cámara</text>
+      <text x="300" y="109" font-size="11" font-weight="700" fill="#b91c1c">ACHICA</text>
+      <text x="305" y="123" font-size="9.5" fill="#b91c1c" font-style="italic">(descarga)</text>
+      <text x="150" y="245" font-size="11" font-weight="700" fill="#1d4ed8" text-anchor="middle">rotor (motriz)</text>
+      <text x="320" y="245" font-size="11" font-weight="700" fill="#b45309" text-anchor="middle">paletas</text>
+    </svg>
+    <div class="dcap"><strong>Paletas.</strong> El rotor está <strong>descentrado (excéntrico)</strong> respecto del anillo estator. Al girar, las cámaras entre paletas crecen (succión) y se achican (descarga). Caudal VARIABLE: desplazando el anillo se cambia la excentricidad.</div>
+  </div>
+
   <div class="stitle"><span class="ico">🧊</span>Visualización 3D: así funcionan por dentro</div>
   <div class="note">🖱️ <strong>Arrastrá sobre cada modelo para girarlo</strong> y mirá el mecanismo desde cualquier ángulo. Regulá la velocidad con el deslizador. Los modelos necesitan conexión a internet la primera vez (cargan Three.js).</div>
 
@@ -716,6 +868,56 @@ tr:nth-child(even) td{background:var(--blue-bg)}
     </div>
   </div>
 
+  <div class="sub">Corte transversal de un cilindro de doble efecto</div>
+  <div class="diagram">
+    <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Corte de cilindro de doble efecto">
+      <!-- camisa / tubo -->
+      <rect x="60" y="70" width="360" height="80" fill="#e0f2fe" stroke="#0369a1" stroke-width="3"/>
+      <!-- tapa trasera -->
+      <rect x="48" y="60" width="14" height="100" rx="3" fill="#475569"/>
+      <!-- tapa delantera -->
+      <rect x="418" y="60" width="14" height="100" rx="3" fill="#475569"/>
+      <!-- émbolo / pistón -->
+      <rect x="200" y="72" width="26" height="76" fill="#94a3b8" stroke="#334155" stroke-width="2"/>
+      <!-- sellos del émbolo -->
+      <rect x="198" y="72" width="5" height="76" fill="#16a34a"/>
+      <rect x="223" y="72" width="5" height="76" fill="#16a34a"/>
+      <!-- vástago -->
+      <rect x="226" y="102" width="210" height="16" fill="#cbd5e1" stroke="#334155" stroke-width="1.5"/>
+      <!-- prensaestopas + sello vástago + rascador -->
+      <rect x="418" y="96" width="6" height="28" fill="#16a34a"/>
+      <rect x="426" y="96" width="5" height="28" fill="#d97706"/>
+      <!-- cámaras (aceite) -->
+      <rect x="63" y="73" width="135" height="74" fill="#bfdbfe" opacity=".6"/>
+      <rect x="228" y="73" width="190" height="74" fill="#fecaca" opacity=".55"/>
+      <!-- vías -->
+      <path d="M120 70 V40" stroke="#0284c7" stroke-width="8" marker-start="url(#cilB)"/>
+      <path d="M360 70 V40" stroke="#ef4444" stroke-width="8" marker-start="url(#cilR)"/>
+      <!-- etiquetas -->
+      <text x="120" y="32" font-size="11" font-weight="700" fill="#0369a1" text-anchor="middle">vía A (avance)</text>
+      <text x="360" y="32" font-size="11" font-weight="700" fill="#b91c1c" text-anchor="middle">vía B (retroceso)</text>
+      <text x="130" y="170" font-size="10.5" fill="#0369a1" text-anchor="middle">cámara trasera</text>
+      <text x="320" y="170" font-size="10.5" fill="#b91c1c" text-anchor="middle">cámara delantera (anular)</text>
+      <text x="213" y="200" font-size="10.5" font-weight="700" fill="#334155" text-anchor="middle">émbolo/pistón</text>
+      <text x="40" y="195" font-size="10.5" font-weight="700" fill="#475569">tapa trasera</text>
+      <text x="408" y="195" font-size="10.5" font-weight="700" fill="#475569">tapa delantera</text>
+      <text x="240" y="63" font-size="10.5" font-weight="700" fill="#0c4a6e">camisa (tubo)</text>
+      <text x="500" y="113" font-size="10.5" font-weight="700" fill="#334155" text-anchor="middle">vástago →</text>
+      <text x="470" y="150" font-size="9.5" fill="#16a34a">🟩 sellos · 🟧 rascador</text>
+      <defs>
+        <marker id="cilB" markerWidth="8" markerHeight="8" refX="3" refY="6" orient="auto"><path d="M0 6 L3 0 L6 6 z" fill="#0284c7"/></marker>
+        <marker id="cilR" markerWidth="8" markerHeight="8" refX="3" refY="6" orient="auto"><path d="M0 6 L3 0 L6 6 z" fill="#ef4444"/></marker>
+      </defs>
+    </svg>
+    <div class="dcap">Partes internas: <strong>camisa</strong> (tubo externo), <strong>émbolo/pistón</strong> (divide las cámaras), <strong>vástago</strong> (barra que sale), <strong>tapas</strong> delantera y trasera, <strong>sellos/O-rings</strong> (evitan fugas) y <strong>rascador</strong> (impide que entre suciedad). Aceite por A → avanza; por B → retrocede.</div>
+  </div>
+  <div class="grid g4" style="margin-top:.4rem">
+    <div class="card"><h3>Por brida</h3><p>Brida delantera o trasera atornillada a la estructura.</p></div>
+    <div class="card"><h3>Por patas (pie)</h3><p>Patas laterales apoyadas y fijadas a la base.</p></div>
+    <div class="card"><h3>Basculante</h3><p>Con muñón (trunnion) o rótula trasera: el cilindro pivota.</p></div>
+    <div class="card"><h3>Por horquilla</h3><p>Articulación tipo clevis en el extremo.</p></div>
+  </div>
+
   <div class="stitle"><span class="ico">🔄</span>Actuadores: motores hidráulicos</div>
   <div class="grid g2">
     <div class="card">
@@ -734,6 +936,47 @@ tr:nth-child(even) td{background:var(--blue-bg)}
     <div class="card"><h3>De pesa</h3><p>Descarga a presión constante, pero para altas presiones la pesa sería enorme y solo funciona vertical.</p></div>
     <div class="card"><h3>De resorte</h3><p>Se monta en cualquier posición; la presión disminuye a medida que el resorte se extiende.</p></div>
     <div class="card gr"><h3>De gas presurizado ⭐</h3><p>El más popular. Subtipos: <strong>vejiga (bladder)</strong>, <strong>diafragma</strong> y <strong>pistón</strong>. Los scooptrams usan de gas; los jumbos perforadores, de diafragma.</p></div>
+  </div>
+
+  <div class="sub">Los 3 tipos de gas presurizado</div>
+  <div class="diagram">
+    <svg viewBox="0 0 540 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tipos de acumulador: vejiga, diafragma y pistón">
+      <!-- VEJIGA -->
+      <g>
+        <rect x="30" y="25" width="110" height="160" rx="55" fill="#fff" stroke="#0369a1" stroke-width="2.5"/>
+        <path d="M85 40 C50 60 50 110 85 130 C120 110 120 60 85 40 Z" fill="#fde68a" stroke="#b45309" stroke-width="2"/>
+        <text x="85" y="95" font-size="13" font-weight="800" fill="#b45309" text-anchor="middle">N₂</text>
+        <rect x="60" y="150" width="50" height="38" fill="#bfdbfe" opacity=".7"/>
+        <circle cx="85" cy="20" r="6" fill="#475569"/>
+        <path d="M85 185 V205" stroke="#0284c7" stroke-width="7"/>
+        <text x="85" y="218" font-size="11" font-weight="700" fill="#0369a1" text-anchor="middle">vejiga (bladder)</text>
+      </g>
+      <!-- DIAFRAGMA -->
+      <g>
+        <circle cx="270" cy="105" r="80" fill="#fff" stroke="#0369a1" stroke-width="2.5"/>
+        <path d="M192 90 Q270 130 348 90" fill="none" stroke="#b45309" stroke-width="3"/>
+        <path d="M192 90 Q270 130 348 90 L348 28 Q270 28 192 28 Z" fill="#fde68a" opacity=".85"/>
+        <text x="270" y="62" font-size="13" font-weight="800" fill="#b45309" text-anchor="middle">N₂</text>
+        <path d="M192 90 Q270 130 348 90 L348 180 Q270 180 192 180 Z" fill="#bfdbfe" opacity=".6"/>
+        <path d="M270 185 V205" stroke="#0284c7" stroke-width="7"/>
+        <text x="270" y="218" font-size="11" font-weight="700" fill="#0369a1" text-anchor="middle">diafragma (membrana)</text>
+      </g>
+      <!-- PISTÓN -->
+      <g>
+        <rect x="410" y="30" width="100" height="155" rx="10" fill="#fff" stroke="#0369a1" stroke-width="2.5"/>
+        <rect x="412" y="32" width="96" height="60" fill="#fde68a"/>
+        <text x="460" y="68" font-size="13" font-weight="800" fill="#b45309" text-anchor="middle">N₂</text>
+        <rect x="412" y="92" width="96" height="20" fill="#94a3b8" stroke="#334155" stroke-width="1.5"/>
+        <rect x="412" y="112" width="96" height="71" fill="#bfdbfe" opacity=".6"/>
+        <path d="M460 185 V205" stroke="#0284c7" stroke-width="7"/>
+        <text x="460" y="218" font-size="11" font-weight="700" fill="#0369a1" text-anchor="middle">pistón flotante</text>
+      </g>
+    </svg>
+    <div class="dcap">🟡 gas N₂ · 🔵 aceite. <strong>Vejiga:</strong> bolsa de goma, respuesta muy rápida. <strong>Diafragma:</strong> membrana elástica, para volúmenes chicos. <strong>Pistón:</strong> pistón flotante, para altas presiones y grandes volúmenes.</div>
+  </div>
+  <div class="grid g2">
+    <div class="card gr"><h3>¿Por qué nitrógeno (N₂)?</h3><p>Es un gas <strong>inerte</strong>: evita el riesgo de explosión por combustión (<strong>efecto diésel</strong>) que ocurriría si se usara aire u oxígeno mezclado con aceite a alta presión.</p></div>
+    <div class="card re"><h3>⚠️ Conexión segura</h3><p>El acumulador <strong>NUNCA</strong> se conecta directo a la línea de presión. Requiere un <strong>bloque de seguridad</strong>: válvula de alivio propia (para que no explote) + válvula de descarga manual (para vaciarlo antes del mantenimiento). Se conecta en <strong>paralelo</strong> a la línea.</p></div>
   </div>
 
 </div></div>
@@ -888,6 +1131,196 @@ tr:nth-child(even) td{background:var(--blue-bg)}
       </ul>
     </div>
   </div>
+
+</div></div>
+
+<!-- ═══════════════════════ SÍMBOLOS ISO ═══════════════════════ -->
+<div id="simbolos" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">🔣</span>Símbolos ISO normados (DIN ISO 1219)</div>
+  <div class="note">El parcial te pide <strong>dibujar e identificar</strong> estos símbolos. Acá están los principales con su función y sus presiones de entrada/salida. Abajo hay un juego para practicar el reconocimiento.</div>
+
+  <div class="grid g3 sym-grid">
+
+    <div class="card"><div class="sym">
+      <svg viewBox="0 0 120 120" aria-label="Símbolo de bomba">
+        <circle cx="60" cy="62" r="34" fill="none" stroke="#1e293b" stroke-width="2.5"/>
+        <path d="M60 28 L52 44 L68 44 Z" fill="#1e293b"/>
+        <line x1="60" y1="28" x2="60" y2="14" stroke="#1e293b" stroke-width="2.5"/>
+      </svg></div>
+      <h3>Bomba (caudal fijo)</h3>
+      <p>Círculo con un <strong>triángulo hacia AFUERA</strong> (sale fluido a presión). Transforma energía mecánica en hidráulica. Genera <strong>caudal</strong>. La doble flecha/triángulo indica variable.</p>
+    </div>
+
+    <div class="card"><div class="sym">
+      <svg viewBox="0 0 120 120" aria-label="Símbolo de motor hidráulico">
+        <circle cx="60" cy="62" r="34" fill="none" stroke="#1e293b" stroke-width="2.5"/>
+        <path d="M48 50 L64 58 L48 66 Z" fill="#1e293b"/>
+        <path d="M72 50 L56 58 L72 66 Z" fill="#1e293b"/>
+        <line x1="60" y1="28" x2="60" y2="14" stroke="#1e293b" stroke-width="2.5"/>
+      </svg></div>
+      <h3>Motor hidráulico</h3>
+      <p>Círculo con dos <strong>triángulos hacia ADENTRO</strong> (entra fluido). Proceso inverso a la bomba: entra energía hidráulica (presión y caudal), sale mecánica (torque y rotación).</p>
+    </div>
+
+    <div class="card"><div class="sym">
+      <svg viewBox="0 0 120 120" aria-label="Símbolo de cilindro doble efecto">
+        <rect x="22" y="40" width="60" height="40" fill="none" stroke="#1e293b" stroke-width="2.5"/>
+        <line x1="50" y1="40" x2="50" y2="80" stroke="#1e293b" stroke-width="3"/>
+        <line x1="50" y1="60" x2="104" y2="60" stroke="#1e293b" stroke-width="3"/>
+        <line x1="35" y1="80" x2="35" y2="96" stroke="#1e293b" stroke-width="2"/>
+        <line x1="67" y1="80" x2="67" y2="96" stroke="#1e293b" stroke-width="2"/>
+        <text x="35" y="108" font-size="11" fill="#1e293b" text-anchor="middle">A</text>
+        <text x="67" y="108" font-size="11" fill="#1e293b" text-anchor="middle">B</text>
+      </svg></div>
+      <h3>Cilindro doble efecto</h3>
+      <p>Émbolo con vástago y <strong>dos vías</strong> (A y B). Energía de entrada hidráulica → salida mecánica <strong>lineal</strong> (fuerza y velocidad). Trabaja en ambos sentidos.</p>
+    </div>
+
+    <div class="card"><div class="sym">
+      <svg viewBox="0 0 120 120" aria-label="Símbolo de válvula de alivio">
+        <rect x="38" y="38" width="44" height="44" fill="none" stroke="#1e293b" stroke-width="2.5"/>
+        <path d="M52 70 L52 50" stroke="#1e293b" stroke-width="2.5" marker-end="url(#sa1)"/>
+        <path d="M82 60 q8 0 8 -6" fill="none" stroke="#1e293b" stroke-width="1.6" stroke-dasharray="3 2"/>
+        <path d="M30 86 l10 -4 -2 6 z" fill="#1e293b"/>
+        <path d="M82 50 l6 -4 -2 5 4 -2" fill="none" stroke="#1e293b" stroke-width="1.6"/>
+        <line x1="60" y1="82" x2="60" y2="98" stroke="#1e293b" stroke-width="2.5"/>
+        <line x1="60" y1="38" x2="60" y2="22" stroke="#1e293b" stroke-width="2.5"/>
+        <text x="60" y="112" font-size="11" fill="#b91c1c" text-anchor="middle">P (entrada)</text>
+        <text x="60" y="18" font-size="11" fill="#0369a1" text-anchor="middle">T (tanque)</text>
+        <defs><marker id="sa1" markerWidth="7" markerHeight="7" refX="3" refY="1" orient="auto"><path d="M0 6 L3 0 L6 6 z" fill="#1e293b"/></marker></defs>
+      </svg></div>
+      <h3>Válvula de alivio (limitadora)</h3>
+      <p><strong>Normalmente cerrada.</strong> Flecha desalineada + <strong>resorte</strong> regulable + pilotaje (puntos) desde la <strong>entrada</strong>. Entrada = presión del sistema (alta); salida = tanque (baja). Seguridad por sobrepresión.</p>
+    </div>
+
+    <div class="card"><div class="sym">
+      <svg viewBox="0 0 120 120" aria-label="Símbolo de válvula reductora">
+        <rect x="38" y="38" width="44" height="44" fill="none" stroke="#1e293b" stroke-width="2.5"/>
+        <path d="M60 78 L60 46" stroke="#1e293b" stroke-width="2.5" marker-end="url(#sr1)"/>
+        <path d="M82 60 q8 0 8 6" fill="none" stroke="#1e293b" stroke-width="1.6" stroke-dasharray="3 2"/>
+        <path d="M82 70 l6 4 -2 -5" fill="none" stroke="#1e293b" stroke-width="1.6"/>
+        <line x1="60" y1="82" x2="60" y2="98" stroke="#1e293b" stroke-width="2.5"/>
+        <line x1="60" y1="38" x2="60" y2="22" stroke="#1e293b" stroke-width="2.5"/>
+        <text x="60" y="112" font-size="11" fill="#b91c1c" text-anchor="middle">entrada (alta)</text>
+        <text x="60" y="18" font-size="11" fill="#0369a1" text-anchor="middle">salida (regulada)</text>
+        <defs><marker id="sr1" markerWidth="7" markerHeight="7" refX="3" refY="1" orient="auto"><path d="M0 6 L3 0 L6 6 z" fill="#1e293b"/></marker></defs>
+      </svg></div>
+      <h3>Válvula reductora de presión</h3>
+      <p><strong>Normalmente abierta</strong> (flecha alineada, pasa el flujo). Pilotaje tomado desde la <strong>salida</strong> para cerrarla si la presión se pasa del límite. La diferencia de presión se transforma en <strong>calor</strong>.</p>
+    </div>
+
+    <div class="card"><div class="sym">
+      <svg viewBox="0 0 120 120" aria-label="Símbolo de válvula de secuencia">
+        <rect x="38" y="34" width="44" height="44" fill="none" stroke="#1e293b" stroke-width="2.5"/>
+        <path d="M52 66 L52 46" stroke="#1e293b" stroke-width="2.5" marker-end="url(#ss1)"/>
+        <path d="M82 56 q8 0 8 -6" fill="none" stroke="#1e293b" stroke-width="1.6" stroke-dasharray="3 2"/>
+        <line x1="60" y1="78" x2="60" y2="96" stroke="#1e293b" stroke-width="2.5"/>
+        <line x1="60" y1="34" x2="60" y2="18" stroke="#1e293b" stroke-width="2.5"/>
+        <line x1="30" y1="78" x2="30" y2="100" stroke="#1e293b" stroke-width="1.6" stroke-dasharray="4 3"/>
+        <text x="60" y="110" font-size="10.5" fill="#b91c1c" text-anchor="middle">entrada (alta)</text>
+        <text x="60" y="14" font-size="10.5" fill="#0369a1" text-anchor="middle">salida → 2º actuador</text>
+        <text x="14" y="104" font-size="9" fill="#7c3aed">dren</text>
+        <defs><marker id="ss1" markerWidth="7" markerHeight="7" refX="3" refY="1" orient="auto"><path d="M0 6 L3 0 L6 6 z" fill="#1e293b"/></marker></defs>
+      </svg></div>
+      <h3>Válvula de secuencia</h3>
+      <p>Como la alivio pero con <strong>drenaje externo</strong> al tanque (línea de trazos). Cuando el 1º actuador termina y la presión sube, abre para alimentar al <strong>2º</strong>. Entrada y salida = alta presión.</p>
+    </div>
+
+    <div class="card"><div class="sym">
+      <svg viewBox="0 0 120 120" aria-label="Símbolo de válvula de retención">
+        <line x1="14" y1="60" x2="42" y2="60" stroke="#1e293b" stroke-width="2.5"/>
+        <line x1="78" y1="60" x2="106" y2="60" stroke="#1e293b" stroke-width="2.5"/>
+        <circle cx="52" cy="60" r="11" fill="none" stroke="#1e293b" stroke-width="2.5"/>
+        <line x1="64" y1="48" x2="64" y2="72" stroke="#1e293b" stroke-width="2.5"/>
+        <path d="M64 48 L78 60 L64 72" fill="none" stroke="#1e293b" stroke-width="2.5"/>
+        <text x="30" y="86" font-size="11" fill="#15803d" text-anchor="middle">libre →</text>
+        <text x="90" y="86" font-size="11" fill="#b91c1c" text-anchor="middle">bloqueo</text>
+      </svg></div>
+      <h3>Válvula de retención (cheque)</h3>
+      <p>Una <strong>bola apoyada en un cono (V)</strong>. El aceite pasa si empuja la bola desde la punta de la V hacia afuera; en sentido inverso la aplasta contra el asiento y <strong>bloquea</strong>.</p>
+    </div>
+
+    <div class="card"><div class="sym">
+      <svg viewBox="0 0 120 120" aria-label="Símbolo de reguladora de caudal simple">
+        <line x1="14" y1="60" x2="44" y2="60" stroke="#1e293b" stroke-width="2.5"/>
+        <line x1="76" y1="60" x2="106" y2="60" stroke="#1e293b" stroke-width="2.5"/>
+        <path d="M44 48 q16 12 0 24" fill="none" stroke="#1e293b" stroke-width="2.5"/>
+        <path d="M76 48 q-16 12 0 24" fill="none" stroke="#1e293b" stroke-width="2.5"/>
+        <line x1="40" y1="78" x2="80" y2="40" stroke="#1e293b" stroke-width="2" marker-end="url(#sf1)"/>
+        <defs><marker id="sf1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#1e293b"/></marker></defs>
+      </svg></div>
+      <h3>Reguladora de caudal (aguja) — simple</h3>
+      <p>Dos arcos enfrentados (estrangulación) con una <strong>flecha diagonal</strong> = <strong>regulable</strong>. Controla la velocidad de los actuadores restringiendo el paso. Restringe en <strong>ambos sentidos</strong>.</p>
+    </div>
+
+    <div class="card"><div class="sym">
+      <svg viewBox="0 0 120 120" aria-label="Símbolo de reguladora de caudal unidireccional">
+        <rect x="32" y="30" width="56" height="60" rx="4" fill="none" stroke="#1e293b" stroke-width="1.6" stroke-dasharray="4 3"/>
+        <line x1="6" y1="60" x2="32" y2="60" stroke="#1e293b" stroke-width="2.5"/>
+        <line x1="88" y1="60" x2="114" y2="60" stroke="#1e293b" stroke-width="2.5"/>
+        <path d="M40 40 q12 8 0 16" fill="none" stroke="#1e293b" stroke-width="2"/>
+        <path d="M80 40 q-12 8 0 16" fill="none" stroke="#1e293b" stroke-width="2"/>
+        <line x1="38" y1="58" x2="82" y2="30" stroke="#1e293b" stroke-width="1.6" marker-end="url(#sf2)"/>
+        <circle cx="52" cy="74" r="8" fill="none" stroke="#1e293b" stroke-width="2"/>
+        <path d="M60 66 L68 74 L60 82" fill="none" stroke="#1e293b" stroke-width="2"/>
+        <line x1="60" y1="66" x2="60" y2="82" stroke="#1e293b" stroke-width="2"/>
+        <defs><marker id="sf2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#1e293b"/></marker></defs>
+      </svg></div>
+      <h3>Reguladora unidireccional (con check)</h3>
+      <p>La reguladora en <strong>paralelo con una válvula de retención</strong>. Regula en un sentido; en el inverso el aceite pasa <strong>libre por el cheque</strong>.</p>
+    </div>
+
+    <div class="card"><div class="sym">
+      <svg viewBox="0 0 120 120" aria-label="Símbolo de válvula direccional 4/3">
+        <g stroke="#1e293b" stroke-width="2" fill="none">
+          <rect x="16" y="44" width="29" height="32"/>
+          <rect x="45" y="44" width="29" height="32"/>
+          <rect x="74" y="44" width="29" height="32"/>
+        </g>
+        <!-- centro: bloqueado -->
+        <path d="M55 70 v-12 M64 70 v-12" stroke="#1e293b" stroke-width="1.8"/>
+        <path d="M52 50 h6 M61 50 h6" stroke="#1e293b" stroke-width="1.8"/>
+        <!-- izq: cruzado -->
+        <path d="M22 50 L39 70 M22 70 L39 50" stroke="#1e293b" stroke-width="1.6"/>
+        <!-- der: paralelo -->
+        <path d="M80 50 L97 50 M80 70 L97 70" stroke="#1e293b" stroke-width="1.6"/>
+        <text x="48" y="92" font-size="10.5" fill="#1e293b" text-anchor="middle">P  T  A  B</text>
+        <text x="60" y="36" font-size="11" fill="#1e293b" text-anchor="middle" font-weight="700">4/3</text>
+      </svg></div>
+      <h3>Direccional 4/3 (4 vías, 3 posiciones)</h3>
+      <p>Cada <strong>cuadrado = una posición</strong>; las líneas que tocan el cuadrado central son las <strong>vías</strong> (P=presión, T=tanque, A y B=actuador). Dirige el aceite para avanzar, retroceder o parar.</p>
+    </div>
+
+    <div class="card"><div class="sym">
+      <svg viewBox="0 0 120 120" aria-label="Símbolo de acumulador">
+        <rect x="46" y="22" width="28" height="76" rx="14" fill="none" stroke="#1e293b" stroke-width="2.5"/>
+        <path d="M52 40 q8 -6 16 0" fill="none" stroke="#1e293b" stroke-width="2"/>
+        <text x="60" y="34" font-size="11" fill="#1e293b" text-anchor="middle">N₂</text>
+        <line x1="60" y1="98" x2="60" y2="112" stroke="#1e293b" stroke-width="2.5"/>
+      </svg></div>
+      <h3>Acumulador (hidroneumático)</h3>
+      <p>Recipiente alargado con el <strong>gas (N₂)</strong> arriba separado del aceite. Almacena energía de reserva, amortigua picos de presión y compensa fugas. Se conecta en <strong>paralelo</strong>.</p>
+    </div>
+
+    <div class="card"><div class="sym">
+      <svg viewBox="0 0 120 120" aria-label="Símbolo de accionamientos">
+        <g stroke="#1e293b" stroke-width="2" fill="none">
+          <line x1="20" y1="30" x2="20" y2="50"/><circle cx="20" cy="26" r="5" fill="#1e293b"/>
+          <path d="M50 50 l0 -16 M44 38 l12 -8" /><text x="50" y="64" font-size="8" fill="#1e293b" text-anchor="middle">palanca</text>
+          <rect x="74" y="34" width="16" height="16"/><line x1="74" y1="42" x2="90" y2="42"/><text x="82" y="64" font-size="8" fill="#1e293b" text-anchor="middle">solenoide</text>
+          <path d="M20 86 l10 -8 -10 -8 10 8 z" /><text x="22" y="104" font-size="8" fill="#1e293b" text-anchor="middle">resorte</text>
+        </g>
+      </svg></div>
+      <h3>Accionamientos</h3>
+      <p><strong>Palanca manual</strong> (operario), <strong>solenoides</strong> (bobinas que mueven la corredera por magnetismo) y <strong>resortes/muelles</strong> (devuelven la válvula a su posición de reposo al cortar la fuerza).</p>
+    </div>
+
+  </div>
+
+  <div class="stitle"><span class="ico">🎯</span>Juego: ¿qué símbolo es?</div>
+  <p style="margin-bottom:1rem">Mirá el símbolo y elegí a qué componente corresponde. Practicá hasta reconocerlos todos de un vistazo.</p>
+  <div id="symgame"></div>
 
 </div></div>
 
@@ -1222,6 +1655,25 @@ tr:nth-child(even) td{background:var(--blue-bg)}
 
 </div></div>
 
+<!-- ═══════════════════════ AUTOEVALUACIÓN TEMARIO ═══════════════════════ -->
+<div id="autoeval" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">📋</span>Autoevaluación del temario (Oleohidráulica)</div>
+  <div class="note">Cubre los <strong>22 puntos del temario orientativo</strong> del 2º parcial. <strong>Parte A:</strong> preguntas tipo oral — respondé mentalmente y revelá la respuesta para corregirte. <strong>Parte B:</strong> autoevaluación de opción múltiple con puntaje.</div>
+
+  <div class="sub">📝 Parte A — Las 22 preguntas del temario (respuesta revelable)</div>
+  <div class="oral-tools">
+    <button class="btn-reset" onclick="toggleAllOral(true)">Abrir todas</button>
+    <button class="btn-reset" onclick="toggleAllOral(false)">Cerrar todas</button>
+  </div>
+  <div id="oral-list"></div>
+
+  <div class="stitle"><span class="ico">✅</span>Parte B — Autoevaluación de opción múltiple</div>
+  <p style="margin-bottom:1rem">25 preguntas sobre todo el temario, incluyendo identificación de símbolos ISO. Se guarda tu mejor puntaje.</p>
+  <div id="quiz2-container"></div>
+
+</div></div>
+
 <!-- ═══════════════════════ EJERCICIOS ═══════════════════════ -->
 <div id="ejercicios" class="page"><div class="container">
 
@@ -1462,6 +1914,68 @@ tr:nth-child(even) td{background:var(--blue-bg)}
         <div class="row"><label>Rendimiento η <span class="val" id="sim4-e-v">85 %</span></label><input type="range" id="sim4-e" min="50" max="100" step="1" value="85" oninput="sim4()"></div>
         <div class="lab-result" id="sim4-out"></div>
         <div class="lab-fact"><strong>Mirá:</strong> la potencia crece linealmente con AMBOS. Doblar la presión o doblar el caudal duplica los kW que consume el motor.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIM 5: lector de esquema hidráulico -->
+  <div class="lab">
+    <div class="lab-head"><h3>🔧 Lector de esquema hidráulico</h3><div class="ctx">Un circuito real: tanque → bomba → válvula de alivio → direccional 4/3 → cilindro de doble efecto. Cambiá la posición de la válvula y seguí el aceite.</div></div>
+    <div class="lab-body">
+      <div class="lab-viz" style="min-height:300px">
+        <svg viewBox="0 0 460 300" xmlns="http://www.w3.org/2000/svg" id="sim5-svg">
+          <!-- CILINDRO -->
+          <rect x="250" y="26" width="170" height="44" fill="#fff" stroke="#1e293b" stroke-width="2.5"/>
+          <rect id="sim5-piston" x="270" y="28" width="14" height="40" fill="#94a3b8" stroke="#334155" stroke-width="1.5"/>
+          <line id="sim5-rod" x1="284" y1="48" x2="430" y2="48" stroke="#334155" stroke-width="5"/>
+          <text x="335" y="20" font-size="10" fill="#475569" text-anchor="middle">cilindro doble efecto</text>
+          <text x="262" y="86" font-size="10" fill="#0369a1">A</text>
+          <text x="404" y="86" font-size="10" fill="#0369a1">B</text>
+          <!-- líneas A y B desde cilindro a válvula -->
+          <path id="sim5-lineA" d="M268 70 V120 H300 V150" fill="none" stroke="#94a3b8" stroke-width="3.5"/>
+          <path id="sim5-lineB" d="M410 70 V110 H330 V150" fill="none" stroke="#94a3b8" stroke-width="3.5"/>
+          <!-- VÁLVULA DIRECCIONAL 4/3 -->
+          <g stroke="#1e293b" stroke-width="2" fill="#fff">
+            <rect x="255" y="150" width="40" height="40"/>
+            <rect x="295" y="150" width="40" height="40"/>
+            <rect x="335" y="150" width="40" height="40"/>
+          </g>
+          <text x="315" y="205" font-size="9.5" fill="#475569" text-anchor="middle">direccional 4/3</text>
+          <text x="300" y="148" font-size="9" fill="#1e293b">A</text>
+          <text x="328" y="148" font-size="9" fill="#1e293b">B</text>
+          <text x="300" y="201" font-size="9" fill="#1e293b">P</text>
+          <text x="328" y="201" font-size="9" fill="#1e293b">T</text>
+          <!-- símbolos internos según posición -->
+          <g id="sim5-valveglyph" stroke="#1e293b" stroke-width="1.6" fill="none"></g>
+          <!-- línea P (presión) desde bomba -->
+          <path id="sim5-lineP" d="M305 190 V230 H120" fill="none" stroke="#94a3b8" stroke-width="3.5"/>
+          <!-- línea T (tanque) -->
+          <path id="sim5-lineT" d="M325 190 V215 H210 V260" fill="none" stroke="#94a3b8" stroke-width="3.5"/>
+          <!-- BOMBA -->
+          <circle cx="95" cy="230" r="20" fill="#fff" stroke="#1e293b" stroke-width="2.5"/>
+          <path d="M95 214 L88 226 L102 226 Z" fill="#1e293b"/>
+          <line id="sim5-suction" x1="95" y1="250" x2="95" y2="278" stroke="#94a3b8" stroke-width="3.5"/>
+          <text x="95" y="208" font-size="9.5" fill="#475569" text-anchor="middle">bomba</text>
+          <!-- VÁLVULA DE ALIVIO -->
+          <rect x="150" y="232" width="30" height="30" fill="#fff" stroke="#1e293b" stroke-width="2"/>
+          <path id="sim5-relief-arrow" d="M165 256 V240" stroke="#1e293b" stroke-width="1.8"/>
+          <path id="sim5-lineRelief" d="M165 262 V272 H210" fill="none" stroke="#94a3b8" stroke-width="3"/>
+          <text x="165" y="226" font-size="9" fill="#475569" text-anchor="middle">alivio</text>
+          <!-- TANQUE -->
+          <path d="M180 278 H250 M210 278 V292 M195 292 H225" stroke="#1e293b" stroke-width="2" fill="none"/>
+          <path d="M75 278 H115 M95 278 V292" stroke="#1e293b" stroke-width="2" fill="none"/>
+        </svg>
+      </div>
+      <div class="lab-ctrls">
+        <div class="row"><label>Posición de la válvula</label>
+          <select class="sel" id="sim5-pos" onchange="sim5()">
+            <option value="centro" selected>Centro — cilindro parado (centro tándem)</option>
+            <option value="avance">Izquierda — AVANCE del vástago (P→A, B→T)</option>
+            <option value="retro">Derecha — RETROCESO del vástago (P→B, A→T)</option>
+          </select>
+        </div>
+        <div class="lab-result" id="sim5-out"></div>
+        <div class="lab-fact"><strong>Cómo leer:</strong> 🔴 línea con presión · 🔵 línea de retorno a tanque · ⚪ línea inactiva. Si el aceite entra por la base (A) el vástago <strong>avanza</strong>; el aceite de la cámara opuesta siempre vuelve por la línea <strong>T</strong>. En el centro tándem la bomba descarga libre a tanque por el propio centro de la válvula (P→T), sin calentar el aceite.</div>
       </div>
     </div>
   </div>
@@ -2170,9 +2684,178 @@ window.addEventListener('resize', ()=>{
   }
 });
 
+/* ========== SIM 5: lector de esquema hidráulico ========== */
+const SIM5 = {RED:'#dc2626', BLUE:'#0284c7', GRAY:'#94a3b8'};
+let sim5shift = 0;   // 0 = retraído, 96 = avanzado
+function sim5(){
+  const pos = document.getElementById('sim5-pos').value;
+  const setL = (id,c)=>document.getElementById(id).setAttribute('stroke',c);
+  const glyph = document.getElementById('sim5-valveglyph');
+  let boxX, out;
+  if(pos==='avance'){
+    setL('sim5-lineP',SIM5.RED); setL('sim5-lineA',SIM5.RED); setL('sim5-lineB',SIM5.BLUE);
+    setL('sim5-lineT',SIM5.BLUE); setL('sim5-lineRelief',SIM5.GRAY); setL('sim5-suction',SIM5.BLUE);
+    boxX=255; sim5shift=96;
+    out='<span class="res-line"><span class="res-key">AVANCE</span>: P → A (presión a la base)</span><span class="res-line">B → T: la cámara opuesta vuelve a tanque</span><span class="res-line">el vástago SALE →</span>';
+  } else if(pos==='retro'){
+    setL('sim5-lineP',SIM5.RED); setL('sim5-lineB',SIM5.RED); setL('sim5-lineA',SIM5.BLUE);
+    setL('sim5-lineT',SIM5.BLUE); setL('sim5-lineRelief',SIM5.GRAY); setL('sim5-suction',SIM5.BLUE);
+    boxX=335; sim5shift=0;
+    out='<span class="res-line"><span class="res-key">RETROCESO</span>: P → B (presión al lado del vástago)</span><span class="res-line">A → T: la cámara de la base vuelve a tanque</span><span class="res-line">← el vástago ENTRA</span>';
+  } else {
+    setL('sim5-lineP',SIM5.BLUE); setL('sim5-lineT',SIM5.BLUE); setL('sim5-lineA',SIM5.GRAY);
+    setL('sim5-lineB',SIM5.GRAY); setL('sim5-lineRelief',SIM5.GRAY); setL('sim5-suction',SIM5.BLUE);
+    boxX=295;
+    out='<span class="res-line"><span class="res-key">CENTRO TÁNDEM</span>: A y B bloqueados</span><span class="res-line">P → T: la bomba descarga libre a tanque (no calienta)</span><span class="res-line">el cilindro queda PARADO en posición</span>';
+  }
+  glyph.innerHTML='<rect x="'+boxX+'" y="150" width="40" height="40" fill="none" stroke="#f59e0b" stroke-width="3"/>';
+  document.getElementById('sim5-piston').style.transform='translateX('+sim5shift+'px)';
+  document.getElementById('sim5-rod').style.transform='translateX('+sim5shift+'px)';
+  document.getElementById('sim5-out').innerHTML=out;
+}
+
+/* ========== JUEGO DE SÍMBOLOS ISO ========== */
+const SVGNS='http://www.w3.org/2000/svg';
+const SYMGAME=[
+  {a:'Bomba', svg:'<circle cx="60" cy="62" r="34" fill="none" stroke="#1e293b" stroke-width="2.5"/><path d="M60 28 L52 44 L68 44 Z" fill="#1e293b"/><line x1="60" y1="28" x2="60" y2="14" stroke="#1e293b" stroke-width="2.5"/>', opts:['Bomba','Motor hidráulico','Acumulador','Válvula de alivio']},
+  {a:'Motor hidráulico', svg:'<circle cx="60" cy="62" r="34" fill="none" stroke="#1e293b" stroke-width="2.5"/><path d="M48 50 L64 58 L48 66 Z" fill="#1e293b"/><path d="M72 50 L56 58 L72 66 Z" fill="#1e293b"/><line x1="60" y1="28" x2="60" y2="14" stroke="#1e293b" stroke-width="2.5"/>', opts:['Bomba','Motor hidráulico','Cilindro','Válvula de retención']},
+  {a:'Cilindro doble efecto', svg:'<rect x="22" y="40" width="60" height="40" fill="none" stroke="#1e293b" stroke-width="2.5"/><line x1="50" y1="40" x2="50" y2="80" stroke="#1e293b" stroke-width="3"/><line x1="50" y1="60" x2="104" y2="60" stroke="#1e293b" stroke-width="3"/>', opts:['Cilindro doble efecto','Acumulador','Motor hidráulico','Filtro']},
+  {a:'Válvula de alivio', svg:'<rect x="38" y="38" width="44" height="44" fill="none" stroke="#1e293b" stroke-width="2.5"/><path d="M52 70 L52 50" stroke="#1e293b" stroke-width="2.5"/><path d="M82 60 q8 0 8 -6" fill="none" stroke="#1e293b" stroke-width="1.6" stroke-dasharray="3 2"/><line x1="60" y1="82" x2="60" y2="98" stroke="#1e293b" stroke-width="2.5"/><line x1="60" y1="38" x2="60" y2="22" stroke="#1e293b" stroke-width="2.5"/>', opts:['Válvula reductora','Válvula de alivio','Válvula direccional','Bomba'], hint:'Flecha desalineada + pilotaje desde la entrada = normalmente cerrada.'},
+  {a:'Válvula reductora', svg:'<rect x="38" y="38" width="44" height="44" fill="none" stroke="#1e293b" stroke-width="2.5"/><path d="M60 78 L60 46" stroke="#1e293b" stroke-width="2.5"/><path d="M82 60 q8 0 8 6" fill="none" stroke="#1e293b" stroke-width="1.6" stroke-dasharray="3 2"/><line x1="60" y1="82" x2="60" y2="98" stroke="#1e293b" stroke-width="2.5"/><line x1="60" y1="38" x2="60" y2="22" stroke="#1e293b" stroke-width="2.5"/>', opts:['Válvula reductora','Válvula de alivio','Válvula de secuencia','Acumulador'], hint:'Flecha alineada (pasa el flujo) + pilotaje desde la salida = normalmente abierta.'},
+  {a:'Válvula de retención', svg:'<line x1="14" y1="60" x2="42" y2="60" stroke="#1e293b" stroke-width="2.5"/><line x1="78" y1="60" x2="106" y2="60" stroke="#1e293b" stroke-width="2.5"/><circle cx="52" cy="60" r="11" fill="none" stroke="#1e293b" stroke-width="2.5"/><line x1="64" y1="48" x2="64" y2="72" stroke="#1e293b" stroke-width="2.5"/><path d="M64 48 L78 60 L64 72" fill="none" stroke="#1e293b" stroke-width="2.5"/>', opts:['Reguladora de caudal','Válvula de retención','Bomba','Válvula de alivio'], hint:'Bola apoyada en un cono (V): pasa en un solo sentido.'},
+  {a:'Reguladora de caudal', svg:'<line x1="14" y1="60" x2="44" y2="60" stroke="#1e293b" stroke-width="2.5"/><line x1="76" y1="60" x2="106" y2="60" stroke="#1e293b" stroke-width="2.5"/><path d="M44 48 q16 12 0 24" fill="none" stroke="#1e293b" stroke-width="2.5"/><path d="M76 48 q-16 12 0 24" fill="none" stroke="#1e293b" stroke-width="2.5"/><line x1="40" y1="78" x2="80" y2="40" stroke="#1e293b" stroke-width="2"/>', opts:['Válvula de retención','Reguladora de caudal','Motor hidráulico','Válvula direccional'], hint:'Dos arcos enfrentados + flecha diagonal = estrangulación regulable.'},
+  {a:'Acumulador', svg:'<rect x="46" y="22" width="28" height="76" rx="14" fill="none" stroke="#1e293b" stroke-width="2.5"/><path d="M52 40 q8 -6 16 0" fill="none" stroke="#1e293b" stroke-width="2"/><text x="60" y="34" font-size="11" fill="#1e293b" text-anchor="middle">N₂</text><line x1="60" y1="98" x2="60" y2="112" stroke="#1e293b" stroke-width="2.5"/>', opts:['Cilindro','Acumulador','Bomba','Filtro']},
+  {a:'Válvula direccional 4/3', svg:'<g stroke="#1e293b" stroke-width="2" fill="none"><rect x="16" y="44" width="29" height="32"/><rect x="45" y="44" width="29" height="32"/><rect x="74" y="44" width="29" height="32"/></g><path d="M22 50 L39 70 M22 70 L39 50" stroke="#1e293b" stroke-width="1.6"/><path d="M80 50 L97 50 M80 70 L97 70" stroke="#1e293b" stroke-width="1.6"/>', opts:['Válvula direccional 4/3','Válvula de alivio','Acumulador','Motor hidráulico'], hint:'Tres cuadrados = 3 posiciones; las líneas que tocan el central son las vías.'},
+];
+let sgIdx=0, sgScore=0, sgAns=false, sgOrder=[];
+function sgStart(){ sgOrder=SYMGAME.map((_,i)=>i).sort(()=>Math.random()-0.5); sgIdx=0; sgScore=0; sgRender(); }
+function sgRender(){
+  const c=document.getElementById('symgame');
+  if(sgIdx>=sgOrder.length){
+    const pct=Math.round(sgScore/sgOrder.length*100);
+    c.innerHTML='<div class="result-card"><span class="emoji">'+(pct>=80?'🏆':pct>=60?'💪':'📚')+'</span><h2>¡Listo!</h2><span class="score-big">'+sgScore+' / '+sgOrder.length+'</span><p>'+(pct>=80?'Reconocés los símbolos al toque.':'Repasá la grilla de símbolos de arriba.')+'</p><button class="btn-retry" onclick="sgStart()">🔄 Jugar de nuevo</button></div>';
+    return;
+  }
+  const q=SYMGAME[sgOrder[sgIdx]]; sgAns=false;
+  c.innerHTML='<div class="quiz-header"><span class="quiz-score-display">Aciertos: '+sgScore+' / '+sgOrder.length+'</span></div>'+
+    '<div class="progress-bar-wrap"><div class="progress-bar" style="width:'+(sgIdx/sgOrder.length*100)+'%"></div></div>'+
+    '<div class="quiz-card"><div class="q-num">Símbolo '+(sgIdx+1)+' de '+sgOrder.length+'</div>'+
+    '<div class="symq-figure"><svg viewBox="0 0 120 120">'+q.svg+'</svg></div>'+
+    '<div class="options">'+q.opts.map(o=>'<button class="opt-btn" onclick="sgAnswer(this,\''+o.replace(/'/g,"\\'")+'\')">'+o+'</button>').join('')+'</div>'+
+    '<div class="feedback-box" id="sgfb"></div>'+
+    '<div class="quiz-nav"><button class="btn-next" id="sgnext" disabled onclick="sgIdx++;sgRender()">Siguiente →</button></div></div>';
+}
+function sgAnswer(btn,choice){
+  if(sgAns) return; sgAns=true;
+  const q=SYMGAME[sgOrder[sgIdx]];
+  document.querySelectorAll('#symgame .opt-btn').forEach(b=>{b.disabled=true; if(b.textContent===q.a) b.classList.add('correct');});
+  const fb=document.getElementById('sgfb');
+  if(choice===q.a){ sgScore++; fb.className='feedback-box show ok'; fb.innerHTML='✅ ¡Correcto! '+(q.hint||''); }
+  else { btn.classList.add('wrong'); fb.className='feedback-box show ko'; fb.innerHTML='❌ Es <strong>'+q.a+'</strong>. '+(q.hint||''); }
+  document.getElementById('sgnext').disabled=false;
+}
+
+/* ========== AUTOEVALUACIÓN — PARTE A (oral) ========== */
+const ORAL=[
+  ['Bombas hidráulicas: principio, energía y qué genera','Crea vacío en la entrada para succionar fluido y lo empuja mecánicamente hacia la salida mediante cámaras de volumen variable. Recibe energía <strong>mecánica</strong> (motor) y la transforma en <strong>hidráulica</strong> (caudal). Genera <strong>únicamente caudal, NO presión</strong>. La presión depende de la <strong>resistencia externa al flujo</strong> (carga del actuador y restricciones). Potencia = P · Q.'],
+  ['Caudal fijo vs caudal variable','<strong>Fijo:</strong> entrega siempre el mismo volumen por vuelta; el caudal solo cambia si varían las RPM. <strong>Variable:</strong> modifica el volumen por vuelta cambiando su geometría interna (ángulo del plato o posición del anillo) con las RPM fijas.'],
+  ['Desplazamiento positivo vs no positivo','<strong>Positivo:</strong> tiene sello hermético, mueve un volumen fijo sí o sí sin importar la presión en contra (pistones y paletas). <strong>No positivo:</strong> sin sello; si la resistencia a la salida sube, el caudal cae a cero porque el fluido "resbala" (bomba centrífuga/periférica de agua).'],
+  ['Bomba de engranajes','Dos ruedas dentadas giran acopladas: una <strong>motriz</strong> (eje motor) y una <strong>conducida</strong>. El aceite entra, queda atrapado entre los dientes y la carcasa, viaja por los <em>costados externos</em> y sale a presión. Caudal <strong>fijo</strong>: solo varía cambiando las RPM.'],
+  ['Bomba de pistones axiales (plato basculante)','Un tambor gira con pistones que apoyan sobre un <strong>plato inclinado</strong>; la inclinación obliga a los pistones a entrar (expulsión) y salir (succión). Elementos móviles: eje, tambor y pistones. Caudal <strong>variable</strong>: variando el <strong>ángulo del plato</strong> (más ángulo → más carrera → más caudal; con 0° el caudal se anula).'],
+  ['Bomba de paletas','Un rotor <strong>descentrado (excéntrico)</strong> gira con paletas dentro de un <strong>anillo estator</strong>. Al girar, las cámaras entre paletas se agrandan en la entrada (succión) y se achican en la salida (descarga). Elementos: rotor (motriz), paletas y anillo. Caudal <strong>variable</strong>: moviendo el anillo se cambia la excentricidad.'],
+  ['Válvulas de control de presión: definición y tipos','Componentes que <strong>regulan, limitan o reducen</strong> la presión en puntos del circuito para proteger el sistema o controlar fuerzas. Tipos: <strong>alivio (limitadora), reductora, secuencia y contrabalance</strong>.'],
+  ['Válvula de alivio (limitadora)','Función de <strong>seguridad</strong>: evita que el circuito o la bomba revienten por sobrepresión. Un resorte regulable empuja un cono que tapa el paso; si la presión vence al resorte, el cono se levanta y desvía el aceite al tanque. Entrada = presión del sistema (alta); salida = retorno a tanque (baja). Normalmente <strong>cerrada</strong>.'],
+  ['Válvula de secuencia','Permite que ocurran dos eventos <strong>en orden</strong>: cuando el primer actuador termina su carrera y la presión sube, la válvula abre y alimenta al segundo. Entrada y salida = alta presión. Símbolo con <strong>drenaje externo</strong> al tanque.'],
+  ['Válvula reductora de presión','<strong>Normalmente abierta.</strong> Reduce la presión en una parte del circuito para alimentar componentes que trabajan con menos fuerza. Entrada = presión máxima del sistema; salida = presión menor y constante. Si la entrada es mayor, se va cerrando (estrangula) y esa <strong>diferencia de presión se transforma en calor</strong>. Pilota desde la salida.'],
+  ['Válvula de retención (símbolo)','Permite el paso libre del aceite en un solo sentido; si el aceite intenta volver, empuja el obturador contra el asiento y bloquea. Símbolo: una <strong>bola apoyada en un cono (una "V")</strong>; el aceite pasa al empujar la bola desde la punta de la V hacia afuera.'],
+  ['Acumuladores: función y conexión','Almacena aceite a presión como <strong>energía de reserva</strong>, amortigua picos de presión o compensa fugas. Se conecta en <strong>paralelo</strong> a la línea de presión. <strong>NUNCA</strong> directo: requiere un <strong>bloque de seguridad</strong> (válvula de alivio propia para que no explote + válvula de descarga manual para vaciarlo antes del mantenimiento).'],
+  ['Acumuladores: tipos y gas de carga','El aceite entra a presión y comprime un gas separado por una barrera; cuando el sistema lo necesita, el gas se expande y expulsa el aceite. Tipos: <strong>vejiga</strong> (bolsa de goma, respuesta muy rápida), <strong>diafragma</strong> (membrana, volúmenes chicos) y <strong>pistón</strong> (pistón flotante, altas presiones y grandes volúmenes). Precarga con <strong>nitrógeno (N₂)</strong>, gas inerte, para evitar explosión por combustión (efecto diésel).'],
+  ['Motores hidráulicos','Proceso <strong>inverso a la bomba</strong>: reciben aceite a presión y lo transforman en movimiento rotatorio continuo. Entrada = hidráulica (presión y caudal); salida = mecánica (torque y rotación). Tipos: de engranajes, de paletas y de pistones (axiales o radiales). Símbolo: círculo con dos triángulos apuntando <strong>hacia adentro</strong>.'],
+  ['Actuadores (cilindros): energías, corte y montajes','Entrada = hidráulica (aceite a presión); salida = mecánica <strong>lineal</strong> (fuerza y velocidad). Corte de doble efecto: <strong>camisa</strong> (tubo externo), <strong>pistón/émbolo</strong> (divide las cámaras), <strong>vástago</strong>, <strong>tapas</strong> delantera y trasera y <strong>sellos/O-rings</strong>. Montajes: por brida, por patas, basculante (muñón o rótula) y por horquilla.'],
+  ['Sistema hidráulico: los 3 bloques','<strong>1) Unidad de potencia (HPU):</strong> depósito, motor y bomba → genera el caudal de aceite. <strong>2) Unidad de control:</strong> válvulas de presión, caudal y direccionales → regula y dirige la energía del fluido. <strong>3) Actuadores:</strong> cilindros y motores → realizan el trabajo mecánico final.'],
+  ['Filtros hidráulicos: importancia','Retienen las partículas de contaminación sólida (metal, polvo, goma) que flotan en el aceite. Son <strong>críticos</strong>: el ~80% de las fallas en hidráulica son por aceite sucio. Evitan el desgaste prematuro de las bombas, el rayado de camisas y el trabado de las válvulas.'],
+  ['Función específica de cada filtro','<strong>Presión:</strong> justo después de la bomba, protege los componentes aguas abajo, soporta alta presión. <strong>Retorno:</strong> antes de entrar al depósito, limpia el aceite que vuelve de los actuadores. <strong>Respiradero:</strong> en la tapa del tanque, filtra el aire que entra y sale. <strong>Precaución en succión:</strong> si se tapa, la bomba se queda sin aceite y <strong>cavita</strong>; por eso son mallas gruesas o no se usan.'],
+  ['Válvula de retención: descripción mecánica','Componentes: cuerpo, asiento rectificado, obturador (bola o cono) y un resorte blando. <strong>Flujo libre:</strong> el aceite empuja la bola, vence al resorte y pasa por los costados. <strong>Flujo bloqueado:</strong> el aceite entra por el lado contrario y, ayudado por el resorte, aplasta la bola contra el asiento → cierre <strong>100% hermético</strong>.'],
+  ['Válvula reguladora de caudal (aguja)','Controla la <strong>velocidad de los actuadores</strong> restringiendo el paso del aceite. Un volante gira un tornillo con punta cónica (aguja) que al meterse achica el área de paso. Símbolos: <strong>simple</strong> (dos arcos enfrentados + flecha diagonal, restringe en ambos sentidos) y <strong>unidireccional</strong> (en paralelo con un check: regula en un sentido y deja pasar libre en el inverso).'],
+  ['Válvulas direccionales y accionamientos','Dirigen el rumbo del aceite hacia un lado u otro del actuador (avanzar, retroceder o parar). Accionamientos: <strong>palanca manual</strong>, <strong>solenoides</strong> (bobinas que mueven la corredera por magnetismo) y <strong>resortes/muelles</strong> (devuelven a la posición de reposo). Simbología: cada <strong>cuadrado = una posición</strong>; las líneas que tocan el cuadrado son las <strong>vías</strong> (P, T, A, B). Una "4/2" = 4 vías y 2 posiciones.'],
+  ['Interpretación de esquemas hidráulicos','Buscá la <strong>bomba</strong> (círculo abajo) y la <strong>válvula de alivio</strong> al lado. Seguí la línea de presión hacia la <strong>direccional</strong> (centro) y mirá las flechas internas para ver a qué cámara va el aceite en cada posición. Si el aceite entra por la base del cilindro, el vástago <strong>avanza</strong>; si entra por el frente, <strong>retrocede</strong>. El aceite de la cámara opuesta siempre viaja a la línea <strong>T (tanque)</strong>.'],
+];
+function renderOral(){
+  const c=document.getElementById('oral-list');
+  c.innerHTML=ORAL.map((o,i)=>
+    '<div class="oral-item"><div class="oral-q" onclick="this.parentNode.classList.toggle(\'open\')"><span class="oral-n">'+(i+1)+'</span><span>'+o[0]+'</span><span class="arrow">▼</span></div><div class="oral-a">'+o[1]+'</div></div>'
+  ).join('');
+}
+function toggleAllOral(open){ document.querySelectorAll('#oral-list .oral-item').forEach(it=>it.classList.toggle('open',open)); }
+
+/* ========== AUTOEVALUACIÓN — PARTE B (quiz independiente) ========== */
+const QUIZ2=[
+  {q:'¿Qué energía recibe la bomba y en cuál la transforma?', opts:['Hidráulica → mecánica','Mecánica → hidráulica','Eléctrica → térmica','Térmica → mecánica'], ok:1, fb:'La bomba recibe energía mecánica del motor y la transforma en energía hidráulica (caudal).'},
+  {q:'La presión en un sistema hidráulico depende de…', opts:['El tamaño de la bomba','La resistencia externa al flujo','El color del aceite','La temperatura ambiente'], ok:1, fb:'La bomba genera caudal; la presión aparece por la resistencia externa (carga del actuador y restricciones).'},
+  {q:'¿Cuál es una bomba de desplazamiento NO positivo?', opts:['De pistones','De paletas','Centrífuga de agua','De engranajes'], ok:2, fb:'La centrífuga no tiene sello: si sube la resistencia, el caudal cae a cero (el fluido resbala).'},
+  {q:'En la bomba de engranajes, el aceite viaja…', opts:['Por el centro de los ejes','Entre los dientes y la carcasa, por los costados','A través del plato basculante','Por la vejiga de nitrógeno'], ok:1, fb:'Queda atrapado entre los dientes y la caja y viaja por la parte externa.'},
+  {q:'¿Cómo varía el caudal una bomba de pistones axiales?', opts:['Cambiando el ángulo del plato basculante','Cambiando el color del aceite','Agregando paletas','Cerrando la válvula de alivio'], ok:0, fb:'A más ángulo, más carrera del pistón y más caudal; con 0° el caudal se anula.'},
+  {q:'En la bomba de paletas, ¿qué se mueve para hacerla de caudal variable?', opts:['El eje motriz','El anillo estator (excentricidad)','Las tapas','El resorte de la alivio'], ok:1, fb:'Moviendo el anillo se cambia el descentrado del rotor y con él el caudal por vuelta.'},
+  {q:'La válvula de alivio normalmente está…', opts:['Abierta y sensa la salida','Cerrada y sensa la entrada','Abierta y sensa la entrada','Cerrada y sensa la salida'], ok:1, fb:'Es de seguridad: normalmente cerrada, abre cuando la presión de entrada vence al resorte.'},
+  {q:'¿Para qué sirve la válvula de secuencia?', opts:['Enfriar el aceite','Que dos eventos ocurran en orden','Filtrar partículas','Medir el caudal'], ok:1, fb:'Cuando el primer actuador termina y la presión sube, abre para alimentar al segundo.'},
+  {q:'En la válvula reductora, la diferencia de presión se transforma en…', opts:['Caudal extra','Calor en el aceite','Vacío','Torque'], ok:1, fb:'Al estrangular el paso para mantener la presión regulada, esa diferencia se disipa como calor.'},
+  {q:'El símbolo "bola apoyada en un cono (V)" corresponde a…', opts:['Válvula de alivio','Válvula de retención','Bomba','Acumulador'], ok:1, fb:'Es la válvula de retención (cheque): pasa en un solo sentido.'},
+  {q:'¿Cómo se conecta un acumulador a la línea de presión?', opts:['Directo, sin protección','En paralelo y con bloque de seguridad','En serie con la bomba','Dentro del tanque'], ok:1, fb:'En paralelo y NUNCA directo: necesita alivio propia y descarga manual.'},
+  {q:'¿Qué gas se usa para precargar un acumulador y por qué?', opts:['Oxígeno, porque es barato','Aire, porque está disponible','Nitrógeno, porque es inerte','Hidrógeno, porque es liviano'], ok:2, fb:'N₂ inerte evita la explosión por combustión (efecto diésel) con aceite a alta presión.'},
+  {q:'El acumulador de respuesta más rápida es el de…', opts:['Pistón','Diafragma','Vejiga','Pesa'], ok:2, fb:'La vejiga (bolsa de goma) responde muy rápido; el de pistón es para altas presiones y grandes volúmenes.'},
+  {q:'Un motor hidráulico tiene como salida…', opts:['Presión y caudal','Torque y rotación','Fuerza lineal','Calor'], ok:1, fb:'Es el inverso de la bomba: entra energía hidráulica, sale mecánica rotatoria (torque).'},
+  {q:'El símbolo de un círculo con dos triángulos hacia ADENTRO es…', opts:['Una bomba','Un motor hidráulico','Un acumulador','Una válvula'], ok:1, fb:'Triángulos hacia adentro = entra fluido = motor. Hacia afuera = bomba.'},
+  {q:'En el corte de un cilindro, la pieza que divide las dos cámaras es…', opts:['El vástago','El émbolo/pistón','La camisa','El rascador'], ok:1, fb:'El émbolo separa la cámara de la base de la cámara anular (lado del vástago).'},
+  {q:'¿Cuál NO es un tipo de montaje de cilindro?', opts:['Por brida','Basculante (muñón/rótula)','Por horquilla','Por vejiga'], ok:3, fb:'La vejiga es de acumuladores. Montajes: brida, patas, basculante y horquilla.'},
+  {q:'La unidad de potencia (HPU) está formada por…', opts:['Válvulas y actuadores','Depósito, motor y bomba','Filtros y mangueras','Cilindros y motores'], ok:1, fb:'Genera el caudal de aceite: depósito + motor + bomba.'},
+  {q:'¿Qué porcentaje de las fallas en hidráulica se debe a aceite sucio?', opts:['~20%','~50%','~80%','~5%'], ok:2, fb:'Cerca del 80%: por eso los filtros son críticos.'},
+  {q:'El filtro de succión, si se tapa, provoca…', opts:['Sobrepresión en el tanque','Cavitación en la bomba','Más caudal','Calentamiento del vástago'], ok:1, fb:'La bomba se queda sin aceite y cavita; por eso son mallas gruesas o no se usan.'},
+  {q:'El filtro que soporta alta presión y va justo después de la bomba es el…', opts:['De respiradero','De retorno','De presión','De succión'], ok:2, fb:'El de presión protege los componentes aguas abajo y soporta alta presión.'},
+  {q:'En flujo bloqueado, la válvula de retención logra cierre…', opts:['Parcial','100% hermético','Con fuga controlada','Solo a baja presión'], ok:1, fb:'El resorte ayuda a aplastar la bola contra el asiento rectificado: cierre hermético.'},
+  {q:'El símbolo de reguladora de caudal con flecha diagonal indica que…', opts:['Es fija','Es regulable','Está rota','Es una bomba'], ok:1, fb:'La flecha diagonal sobre los arcos enfrentados indica estrangulación regulable.'},
+  {q:'Una válvula "4/2" significa…', opts:['4 posiciones y 2 vías','4 vías y 2 posiciones','4 resortes y 2 solenoides','4 bar y 2 litros'], ok:1, fb:'Primer número = vías (P, T, A, B), segundo = posiciones.'},
+  {q:'Si el aceite entra por la base del cilindro (vía A), el vástago…', opts:['Retrocede','Avanza','Queda bloqueado','Cavita'], ok:1, fb:'Entra por la base → avanza; el aceite de la cámara opuesta vuelve por la línea T.'},
+];
+let q2Idx=0,q2Score=0,q2Ans=false;
+function renderQuiz2(){
+  const c=document.getElementById('quiz2-container');
+  if(q2Idx>=QUIZ2.length){
+    const pct=Math.round(q2Score/QUIZ2.length*100);
+    const best=Math.max(pct,parseInt(localStorage.getItem('hidro2_auto_best')||'0'));
+    localStorage.setItem('hidro2_auto_best',best);
+    const emoji=pct>=80?'🏆':pct>=60?'💪':'📚';
+    const msg=pct>=80?'¡Dominás el temario! Estás para rendir.':pct>=60?'Bien, repasá los puntos que fallaste en la Parte A.':'Volvé a las preguntas tipo oral y a los símbolos antes del parcial.';
+    c.innerHTML='<div class="result-card"><span class="emoji">'+emoji+'</span><h2>Autoevaluación terminada</h2><span class="score-big">'+pct+'%</span><p>'+msg+'</p>'+
+      '<div class="result-detail"><div class="rstat ok">✔ '+q2Score+' correctas</div><div class="rstat ko">✘ '+(QUIZ2.length-q2Score)+' incorrectas</div></div>'+
+      '<p>🥇 Tu mejor puntaje: <strong>'+best+'%</strong></p><button class="btn-retry" onclick="restartQuiz2()">🔄 Intentar de nuevo</button></div>';
+    return;
+  }
+  const q=QUIZ2[q2Idx]; q2Ans=false;
+  c.innerHTML='<div class="quiz-header"><span class="quiz-score-display">Puntaje: '+q2Score+' / '+QUIZ2.length+'</span>'+
+    '<span class="quiz-score-display">🥇 Mejor: '+(localStorage.getItem('hidro2_auto_best')||'—')+'%</span></div>'+
+    '<div class="progress-bar-wrap"><div class="progress-bar" style="width:'+(q2Idx/QUIZ2.length*100)+'%"></div></div>'+
+    '<div class="quiz-card"><div class="q-num">Pregunta '+(q2Idx+1)+' de '+QUIZ2.length+'</div>'+
+    '<div class="q-text">'+q.q+'</div>'+
+    '<div class="options">'+q.opts.map((o,i)=>'<button class="opt-btn" onclick="answer2('+i+',this)">'+o+'</button>').join('')+'</div>'+
+    '<div class="feedback-box" id="q2fb"></div>'+
+    '<div class="quiz-nav"><button class="btn-next" id="q2next" disabled onclick="q2Idx++;renderQuiz2()">Siguiente →</button></div></div>';
+}
+function answer2(i,btn){
+  if(q2Ans) return; q2Ans=true;
+  const q=QUIZ2[q2Idx];
+  const btns=document.querySelectorAll('#quiz2-container .opt-btn');
+  btns.forEach(b=>b.disabled=true); btns[q.ok].classList.add('correct');
+  const fb=document.getElementById('q2fb');
+  if(i===q.ok){ q2Score++; fb.className='feedback-box show ok'; fb.innerHTML='✅ ¡Correcto! '+q.fb; }
+  else { btn.classList.add('wrong'); fb.className='feedback-box show ko'; fb.innerHTML='❌ No. '+q.fb; }
+  document.getElementById('q2next').disabled=false;
+}
+function restartQuiz2(){ q2Idx=0; q2Score=0; renderQuiz2(); }
+
 /* ========== INIT ========== */
-sim1(); sim2(); sim3(); sim4();
+sim1(); sim2(); sim3(); sim4(); sim5();
 renderCard(); initMatch(); initMatch2(); renderQuiz();
+sgStart(); renderOral(); renderQuiz2();
 </script>
 
 </body>

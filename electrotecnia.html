@@ -206,6 +206,34 @@ details[open] summary{background:var(--blue-bg);color:var(--blue)}
 .confetti-piece{position:fixed;width:10px;height:10px;border-radius:2px;animation:fall linear forwards;pointer-events:none;z-index:9999}
 @keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
 
+/* ══════════ MÉTODO / CÓMO RESOLVER ══════════ */
+.roadmap{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;margin:1rem 0 2rem}
+.rm-step{flex:1 1 150px;min-width:140px;border-radius:12px;padding:.85rem .9rem;text-align:center;border:2px solid;position:relative}
+.rm-step .rm-n{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;font-weight:800;font-size:.9rem;color:#fff;margin-bottom:.4rem}
+.rm-step .rm-t{font-size:.82rem;font-weight:700;line-height:1.3}
+.rm-step .rm-d{font-size:.72rem;margin-top:.2rem;opacity:.85}
+.rm-1{border-color:var(--blue);background:var(--blue-bg)}   .rm-1 .rm-n{background:var(--blue)}   .rm-1 .rm-t{color:var(--blue)}
+.rm-2{border-color:var(--purple);background:var(--purple-bg)}.rm-2 .rm-n{background:var(--purple)} .rm-2 .rm-t{color:var(--purple)}
+.rm-3{border-color:var(--orange);background:var(--orange-bg)}.rm-3 .rm-n{background:var(--orange)} .rm-3 .rm-t{color:var(--orange)}
+.rm-4{border-color:var(--green);background:var(--green-bg)} .rm-4 .rm-n{background:var(--green)}  .rm-4 .rm-t{color:var(--green)}
+.rm-5{border-color:var(--red);background:var(--red-bg)}     .rm-5 .rm-n{background:var(--red)}    .rm-5 .rm-t{color:var(--red)}
+
+.mstep{border-radius:14px;padding:1.3rem 1.4rem;margin-bottom:1.1rem;border-left:6px solid;background:var(--card);box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.mstep .mhead{display:flex;align-items:center;gap:.7rem;margin-bottom:.6rem}
+.mstep .mhead .mn{width:34px;height:34px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
+.mstep .mhead h3{font-size:1.05rem;font-weight:800}
+.mstep .mgoal{font-size:.83rem;font-style:italic;color:var(--gray-lt);margin-bottom:.7rem}
+.mstep ul{margin:.3rem 0 .3rem 1.1rem}.mstep li{margin-bottom:.4rem;font-size:.9rem}
+.ms-1{border-color:var(--blue)}   .ms-1 .mn{background:var(--blue)}   .ms-1 h3{color:var(--blue)}
+.ms-2{border-color:var(--purple)} .ms-2 .mn{background:var(--purple)} .ms-2 h3{color:var(--purple)}
+.ms-3{border-color:var(--orange)} .ms-3 .mn{background:var(--orange)} .ms-3 h3{color:var(--orange)}
+.ms-4{border-color:var(--green)}  .ms-4 .mn{background:var(--green)}  .ms-4 h3{color:var(--green)}
+.ms-5{border-color:var(--red)}    .ms-5 .mn{background:var(--red)}    .ms-5 h3{color:var(--red)}
+.pill{display:inline-block;font-family:'Courier New',monospace;background:#f1f5f9;border:1px solid var(--border);padding:.1rem .5rem;border-radius:5px;color:var(--blue);font-weight:700;font-size:.85rem}
+.err-list{list-style:none;margin:0}
+.err-list li{display:flex;gap:.6rem;align-items:flex-start;background:var(--red-bg);border:1px solid #fca5a5;border-radius:9px;padding:.7rem .9rem;margin-bottom:.55rem;font-size:.88rem;color:#7f1d1d}
+.err-list li b{color:var(--red)}
+
 @media(max-width:640px){
   .hero h1{font-size:1.7rem}
   .match-grid{grid-template-columns:1fr}
@@ -221,6 +249,7 @@ details[open] summary{background:var(--blue-bg);color:var(--blue)}
   <div class="tabs">
     <button class="tab-btn active"  onclick="showPage('u1',this)">📖 U1 · Fundamentos</button>
     <button class="tab-btn"         onclick="showPage('u2',this)">🔗 U2 · Circuitos CC</button>
+    <button class="tab-btn"         onclick="showPage('metodo',this)">🧭 Cómo resolver</button>
     <button class="tab-btn"         onclick="showPage('ejercicios',this)">✏️ Ejercicios</button>
     <button class="tab-btn"         onclick="showPage('juegos',this)">🎮 Juegos</button>
     <button class="tab-btn"         onclick="showPage('quiz',this)">🧠 Quiz</button>
@@ -397,6 +426,144 @@ details[open] summary{background:var(--blue-bg);color:var(--blue)}
       <div class="fbox"><span class="big" style="font-size:1rem">P_max = V_th² / (4·R_th)</span></div>
     </div></details>
   </div>
+
+</div></div>
+
+<!-- ═══════════════════════ MÉTODO / CÓMO RESOLVER ═══════════════════════ -->
+<div id="metodo" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">🧭</span>Instructivo General: Cómo Resolver Cualquier Circuito</div>
+  <p style="margin-bottom:1rem;color:var(--gray-lt);font-size:.92rem">Una sola receta para todos los ejercicios de circuitos de CC. Seguí los 5 pasos siempre en el mismo orden y no te vas a perder. Pensado para entenderse en <strong>20 minutos</strong>.</p>
+
+  <!-- RUTA DE 20 MIN -->
+  <div class="roadmap">
+    <div class="rm-step rm-1"><span class="rm-n">1</span><div class="rm-t">MAPEAR</div><div class="rm-d">Nodos, corriente y polaridad</div></div>
+    <div class="rm-step rm-2"><span class="rm-n">2</span><div class="rm-t">REDUCIR</div><div class="rm-d">De afuera hacia adentro</div></div>
+    <div class="rm-step rm-3"><span class="rm-n">3</span><div class="rm-t">CALCULAR</div><div class="rm-d">I total = V / Rt</div></div>
+    <div class="rm-step rm-4"><span class="rm-n">4</span><div class="rm-t">EXPANDIR</div><div class="rm-d">De adentro hacia afuera</div></div>
+    <div class="rm-step rm-5"><span class="rm-n">5</span><div class="rm-t">VERIFICAR</div><div class="rm-d">Kirchhoff (LKC y LKT)</div></div>
+  </div>
+
+  <!-- ¿SERIE O PARALELO? -->
+  <div class="stitle"><span class="ico">🔍</span>Antes de empezar: ¿Serie o Paralelo?</div>
+  <p style="margin-bottom:1rem;color:var(--gray-lt);font-size:.9rem">El 90% del trabajo es saber identificar esto. Mirá cómo están conectadas <strong>dos resistencias entre sí</strong>:</p>
+  <div class="grid g2">
+    <div class="lawcard kvl">
+      <h3>🔗 Están en SERIE si…</h3>
+      <ul style="margin-left:1.1rem">
+        <li>Van una <strong>detrás de la otra</strong> en el mismo cable, sin ninguna bifurcación en el medio.</li>
+        <li>La corriente <strong>no tiene otro camino</strong>: lo que entra a una, entra a la otra.</li>
+      </ul>
+      <div class="fbox" style="margin-top:.8rem"><span class="big" style="font-size:1.1rem">Rt = R₁ + R₂ + R₃ …</span><span class="sub">se SUMAN directo</span></div>
+    </div>
+    <div class="lawcard kcl">
+      <h3>⫲ Están en PARALELO si…</h3>
+      <ul style="margin-left:1.1rem">
+        <li>Sus <strong>dos extremos tocan los mismos dos nodos</strong> (puntos del circuito).</li>
+        <li>La corriente <strong>se reparte</strong> entre ellas; cada una es un camino alternativo.</li>
+      </ul>
+      <div class="fbox" style="margin-top:.8rem"><span class="big" style="font-size:1.05rem">Rt = 1 / (1/R₁ + 1/R₂ …)</span><span class="sub">truco para 2: (R₁·R₂)/(R₁+R₂)</span></div>
+    </div>
+  </div>
+  <div class="tip" style="margin-top:1rem"><span>💡</span><div><strong>Regla rápida:</strong> seguí un cable con el dedo. Si llegás de una resistencia a la otra <em>sin pasar por un nodo donde se abre otro camino</em> → es serie. Si ambas arrancan y terminan en los mismos dos puntos → es paralelo.</div></div>
+
+  <!-- MÉTODO 5 PASOS -->
+  <div class="stitle"><span class="ico">🪜</span>El método en 5 pasos</div>
+
+  <div class="mstep ms-1">
+    <div class="mhead"><span class="mn">1</span><h3>Mapeo inicial (setup)</h3></div>
+    <div class="mgoal">Objetivo: dibujar el "mapa" antes de calcular nada.</div>
+    <ul>
+      <li><strong>Identificar nodos:</strong> marcá con letras (A, B, C…) cada punto donde el circuito se bifurca.</li>
+      <li><strong>Trazar la corriente total:</strong> dibujá la flecha de <span class="pill">I_total</span> saliendo del <strong>+</strong> de la fuente.</li>
+      <li><strong>Polarizar:</strong> anotá <span class="pill">+</span> donde la corriente entra a cada resistencia y <span class="pill">−</span> por donde sale.</li>
+    </ul>
+  </div>
+
+  <div class="mstep ms-2">
+    <div class="mhead"><span class="mn">2</span><h3>Reducción (de afuera hacia adentro)</h3></div>
+    <div class="mgoal">Objetivo: comprimir todo hasta una sola Resistencia Total (Rt). Empezá por el extremo más lejano a la fuente.</div>
+    <ul>
+      <li><strong>Series puras:</strong> resistencias en el mismo cable continuo → <span class="pill">Rs = R₁ + R₂</span>.</li>
+      <li><strong>Paralelos puros:</strong> resistencias entre los mismos dos nodos → <span class="pill">Rp = (1/R₁ + 1/R₂)⁻¹</span>.</li>
+      <li><strong>Iterar:</strong> redibujá el circuito con el equivalente y repetí hasta quedarte con una sola Rt.</li>
+    </ul>
+    <div class="note">Truco clave: una rama "serie" puede quedar en paralelo con otra, y ese paralelo a su vez en serie con algo más. Resolvé siempre el bloque más interno/lejano primero.</div>
+  </div>
+
+  <div class="mstep ms-3">
+    <div class="mhead"><span class="mn">3</span><h3>Cálculo principal</h3></div>
+    <div class="mgoal">Objetivo: obtener la corriente que alimenta a todo el sistema.</div>
+    <div class="fbox"><span class="big">I_total = V_fuente / Rt</span><span class="unit">A = V / Ω</span></div>
+    <p style="font-size:.9rem">Esta es la corriente que sale de la fuente. Guardala: es el punto de partida para "desarmar" el circuito.</p>
+  </div>
+
+  <div class="mstep ms-4">
+    <div class="mhead"><span class="mn">4</span><h3>Expansión (de adentro hacia afuera)</h3></div>
+    <div class="mgoal">Objetivo: desarmar paso a paso para sacar cada valor, aplicando las dos reglas de oro.</div>
+    <ul>
+      <li><strong>Regla de la SERIE — la corriente se mantiene:</strong> usá la corriente que ya conocés de esa rama y calculá la caída en cada resistencia con <span class="pill">V = I · R</span>.</li>
+      <li><strong>Regla del PARALELO — la tensión se mantiene:</strong> usá la tensión que cae en ese nodo y calculá la corriente que se deriva por cada rama con <span class="pill">I = V / R</span>.</li>
+    </ul>
+  </div>
+
+  <div class="mstep ms-5">
+    <div class="mhead"><span class="mn">5</span><h3>Verificación de calidad (Kirchhoff)</h3></div>
+    <div class="mgoal">Objetivo: confirmar que no hay errores antes de entregar.</div>
+    <ul>
+      <li><strong>LKC (nodos):</strong> en cada nodo, suma de corrientes que <strong>entran</strong> = suma de corrientes que <strong>salen</strong>.</li>
+      <li><strong>LKT (mallas):</strong> en cualquier camino cerrado, la tensión de la fuente = suma de todas las caídas de tensión.</li>
+    </ul>
+  </div>
+
+  <!-- 2 REGLAS DE ORO -->
+  <div class="stitle"><span class="ico">🥇</span>Las 2 reglas de oro (memorizá esto)</div>
+  <div class="grid g2">
+    <div class="lawcard kvl">
+      <h3>🔗 En SERIE → misma CORRIENTE</h3>
+      <p>Por todas las resistencias de una rama serie pasa <strong>exactamente la misma corriente</strong>. Lo que cambia es la tensión: se reparte.</p>
+      <div class="fbox" style="margin-top:.6rem"><span class="big" style="font-size:1rem">I = igual &nbsp;·&nbsp; V se reparte</span></div>
+    </div>
+    <div class="lawcard kcl">
+      <h3>⫲ En PARALELO → misma TENSIÓN</h3>
+      <p>Todas las ramas en paralelo tienen <strong>la misma tensión</strong> en sus extremos. Lo que cambia es la corriente: se reparte.</p>
+      <div class="fbox" style="margin-top:.6rem"><span class="big" style="font-size:1rem">V = igual &nbsp;·&nbsp; I se reparte</span></div>
+    </div>
+  </div>
+
+  <!-- ERRORES COMUNES -->
+  <div class="stitle"><span class="ico">⚠️</span>Errores que cuestan puntos</div>
+  <ul class="err-list">
+    <li><span>✗</span><div><b>Sumar resistencias en paralelo.</b> En paralelo el equivalente es <em>menor</em> que la más chica; nunca se suman directo.</div></li>
+    <li><span>✗</span><div><b>Confundir qué se conserva.</b> Serie = misma corriente. Paralelo = misma tensión. Si las cruzás, todo el cálculo se cae.</div></li>
+    <li><span>✗</span><div><b>Reducir desde la fuente hacia afuera.</b> Siempre se simplifica desde el extremo <em>más lejano</em> hacia la fuente.</div></li>
+    <li><span>✗</span><div><b>Olvidar las unidades.</b> Pasá todo a V, A y Ω antes de operar (¡cuidado con mA y kΩ!).</div></li>
+    <li><span>✗</span><div><b>No verificar con Kirchhoff.</b> El Paso 5 detecta el 90% de los errores de cuenta. No lo saltees.</div></li>
+  </ul>
+
+  <!-- MINI EJEMPLO -->
+  <div class="stitle"><span class="ico">🧩</span>Mini-ejemplo guiado (aplicando los 5 pasos)</div>
+  <details>
+    <summary>R₁ = 6 Ω en serie con (R₂ = 12 Ω ∥ R₃ = 6 Ω), fuente de 12 V — ver resolución</summary>
+    <div class="dbody">
+      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Mapeo:</strong> R₂ y R₃ comparten los mismos dos nodos → están en paralelo. Ese bloque va en serie con R₁.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Reducir (afuera→adentro):</strong> primero el paralelo interno → <span class="formula-inline">R₂∥R₃ = (12·6)/(12+6) = 72/18 = 4 Ω</span>. Ahora en serie con R₁ → <span class="formula-inline">Rt = 6 + 4 = 10 Ω</span>.</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Cálculo principal:</strong> <span class="formula-inline">I_total = 12 V / 10 Ω = 1,2 A</span> (esta corriente pasa por R₁, que está en serie).</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Expandir (adentro→afuera):</strong><br>Caída en R₁ (serie, misma I): <span class="formula-inline">V₁ = 1,2 · 6 = 7,2 V</span>.<br>Tensión sobre el paralelo: <span class="formula-inline">V_p = 12 − 7,2 = 4,8 V</span> (o 1,2 · 4).<br>Corrientes (paralelo, misma V): <span class="formula-inline">I₂ = 4,8/12 = 0,4 A</span> · <span class="formula-inline">I₃ = 4,8/6 = 0,8 A</span>.</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Verificación Kirchhoff:</strong> LKC → <span class="formula-inline">I₂ + I₃ = 0,4 + 0,8 = 1,2 A = I_total ✓</span>. LKT → <span class="formula-inline">7,2 + 4,8 = 12 V = V_fuente ✓</span></div></div>
+      <div class="result-box">✅ Rt = 10 Ω | I_total = 1,2 A | V₁ = 7,2 V | V_paralelo = 4,8 V | I₂ = 0,4 A | I₃ = 0,8 A</div>
+    </div>
+  </details>
+
+  <!-- CHECKLIST FINAL -->
+  <div class="stitle"><span class="ico">✅</span>Checklist antes de entregar</div>
+  <div class="tip"><span>📋</span><div>
+    ☐ ¿Pasé todo a V, A y Ω?<br>
+    ☐ ¿Reduje desde el extremo más lejano hacia la fuente?<br>
+    ☐ ¿Usé "misma corriente" en serie y "misma tensión" en paralelo?<br>
+    ☐ ¿La suma de corrientes en cada nodo da cero (LKC)?<br>
+    ☐ ¿Las caídas de tensión de cada malla suman la fuente (LKT)?
+  </div></div>
 
 </div></div>
 

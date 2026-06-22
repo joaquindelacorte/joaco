@@ -555,6 +555,53 @@ details[open] summary{background:var(--blue-bg);color:var(--blue)}
     </div>
   </details>
 
+  <!-- PUNTOS C y D: KIRCHHOFF -->
+  <div class="stitle"><span class="ico">🎯</span>Puntos c) y d): corrientes, tensiones y Kirchhoff</div>
+  <p style="margin-bottom:1rem;color:var(--gray-lt);font-size:.9rem">Estos dos puntos valen <strong>25 + 25 = 50 puntos</strong> y casi siempre se piden juntos. La clave: ya tenés los Pasos 3 y 4 hechos (las corrientes y tensiones salen de ahí); acá solo hay que <strong>nombrarlas todas</strong> y <strong>comprobar Kirchhoff nodo por nodo</strong>.</p>
+
+  <!-- PUNTO C -->
+  <div class="mstep ms-4">
+    <div class="mhead"><span class="mn">c</span><h3>Calcular TODAS las corrientes + comprobar LKC en cada nodo</h3></div>
+    <div class="mgoal">Objetivo: dar un valor a la corriente de cada rama y demostrar que en cada nodo entra lo mismo que sale.</div>
+    <ul>
+      <li><strong>Bautizá cada rama:</strong> ponele nombre a cada corriente (<span class="pill">I₁, I₂, I₃…</span>) y dibujale una flecha con el sentido que asumís. Si te da negativo, es la misma corriente pero al revés.</li>
+      <li><strong>La total ya la tenés:</strong> <span class="pill">I_total = V / Rt</span> (Paso 3). Esa entra al primer nodo.</li>
+      <li><strong>Repartí en cada paralelo:</strong> con la tensión del nodo, <span class="pill">I_rama = V_nodo / R_rama</span>. En serie la corriente no se reparte: es la misma en toda la rama.</li>
+      <li><strong>Comprobá LKC nodo por nodo:</strong> en cada nodo, suma de las que <strong>entran</strong> = suma de las que <strong>salen</strong>.</li>
+    </ul>
+    <div class="fbox"><span class="big">Σ I_entran = Σ I_salen</span><span class="sub">en TODO nodo (o ΣI = 0 tomando signo)</span></div>
+    <div class="note"><strong>Truco de signos:</strong> poné <span class="pill">+</span> a las corrientes que entran al nodo y <span class="pill">−</span> a las que salen. Si la suma da 0, el nodo está bien. Hacelo en <em>todos</em> los nodos: el enunciado pide "en todos los nodos".</div>
+    <div class="tip"><span>✍️</span><div><strong>Ejemplo de redacción:</strong> "Nodo A: entra I_total = 1,2 A; salen I₂ = 0,4 A e I₃ = 0,8 A. Comprobación: 1,2 = 0,4 + 0,8 ✓".</div></div>
+  </div>
+
+  <!-- PUNTO D -->
+  <div class="mstep ms-5">
+    <div class="mhead"><span class="mn">d</span><h3>Calcular TODAS las tensiones + comprobar LKT en cada malla</h3></div>
+    <div class="mgoal">Objetivo: dar la caída de tensión de cada resistencia y demostrar que en cada lazo cerrado las caídas suman la fuente.</div>
+    <ul>
+      <li><strong>Caída en cada resistencia:</strong> con la corriente que ya pasa por ella, <span class="pill">V_R = I_R · R</span> (Ley de Ohm). Hacelo para cada resistencia, no solo las del camino principal.</li>
+      <li><strong>En paralelo:</strong> todas las ramas del mismo par de nodos tienen la <strong>misma tensión</strong> → calculás una y vale para todas.</li>
+      <li><strong>Elegí las mallas:</strong> identificá cada lazo cerrado (ventana del circuito). Vas a comprobar LKT en cada una.</li>
+      <li><strong>Comprobá LKT:</strong> recorré la malla en un sentido; la tensión de la fuente = suma de las caídas de ese lazo.</li>
+    </ul>
+    <div class="fbox"><span class="big">V_fuente = Σ V_caídas</span><span class="sub">en cada malla (o Σ V = 0 recorriendo el lazo)</span></div>
+    <div class="note"><strong>Truco de signos (recorriendo la malla):</strong> sumás <span class="pill">+</span> al pasar por la fuente del <strong>−</strong> al <strong>+</strong>, y restás la caída <span class="pill">−I·R</span> cuando vas a favor de la corriente por una resistencia. Al volver al punto de partida, todo debe dar 0.</div>
+    <div class="tip"><span>✍️</span><div><strong>Ejemplo de redacción:</strong> "Malla izquierda: V₁ + V_paralelo = 7,2 + 4,8 = 12 V = fuente ✓". Repetilo en cada malla del circuito.</div></div>
+  </div>
+
+  <div class="grid g2" style="margin-top:.3rem">
+    <div class="lawcard kcl">
+      <h3>⚡ LKC — atajo mental</h3>
+      <p>Un nodo no acumula carga: <strong>todo lo que llega, se va</strong>. Si en un nodo solo conocés todas las corrientes menos una, la despejás de la LKC sin calcular nada más.</p>
+    </div>
+    <div class="lawcard kvl">
+      <h3>🔋 LKT — atajo mental</h3>
+      <p>Una vuelta completa <strong>vuelve al mismo potencial</strong>: lo que la fuente "sube", las resistencias lo "bajan". Sirve para hallar una tensión faltante despejándola del lazo.</p>
+    </div>
+  </div>
+
+  <div class="tip" style="margin-top:1rem"><span>💡</span><div><strong>Si el circuito NO se reduce</strong> (tiene puentes o fuentes que no quedan en serie/paralelo simple, como el ejercicio 4 del parcial): no fuerces serie/paralelo. Planteá directamente las ecuaciones de <strong>Kirchhoff por mallas o por nodos</strong> (un sistema de ecuaciones) y resolvé las corrientes; después las tensiones salen con V = I·R. Ahí los puntos c) y d) <em>son</em> el método, no solo la verificación.</div></div>
+
   <!-- CHECKLIST FINAL -->
   <div class="stitle"><span class="ico">✅</span>Checklist antes de entregar</div>
   <div class="tip"><span>📋</span><div>

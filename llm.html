@@ -347,6 +347,61 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
     <span class="sub">"gato" podría ser 1 token · "extraterrestre" podría ser 3-4 tokens</span>
   </div>
 
+  <div class="stitle"><span class="ico">⚖️</span>Carácter vs. palabra vs. subpalabra</div>
+  <p style="margin-bottom:.8rem">La elección de granularidad no es un detalle menor: define cuánto "cuesta" leer un texto y qué tan bien el modelo maneja palabras que nunca vio.</p>
+  <div class="twrap">
+    <table>
+      <tr><th>Granularidad</th><th>Tamaño de vocabulario</th><th>Longitud de secuencia</th><th>Problema</th></tr>
+      <tr><td>Carácter</td><td>~256</td><td>Muy larga</td><td>El costo de la atención crece al cuadrado (O(n²)); cuesta aprender relaciones largas</td></tr>
+      <tr><td>Palabra completa</td><td>500.000+</td><td>Corta</td><td>No puede manejar palabras nuevas o raras; tabla de embeddings gigante</td></tr>
+      <tr><td>Subpalabra (BPE)</td><td>32.000 – 128.000</td><td>Moderada</td><td>El mejor equilibrio: secuencias cortas + vocabulario abierto</td></tr>
+    </table>
+  </div>
+
+  <div class="stitle"><span class="ico">🧩</span>Cómo se arma el vocabulario: Byte-Pair Encoding (BPE)</div>
+  <div class="grid g2">
+    <div class="card pu">
+      <h3>El algoritmo, paso a paso</h3>
+      <ol style="margin-left:1.2rem;font-size:.9rem;line-height:1.9">
+        <li>Arrancar con un vocabulario de caracteres individuales (bytes)</li>
+        <li>Contar todos los pares de símbolos adyacentes en el corpus de entrenamiento</li>
+        <li>Fusionar el par más frecuente en un nuevo símbolo</li>
+        <li>Repetir los pasos 2-3 durante k iteraciones, hasta llegar al tamaño de vocabulario deseado</li>
+      </ol>
+      <p style="margin-top:.6rem">Así, palabras frecuentes ("the", "el") terminan siendo 1 solo token, y palabras raras ("criptomoneda") se arman combinando piezas ya conocidas.</p>
+    </div>
+    <div class="card">
+      <h3>No todos usan el mismo método</h3>
+      <div class="twrap" style="margin-top:.4rem">
+        <table>
+          <tr><th>Método</th><th>Lo usan</th><th>Idea clave</th></tr>
+          <tr><td>BPE</td><td>GPT-4, Llama-3, Mistral</td><td>Fusión ascendente de pares frecuentes</td></tr>
+          <tr><td>WordPiece</td><td>BERT</td><td>Parecido a BPE pero maximiza la probabilidad del corpus</td></tr>
+          <tr><td>Unigram LM</td><td>T5, XLNet (SentencePiece)</td><td>De arriba hacia abajo: empieza grande y poda</td></tr>
+          <tr><td>Byte-level BPE</td><td>GPT-2 en adelante</td><td>BPE sobre bytes crudos: nunca hay tokens "desconocidos"</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <details>
+    <summary>🔎 Tokens especiales: los ladrillos invisibles del prompt</summary>
+    <div class="dbody">
+      <p>Además de las palabras, el vocabulario incluye <strong>tokens especiales</strong> que no significan nada lingüísticamente, pero le dan estructura a la conversación:</p>
+      <ul style="margin:.6rem 0 .6rem 1.2rem;line-height:1.9">
+        <li><code>&lt;bos&gt;</code> / <code>&lt;|begin_of_text|&gt;</code> — marca el inicio de la secuencia</li>
+        <li><code>&lt;eos&gt;</code> / <code>&lt;|end_of_text|&gt;</code> — marca el final; le dice al modelo "parar de generar"</li>
+        <li><code>&lt;|user|&gt;</code> / <code>&lt;|assistant|&gt;</code> — separan los turnos de una conversación</li>
+        <li><code>&lt;pad&gt;</code> — rellena secuencias más cortas dentro de un lote (batch)</li>
+      </ul>
+      <p>Cuando chateás con un asistente, tu mensaje no llega "pelado": la app arma internamente algo como:</p>
+      <div class="code" style="background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1rem;font-family:'Courier New',monospace;font-size:.8rem;white-space:pre-wrap">&lt;|begin_of_text|&gt;&lt;|system|&gt;
+Sos un asistente útil.&lt;|eot|&gt;&lt;|user|&gt;
+Explicame PPO en una oración.&lt;|eot|&gt;&lt;|assistant|&gt;</div>
+      <p style="margin-top:.6rem">Modelos con vocabularios más grandes (Llama-3 usa 128K tokens) suelen manejar mejor varios idiomas y código, porque necesitan menos tokens para representar el mismo texto.</p>
+    </div>
+  </details>
+
   <div class="stitle"><span class="ico">🎮</span>Simulador: tokenizá tu propio texto<span class="lvl-chip">interactivo</span></div>
   <div class="sim">
     <textarea id="tok-input" class="tok-input" oninput="renderTokens()" placeholder="Escribí una frase acá y mirá cómo se parte en tokens..."></textarea>
@@ -382,6 +437,30 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
     <span class="big">similitud(A, B) = coseno del ángulo entre los vectores de A y B</span>
     <span class="sub">1 = idénticos en significado · 0 = sin relación · -1 = opuestos</span>
   </div>
+
+  <div class="stitle"><span class="ico">🔢</span>Embeddings en un modelo real</div>
+  <div class="grid g2">
+    <div class="card pu">
+      <h3>Los números detrás de un LLM de verdad</h3>
+      <p>En Llama-3 8B, cada token se representa con un vector de <strong>d = 4096</strong> dimensiones. Con un vocabulario de 128.256 tokens, la tabla de embeddings completa (<code>|V| × d</code>) tiene ~525 millones de parámetros — un <strong>6,5% de todo el modelo</strong>, solo para representar palabras antes de procesarlas.</p>
+    </div>
+    <div class="card">
+      <h3>Aritmética de significados</h3>
+      <p>Como los embeddings capturan relaciones semánticas como direcciones geométricas, se puede "sumar y restar" significado:</p>
+      <div class="fbox" style="margin-top:.6rem"><span class="big" style="font-size:1.05rem">rey − hombre + mujer ≈ reina</span></div>
+    </div>
+  </div>
+
+  <div class="note">📌 Muchos modelos reutilizan la misma matriz de embeddings como capa de salida ("weight tying"): la geometría que aprendiste para <em>leer</em> tokens es la misma que el modelo usa para <em>elegir</em> el próximo token.</div>
+
+  <details>
+    <summary>🔎 El problema de la anisotropía (por qué la similitud coseno a veces falla)</summary>
+    <div class="dbody">
+      <p>En este simulador, los vectores están distribuidos "prolijamente" en el plano. Pero los embeddings reales de modelos como BERT o GPT-2 suelen ser <strong>anisotrópicos</strong>: en vez de repartirse en todas las direcciones, se amontonan en un cono angosto del espacio.</p>
+      <p style="margin-top:.6rem">Consecuencia práctica: si <em>todos</em> los pares de palabras tienen similitud coseno &gt; 0.7 sin importar el contenido, un sistema de búsqueda semántica (como el que usa <strong>RAG</strong>) no puede distinguir un documento relevante de uno irrelevante — el ranking se vuelve casi aleatorio.</p>
+      <p style="margin-top:.6rem">La solución más simple es el <strong>whitening</strong>: una transformación lineal que "reacomoda" el espacio para que tenga varianza uniforme en todas las direcciones, devolviéndole sentido a la similitud coseno.</p>
+    </div>
+  </details>
 
   <div class="stitle"><span class="ico">🎮</span>Simulador: espacio semántico 2D<span class="lvl-chip">interactivo</span></div>
   <div class="sim">
@@ -425,6 +504,36 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
     <span class="sub">cada palabra genera una "consulta" (Q) y se compara contra las "claves" (K) de todas para ponderar sus "valores" (V)</span>
   </div>
 
+  <div class="stitle"><span class="ico">🧠</span>Query, Key, Value — en criollo</div>
+  <div class="grid g3">
+    <div class="card pu"><h3>Query (Q)</h3><p>"Lo que esta palabra está buscando." Cada token genera una consulta que representa qué tipo de información necesita del resto de la frase.</p></div>
+    <div class="card bl"><h3>Key (K)</h3><p>"Lo que esta palabra ofrece." Cada token también genera una clave que anuncia qué información contiene, para que otras consultas la encuentren.</p></div>
+    <div class="card gr"><h3>Value (V)</h3><p>"Lo que esta palabra aporta." Una vez calculados los pesos (Q·K), el resultado final es un promedio ponderado de los "values" de todas las palabras.</p></div>
+  </div>
+
+  <div class="stitle"><span class="ico">🎭</span>Multi-head attention y posición</div>
+  <div class="grid g2">
+    <div class="card">
+      <h3>Varias "cabezas" en paralelo</h3>
+      <p>En vez de calcular atención una sola vez, el Transformer la calcula <strong>H veces en paralelo</strong> (multi-head attention), con cada cabeza aprendiendo a especializarse: una en relaciones sintácticas, otra en correferencias ("ella" → "María"), otra en cercanía posicional.</p>
+      <p style="margin-top:.5rem;font-size:.82rem;color:var(--gray-lt)">Llama-3 usa <em>Grouped Query Attention</em> (GQA): comparte las claves/valores entre grupos de cabezas para reducir 4× la memoria de inferencia, con pérdida mínima de calidad.</p>
+    </div>
+    <div class="card">
+      <h3>¿Y el orden de las palabras?</h3>
+      <p>La atención por sí sola es "ciega" al orden: sin ayuda, no distingue "el gato come al ratón" de "el ratón come al gato". Por eso se suma información posicional a cada token.</p>
+      <p style="margin-top:.5rem;font-size:.82rem;color:var(--gray-lt)">El método moderno dominante es <strong>RoPE</strong> (Rotary Position Embedding, usado por Llama/Mistral/Qwen): rota los vectores Q y K según la posición, de forma que la atención capture naturalmente la <em>distancia relativa</em> entre tokens.</p>
+    </div>
+  </div>
+
+  <details>
+    <summary>🔎 Cuando la atención falla: sink y "lost in the middle"</summary>
+    <div class="dbody">
+      <p><strong>Costo cuadrático.</strong> Calcular atención entre todos los pares de tokens cuesta O(n²): duplicar el contexto cuadruplica el cómputo. Para 128K tokens, la matriz de atención sola pesaría ~64 GB. Técnicas como <em>FlashAttention</em> no reducen ese cómputo, pero evitan tener que guardar la matriz gigante en memoria, calculándola por bloques.</p>
+      <p style="margin-top:.6rem"><strong>Attention sink.</strong> En la práctica, los modelos entrenados le asignan una cantidad desproporcionada de atención al <em>primer token</em> de la secuencia (a veces 20-50% del total), incluso cuando ese token no tiene ningún significado especial. Es un "basurero" donde el modelo descarta atención sobrante cuando ninguna palabra es realmente relevante.</p>
+      <p style="margin-top:.6rem"><strong>"Lost in the middle".</strong> En contextos largos, la información ubicada al <em>principio</em> o al <em>final</em> del prompt se recupera de forma confiable, pero la que está en el <em>medio</em> tiende a perderse — un patrón en forma de U que se repite en casi todos los LLMs, y que se agrava cuanto más largo es el texto.</p>
+    </div>
+  </details>
+
   <div class="stitle"><span class="ico">🎮</span>Simulador: mapa de atención<span class="lvl-chip">interactivo</span></div>
   <div class="sim">
     <p style="font-size:.85rem;color:var(--gray-lt);margin-bottom:.6rem">Elegí una oración y clickeá una palabra: vas a ver a qué otras palabras le "presta atención" (pesos ilustrativos, no de un modelo real).</p>
@@ -451,6 +560,51 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
     <div class="card bl"><h3>2. Fine-tuning</h3><p>Se lo re-entrena con ejemplos de instrucción-respuesta de alta calidad, curados por humanos, para que pase de "completar texto" a "seguir instrucciones y conversar" de forma útil.</p></div>
     <div class="card gr"><h3>3. RLHF</h3><p><em>Reinforcement Learning from Human Feedback:</em> humanos comparan pares de respuestas y el modelo se ajusta para preferir las que la gente prefiere — más útiles, honestas y seguras.</p></div>
   </div>
+
+  <div class="fbox">
+    <span class="big">L = − (1/T) Σ log P(xₜ | x&lt;ₜ)</span>
+    <span class="sub">el objetivo de pre-training: minimizar el error al predecir cada token usando solo los anteriores</span>
+  </div>
+
+  <div class="stitle"><span class="ico">⚙️</span>Cómo se minimiza ese error</div>
+  <div class="grid g2">
+    <div class="card pu">
+      <h3>Gradiente descendente + Adam</h3>
+      <p>En cada paso, el modelo calcula el <strong>gradiente</strong> (hacia dónde hay que mover cada parámetro para bajar el error) y da un paso en esa dirección, de tamaño <em>learning rate</em>. Los LLMs no usan gradiente descendente "a secas": usan <strong>Adam/AdamW</strong>, que le da a cada uno de los miles de millones de parámetros su propio tamaño de paso adaptativo, según qué tan ruidoso o consistente fue su gradiente históricamente.</p>
+    </div>
+    <div class="card">
+      <h3>Warmup + decay</h3>
+      <p>El learning rate no es constante: empieza en casi cero y sube gradualmente (<em>warmup</em>) para no desestabilizar al modelo con los primeros gradientes ruidosos, y después baja suavemente (<em>cosine decay</em>) a medida que el entrenamiento converge — como frenar de a poco al acercarse al mínimo.</p>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">📚</span>Escala real y calidad de los datos</div>
+  <div class="grid g2">
+    <div class="card">
+      <h3>¿Cuánto texto hace falta?</h3>
+      <p>Llama-3 se entrenó con <strong>15 billones de tokens</strong> (millones de millones), mezclando ~80% texto web, ~10% código, ~5% libros/papers y ~5% datos curados. Ese pre-training consume millones de horas de GPU y cuesta decenas de millones de dólares.</p>
+    </div>
+    <div class="card gr">
+      <h3>El principio LIMA: menos es más</h3>
+      <p>Un hallazgo sorprendente: <strong>1.000 ejemplos de fine-tuning</strong> cuidadosamente curados (diversos, correctos, bien formateados) pueden igualar a modelos entrenados con 50.000+ ejemplos ruidosos. Para el fine-tuning, la <em>calidad</em> de los datos pesa más que la cantidad.</p>
+    </div>
+  </div>
+
+  <details>
+    <summary>🔎 Hiperparámetros reales de modelos publicados</summary>
+    <div class="dbody">
+      <div class="twrap">
+        <table>
+          <tr><th>Modelo</th><th>Tokens de entrenamiento</th><th>Learning rate pico</th><th>Schedule</th></tr>
+          <tr><td>Llama-3 405B</td><td>15T</td><td>8e-5</td><td>Warmup-Stable-Decay</td></tr>
+          <tr><td>Llama-3 8B</td><td>15T</td><td>3e-4</td><td>Warmup-Stable-Decay</td></tr>
+          <tr><td>Qwen-2.5 72B</td><td>18T</td><td>3e-4</td><td>Cosine</td></tr>
+          <tr><td>Mistral 7B</td><td>8T</td><td>3e-4</td><td>Cosine</td></tr>
+        </table>
+      </div>
+      <p style="margin-top:.6rem">Para el fine-tuning (SFT), el learning rate suele ser mucho más chico (1e-5 a 2e-5) — el modelo ya "sabe" lenguaje, solo hay que ajustarlo para seguir instrucciones sin destruir lo aprendido en el pre-training.</p>
+    </div>
+  </details>
 
   <div class="stitle"><span class="ico">🎮</span>Simulador: curva de entrenamiento<span class="lvl-chip">interactivo</span></div>
   <div class="sim">
@@ -486,6 +640,40 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
       </ul>
     </div>
   </div>
+
+  <div class="stitle"><span class="ico">🗂️</span>La familia completa de estrategias de decodificación</div>
+  <div class="twrap">
+    <table>
+      <tr><th>Método</th><th>¿Determinista?</th><th>Diversidad</th><th>Mejor para</th></tr>
+      <tr><td>Greedy (elegir siempre lo más probable)</td><td>Sí</td><td>Ninguna</td><td>Código, respuestas factuales</td></tr>
+      <tr><td>Beam search</td><td>Sí</td><td>Baja</td><td>Traducción, resúmenes</td></tr>
+      <tr><td>Top-k</td><td>No</td><td>Media</td><td>Generación general</td></tr>
+      <tr><td>Top-p (nucleus)</td><td>No</td><td>Adaptativa</td><td>El default para tareas abiertas</td></tr>
+      <tr><td>Min-p</td><td>No</td><td>Adaptativa</td><td>Alternativa robusta a top-p</td></tr>
+      <tr><td>Contrastive decoding</td><td>Sí</td><td>Baja</td><td>Texto largo, coherente y factual</td></tr>
+    </table>
+  </div>
+  <p style="font-size:.82rem;color:var(--gray-lt);margin:.6rem 0 1rem">💡 Top-k usa un número fijo de candidatos; top-p se adapta a la "forma" de la distribución (pocas opciones si el modelo está seguro, muchas si está indeciso) — por eso en la práctica top-p suele ganarle a top-k solo.</p>
+
+  <details>
+    <summary>🔎 Mismo modelo, mismo prompt: "Había una vez..."</summary>
+    <div class="dbody">
+      <p>La estrategia de decodificación cambia por completo el carácter del texto generado, aunque el modelo y el prompt sean idénticos:</p>
+      <ul style="margin:.6rem 0 .6rem 1.2rem;line-height:2">
+        <li><strong>Greedy:</strong> "había una niña que vivía en un pueblo pequeño..." <em>(genérico, previsible)</em></li>
+        <li><strong>Top-p=0.9, T=1.0:</strong> "los ríos corrían al revés y los peces aprendieron a volar..." <em>(creativo, sorprendente)</em></li>
+        <li><strong>Top-p=0.9, T=0.3:</strong> "había un reino gobernado por un rey sabio y justo..." <em>(coherente, convencional)</em></li>
+      </ul>
+      <p>El modelo "sabe" lo mismo en los tres casos — lo que cambia es <em>cómo elige</em> entre las palabras que sabe.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>🔎 Generación con formato garantizado (JSON, function calling)</summary>
+    <div class="dbody">
+      <p>Cuando la salida la va a leer un programa (no una persona), no alcanza con "pedirle" al modelo que responda en JSON — puede fallar. La técnica real se llama <strong>constrained decoding</strong>: en cada paso, se calcula qué tokens son válidos según la gramática (JSON schema, regex) y se ponen en <code>−∞</code> las probabilidades de todos los tokens inválidos <em>antes</em> de samplear. El resultado es una salida sintácticamente válida garantizada, token por token — no un post-procesamiento con reintentos.</p>
+    </div>
+  </details>
 
   <div class="stitle"><span class="ico">🎮</span>Simulador: generador de texto<span class="lvl-chip">interactivo</span></div>
   <div class="sim">
@@ -525,6 +713,63 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
     <div class="card gr"><h3>Chain-of-thought</h3><p>Pedirle explícitamente que "piense paso a paso" mejora mucho la precisión en problemas que requieren razonamiento.</p></div>
   </div>
 
+  <div class="stitle"><span class="ico">🪄</span>In-context learning: aprender sin entrenar</div>
+  <div class="grid g2">
+    <div class="card pu">
+      <h3>¿Por qué funciona mostrar ejemplos?</h3>
+      <p>El modelo puede "aprender" una tarea nueva solo viendo 2-3 ejemplos en el prompt, <strong>sin actualizar ni un solo parámetro</strong>. Durante el pre-training vio millones de tareas distintas; los ejemplos en tu prompt simplemente le indican <em>cuál</em> de esas tareas aprendidas tenés en mente ahora mismo.</p>
+    </div>
+    <div class="card">
+      <h3>¿Cuántos ejemplos hacen falta?</h3>
+      <p>La performance suele mejorar de 0 a 4-8 ejemplos y después se estanca. Lo que más importa no es solo que las respuestas sean correctas, sino que el <strong>formato</strong> de los ejemplos sea consistente — el modelo copia el patrón que ve.</p>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">🌳</span>Variantes de Chain-of-Thought</div>
+  <div class="twrap">
+    <table>
+      <tr><th>Técnica</th><th>Qué hace</th></tr>
+      <tr><td>Zero-shot CoT</td><td>Agregar "pensemos paso a paso" a cualquier prompt, sin ejemplos</td></tr>
+      <tr><td>Few-shot CoT</td><td>Mostrar ejemplos que incluyen el razonamiento explícito, no solo la respuesta</td></tr>
+      <tr><td>Self-consistency</td><td>Generar N cadenas de razonamiento distintas y quedarse con la respuesta más votada</td></tr>
+      <tr><td>Tree of Thoughts</td><td>Explorar varias ramas de razonamiento en paralelo, con posibilidad de retroceder</td></tr>
+      <tr><td>ReAct</td><td>Alternar entre "razonar" y "actuar" (usar herramientas) paso a paso</td></tr>
+    </table>
+  </div>
+
+  <details>
+    <summary>🔎 Checklist de prompting efectivo</summary>
+    <div class="dbody">
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li><strong>Sé específico:</strong> "resumí en 3 viñetas de menos de 20 palabras" en vez de "resumí esto"</li>
+        <li><strong>Mostrá, no solo digas:</strong> un buen ejemplo vale más que un párrafo de instrucciones</li>
+        <li><strong>Definí el formato de salida:</strong> JSON, tabla, viñetas — nunca lo dejes a interpretación</li>
+        <li><strong>Usá delimitadores</strong> para separar instrucciones de los datos de entrada (comillas, <code>&lt;input&gt;</code>)</li>
+        <li><strong>Asignale un rol:</strong> "sos un [experto en X]" activa conocimiento y tono relevantes</li>
+        <li><strong>Decile qué NO hacer:</strong> las restricciones negativas suelen ser más efectivas que las positivas</li>
+        <li><strong>Pedí razonamiento</strong> ("pensá paso a paso") en tareas de lógica o matemática</li>
+        <li><strong>Ajustá la temperature:</strong> baja para tareas factuales, alta para creatividad</li>
+        <li><strong>Iterá empíricamente:</strong> tratá los prompts como código — versionalos y medí resultados</li>
+        <li><strong>Aprovechá el sesgo de recencia:</strong> las instrucciones más importantes van al final del prompt</li>
+      </ol>
+    </div>
+  </details>
+
+  <details>
+    <summary>🔎 Errores comunes de prompting</summary>
+    <div class="dbody">
+      <div class="twrap">
+        <table>
+          <tr><th>Problema</th><th>Síntoma</th><th>Solución</th></tr>
+          <tr><td>Amnesia de instrucciones</td><td>El modelo ignora reglas en prompts largos</td><td>Mover las reglas clave al final; repetirlas</td></tr>
+          <tr><td>Deriva de formato</td><td>La salida empieza bien y se degrada</td><td>Constrained decoding; dividir en prompts más cortos</td></tr>
+          <tr><td>Sicofancia</td><td>El modelo valida premisas incorrectas del usuario</td><td>Pedir explícitamente que cuestione supuestos erróneos</td></tr>
+          <tr><td>Detalles alucinados</td><td>Inventa datos no provistos</td><td>Pedir "si no lo sabés, decilo"; usar RAG</td></tr>
+        </table>
+      </div>
+    </div>
+  </details>
+
   <div class="stitle"><span class="ico">🎮</span>Simulador: constructor de prompt<span class="lvl-chip">interactivo</span></div>
   <div class="sim">
     <p style="font-size:.85rem;color:var(--gray-lt);margin-bottom:.8rem">Pregunta base: <em>"Tenía 10 manzanas, regalé 3 y compré 5 más. ¿Cuántas manzanas tengo ahora?"</em> — activá técnicas y mirá cómo cambia el prompt final y la calidad de la respuesta simulada.</p>
@@ -557,6 +802,31 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
     <div class="card or"><h3>📏 Ventana de contexto</h3><p>Solo "recuerda" una cantidad limitada de tokens (el prompt + la conversación). Lo que quedó afuera de esa ventana, literalmente no existe para el modelo en ese momento.</p></div>
     <div class="card te"><h3>⚖️ Sesgos</h3><p>Si el texto de entrenamiento contiene sesgos (de género, culturales, etc.), el modelo puede reproducirlos, porque aprendió patrones estadísticos del mundo real tal como es.</p></div>
   </div>
+
+  <div class="stitle"><span class="ico">🕳️</span>Dos fallas específicas de la atención en contextos largos</div>
+  <div class="grid g2">
+    <div class="card or">
+      <h3>Attention sink</h3>
+      <p>Los modelos le dedican una porción desproporcionada de su atención al <strong>primer token</strong> de la conversación (hasta 20-50% del total), sin importar qué tan irrelevante sea. Es un efecto secundario de cómo funciona el softmax: si ninguna palabra es realmente relevante, la atención "sobrante" necesita ir a algún lado.</p>
+    </div>
+    <div class="card re">
+      <h3>"Lost in the middle"</h3>
+      <p>En prompts largos, la información al <strong>principio</strong> y al <strong>final</strong> se recupera bien, pero la del <strong>medio</strong> tiende a perderse — un patrón en forma de U documentado en casi todos los LLMs. Por eso conviene poner los datos más importantes al inicio o justo antes de la pregunta.</p>
+    </div>
+  </div>
+
+  <div class="note">📌 Los modelos de punta manejan ventanas mucho más grandes que la demo de abajo: Claude llega a 200K-1M tokens, Gemini 1.5 supera el millón y GPT-4 maneja 128K. Pero una ventana grande <strong>no garantiza</strong> que el modelo use bien toda esa información — el efecto "lost in the middle" sigue apareciendo incluso con contextos enormes.</div>
+
+  <details>
+    <summary>🔎 ¿Cómo se mitigan estos problemas en producción?</summary>
+    <div class="dbody">
+      <ul style="margin-left:1.2rem;line-height:2">
+        <li><strong>RAG (Retrieval-Augmented Generation):</strong> en vez de confiar en la memoria interna del modelo, se buscan documentos relevantes y se los agrega al prompt, citando la fuente — reduce drásticamente las alucinaciones en tareas que dependen de datos concretos.</li>
+        <li><strong>StreamingLLM:</strong> al usar una ventana deslizante para conversaciones muy largas, se conservan siempre los primeros tokens ("sink") junto con los más recientes, evitando que el modelo colapse al perder su "basurero" de atención.</li>
+        <li><strong>Ubicación estratégica:</strong> colocar la información crítica al principio o justo antes de la pregunta final compensa el efecto "lost in the middle".</li>
+      </ul>
+    </div>
+  </details>
 
   <div class="stitle"><span class="ico">🎮</span>Simulador: ventana de contexto<span class="lvl-chip">interactivo</span></div>
   <div class="sim">
@@ -604,6 +874,22 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
       <div class="citem"><div class="lbl">Temperature</div><div class="cf">Parámetro que aplana (alta) o afila (baja) la distribución de probabilidad al generar.</div></div>
       <div class="citem"><div class="lbl">Top-k / Top-p</div><div class="cf">Filtros que limitan cuántas opciones distintas puede elegir el modelo en cada paso.</div></div>
       <div class="citem"><div class="lbl">Ventana de contexto</div><div class="cf">Cantidad máxima de tokens que el modelo puede "tener en cuenta" a la vez.</div></div>
+    </div>
+  </div>
+
+  <div class="cheat" style="margin-top:1.3rem">
+    <h2>10 términos avanzados</h2>
+    <div class="cgrid">
+      <div class="citem"><div class="lbl">BPE</div><div class="cf">Byte-Pair Encoding: algoritmo que arma el vocabulario fusionando repetidamente los pares de símbolos más frecuentes.</div></div>
+      <div class="citem"><div class="lbl">RoPE</div><div class="cf">Rotary Position Embedding: codifica la posición rotando los vectores Q y K según su ubicación en la secuencia.</div></div>
+      <div class="citem"><div class="lbl">GQA / KV cache</div><div class="cf">Grouped Query Attention comparte claves/valores entre cabezas para reducir la memoria que ocupa la caché de inferencia.</div></div>
+      <div class="citem"><div class="lbl">Attention sink</div><div class="cf">Tendencia del modelo a volcar atención excesiva sobre el primer token, sin importar su contenido.</div></div>
+      <div class="citem"><div class="lbl">Lost in the middle</div><div class="cf">Pérdida de información ubicada en el medio de contextos largos, aunque el principio y el final se recuerden bien.</div></div>
+      <div class="citem"><div class="lbl">Chain-of-thought</div><div class="cf">Pedirle al modelo que muestre su razonamiento paso a paso antes de la respuesta final.</div></div>
+      <div class="citem"><div class="lbl">Self-consistency</div><div class="cf">Generar varias cadenas de razonamiento y quedarse con la respuesta más votada entre ellas.</div></div>
+      <div class="citem"><div class="lbl">LIMA (principio)</div><div class="cf">Pocos ejemplos de fine-tuning bien curados pueden superar a muchos ejemplos ruidosos.</div></div>
+      <div class="citem"><div class="lbl">Weight tying</div><div class="cf">Reutilizar la matriz de embeddings como capa de salida del modelo, ahorrando parámetros.</div></div>
+      <div class="citem"><div class="lbl">Constrained decoding</div><div class="cf">Forzar en cada paso que el modelo solo pueda elegir tokens válidos según una gramática (ej. JSON).</div></div>
     </div>
   </div>
 
@@ -1049,7 +1335,19 @@ const allQuestions = [
    exp:'Es el límite de tokens (prompt + conversación) que el modelo puede procesar en un momento dado; lo que queda afuera se "olvida".'},
   {t:'¿Qué es una "alucinación" en un LLM?', h:null,
    opts:['Un error de conexión a internet','Contenido inventado que el modelo presenta como si fuera cierto','Una respuesta demasiado corta','Un bug en el navegador'], c:1,
-   exp:'El modelo puede generar datos, citas o hechos falsos que suenan coherentes porque optimiza por "lo más probable", no por verdad verificada.'}
+   exp:'El modelo puede generar datos, citas o hechos falsos que suenan coherentes porque optimiza por "lo más probable", no por verdad verificada.'},
+  {t:'¿Cómo arma el vocabulario el algoritmo BPE (Byte-Pair Encoding)?', h:null,
+   opts:['Fusionando repetidamente el par de símbolos adyacentes más frecuente','Traduciendo cada palabra a otro idioma','Eliminando las vocales del texto','Ordenando las palabras alfabéticamente'], c:0,
+   exp:'BPE arranca con caracteres individuales y va fusionando el par más frecuente, iteración tras iteración, hasta llegar al tamaño de vocabulario deseado.'},
+  {t:'¿Qué es el "attention sink"?', h:null,
+   opts:['Un tipo de red neuronal recurrente','La tendencia del modelo a volcar atención excesiva en el primer token, sin importar su contenido','Un método para comprimir el modelo','Una técnica de traducción automática'], c:1,
+   exp:'Cuando ninguna palabra es especialmente relevante, el softmax necesita "depositar" la atención sobrante en algún lado — y suele terminar en el primer token de la secuencia.'},
+  {t:'Según el principio LIMA, ¿qué importa más en los datos de fine-tuning?', h:null,
+   opts:['La cantidad de ejemplos, cuantos más mejor','La calidad y curación de los ejemplos, más que la cantidad','Que todos los ejemplos sean generados por IA','El idioma en que están escritos'], c:1,
+   exp:'LIMA mostró que ~1.000 ejemplos bien curados pueden igualar a modelos entrenados con 50.000+ ejemplos ruidosos.'},
+  {t:'¿En qué consiste la técnica de "self-consistency"?', h:null,
+   opts:['Generar varias cadenas de razonamiento distintas y quedarse con la respuesta más votada','Repetir la misma pregunta hasta obtener siempre igual respuesta','Comparar dos modelos distintos','Reducir la temperatura a cero'], c:0,
+   exp:'Al samplear N caminos de razonamiento independientes y votar la respuesta final, los errores idiosincrásicos se cancelan y gana la respuesta más consistente.'}
 ];
 let qIdx=0, score=0, answered=false;
 document.getElementById('q-total').textContent=allQuestions.length;

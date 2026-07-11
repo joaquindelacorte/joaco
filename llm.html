@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Cómo funcionan los LLMs — Guía gamificada</title>
+<meta name="description" content="De la tokenización al RLHF: cómo piensan los modelos de lenguaje, con simuladores interactivos y quiz.">
+<style>
+:root{
+  --pur:#0e7490;--pur-lt:#22d3ee;--pur-bg:#cffafe;
+  --blue:#4338ca;--blue-bg:#e0e7ff;
+  --green:#15803d;--green-bg:#dcfce7;
+  --orange:#c2410c;--orange-bg:#fff3e0;
+  --red:#b91c1c;--red-bg:#fee2e2;
+  --teal:#0d9488;--teal-bg:#ccfbf1;
+  --yellow:#d97706;--yellow-bg:#fef9c3;
+  --gray:#374151;--gray-lt:#6b7280;
+  --bg:#f0fbfd;--card:#fff;--border:#e2e8f0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:var(--pur);display:flex;align-items:center;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.brand{color:#fff;font-size:1.05rem;font-weight:800;padding:.8rem 1.2rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.2)}
+.tabs{display:flex;overflow-x:auto;flex:1}
+.tab-btn{padding:.75rem 1.05rem;border:none;background:transparent;color:rgba(255,255,255,.75);font-size:.83rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tab-btn.active{color:#fff;border-bottom-color:#a5f3fc}
+.nav-badges{color:#fff;font-weight:700;font-size:.82rem;padding:.6rem 1.1rem;white-space:nowrap;background:rgba(255,255,255,.12)}
+
+/* GLOBAL PROGRESS */
+.global-progress-wrap{height:5px;background:rgba(0,0,0,.15)}
+.global-progress{height:100%;background:linear-gradient(90deg,#facc15,#fb923c);transition:width .4s ease;width:0}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#083344 0%,var(--pur) 60%,var(--pur-lt) 100%);color:#fff;text-align:center;padding:2.5rem 1rem 2rem}
+.hero h1{font-size:2.2rem;font-weight:900;letter-spacing:-.5px}
+.hero p{opacity:.88;margin-top:.4rem}
+.badges{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.25rem .85rem;font-size:.78rem;font-weight:700}
+
+/* LAYOUT */
+.page{display:none}.page.active{display:block}
+.container{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+
+/* SECTION TITLE */
+.stitle{display:flex;align-items:center;gap:.6rem;font-size:1.25rem;font-weight:800;color:var(--pur);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid var(--pur-bg)}
+.stitle:first-of-type{margin-top:.5rem}
+.stitle .ico{font-size:1.2rem}
+.lvl-chip{display:inline-block;background:var(--pur);color:#fff;font-size:.7rem;font-weight:700;padding:.2rem .65rem;border-radius:2rem;margin-left:.6rem;vertical-align:middle}
+
+/* CARDS */
+.grid{display:grid;gap:1.1rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;box-shadow:0 1px 4px rgba(0,0,0,.05);transition:.2s}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.card h3{font-size:.97rem;font-weight:700;margin-bottom:.5rem;color:var(--pur)}
+.card p,.card li{font-size:.9rem;color:var(--gray)}
+.card.pu{border-left:4px solid var(--pur);background:var(--pur-bg)}
+.card.bl{border-left:4px solid var(--blue);background:var(--blue-bg)}
+.card.gr{border-left:4px solid var(--green);background:var(--green-bg)}
+.card.or{border-left:4px solid var(--orange);background:var(--orange-bg)}
+.card.re{border-left:4px solid var(--red);background:var(--red-bg)}
+.card.te{border-left:4px solid var(--teal);background:var(--teal-bg)}
+
+/* FORMULA / CODE */
+.fbox{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1rem 1.3rem;font-family:'Courier New',monospace;text-align:center;margin:.7rem 0;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.fbox .big{font-size:1.3rem;font-weight:700;color:#67e8f9;display:block;margin-bottom:.25rem}
+.fbox .sub{font-size:.82rem;color:#94a3b8;display:block;margin-top:.2rem}
+
+/* TABLE */
+.twrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th{background:var(--pur);color:#fff;padding:.65rem 1rem;text-align:left;font-weight:600}
+td{padding:.6rem 1rem;border-bottom:1px solid var(--border)}
+tr:last-child td{border:none}
+tr:nth-child(even) td{background:var(--pur-bg)}
+
+/* TIP / NOTE */
+.tip{display:flex;gap:.7rem;align-items:flex-start;background:#fffbeb;border:1px solid #fbbf24;border-radius:10px;padding:.85rem 1.1rem;margin:.7rem 0;font-size:.88rem}
+.note{background:var(--pur-bg);border-left:4px solid var(--pur);border-radius:0 8px 8px 0;padding:.75rem 1rem;font-size:.9rem;margin:.7rem 0;color:#0e5f78}
+
+/* ACCORDION */
+details{border:1px solid var(--border);border-radius:10px;margin-bottom:.7rem;overflow:hidden}
+details summary{padding:.9rem 1.1rem;cursor:pointer;font-weight:600;font-size:.92rem;background:var(--card);list-style:none;display:flex;justify-content:space-between;align-items:center;user-select:none}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:'＋';color:var(--pur-lt)}
+details[open] summary::after{content:'－'}
+details[open] summary{background:var(--pur-bg);color:var(--pur)}
+.dbody{padding:1.1rem;background:var(--card);border-top:1px solid var(--border);font-size:.9rem;line-height:1.7}
+
+/* CHEAT DARK */
+.cheat{background:linear-gradient(135deg,#082f36 0%,#0e7490 100%);color:#e2e8f0;border-radius:14px;padding:1.8rem;margin:1rem 0}
+.cheat h2{color:#67e8f9;font-size:1.1rem;margin-bottom:1.1rem;text-align:center}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.9rem}
+.citem{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:.85rem}
+.citem .lbl{font-size:.78rem;color:#67e8f9;font-weight:700;margin-bottom:.3rem}
+.citem .cf{font-size:.82rem;color:#e2e8f0;line-height:1.55}
+
+/* ═══ BADGES / GAMIFICACIÓN ═══ */
+.badges-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem}
+.badge-card{border-radius:12px;padding:1.1rem;border:2px solid var(--border);text-align:center;transition:.25s}
+.badge-card.locked{opacity:.45;filter:grayscale(1)}
+.badge-card.unlocked{border-color:var(--green);background:var(--green-bg)}
+.badge-card .bic{font-size:2.1rem;display:block;margin-bottom:.4rem}
+.badge-card .bname{font-weight:700;font-size:.9rem}
+.badge-card .bdesc{font-size:.78rem;color:var(--gray-lt);margin-top:.3rem}
+
+.badge-toast{position:fixed;bottom:20px;right:20px;background:linear-gradient(135deg,#0e7490,#4338ca);color:#fff;z-index:9999;padding:1rem 1.3rem;border-radius:12px;display:flex;gap:.8rem;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,.35);transform:translateX(140%);transition:transform .4s cubic-bezier(.34,1.56,.64,1);max-width:300px}
+.badge-toast.show{transform:translateX(0)}
+
+.map-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.9rem}
+.map-card{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:1.1rem;text-align:center;cursor:pointer;transition:.2s}
+.map-card:hover{border-color:var(--pur-lt);transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.map-card .mic{font-size:1.8rem;display:block;margin-bottom:.4rem}
+.map-card .mname{font-weight:700;font-size:.85rem;color:var(--pur)}
+.map-card .mstep{font-size:.7rem;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem}
+
+/* ═══ SIMULADORES: shared bar rows (atención + sampling) ═══ */
+.bar-row{display:flex;align-items:center;gap:.6rem}
+.bar-lbl{width:120px;font-family:'Courier New',monospace;font-size:.85rem;text-align:right;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-track{flex:1;height:22px;background:var(--pur-bg);border-radius:6px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--pur),var(--pur-lt));transition:width .3s}
+.bar-pct{width:46px;font-size:.8rem;font-weight:700;color:var(--pur);flex-shrink:0}
+.bars-wrap{display:flex;flex-direction:column;gap:.5rem;margin:1rem 0}
+
+/* sim shell */
+.sim{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;margin:1rem 0}
+.sim-controls{display:flex;flex-wrap:wrap;gap:1.3rem;align-items:center;margin-top:.8rem}
+.sim-controls label{font-size:.85rem;font-weight:600;color:var(--gray)}
+.sim-controls input[type=range]{width:150px;vertical-align:middle}
+.sim-val{font-family:'Courier New',monospace;font-weight:700;color:var(--pur)}
+.sim-btn{padding:.7rem 1.4rem;background:var(--pur);color:#fff;border:none;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;transition:.2s}
+.sim-btn:hover:not(:disabled){background:var(--pur-lt)}
+.sim-btn:disabled{opacity:.4;cursor:default}
+.sim-btn.ghost{background:transparent;color:var(--pur);border:2px solid var(--pur)}
+
+/* Tokenizador */
+.tok-input{width:100%;padding:.9rem;border-radius:10px;border:2px solid var(--border);font-size:1rem;font-family:inherit;resize:vertical;min-height:70px}
+.tok-input:focus{outline:none;border-color:var(--pur-lt)}
+.tok-output{margin-top:1rem;display:flex;flex-wrap:wrap;gap:.4rem;min-height:50px}
+.tok-chip{padding:.35rem .6rem;border-radius:6px;font-family:'Courier New',monospace;font-size:.85rem;font-weight:700;color:#fff}
+.tok-stats{display:flex;gap:1rem;margin-top:1.1rem;flex-wrap:wrap}
+.tok-stat{background:var(--pur-bg);border-radius:10px;padding:.7rem 1.1rem;text-align:center;min-width:110px}
+.tok-stat .n{font-size:1.4rem;font-weight:800;color:var(--pur);display:block}
+.tok-stat .l{font-size:.72rem;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.05em}
+
+/* Embeddings */
+.embed-wrap{display:grid;grid-template-columns:1fr 260px;gap:1.3rem;align-items:start}
+.embed-svg{width:100%;height:auto;background:#0f172a;border-radius:12px}
+.embed-controls select{width:100%;padding:.6rem;border-radius:8px;border:1px solid var(--border);margin-bottom:.7rem;font-size:.9rem}
+.embed-result{background:var(--pur-bg);border-radius:10px;padding:1rem;text-align:center}
+.embed-result .sim-big{font-size:2rem;font-weight:900;color:var(--pur);display:block}
+.embed-result .lbl2{font-size:.85rem;font-weight:600;color:var(--gray);margin-top:.3rem}
+
+/* Atención */
+.att-sentence{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}
+.att-word{padding:.55rem .9rem;border-radius:8px;border:2px solid var(--border);background:var(--card);cursor:pointer;font-weight:600;font-size:.95rem;transition:.2s;color:var(--gray)}
+.att-word:hover{border-color:var(--pur-lt)}
+.att-word.selected{border-color:var(--blue);background:var(--blue);color:#fff}
+.att-presets{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:.6rem}
+
+/* Prompting */
+.prompt-check{display:flex;align-items:flex-start;gap:.7rem;padding:.85rem;border:2px solid var(--border);border-radius:10px;margin-bottom:.6rem;cursor:pointer;transition:.2s}
+.prompt-check:hover{border-color:var(--pur-lt)}
+.prompt-check input{margin-top:.25rem;width:18px;height:18px;accent-color:var(--pur)}
+.prompt-check .pc-title{font-weight:700;font-size:.88rem;color:var(--gray)}
+.prompt-check .pc-desc{font-size:.78rem;color:var(--gray-lt)}
+.prompt-final{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1.1rem;font-family:'Courier New',monospace;font-size:.82rem;white-space:pre-wrap;margin-top:1rem;line-height:1.6}
+.prompt-answer{background:var(--green-bg);border-left:4px solid var(--green);border-radius:0 8px 8px 0;padding:1rem;margin-top:.8rem;font-size:.88rem;white-space:pre-wrap;color:#14532d}
+
+/* Ventana de contexto */
+.ctx-bar{display:flex;gap:2px;min-height:50px;position:relative;overflow-x:auto;border:2px solid var(--border);border-radius:8px;padding:.5rem}
+.ctx-msg{display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:#fff;flex-shrink:0;border-radius:4px;transition:opacity .3s,filter .3s}
+.ctx-msg.evicted{opacity:.18;filter:grayscale(1)}
+.ctx-limit-line{position:absolute;top:0;bottom:0;width:2px;background:#facc15;z-index:2}
+.ctx-limit-line::after{content:'límite de contexto';position:absolute;top:-20px;left:-46px;font-size:.65rem;color:#b45309;font-weight:700;white-space:nowrap}
+.ctx-legend{display:flex;justify-content:space-between;font-size:.82rem;color:var(--gray-lt);margin-top:.6rem;flex-wrap:wrap;gap:.4rem}
+
+/* Loss canvas */
+.loss-canvas{width:100%;max-width:600px;height:220px;background:#0f172a;border-radius:10px;display:block;margin:.6rem auto}
+
+/* Gen output */
+.gen-output{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1.2rem;min-height:50px;font-size:1.05rem;margin-top:1rem;line-height:1.6}
+
+/* QUIZ */
+#quiz-container{max-width:720px;margin:0 auto}
+.quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:.5rem}
+.quiz-score-display{font-weight:700;font-size:1rem;color:var(--pur)}
+.progress-bar-wrap{background:var(--border);border-radius:2rem;height:8px;margin-bottom:1.5rem;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--pur-lt),#67e8f9);border-radius:2rem;transition:width .4s ease}
+
+.quiz-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.quiz-card .q-num{font-size:.8rem;font-weight:700;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem}
+.quiz-card .q-text{font-size:1.05rem;font-weight:600;color:var(--gray);margin-bottom:1.3rem;line-height:1.5}
+
+.options{display:grid;gap:.65rem}
+.opt-btn{padding:.85rem 1.1rem;border:2px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;font-size:.9rem;text-align:left;transition:.2s;font-weight:500;color:var(--gray)}
+.opt-btn:hover:not(:disabled){border-color:var(--pur-lt);background:var(--pur-bg);color:var(--pur)}
+.opt-btn.correct{border-color:var(--green);background:var(--green-bg);color:var(--green);font-weight:700}
+.opt-btn.wrong{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+
+.feedback-box{margin-top:1.1rem;padding:.9rem 1.1rem;border-radius:10px;font-size:.9rem;line-height:1.6;display:none}
+.feedback-box.show{display:block}
+.feedback-box.ok{background:var(--green-bg);border:1px solid var(--green);color:var(--green)}
+.feedback-box.ko{background:var(--red-bg);border:1px solid var(--red);color:var(--red)}
+
+.quiz-nav{display:flex;justify-content:flex-end;margin-top:1.2rem}
+.btn-next{padding:.75rem 1.8rem;background:var(--pur);color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:700;cursor:pointer;transition:.2s}
+.btn-next:hover{background:var(--pur-lt)}
+.btn-next:disabled{opacity:.4;cursor:default}
+
+.result-card{background:var(--card);border-radius:16px;padding:2.5rem;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+.result-card .emoji{font-size:4rem;display:block;margin-bottom:.8rem}
+.result-card h2{font-size:1.6rem;font-weight:800;color:var(--pur);margin-bottom:.5rem}
+.result-card .score-big{font-size:3rem;font-weight:900;color:var(--pur);display:block;margin:.5rem 0}
+.result-card p{color:var(--gray-lt);font-size:.95rem;margin-bottom:1.3rem}
+.result-detail{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1.3rem}
+.rstat{border-radius:10px;padding:.8rem;font-weight:700;font-size:1rem}
+.rstat.ok{background:var(--green-bg);color:var(--green)}
+.rstat.ko{background:var(--red-bg);color:var(--red)}
+.btn-retry{padding:.8rem 2rem;background:var(--pur);color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:.5rem}
+
+/* CONFETTI */
+.confetti-piece{position:fixed;width:10px;height:10px;border-radius:2px;animation:fall linear forwards;pointer-events:none;z-index:9999}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+@media(max-width:640px){
+  .hero h1{font-size:1.7rem}
+  nav{flex-direction:column}
+  .brand{text-align:center;border:none;border-bottom:1px solid rgba(255,255,255,.2)}
+  .nav-badges{text-align:center}
+  .embed-wrap{grid-template-columns:1fr}
+  .bar-lbl{width:80px;font-size:.75rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">🧠 LLMs</div>
+  <div class="tabs">
+    <button class="tab-btn active" id="tb-inicio" onclick="showPage('inicio',this)">🏠 Inicio</button>
+    <button class="tab-btn" id="tb-token" onclick="showPage('token',this)">🔤 Tokenización</button>
+    <button class="tab-btn" id="tb-embed" onclick="showPage('embed',this)">📍 Embeddings</button>
+    <button class="tab-btn" id="tb-atencion" onclick="showPage('atencion',this)">🔗 Atención</button>
+    <button class="tab-btn" id="tb-entrena" onclick="showPage('entrena',this)">📉 Entrenamiento</button>
+    <button class="tab-btn" id="tb-genera" onclick="showPage('genera',this)">🎲 Generación</button>
+    <button class="tab-btn" id="tb-prompt" onclick="showPage('prompt',this)">✍️ Prompting</button>
+    <button class="tab-btn" id="tb-limites" onclick="showPage('limites',this)">⚠️ Límites</button>
+    <button class="tab-btn" id="tb-quiz" onclick="showPage('quiz',this)">🎓 Quiz</button>
+    <button class="tab-btn" id="tb-glosario" onclick="showPage('glosario',this)">📋 Glosario</button>
+  </div>
+  <div class="nav-badges" id="nav-badges">🏅 0/8</div>
+</nav>
+<div class="global-progress-wrap"><div class="global-progress" id="global-progress"></div></div>
+
+<div class="hero">
+  <h1>Cómo funcionan los LLMs 🧠</h1>
+  <p>De la tokenización al RLHF — tocá cada pieza con simuladores, ganá insignias y terminá con un quiz</p>
+  <div class="badges">
+    <span class="badge">Tokens</span>
+    <span class="badge">Embeddings</span>
+    <span class="badge">Self-Attention</span>
+    <span class="badge">Transformers</span>
+    <span class="badge">Sampling</span>
+    <span class="badge">RLHF</span>
+  </div>
+</div>
+
+<!-- ════════════ INICIO ════════════ -->
+<div id="inicio" class="page active"><div class="container">
+
+  <div class="stitle"><span class="ico">🧠</span>¿Qué es un LLM?</div>
+  <div class="grid g2">
+    <div class="card pu">
+      <h3>Definición</h3>
+      <p>Un <strong>LLM</strong> (Large Language Model) es una red neuronal entrenada con enormes cantidades de texto para hacer una sola cosa muy bien: <strong>predecir cuál es la palabra (o "token") más probable que sigue</strong> a un texto dado. Todo lo demás — responder preguntas, programar, traducir, razonar — emerge de repetir esa predicción una y otra vez.</p>
+    </div>
+    <div class="card">
+      <h3>La idea en una frase</h3>
+      <p>Si le das "El cielo es de color", un LLM no "sabe" que el cielo es azul: calculó, a partir de patrones estadísticos de miles de millones de textos, que la palabra <em>"azul"</em> tiene la mayor probabilidad de continuar esa frase.</p>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">🗺️</span>El recorrido</div>
+  <p style="margin-bottom:.9rem">Cada parada explica un concepto y te deja tocar un simulador. Completá la interacción de cada una para ganar su insignia.</p>
+  <div class="map-grid">
+    <div class="map-card" onclick="showPage('token', document.getElementById('tb-token'))">
+      <span class="mic">🔤</span><div class="mstep">Paso 1</div><div class="mname">Tokenización</div>
+    </div>
+    <div class="map-card" onclick="showPage('embed', document.getElementById('tb-embed'))">
+      <span class="mic">📍</span><div class="mstep">Paso 2</div><div class="mname">Embeddings</div>
+    </div>
+    <div class="map-card" onclick="showPage('atencion', document.getElementById('tb-atencion'))">
+      <span class="mic">🔗</span><div class="mstep">Paso 3</div><div class="mname">Atención</div>
+    </div>
+    <div class="map-card" onclick="showPage('entrena', document.getElementById('tb-entrena'))">
+      <span class="mic">📉</span><div class="mstep">Paso 4</div><div class="mname">Entrenamiento</div>
+    </div>
+    <div class="map-card" onclick="showPage('genera', document.getElementById('tb-genera'))">
+      <span class="mic">🎲</span><div class="mstep">Paso 5</div><div class="mname">Generación</div>
+    </div>
+    <div class="map-card" onclick="showPage('prompt', document.getElementById('tb-prompt'))">
+      <span class="mic">✍️</span><div class="mstep">Paso 6</div><div class="mname">Prompting</div>
+    </div>
+    <div class="map-card" onclick="showPage('limites', document.getElementById('tb-limites'))">
+      <span class="mic">⚠️</span><div class="mstep">Paso 7</div><div class="mname">Límites</div>
+    </div>
+    <div class="map-card" onclick="showPage('quiz', document.getElementById('tb-quiz'))">
+      <span class="mic">🎓</span><div class="mstep">Paso 8</div><div class="mname">Quiz final</div>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">🏅</span>Tus insignias<span class="lvl-chip" id="badge-count-chip">0/8</span></div>
+  <div class="badges-grid" id="badges-grid"></div>
+
+  <div class="tip" style="margin-top:1.5rem">
+    <span>💡</span>
+    <span>Tu progreso se guarda automáticamente en este navegador (localStorage). Podés cerrar la página y volver cuando quieras — las insignias quedan.</span>
+  </div>
+
+</div></div>
+
+<!-- ════════════ TOKENIZACIÓN ════════════ -->
+<div id="token" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">🔤</span>El modelo no lee letras, lee tokens</div>
+  <div class="grid g2">
+    <div class="card pu">
+      <h3>¿Qué es un token?</h3>
+      <p>Antes de procesar cualquier texto, el modelo lo parte en <strong>tokens</strong>: pedazos de palabra (a veces la palabra completa, a veces un fragmento) que se mapean a un número. "Tokenizar" es el primer paso de <em>todo</em> LLM, sea para leer tu prompt o para escribir su respuesta.</p>
+    </div>
+    <div class="card">
+      <h3>¿Por qué subpalabras y no palabras enteras?</h3>
+      <p>Si tokenizara por palabra completa, necesitaría un "diccionario" gigante y no sabría qué hacer con palabras nuevas ("chatgepeteable"). Partiendo en subpalabras frecuentes, cualquier palabra —incluso inventada— se puede armar combinando piezas conocidas.</p>
+    </div>
+  </div>
+
+  <div class="fbox">
+    <span class="big">texto → tokens → números → el modelo trabaja con números</span>
+    <span class="sub">"gato" podría ser 1 token · "extraterrestre" podría ser 3-4 tokens</span>
+  </div>
+
+  <div class="stitle"><span class="ico">🎮</span>Simulador: tokenizá tu propio texto<span class="lvl-chip">interactivo</span></div>
+  <div class="sim">
+    <textarea id="tok-input" class="tok-input" oninput="renderTokens()" placeholder="Escribí una frase acá y mirá cómo se parte en tokens..."></textarea>
+    <div class="tok-output" id="tok-output"><span style="color:var(--gray-lt);font-size:.85rem">Escribí algo arriba para ver los tokens...</span></div>
+    <div class="tok-stats">
+      <div class="tok-stat"><span class="n" id="tok-count">0</span><span class="l">Tokens</span></div>
+      <div class="tok-stat"><span class="n" id="tok-chars">0</span><span class="l">Caracteres</span></div>
+      <div class="tok-stat"><span class="n" id="tok-ratio">0</span><span class="l">Chars / token</span></div>
+    </div>
+    <p style="font-size:.78rem;color:var(--gray-lt);margin-top:.8rem">* Es una tokenización simplificada para fines didácticos (no es el algoritmo BPE real que usan GPT/Claude), pero ilustra la idea: palabras cortas y frecuentes = 1 token, palabras largas o raras = varios.</p>
+  </div>
+
+  <div class="note">📌 Dato real: los modelos comerciales suelen tokenizar en promedio ~4 caracteres por token en inglés (un poco menos en español). Por eso las APIs cobran "por token", no por palabra.</div>
+
+</div></div>
+
+<!-- ════════════ EMBEDDINGS ════════════ -->
+<div id="embed" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">📍</span>Cada token es un punto en el espacio</div>
+  <div class="grid g2">
+    <div class="card pu">
+      <h3>¿Qué es un embedding?</h3>
+      <p>Una vez tokenizado el texto, cada token se convierte en un <strong>vector</strong>: una lista de cientos o miles de números que representa su "significado" según cómo se usa en el lenguaje. Palabras con significados parecidos terminan con vectores parecidos — es decir, <em>cerca</em> en ese espacio.</p>
+    </div>
+    <div class="card">
+      <h3>¿De dónde salen esos números?</h3>
+      <p>No los define nadie a mano: el modelo los <strong>aprende</strong> durante el entrenamiento, ajustándolos hasta que palabras que aparecen en contextos similares ("rey" y "reina", "gato" y "perro") queden ubicadas cerca entre sí.</p>
+    </div>
+  </div>
+
+  <div class="fbox">
+    <span class="big">similitud(A, B) = coseno del ángulo entre los vectores de A y B</span>
+    <span class="sub">1 = idénticos en significado · 0 = sin relación · -1 = opuestos</span>
+  </div>
+
+  <div class="stitle"><span class="ico">🎮</span>Simulador: espacio semántico 2D<span class="lvl-chip">interactivo</span></div>
+  <div class="sim">
+    <p style="font-size:.85rem;color:var(--gray-lt);margin-bottom:.8rem">En un LLM real cada palabra vive en un espacio de cientos de dimensiones. Acá lo aplastamos a 2D para poder verlo — la idea (cercanía = significado similar) es la misma.</p>
+    <div class="embed-wrap">
+      <svg id="embed-svg" class="embed-svg" viewBox="0 0 400 350"></svg>
+      <div class="embed-controls">
+        <label style="display:block;margin-bottom:.3rem;font-size:.82rem;font-weight:600">Palabra A</label>
+        <select id="embed-a" onchange="updateEmbed(true)"></select>
+        <label style="display:block;margin-bottom:.3rem;font-size:.82rem;font-weight:600">Palabra B</label>
+        <select id="embed-b" onchange="updateEmbed(true)"></select>
+        <div class="embed-result">
+          <span class="sim-big" id="embed-sim">–</span>
+          <div class="lbl2">similitud aproximada</div>
+          <div style="font-size:.78rem;color:var(--gray-lt);margin-top:.4rem">coseno: <strong id="embed-cos">–</strong></div>
+          <div style="font-size:.82rem;font-weight:700;color:var(--pur);margin-top:.5rem" id="embed-label"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div></div>
+
+<!-- ════════════ ATENCIÓN ════════════ -->
+<div id="atencion" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">🔗</span>Self-attention: el corazón del Transformer</div>
+  <div class="grid g2">
+    <div class="card pu">
+      <h3>El problema a resolver</h3>
+      <p>Una misma palabra cambia de sentido según el contexto: en <em>"el banco del río"</em> y <em>"el banco me cobró interés"</em>, "banco" significa cosas distintas. El modelo necesita que cada palabra "mire" a las demás palabras de la frase para entender su rol.</p>
+    </div>
+    <div class="card">
+      <h3>Cómo lo resuelve</h3>
+      <p>El mecanismo de <strong>atención</strong> calcula, para cada palabra, un peso hacia todas las demás: cuánto debería "prestarle atención" a cada una para representarla mejor. Esto se hace en paralelo para toda la frase — por eso los Transformers reemplazaron a los modelos secuenciales (RNN) que leían palabra por palabra.</p>
+    </div>
+  </div>
+
+  <div class="fbox">
+    <span class="big">Attention(Q, K, V) = softmax( Q · Kᵀ / √d ) · V</span>
+    <span class="sub">cada palabra genera una "consulta" (Q) y se compara contra las "claves" (K) de todas para ponderar sus "valores" (V)</span>
+  </div>
+
+  <div class="stitle"><span class="ico">🎮</span>Simulador: mapa de atención<span class="lvl-chip">interactivo</span></div>
+  <div class="sim">
+    <p style="font-size:.85rem;color:var(--gray-lt);margin-bottom:.6rem">Elegí una oración y clickeá una palabra: vas a ver a qué otras palabras le "presta atención" (pesos ilustrativos, no de un modelo real).</p>
+    <div class="att-presets">
+      <button class="sim-btn ghost" onclick="loadAttPreset('s1')">🐱 Oración 1</button>
+      <button class="sim-btn ghost" onclick="loadAttPreset('s2')">🤖 Oración 2</button>
+      <button class="sim-btn ghost" onclick="loadAttPreset('s3')">📖 Oración 3</button>
+    </div>
+    <p style="font-size:.82rem;color:var(--gray-lt);margin-bottom:.4rem" id="att-hint"></p>
+    <div class="att-sentence" id="att-sentence"></div>
+    <div id="att-detail"></div>
+  </div>
+
+  <div class="note">📌 En un LLM real hay decenas de "cabezas de atención" en paralelo (multi-head attention), cada una aprendiendo a captar un tipo distinto de relación: gramatical, referencial, temática...</div>
+
+</div></div>
+
+<!-- ════════════ ENTRENAMIENTO ════════════ -->
+<div id="entrena" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">📉</span>Cómo se entrena un LLM</div>
+  <div class="grid g3">
+    <div class="card pu"><h3>1. Pre-training</h3><p>Se entrena con billones de palabras de internet, libros y código, con un único objetivo: predecir el siguiente token. Acá aprende gramática, hechos del mundo y razonamiento básico. Dura semanas y cuesta millones de dólares en cómputo.</p></div>
+    <div class="card bl"><h3>2. Fine-tuning</h3><p>Se lo re-entrena con ejemplos de instrucción-respuesta de alta calidad, curados por humanos, para que pase de "completar texto" a "seguir instrucciones y conversar" de forma útil.</p></div>
+    <div class="card gr"><h3>3. RLHF</h3><p><em>Reinforcement Learning from Human Feedback:</em> humanos comparan pares de respuestas y el modelo se ajusta para preferir las que la gente prefiere — más útiles, honestas y seguras.</p></div>
+  </div>
+
+  <div class="stitle"><span class="ico">🎮</span>Simulador: curva de entrenamiento<span class="lvl-chip">interactivo</span></div>
+  <div class="sim">
+    <p style="font-size:.85rem;color:var(--gray-lt);margin-bottom:.4rem">Movés el slider de "pasos de entrenamiento" y mirás cómo baja el <strong>loss</strong> (error de predicción) — y por qué fase del pipeline pasaría el modelo en ese punto.</p>
+    <canvas id="loss-canvas" class="loss-canvas"></canvas>
+    <div class="sim-controls">
+      <label>Pasos de entrenamiento</label>
+      <input type="range" id="loss-slider" min="0" max="100" value="0" oninput="drawLossCurve(this.value)">
+      <span class="sim-val" id="loss-step">0</span>
+      <span style="color:var(--gray-lt)">·</span>
+      <span>loss actual: <span class="sim-val" id="loss-val">–</span></span>
+    </div>
+    <p style="font-size:.85rem;font-weight:600;color:var(--pur);margin-top:.8rem" id="loss-phase"></p>
+  </div>
+
+</div></div>
+
+<!-- ════════════ GENERACIÓN ════════════ -->
+<div id="genera" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">🎲</span>De probabilidades a palabras: sampling</div>
+  <div class="grid g2">
+    <div class="card pu">
+      <h3>El modelo nunca "elige" con certeza</h3>
+      <p>En cada paso, el modelo no devuelve una palabra: devuelve una <strong>distribución de probabilidad</strong> sobre todo su vocabulario. Un algoritmo de muestreo decide, a partir de esas probabilidades, qué token sale realmente.</p>
+    </div>
+    <div class="card">
+      <h3>Los tres diales que controlan la generación</h3>
+      <ul style="margin-left:1.2rem;font-size:.9rem;line-height:1.9">
+        <li><strong>Temperature:</strong> aplana o afila la distribución (más aleatorio vs. más determinista)</li>
+        <li><strong>Top-k:</strong> solo considera las k opciones más probables</li>
+        <li><strong>Top-p (nucleus):</strong> solo considera las opciones necesarias para acumular una probabilidad p</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stitle"><span class="ico">🎮</span>Simulador: generador de texto<span class="lvl-chip">interactivo</span></div>
+  <div class="sim">
+    <p style="font-size:.85rem;color:var(--gray-lt);margin-bottom:.6rem">Prompt fijo: <em>"El clima en Buenos Aires hoy está..."</em> — movés los sliders y apretás "Generar palabra" para ver cómo cambia la distribución y qué elige el modelo.</p>
+    <div class="bars-wrap" id="gen-bars"></div>
+    <div class="sim-controls">
+      <label>Temperature</label>
+      <input type="range" id="gen-temp" min="0.1" max="2" step="0.1" value="1" oninput="renderGenBars()">
+      <span class="sim-val" id="gen-temp-val">1</span>
+    </div>
+    <div class="sim-controls">
+      <label>Top-k</label>
+      <input type="range" id="gen-topk" min="1" max="8" step="1" value="8" oninput="renderGenBars()">
+      <span class="sim-val" id="gen-topk-val">8</span>
+      <label style="margin-left:1rem">Top-p</label>
+      <input type="range" id="gen-topp" min="0.1" max="1" step="0.05" value="1" oninput="renderGenBars()">
+      <span class="sim-val" id="gen-topp-val">1</span>
+    </div>
+    <div style="display:flex;gap:.7rem;margin-top:1rem;flex-wrap:wrap">
+      <button class="sim-btn" id="gen-next-btn" onclick="genNext()">🎲 Generar palabra</button>
+      <button class="sim-btn ghost" onclick="resetGen()">🔄 Reiniciar</button>
+    </div>
+    <div class="gen-output" id="gen-output">El clima en Buenos Aires hoy está…</div>
+  </div>
+
+  <div class="tip">💡 Probá temperature muy baja (0.1) y generá varias veces: siempre elige casi lo mismo. Después subila a 2.0: vas a ver opciones más raras entrar en juego.</div>
+
+</div></div>
+
+<!-- ════════════ PROMPTING ════════════ -->
+<div id="prompt" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">✍️</span>Prompting avanzado</div>
+  <div class="grid g3">
+    <div class="card pu"><h3>System prompt</h3><p>Instrucciones "de fondo" que fijan el rol, tono y reglas del modelo antes de que empiece la conversación.</p></div>
+    <div class="card bl"><h3>Few-shot</h3><p>Mostrarle al modelo 1-2 ejemplos de pregunta-respuesta antes de tu pregunta real, para que copie el patrón y formato.</p></div>
+    <div class="card gr"><h3>Chain-of-thought</h3><p>Pedirle explícitamente que "piense paso a paso" mejora mucho la precisión en problemas que requieren razonamiento.</p></div>
+  </div>
+
+  <div class="stitle"><span class="ico">🎮</span>Simulador: constructor de prompt<span class="lvl-chip">interactivo</span></div>
+  <div class="sim">
+    <p style="font-size:.85rem;color:var(--gray-lt);margin-bottom:.8rem">Pregunta base: <em>"Tenía 10 manzanas, regalé 3 y compré 5 más. ¿Cuántas manzanas tengo ahora?"</em> — activá técnicas y mirá cómo cambia el prompt final y la calidad de la respuesta simulada.</p>
+
+    <label class="prompt-check">
+      <input type="checkbox" id="pr-sys" onchange="updatePrompt()">
+      <div><div class="pc-title">System prompt</div><div class="pc-desc">"Sos un asistente experto en matemática, explicás con precisión."</div></div>
+    </label>
+    <label class="prompt-check">
+      <input type="checkbox" id="pr-few" onchange="updatePrompt()">
+      <div><div class="pc-title">Few-shot (2 ejemplos)</div><div class="pc-desc">Le mostramos dos problemas parecidos ya resueltos.</div></div>
+    </label>
+    <label class="prompt-check">
+      <input type="checkbox" id="pr-cot" onchange="updatePrompt()">
+      <div><div class="pc-title">Chain-of-thought</div><div class="pc-desc">"Pensá paso a paso antes de responder."</div></div>
+    </label>
+
+    <div class="prompt-final" id="prompt-final"></div>
+    <div class="prompt-answer" id="prompt-answer"></div>
+  </div>
+
+</div></div>
+
+<!-- ════════════ LÍMITES ════════════ -->
+<div id="limites" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">⚠️</span>Lo que un LLM no hace bien</div>
+  <div class="grid g3">
+    <div class="card re"><h3>🌀 Alucinaciones</h3><p>Como siempre predice "lo más probable", puede generar datos, citas o fuentes que suenan coherentes pero son <strong>inventados</strong>. No "sabe" que está mintiendo: no tiene forma interna de verificar hechos.</p></div>
+    <div class="card or"><h3>📏 Ventana de contexto</h3><p>Solo "recuerda" una cantidad limitada de tokens (el prompt + la conversación). Lo que quedó afuera de esa ventana, literalmente no existe para el modelo en ese momento.</p></div>
+    <div class="card te"><h3>⚖️ Sesgos</h3><p>Si el texto de entrenamiento contiene sesgos (de género, culturales, etc.), el modelo puede reproducirlos, porque aprendió patrones estadísticos del mundo real tal como es.</p></div>
+  </div>
+
+  <div class="stitle"><span class="ico">🎮</span>Simulador: ventana de contexto<span class="lvl-chip">interactivo</span></div>
+  <div class="sim">
+    <p style="font-size:.85rem;color:var(--gray-lt);margin-bottom:.6rem">Cada bloque es un mensaje de la conversación (ancho = cantidad de tokens). El límite de esta demo es de <strong>140 tokens</strong> — cuando se supera, los mensajes más viejos se "olvidan" (se ven en gris).</p>
+    <div class="ctx-bar" id="ctx-bar"></div>
+    <div class="ctx-legend">
+      <span>Tokens en memoria activa: <strong id="ctx-used">0</strong> / <span id="ctx-total">140</span></span>
+      <span>🟦 usuario &nbsp; 🟩 asistente</span>
+    </div>
+    <div style="margin-top:1rem;display:flex;gap:.7rem;flex-wrap:wrap">
+      <button class="sim-btn" id="ctx-next-btn" onclick="ctxAddNext()">➕ Agregar siguiente mensaje</button>
+      <button class="sim-btn ghost" onclick="ctxReset()">🔄 Reiniciar conversación</button>
+    </div>
+    <p style="margin-top:.9rem;font-size:.85rem" id="ctx-msg-info"></p>
+  </div>
+
+</div></div>
+
+<!-- ════════════ QUIZ ════════════ -->
+<div id="quiz" class="page"><div class="container">
+  <div id="quiz-container">
+    <div class="stitle"><span class="ico">🎓</span>Quiz final</div>
+    <div class="quiz-header">
+      <div class="quiz-score-display">Puntos: <span id="q-score">0</span> / <span id="q-total">16</span></div>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="q-progress" style="width:0%"></div></div>
+    <div id="quiz-area"></div>
+  </div>
+</div></div>
+
+<!-- ════════════ GLOSARIO ════════════ -->
+<div id="glosario" class="page"><div class="container">
+
+  <div class="stitle"><span class="ico">📋</span>Cheat sheet: glosario de LLMs</div>
+  <div class="cheat">
+    <h2>10 términos clave</h2>
+    <div class="cgrid">
+      <div class="citem"><div class="lbl">Token</div><div class="cf">Unidad mínima de texto que procesa el modelo: una palabra, parte de una palabra o un signo.</div></div>
+      <div class="citem"><div class="lbl">Embedding</div><div class="cf">Vector numérico que representa el significado de un token en un espacio de cientos de dimensiones.</div></div>
+      <div class="citem"><div class="lbl">Self-attention</div><div class="cf">Mecanismo que permite a cada token "mirar" a los demás para entender su contexto.</div></div>
+      <div class="citem"><div class="lbl">Transformer</div><div class="cf">Arquitectura de red neuronal basada en atención, base de casi todos los LLMs actuales.</div></div>
+      <div class="citem"><div class="lbl">Pre-training</div><div class="cf">Fase inicial de entrenamiento masivo prediciendo el siguiente token sobre texto general.</div></div>
+      <div class="citem"><div class="lbl">Fine-tuning</div><div class="cf">Re-entrenamiento sobre ejemplos curados para que el modelo siga instrucciones.</div></div>
+      <div class="citem"><div class="lbl">RLHF</div><div class="cf">Ajuste del modelo usando comparaciones de respuestas hechas por humanos.</div></div>
+      <div class="citem"><div class="lbl">Temperature</div><div class="cf">Parámetro que aplana (alta) o afila (baja) la distribución de probabilidad al generar.</div></div>
+      <div class="citem"><div class="lbl">Top-k / Top-p</div><div class="cf">Filtros que limitan cuántas opciones distintas puede elegir el modelo en cada paso.</div></div>
+      <div class="citem"><div class="lbl">Ventana de contexto</div><div class="cf">Cantidad máxima de tokens que el modelo puede "tener en cuenta" a la vez.</div></div>
+    </div>
+  </div>
+
+  <div class="tip" style="margin-top:1.3rem">🎉 Si llegaste hasta acá y completaste las 8 insignias, ¡ya tenés una idea sólida de cómo funciona un LLM de punta a punta!</div>
+
+</div></div>
+
+<div id="badge-toast" class="badge-toast"></div>
+
+<script>
+// ════════════════════════════
+//  STORE + BADGES
+// ════════════════════════════
+const store = {
+  get(k,d){ try{ const v=localStorage.getItem('llm_'+k); return v!==null?JSON.parse(v):d; }catch(e){ return d; } },
+  set(k,v){ try{ localStorage.setItem('llm_'+k, JSON.stringify(v)); }catch(e){} }
+};
+
+const BADGES = [
+  {id:'token', ico:'🔤', name:'Tokenizador', desc:'Tokenizaste tu propio texto'},
+  {id:'embed', ico:'📍', name:'Explorador semántico', desc:'Comparaste el significado de dos palabras'},
+  {id:'atencion', ico:'🔗', name:'Maestro de la atención', desc:'Explorá la atención de 3+ palabras'},
+  {id:'entrena', ico:'📉', name:'Entrenador', desc:'Recorriste la curva de entrenamiento'},
+  {id:'genera', ico:'🎲', name:'Generador', desc:'Generaste texto con 2 configuraciones distintas'},
+  {id:'prompt', ico:'✍️', name:'Prompt engineer', desc:'Armaste un prompt completo'},
+  {id:'limites', ico:'⚠️', name:'Realista', desc:'Viste cómo se llena la ventana de contexto'},
+  {id:'quiz', ico:'🎓', name:'Graduado', desc:'Completaste el quiz final'}
+];
+let unlockedBadges = store.get('badges', []);
+
+function unlockBadge(id){
+  if(unlockedBadges.includes(id)) return;
+  unlockedBadges.push(id);
+  store.set('badges', unlockedBadges);
+  renderBadges();
+  showToast(id);
+  if(unlockedBadges.length===BADGES.length) launchConfetti();
+}
+function showToast(id){
+  const b = BADGES.find(x=>x.id===id);
+  if(!b) return;
+  const t = document.getElementById('badge-toast');
+  t.innerHTML = `<span style="font-size:1.8rem">${b.ico}</span><div><div style="font-weight:800;font-size:.85rem">¡Insignia desbloqueada!</div><div style="font-size:.9rem">${b.name}</div></div>`;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=>t.classList.remove('show'), 3200);
+}
+function renderBadges(){
+  document.getElementById('nav-badges').textContent = `🏅 ${unlockedBadges.length}/${BADGES.length}`;
+  document.getElementById('badge-count-chip').textContent = `${unlockedBadges.length}/${BADGES.length}`;
+  document.getElementById('global-progress').style.width = (unlockedBadges.length/BADGES.length*100)+'%';
+  const grid = document.getElementById('badges-grid');
+  grid.innerHTML = BADGES.map(b=>{
+    const has = unlockedBadges.includes(b.id);
+    return `<div class="badge-card ${has?'unlocked':'locked'}"><span class="bic">${has?b.ico:'🔒'}</span><div class="bname">${b.name}</div><div class="bdesc">${b.desc}</div></div>`;
+  }).join('');
+}
+
+// ════════════════════════════
+//  NAV
+// ════════════════════════════
+function showPage(id, btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='entrena') setTimeout(()=>drawLossCurve(document.getElementById('loss-slider').value),30);
+}
+
+// ════════════════════════════
+//  TOKENIZADOR
+// ════════════════════════════
+const TOK_COLORS=['#0e7490','#4338ca','#15803d','#c2410c','#0d9488','#b91c1c','#d97706','#7c3aed'];
+function toyTokenize(text){
+  const pieces = text.match(/[A-Za-zÀ-ÿ0-9]+|[^\sA-Za-zÀ-ÿ0-9]+/g) || [];
+  const tokens=[];
+  pieces.forEach(w=>{
+    if(/^[A-Za-zÀ-ÿ0-9]+$/.test(w) && w.length>5){
+      let i=0;
+      while(i<w.length){
+        const len = Math.min(4, w.length-i);
+        tokens.push((i===0?'':'##')+w.slice(i,i+len));
+        i+=len;
+      }
+    } else {
+      tokens.push(w);
+    }
+  });
+  return tokens;
+}
+function hashId(s){
+  let h=0;
+  for(let i=0;i<s.length;i++){ h=(h*31 + s.charCodeAt(i))>>>0; }
+  return h%50000;
+}
+function renderTokens(){
+  const text = document.getElementById('tok-input').value;
+  const out = document.getElementById('tok-output');
+  if(!text.trim()){
+    out.innerHTML='<span style="color:var(--gray-lt);font-size:.85rem">Escribí algo arriba para ver los tokens...</span>';
+    updateTokStats(0,0);
+    return;
+  }
+  const tokens = toyTokenize(text);
+  out.innerHTML = tokens.map((t,i)=>`<span class="tok-chip" style="background:${TOK_COLORS[i%TOK_COLORS.length]}" title="ID ${hashId(t)}">${t.replace('##','')}</span>`).join('');
+  updateTokStats(tokens.length, text.length);
+  unlockBadge('token');
+}
+function updateTokStats(nTok,nChar){
+  document.getElementById('tok-count').textContent = nTok;
+  document.getElementById('tok-chars').textContent = nChar;
+  document.getElementById('tok-ratio').textContent = nTok? (nChar/nTok).toFixed(1) : '0';
+}
+
+// ════════════════════════════
+//  EMBEDDINGS
+// ════════════════════════════
+const EMBED_WORDS = [
+  {w:'gato',x:60,y:70},{w:'perro',x:78,y:88},{w:'león',x:48,y:100},
+  {w:'computadora',x:290,y:55},{w:'algoritmo',x:320,y:35},{w:'internet',x:300,y:88},
+  {w:'pizza',x:180,y:290},{w:'pasta',x:202,y:308},{w:'ensalada',x:158,y:268},
+  {w:'alegría',x:90,y:220},{w:'tristeza',x:68,y:252},{w:'miedo',x:112,y:246},
+  {w:'fútbol',x:345,y:255},{w:'tenis',x:365,y:275},{w:'básquet',x:352,y:232},
+  {w:'río',x:230,y:150},{w:'montaña',x:255,y:128},{w:'océano',x:208,y:172}
+];
+function initEmbed(){
+  const svg = document.getElementById('embed-svg');
+  let dots='';
+  EMBED_WORDS.forEach(p=>{
+    dots += `<circle cx="${p.x}" cy="${p.y}" r="5" fill="#22d3ee" id="dot-${p.w}"/><text x="${p.x+8}" y="${p.y+4}" fill="#cbd5e1" font-size="11" font-family="Segoe UI,sans-serif">${p.w}</text>`;
+  });
+  svg.innerHTML = dots + '<line id="embed-line" x1="0" y1="0" x2="0" y2="0" stroke="#facc15" stroke-width="2" stroke-dasharray="4" opacity="0"/>';
+  ['embed-a','embed-b'].forEach(id=>{
+    const sel=document.getElementById(id);
+    sel.innerHTML = EMBED_WORDS.map(p=>`<option value="${p.w}">${p.w}</option>`).join('');
+  });
+  document.getElementById('embed-b').selectedIndex=1;
+  updateEmbed(false);
+}
+function updateEmbed(userTriggered){
+  const a = EMBED_WORDS.find(p=>p.w===document.getElementById('embed-a').value);
+  const b = EMBED_WORDS.find(p=>p.w===document.getElementById('embed-b').value);
+  document.querySelectorAll('[id^="dot-"]').forEach(d=>{ d.setAttribute('fill','#22d3ee'); d.setAttribute('r',5); });
+  document.getElementById('dot-'+a.w).setAttribute('fill','#facc15');
+  document.getElementById('dot-'+b.w).setAttribute('fill','#f472b6');
+  document.getElementById('dot-'+a.w).setAttribute('r',7);
+  document.getElementById('dot-'+b.w).setAttribute('r',7);
+  const line = document.getElementById('embed-line');
+  line.setAttribute('x1',a.x); line.setAttribute('y1',a.y);
+  line.setAttribute('x2',b.x); line.setAttribute('y2',b.y);
+  line.setAttribute('opacity',1);
+  const cx=200, cy=175;
+  const va=[a.x-cx, a.y-cy], vb=[b.x-cx, b.y-cy];
+  const dot = va[0]*vb[0]+va[1]*vb[1];
+  const magA = Math.hypot(va[0],va[1]), magB = Math.hypot(vb[0],vb[1]);
+  const cos = dot/(magA*magB);
+  const dist = Math.hypot(a.x-b.x, a.y-b.y);
+  const simPct = Math.max(0, Math.round((1 - dist/450)*100));
+  document.getElementById('embed-sim').textContent = simPct+'%';
+  document.getElementById('embed-cos').textContent = cos.toFixed(2);
+  document.getElementById('embed-label').textContent = simPct>=70?'Muy relacionadas 🔥':simPct>=40?'Algo relacionadas':'Casi sin relación aparente';
+  if(userTriggered && a.w!==b.w) unlockBadge('embed');
+}
+
+// ════════════════════════════
+//  ATENCIÓN
+// ════════════════════════════
+const ATT_PRESETS = {
+  s1: "El gato se sentó en la alfombra porque estaba cansado",
+  s2: "El modelo predice la siguiente palabra usando el contexto anterior",
+  s3: "María le prestó el libro a Juan porque ella ya lo había leído"
+};
+let attWords = [], attMatrix = [], attClicked = new Set();
+function seededRand(i,j){
+  const x = Math.sin(i*12.9898 + j*78.233 + i*j*0.577)*43758.5453;
+  return x - Math.floor(x);
+}
+function buildAttMatrix(words){
+  const n = words.length, m=[];
+  for(let i=0;i<n;i++){
+    const row=[]; let sum=0;
+    for(let j=0;j<n;j++){
+      const prox = 1/(1+Math.abs(i-j));
+      const val = prox*0.6 + seededRand(i,j)*0.4 + (i===j?0.3:0);
+      row.push(val); sum+=val;
+    }
+    m.push(row.map(v=>v/sum));
+  }
+  return m;
+}
+function loadAttPreset(key){
+  attWords = ATT_PRESETS[key].split(' ');
+  attMatrix = buildAttMatrix(attWords);
+  attClicked = new Set();
+  document.getElementById('att-sentence').innerHTML = attWords.map((w,i)=>`<span class="att-word" id="att-w${i}" onclick="selectAttWord(${i})">${w}</span>`).join('');
+  document.getElementById('att-hint').textContent = 'Clickeá una palabra para ver a qué otras palabras "presta atención" el modelo.';
+  document.getElementById('att-detail').innerHTML='';
+}
+function selectAttWord(i){
+  document.querySelectorAll('.att-word').forEach((el,idx)=>{
+    el.classList.toggle('selected', idx===i);
+    if(idx!==i){
+      const w = attMatrix[i][idx];
+      el.style.background = `rgba(67,56,202,${Math.min(1,w*2.2).toFixed(2)})`;
+      el.style.color = w>0.16?'#fff':'';
+      el.style.borderColor = 'transparent';
+    } else {
+      el.style.background=''; el.style.borderColor='';
+    }
+  });
+  attClicked.add(i);
+  const rows = attWords.map((w,j)=> j===i?null:`<div class="bar-row"><span class="bar-lbl">${w}</span><div class="bar-track"><div class="bar-fill" style="width:${(attMatrix[i][j]*100).toFixed(0)}%"></div></div><span class="bar-pct">${(attMatrix[i][j]*100).toFixed(0)}%</span></div>`).filter(Boolean).join('');
+  document.getElementById('att-detail').innerHTML = `<h4 style="margin:1rem 0 .6rem;color:var(--pur);font-size:.95rem">Atención de "${attWords[i]}" hacia el resto:</h4><div class="bars-wrap">${rows}</div>`;
+  if(attClicked.size>=3) unlockBadge('atencion');
+}
+
+// ════════════════════════════
+//  ENTRENAMIENTO
+// ════════════════════════════
+function lossAt(s){ return 0.15 + 2.8*Math.exp(-s/28) + 0.05*Math.sin(s/3)*Math.exp(-s/40); }
+function drawLossCurve(step){
+  step = Number(step);
+  const canvas = document.getElementById('loss-canvas');
+  const w = canvas.width = canvas.clientWidth || 560;
+  const h = canvas.height = 220;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle='#1e293b'; ctx.lineWidth=1;
+  for(let gx=0; gx<=w; gx+=w/10){ ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,h); ctx.stroke(); }
+  ctx.beginPath(); ctx.strokeStyle='#22d3ee'; ctx.lineWidth=2.5;
+  for(let s=0; s<=100; s++){
+    const x = (s/100)*w, y = h - (lossAt(s)/3)*h*0.9 - 8;
+    if(s===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  const mx = (step/100)*w, my = h - (lossAt(step)/3)*h*0.9 - 8;
+  ctx.beginPath(); ctx.fillStyle='#facc15'; ctx.arc(mx,my,6,0,Math.PI*2); ctx.fill();
+  document.getElementById('loss-val').textContent = lossAt(step).toFixed(3);
+  document.getElementById('loss-step').textContent = step;
+  const phase = step<15?'🌱 Pre-training temprano — el modelo predice casi al azar':
+                step<50?'📚 Pre-training avanzado — ya capta gramática y hechos generales':
+                step<85?'🎯 Fine-tuning — se ajusta a instrucciones y formato de conversación':
+                '🤝 RLHF — se afina con feedback humano para ser más útil y seguro';
+  document.getElementById('loss-phase').textContent = phase;
+  if(step>=100) unlockBadge('entrena');
+}
+
+// ════════════════════════════
+//  GENERACIÓN (sampling)
+// ════════════════════════════
+const GEN_CANDIDATES = [
+  [ {t:'soleado',p:.32},{t:'nublado',p:.21},{t:'lluvioso',p:.15},{t:'perfecto',p:.10},{t:'increíble',p:.08},{t:'terrible',p:.05},{t:'raro',p:.05},{t:'extraterrestre',p:.04} ],
+  [ {t:'y',p:.40},{t:'pero',p:.22},{t:'aunque',p:.14},{t:'así que',p:.10},{t:'porque',p:.08},{t:'mientras',p:.06} ],
+  [ {t:'refresca',p:.28},{t:'mejora',p:.24},{t:'empeora',p:.18},{t:'sorprende',p:.12},{t:'preocupa',p:.10},{t:'divierte',p:.08} ],
+  [ {t:'a',p:.5},{t:'por',p:.3},{t:'hacia',p:.2} ],
+  [ {t:'la tarde',p:.55},{t:'la noche',p:.25},{t:'siempre',p:.20} ]
+];
+let genStep=0, genSentence=['El','clima','en','Buenos','Aires','hoy','está'], genConfigsUsed=new Set();
+function reshapeDistribution(cands){
+  const T = parseFloat(document.getElementById('gen-temp').value);
+  const K = parseInt(document.getElementById('gen-topk').value);
+  const P = parseFloat(document.getElementById('gen-topp').value);
+  let arr = cands.map(c=>({t:c.t, p: Math.pow(c.p, 1/T)}));
+  let sum = arr.reduce((s,c)=>s+c.p,0);
+  arr = arr.map(c=>({t:c.t,p:c.p/sum}));
+  arr.sort((a,b)=>b.p-a.p);
+  arr = arr.slice(0, K);
+  let cum=0; const kept=[];
+  for(const c of arr){ if(cum>=P && kept.length>0) break; kept.push(c); cum+=c.p; }
+  sum = kept.reduce((s,c)=>s+c.p,0);
+  return kept.map(c=>({t:c.t,p:c.p/sum}));
+}
+function renderGenBars(){
+  document.getElementById('gen-temp-val').textContent = document.getElementById('gen-temp').value;
+  document.getElementById('gen-topk-val').textContent = document.getElementById('gen-topk').value;
+  document.getElementById('gen-topp-val').textContent = document.getElementById('gen-topp').value;
+  const idx = genStep % GEN_CANDIDATES.length;
+  const dist = reshapeDistribution(GEN_CANDIDATES[idx]);
+  document.getElementById('gen-bars').innerHTML = dist.map(c=>`<div class="bar-row"><span class="bar-lbl">${c.t}</span><div class="bar-track"><div class="bar-fill" style="width:${(c.p*100).toFixed(0)}%"></div></div><span class="bar-pct">${(c.p*100).toFixed(0)}%</span></div>`).join('');
+  return dist;
+}
+function sampleFrom(dist){
+  const r = Math.random(); let cum=0;
+  for(const c of dist){ cum+=c.p; if(r<=cum) return c.t; }
+  return dist[dist.length-1].t;
+}
+function genNext(){
+  const dist = renderGenBars();
+  const chosen = sampleFrom(dist);
+  genSentence.push(chosen);
+  genStep++;
+  const done = genStep>=GEN_CANDIDATES.length;
+  document.getElementById('gen-output').textContent = genSentence.join(' ') + (done?'.':'…');
+  if(done) document.getElementById('gen-next-btn').disabled=true;
+  const cfgKey = `${document.getElementById('gen-temp').value}-${document.getElementById('gen-topk').value}-${document.getElementById('gen-topp').value}`;
+  genConfigsUsed.add(cfgKey);
+  if(genConfigsUsed.size>=2) unlockBadge('genera');
+  if(!done) renderGenBars();
+}
+function resetGen(){
+  genStep=0; genSentence=['El','clima','en','Buenos','Aires','hoy','está'];
+  document.getElementById('gen-output').textContent = genSentence.join(' ') + '…';
+  document.getElementById('gen-next-btn').disabled=false;
+  renderGenBars();
+}
+
+// ════════════════════════════
+//  PROMPTING
+// ════════════════════════════
+function updatePrompt(){
+  const sys = document.getElementById('pr-sys').checked;
+  const few = document.getElementById('pr-few').checked;
+  const cot = document.getElementById('pr-cot').checked;
+  let prompt='';
+  if(sys) prompt += 'Sistema: Sos un asistente experto en matemática, explicás con precisión y sos conciso.\n\n';
+  if(few) prompt += 'Ejemplo 1:\nP: Tengo 5 caramelos, como 2 y compro 4. ¿Cuántos tengo?\nR: 5 - 2 + 4 = 7 caramelos.\n\nEjemplo 2:\nP: Tenía 8 lápices, presté 3. ¿Cuántos me quedan?\nR: 8 - 3 = 5 lápices.\n\n';
+  prompt += 'Pregunta: Tenía 10 manzanas, regalé 3 y compré 5 más. ¿Cuántas manzanas tengo ahora?';
+  if(cot) prompt += '\nPensá paso a paso antes de responder.';
+  document.getElementById('prompt-final').textContent = prompt;
+
+  let answer;
+  if(cot && few && sys) answer = 'Paso 1: Empiezo con 10 manzanas.\nPaso 2: Regalo 3 → 10 - 3 = 7.\nPaso 3: Compro 5 más → 7 + 5 = 12.\nRespuesta: tengo 12 manzanas.';
+  else if(cot) answer = 'Pensando paso a paso: 10 - 3 = 7, luego 7 + 5 = 12.\nRespuesta: 12 manzanas.';
+  else if(few) answer = 'Siguiendo el patrón de los ejemplos: 10 - 3 + 5 = 12 manzanas.';
+  else if(sys) answer = '12 manzanas.';
+  else answer = '12';
+  document.getElementById('prompt-answer').textContent = answer;
+  if(sys && few && cot) unlockBadge('prompt');
+}
+
+// ════════════════════════════
+//  LÍMITES: ventana de contexto
+// ════════════════════════════
+const CTX_HISTORY = [
+  {who:'Usuario', tok:22, txt:'Hola, ¿podés ayudarme a planear un viaje a Bariloche?'},
+  {who:'Asistente', tok:35, txt:'¡Claro! Contame cuántos días tenés y qué te interesa.'},
+  {who:'Usuario', tok:18, txt:'Tengo 5 días y me gusta el trekking.'},
+  {who:'Asistente', tok:40, txt:'Perfecto, te armo un itinerario con Cerro Catedral y el circuito chico.'},
+  {who:'Usuario', tok:15, txt:'¿Y para comer algo típico?'},
+  {who:'Asistente', tok:38, txt:'Probá el chocolate artesanal y el cordero patagónico.'},
+  {who:'Usuario', tok:20, txt:'¿Cuánto sale aproximadamente el viaje?'},
+  {who:'Asistente', tok:42, txt:'Calculá entre 400 y 700 USD por persona sin vuelos.'},
+  {who:'Usuario', tok:12, txt:'Genial, ¿algo más?'},
+  {who:'Asistente', tok:36, txt:'Llevá ropa de abrigo en capas, el clima cambia mucho.'},
+  {who:'Usuario', tok:10, txt:'¿Cuál era mi primera pregunta?'}
+];
+const CTX_LIMIT = 140;
+let ctxIdx=0, ctxUsed=0, ctxTruncated=false;
+function ctxAddNext(){
+  if(ctxIdx>=CTX_HISTORY.length) return;
+  const msg = CTX_HISTORY[ctxIdx];
+  ctxUsed += msg.tok;
+  const bar = document.getElementById('ctx-bar');
+  const el = document.createElement('div');
+  el.className='ctx-msg';
+  el.id='ctx-m'+ctxIdx;
+  el.style.background = msg.who==='Usuario'?'#4338ca':'#0e7490';
+  el.style.width = (msg.tok*3)+'px';
+  el.style.minWidth = (msg.tok*3)+'px';
+  el.title = msg.txt;
+  el.textContent = msg.tok+'t';
+  bar.appendChild(el);
+  ctxIdx++;
+  let i=0;
+  while(ctxUsed>CTX_LIMIT && i<ctxIdx-1){
+    const e = document.getElementById('ctx-m'+i);
+    if(e && !e.classList.contains('evicted')){
+      e.classList.add('evicted');
+      ctxUsed -= CTX_HISTORY[i].tok;
+      ctxTruncated=true;
+    }
+    i++;
+  }
+  document.getElementById('ctx-used').textContent = ctxUsed;
+  if(ctxIdx>=CTX_HISTORY.length) document.getElementById('ctx-next-btn').disabled=true;
+  if(ctxTruncated){
+    document.getElementById('ctx-msg-info').innerHTML = '⚠️ Se superó la ventana de contexto: los mensajes en gris ya <strong>no forman parte de la memoria activa</strong> del modelo.';
+    unlockBadge('limites');
+  }
+}
+function ctxReset(){
+  ctxIdx=0; ctxUsed=0; ctxTruncated=false;
+  const bar = document.getElementById('ctx-bar');
+  bar.innerHTML='';
+  const line = document.createElement('div');
+  line.className='ctx-limit-line';
+  line.style.left = (CTX_LIMIT*3)+'px';
+  bar.appendChild(line);
+  document.getElementById('ctx-used').textContent=0;
+  document.getElementById('ctx-next-btn').disabled=false;
+  document.getElementById('ctx-msg-info').textContent='';
+}
+
+// ════════════════════════════
+//  QUIZ
+// ════════════════════════════
+const allQuestions = [
+  {t:'¿Qué predice literalmente un LLM en cada paso?', h:null,
+   opts:['El siguiente token más probable','La respuesta completa de una vez','La emoción del usuario','El idioma del texto'], c:0,
+   exp:'Un LLM es, en su núcleo, un predictor de "siguiente token" repetido muchas veces.'},
+  {t:'¿Qué es un token?', h:null,
+   opts:['Una oración completa','Una unidad mínima de texto (palabra, subpalabra o símbolo)','Un parámetro del modelo','Una neurona de la red'], c:1,
+   exp:'El texto se parte en tokens antes de ser procesado; pueden ser palabras completas o fragmentos.'},
+  {t:'¿Por qué se usa tokenización por subpalabras en vez de por palabra completa?', h:null,
+   opts:['Es más lenta pero más precisa','Permite representar palabras nuevas o raras combinando piezas conocidas','Ocupa más memoria','Solo funciona en inglés'], c:1,
+   exp:'Con subpalabras, cualquier palabra —incluso inventada— se puede construir con fragmentos ya conocidos por el modelo.'},
+  {t:'¿Qué es un embedding?', h:null,
+   opts:['El nombre del modelo','Un vector numérico que representa el significado de un token','La cantidad de tokens de un texto','Un tipo de red neuronal'], c:1,
+   exp:'Cada token se representa como un vector en un espacio de muchas dimensiones, aprendido durante el entrenamiento.'},
+  {t:'Si dos palabras tienen embeddings muy cercanos entre sí, ¿qué sugiere eso?', h:null,
+   opts:['Que son antónimos','Que tienen significados o usos similares','Que aparecen siempre juntas en una frase','Que son la misma palabra'], c:1,
+   exp:'La cercanía en el espacio de embeddings suele reflejar similitud semántica.'},
+  {t:'¿Cuál es el mecanismo central de la arquitectura Transformer?', h:null,
+   opts:['Convolución','Self-attention','Recurrencia (RNN)','Backpropagation únicamente'], c:1,
+   exp:'La atención (self-attention) permite que cada token pondere la relevancia de todos los demás tokens de la secuencia.'},
+  {t:'¿Qué ventaja clave le dio la atención frente a los modelos recurrentes (RNN)?', h:null,
+   opts:['Usar menos memoria siempre','Procesar la secuencia en paralelo y capturar relaciones a larga distancia','No necesitar entrenamiento','Generar texto sin datos'], c:1,
+   exp:'Al no depender de procesar palabra por palabra en orden, los Transformers paralelizan mejor y conectan tokens lejanos entre sí.'},
+  {t:'¿Cuál es el objetivo del pre-training?', h:null,
+   opts:['Aprender a seguir instrucciones específicas','Predecir el siguiente token sobre grandes cantidades de texto general','Aprender de feedback humano directo','Reducir el tamaño del modelo'], c:1,
+   exp:'El pre-training es la fase masiva donde el modelo aprende lenguaje, hechos y patrones prediciendo texto.'},
+  {t:'¿Qué busca el fine-tuning respecto al modelo pre-entrenado?', h:null,
+   opts:['Hacerlo más lento','Ajustarlo con ejemplos curados para que siga instrucciones y converse útilmente','Borrar lo que aprendió','Aumentar su ventana de contexto'], c:1,
+   exp:'El fine-tuning re-entrena al modelo sobre datos de instrucción-respuesta de calidad.'},
+  {t:'¿Qué significa RLHF?', h:'Reinforcement Learning...',
+   opts:['Reinforcement Learning from Human Feedback','Random Language Hallucination Filter','Recurrent Learning for Hidden Features','Rapid Language Heuristic Fine-tuning'], c:0,
+   exp:'RLHF ajusta el modelo usando comparaciones de respuestas hechas por evaluadores humanos.'},
+  {t:'Si subís la temperature de generación al máximo, ¿qué pasa con las respuestas?', h:null,
+   opts:['Se vuelven siempre idénticas','Se vuelven más aleatorias y menos predecibles','El modelo deja de funcionar','Se acorta la ventana de contexto'], c:1,
+   exp:'Una temperature alta aplana la distribución de probabilidad, dando más chance a opciones menos probables.'},
+  {t:'Con temperature ≈ 0, ¿cómo se comporta el modelo?', h:null,
+   opts:['De forma casi determinista, eligiendo casi siempre la opción más probable','De forma completamente aleatoria','Genera texto vacío','Ignora el prompt'], c:0,
+   exp:'Temperature muy baja concentra casi toda la probabilidad en el token más probable.'},
+  {t:'¿Qué hace el parámetro top-k?', h:null,
+   opts:['Limita la generación a las k opciones de mayor probabilidad','Cuenta cuántos tokens tiene el prompt','Define el tamaño de la ventana de contexto','Mide la temperatura del modelo'], c:0,
+   exp:'Top-k restringe el muestreo a las k palabras con mayor probabilidad, descartando el resto.'},
+  {t:'¿En qué se diferencia top-p (nucleus sampling) de top-k?', h:null,
+   opts:['Top-p no existe en la práctica','Top-p elige un número variable de opciones hasta acumular una probabilidad p, en vez de un número fijo k','Top-p siempre elige una sola opción','Son exactamente lo mismo'], c:1,
+   exp:'Top-p adapta cuántas opciones considerar según la forma de la distribución, no un número fijo.'},
+  {t:'¿Qué es la "ventana de contexto"?', h:null,
+   opts:['La pantalla donde se muestra el chat','La cantidad máxima de tokens que el modelo puede tener en cuenta a la vez','El tiempo que tarda en responder','La cantidad de parámetros del modelo'], c:1,
+   exp:'Es el límite de tokens (prompt + conversación) que el modelo puede procesar en un momento dado; lo que queda afuera se "olvida".'},
+  {t:'¿Qué es una "alucinación" en un LLM?', h:null,
+   opts:['Un error de conexión a internet','Contenido inventado que el modelo presenta como si fuera cierto','Una respuesta demasiado corta','Un bug en el navegador'], c:1,
+   exp:'El modelo puede generar datos, citas o hechos falsos que suenan coherentes porque optimiza por "lo más probable", no por verdad verificada.'}
+];
+let qIdx=0, score=0, answered=false;
+document.getElementById('q-total').textContent=allQuestions.length;
+function renderQuiz(){
+  const area=document.getElementById('quiz-area');
+  if(qIdx>=allQuestions.length){ showResult(); return; }
+  const q=allQuestions[qIdx];
+  const pct=Math.round((qIdx/allQuestions.length)*100);
+  document.getElementById('q-progress').style.width=pct+'%';
+  document.getElementById('q-score').textContent=score;
+  answered=false;
+  area.innerHTML=`
+  <div class="quiz-card">
+    <div class="q-num">Pregunta ${qIdx+1} de ${allQuestions.length}</div>
+    <div class="q-text">${q.t}</div>
+    ${q.h?`<div class="hint" style="font-size:.82rem;font-family:'Courier New',monospace;background:#f1f5f9;border-radius:6px;padding:.4rem .7rem;color:var(--pur);display:inline-block;margin-bottom:1rem">${q.h}</div>`:''}
+    <div class="options" id="opts">
+      ${q.opts.map((o,i)=>`<button class="opt-btn" onclick="answerQ(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}
+    </div>
+    <div class="feedback-box" id="fb"></div>
+    <div class="quiz-nav">
+      <button class="btn-next" id="btn-next" onclick="nextQ()" disabled>Siguiente →</button>
+    </div>
+  </div>`;
+}
+function answerQ(i){
+  if(answered) return;
+  answered=true;
+  const q=allQuestions[qIdx];
+  const btns=document.querySelectorAll('#quiz-area .opt-btn');
+  btns.forEach(b=>b.disabled=true);
+  const fb=document.getElementById('fb');
+  if(i===q.c){
+    score++;
+    btns[i].classList.add('correct');
+    fb.className='feedback-box show ok';
+    fb.innerHTML=`✅ <strong>¡Correcto!</strong> ${q.exp}`;
+  } else {
+    btns[i].classList.add('wrong');
+    btns[q.c].classList.add('correct');
+    fb.className='feedback-box show ko';
+    fb.innerHTML=`❌ <strong>Incorrecto.</strong> La respuesta correcta es <strong>${String.fromCharCode(65+q.c)}. ${q.opts[q.c]}</strong>. ${q.exp}`;
+  }
+  document.getElementById('q-score').textContent=score;
+  document.getElementById('btn-next').disabled=false;
+}
+function nextQ(){ qIdx++; renderQuiz(); }
+function showResult(){
+  document.getElementById('q-progress').style.width='100%';
+  const pct=Math.round((score/allQuestions.length)*100);
+  const best = Math.max(score, store.get('quiz_best',0));
+  store.set('quiz_best', best);
+  const emoji = pct>=80?'🎉':pct>=60?'👍':'📚';
+  const msg   = pct>=80?'¡Excelente! Entendés el pipeline completo de un LLM.':pct>=60?'Bien, pero repasá algunos conceptos.':'Seguí explorando los simuladores, podés mejorar.';
+  document.getElementById('quiz-area').innerHTML=`
+  <div class="result-card">
+    <span class="emoji">${emoji}</span>
+    <h2>${msg}</h2>
+    <span class="score-big">${score}/${allQuestions.length}</span>
+    <p>${pct}% de respuestas correctas · mejor puntaje guardado: ${best}/${allQuestions.length}</p>
+    <div class="result-detail">
+      <div class="rstat ok">✅ Correctas<br><strong>${score}</strong></div>
+      <div class="rstat ko">❌ Incorrectas<br><strong>${allQuestions.length-score}</strong></div>
+    </div>
+    <button class="btn-retry" onclick="restartQuiz()">🔄 Repetir Quiz</button>
+  </div>`;
+  unlockBadge('quiz');
+  if(pct>=80) launchConfetti();
+}
+function restartQuiz(){ qIdx=0; score=0; renderQuiz(); }
+
+// ════════════════════════════
+//  CONFETTI
+// ════════════════════════════
+function launchConfetti(){
+  const colors=['#0e7490','#22d3ee','#4338ca','#818cf8','#facc15','#34d399'];
+  for(let i=0;i<80;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.cssText=`left:${Math.random()*100}vw;top:-20px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${1.2+Math.random()*1.5}s;animation-delay:${Math.random()*.8}s;transform:rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(el);
+    el.addEventListener('animationend',()=>el.remove());
+  }
+}
+
+// ════════════════════════════
+//  INIT
+// ════════════════════════════
+renderBadges();
+initEmbed();
+loadAttPreset('s1');
+renderGenBars();
+updatePrompt();
+ctxReset();
+renderQuiz();
+drawLossCurve(0);
+</script>
+</body>
+</html>

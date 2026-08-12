@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>PID — Control de Temperatura de un Horno</title>
+<meta name="description" content="Simulador interactivo de un controlador PID para la temperatura de un horno — teoría, simulador en vivo, sintonización y quiz"/>
+<style>
+:root{
+  --main:#c2410c;--main-lt:#ea580c;--main-bg:#ffedd5;
+  --amber:#b45309;--amber-bg:#fef9c3;
+  --blue:#1d4ed8;--blue-bg:#dbeafe;
+  --green:#15803d;--green-bg:#dcfce7;
+  --red:#b91c1c;--red-bg:#fee2e2;
+  --purple:#7c3aed;--purple-bg:#ede9fe;
+  --gray:#374151;--gray-lt:#6b7280;
+  --bg:#fff8f2;--card:#fff;--border:#e7dccc;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65;overflow-x:hidden;-webkit-tap-highlight-color:rgba(194,65,12,.15);-webkit-font-smoothing:antialiased}
+img,svg,video{max-width:100%;height:auto}
+table{max-width:100%}
+button,select,input[type=range]{min-height:44px}
+.opt-btn,.tab-btn,.preset-btn,.badge-item,.mode-btn,.speed-btn,.dist-btn,.next-q-btn,.retry-btn{min-height:44px}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:6px;background:var(--border);border-radius:3px}
+input[type=range]::-moz-range-track{height:6px;background:var(--border);border-radius:3px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:var(--main-lt);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);margin-top:-8px;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--main-lt);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);cursor:pointer}
+@media(hover:none){.card:hover{box-shadow:0 1px 4px rgba(0,0,0,.05);transform:none}.preset-btn:hover,.mode-btn:hover{filter:none}}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:var(--main);display:flex;align-items:center;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.brand{color:#fff;font-size:1.05rem;font-weight:800;padding:.8rem 1.2rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.2)}
+.tabs{display:flex;overflow-x:auto;flex:1}
+.tab-btn{padding:.75rem 1rem;border:none;background:transparent;color:rgba(255,255,255,.75);font-size:.83rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s;font-family:inherit}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tab-btn.active{color:#fff;border-bottom-color:#fed7aa;background:rgba(255,255,255,.08)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#7c2d12 0%,var(--main-lt) 100%);color:#fff;text-align:center;padding:2.5rem 1rem 2rem}
+.hero h1{font-size:2.1rem;font-weight:900;letter-spacing:-.5px}
+.hero p{opacity:.88;margin-top:.4rem;max-width:640px;margin-left:auto;margin-right:auto}
+.badges-sum{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.badge-chip{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.25rem .85rem;font-size:.78rem;font-weight:700}
+.lvl-chip{background:#fff;color:var(--main);border-radius:2rem;padding:.2rem .7rem;font-size:.75rem;font-weight:800;margin-left:.5rem}
+
+/* LAYOUT */
+.page{display:none}.page.active{display:block}
+.container{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+.stitle{display:flex;align-items:center;gap:.6rem;font-size:1.3rem;font-weight:800;color:var(--main);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid var(--main-bg)}
+.stitle:first-child{margin-top:0}
+.stitle .ico{font-size:1.3rem}
+.sub{font-size:1.05rem;font-weight:700;color:var(--main-lt);margin:1.4rem 0 .7rem}
+.lead{font-size:.95rem;color:var(--gray);margin-bottom:1rem}
+.lead b{color:var(--main)}
+
+/* CARDS */
+.grid{display:grid;gap:1.1rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;box-shadow:0 1px 4px rgba(0,0,0,.05);transition:.2s}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.card h3{font-size:1rem;font-weight:700;margin-bottom:.5rem;color:var(--main)}
+.card p,.card li{font-size:.9rem;color:var(--gray)}
+.card ul,.card ol{margin-left:1.2rem;margin-top:.4rem}
+.card.bl{border-left:4px solid var(--blue);background:var(--blue-bg)}
+.card.gr{border-left:4px solid var(--green);background:var(--green-bg)}
+.card.or{border-left:4px solid var(--main);background:var(--main-bg)}
+.card.re{border-left:4px solid var(--red);background:var(--red-bg)}
+.card.pu{border-left:4px solid var(--purple);background:var(--purple-bg)}
+.card.am{border-left:4px solid var(--amber);background:var(--amber-bg)}
+
+/* FORMULA */
+.fbox{background:#1c1410;color:#fef3e2;border-radius:10px;padding:1.1rem 1.3rem;font-family:'Courier New',monospace;text-align:center;margin:.8rem 0;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.fbox .big{font-size:1.25rem;font-weight:700;color:#fdba74;display:block;margin-bottom:.3rem}
+.fbox .sub-f{font-size:.85rem;color:#d6bfa8;display:block;margin-top:.25rem}
+.fbox .unit{font-size:.78rem;color:#a8907c;display:block;margin-top:.3rem}
+
+/* TABLE */
+.twrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);margin:.6rem 0}
+table{width:100%;border-collapse:collapse;font-size:.87rem;background:#fff}
+th{background:var(--main);color:#fff;padding:.65rem .9rem;text-align:left;font-weight:600}
+td{padding:.6rem .9rem;border-bottom:1px solid var(--border)}
+tr:last-child td{border:none}
+tr:nth-child(even) td{background:var(--main-bg)}
+
+/* TIP / NOTE / WARN */
+.tip{display:flex;gap:.7rem;align-items:flex-start;background:#fffbeb;border:1px solid #fbbf24;border-radius:10px;padding:.85rem 1.1rem;margin:.9rem 0;font-size:.9rem}
+.tip-i{flex-shrink:0;font-size:1.05rem}
+.note{background:var(--blue-bg);border-left:4px solid var(--blue);border-radius:0 8px 8px 0;padding:.8rem 1rem;font-size:.92rem;margin:.9rem 0;color:#1e3a8a}
+.warn{background:var(--red-bg);border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:.8rem 1rem;font-size:.92rem;margin:.9rem 0;color:#7f1d1d}
+.good{background:var(--green-bg);border-left:4px solid var(--green);border-radius:0 8px 8px 0;padding:.8rem 1rem;font-size:.92rem;margin:.9rem 0;color:#14532d}
+
+/* DIAGRAM */
+.diagram{background:#fffaf5;border:1px solid var(--border);border-radius:10px;padding:1rem;margin:.9rem 0;text-align:center}
+.dcap{font-size:.82rem;color:var(--gray-lt);margin-top:.6rem;font-style:italic}
+
+/* ACCORDION */
+details{border:1px solid var(--border);border-radius:10px;margin-bottom:.7rem;overflow:hidden}
+details summary{padding:.9rem 1.1rem;cursor:pointer;font-weight:600;font-size:.92rem;background:var(--card);list-style:none;display:flex;justify-content:space-between;align-items:center;user-select:none}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:'＋';color:var(--main-lt)}
+details[open] summary::after{content:'－'}
+details[open] summary{background:var(--main-bg);color:var(--main)}
+.dbody{padding:1.1rem;background:var(--card);border-top:1px solid var(--border);font-size:.9rem;line-height:1.7}
+
+/* ===== SIMULADOR ===== */
+.sim-layout{display:grid;grid-template-columns:280px 1fr;gap:1.3rem}
+@media(max-width:820px){.sim-layout{grid-template-columns:1fr}}
+.sim-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.1rem}
+.sim-panel h4{font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-lt);margin-bottom:.8rem}
+.slider-row{margin-bottom:1rem}
+.slider-row label{display:flex;justify-content:space-between;font-size:.85rem;font-weight:600;color:var(--gray);margin-bottom:.35rem}
+.slider-row label .val{color:var(--main);font-family:'Courier New',monospace;font-weight:700}
+.mode-row{display:flex;gap:.5rem;margin-bottom:1rem}
+.mode-btn{flex:1;border:2px solid var(--border);background:#fff;border-radius:8px;padding:.5rem;font-size:.82rem;font-weight:700;cursor:pointer;color:var(--gray-lt);font-family:inherit;transition:.15s}
+.mode-btn.active{border-color:var(--main);background:var(--main-bg);color:var(--main)}
+.preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1rem}
+.preset-btn{border:1px solid var(--border);background:#fdfaf6;border-radius:8px;padding:.5rem .4rem;font-size:.74rem;font-weight:700;cursor:pointer;color:var(--gray);font-family:inherit;transition:.15s}
+.preset-btn:hover{border-color:var(--main-lt);color:var(--main)}
+.preset-btn.done{background:var(--green-bg);border-color:var(--green);color:#14532d}
+.sim-btns{display:flex;gap:.5rem;margin-bottom:.9rem}
+.sim-btns button{flex:1;border:none;border-radius:8px;padding:.6rem;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;color:#fff;background:var(--main)}
+.sim-btns button.reset{background:var(--gray-lt)}
+.dist-btn{width:100%;border:2px dashed var(--red);background:var(--red-bg);color:var(--red);border-radius:8px;padding:.6rem;font-weight:700;font-size:.83rem;cursor:pointer;font-family:inherit;margin-bottom:.9rem}
+.dist-btn:active{transform:scale(.98)}
+.speed-row{display:flex;gap:.4rem}
+.speed-btn{flex:1;border:1px solid var(--border);background:#fff;border-radius:6px;padding:.4rem;font-size:.75rem;font-weight:700;cursor:pointer;color:var(--gray-lt);font-family:inherit}
+.speed-btn.active{background:var(--main);border-color:var(--main);color:#fff}
+
+.oven-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem;margin-bottom:1rem}
+.oven-flex{display:flex;gap:1.2rem;flex-wrap:wrap;align-items:center;justify-content:center}
+#ovenCanvas{background:#fdfaf6;border-radius:8px}
+.readouts{display:flex;gap:.9rem;flex-wrap:wrap;justify-content:center}
+.readout{text-align:center;min-width:80px}
+.readout .rv{font-size:1.5rem;font-weight:800;color:var(--main);font-family:'Courier New',monospace}
+.readout .rl{font-size:.72rem;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.04em}
+.door-flash{position:relative}
+.door-flash.open::after{content:'🚪 ¡Puerta abierta!';position:absolute;top:6px;left:50%;transform:translateX(-50%);background:var(--red);color:#fff;font-size:.72rem;font-weight:700;padding:.2rem .6rem;border-radius:2rem}
+
+.chart-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem}
+#chartCanvas{width:100%;height:260px;background:#fdfaf6;border-radius:8px}
+.chart-legend{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.7rem;font-size:.78rem}
+.chart-legend label{display:flex;align-items:center;gap:.35rem;cursor:pointer;color:var(--gray)}
+.leg-sw{width:14px;height:4px;border-radius:2px;display:inline-block}
+
+/* BADGES */
+.badge-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.8rem;margin:1rem 0 1.6rem}
+.badge-item{border:2px solid var(--border);border-radius:10px;padding:.9rem;text-align:center;background:#fdfaf6;opacity:.5;filter:grayscale(1);transition:.25s}
+.badge-item.unlocked{opacity:1;filter:none;border-color:var(--main);background:var(--main-bg);box-shadow:0 2px 10px rgba(194,65,12,.15)}
+.badge-item .bi{font-size:1.7rem;display:block;margin-bottom:.35rem}
+.badge-item .bn{font-size:.78rem;font-weight:700;color:var(--gray)}
+.badge-item.unlocked .bn{color:var(--main)}
+
+/* QUIZ */
+.quiz-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.4rem}
+.quiz-progress{font-size:.8rem;color:var(--gray-lt);margin-bottom:.6rem;font-weight:600}
+.quiz-q{font-size:1.02rem;font-weight:700;color:var(--gray);margin-bottom:1rem}
+.quiz-opts{display:flex;flex-direction:column;gap:.6rem}
+.opt-btn{text-align:left;border:2px solid var(--border);background:#fff;border-radius:8px;padding:.75rem 1rem;font-size:.9rem;cursor:pointer;color:var(--gray);font-family:inherit;transition:.15s}
+.opt-btn:hover{border-color:var(--main-lt)}
+.opt-btn.correct{border-color:var(--green);background:var(--green-bg);color:#14532d;font-weight:700}
+.opt-btn.wrong{border-color:var(--red);background:var(--red-bg);color:#7f1d1d;font-weight:700}
+.opt-btn.disabled{pointer-events:none}
+.quiz-expl{margin-top:1rem;padding:.9rem;border-radius:8px;background:var(--blue-bg);color:#1e3a8a;font-size:.87rem;display:none}
+.quiz-expl.show{display:block}
+.next-q-btn{margin-top:1.1rem;border:none;background:var(--main);color:#fff;font-weight:700;padding:.65rem 1.3rem;border-radius:8px;cursor:pointer;font-family:inherit;display:none}
+.next-q-btn.show{display:inline-block}
+.quiz-result{text-align:center}
+.quiz-result .score{font-size:2.6rem;font-weight:900;color:var(--main);margin:.6rem 0}
+.quiz-score-display{font-size:.85rem;color:var(--gray-lt);font-weight:700}
+.retry-btn{margin-top:1rem;border:none;background:var(--main);color:#fff;font-weight:700;padding:.65rem 1.4rem;border-radius:8px;cursor:pointer;font-family:inherit}
+
+footer{text-align:center;padding:2rem 1rem 3rem;font-size:.8rem;color:var(--gray-lt)}
+footer a{color:var(--main)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">🔥 PID · Horno</div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('intro')">🎯 Intro</button>
+    <button class="tab-btn" onclick="showTab('planta')">🔥 El horno</button>
+    <button class="tab-btn" onclick="showTab('pid')">⚙️ P·I·D</button>
+    <button class="tab-btn" onclick="showTab('sim')">🧪 Simulador</button>
+    <button class="tab-btn" onclick="showTab('tuning')">📐 Sintonización</button>
+    <button class="tab-btn" onclick="showTab('quiz')">🏅 Insignias · Quiz</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>Control PID de la temperatura de un horno</h1>
+  <p>Cómo un controlador Proporcional-Integral-Derivativo mantiene un horno en su temperatura de consigna, término por término, con un simulador en vivo.</p>
+  <div class="badges-sum">
+    <span class="badge-chip">🔥 Modelo físico real</span>
+    <span class="badge-chip">🧪 Simulador con canvas</span>
+    <span class="badge-chip">📐 Sintonización (Ziegler-Nichols)</span>
+    <span class="badge-chip">🏅 Insignias<span class="lvl-chip" id="badge-count-chip">0/6</span></span>
+  </div>
+</div>
+
+<!-- ================= INTRO ================= -->
+<div class="page active" id="page-intro">
+  <div class="container">
+
+    <div class="stitle"><span class="ico">🎯</span>¿Qué es controlar un horno?</div>
+    <p class="lead">Un horno tiene una <b>resistencia</b> que calienta y un <b>sensor</b> que mide la temperatura interna. El objetivo es simple de enunciar y difícil de lograr bien: <b>mantener la temperatura en un valor deseado (setpoint)</b>, a pesar de que el horno pierde calor hacia el ambiente todo el tiempo. Controlar es decidir, en cada instante, cuánta potencia entregarle a la resistencia para lograrlo.</p>
+
+    <div class="grid g2">
+      <div class="card bl">
+        <h3>🔓 Lazo abierto</h3>
+        <p>El controlador aplica una potencia fija (por ejemplo, "resistencia al 60%") sin mirar la temperatura real. Funciona solo si conocés perfectamente las pérdidas de calor y nada cambia — abrís la puerta una vez y el sistema ya no sabe que se enfrió.</p>
+      </div>
+      <div class="card or">
+        <h3>🔁 Lazo cerrado (realimentado)</h3>
+        <p>El controlador <b>mide</b> la temperatura real, la compara contra el setpoint, calcula el <b>error</b> (setpoint − temperatura) y ajusta la potencia en consecuencia. Si algo perturba el sistema (se abre la puerta), el error crece y el controlador reacciona. Esto es un <b>PID</b>.</p>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <svg viewBox="0 0 720 190" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/>
+          </marker>
+        </defs>
+        <!-- setpoint -->
+        <text x="10" y="80" font-size="13" fill="#374151" font-weight="700">Setpoint</text>
+        <text x="10" y="96" font-size="11" fill="#6b7280">(180°C)</text>
+        <line x1="90" y1="85" x2="150" y2="85" stroke="#c2410c" stroke-width="2" marker-end="url(#arrow)"/>
+        <!-- sum -->
+        <circle cx="168" cy="85" r="18" fill="#fff" stroke="#c2410c" stroke-width="2"/>
+        <text x="168" y="90" font-size="16" fill="#c2410c" text-anchor="middle" font-weight="700">Σ</text>
+        <text x="168" y="118" font-size="10" fill="#6b7280" text-anchor="middle">error e(t)</text>
+        <line x1="186" y1="85" x2="250" y2="85" stroke="#c2410c" stroke-width="2" marker-end="url(#arrow)"/>
+        <!-- controller -->
+        <rect x="252" y="55" width="130" height="60" rx="8" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5"/>
+        <text x="317" y="80" font-size="13" fill="#7c2d12" text-anchor="middle" font-weight="700">Controlador</text>
+        <text x="317" y="98" font-size="12" fill="#7c2d12" text-anchor="middle">PID</text>
+        <line x1="382" y1="85" x2="446" y2="85" stroke="#c2410c" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="414" y="76" font-size="10" fill="#6b7280" text-anchor="middle">u(t) %</text>
+        <!-- plant -->
+        <rect x="448" y="55" width="130" height="60" rx="8" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.5"/>
+        <text x="513" y="80" font-size="13" fill="#7f1d1d" text-anchor="middle" font-weight="700">Horno</text>
+        <text x="513" y="98" font-size="12" fill="#7f1d1d" text-anchor="middle">(planta)</text>
+        <line x1="578" y1="85" x2="650" y2="85" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="655" y="80" font-size="13" fill="#374151" font-weight="700">T(t)</text>
+        <text x="655" y="96" font-size="11" fill="#6b7280">salida</text>
+        <!-- feedback -->
+        <path d="M650,85 V160 H168 V103" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+        <rect x="330" y="140" width="90" height="34" rx="6" fill="#dbeafe" stroke="#1d4ed8"/>
+        <text x="375" y="161" font-size="11" fill="#1e3a8a" text-anchor="middle" font-weight="700">Sensor</text>
+      </svg>
+      <p class="dcap">El controlador nunca ve la temperatura "de verdad": ve el error. Todo lo que hace el PID nace de esa resta.</p>
+    </div>
+
+    <div class="stitle"><span class="ico">⚖️</span>Termostato ON/OFF vs. PID</div>
+    <p class="lead">La forma más simple de controlar un horno es un termostato: <b>resistencia al 100% si hace frío, apagada si hace calor</b>. Funciona, pero produce oscilaciones permanentes porque el horno tiene inercia térmica — sigue calentando un rato después de que apagás la resistencia, y sigue enfriándose un rato después de encenderla. El PID reemplaza ese "todo o nada" por una potencia graduada y anticipada.</p>
+
+    <div class="grid g2">
+      <div class="card re">
+        <h3>🔴 ON/OFF (termostato)</h3>
+        <ul>
+          <li>Solo dos estados: 0% o 100% de potencia</li>
+          <li>Siempre oscila alrededor del setpoint (ciclo limite)</li>
+          <li>Desgasta más el elemento calefactor (encendidos/apagados constantes)</li>
+          <li>Simple y barato — sirve cuando la precisión no importa</li>
+        </ul>
+      </div>
+      <div class="card gr">
+        <h3>🟢 PID</h3>
+        <ul>
+          <li>Potencia continua entre 0% y 100%</li>
+          <li>Puede estabilizarse casi sin oscilar</li>
+          <li>Reacciona antes de llegar al setpoint (no lo "pisa" tan fuerte)</li>
+          <li>Requiere ajustar 3 parámetros (Kp, Ki, Kd) — eso es la "sintonización"</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tip"><span class="tip-i">💡</span><div>Probá esto vos mismo: en la pestaña <b>Simulador</b> hay un botón para alternar entre modo <b>ON/OFF</b> y <b>PID</b>. Corré el mismo horno en los dos modos y compará las curvas — vas a ver el ciclo de oscilación del termostato contra la curva suave del PID.</div></div>
+
+  </div>
+</div>
+
+<!-- ================= PLANTA ================= -->
+<div class="page" id="page-planta">
+  <div class="container">
+
+    <div class="stitle"><span class="ico">🔥</span>El horno como "planta"</div>
+    <p class="lead">En control, la <b>planta</b> es el sistema físico que querés controlar — acá, la cavidad del horno. Para diseñar (y sobre todo para entender) un PID hace falta un modelo, aunque sea simplificado, de cómo cambia la temperatura con el tiempo.</p>
+
+    <div class="sub">Balance de energía</div>
+    <p class="lead">La temperatura del horno sube cuando la resistencia entrega más calor del que se pierde hacia el ambiente, y baja en el caso contrario. Ese balance se escribe como una ecuación diferencial de primer orden:</p>
+
+    <div class="fbox">
+      <span class="big">C · dT/dt = P<sub>max</sub> · u(t) − k<sub>pérdidas</sub> · (T − T<sub>amb</sub>)</span>
+      <span class="sub-f">calor acumulado = calor entregado por la resistencia − calor perdido al ambiente</span>
+    </div>
+
+    <div class="grid g3">
+      <div class="card or">
+        <h3>C — Capacidad calorífica</h3>
+        <p>Cuánta energía hace falta para subir la temperatura del horno un grado. Un horno "pesado" (mucho metal, ladrillos refractarios) tiene C alto → responde lento. Es la <b>inercia térmica</b>.</p>
+      </div>
+      <div class="card re">
+        <h3>P<sub>max</sub> · u(t)</h3>
+        <p>Potencia de la resistencia a máxima carga, multiplicada por la fracción de potencia que le manda el controlador, <b>u(t)</b>, entre 0% y 100%. Es la única variable que el controlador puede tocar.</p>
+      </div>
+      <div class="card bl">
+        <h3>k<sub>pérdidas</sub> · (T − T<sub>amb</sub>)</h3>
+        <p>Cuanto más caliente está el horno respecto del ambiente, más rápido pierde calor (por conducción, convección y radiación). Por eso cuesta lo mismo <i>mantener</i> 180°C que llegar a 180°C.</p>
+      </div>
+    </div>
+
+    <div class="note">📌 Este modelo es el mismo que usa, por ejemplo, una taza de café enfriándose (Ley de enfriamiento de Newton) pero con una fuente de calor controlable sumada. Cuanto más grande es k<sub>pérdidas</sub> comparado con P<sub>max</sub>, más "húmedo" es el ambiente térmicamente — más difícil sostener temperatura.</div>
+
+    <div class="sub">Por qué el horno es "lento"</div>
+    <p class="lead">Aunque pongas la resistencia al 100% de entrada, la temperatura no salta instantáneamente al valor final — sube con una curva exponencial que se achata a medida que se acerca al equilibrio. Esa demora entre "ordenar más calor" y "verlo reflejado en el sensor" es la razón de fondo por la que un simple ON/OFF sobrepasa el setpoint: para cuando el sensor avisa que ya se llegó, la resistencia lleva un rato entregando calor de más que todavía no se notó.</p>
+
+    <div class="sub">Tiempo muerto: el ingrediente que habilita la inestabilidad</div>
+    <p class="lead">Hay una segunda demora, distinta de la inercia térmica: el calor tarda un tiempo en <b>viajar</b> desde la resistencia hasta el punto donde está el sensor — es <b>tiempo muerto</b> (dead time), no solo "lentitud". Este horno modelo tiene unos <b>20 segundos</b> de tiempo muerto. Es un detalle que parece menor, pero es la pieza que le falta a un sistema de primer orden puro para poder volverse inestable: sin tiempo muerto, subir Kp todo lo que quieras nunca hace que un horno así oscile sin parar, solo se pone más agresivo. Con tiempo muerto, en cambio, a partir de cierta ganancia el retardo entre "ordenar" y "ver el efecto" hace que el controlador esté siempre corrigiendo un error que ya cambió — y ahí aparece la oscilación sostenida que vas a ver con el preset "Ganancia alta" en el simulador.</p>
+
+    <div class="warn">⚠️ Esto no es solo una curiosidad matemática: es la razón real por la que en la industria (hornos, calderas, reactores) el tiempo muerto es el parámetro que más complica sintonizar un PID — cuanto más tiempo muerto respecto a la constante de tiempo del proceso, más conservadoras tienen que ser las ganancias.</div>
+
+    <div class="sub">Discretización — lo que realmente corre el simulador</div>
+    <p class="lead">Una computadora no integra ecuaciones diferenciales de forma continua: las resuelve a pasos discretos de tiempo Δt (método de Euler). El simulador de esta página avanza así, muchas veces por segundo:</p>
+
+    <div class="fbox">
+      <span class="big">T[k+1] = T[k] + Δt · ( P<sub>max</sub>·u[k−L] − k<sub>pérdidas</sub>·(T[k] − T<sub>amb</sub>) ) / C</span>
+      <span class="sub-f">u[k−L]: la potencia que el controlador ordenó L pasos atrás (tiempo muerto), no la de ahora</span>
+      <span class="unit">Δt pequeño (fracciones de segundo simulado) → la curva se ve suave</span>
+    </div>
+
+    <details>
+      <summary>¿Por qué importa esto para el PID? <span></span></summary>
+      <div class="dbody">El controlador PID también corre a pasos discretos: en cada Δt lee la temperatura, calcula el error, actualiza su salida u(t), y esa u(t) es la que entra a la ecuación de arriba en el paso siguiente. El "diálogo" entre controlador y planta es exactamente ese ida y vuelta, tick a tick — es lo que vas a ver animado en la pestaña Simulador.</div>
+    </details>
+
+  </div>
+</div>
+
+<!-- ================= PID ================= -->
+<div class="page" id="page-pid">
+  <div class="container">
+
+    <div class="stitle"><span class="ico">⚙️</span>P, I y D — uno por uno</div>
+    <p class="lead">El controlador PID calcula la potencia de la resistencia sumando <b>tres términos</b> que reaccionan al error <b>e(t) = setpoint − T(t)</b> de formas distintas y complementarias.</p>
+
+    <div class="fbox">
+      <span class="big">u(t) = K<sub>p</sub>·e(t) &nbsp;+&nbsp; K<sub>i</sub>·∫e(t)dt &nbsp;+&nbsp; K<sub>d</sub>·de(t)/dt</span>
+      <span class="sub-f">saturado entre 0% y 100% — la resistencia no puede dar menos de 0 ni más de su máximo</span>
+    </div>
+
+    <div class="grid g3">
+      <div class="card or">
+        <h3>P — Proporcional</h3>
+        <div class="fbox" style="margin:.6rem 0"><span class="big" style="font-size:1rem">u<sub>P</sub> = K<sub>p</sub> · e(t)</span></div>
+        <p><b>Reacciona al presente.</b> Cuanto más lejos está la temperatura del setpoint, más potencia manda — proporcional y sin memoria.</p>
+        <p style="margin-top:.5rem"><b>Problema:</b> para sostener calor contra las pérdidas necesita un error distinto de cero (si el error fuera 0, P mandaría 0% de potencia y el horno se enfriaría). Ese error que queda "clavado" en régimen permanente se llama <b>offset</b>.</p>
+      </div>
+      <div class="card bl">
+        <h3>I — Integral</h3>
+        <div class="fbox" style="margin:.6rem 0"><span class="big" style="font-size:1rem">u<sub>I</sub> = K<sub>i</sub> · ∫₀ᵗ e(τ) dτ</span></div>
+        <p><b>Reacciona al pasado.</b> Va acumulando el error a lo largo del tiempo. Mientras exista <i>cualquier</i> error, aunque sea chiquito, la integral sigue creciendo y empujando más potencia — hasta que el error llega exactamente a cero.</p>
+        <p style="margin-top:.5rem"><b>Problema:</b> introduce demora (lag) y, si se acumula de más mientras la salida está saturada, produce <b>windup</b>: sigue empujando por un rato incluso después de cruzar el setpoint, causando sobreoscilación.</p>
+      </div>
+      <div class="card pu">
+        <h3>D — Derivativo</h3>
+        <div class="fbox" style="margin:.6rem 0"><span class="big" style="font-size:1rem">u<sub>D</sub> = K<sub>d</sub> · de(t)/dt</span></div>
+        <p><b>Reacciona a la tendencia (futuro cercano).</b> Mide qué tan rápido está cambiando el error. Si la temperatura sube muy rápido hacia el setpoint, D "frena" bajando potencia antes de llegar — amortigua la sobreoscilación.</p>
+        <p style="margin-top:.5rem"><b>Problema:</b> amplifica el ruido de medición (una lectura de sensor con jitter genera una derivada muy ruidosa). En la práctica, D casi siempre se aplica sobre la medición filtrada, no sobre el error crudo.</p>
+      </div>
+    </div>
+
+    <div class="sub">¿Qué pasa si usás cada término solo?</div>
+    <div class="twrap">
+      <table>
+        <tr><th>Combinación</th><th>Comportamiento típico</th></tr>
+        <tr><td><b>Solo P</b></td><td>Responde rápido pero se estabiliza con error permanente (offset) — nunca llega exactamente al setpoint mientras haya pérdidas de calor.</td></tr>
+        <tr><td><b>P + I</b></td><td>Elimina el offset (llega exacto al setpoint) pero suele sobrepasarlo un poco antes de asentarse — más lento en reaccionar.</td></tr>
+        <tr><td><b>P + I + D</b></td><td>El término D anticipa y frena la subida, reduciendo la sobreoscilación que dejó la I — la combinación más usada en la práctica.</td></tr>
+        <tr><td><b>Ganancias muy altas</b></td><td>El sistema se vuelve inestable: oscila cada vez más fuerte en vez de asentarse (ver pestaña Sintonización).</td></tr>
+      </table>
+    </div>
+
+    <div class="stitle" style="margin-top:2.2rem"><span class="ico">🧷</span>Anti-windup: el freno de mano de la I</div>
+    <p class="lead">Imaginate el horno frío y el setpoint alto: el error es enorme, la resistencia ya está al 100% (saturada) y aun así la integral sigue sumando error mientras espera que la temperatura suba. Cuando por fin la temperatura cruza el setpoint, esa integral "hinchada" sigue empujando potencia de más durante un rato — sobreoscilación innecesaria. Eso es el <b>windup</b>.</p>
+    <div class="good">✅ <b>Solución (clamping / integración condicional):</b> si la salida ya está saturada (0% o 100%) <i>y</i> seguir sumando la integral empujaría aún más en esa misma dirección, el controlador simplemente no acumula ese paso. El simulador de esta página implementa exactamente esto — probalo con el botón "Perturbación" en modo PID con Ki alto.</div>
+
+  </div>
+</div>
+
+<!-- ================= SIMULADOR ================= -->
+<div class="page" id="page-sim">
+  <div class="container">
+
+    <div class="stitle"><span class="ico">🧪</span>Simulador en vivo</div>
+    <p class="lead">Movés los sliders, el horno reacciona en tiempo real. Los parámetros físicos del horno (capacidad calorífica, potencia máxima, pérdidas) están fijos para que la comparación entre modos y ganancias sea siempre sobre el mismo horno.</p>
+
+    <div class="sim-layout">
+      <!-- CONTROLES -->
+      <div class="sim-panel">
+        <h4>Modo de control</h4>
+        <div class="mode-row">
+          <button class="mode-btn active" id="btnModeOnoff" onclick="setMode('onoff')">🔴 ON/OFF</button>
+          <button class="mode-btn" id="btnModePid" onclick="setMode('pid')">🟢 PID</button>
+        </div>
+
+        <h4>Ganancias PID</h4>
+        <div class="slider-row">
+          <label>Setpoint <span class="val" id="valSp">180°C</span></label>
+          <input type="range" id="sldSp" min="50" max="230" value="180" step="5" oninput="onGainChange()">
+        </div>
+        <div class="slider-row">
+          <label>Kp (proporcional) <span class="val" id="valKp">1.20</span></label>
+          <input type="range" id="sldKp" min="0" max="5" value="1.2" step="0.05" oninput="onGainChange()">
+        </div>
+        <div class="slider-row">
+          <label>Ki (integral) <span class="val" id="valKi">0.04</span></label>
+          <input type="range" id="sldKi" min="0" max="0.5" value="0.04" step="0.005" oninput="onGainChange()">
+        </div>
+        <div class="slider-row">
+          <label>Kd (derivativo) <span class="val" id="valKd">6</span></label>
+          <input type="range" id="sldKd" min="0" max="40" value="6" step="0.5" oninput="onGainChange()">
+        </div>
+
+        <h4>Presets rápidos</h4>
+        <div class="preset-grid">
+          <button class="preset-btn" id="presetP" onclick="applyPreset('P')">Solo P</button>
+          <button class="preset-btn" id="presetPI" onclick="applyPreset('PI')">PI</button>
+          <button class="preset-btn" id="presetPID" onclick="applyPreset('PID')">PID típico</button>
+          <button class="preset-btn" id="presetUnstable" onclick="applyPreset('unstable')">Ganancia alta</button>
+        </div>
+
+        <button class="dist-btn" onclick="triggerDisturbance()">🚪 Abrir la puerta (perturbación)</button>
+
+        <div class="sim-btns">
+          <button onclick="toggleRun()" id="btnRun">▶ Iniciar</button>
+          <button class="reset" onclick="resetSim()">⟲ Reset</button>
+        </div>
+
+        <h4>Velocidad</h4>
+        <div class="speed-row">
+          <button class="speed-btn" onclick="setSpeed(1)">1×</button>
+          <button class="speed-btn active" onclick="setSpeed(2)">2×</button>
+          <button class="speed-btn" onclick="setSpeed(4)">4×</button>
+        </div>
+      </div>
+
+      <!-- VISUAL -->
+      <div>
+        <div class="oven-wrap">
+          <div class="oven-flex">
+            <div class="door-flash" id="doorFlash"><canvas id="ovenCanvas" width="220" height="180"></canvas></div>
+            <div class="readouts">
+              <div class="readout"><div class="rv" id="roT">22°</div><div class="rl">Temp. actual</div></div>
+              <div class="readout"><div class="rv" id="roSp">180°</div><div class="rl">Setpoint</div></div>
+              <div class="readout"><div class="rv" id="roErr">158°</div><div class="rl">Error</div></div>
+              <div class="readout"><div class="rv" id="roU">0%</div><div class="rl">Potencia u(t)</div></div>
+              <div class="readout"><div class="rv" id="roT2">0s</div><div class="rl">Tiempo sim.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-wrap">
+          <canvas id="chartCanvas" width="800" height="260"></canvas>
+          <div class="chart-legend">
+            <label><span class="leg-sw" style="background:#c2410c"></span>Temperatura</label>
+            <label><span class="leg-sw" style="background:#6b7280;border:1px dashed #6b7280"></span>Setpoint</label>
+            <label><input type="checkbox" id="chkU" checked onchange="redrawStatic()"> <span class="leg-sw" style="background:#f59e0b"></span>Potencia u(t)</label>
+            <label><input type="checkbox" id="chkPID" onchange="redrawStatic()"> <span class="leg-sw" style="background:#7c3aed"></span>Aporte P / I / D (escala relativa)</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip" style="margin-top:1.2rem"><span class="tip-i">🎮</span><div>Sugerencia de recorrido: arrancá en <b>ON/OFF</b> y dejalo correr hasta que se asiente — vas a ver el serrucho característico. Después pasá a <b>PID</b> con el preset "Solo P" (offset visible), luego "PI" (llega exacto pero con sobreoscilación) y por último "PID típico" (rápido y sin casi sobreoscilar). Cerrá con "Ganancia alta" para ver la inestabilidad.</div></div>
+
+  </div>
+</div>
+
+<!-- ================= TUNING ================= -->
+<div class="page" id="page-tuning">
+  <div class="container">
+
+    <div class="stitle"><span class="ico">📐</span>Sintonización — elegir Kp, Ki, Kd</div>
+    <p class="lead">Sintonizar un PID es encontrar valores de Kp, Ki y Kd que den una respuesta rápida, sin (o con poca) sobreoscilación, y sin error permanente. No hay una única receta, pero sí efectos conocidos de cada ganancia que sirven como guía.</p>
+
+    <div class="twrap">
+      <table>
+        <tr><th>Aumentar…</th><th>Tiempo de subida</th><th>Sobreoscilación</th><th>Tiempo de establecimiento</th><th>Error permanente</th></tr>
+        <tr><td><b>Kp</b></td><td>Baja</td><td>Sube</td><td>Cambia poco</td><td>Baja</td></tr>
+        <tr><td><b>Ki</b></td><td>Baja levemente</td><td>Sube</td><td>Sube</td><td>Se elimina</td></tr>
+        <tr><td><b>Kd</b></td><td>Cambia poco</td><td>Baja</td><td>Baja</td><td>Sin efecto directo</td></tr>
+      </table>
+    </div>
+    <p class="dcap" style="margin-top:.3rem">Regla clásica de control (efectos aproximados e independientes — en la práctica interactúan entre sí, por eso se sintoniza de forma iterativa).</p>
+
+    <div class="sub">Método de Ziegler-Nichols (oscilación sostenida)</div>
+    <p class="lead">Es una receta práctica de 1942 que sigue usándose como punto de partida:</p>
+    <ol style="margin-left:1.3rem;font-size:.92rem;line-height:1.9">
+      <li>Poné <b>Ki = 0</b> y <b>Kd = 0</b> — dejá solo el término P.</li>
+      <li>Subí <b>Kp</b> de a poco hasta que el sistema entre en <b>oscilación sostenida</b> (ni crece ni se apaga, oscila con amplitud constante). Ese valor de Kp es la <b>ganancia crítica Ku</b>.</li>
+      <li>Medí el <b>período</b> de esa oscilación: <b>Tu</b> (tiempo entre dos picos consecutivos).</li>
+      <li>Calculá Kp, Ki, Kd con la tabla de Ziegler-Nichols:</li>
+    </ol>
+
+    <div class="twrap">
+      <table>
+        <tr><th>Controlador</th><th>Kp</th><th>Ki</th><th>Kd</th></tr>
+        <tr><td>Solo P</td><td>0.50 · Ku</td><td>—</td><td>—</td></tr>
+        <tr><td>PI</td><td>0.45 · Ku</td><td>1.2·Kp / Tu</td><td>—</td></tr>
+        <tr><td>PID</td><td>0.60 · Ku</td><td>2·Kp / Tu</td><td>Kp·Tu / 8</td></tr>
+      </table>
+    </div>
+
+    <div class="tip"><span class="tip-i">🧪</span><div>Probalo en el simulador: usá el preset <b>"Ganancia alta"</b> como punto de partida de oscilación sostenida, anotá mentalmente cada cuántos segundos simulados se repite el pico (Tu), y calculá con la tabla qué Kp/Ki/Kd te darían para un PID completo. Después cargalos manualmente en los sliders y compará contra el preset "PID típico".</div></div>
+
+    <div class="sub">Síntomas → causa → qué tocar</div>
+    <div class="grid g2">
+      <div class="card re">
+        <h3>😵 Oscila sin parar, cada vez más fuerte</h3>
+        <p><b>Causa:</b> ganancias demasiado altas, sistema inestable.</p>
+        <p><b>Acción:</b> bajá Kp primero; si persiste, bajá también Ki.</p>
+      </div>
+      <div class="card am">
+        <h3>🐌 Llega, pero tarda muchísimo</h3>
+        <p><b>Causa:</b> Kp muy bajo, el sistema responde débil al error.</p>
+        <p><b>Acción:</b> subí Kp de a poco hasta acelerar sin generar oscilación.</p>
+      </div>
+      <div class="card bl">
+        <h3>📉 Se estabiliza pero nunca llega al setpoint exacto</h3>
+        <p><b>Causa:</b> falta o es muy bajo el término integral (offset de P puro).</p>
+        <p><b>Acción:</b> subí Ki de a poco — cuidado, mucho Ki genera sobreoscilación.</p>
+      </div>
+      <div class="card pu">
+        <h3>🎢 Se pasa del setpoint antes de asentarse</h3>
+        <p><b>Causa:</b> Ki demasiado alto (o windup) y/o falta de D.</p>
+        <p><b>Acción:</b> sumá o subí Kd para amortiguar, o bajá un poco Ki.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= QUIZ / BADGES ================= -->
+<div class="page" id="page-quiz">
+  <div class="container">
+
+    <div class="stitle"><span class="ico">🏅</span>Tus insignias<span class="lvl-chip" id="badge-count-chip2">0/6</span></div>
+    <p class="lead">Se desbloquean jugando con el simulador de la pestaña anterior. Tu progreso se guarda automáticamente en este navegador (localStorage) — podés cerrar la página y volver cuando quieras.</p>
+    <div class="badge-grid" id="badgeGrid"></div>
+
+    <div class="stitle"><span class="ico">🧠</span>Quiz final</div>
+    <div class="quiz-box" id="quizBox"></div>
+
+  </div>
+</div>
+
+<footer>Hecho para entender de una vez por todas cómo funciona un PID · <a href="index.html">← volver al inicio</a></footer>
+
+<script>
+/* ===================== NAV ===================== */
+function showTab(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  event.target.classList.add('active');
+  if(id==='quiz'){ renderBadges(); }
+}
+
+/* ===================== STORE / BADGES ===================== */
+const Store = {
+  get(k,d){ try{ const v=localStorage.getItem('pidhorno_'+k); return v!==null?JSON.parse(v):d; }catch(e){ return d; } },
+  set(k,v){ try{ localStorage.setItem('pidhorno_'+k, JSON.stringify(v)); }catch(e){} }
+};
+
+const BADGES = [
+  {id:'lazo_cerrado', ico:'🔁', name:'Lazo cerrado', desc:'Pasaste de ON/OFF a modo PID'},
+  {id:'overshoot_domado', ico:'🎯', name:'Overshoot domado', desc:'Lograste una sobreoscilación menor al 5%'},
+  {id:'error_cero', ico:'🧮', name:'Error casi cero', desc:'Llegaste al setpoint con menos de 1° de error, sostenido'},
+  {id:'antiwindup', ico:'🧷', name:'Anti-windup', desc:'Abriste la puerta en modo PID y viste cómo se recupera'},
+  {id:'sintonizador', ico:'📐', name:'Sintonizador', desc:'Probaste los 4 presets de ganancias'},
+  {id:'quiz_aprobado', ico:'🏆', name:'Quiz aprobado', desc:'Sacaste 70% o más en el quiz final'},
+];
+let unlocked = Store.get('badges', {});
+
+function unlockBadge(id){
+  if(unlocked[id]) return;
+  unlocked[id] = true;
+  Store.set('badges', unlocked);
+  updateBadgeCount();
+  renderBadges();
+}
+function updateBadgeCount(){
+  const n = Object.keys(unlocked).filter(k=>unlocked[k]).length;
+  document.getElementById('badge-count-chip').textContent = n+'/'+BADGES.length;
+  const chip2 = document.getElementById('badge-count-chip2');
+  if(chip2) chip2.textContent = n+'/'+BADGES.length;
+}
+function renderBadges(){
+  const grid = document.getElementById('badgeGrid');
+  if(!grid) return;
+  grid.innerHTML = BADGES.map(b=>{
+    const u = !!unlocked[b.id];
+    return '<div class="badge-item'+(u?' unlocked':'')+'"><span class="bi">'+b.ico+'</span><div class="bn">'+b.name+'</div><div style="font-size:.7rem;color:#6b7280;margin-top:.25rem">'+b.desc+'</div></div>';
+  }).join('');
+}
+updateBadgeCount();
+
+/* ===================== PHYSICS + CONTROLLER ===================== */
+const PHYS = { Tamb: 22, Pmax: 2.0, kloss: 0.01 }; // °C/s a 100%, 1/s de pérdidas
+const DT_SIM = 0.25; // segundos simulados por paso
+const TICK_MS = 60;  // intervalo real del setInterval
+const LD_SIM = 20;   // segundos de tiempo muerto (transporte de calor resistencia→sensor)
+const DELAY_STEPS = Math.round(LD_SIM/DT_SIM);
+
+let sim = {
+  running:false, mode:'onoff', speed:2, timer:null,
+  T: PHYS.Tamb, integral:0, prevError:null, prevT:null, u:0,
+  simTime:0, onoffState:0,
+  uQueue: new Array(DELAY_STEPS).fill(0), // tiempo muerto: la potencia tarda LD_SIM segundos en afectar la temperatura
+  hist:[], // {t,T,sp,u,p,i,d}
+  presetsUsed:new Set(), maxOvershoot:0, crossedSetpoint:false, lowErrStreak:0
+};
+
+function getSetpoint(){ return parseFloat(document.getElementById('sldSp').value); }
+function getKp(){ return parseFloat(document.getElementById('sldKp').value); }
+function getKi(){ return parseFloat(document.getElementById('sldKi').value); }
+function getKd(){ return parseFloat(document.getElementById('sldKd').value); }
+
+function onGainChange(){
+  document.getElementById('valSp').textContent = getSetpoint()+'°C';
+  document.getElementById('valKp').textContent = getKp().toFixed(2);
+  document.getElementById('valKi').textContent = getKi().toFixed(3);
+  document.getElementById('valKd').textContent = getKd().toFixed(1);
+  if(!sim.running) drawOven();
+}
+
+function setMode(m){
+  if(m==='pid' && sim.mode==='onoff') unlockBadge('lazo_cerrado');
+  sim.mode = m;
+  document.getElementById('btnModeOnoff').classList.toggle('active', m==='onoff');
+  document.getElementById('btnModePid').classList.toggle('active', m==='pid');
+}
+
+function setSpeed(s){
+  sim.speed = s;
+  document.querySelectorAll('.speed-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function applyPreset(name){
+  const P = {
+    P:        {kp:1.2, ki:0,     kd:0},
+    PI:       {kp:1.0, ki:0.06,  kd:0},
+    PID:      {kp:1.0, ki:0.015, kd:8},
+    unstable: {kp:4.5, ki:0.35,  kd:0}
+  }[name];
+  document.getElementById('sldKp').value = P.kp;
+  document.getElementById('sldKi').value = P.ki;
+  document.getElementById('sldKd').value = P.kd;
+  setMode('pid');
+  onGainChange();
+  sim.presetsUsed.add(name);
+  document.getElementById('preset'+(name==='unstable'?'Unstable':name)).classList.add('done');
+  if(sim.presetsUsed.size>=4) unlockBadge('sintonizador');
+}
+
+function resetSim(){
+  sim.T = PHYS.Tamb; sim.integral=0; sim.prevError=null; sim.prevT=null; sim.u=0;
+  sim.simTime=0; sim.onoffState=0; sim.hist=[]; sim.maxOvershoot=0; sim.crossedSetpoint=false; sim.lowErrStreak=0;
+  sim.uQueue = new Array(DELAY_STEPS).fill(0);
+  drawOven(); redrawStatic();
+  updateReadouts();
+}
+
+function toggleRun(){
+  sim.running = !sim.running;
+  const btn = document.getElementById('btnRun');
+  if(sim.running){
+    btn.textContent = '⏸ Pausar';
+    sim.timer = setInterval(tick, TICK_MS);
+  } else {
+    btn.textContent = '▶ Iniciar';
+    clearInterval(sim.timer);
+  }
+}
+
+function triggerDisturbance(){
+  const drop = 15 + Math.random()*15;
+  sim.T = Math.max(PHYS.Tamb, sim.T - drop);
+  const flash = document.getElementById('doorFlash');
+  flash.classList.add('open');
+  setTimeout(()=>flash.classList.remove('open'), 1200);
+  if(sim.mode==='pid' && sim.running) unlockBadge('antiwindup');
+}
+
+function tick(){
+  const steps = sim.speed;
+  const sp = getSetpoint(), Kp=getKp(), Ki=getKi(), Kd=getKd();
+  let lastP=0,lastI=0,lastD=0;
+  for(let s=0;s<steps;s++){
+    const error = sp - sim.T;
+    let u;
+    if(sim.mode==='onoff'){
+      const hyst=2;
+      if(sim.T < sp-hyst) sim.onoffState=1;
+      else if(sim.T > sp+hyst) sim.onoffState=0;
+      u = sim.onoffState*100;
+      lastP=0;lastI=0;lastD=0;
+    } else {
+      const deriv = sim.prevError===null ? 0 : (error - sim.prevError)/DT_SIM;
+      const integralCandidate = sim.integral + error*DT_SIM;
+      const uTest = Kp*error + Ki*integralCandidate + Kd*deriv;
+      if(!((uTest>100 && error>0) || (uTest<0 && error<0))){
+        sim.integral = integralCandidate;
+      }
+      const P_ = Kp*error, I_ = Ki*sim.integral, D_ = Kd*deriv;
+      u = P_ + I_ + D_;
+      u = Math.max(0, Math.min(100, u));
+      lastP=P_; lastI=I_; lastD=D_;
+      sim.prevError = error;
+    }
+    sim.u = u;
+    // tiempo muerto: el calor que la resistencia genera ahora recién impacta la temperatura LD_SIM segundos después
+    sim.uQueue.push(u);
+    const uDelayed = sim.uQueue.shift();
+    const dTdt = (PHYS.Pmax*(uDelayed/100) - PHYS.kloss*(sim.T - PHYS.Tamb)) / 1.0;
+    sim.T += dTdt*DT_SIM;
+    sim.simTime += DT_SIM;
+
+    // badges: overshoot & error cero
+    if(sim.mode==='pid'){
+      if(!sim.crossedSetpoint && sim.T>=sp) sim.crossedSetpoint = true;
+      if(sim.crossedSetpoint){
+        const ov = sim.T - sp;
+        if(ov>sim.maxOvershoot) sim.maxOvershoot = ov;
+      }
+      const errAbs = Math.abs(sp - sim.T);
+      if(errAbs<1 && Ki>0){ sim.lowErrStreak++; } else { sim.lowErrStreak=0; }
+      if(sim.lowErrStreak>60) unlockBadge('error_cero');
+      if(sim.crossedSetpoint && sim.maxOvershoot>0 && sim.maxOvershoot<=5 && sim.simTime>15) unlockBadge('overshoot_domado');
+    }
+  }
+  sim.hist.push({t:sim.simTime, T:sim.T, sp:sp, u:sim.u, p:lastP, i:lastI, d:lastD});
+  if(sim.hist.length>400) sim.hist.shift();
+
+  drawOven();
+  drawChart();
+  updateReadouts();
+}
+
+function updateReadouts(){
+  const sp=getSetpoint();
+  document.getElementById('roT').textContent = sim.T.toFixed(1)+'°';
+  document.getElementById('roSp').textContent = sp+'°';
+  document.getElementById('roErr').textContent = (sp-sim.T).toFixed(1)+'°';
+  document.getElementById('roU').textContent = sim.u.toFixed(0)+'%';
+  document.getElementById('roT2').textContent = sim.simTime.toFixed(0)+'s';
+}
+
+/* ===================== DIBUJO: HORNO ===================== */
+function heatColor(t){
+  const c = Math.max(0, Math.min(1, (t-22)/(230-22)));
+  const r1=60,g1=40,b1=40, r2=255,g2=170,b2=60, r3=255,g3=245,b3=210;
+  let r,g,b;
+  if(c<0.6){ const k=c/0.6; r=r1+(r2-r1)*k; g=g1+(g2-g1)*k; b=b1+(b2-b1)*k; }
+  else { const k=(c-0.6)/0.4; r=r2+(r3-r2)*k; g=g2+(g3-g2)*k; b=b2+(b3-b2)*k; }
+  return 'rgb('+(r|0)+','+(g|0)+','+(b|0)+')';
+}
+
+function drawOven(){
+  const cv = document.getElementById('ovenCanvas'), ctx = cv.getContext('2d');
+  const w=cv.width, h=cv.height;
+  ctx.clearRect(0,0,w,h);
+  // cuerpo
+  ctx.fillStyle = '#2b2320';
+  ctx.fillRect(10,10,w-90,h-20);
+  // ventana
+  const winX=26, winY=26, winW=w-90-32, winH=h-20-32;
+  ctx.fillStyle = heatColor(sim.T);
+  ctx.fillRect(winX,winY,winW,winH);
+  ctx.strokeStyle = '#111'; ctx.lineWidth=6;
+  ctx.strokeRect(10,10,w-90,h-20);
+  // resistencia (zigzag) con glow según u
+  const zy = winY+winH-14;
+  ctx.save();
+  ctx.shadowColor = 'rgba(255,140,0,'+(sim.u/100)+')';
+  ctx.shadowBlur = 6+sim.u*0.25;
+  ctx.strokeStyle = sim.u>2 ? 'rgb(255,'+(180-sim.u)+',60)' : '#7a5230';
+  ctx.lineWidth=3;
+  ctx.beginPath();
+  const segs=10, segW=winW/segs;
+  for(let i=0;i<=segs;i++){
+    const x=winX+i*segW, y= zy + (i%2===0? -6:6);
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  ctx.restore();
+
+  // termómetro lateral
+  const tx=w-56, ty=14, tw=20, th=h-40;
+  ctx.fillStyle='#e5e5e5'; ctx.fillRect(tx,ty,tw,th);
+  ctx.strokeStyle='#999'; ctx.strokeRect(tx,ty,tw,th);
+  const frac = Math.max(0,Math.min(1,(sim.T-0)/250));
+  const fillH = th*frac;
+  ctx.fillStyle = heatColor(sim.T);
+  ctx.fillRect(tx,ty+th-fillH,tw,fillH);
+  // marca setpoint
+  const sp = getSetpoint();
+  const spFrac = Math.max(0,Math.min(1, sp/250));
+  const spY = ty+th-th*spFrac;
+  ctx.strokeStyle='#1d4ed8'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(tx-4,spY); ctx.lineTo(tx+tw+4,spY); ctx.stroke();
+}
+
+/* ===================== DIBUJO: GRAFICO ===================== */
+function redrawStatic(){ drawChart(); }
+
+function drawChart(){
+  const cv = document.getElementById('chartCanvas'), ctx = cv.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const cssW = cv.clientWidth || 800, cssH = 260;
+  if(cv.width !== cssW*dpr || cv.height !== cssH*dpr){ cv.width=cssW*dpr; cv.height=cssH*dpr; }
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const w=cssW, h=cssH;
+  ctx.clearRect(0,0,w,h);
+
+  const padL=42, padR=10, padT=10, padB=24;
+  const plotW=w-padL-padR, plotH=h-padT-padB;
+  const hist = sim.hist;
+
+  // ejes temperatura 0-250
+  const yMin=0, yMax=250;
+  ctx.strokeStyle='#e7dccc'; ctx.fillStyle='#6b7280'; ctx.font='10px Segoe UI'; ctx.lineWidth=1;
+  for(let v=0; v<=250; v+=50){
+    const y = padT + plotH*(1-(v-yMin)/(yMax-yMin));
+    ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(w-padR,y); ctx.stroke();
+    ctx.fillText(v+'°', 4, y+3);
+  }
+
+  if(hist.length<2){ ctx.restore && ctx.restore(); return; }
+
+  const tMax = hist[hist.length-1].t, tMin = Math.max(0, tMax-100);
+  const xOf = t => padL + plotW*((t-tMin)/Math.max(1,(tMax-tMin)));
+  const yOfT = T => padT + plotH*(1-(Math.max(yMin,Math.min(yMax,T))-yMin)/(yMax-yMin));
+  const yOfPct = pct => padT + plotH*(1-(Math.max(0,Math.min(100,pct))/100));
+
+  const visible = hist.filter(p=>p.t>=tMin);
+
+  // setpoint (dashed)
+  ctx.strokeStyle='#6b7280'; ctx.setLineDash([5,4]); ctx.lineWidth=1.5;
+  ctx.beginPath();
+  visible.forEach((p,idx)=>{ const x=xOf(p.t), y=yOfT(p.sp); idx===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
+  ctx.stroke(); ctx.setLineDash([]);
+
+  // u(t)
+  if(document.getElementById('chkU').checked){
+    ctx.strokeStyle='#f59e0b'; ctx.fillStyle='rgba(245,158,11,.12)'; ctx.lineWidth=1.5;
+    ctx.beginPath();
+    visible.forEach((p,idx)=>{ const x=xOf(p.t), y=yOfPct(p.u); idx===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
+    ctx.stroke();
+  }
+
+  // P/I/D relativo
+  if(document.getElementById('chkPID').checked){
+    let maxAbs=1;
+    visible.forEach(p=>{ maxAbs=Math.max(maxAbs, Math.abs(p.p), Math.abs(p.i), Math.abs(p.d)); });
+    const yOfRel = v => padT + plotH*(1-((v/maxAbs)*0.45+0.5));
+    [['p','#ea580c'],['i','#1d4ed8'],['d','#7c3aed']].forEach(([key,color])=>{
+      ctx.strokeStyle=color; ctx.lineWidth=1.3;
+      ctx.beginPath();
+      visible.forEach((pt,idx)=>{ const x=xOf(pt.t), y=yOfRel(pt[key]); idx===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
+      ctx.stroke();
+    });
+  }
+
+  // temperatura (principal)
+  ctx.strokeStyle='#c2410c'; ctx.lineWidth=2.4;
+  ctx.beginPath();
+  visible.forEach((p,idx)=>{ const x=xOf(p.t), y=yOfT(p.T); idx===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
+  ctx.stroke();
+
+  // eje x label
+  ctx.fillStyle='#6b7280'; ctx.font='10px Segoe UI';
+  ctx.fillText('t (s simulados) →', padL, h-6);
+}
+
+/* redibujo del canvas al resize */
+window.addEventListener('resize', ()=>{ if(!sim.running) drawChart(); });
+
+/* init */
+onGainChange();
+drawOven();
+drawChart();
+
+/* ===================== QUIZ ===================== */
+const QUIZ = [
+  {q:'¿Qué representa e(t) en un controlador PID?', opts:['La temperatura ambiente','El error: setpoint menos temperatura medida','La potencia de la resistencia','El tiempo transcurrido'], correct:1, expl:'e(t) = setpoint − T(t). Todo lo que calcula el PID parte de esta resta.'},
+  {q:'Un controlador con solo término P (proporcional) típicamente…', opts:['Elimina el error para siempre','Se estabiliza con un error permanente (offset)','Nunca satura la salida','No necesita ajustar Kp'], correct:1, expl:'P necesita un error distinto de cero para seguir empujando potencia contra las pérdidas — por eso queda un offset.'},
+  {q:'¿Qué término elimina el error permanente (offset) de un control solo-P?', opts:['El proporcional','El integral','El derivativo','Ninguno, es inevitable'], correct:1, expl:'La integral acumula error mientras exista, empujando potencia hasta llevarlo a cero.'},
+  {q:'¿Para qué sirve principalmente el término derivativo (D)?', opts:['Para eliminar el error permanente','Para acelerar la respuesta inicial','Para anticipar la tendencia y amortiguar la sobreoscilación','Para saturar la salida más rápido'], correct:2, expl:'D mira qué tan rápido cambia el error y frena antes de llegar al setpoint, reduciendo el overshoot.'},
+  {q:'¿Qué es el "windup" del término integral?', opts:['Cuando la resistencia se rompe','Cuando la integral sigue acumulando error mientras la salida está saturada, causando sobreoscilación extra','Cuando Kp es cero','Un sinónimo de anti-windup'], correct:1, expl:'Con la salida saturada, la integral sigue creciendo "de más" y tarda en descargarse, empujando potencia extra después de cruzar el setpoint.'},
+  {q:'¿Cómo se llama la técnica para evitar el windup usada en este simulador?', opts:['Filtrado de Kalman','Integración condicional / clamping','Control ON/OFF','PWM'], correct:1, expl:'Se deja de acumular la integral cuando la salida ya está saturada y seguir sumando empujaría aún más en esa dirección.'},
+  {q:'En el método de Ziegler-Nichols, ¿qué es Ku?', opts:['La ganancia integral final','La ganancia proporcional que produce oscilación sostenida (con Ki=Kd=0)','La temperatura ambiente','El tiempo de establecimiento'], correct:1, expl:'Ku (ganancia crítica) es el Kp con el que el sistema, solo con P, oscila con amplitud constante.'},
+  {q:'¿Por qué un termostato ON/OFF nunca se "queda quieto" en el setpoint?', opts:['Porque no tiene sensor','Porque el horno tiene inercia térmica y sigue calentando/enfriando después de que la resistencia cambia de estado','Porque el setpoint cambia solo','Porque Kp es demasiado alto'], correct:1, expl:'La demora entre el cambio de potencia y su efecto en la temperatura medida genera un ciclo de oscilación permanente (ciclo límite).'},
+];
+let quizIdx=0, quizScore=0, quizAnswered=false;
+
+function renderQuiz(){
+  const box = document.getElementById('quizBox');
+  if(quizIdx>=QUIZ.length){ showQuizResult(); return; }
+  const q = QUIZ[quizIdx];
+  quizAnswered=false;
+  box.innerHTML =
+    '<div class="quiz-progress">Pregunta '+(quizIdx+1)+' / '+QUIZ.length+'</div>'+
+    '<div class="quiz-q">'+q.q+'</div>'+
+    '<div class="quiz-opts">'+q.opts.map((o,i)=>'<button class="opt-btn" onclick="answerQuiz('+i+')">'+o+'</button>').join('')+'</div>'+
+    '<div class="quiz-expl" id="quizExpl">'+q.expl+'</div>'+
+    '<button class="next-q-btn" id="nextQBtn" onclick="nextQuiz()">Siguiente →</button>';
+}
+
+function answerQuiz(i){
+  if(quizAnswered) return;
+  quizAnswered=true;
+  const q = QUIZ[quizIdx];
+  const btns = document.querySelectorAll('.opt-btn');
+  btns.forEach((b,idx)=>{
+    b.classList.add('disabled');
+    if(idx===q.correct) b.classList.add('correct');
+    else if(idx===i) b.classList.add('wrong');
+  });
+  if(i===q.correct) quizScore++;
+  document.getElementById('quizExpl').classList.add('show');
+  document.getElementById('nextQBtn').classList.add('show');
+}
+
+function nextQuiz(){ quizIdx++; renderQuiz(); }
+
+function showQuizResult(){
+  const box = document.getElementById('quizBox');
+  const pct = Math.round(100*quizScore/QUIZ.length);
+  const best = Math.max(pct, parseInt(localStorage.getItem('pidhorno_best')||'0'));
+  localStorage.setItem('pidhorno_best', best);
+  if(pct>=70) unlockBadge('quiz_aprobado');
+  box.innerHTML =
+    '<div class="quiz-result">'+
+    '<div style="font-size:2.2rem">'+(pct>=70?'🎉':'📚')+'</div>'+
+    '<div class="score">'+quizScore+' / '+QUIZ.length+'</div>'+
+    '<div class="quiz-score-display">🥇 Mejor: '+best+'%</div>'+
+    '<p style="margin-top:.8rem;color:#6b7280">'+(pct>=70?'¡Bien ahí! Entendiste cómo funciona un PID de punta a punta.':'Repasá las pestañas de teoría y volvé a intentar.')+'</p>'+
+    '<button class="retry-btn" onclick="restartQuiz()">Reintentar</button>'+
+    '</div>';
+}
+
+function restartQuiz(){ quizIdx=0; quizScore=0; renderQuiz(); }
+renderQuiz();
+renderBadges();
+</script>
+</body>
+</html>

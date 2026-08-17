@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Álgebra Lineal I — Vectores y Rectas (gamificada)</title>
+<meta name="description" content="Vectores en R² y R³, producto escalar y vectorial, las 5 formas de la recta y planos — con simuladores interactivos, insignias y quiz.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+<style>
+:root{
+  --pur:#6d28d9;--pur-lt:#8b5cf6;--pur-bg:#ede9fe;
+  --blue:#1d4ed8;--blue-bg:#dbeafe;
+  --green:#15803d;--green-bg:#dcfce7;
+  --orange:#c2410c;--orange-bg:#fff3e0;
+  --red:#b91c1c;--red-bg:#fee2e2;
+  --teal:#0d9488;--teal-bg:#ccfbf1;
+  --yellow:#d97706;--yellow-bg:#fef9c3;
+  --gray:#374151;--gray-lt:#6b7280;
+  --bg:#f8f7fc;--card:#fff;--border:#e5e2f0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:var(--pur);display:flex;align-items:center;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.brand{color:#fff;font-size:1.05rem;font-weight:800;padding:.8rem 1.2rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.2)}
+.tabs{display:flex;overflow-x:auto;flex:1}
+.tab-btn{padding:.75rem 1.05rem;border:none;background:transparent;color:rgba(255,255,255,.75);font-size:.83rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tab-btn.active{color:#fff;border-bottom-color:#c4b5fd}
+.nav-badges{color:#fff;font-weight:700;font-size:.82rem;padding:.6rem 1.1rem;white-space:nowrap;background:rgba(255,255,255,.12)}
+
+/* GLOBAL PROGRESS */
+.global-progress-wrap{height:5px;background:rgba(0,0,0,.15)}
+.global-progress{height:100%;background:linear-gradient(90deg,#facc15,#fb923c);transition:width .4s ease;width:0}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#2e1065 0%,var(--pur) 60%,var(--pur-lt) 100%);color:#fff;text-align:center;padding:2.5rem 1rem 2rem}
+.hero h1{font-size:2.2rem;font-weight:900;letter-spacing:-.5px}
+.hero p{opacity:.88;margin-top:.4rem}
+.badges{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.25rem .85rem;font-size:.78rem;font-weight:700}
+
+/* LAYOUT */
+.page{display:none}.page.active{display:block}
+.container{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+
+/* SECTION TITLE */
+.stitle{display:flex;align-items:center;gap:.6rem;font-size:1.25rem;font-weight:800;color:var(--pur);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid var(--pur-bg)}
+.stitle:first-of-type{margin-top:.5rem}
+.stitle .ico{font-size:1.2rem}
+.lvl-chip{display:inline-block;background:var(--pur);color:#fff;font-size:.7rem;font-weight:700;padding:.2rem .65rem;border-radius:2rem;margin-left:.6rem;vertical-align:middle}
+
+/* CARDS */
+.grid{display:grid;gap:1.1rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;box-shadow:0 1px 4px rgba(0,0,0,.05);transition:.2s}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.card h3{font-size:.97rem;font-weight:700;margin-bottom:.5rem;color:var(--pur)}
+.card p,.card li{font-size:.9rem;color:var(--gray)}
+.card.pu{border-left:4px solid var(--pur);background:var(--pur-bg)}
+.card.bl{border-left:4px solid var(--blue);background:var(--blue-bg)}
+.card.gr{border-left:4px solid var(--green);background:var(--green-bg)}
+.card.or{border-left:4px solid var(--orange);background:var(--orange-bg)}
+.card.re{border-left:4px solid var(--red);background:var(--red-bg)}
+.card.te{border-left:4px solid var(--teal);background:var(--teal-bg)}
+
+/* FORMULA / CODE */
+.fbox{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1rem 1.3rem;text-align:center;margin:.7rem 0;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.fbox .big{font-size:1.25rem;font-weight:700;color:#c4b5fd;display:block;margin-bottom:.25rem}
+.fbox .sub{font-size:.82rem;color:#94a3b8;display:block;margin-top:.35rem}
+
+/* TABLE */
+.twrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th{background:var(--pur);color:#fff;padding:.65rem 1rem;text-align:left;font-weight:600}
+td{padding:.6rem 1rem;border-bottom:1px solid var(--border)}
+tr:last-child td{border:none}
+tr:nth-child(even) td{background:var(--pur-bg)}
+
+/* TIP / NOTE */
+.tip{display:flex;gap:.7rem;align-items:flex-start;background:#fffbeb;border:1px solid #fbbf24;border-radius:10px;padding:.85rem 1.1rem;margin:.7rem 0;font-size:.88rem}
+.note{background:var(--pur-bg);border-left:4px solid var(--pur);border-radius:0 8px 8px 0;padding:.75rem 1rem;font-size:.9rem;margin:.7rem 0;color:#4c1d95}
+
+/* ACCORDION */
+details{border:1px solid var(--border);border-radius:10px;margin-bottom:.7rem;overflow:hidden}
+details summary{padding:.9rem 1.1rem;cursor:pointer;font-weight:600;font-size:.92rem;background:var(--card);list-style:none;display:flex;justify-content:space-between;align-items:center;user-select:none}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:'＋';color:var(--pur-lt)}
+details[open] summary::after{content:'－'}
+details[open] summary{background:var(--pur-bg);color:var(--pur)}
+.dbody{padding:1.1rem;background:var(--card);border-top:1px solid var(--border);font-size:.9rem;line-height:1.7}
+
+/* CHEAT DARK */
+.cheat{background:linear-gradient(135deg,#2e1065 0%,#6d28d9 100%);color:#e2e8f0;border-radius:14px;padding:1.8rem;margin:1rem 0}
+.cheat h2{color:#c4b5fd;font-size:1.1rem;margin-bottom:1.1rem;text-align:center}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.9rem}
+.citem{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:.85rem}
+.citem .lbl{font-size:.78rem;color:#c4b5fd;font-weight:700;margin-bottom:.3rem}
+.citem .cf{font-size:.85rem;color:#e2e8f0;line-height:1.6}
+
+/* ═══ BADGES / GAMIFICACIÓN ═══ */
+.badges-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem}
+.badge-card{border-radius:12px;padding:1.1rem;border:2px solid var(--border);text-align:center;transition:.25s}
+.badge-card.locked{opacity:.45;filter:grayscale(1)}
+.badge-card.unlocked{border-color:var(--green);background:var(--green-bg)}
+.badge-card .bic{font-size:2.1rem;display:block;margin-bottom:.4rem}
+.badge-card .bname{font-weight:700;font-size:.9rem}
+.badge-card .bdesc{font-size:.78rem;color:var(--gray-lt);margin-top:.3rem}
+
+.badge-toast{position:fixed;bottom:20px;right:20px;background:linear-gradient(135deg,#6d28d9,#4338ca);color:#fff;z-index:9999;padding:1rem 1.3rem;border-radius:12px;display:flex;gap:.8rem;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,.35);transform:translateX(140%);transition:transform .4s cubic-bezier(.34,1.56,.64,1);max-width:300px}
+.badge-toast.show{transform:translateX(0)}
+
+.map-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.9rem}
+.map-card{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:1.1rem;text-align:center;cursor:pointer;transition:.2s}
+.map-card:hover{border-color:var(--pur-lt);transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.map-card .mic{font-size:1.8rem;display:block;margin-bottom:.4rem}
+.map-card .mname{font-weight:700;font-size:.85rem;color:var(--pur)}
+.map-card .mstep{font-size:.7rem;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem}
+
+/* sim shell */
+.sim{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;margin:1rem 0}
+.sim-controls{display:flex;flex-wrap:wrap;gap:1.1rem;align-items:center;margin-top:.8rem}
+.sim-controls label{font-size:.85rem;font-weight:600;color:var(--gray);display:flex;align-items:center;gap:.35rem}
+.sim-controls input[type=range]{width:140px;vertical-align:middle}
+.sim-controls input[type=number]{width:64px;padding:.35rem .4rem;border-radius:6px;border:1px solid var(--border);font-size:.9rem;text-align:center}
+.sim-val{font-family:'Courier New',monospace;font-weight:700;color:var(--pur)}
+.sim-btn{padding:.65rem 1.2rem;background:var(--pur);color:#fff;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;transition:.2s}
+.sim-btn:hover:not(:disabled){background:var(--pur-lt)}
+.sim-btn:disabled{opacity:.4;cursor:default}
+.sim-btn.ghost{background:transparent;color:var(--pur);border:2px solid var(--pur)}
+.plot{width:100%;height:380px;border-radius:10px;border:1px solid var(--border)}
+.plot.short{height:300px}
+.result-box{background:var(--pur-bg);border-radius:10px;padding:1rem 1.2rem;margin-top:1rem;font-size:.92rem;color:#4c1d95}
+.result-box.ok{background:var(--green-bg);color:#14532d}
+.result-box.no{background:var(--red-bg);color:#7f1d1d}
+
+/* Práctica guiada */
+.ex-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;margin-bottom:1.1rem}
+.ex-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap}
+.ex-num{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--pur-lt)}
+.ex-statement{font-size:.94rem;margin:.4rem 0 .9rem;color:var(--gray)}
+.ex-btns{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.6rem}
+.ex-hint{background:var(--yellow-bg);border-left:4px solid var(--yellow);border-radius:0 8px 8px 0;padding:.7rem 1rem;font-size:.86rem;margin-top:.5rem;color:#78350f;display:none}
+.ex-hint.show{display:block}
+.ex-sol{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1rem 1.2rem;margin-top:.7rem;font-size:.87rem;line-height:1.8;display:none}
+.ex-sol.show{display:block}
+.ex-done{margin-top:.7rem}
+.ex-card.solved{border-color:var(--green);background:var(--green-bg)}
+.ex-check{font-weight:700;color:var(--green);font-size:.85rem}
+
+/* QUIZ */
+#quiz-container{max-width:720px;margin:0 auto}
+.quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:.5rem}
+.quiz-score-display{font-weight:700;font-size:1rem;color:var(--pur)}
+.progress-bar-wrap{background:var(--border);border-radius:2rem;height:8px;margin-bottom:1.5rem;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--pur-lt),#c4b5fd);border-radius:2rem;transition:width .4s ease}
+
+.quiz-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.quiz-card .q-num{font-size:.8rem;font-weight:700;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem}
+.quiz-card .q-text{font-size:1.05rem;font-weight:600;color:var(--gray);margin-bottom:1.3rem;line-height:1.5}
+
+.options{display:grid;gap:.65rem}
+.opt-btn{padding:.85rem 1.1rem;border:2px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;font-size:.9rem;text-align:left;transition:.2s;font-weight:500;color:var(--gray)}
+.opt-btn:hover:not(:disabled){border-color:var(--pur-lt);background:var(--pur-bg);color:var(--pur)}
+.opt-btn.correct{border-color:var(--green);background:var(--green-bg);color:var(--green);font-weight:700}
+.opt-btn.wrong{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+
+.feedback-box{margin-top:1.1rem;padding:.9rem 1.1rem;border-radius:10px;font-size:.9rem;line-height:1.6;display:none}
+.feedback-box.show{display:block}
+.feedback-box.ok{background:var(--green-bg);border:1px solid var(--green);color:var(--green)}
+.feedback-box.ko{background:var(--red-bg);border:1px solid var(--red);color:var(--red)}
+
+.quiz-nav{display:flex;justify-content:flex-end;margin-top:1.2rem}
+.btn-next{padding:.75rem 1.8rem;background:var(--pur);color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:700;cursor:pointer;transition:.2s}
+.btn-next:hover{background:var(--pur-lt)}
+.btn-next:disabled{opacity:.4;cursor:default}
+
+.result-card{background:var(--card);border-radius:16px;padding:2.5rem;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+.result-card .emoji{font-size:4rem;display:block;margin-bottom:.8rem}
+.result-card h2{font-size:1.6rem;font-weight:800;color:var(--pur);margin-bottom:.5rem}
+.result-card .score-big{font-size:3rem;font-weight:900;color:var(--pur);display:block;margin:.5rem 0}
+.result-card p{color:var(--gray-lt);font-size:.95rem;margin-bottom:1.3rem}
+.result-detail{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1.3rem}
+.rstat{border-radius:10px;padding:.8rem;font-weight:700;font-size:1rem}
+.rstat.ok{background:var(--green-bg);color:var(--green)}
+.rstat.ko{background:var(--red-bg);color:var(--red)}
+.btn-retry{padding:.8rem 2rem;background:var(--pur);color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:.5rem}
+
+/* CONFETTI */
+.confetti-piece{position:fixed;width:10px;height:10px;border-radius:2px;animation:fall linear forwards;pointer-events:none;z-index:9999}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+/* radio group */
+.radio-group{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:.5rem}
+.radio-group label{display:flex;align-items:center;gap:.35rem;font-size:.85rem;font-weight:600;cursor:pointer}
+
+footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
+
+@media(max-width:640px){
+  .hero h1{font-size:1.7rem}
+  nav{flex-direction:column}
+  .brand{text-align:center;border:none;border-bottom:1px solid rgba(255,255,255,.2)}
+  .nav-badges{text-align:center}
+  .plot{height:300px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">🧮 Álgebra I</div>
+  <div class="tabs">
+    <button class="tab-btn active" id="tb-inicio" onclick="showPage('inicio',this)">🏠 Inicio</button>
+    <button class="tab-btn" id="tb-vec2" onclick="showPage('vec2',this)">➡️ Vectores R²</button>
+    <button class="tab-btn" id="tb-vec3" onclick="showPage('vec3',this)">🧊 Vectores R³</button>
+    <button class="tab-btn" id="tb-prod" onclick="showPage('prod',this)">📐 Productos</button>
+    <button class="tab-btn" id="tb-rectas" onclick="showPage('rectas',this)">📏 Rectas</button>
+    <button class="tab-btn" id="tb-r3" onclick="showPage('r3',this)">🗺️ Rectas y planos R³</button>
+    <button class="tab-btn" id="tb-practica" onclick="showPage('practica',this)">✍️ Práctica guiada</button>
+    <button class="tab-btn" id="tb-quiz" onclick="showPage('quiz',this)">🎓 Quiz</button>
+    <button class="tab-btn" id="tb-cheat" onclick="showPage('cheat',this)">📋 Cheatsheet</button>
+  </div>
+  <div class="nav-badges" id="nav-badges">🏅 0/8</div>
+</nav>
+<div class="global-progress-wrap"><div class="global-progress" id="global-progress"></div></div>
+
+<!-- ═══════════════ INICIO ═══════════════ -->
+<div class="page active" id="inicio">
+  <div class="hero">
+    <h1>Álgebra Lineal I</h1>
+    <p>Vectores, rectas y planos en el plano y el espacio — Práctica 1 con simuladores interactivos</p>
+    <div class="badges">
+      <span class="badge">🎮 8 insignias por desbloquear</span>
+      <span class="badge">📊 Simuladores con Plotly</span>
+      <span class="badge">✍️ 9 ejercicios guiados con pistas</span>
+    </div>
+  </div>
+  <div class="container">
+    <div class="stitle"><span class="ico">🗺️</span> Mapa de la práctica</div>
+    <p style="margin-bottom:1.2rem;color:var(--gray-lt)">Basado en la Práctica 1 y las clases teóricas 1 y 2 de Álgebra Lineal (Prof. Sebastián Domínguez). Recorré cada sección, jugá con los simuladores y desbloqueá las 8 insignias.</p>
+    <div class="map-grid">
+      <div class="map-card" onclick="showPage('vec2', document.getElementById('tb-vec2'))">
+        <span class="mic">➡️</span>
+        <div class="mstep">Paso 1</div>
+        <div class="mname">Vectores en R²</div>
+      </div>
+      <div class="map-card" onclick="showPage('vec3', document.getElementById('tb-vec3'))">
+        <span class="mic">🧊</span>
+        <div class="mstep">Paso 2</div>
+        <div class="mname">Vectores en R³</div>
+      </div>
+      <div class="map-card" onclick="showPage('prod', document.getElementById('tb-prod'))">
+        <span class="mic">📐</span>
+        <div class="mstep">Paso 3</div>
+        <div class="mname">Producto escalar y vectorial</div>
+      </div>
+      <div class="map-card" onclick="showPage('rectas', document.getElementById('tb-rectas'))">
+        <span class="mic">📏</span>
+        <div class="mstep">Paso 4</div>
+        <div class="mname">Las 5 formas de la recta</div>
+      </div>
+      <div class="map-card" onclick="showPage('r3', document.getElementById('tb-r3'))">
+        <span class="mic">🗺️</span>
+        <div class="mstep">Paso 5</div>
+        <div class="mname">Rectas y planos en R³</div>
+      </div>
+      <div class="map-card" onclick="showPage('practica', document.getElementById('tb-practica'))">
+        <span class="mic">✍️</span>
+        <div class="mstep">Paso 6</div>
+        <div class="mname">Práctica guiada</div>
+      </div>
+      <div class="map-card" onclick="showPage('quiz', document.getElementById('tb-quiz'))">
+        <span class="mic">🎓</span>
+        <div class="mstep">Paso 7</div>
+        <div class="mname">Quiz final</div>
+      </div>
+      <div class="map-card" onclick="showPage('cheat', document.getElementById('tb-cheat'))">
+        <span class="mic">📋</span>
+        <div class="mstep">Extra</div>
+        <div class="mname">Cheatsheet</div>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">🏅</span> Tus insignias <span class="lvl-chip" id="badge-count-chip">0/8</span></div>
+    <div class="badges-grid" id="badges-grid"></div>
+
+    <div class="note" style="margin-top:2rem">
+      💾 Tu progreso (insignias y mejor puntaje del quiz) se guarda automáticamente en este navegador.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ VECTORES R² ═══════════════ -->
+<div class="page" id="vec2">
+  <div class="container">
+    <div class="stitle"><span class="ico">➡️</span> Vectores en el plano (R²)</div>
+
+    <div class="grid g2">
+      <div class="card pu">
+        <h3>¿Qué es un vector?</h3>
+        <p>Un vector es un <strong>segmento orientado</strong>: tiene <strong>dirección</strong> (la recta que lo contiene), <strong>sentido</strong> (indicado por la flecha) y <strong>módulo</strong> (su longitud). Todo vector tiene un origen y un extremo.</p>
+      </div>
+      <div class="card bl">
+        <h3>Representación algebraica</h3>
+        <p>En $R^2=\{(a,b): a\in R, b\in R\}$, un vector $\vec{v}$ es un par ordenado de números reales. Su <strong>forma canónica</strong> lo escribe como combinación lineal de los versores fundamentales $\hat i=(1,0)$ y $\hat j=(0,1)$: $\vec v = a\hat i + b\hat j$.</p>
+      </div>
+    </div>
+
+    <div class="fbox">
+      <span class="big">$\|\vec v\| = \sqrt{v_x^2+v_y^2}$</span>
+      <span class="sub">Norma o módulo del vector — la longitud del segmento orientado</span>
+    </div>
+
+    <div class="grid g3">
+      <div class="card">
+        <h3>Vector nulo</h3>
+        <p>El par $(0,0)$. Su norma es 0 y no tiene dirección definida: el extremo coincide con el origen.</p>
+      </div>
+      <div class="card">
+        <h3>Vector opuesto</h3>
+        <p>Dado $\vec u=(a,b)$, su opuesto es $-\vec u=(-a,-b)$, tal que $\vec u+(-\vec u)=\vec 0$.</p>
+      </div>
+      <div class="card">
+        <h3>Vector unitario (versor)</h3>
+        <p>Es aquel cuya norma vale 1. Para normalizar cualquier vector: $\hat u = \dfrac{\vec u}{\|\vec u\|}$.</p>
+      </div>
+    </div>
+
+    <div class="tip">💡 <div><strong>Distancia entre dos puntos</strong>: es igual al módulo del vector que los une. $d(A,B)=\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}$.</div></div>
+
+    <div class="stitle"><span class="ico">➕</span> Operaciones con vectores</div>
+    <div class="grid g3">
+      <div class="card gr">
+        <h3>Suma</h3>
+        <p>$\vec u+\vec v=(u_1+v_1,\,u_2+v_2)$. Gráficamente: regla del triángulo (encadenás los vectores) o regla del paralelogramo (diagonal desde el origen común).</p>
+      </div>
+      <div class="card or">
+        <h3>Resta</h3>
+        <p>$\vec u-\vec v=\vec u+(-\vec v)=(u_1-v_1,\,u_2-v_2)$. Gráficamente, el vector que une el extremo de $\vec v$ con el extremo de $\vec u$.</p>
+      </div>
+      <div class="card te">
+        <h3>Producto por escalar</h3>
+        <p>$k\vec u=(k\cdot u_1,\,k\cdot u_2)$. Si $k>0$ conserva el sentido; si $k<0$ lo invierte. Si $|k|>1$ el vector se estira; si $0<|k|<1$ se comprime.</p>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">🎮</span> Simulador: operá con vectores en el plano</div>
+    <div class="sim">
+      <div class="sim-controls">
+        <label>u = ( <input type="number" id="u2x" value="3" step="0.5"> , <input type="number" id="u2y" value="2" step="0.5"> )</label>
+        <label>v = ( <input type="number" id="v2x" value="1" step="0.5"> , <input type="number" id="v2y" value="4" step="0.5"> )</label>
+        <label>k = <input type="range" id="k2" min="-3" max="3" step="0.5" value="2" oninput="document.getElementById('k2val').textContent=this.value; if(vec2Mode==='k') drawVec2();"><span class="sim-val" id="k2val">2</span></label>
+      </div>
+      <div class="sim-controls">
+        <button class="sim-btn" onclick="vec2Op('both')">Mostrar u y v</button>
+        <button class="sim-btn" onclick="vec2Op('sum')">u + v</button>
+        <button class="sim-btn" onclick="vec2Op('sub')">u − v</button>
+        <button class="sim-btn" onclick="vec2Op('k')">k·u</button>
+      </div>
+      <div id="vec2plot" class="plot"></div>
+      <div class="grid g3" id="vec2stats" style="margin-top:1rem"></div>
+    </div>
+
+    <details>
+      <summary>📝 Ejercicios de la guía relacionados (Práctica 1, ej. 1 y 2)</summary>
+      <div class="dbody">
+        Ej. 1: dados $A=(1,-2)$, $B=(3,4)$, $C=(-2,4)$, practicá $A+B$, $2A$, $-A$, $\tfrac13 A$, $2A+3B$, $A-C$, $2A+C$ cargando esos valores en el simulador.<br><br>
+        Ej. 2: explorá qué pasa con $\alpha(1,3)$ para distintos rangos de $\alpha$ — usá el slider de $k$ con $u=(1,3)$.
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ═══════════════ VECTORES R³ ═══════════════ -->
+<div class="page" id="vec3">
+  <div class="container">
+    <div class="stitle"><span class="ico">🧊</span> Vectores en el espacio (R³)</div>
+
+    <div class="card pu">
+      <h3>Extensión natural a R³</h3>
+      <p>Todas las definiciones de R² se extienden agregando una tercera componente. Los versores fundamentales del espacio son $\hat i=(1,0,0)$, $\hat j=(0,1,0)$, $\hat k=(0,0,1)$, y todo vector se escribe $\vec v=(a,b,c)=a\hat i+b\hat j+c\hat k$.</p>
+    </div>
+
+    <div class="fbox">
+      <span class="big">$\|\vec v\| = \sqrt{v_x^2+v_y^2+v_z^2}$</span>
+      <span class="sub">Norma en el espacio — mismo principio, una dimensión más</span>
+    </div>
+
+    <p style="margin:1rem 0;color:var(--gray-lt)">Suma, resta y producto por escalar funcionan exactamente igual, componente a componente: $\vec u\pm\vec v=(u_1\pm v_1,\,u_2\pm v_2,\,u_3\pm v_3)$ y $k\vec u=(ku_1,ku_2,ku_3)$.</p>
+
+    <div class="stitle"><span class="ico">🎮</span> Simulador 3D: vectores en el espacio</div>
+    <div class="sim">
+      <div class="sim-controls">
+        <label>u = ( <input type="number" id="u3x" value="1" step="0.5"> , <input type="number" id="u3y" value="2" step="0.5"> , <input type="number" id="u3z" value="3" step="0.5"> )</label>
+        <label>v = ( <input type="number" id="v3x" value="1" step="0.5"> , <input type="number" id="v3y" value="0" step="0.5"> , <input type="number" id="v3z" value="2" step="0.5"> )</label>
+      </div>
+      <div class="sim-controls">
+        <button class="sim-btn" onclick="vec3Op('both')">Mostrar u y v</button>
+        <button class="sim-btn" onclick="vec3Op('sum')">u + v</button>
+        <button class="sim-btn" onclick="vec3Op('sub')">u − v</button>
+      </div>
+      <div id="vec3plot" class="plot"></div>
+      <div class="grid g3" id="vec3stats" style="margin-top:1rem"></div>
+      <p style="font-size:.8rem;color:var(--gray-lt);margin-top:.6rem">🖱️ Arrastrá el gráfico para rotarlo y ver los vectores desde otro ángulo.</p>
+    </div>
+
+    <details>
+      <summary>📝 Ejercicios de la guía relacionados (Práctica 1, ej. 6 a 9)</summary>
+      <div class="dbody">
+        Ej. 6: con $A=(1,2,3)$, $B=(1,0,2)$, $C=(-1,2,-4)$, probá $A+C$, $3C$, $-A+B$, $5A-\tfrac12 B$.<br><br>
+        Ej. 7: dado $v=(1,3,-2)$, buscá un vector $w$ con la misma dirección pero norma 5 (pista: normalizá y multiplicá por 5).<br><br>
+        Ej. 9: usá la sección de <em>Rectas y planos en R³</em> para verificar si $A=(1,1,1)$, $B=(-2,0,1)$, $C=(3,2,0)$ están alineados.
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ═══════════════ PRODUCTO ESCALAR Y VECTORIAL ═══════════════ -->
+<div class="page" id="prod">
+  <div class="container">
+    <div class="stitle"><span class="ico">📐</span> Producto escalar (interno)</div>
+
+    <div class="grid g2">
+      <div class="card pu">
+        <h3>Definición algebraica</h3>
+        <p>$\vec u\cdot\vec v = u_1v_1+u_2v_2\,(+u_3v_3)$. El resultado siempre es un <strong>número real</strong>, no otro vector.</p>
+      </div>
+      <div class="card bl">
+        <h3>Definición geométrica</h3>
+        <p>$\vec u\cdot\vec v = \|\vec u\|\,\|\vec v\|\cos\alpha$, con $\alpha$ el ángulo entre ambos vectores. Combinando ambas fórmulas se puede despejar el ángulo.</p>
+      </div>
+    </div>
+
+    <div class="fbox">
+      <span class="big">$\cos\alpha = \dfrac{\vec u\cdot\vec v}{\|\vec u\|\,\|\vec v\|}$</span>
+      <span class="sub">Ángulo entre dos vectores</span>
+    </div>
+
+    <div class="tip">💡 <div><strong>Criterio de perpendicularidad</strong>: $\vec u$ y $\vec v$ (no nulos) son perpendiculares si y solo si $\vec u\cdot\vec v=0$. No hace falta calcular el ángulo.</div></div>
+
+    <div class="stitle"><span class="ico">🎮</span> Simulador: ángulo y perpendicularidad</div>
+    <div class="sim">
+      <div class="sim-controls">
+        <label>u = ( <input type="number" id="us_x" value="4" step="0.5"> , <input type="number" id="us_y" value="0" step="0.5"> )</label>
+        <label>v = ( <input type="number" id="vs_x" value="2" step="0.5"> , <input type="number" id="vs_y" value="2" step="0.5"> )</label>
+        <button class="sim-btn" onclick="calcScalar()">Calcular</button>
+      </div>
+      <div id="scalarplot" class="plot short"></div>
+      <div class="result-box" id="scalarresult">Ingresá dos vectores y presioná «Calcular».</div>
+    </div>
+
+    <div class="stitle"><span class="ico">✖️</span> Producto vectorial (solo en R³)</div>
+    <div class="card pu">
+      <h3>Definición</h3>
+      <p>Para $\vec u=(u_1,u_2,u_3)$ y $\vec v=(v_1,v_2,v_3)$ de $R^3$:</p>
+    </div>
+    <div class="fbox">
+      <span class="big">$\vec u\times\vec v=(u_2v_3-u_3v_2,\; u_3v_1-u_1v_3,\; u_1v_2-u_2v_1)$</span>
+      <span class="sub">El resultado es otro vector, perpendicular a ambos originales a la vez</span>
+    </div>
+
+    <div class="grid g3">
+      <div class="card">
+        <h3>No conmutativo</h3>
+        <p>$\vec u\times\vec v = -(\vec v\times\vec u)$. Cambiar el orden invierte el sentido del vector resultante.</p>
+      </div>
+      <div class="card">
+        <h3>Vectores paralelos</h3>
+        <p>Si $\vec u$ y $\vec v$ son paralelos, $\vec u\times\vec v=\vec 0$.</p>
+      </div>
+      <div class="card">
+        <h3>Área del paralelogramo</h3>
+        <p>El módulo $\|\vec u\times\vec v\|$ es el área del paralelogramo que determinan $\vec u$ y $\vec v$.</p>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">🎮</span> Simulador 3D: producto vectorial</div>
+    <div class="sim">
+      <div class="sim-controls">
+        <label>u = ( <input type="number" id="uc_x" value="3" step="0.5"> , <input type="number" id="uc_y" value="0" step="0.5"> , <input type="number" id="uc_z" value="4" step="0.5"> )</label>
+        <label>v = ( <input type="number" id="vc_x" value="1" step="0.5"> , <input type="number" id="vc_y" value="2" step="0.5"> , <input type="number" id="vc_z" value="0" step="0.5"> )</label>
+        <button class="sim-btn" onclick="calcCross()">Calcular u × v</button>
+      </div>
+      <div id="crossplot" class="plot"></div>
+      <div class="result-box" id="crossresult">Ingresá dos vectores de R³ y presioná «Calcular u × v».</div>
+    </div>
+
+    <details>
+      <summary>📝 Ejercicios de la guía relacionados (Práctica 1, ej. 13, 14, 16, 17, 20)</summary>
+      <div class="dbody">
+        Ej. 13/14: calculá productos escalares entre pares de vectores y decidí cuáles son perpendiculares.<br><br>
+        Ej. 16: hallá el área del paralelogramo entre $u=(3,0,4)$ y $v=(1,2,0)$ con el simulador de producto vectorial.<br><br>
+        Ej. 20: buscá un vector no nulo ortogonal a $(1,2,-3)$ y a $(-1,5,-2)$ — es exactamente lo que calcula $u\times v$.
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ═══════════════ RECTAS (5 FORMAS) ═══════════════ -->
+<div class="page" id="rectas">
+  <div class="container">
+    <div class="stitle"><span class="ico">📏</span> Las 5 formas de la recta (en R²)</div>
+    <p style="color:var(--gray-lt);margin-bottom:1rem">Una misma recta puede escribirse de 5 maneras distintas. Son intercambiables: cualquiera te sirve para llegar a las otras.</p>
+
+    <div class="twrap">
+      <table>
+        <tr><th>Forma</th><th>Ecuación</th><th>Cuándo conviene</th></tr>
+        <tr><td>1. General / implícita</td><td>$Ax+By+C=0$</td><td>Para ver rápido el vector normal $(A,B)$</td></tr>
+        <tr><td>2. Explícita</td><td>$y=mx+b$</td><td>Para leer la pendiente $m$ y la ordenada $b$</td></tr>
+        <tr><td>3. Segmentaria</td><td>$\frac{x}{a}+\frac{y}{b}=1$</td><td>Para ver las intersecciones con los ejes</td></tr>
+        <tr><td>4. Paramétrica vectorial</td><td>$(x,y)=t\vec v+\vec w$</td><td>Para trabajar con puntos y direcciones</td></tr>
+        <tr><td>5. Paramétrica cartesiana</td><td>$x=x_0+t v_1,\; y=y_0+tv_2$</td><td>Igual que la anterior, separada en $x$ e $y$</td></tr>
+      </table>
+    </div>
+
+    <div class="grid g2" style="margin-top:1.2rem">
+      <div class="card pu">
+        <h3>Vector director</h3>
+        <p>Cualquier vector paralelo a la recta. Si $(x,y)=(x_0,y_0)+t(v_1,v_2)$, entonces $\vec v=(v_1,v_2)$ es un director.</p>
+      </div>
+      <div class="card bl">
+        <h3>Vector normal</h3>
+        <p>Un vector perpendicular a la recta. Si la recta es $ax+by+c=0$, entonces $\vec n=(a,b)$ es normal. Director y normal siempre cumplen $\vec n\cdot\vec v=0$.</p>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:1rem">
+      <div class="card gr">
+        <h3>Paralelismo entre rectas</h3>
+        <p>Dos rectas son paralelas si sus vectores directores son proporcionales: $\vec v_1=k\cdot\vec v_2$.</p>
+      </div>
+      <div class="card or">
+        <h3>Perpendicularidad entre rectas</h3>
+        <p>Dos rectas son perpendiculares si sus vectores directores son ortogonales: $\vec v_1\cdot\vec v_2=0$.</p>
+      </div>
+    </div>
+
+    <div class="note">📌 <strong>Posiciones relativas</strong>: si los directores son proporcionales → paralelas (y si además comparten un punto, son la misma recta, <em>coincidentes</em>). Si no son proporcionales → <em>secantes</em> (se cortan en un punto). Si además el producto escalar de los directores da cero → <em>perpendiculares</em>.</div>
+
+    <div class="stitle"><span class="ico">🎮</span> Simulador: convertidor de formas</div>
+    <div class="sim">
+      <div class="radio-group">
+        <label><input type="radio" name="rmode" value="pv" checked onchange="rectaModeChange()"> Punto + vector director</label>
+        <label><input type="radio" name="rmode" value="2p" onchange="rectaModeChange()"> Dos puntos</label>
+        <label><input type="radio" name="rmode" value="gen" onchange="rectaModeChange()"> Ecuación general $Ax+By+C=0$</label>
+      </div>
+      <div class="sim-controls" id="recta-in-pv">
+        <label>P = ( <input type="number" id="rpx" value="1" step="0.5"> , <input type="number" id="rpy" value="2" step="0.5"> )</label>
+        <label>v = ( <input type="number" id="rvx" value="3" step="0.5"> , <input type="number" id="rvy" value="-1" step="0.5"> )</label>
+      </div>
+      <div class="sim-controls" id="recta-in-2p" style="display:none">
+        <label>A = ( <input type="number" id="rax" value="1" step="0.5"> , <input type="number" id="ray" value="2" step="0.5"> )</label>
+        <label>B = ( <input type="number" id="rbx" value="4" step="0.5"> , <input type="number" id="rby" value="5" step="0.5"> )</label>
+      </div>
+      <div class="sim-controls" id="recta-in-gen" style="display:none">
+        <label><input type="number" id="rA" value="2" step="0.5"> x + <input type="number" id="rB" value="-3" step="0.5"> y + <input type="number" id="rC" value="6" step="0.5"> = 0</label>
+      </div>
+      <div class="sim-controls">
+        <button class="sim-btn" onclick="calcRecta()">Convertir a las 5 formas</button>
+      </div>
+      <div id="rectaplot" class="plot" style="margin-top:1rem"></div>
+      <div class="grid g2" id="recta-forms" style="margin-top:1rem"></div>
+    </div>
+
+    <div class="stitle"><span class="ico">🎮</span> Simulador: ¿paralelas, perpendiculares o secantes?</div>
+    <div class="sim">
+      <div class="sim-controls">
+        <label>r: director v₁ = ( <input type="number" id="pp1x" value="2" step="0.5"> , <input type="number" id="pp1y" value="3" step="0.5"> )</label>
+        <label>s: director v₂ = ( <input type="number" id="pp2x" value="4" step="0.5"> , <input type="number" id="pp2y" value="6" step="0.5"> )</label>
+        <button class="sim-btn" onclick="calcParPerp()">Comparar</button>
+      </div>
+      <div id="pplot" class="plot short"></div>
+      <div class="result-box" id="ppresult">Ingresá dos vectores directores y presioná «Comparar».</div>
+    </div>
+
+    <details>
+      <summary>💡 Ejercicio integrador resuelto: $2x-3y+6=0$</summary>
+      <div class="dbody">
+        <strong>1. Vector normal</strong>: $\vec n=(2,-3)$.<br>
+        <strong>2. Vector director</strong>: cualquiera perpendicular a $\vec n$, por ejemplo $\vec v=(3,2)$ (verificá: $2\cdot3+(-3)\cdot2=0$ ✓).<br>
+        <strong>3. Forma explícita</strong>: despejando $y$: $y=\tfrac23 x+2$.<br>
+        <strong>4. Paramétrica vectorial</strong>: tomando el punto $(0,2)$ (con $x=0$): $(x,y)=(0,2)+t(3,2)$.<br>
+        <strong>5. Paramétrica cartesiana</strong>: $x=3t,\; y=2+2t$.<br>
+        <strong>6. Pendiente</strong>: $m=\tfrac23$.<br>
+        <strong>7. Intersecciones</strong>: con eje $y$ (x=0): $(0,2)$. Con eje $x$ (y=0): $(-3,0)$.<br>
+        Probá cargar $P=(0,2)$, $v=(3,2)$ en el conversor de arriba para verlo graficado.
+      </div>
+    </details>
+
+    <details>
+      <summary>📝 Ejercicios de la guía relacionados (Práctica 1, ej. 3, 4, 5, 18, 19)</summary>
+      <div class="dbody">
+        Ej. 3: las rectas $L_1,L_2,L_3$ (dirección $(1,1)$) son todas paralelas entre sí pero distintas; $L_4$ y $L_5$ resultan ser <strong>la misma recta</strong> ($x+y=0$); $L_6$ es paralela a ambas pero distinta.<br><br>
+        Ej. 5: usá «Punto + vector director» para las rectas de los incisos (a) a (e).<br><br>
+        Ej. 18/19: usá el cheatsheet para la fórmula de distancia punto-recta y verificala con el ejercicio de práctica guiada.
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ═══════════════ RECTAS Y PLANOS EN R³ ═══════════════ -->
+<div class="page" id="r3">
+  <div class="container">
+    <div class="stitle"><span class="ico">🗺️</span> Rectas en el espacio (R³)</div>
+    <div class="fbox">
+      <span class="big">$(x,y,z)=(x_0,y_0,z_0)+t(a,b,c)$</span>
+      <span class="sub">Ecuación paramétrica vectorial — mismo esquema que en R², una dimensión más</span>
+    </div>
+    <div class="grid g2">
+      <div class="card pu">
+        <h3>Recta por dos puntos</h3>
+        <p>Dados $A=(x_1,y_1,z_1)$ y $B=(x_2,y_2,z_2)$, el vector director es $\vec{AB}=(x_2-x_1,\,y_2-y_1,\,z_2-z_1)$.</p>
+      </div>
+      <div class="card bl">
+        <h3>Alineación de puntos</h3>
+        <p>$A$, $B$, $C$ están alineados si $\vec{AB}$ y $\vec{AC}$ son proporcionales (paralelos). Se puede verificar fácilmente con $\vec{AB}\times\vec{AC}=\vec 0$.</p>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">🎮</span> Simulador: ¿tres puntos alineados?</div>
+    <div class="sim">
+      <div class="sim-controls">
+        <label>A = ( <input type="number" id="alax" value="1" step="0.5"> , <input type="number" id="alay" value="1" step="0.5"> , <input type="number" id="alaz" value="1" step="0.5"> )</label>
+        <label>B = ( <input type="number" id="albx" value="-2" step="0.5"> , <input type="number" id="alby" value="0" step="0.5"> , <input type="number" id="albz" value="1" step="0.5"> )</label>
+        <label>C = ( <input type="number" id="alcx" value="3" step="0.5"> , <input type="number" id="alcy" value="2" step="0.5"> , <input type="number" id="alcz" value="0" step="0.5"> )</label>
+      </div>
+      <button class="sim-btn" onclick="calcAlign()">Verificar alineación</button>
+      <div id="alignplot" class="plot" style="margin-top:1rem"></div>
+      <div class="result-box" id="alignresult">Ingresá tres puntos y presioná «Verificar alineación».</div>
+    </div>
+
+    <div class="stitle"><span class="ico">◻️</span> Planos</div>
+    <div class="grid g2">
+      <div class="card gr">
+        <h3>Ecuación paramétrica</h3>
+        <p>$(x,y,z)=\alpha\vec v_1+\beta\vec v_2+P$, con $\vec v_1,\vec v_2$ dos vectores directores no paralelos del plano y $P$ un punto de paso.</p>
+      </div>
+      <div class="card or">
+        <h3>Ecuación implícita</h3>
+        <p>$Ax+By+Cz+D=0$. El vector $\vec n=(A,B,C)$ es <strong>normal</strong> al plano (perpendicular a todo vector contenido en él).</p>
+      </div>
+    </div>
+    <div class="tip">💡 <div>Un vector $\vec w$ es <strong>paralelo</strong> a un plano de normal $\vec n$ si y solo si $\vec w\cdot\vec n=0$ (es perpendicular a la normal, por eso "está acostado" sobre el plano).</div></div>
+
+    <div class="stitle"><span class="ico">🎮</span> Simulador 3D: distancia de un punto a un plano</div>
+    <div class="sim">
+      <div class="sim-controls">
+        <label>Plano: <input type="number" id="plA" value="2" step="0.5"> x + <input type="number" id="plB" value="-3" step="0.5"> y + <input type="number" id="plC" value="1" step="0.5"> z + <input type="number" id="plD" value="-8" step="0.5"> = 0</label>
+      </div>
+      <div class="sim-controls">
+        <label>P = ( <input type="number" id="plpx" value="-1" step="0.5"> , <input type="number" id="plpy" value="0" step="0.5"> , <input type="number" id="plpz" value="2" step="0.5"> )</label>
+        <button class="sim-btn" onclick="calcPlaneDist()">Calcular distancia</button>
+      </div>
+      <div id="planeplot" class="plot"></div>
+      <div class="result-box" id="planeresult">Ingresá un plano y un punto, presioná «Calcular distancia». (Requiere C≠0 para poder graficar el plano.)</div>
+    </div>
+
+    <details>
+      <summary>📝 Ejercicios de la guía relacionados (Práctica 1, ej. 9, 10, 11, 12, 21, 22)</summary>
+      <div class="dbody">
+        Ej. 9: verificá con el simulador si $A=(1,1,1)$, $B=(-2,0,1)$, $C=(3,2,0)$ están alineados (spoiler: no lo están).<br><br>
+        Ej. 22: el plano $\Pi:2x-3y+z=8$ y $P=(-1,0,2)$ ya están cargados por defecto en el simulador de distancia — solo presioná «Calcular».<br><br>
+        Ej. 11: para decidir si un vector es paralelo a un plano, calculá su producto escalar con la normal: si da 0, es paralelo.
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ═══════════════ PRÁCTICA GUIADA ═══════════════ -->
+<div class="page" id="practica">
+  <div class="container">
+    <div class="stitle"><span class="ico">✍️</span> Práctica guiada — 9 ejercicios reales</div>
+    <p style="color:var(--gray-lt);margin-bottom:1.2rem">Ejercicios tomados de la Práctica 1. Intentá resolverlos solo primero. Si te trabás, pedí una pista (van revelando más de a poco). Al final podés destapar la solución completa. Resolvé 5 para desbloquear la insignia.</p>
+    <div id="ex-list"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ QUIZ ═══════════════ -->
+<div class="page" id="quiz">
+  <div class="container">
+    <div id="quiz-container">
+      <div class="stitle"><span class="ico">🎓</span> Quiz final</div>
+      <div class="quiz-header">
+        <span class="quiz-score-display">Puntaje: <span id="q-score">0</span>/<span id="q-total">0</span></span>
+      </div>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="q-progress" style="width:0%"></div></div>
+      <div id="quiz-area"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ CHEATSHEET ═══════════════ -->
+<div class="page" id="cheat">
+  <div class="container">
+    <div class="stitle"><span class="ico">📋</span> Cheatsheet — todo lo esencial</div>
+    <div class="cheat">
+      <h2>VECTORES</h2>
+      <div class="cgrid">
+        <div class="citem"><div class="lbl">Norma</div><div class="cf">$\|\vec v\|=\sqrt{v_x^2+v_y^2(+v_z^2)}$</div></div>
+        <div class="citem"><div class="lbl">Vector unitario</div><div class="cf">$\hat u=\vec u/\|\vec u\|$</div></div>
+        <div class="citem"><div class="lbl">Distancia entre puntos</div><div class="cf">$d(A,B)=\|\vec{AB}\|$</div></div>
+        <div class="citem"><div class="lbl">Producto escalar</div><div class="cf">$\vec u\cdot\vec v=\Sigma u_iv_i=\|\vec u\|\|\vec v\|\cos\alpha$</div></div>
+        <div class="citem"><div class="lbl">Perpendicularidad</div><div class="cf">$\vec u\perp\vec v \iff \vec u\cdot\vec v=0$</div></div>
+        <div class="citem"><div class="lbl">Producto vectorial (R³)</div><div class="cf">$\vec u\times\vec v=(u_2v_3-u_3v_2,u_3v_1-u_1v_3,u_1v_2-u_2v_1)$</div></div>
+        <div class="citem"><div class="lbl">Área paralelogramo</div><div class="cf">$\|\vec u\times\vec v\|$</div></div>
+        <div class="citem"><div class="lbl">Vectores paralelos</div><div class="cf">$\vec u\parallel\vec v \iff \vec u\times\vec v=\vec 0$ (o $\vec u=k\vec v$)</div></div>
+      </div>
+    </div>
+    <div class="cheat">
+      <h2>RECTAS EN R²</h2>
+      <div class="cgrid">
+        <div class="citem"><div class="lbl">General/implícita</div><div class="cf">$Ax+By+C=0$</div></div>
+        <div class="citem"><div class="lbl">Explícita</div><div class="cf">$y=mx+b$</div></div>
+        <div class="citem"><div class="lbl">Segmentaria</div><div class="cf">$x/a+y/b=1$</div></div>
+        <div class="citem"><div class="lbl">Paramétrica vectorial</div><div class="cf">$(x,y)=t\vec v+\vec w$</div></div>
+        <div class="citem"><div class="lbl">Vector normal de $ax+by+c=0$</div><div class="cf">$\vec n=(a,b)$</div></div>
+        <div class="citem"><div class="lbl">Paralelismo</div><div class="cf">$\vec v_1=k\vec v_2$</div></div>
+        <div class="citem"><div class="lbl">Perpendicularidad</div><div class="cf">$\vec v_1\cdot\vec v_2=0$</div></div>
+        <div class="citem"><div class="lbl">Distancia punto-recta</div><div class="cf">$d=\dfrac{|Ax_0+By_0+C|}{\sqrt{A^2+B^2}}$</div></div>
+      </div>
+    </div>
+    <div class="cheat">
+      <h2>RECTAS Y PLANOS EN R³</h2>
+      <div class="cgrid">
+        <div class="citem"><div class="lbl">Recta paramétrica</div><div class="cf">$(x,y,z)=(x_0,y_0,z_0)+t(a,b,c)$</div></div>
+        <div class="citem"><div class="lbl">Alineación de 3 puntos</div><div class="cf">$\vec{AB}\parallel\vec{AC}$</div></div>
+        <div class="citem"><div class="lbl">Plano implícito</div><div class="cf">$Ax+By+Cz+D=0$, normal $\vec n=(A,B,C)$</div></div>
+        <div class="citem"><div class="lbl">Plano paramétrico</div><div class="cf">$P+\alpha\vec v_1+\beta\vec v_2$</div></div>
+        <div class="citem"><div class="lbl">Vector paralelo a un plano</div><div class="cf">$\vec w\cdot\vec n=0$</div></div>
+        <div class="citem"><div class="lbl">Distancia punto-plano</div><div class="cf">$d=\dfrac{|Ax_0+By_0+Cz_0+D|}{\sqrt{A^2+B^2+C^2}}$</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>Álgebra Lineal I · Práctica 1 · Vectores, rectas y planos — Joaquín De La Corte</footer>
+
+<div id="badge-toast" class="badge-toast"></div>
+
+<script>
+// ════════════════════════════
+//  STORE + BADGES
+// ════════════════════════════
+const store = {
+  get(k,d){ try{ const v=localStorage.getItem('algebra_'+k); return v!==null?JSON.parse(v):d; }catch(e){ return d; } },
+  set(k,v){ try{ localStorage.setItem('algebra_'+k, JSON.stringify(v)); }catch(e){} }
+};
+
+const BADGES = [
+  {id:'vect2d', ico:'🧮', name:'Sumador de vectores', desc:'Operaste vectores en el plano (R²)'},
+  {id:'vect3d', ico:'🌌', name:'Explorador del espacio', desc:'Graficaste vectores en el espacio (R³)'},
+  {id:'escalar', ico:'📐', name:'Cazador de ángulos', desc:'Calculaste un producto escalar y el ángulo entre vectores'},
+  {id:'vectorial', ico:'⚡', name:'Perpendicular nato', desc:'Usaste el producto vectorial'},
+  {id:'rectas', ico:'📏', name:'Maestro de las 5 formas', desc:'Convertiste una recta entre sus 5 formas'},
+  {id:'planos', ico:'🗺️', name:'Geómetra 3D', desc:'Calculaste la distancia de un punto a un plano'},
+  {id:'practica', ico:'✅', name:'Practicante', desc:'Resolviste 5 ejercicios guiados'},
+  {id:'quiz', ico:'🎓', name:'Graduado en Álgebra I', desc:'Completaste el quiz final'}
+];
+let unlockedBadges = store.get('badges', []);
+
+function unlockBadge(id){
+  if(unlockedBadges.includes(id)) return;
+  unlockedBadges.push(id);
+  store.set('badges', unlockedBadges);
+  renderBadges();
+  showToast(id);
+  if(unlockedBadges.length===BADGES.length) launchConfetti();
+}
+function showToast(id){
+  const b = BADGES.find(x=>x.id===id);
+  if(!b) return;
+  const t = document.getElementById('badge-toast');
+  t.innerHTML = `<span style="font-size:1.8rem">${b.ico}</span><div><div style="font-weight:800;font-size:.85rem">¡Insignia desbloqueada!</div><div style="font-size:.9rem">${b.name}</div></div>`;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=>t.classList.remove('show'), 3200);
+}
+function renderBadges(){
+  document.getElementById('nav-badges').textContent = `🏅 ${unlockedBadges.length}/${BADGES.length}`;
+  document.getElementById('badge-count-chip').textContent = `${unlockedBadges.length}/${BADGES.length}`;
+  document.getElementById('global-progress').style.width = (unlockedBadges.length/BADGES.length*100)+'%';
+  const grid = document.getElementById('badges-grid');
+  grid.innerHTML = BADGES.map(b=>{
+    const has = unlockedBadges.includes(b.id);
+    return `<div class="badge-card ${has?'unlocked':'locked'}"><span class="bic">${has?b.ico:'🔒'}</span><div class="bname">${b.name}</div><div class="bdesc">${b.desc}</div></div>`;
+  }).join('');
+}
+
+// ════════════════════════════
+//  NAV
+// ════════════════════════════
+function showPage(id, btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(()=>{
+    if(id==='vec2') drawVec2();
+    if(id==='vec3') drawVec3();
+    if(id==='rectas'){ calcRecta(false); calcParPerp(); }
+    if(id==='r3'){ calcAlign(); calcPlaneDist(false); }
+    if(id==='prod'){ calcScalar(false); calcCross(false); }
+  },30);
+}
+function mathRender(el){
+  if(window.renderMathInElement){
+    try{ renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false}); }catch(e){}
+  }
+}
+
+// ════════════════════════════
+//  HELPERS PLOTLY
+// ════════════════════════════
+function plotVectors2D(divId, vecs, extraTraces){
+  extraTraces = extraTraces || [];
+  const traces = extraTraces.slice();
+  const annotations = [];
+  let maxAbs = 3;
+  vecs.forEach(v=>{
+    annotations.push({ax:0,ay:0,axref:'x',ayref:'y',x:v.x,y:v.y,xref:'x',yref:'y',showarrow:true,arrowhead:3,arrowsize:1.3,arrowwidth:2.5,arrowcolor:v.color});
+    traces.push({x:[v.x],y:[v.y],mode:'markers+text',type:'scatter',text:[v.label],textposition:'top center',textfont:{color:v.color,size:13},marker:{size:4,color:v.color},showlegend:false});
+    maxAbs = Math.max(maxAbs, Math.abs(v.x), Math.abs(v.y));
+  });
+  const range = maxAbs*1.35;
+  Plotly.react(divId, traces, {
+    paper_bgcolor:'#fff', plot_bgcolor:'#fdfcff',
+    font:{color:'#374151'},
+    margin:{t:20,r:20,b:35,l:35},
+    xaxis:{range:[-range,range], zeroline:true, zerolinecolor:'#94a3b8', gridcolor:'#eee'},
+    yaxis:{range:[-range,range], zeroline:true, zerolinecolor:'#94a3b8', gridcolor:'#eee', scaleanchor:'x', scaleratio:1},
+    annotations, showlegend:false
+  },{displayModeBar:false, responsive:true});
+}
+function plotVectors3D(divId, vecs){
+  const traces = [];
+  vecs.forEach(v=>{
+    traces.push({type:'scatter3d',mode:'lines',x:[0,v.x],y:[0,v.y],z:[0,v.z],line:{color:v.color,width:7},showlegend:false});
+    traces.push({type:'scatter3d',mode:'markers+text',x:[v.x],y:[v.y],z:[v.z],text:[v.label],textposition:'top center',marker:{size:3,color:v.color},showlegend:false});
+  });
+  Plotly.react(divId, traces, {
+    scene:{xaxis:{title:'x'},yaxis:{title:'y'},zaxis:{title:'z'},aspectmode:'cube'},
+    margin:{t:10,r:10,b:10,l:10},
+    paper_bgcolor:'#fff'
+  },{displayModeBar:false, responsive:true});
+}
+function plotPoints3D(divId, pts){
+  const traces = [
+    {type:'scatter3d',mode:'markers+text',x:pts.map(p=>p.x),y:pts.map(p=>p.y),z:pts.map(p=>p.z),text:pts.map(p=>p.label),textposition:'top center',marker:{size:5,color:pts.map(p=>p.color)},showlegend:false},
+    {type:'scatter3d',mode:'lines',x:pts.map(p=>p.x),y:pts.map(p=>p.y),z:pts.map(p=>p.z),line:{color:'#94a3b8',width:3,dash:'dot'},showlegend:false}
+  ];
+  Plotly.react(divId, traces, {scene:{aspectmode:'cube'}, margin:{t:10,r:10,b:10,l:10}, paper_bgcolor:'#fff'},{displayModeBar:false, responsive:true});
+}
+function plotRecta2D(divId, P, v){
+  const t=8;
+  const x0=P[0]-t*v[0], y0=P[1]-t*v[1];
+  const x1=P[0]+t*v[0], y1=P[1]+t*v[1];
+  const traces=[
+    {x:[x0,x1],y:[y0,y1],type:'scatter',mode:'lines',line:{color:'#6d28d9',width:3},showlegend:false},
+    {x:[P[0]],y:[P[1]],type:'scatter',mode:'markers+text',marker:{size:8,color:'#dc2626'},text:['P'],textposition:'top center',showlegend:false}
+  ];
+  const annotations=[{ax:P[0],ay:P[1],axref:'x',ayref:'y',x:P[0]+v[0],y:P[1]+v[1],xref:'x',yref:'y',showarrow:true,arrowhead:3,arrowsize:1.3,arrowwidth:2.5,arrowcolor:'#059669'}];
+  const range=Math.max(6, Math.abs(P[0])+3, Math.abs(P[1])+3);
+  Plotly.react(divId, traces, {
+    margin:{t:20,r:20,b:35,l:35}, paper_bgcolor:'#fff', plot_bgcolor:'#fdfcff',
+    xaxis:{range:[-range,range], zeroline:true, zerolinecolor:'#94a3b8', gridcolor:'#eee'},
+    yaxis:{range:[-range,range], zeroline:true, zerolinecolor:'#94a3b8', gridcolor:'#eee', scaleanchor:'x', scaleratio:1},
+    annotations, showlegend:false
+  },{displayModeBar:false, responsive:true});
+}
+function plotLines2D(divId, lines){
+  const t=8; const traces=[];
+  let range=6;
+  lines.forEach(L=>{
+    const x0=L.P[0]-t*L.v[0], y0=L.P[1]-t*L.v[1];
+    const x1=L.P[0]+t*L.v[0], y1=L.P[1]+t*L.v[1];
+    traces.push({x:[x0,x1],y:[y0,y1],type:'scatter',mode:'lines',line:{color:L.color,width:3},name:L.label,showlegend:true});
+    range=Math.max(range, Math.abs(L.P[0])+3, Math.abs(L.P[1])+3);
+  });
+  Plotly.react(divId, traces, {
+    margin:{t:20,r:20,b:35,l:35}, paper_bgcolor:'#fff', plot_bgcolor:'#fdfcff',
+    xaxis:{range:[-range,range], zeroline:true, zerolinecolor:'#94a3b8', gridcolor:'#eee'},
+    yaxis:{range:[-range,range], zeroline:true, zerolinecolor:'#94a3b8', gridcolor:'#eee', scaleanchor:'x', scaleratio:1},
+    legend:{orientation:'h', y:-0.2}
+  },{displayModeBar:false, responsive:true});
+}
+
+// ════════════════════════════
+//  VECTORES R²
+// ════════════════════════════
+let vec2Mode = 'both';
+function vec2Op(mode){ vec2Mode = mode; drawVec2(); unlockBadge('vect2d'); }
+function drawVec2(){
+  const ux=parseFloat(document.getElementById('u2x').value)||0;
+  const uy=parseFloat(document.getElementById('u2y').value)||0;
+  const vx=parseFloat(document.getElementById('v2x').value)||0;
+  const vy=parseFloat(document.getElementById('v2y').value)||0;
+  const k=parseFloat(document.getElementById('k2').value);
+  const vecs=[{x:ux,y:uy,color:'#6d28d9',label:'u'},{x:vx,y:vy,color:'#059669',label:'v'}];
+  let extra=[];
+  let statsHtml='';
+  const normU=Math.hypot(ux,uy), normV=Math.hypot(vx,vy);
+  statsHtml += `<div class="card pu"><h3>‖u‖</h3><p>${normU.toFixed(2)}</p></div><div class="card gr"><h3>‖v‖</h3><p>${normV.toFixed(2)}</p></div>`;
+  if(vec2Mode==='sum'){
+    const sx=ux+vx, sy=uy+vy;
+    vecs.push({x:sx,y:sy,color:'#dc2626',label:'u+v'});
+    extra.push({x:[ux,sx],y:[uy,sy],type:'scatter',mode:'lines',line:{dash:'dot',color:'#94a3b8'},showlegend:false});
+    extra.push({x:[vx,sx],y:[vy,sy],type:'scatter',mode:'lines',line:{dash:'dot',color:'#94a3b8'},showlegend:false});
+    statsHtml += `<div class="card re"><h3>u + v</h3><p>(${sx.toFixed(2)}, ${sy.toFixed(2)})</p></div>`;
+  } else if(vec2Mode==='sub'){
+    const sx=ux-vx, sy=uy-vy;
+    vecs.push({x:sx,y:sy,color:'#dc2626',label:'u−v'});
+    statsHtml += `<div class="card re"><h3>u − v</h3><p>(${sx.toFixed(2)}, ${sy.toFixed(2)})</p></div>`;
+  } else if(vec2Mode==='k'){
+    const kx=k*ux, ky=k*uy;
+    vecs.length=1; // solo mostrar u y k*u
+    vecs.push({x:kx,y:ky,color:'#ea580c',label:'k·u'});
+    statsHtml = `<div class="card pu"><h3>‖u‖</h3><p>${normU.toFixed(2)}</p></div><div class="card or"><h3>k·u (k=${k})</h3><p>(${kx.toFixed(2)}, ${ky.toFixed(2)})</p></div>`;
+  }
+  plotVectors2D('vec2plot', vecs, extra);
+  document.getElementById('vec2stats').innerHTML = statsHtml;
+}
+
+// ════════════════════════════
+//  VECTORES R³
+// ════════════════════════════
+let vec3Mode = 'both';
+function vec3Op(mode){ vec3Mode = mode; drawVec3(); unlockBadge('vect3d'); }
+function drawVec3(){
+  const ux=parseFloat(document.getElementById('u3x').value)||0, uy=parseFloat(document.getElementById('u3y').value)||0, uz=parseFloat(document.getElementById('u3z').value)||0;
+  const vx=parseFloat(document.getElementById('v3x').value)||0, vy=parseFloat(document.getElementById('v3y').value)||0, vz=parseFloat(document.getElementById('v3z').value)||0;
+  const vecs=[{x:ux,y:uy,z:uz,color:'#6d28d9',label:'u'},{x:vx,y:vy,z:vz,color:'#059669',label:'v'}];
+  const normU=Math.sqrt(ux*ux+uy*uy+uz*uz), normV=Math.sqrt(vx*vx+vy*vy+vz*vz);
+  let statsHtml = `<div class="card pu"><h3>‖u‖</h3><p>${normU.toFixed(2)}</p></div><div class="card gr"><h3>‖v‖</h3><p>${normV.toFixed(2)}</p></div>`;
+  if(vec3Mode==='sum'){
+    const sx=ux+vx, sy=uy+vy, sz=uz+vz;
+    vecs.push({x:sx,y:sy,z:sz,color:'#dc2626',label:'u+v'});
+    statsHtml += `<div class="card re"><h3>u + v</h3><p>(${sx.toFixed(2)}, ${sy.toFixed(2)}, ${sz.toFixed(2)})</p></div>`;
+  } else if(vec3Mode==='sub'){
+    const sx=ux-vx, sy=uy-vy, sz=uz-vz;
+    vecs.push({x:sx,y:sy,z:sz,color:'#dc2626',label:'u−v'});
+    statsHtml += `<div class="card re"><h3>u − v</h3><p>(${sx.toFixed(2)}, ${sy.toFixed(2)}, ${sz.toFixed(2)})</p></div>`;
+  }
+  plotVectors3D('vec3plot', vecs);
+  document.getElementById('vec3stats').innerHTML = statsHtml;
+}
+
+// ════════════════════════════
+//  PRODUCTO ESCALAR
+// ════════════════════════════
+function calcScalar(fromUser){
+  if(fromUser===undefined) fromUser=true;
+  const ux=parseFloat(document.getElementById('us_x').value)||0, uy=parseFloat(document.getElementById('us_y').value)||0;
+  const vx=parseFloat(document.getElementById('vs_x').value)||0, vy=parseFloat(document.getElementById('vs_y').value)||0;
+  const dot = ux*vx+uy*vy;
+  const nu=Math.hypot(ux,uy), nv=Math.hypot(vx,vy);
+  let html;
+  if(nu===0||nv===0){
+    html = `<strong>u·v = ${dot.toFixed(2)}</strong> — uno de los vectores es nulo, no se puede calcular el ángulo.`;
+  } else {
+    const cos = Math.max(-1,Math.min(1, dot/(nu*nv)));
+    const ang = Math.acos(cos)*180/Math.PI;
+    const perp = Math.abs(dot) < 1e-9;
+    html = `<strong>u·v = ${dot.toFixed(2)}</strong> · ‖u‖=${nu.toFixed(2)} · ‖v‖=${nv.toFixed(2)} · ángulo ≈ <strong>${ang.toFixed(1)}°</strong><br>` +
+      (perp ? '✅ Como u·v = 0, <strong>u y v son perpendiculares</strong>.' : '➡️ Como u·v ≠ 0, u y v <strong>no</strong> son perpendiculares.');
+  }
+  const box = document.getElementById('scalarresult');
+  box.className = 'result-box ' + (nu&&nv ? (Math.abs(dot)<1e-9?'ok':'') : '');
+  box.innerHTML = html;
+  plotVectors2D('scalarplot', [{x:ux,y:uy,color:'#6d28d9',label:'u'},{x:vx,y:vy,color:'#059669',label:'v'}]);
+  if(fromUser) unlockBadge('escalar');
+}
+
+// ════════════════════════════
+//  PRODUCTO VECTORIAL
+// ════════════════════════════
+function calcCross(fromUser){
+  if(fromUser===undefined) fromUser=true;
+  const ux=parseFloat(document.getElementById('uc_x').value)||0, uy=parseFloat(document.getElementById('uc_y').value)||0, uz=parseFloat(document.getElementById('uc_z').value)||0;
+  const vx=parseFloat(document.getElementById('vc_x').value)||0, vy=parseFloat(document.getElementById('vc_y').value)||0, vz=parseFloat(document.getElementById('vc_z').value)||0;
+  const cx = uy*vz-uz*vy, cy = uz*vx-ux*vz, cz = ux*vy-uy*vx;
+  const area = Math.sqrt(cx*cx+cy*cy+cz*cz);
+  document.getElementById('crossresult').innerHTML =
+    `<strong>u × v = (${cx.toFixed(2)}, ${cy.toFixed(2)}, ${cz.toFixed(2)})</strong><br>` +
+    `Área del paralelogramo = ‖u×v‖ = <strong>${area.toFixed(2)}</strong>` +
+    (area<1e-9 ? '<br>⚠️ u y v son paralelos (el producto vectorial da el vector nulo).' : '');
+  plotVectors3D('crossplot', [
+    {x:ux,y:uy,z:uz,color:'#6d28d9',label:'u'},
+    {x:vx,y:vy,z:vz,color:'#059669',label:'v'},
+    {x:cx,y:cy,z:cz,color:'#dc2626',label:'u×v'}
+  ]);
+  if(fromUser) unlockBadge('vectorial');
+}
+
+// ════════════════════════════
+//  RECTAS: CONVERSOR DE FORMAS
+// ════════════════════════════
+function rectaModeChange(){
+  const mode = document.querySelector('input[name="rmode"]:checked').value;
+  document.getElementById('recta-in-pv').style.display = mode==='pv' ? 'flex' : 'none';
+  document.getElementById('recta-in-2p').style.display = mode==='2p' ? 'flex' : 'none';
+  document.getElementById('recta-in-gen').style.display = mode==='gen' ? 'flex' : 'none';
+}
+function calcRecta(fromUser){
+  if(fromUser===undefined) fromUser=true;
+  const mode = document.querySelector('input[name="rmode"]:checked').value;
+  let px,py,vx,vy;
+  if(mode==='pv'){
+    px=parseFloat(document.getElementById('rpx').value)||0; py=parseFloat(document.getElementById('rpy').value)||0;
+    vx=parseFloat(document.getElementById('rvx').value)||0; vy=parseFloat(document.getElementById('rvy').value)||0;
+  } else if(mode==='2p'){
+    const ax=parseFloat(document.getElementById('rax').value)||0, ay=parseFloat(document.getElementById('ray').value)||0;
+    const bx=parseFloat(document.getElementById('rbx').value)||0, by=parseFloat(document.getElementById('rby').value)||0;
+    px=ax; py=ay; vx=bx-ax; vy=by-ay;
+  } else {
+    const A=parseFloat(document.getElementById('rA').value)||0, B=parseFloat(document.getElementById('rB').value)||0, C=parseFloat(document.getElementById('rC').value)||0;
+    vx = B; vy = -A;
+    if(Math.abs(B)>1e-9){ px=0; py=-C/B; }
+    else if(Math.abs(A)>1e-9){ px=-C/A; py=0; }
+    else { px=0; py=0; }
+  }
+  if(Math.abs(vx)<1e-9 && Math.abs(vy)<1e-9){
+    document.getElementById('recta-forms').innerHTML = '<div class="card re"><h3>Vector director nulo</h3><p>Necesito un vector director distinto de (0,0).</p></div>';
+    return;
+  }
+  const A = -vy, B = vx, C = vy*px - vx*py;
+  let html = '';
+  html += `<div class="card pu"><h3>1. General / implícita</h3><p>$${fmtEq(A,B,C)}=0$</p></div>`;
+  if(Math.abs(vx) > 1e-9){
+    const m = vy/vx, b = py - m*px;
+    html += `<div class="card bl"><h3>2. Explícita</h3><p>$y = ${m.toFixed(2)}x ${b>=0?'+':'-'} ${Math.abs(b).toFixed(2)}$</p></div>`;
+  } else {
+    html += `<div class="card bl"><h3>2. Explícita</h3><p>Recta vertical: no tiene forma explícita. Ecuación: $x = ${px.toFixed(2)}$</p></div>`;
+  }
+  if(Math.abs(A)>1e-9 && Math.abs(B)>1e-9 && Math.abs(C)>1e-9){
+    const a = -C/A, b2 = -C/B;
+    html += `<div class="card gr"><h3>3. Segmentaria</h3><p>$\\dfrac{x}{${a.toFixed(2)}}+\\dfrac{y}{${b2.toFixed(2)}}=1$</p></div>`;
+  } else {
+    html += `<div class="card gr"><h3>3. Segmentaria</h3><p>No aplica (la recta pasa por el origen o es paralela a un eje).</p></div>`;
+  }
+  html += `<div class="card or"><h3>4. Paramétrica vectorial</h3><p>$(x,y)=(${px.toFixed(2)},${py.toFixed(2)})+t(${vx.toFixed(2)},${vy.toFixed(2)})$</p></div>`;
+  html += `<div class="card te"><h3>5. Paramétrica cartesiana</h3><p>$x=${px.toFixed(2)}+${vx.toFixed(2)}t$<br>$y=${py.toFixed(2)}+${vy.toFixed(2)}t$</p></div>`;
+  html += `<div class="card"><h3>Vector director / normal</h3><p>$\\vec v=(${vx.toFixed(2)},${vy.toFixed(2)})$ &nbsp;·&nbsp; $\\vec n=(${A.toFixed(2)},${B.toFixed(2)})$</p></div>`;
+  const el = document.getElementById('recta-forms');
+  el.innerHTML = html;
+  mathRender(el);
+  plotRecta2D('rectaplot', [px,py], [vx,vy]);
+  if(fromUser) unlockBadge('rectas');
+}
+function fmtEq(A,B,C){
+  let s = '';
+  s += `${A.toFixed(2)}x `;
+  s += (B>=0?'+ ':'- ') + Math.abs(B).toFixed(2) + 'y ';
+  s += (C>=0?'+ ':'- ') + Math.abs(C).toFixed(2);
+  return s;
+}
+
+// ════════════════════════════
+//  PARALELISMO / PERPENDICULARIDAD RECTAS
+// ════════════════════════════
+function calcParPerp(){
+  const v1x=parseFloat(document.getElementById('pp1x').value)||0, v1y=parseFloat(document.getElementById('pp1y').value)||0;
+  const v2x=parseFloat(document.getElementById('pp2x').value)||0, v2y=parseFloat(document.getElementById('pp2y').value)||0;
+  const cross = v1x*v2y - v1y*v2x;
+  const dot = v1x*v2x + v1y*v2y;
+  const box = document.getElementById('ppresult');
+  let verdict, cls;
+  if(Math.abs(cross) < 1e-9){
+    verdict = '✅ Los vectores directores son proporcionales → las rectas son <strong>paralelas</strong> (o coincidentes si comparten un punto).';
+    cls='ok';
+  } else if(Math.abs(dot) < 1e-9){
+    verdict = '✅ Los directores son ortogonales (v₁·v₂=0) → las rectas son <strong>perpendiculares</strong>.';
+    cls='ok';
+  } else {
+    verdict = '➡️ Los directores no son proporcionales ni ortogonales → las rectas son <strong>secantes</strong> (se cortan, sin ser perpendiculares).';
+    cls='';
+  }
+  box.className = 'result-box ' + cls;
+  box.innerHTML = `v₁·v₂ = ${dot.toFixed(2)} · v₁×v₂ (2D) = ${cross.toFixed(2)}<br>${verdict}`;
+  plotLines2D('pplot', [
+    {P:[0,0], v:[v1x,v1y], color:'#6d28d9', label:'r'},
+    {P:[1,-1], v:[v2x,v2y], color:'#059669', label:'s'}
+  ]);
+}
+
+// ════════════════════════════
+//  ALINEACIÓN DE PUNTOS R³
+// ════════════════════════════
+function calcAlign(){
+  const ax=parseFloat(document.getElementById('alax').value)||0, ay=parseFloat(document.getElementById('alay').value)||0, az=parseFloat(document.getElementById('alaz').value)||0;
+  const bx=parseFloat(document.getElementById('albx').value)||0, by=parseFloat(document.getElementById('alby').value)||0, bz=parseFloat(document.getElementById('albz').value)||0;
+  const cx=parseFloat(document.getElementById('alcx').value)||0, cy=parseFloat(document.getElementById('alcy').value)||0, cz=parseFloat(document.getElementById('alcz').value)||0;
+  const abx=bx-ax, aby=by-ay, abz=bz-az;
+  const acx=cx-ax, acy=cy-ay, acz=cz-az;
+  const crossx = aby*acz-abz*acy, crossy = abz*acx-abx*acz, crossz = abx*acy-aby*acx;
+  const mag = Math.sqrt(crossx*crossx+crossy*crossy+crossz*crossz);
+  const aligned = mag < 1e-6;
+  const box = document.getElementById('alignresult');
+  box.className = 'result-box ' + (aligned?'ok':'no');
+  box.innerHTML = `$\\vec{AB}=(${abx.toFixed(2)},${aby.toFixed(2)},${abz.toFixed(2)})$ · $\\vec{AC}=(${acx.toFixed(2)},${acy.toFixed(2)},${acz.toFixed(2)})$<br>` +
+    (aligned ? '✅ Los vectores son proporcionales → <strong>los puntos están alineados</strong>.' : '❌ Los vectores no son proporcionales → <strong>los puntos NO están alineados</strong>.');
+  mathRender(box);
+  plotPoints3D('alignplot', [
+    {x:ax,y:ay,z:az,color:'#6d28d9',label:'A'},
+    {x:bx,y:by,z:bz,color:'#059669',label:'B'},
+    {x:cx,y:cy,z:cz,color:'#dc2626',label:'C'}
+  ]);
+}
+
+// ════════════════════════════
+//  DISTANCIA PUNTO-PLANO
+// ════════════════════════════
+function calcPlaneDist(fromUser){
+  if(fromUser===undefined) fromUser=true;
+  const A=parseFloat(document.getElementById('plA').value)||0, B=parseFloat(document.getElementById('plB').value)||0, C=parseFloat(document.getElementById('plC').value)||0, D=parseFloat(document.getElementById('plD').value)||0;
+  const px=parseFloat(document.getElementById('plpx').value)||0, py=parseFloat(document.getElementById('plpy').value)||0, pz=parseFloat(document.getElementById('plpz').value)||0;
+  const denom = Math.sqrt(A*A+B*B+C*C);
+  const box = document.getElementById('planeresult');
+  if(denom < 1e-9){
+    box.className='result-box no';
+    box.innerHTML = 'A, B y C no pueden ser todos cero.';
+    return;
+  }
+  const t = (A*px+B*py+C*pz+D)/(A*A+B*B+C*C);
+  const qx = px - A*t, qy = py - B*t, qz = pz - C*t;
+  const dist = Math.abs(t)*denom;
+  box.className='result-box ok';
+  box.innerHTML = `Pie de la perpendicular: $Q=(${qx.toFixed(2)},${qy.toFixed(2)},${qz.toFixed(2)})$<br>Distancia mínima $d=\\dfrac{|A x_0+By_0+Cz_0+D|}{\\sqrt{A^2+B^2+C^2}}=$ <strong>${dist.toFixed(2)}</strong>`;
+  mathRender(box);
+  if(Math.abs(C) < 1e-9){
+    document.getElementById('planeplot').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--gray-lt)">Para graficar el plano necesito C≠0 en esta demo (el cálculo de distancia de arriba sigue siendo válido).</div>';
+  } else {
+    const N=14, range=6, xs=[], ys=[], zGrid=[];
+    for(let i=0;i<=N;i++) xs.push(-range+(2*range*i/N));
+    for(let j=0;j<=N;j++) ys.push(-range+(2*range*j/N));
+    for(let j=0;j<=N;j++){
+      const row=[];
+      for(let i=0;i<=N;i++){ row.push((-D - A*xs[i] - B*ys[j]) / C); }
+      zGrid.push(row);
+    }
+    const traces = [
+      {type:'surface', x:xs, y:ys, z:zGrid, showscale:false, opacity:0.55, colorscale:[[0,'#c4b5fd'],[1,'#6d28d9']]},
+      {type:'scatter3d', mode:'markers+text', x:[px], y:[py], z:[pz], marker:{size:5,color:'#dc2626'}, text:['P'], textposition:'top center', showlegend:false},
+      {type:'scatter3d', mode:'markers+text', x:[qx], y:[qy], z:[qz], marker:{size:4,color:'#059669'}, text:['Q'], textposition:'top center', showlegend:false},
+      {type:'scatter3d', mode:'lines', x:[px,qx], y:[py,qy], z:[pz,qz], line:{color:'#dc2626',width:5,dash:'dot'}, showlegend:false}
+    ];
+    Plotly.react('planeplot', traces, {scene:{aspectmode:'cube'}, margin:{t:10,r:10,b:10,l:10}, paper_bgcolor:'#fff'},{displayModeBar:false,responsive:true});
+  }
+  if(fromUser) unlockBadge('planos');
+}
+
+// ════════════════════════════
+//  PRÁCTICA GUIADA
+// ════════════════════════════
+const EXERCISES = [
+  {id:1, tag:'Vectores R² · Ej. 1(b)',
+   st:'Sean $A=(1,-2)$, $B=(3,4)$, $C=(-2,4)$. Calculá: i) $A+B$, ii) $2A$, iii) $-A$, iv) $\\tfrac13 A$, v) $2A+3B$, vi) $A-C$, vii) $2A+C$.',
+   hints:['Recordá que sumar/restar vectores se hace componente a componente.','Multiplicar por un escalar multiplica cada componente por ese número.','Aplicá la fórmula a cada operación por separado, con cuidado con los signos.'],
+   sol:'i) A+B = (4, 2)<br>ii) 2A = (2, -4)<br>iii) -A = (-1, 2)<br>iv) (1/3)A = (1/3, -2/3)<br>v) 2A+3B = (2,-4)+(9,12) = (11, 8)<br>vi) A-C = (1-(-2), -2-4) = (3, -6)<br>vii) 2A+C = (2,-4)+(-2,4) = (0, 0)'},
+  {id:2, tag:'Rectas R² · Ej. 3(a)(d)',
+   st:'Dadas $L_1$ a $L_6$ (ver guía), decidí cuáles son paralelas y cuáles iguales, y hallá $L_1\\cap L_4$ y $L_1\\cap L_6$.',
+   hints:['Dos rectas son paralelas si sus vectores directores son proporcionales. Para las que están en forma implícita, un director es perpendicular al vector normal (A,B).','Para ver si dos rectas paralelas son la misma recta, tomá un punto de una y fijate si cumple la ecuación implícita de la otra.','Para hallar una intersección, igualá las ecuaciones implícitas de ambas rectas y resolvé el sistema 2×2.'],
+   sol:'Pasando todas a la forma implícita: L1: x-y-6=0 · L2: x-y=0 · L3: x-y-4=0 · L4: x+y=0 · L5: x+y=0 · L6: x+y-5=0.<br><br>Paralelas: {L1, L2, L3} (dirección (1,1), todas distintas entre sí) y {L4, L5, L6} (dirección (-1,1)).<br>Iguales: <strong>L4 = L5</strong> (misma ecuación x+y=0).<br><br>L1∩L4: resolviendo x-y=6 y x+y=0 → x=3, y=-3 → <strong>(3,-3)</strong>.<br>L1∩L6: resolviendo x-y=6 y x+y=5 → x=5.5, y=-0.5 → <strong>(5.5,-0.5)</strong>.'},
+  {id:3, tag:'Rectas R² · Ej. 5(a)',
+   st:'Encontrá una ecuación paramétrica de la recta que pasa por $P=(-1,2)$ y tiene dirección $v=(3,1)$.',
+   hints:['La forma paramétrica vectorial es directamente (x,y) = P + t·v.','Para la cartesiana, separá en x(t) e y(t).','Para la implícita, despejá t de una ecuación y reemplazá en la otra.'],
+   sol:'Vectorial: (x,y) = (-1,2) + t(3,1)<br>Cartesiana: x = -1+3t ; y = 2+t<br>Implícita: de y=2+t → t=y-2, reemplazando: x = -1+3(y-2) = 3y-7 → <strong>x - 3y + 7 = 0</strong>'},
+  {id:4, tag:'Vectores R³ · Ej. 9',
+   st:'Determiná si los puntos $A=(1,1,1)$, $B=(-2,0,1)$, $C=(3,2,0)$ están alineados.',
+   hints:['Calculá los vectores AB y AC.','Si uno es múltiplo escalar del otro (son paralelos), los tres puntos están alineados.','Compará las razones componente a componente: AB=(-3,-1,0) y AC=(2,1,-1). Si alguna razón no coincide con las demás, no están alineados.'],
+   sol:'AB = B-A = (-3,-1,0)<br>AC = C-A = (2,1,-1)<br>Razones: -3/2 ≠ -1/1 → los vectores no son proporcionales.<br><strong>Los puntos NO están alineados.</strong> (Podés verificarlo en el simulador de la sección "Rectas y planos en R³".)'},
+  {id:5, tag:'Producto escalar · Ej. 13(d)',
+   st:'Sean $A=(1,2)$, $B=(-1,-2)$, $C=(-2,1)$. Hallá los ángulos entre cada par y decidí cuáles son perpendiculares.',
+   hints:['El ángulo se obtiene con cos α = (u·v)/(‖u‖‖v‖).','Si el producto escalar da 0, el ángulo es 90° sin necesidad de calcular el coseno.','Calculá los tres productos escalares posibles: A·B, A·C y B·C.'],
+   sol:'A·B = (1)(-1)+(2)(-2) = -5 → ‖A‖=‖B‖=√5 → cos α = -1 → α=180° (son opuestos, B=-A).<br>A·C = (1)(-2)+(2)(1) = 0 → <strong>A⊥C</strong> (90°).<br>B·C = (-1)(-2)+(-2)(1) = 0 → <strong>B⊥C</strong> (90°), lógico porque B=-A.'},
+  {id:6, tag:'Producto vectorial · Ej. 16',
+   st:'Hallá el área del paralelogramo determinado por $u=(3,0,4)$ y $v=(1,2,0)$.',
+   hints:['El área del paralelogramo es el módulo del producto vectorial: ‖u×v‖.','Calculá u×v con la fórmula del determinante 3×3.','El resultado final es un número (la norma), no el vector u×v.'],
+   sol:'u×v = (0·0-4·2, 4·1-3·0, 3·2-0·1) = (-8, 4, 6)<br>‖u×v‖ = √(64+16+36) = √116 ≈ <strong>10.77</strong>'},
+  {id:7, tag:'Rectas R² · Ej. 17(b)',
+   st:'Hallá la ecuación (paramétrica e implícita) de la recta perpendicular a $L:X=t(2,-3)+(5,7)$ que pasa por $P=(1,-3)$.',
+   hints:['Si una recta es perpendicular a L, su vector director debe ser perpendicular al director de L (producto escalar = 0).','Un vector perpendicular a (2,-3) es, por ejemplo, (3,2) — intercambiá componentes y cambiá un signo.','Con P y el nuevo director armá la paramétrica; para la implícita, buscá el vector normal (perpendicular al nuevo director) y aplicá n·(X-P)=0.'],
+   sol:'Director perpendicular a (2,-3): v=(3,2), ya que (2,-3)·(3,2)=6-6=0.<br>Paramétrica: (x,y) = (1,-3) + s(3,2)<br>Implícita: normal a (3,2) es (2,-3): 2(x-1) - 3(y+3) = 0 → <strong>2x - 3y - 11 = 0</strong>'},
+  {id:8, tag:'Distancia · Ej. 18(d)',
+   st:'Con $A=(1,0)$, $B=(2,1)$, $C=(1,1)$, sea $L$ la recta por $A$ y $B$. Hallá la distancia mínima de $C$ a $L$.',
+   hints:['Convertí L a su forma implícita Ax+By+C=0 (director AB=(1,1)).','Usá la fórmula de distancia punto-recta: d = |Ax₀+By₀+C| / √(A²+B²).','Reemplazá con las coordenadas de C=(1,1).'],
+   sol:'Director de L: AB=(1,1) → normal (1,-1). Implícita: (x-1)-(y-0)=0 → x-y-1=0.<br>d(C,L) = |1·1 - 1·1 - 1| / √(1+1) = |-1|/√2 = 1/√2 ≈ <strong>0.71</strong>'},
+  {id:9, tag:'Planos R³ · Ej. 22(c)',
+   st:'Dado el plano $\\Pi: 2x-3y+z=8$ y $P=(-1,0,2)$, hallá la distancia mínima de $P$ a $\\Pi$.',
+   hints:['La distancia punto-plano usa una fórmula análoga a la de punto-recta, pero en 3D: d=|Ax₀+By₀+Cz₀+D|/√(A²+B²+C²).','Identificá A, B, C, D de la ecuación del plano (ojo: acá D=-8, porque la ecuación es 2x-3y+z-8=0).','Reemplazá con las coordenadas de P y calculá. Podés verificarlo en el simulador de la sección "Rectas y planos en R³".'],
+   sol:'A=2, B=-3, C=1, D=-8. d = |2(-1) -3(0) +1(2) -8| / √(4+9+1) = |-2+2-8|/√14 = 8/√14 ≈ <strong>2.14</strong>'}
+];
+let solvedExercises = store.get('solved_ex', []);
+function renderExercises(){
+  const list = document.getElementById('ex-list');
+  list.innerHTML = EXERCISES.map(ex=>{
+    const solved = solvedExercises.includes(ex.id);
+    return `<div class="ex-card ${solved?'solved':''}" id="ex-card-${ex.id}">
+      <div class="ex-head">
+        <div><div class="ex-num">${ex.tag}</div><div class="ex-statement">${ex.st}</div></div>
+        ${solved?'<span class="ex-check">✅ Resuelto</span>':''}
+      </div>
+      <div class="ex-btns">
+        ${ex.hints.map((h,i)=>`<button class="sim-btn ghost" onclick="toggleHint(${ex.id},${i})">Pista ${i+1}</button>`).join('')}
+        <button class="sim-btn" onclick="toggleSol(${ex.id})">Ver solución</button>
+        ${!solved?`<button class="sim-btn" style="background:var(--green)" onclick="markSolved(${ex.id})">Marcar como resuelto</button>`:''}
+      </div>
+      ${ex.hints.map((h,i)=>`<div class="ex-hint" id="hint-${ex.id}-${i}">💡 Pista ${i+1}: ${h}</div>`).join('')}
+      <div class="ex-sol" id="sol-${ex.id}">${ex.sol}</div>
+    </div>`;
+  }).join('');
+  mathRender(list);
+}
+function toggleHint(id,i){
+  const el = document.getElementById(`hint-${id}-${i}`);
+  el.classList.toggle('show');
+}
+function toggleSol(id){
+  const el = document.getElementById(`sol-${id}`);
+  el.classList.toggle('show');
+}
+function markSolved(id){
+  if(!solvedExercises.includes(id)) solvedExercises.push(id);
+  store.set('solved_ex', solvedExercises);
+  renderExercises();
+  if(solvedExercises.length >= 5) unlockBadge('practica');
+}
+
+// ════════════════════════════
+//  QUIZ
+// ════════════════════════════
+const allQuestions = [
+  {t:'¿Qué es un vector?', opts:['Un número real cualquiera','Un segmento orientado, con módulo, dirección y sentido','Una matriz cuadrada','Un punto fijo en el plano'], c:1,
+   exp:'Un vector queda definido por su módulo (longitud), su dirección (la recta que lo contiene) y su sentido (indicado por la flecha).'},
+  {t:'¿Cuál es la norma del vector v=(3,4)?', opts:['5','7','3.5','25'], c:0,
+   exp:'‖v‖=√(3²+4²)=√25=5. Es el clásico triángulo 3-4-5.'},
+  {t:'¿Cuál es el criterio para saber si dos vectores son perpendiculares?', opts:['u+v=0','u·v=0','‖u‖=‖v‖','u×v=(1,1,1)'], c:1,
+   exp:'Dos vectores no nulos son perpendiculares si y solo si su producto escalar da cero.'},
+  {t:'Dado el vector u=(a,b), su opuesto es:', opts:['(a,b)','(b,a)','(-a,-b)','(1/a,1/b)'], c:2,
+   exp:'El opuesto de u=(a,b) es -u=(-a,-b), tal que u+(-u)=(0,0).'},
+  {t:'¿En qué conjunto está definido el producto vectorial u×v?', opts:['Solo en R²','Solo en R³','En R² y R³ por igual','En cualquier Rⁿ'], c:1,
+   exp:'El producto vectorial solo está definido para vectores de R³; su resultado es otro vector de R³ perpendicular a ambos.'},
+  {t:'Si u×v = (0,0,0), entonces u y v son:', opts:['Perpendiculares','Paralelos','Opuestos','Unitarios'], c:1,
+   exp:'El producto vectorial de dos vectores paralelos da el vector nulo, porque no determinan ningún paralelogramo (área = 0).'},
+  {t:'En la recta ax+by+c=0, un vector normal es:', opts:['(a,b)','(b,a)','(-b,a)','(c,c)'], c:0,
+   exp:'El vector n=(a,b), formado por los coeficientes de x e y, es siempre perpendicular a la recta.'},
+  {t:'Dos rectas son paralelas si sus vectores directores son:', opts:['Perpendiculares','Unitarios','Proporcionales (uno múltiplo escalar del otro)','Opuestos'], c:2,
+   exp:'v₁=k·v₂ para algún escalar k ≠ 0 es la condición de paralelismo entre rectas.'},
+  {t:'¿Para qué sirve especialmente la forma segmentaria de la recta (x/a + y/b = 1)?', opts:['Para ver la pendiente','Para ver rápido las intersecciones con los ejes (a y b)','Para calcular el módulo del vector director','Para saber si es vertical'], c:1,
+   exp:'En la forma segmentaria, a y b son directamente las coordenadas donde la recta corta al eje x y al eje y respectivamente.'},
+  {t:'¿Cómo se calcula la distancia de un punto P=(x₀,y₀,z₀) a un plano Ax+By+Cz+D=0?', opts:['|Ax₀+By₀+Cz₀+D| / (A+B+C)','(Ax₀+By₀+Cz₀+D)²','|Ax₀+By₀+Cz₀+D| / √(A²+B²+C²)','√(A²+B²+C²)'], c:2,
+   exp:'Es la versión en R³ de la fórmula de distancia punto-recta: se divide por la norma del vector normal (A,B,C).'},
+  {t:'Si u·v = ‖u‖‖v‖cos(90°), entonces u·v vale:', opts:['1','-1','0','‖u‖·‖v‖'], c:2,
+   exp:'cos(90°)=0, así que el producto escalar da 0 — coherente con el criterio de perpendicularidad.'},
+  {t:'Un vector w es paralelo a un plano de normal n cuando:', opts:['w = n','w·n = 0','w×n = n','‖w‖ = ‖n‖'], c:1,
+   exp:'Si w es paralelo al plano, "está acostado" sobre él, y por lo tanto es perpendicular a la normal: w·n=0.'}
+];
+let qIdx=0, score=0, answered=false;
+document.getElementById('q-total').textContent = allQuestions.length;
+function renderQuiz(){
+  const area=document.getElementById('quiz-area');
+  if(qIdx>=allQuestions.length){ showResult(); return; }
+  const q=allQuestions[qIdx];
+  const pct=Math.round((qIdx/allQuestions.length)*100);
+  document.getElementById('q-progress').style.width=pct+'%';
+  document.getElementById('q-score').textContent=score;
+  answered=false;
+  area.innerHTML=`
+  <div class="quiz-card">
+    <div class="q-num">Pregunta ${qIdx+1} de ${allQuestions.length}</div>
+    <div class="q-text">${q.t}</div>
+    <div class="options" id="opts">
+      ${q.opts.map((o,i)=>`<button class="opt-btn" onclick="answerQ(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}
+    </div>
+    <div class="feedback-box" id="fb"></div>
+    <div class="quiz-nav">
+      <button class="btn-next" id="btn-next" onclick="nextQ()" disabled>Siguiente →</button>
+    </div>
+  </div>`;
+}
+function answerQ(i){
+  if(answered) return;
+  answered=true;
+  const q=allQuestions[qIdx];
+  const btns=document.querySelectorAll('#quiz-area .opt-btn');
+  btns.forEach(b=>b.disabled=true);
+  const fb=document.getElementById('fb');
+  if(i===q.c){
+    score++;
+    btns[i].classList.add('correct');
+    fb.className='feedback-box show ok';
+    fb.innerHTML=`✅ <strong>¡Correcto!</strong> ${q.exp}`;
+  } else {
+    btns[i].classList.add('wrong');
+    btns[q.c].classList.add('correct');
+    fb.className='feedback-box show ko';
+    fb.innerHTML=`❌ <strong>Incorrecto.</strong> La respuesta correcta es <strong>${String.fromCharCode(65+q.c)}. ${q.opts[q.c]}</strong>. ${q.exp}`;
+  }
+  document.getElementById('q-score').textContent=score;
+  document.getElementById('btn-next').disabled=false;
+}
+function nextQ(){ qIdx++; renderQuiz(); }
+function showResult(){
+  document.getElementById('q-progress').style.width='100%';
+  const pct=Math.round((score/allQuestions.length)*100);
+  const best = Math.max(score, store.get('quiz_best',0));
+  store.set('quiz_best', best);
+  const emoji = pct>=80?'🎉':pct>=60?'👍':'📚';
+  const msg   = pct>=80?'¡Excelente! Dominás vectores, rectas y planos.':pct>=60?'Bien, pero repasá algunos conceptos.':'Seguí explorando los simuladores, podés mejorar.';
+  document.getElementById('quiz-area').innerHTML=`
+  <div class="result-card">
+    <span class="emoji">${emoji}</span>
+    <h2>${msg}</h2>
+    <span class="score-big">${score}/${allQuestions.length}</span>
+    <p>${pct}% de respuestas correctas · mejor puntaje guardado: ${best}/${allQuestions.length}</p>
+    <div class="result-detail">
+      <div class="rstat ok">✅ Correctas<br><strong>${score}</strong></div>
+      <div class="rstat ko">❌ Incorrectas<br><strong>${allQuestions.length-score}</strong></div>
+    </div>
+    <button class="btn-retry" onclick="restartQuiz()">🔄 Repetir Quiz</button>
+  </div>`;
+  unlockBadge('quiz');
+  if(pct>=80) launchConfetti();
+}
+function restartQuiz(){ qIdx=0; score=0; renderQuiz(); }
+
+// ════════════════════════════
+//  CONFETTI
+// ════════════════════════════
+function launchConfetti(){
+  const colors=['#6d28d9','#8b5cf6','#4338ca','#818cf8','#facc15','#34d399'];
+  for(let i=0;i<80;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.cssText=`left:${Math.random()*100}vw;top:-20px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${1.2+Math.random()*1.5}s;animation-delay:${Math.random()*.8}s;transform:rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(el);
+    el.addEventListener('animationend',()=>el.remove());
+  }
+}
+
+// ════════════════════════════
+//  INIT
+// ════════════════════════════
+renderBadges();
+renderExercises();
+renderQuiz();
+drawVec2();
+</script>
+</body>
+</html>

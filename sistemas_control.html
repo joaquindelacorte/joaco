@@ -57,6 +57,9 @@ nav{position:sticky;top:0;z-index:200;background:var(--main);display:flex;align-
 .lead{font-size:.95rem;color:var(--gray);margin-bottom:1rem}
 .lead b{color:var(--main)}
 .src-tag{display:inline-block;font-size:.7rem;font-weight:700;color:var(--main-lt);background:var(--main-bg);border-radius:2rem;padding:.15rem .6rem;margin-bottom:.8rem}
+.supp-tag{display:inline-block;font-size:.7rem;font-weight:700;color:#0d9488;background:#ccfbf1;border-radius:2rem;padding:.15rem .6rem;margin-bottom:.6rem}
+.deriv-steps{margin-left:1.2rem;font-size:.87rem;line-height:1.9}
+.deriv-steps li{margin-bottom:.3rem}
 
 /* CARDS */
 .grid{display:grid;gap:1.1rem}
@@ -333,6 +336,22 @@ footer a{color:var(--main)}
       </div>
     </div>
 
+    <div class="stitle"><span class="ico">🧭</span>Cómo se construye un modelo (la receta general)</div>
+    <span class="supp-tag">🔎 Complemento de repaso — no es de la diapositiva original de cátedra</span>
+    <p class="lead">Antes de ver los cuatro ejemplos, conviene tener la receta que se repite en todos: no hay una fórmula distinta para cada sistema, hay <b>un mismo procedimiento</b> aplicado a la ley propia de cada dominio.</p>
+    <div class="card bl">
+      <ol>
+        <li>Identificá la variable <b>"a través de"</b> (flujo: corriente, fuerza, caudal, flujo de calor) y la variable <b>"entre"</b> (potencial: tensión, velocidad, presión, temperatura).</li>
+        <li>Contá los elementos que <b>almacenan energía</b> (capacitores/inductores, masas/resortes, capacidades térmicas) — cada uno agrega una derivada, y esa cuenta te dice el orden del modelo <i>antes</i> de escribir una sola ecuación.</li>
+        <li>Aplicá la ley fundamental del dominio: <b>Kirchhoff</b> en eléctrico, <b>Newton</b> en mecánico, <b>balance de energía</b> en térmico, balance de masa/Bernoulli en fluidos.</li>
+        <li>Escribí la ecuación diferencial resultante.</li>
+        <li>Transformá por <b>Laplace</b> (con condiciones iniciales en cero) y despejá salida/entrada → función de transferencia.</li>
+        <li><b>Linealizá</b> si hace falta — casi ningún sistema real es perfectamente lineal, se trabaja con el modelo lineal cerca de un punto de operación.</li>
+        <li><b>Validá</b>: ¿el orden tiene sentido físico? ¿la respuesta simulada se parece a la medida real?</li>
+      </ol>
+    </div>
+    <p class="dcap">Fuentes: <a href="https://www.electrical4u.com/mathematical-modelling-of-various-system/" target="_blank" rel="noopener">Electrical4U — Mathematical Modelling</a>, <a href="https://www.circuitbread.com/tutorials/mathematical-modelling-of-physical-systems-1-2" target="_blank" rel="noopener">CircuitBread — Modelado matemático</a></p>
+
     <div class="stitle"><span class="ico">🔧</span>Cuatro sistemas físicos modelados</div>
     <p class="lead">La idea central de esta clase: sistemas físicamente muy distintos (un circuito, un tanque de agua, una masa con resorte) se describen con la <b>misma forma matemática</b>. Eso es lo que hace tan potente el modelado.</p>
 
@@ -370,6 +389,18 @@ footer a{color:var(--main)}
         <p class="lead">La tensión en el capacitor no puede cambiar instantáneamente — sube exponencialmente hacia Ve con una velocidad marcada por el producto <b>R·C</b>.</p>
       </div>
     </div>
+    <div class="note"><span class="supp-tag" style="margin:0">🔎 Complemento</span><br>Un <b>circuito RC</b> es la combinación más simple posible de un elemento que <b>disipa</b> energía (R, limita cuán rápido puede fluir la carga) y uno que la <b>almacena</b> (C, acumula carga). Es el sistema dinámico más elemental que existe — por eso aparece como "hola mundo" en control y en circuitos — y se usa como filtro pasa-bajos, como circuito de temporización (flashes de cámara, timers 555) y, conceptualmente, como modelo de cualquier proceso que "carga y descarga" — de ahí que el mismo circuito describa también un tanque de agua o un termómetro.</div>
+    <details>
+      <summary>Ver de dónde sale la fórmula, paso a paso <span></span></summary>
+      <div class="dbody">
+        <ol class="deriv-steps">
+          <li>Ley de tensiones de Kirchhoff (KVL): la tensión de la fuente se reparte entre la caída en R y la del capacitor → <b>Ve = i·R + Vc</b></li>
+          <li>La corriente que carga un capacitor es <b>i = C·dVc/dt</b></li>
+          <li>Reemplazando: <b>RC·dVc/dt + Vc = Ve</b></li>
+          <li>Transformando por Laplace (condiciones iniciales nulas) y despejando: <b>F(s) = Vc(s)/Ve(s) = 1/(1+RCs)</b></li>
+        </ol>
+      </div>
+    </details>
 
     <div class="sub">2 · Sistema térmico simple: calefactor de agua</div>
     <div class="grid g2">
@@ -396,6 +427,17 @@ footer a{color:var(--main)}
         <p class="lead">Misma estructura matemática que el circuito RC — solo cambian los nombres de las variables. Este es exactamente el modelo que usa el <a href="pid_horno.html">simulador de PID del horno</a>.</p>
       </div>
     </div>
+    <details>
+      <summary>Ver de dónde sale la fórmula, paso a paso <span></span></summary>
+      <div class="dbody">
+        <ol class="deriv-steps">
+          <li>Análogo de la ley de Ohm para el calor: el flujo de calor es proporcional a la diferencia de temperatura sobre la resistencia térmica → <b>q = (Te − T)/Rt</b></li>
+          <li>Ese calor se acumula en la capacidad calorífica del agua: <b>Cc·dT/dt = q</b></li>
+          <li>Reemplazando: <b>Rt·Cc·dT/dt + T = Te</b></li>
+          <li>Por Laplace: <b>F(s) = T(s)/Te(s) = 1/(1+Rt·Cc·s)</b> — idéntica forma a la del RC.</li>
+        </ol>
+      </div>
+    </details>
 
     <div class="sub">3 · Sistema masa-elasticidad-viscosidad</div>
     <div class="grid g2">
@@ -432,6 +474,17 @@ footer a{color:var(--main)}
         <p class="lead">M: masa (inercia) · B: amortiguador (fricción viscosa) · K: resorte (elasticidad). Es un sistema de <b>segundo orden</b> — a diferencia de los dos anteriores, puede oscilar.</p>
       </div>
     </div>
+    <details>
+      <summary>Ver de dónde sale la fórmula, paso a paso <span></span></summary>
+      <div class="dbody">
+        <ol class="deriv-steps">
+          <li>2ª ley de Newton: <b>ΣF = M·a</b></li>
+          <li>Las fuerzas que se oponen al movimiento (resorte y amortiguador) restan a la fuerza aplicada: <b>f(t) − B·dx/dt − K·x = M·d²x/dt²</b></li>
+          <li>Reordenando: <b>f(t) = M·d²x/dt² + B·dx/dt + K·x</b></li>
+          <li>Dos derivadas (d²x/dt²) → dos elementos que almacenan energía (masa y resorte) → <b>segundo orden</b>.</li>
+        </ol>
+      </div>
+    </details>
 
     <div class="sub">4 · Sistema resistencia-inductancia-capacidad (RLC paralelo)</div>
     <div class="grid g2">
@@ -470,6 +523,32 @@ footer a{color:var(--main)}
         <p class="lead">También segundo orden. Fijate que la resistencia aparece como <b>1/R</b> (conductancia) porque está en paralelo — esto es clave para la analogía con el sistema mecánico.</p>
       </div>
     </div>
+    <details>
+      <summary>Ver de dónde sale la fórmula, paso a paso <span></span></summary>
+      <div class="dbody">
+        <ol class="deriv-steps">
+          <li>Ley de corrientes de Kirchhoff (KCL): la corriente inyectada se reparte entre las tres ramas paralelas → <b>i(t) = i_C + i_R + i_L</b></li>
+          <li>Cada rama en función de v(t): <b>i_C = C·dv/dt</b>, <b>i_R = v/R</b>, <b>i_L = (1/L)·∫v dt</b></li>
+          <li>Sumando: <b>i(t) = C·dv/dt + v/R + (1/L)·∫v dt</b></li>
+          <li>Dos elementos que almacenan energía (L y C) → <b>segundo orden</b>, igual que la masa-resorte-amortiguador.</li>
+        </ol>
+      </div>
+    </details>
+
+    <div class="stitle"><span class="ico">🔢</span>Primer orden vs. segundo orden: ¿de qué depende?</div>
+    <span class="supp-tag">🔎 Complemento de repaso — no es de la diapositiva original de cátedra</span>
+    <p class="lead">La idea que conecta a los cuatro sistemas de arriba: <b>el orden de un modelo es la cantidad de elementos independientes que almacenan energía</b>, ni más ni menos. RC tiene 1 (el capacitor) → primer orden, igual que el calefactor de agua (Cc). RLC tiene 2 (L y C) → segundo orden, igual que la masa-resorte-amortiguador (la masa guarda energía cinética, el resorte guarda energía potencial, y se la "pasan" entre sí). Con un solo lugar donde guardar energía no hay con qué intercambiarla de un lado a otro — por eso un sistema de primer orden nunca puede oscilar, y uno de segundo orden sí puede.</p>
+    <div class="twrap">
+      <table>
+        <tr><th></th><th>1er orden</th><th>2do orden</th></tr>
+        <tr><td>Elementos de energía</td><td>1</td><td>2</td></tr>
+        <tr><td>Polos</td><td>1 real</td><td>2 (reales o complejos conjugados)</td></tr>
+        <tr><td>¿Puede oscilar?</td><td>Nunca</td><td>Sí, si ζ&lt;1</td></tr>
+        <tr><td>Parámetro clave</td><td>τ (constante de tiempo)</td><td>ωn (frec. natural) y ζ (amortiguamiento)</td></tr>
+        <tr><td>Ejemplos de esta clase</td><td>RC, calefactor de agua</td><td>Masa-resorte-amortiguador, RLC</td></tr>
+      </table>
+    </div>
+    <p class="dcap">Fuentes: <a href="https://web.mit.edu/2.14/www/Handouts/StateSpace.pdf" target="_blank" rel="noopener">MIT — State-Space Representation</a>, <a href="https://eng.libretexts.org/Bookshelves/Industrial_and_Systems_Engineering/Introduction_to_Control_Systems_(Iqbal)/01:_Mathematical_Models_of_Physical_Systems/1.06:_State_Variable_Models" target="_blank" rel="noopener">LibreTexts — State Variable Models</a></p>
 
     <div class="stitle"><span class="ico">🔗</span>Analogías entre dominios</div>
     <p class="lead">Ya viste que RC ↔ calefactor de agua tienen la misma función de transferencia, y que masa-resorte-amortiguador ↔ RLC paralelo son ambos de segundo orden. Esto no es casualidad: son <b>análogos</b> — mismo modelo matemático, distinto fenómeno físico.</p>
@@ -518,6 +597,23 @@ footer a{color:var(--main)}
           </table>
         </div>
         <div class="warn" style="margin-top:.8rem">⚠️ Ojo con el amortiguador: como el circuito análogo es un RLC <b>paralelo</b>, el amortiguador se tiene que caracterizar por su <b>conductancia</b> (en Siemens), no por su resistencia en Ohms — en un paralelo los elementos resistivos se suman como conductancias, no como resistencias.</div>
+
+        <div class="sub" style="margin-top:1.2rem">🔎 Complemento: hay dos analogías mecánico-eléctricas estándar</div>
+        <span class="supp-tag">No es de la diapositiva original — le pone nombre a la convención de la cátedra</span>
+        <p style="margin:.5rem 0">La que usa la cátedra (fuerza↔corriente) se llama <b>analogía de movilidad</b>, y es una de las dos convenciones estándar en los libros de control — son duales entre sí:</p>
+        <div class="twrap">
+          <table>
+            <tr><th></th><th>Fuerza-tensión ("impedancia")</th><th>Fuerza-corriente ("movilidad" — la de la cátedra)</th></tr>
+            <tr><td>f(t) ↔</td><td>tensión</td><td><b>corriente</b></td></tr>
+            <tr><td>v(t) ↔</td><td>corriente</td><td><b>tensión</b></td></tr>
+            <tr><td>M ↔</td><td>inductor</td><td><b>capacitor</b></td></tr>
+            <tr><td>K ↔</td><td>1/capacitor</td><td><b>inductor</b></td></tr>
+            <tr><td>B ↔</td><td>resistor</td><td><b>conductancia</b></td></tr>
+            <tr><td>Topología</td><td>un paralelo mecánico se vuelve una <b>serie</b> eléctrica (cambia)</td><td>un paralelo mecánico sigue siendo un <b>paralelo</b> eléctrico (se preserva)</td></tr>
+          </table>
+        </div>
+        <p style="margin-top:.6rem">La cátedra eligió la de movilidad justamente porque <b>preserva la topología</b>: como resorte y amortiguador están en paralelo contra la masa, el circuito análogo también los deja en paralelo — por eso el amortiguador va en conductancia. Si en algún otro apunte ves la convención de fuerza-tensión, no te confundas: es la misma física, análoga de otra forma.</p>
+        <p class="dcap">Fuentes: <a href="https://en.wikipedia.org/wiki/Mobility_analogy" target="_blank" rel="noopener">Wikipedia — Mobility analogy</a>, <a href="https://en.wikibooks.org/wiki/Engineering_Acoustics/Electro-Mechanical_Analogies" target="_blank" rel="noopener">Wikibooks — Electro-Mechanical Analogies</a></p>
       </div>
     </details>
 
@@ -894,6 +990,8 @@ const QUIZ = [
   {q:'La función de transferencia de un circuito RC es F(s) = 1/(1+RCs). ¿De qué orden es este sistema?', opts:['Orden cero','Primer orden','Segundo orden','No tiene orden definido'], correct:1, expl:'Solo hay una potencia de s en el denominador (s¹) — es un sistema de primer orden, no puede oscilar.'},
   {q:'En un sistema de segundo orden, ¿qué hace que la respuesta al escalón oscile en vez de asentarse suavemente?', opts:['Un amortiguamiento (ζ) bajo, por conductancia/resistencia baja de disipación', 'Un amortiguamiento alto', 'Que la masa sea muy grande', 'Que no tenga entrada'], correct:0, expl:'Con poca disipación de energía (conductancia baja) el sistema es subamortiguado (ζ<1) y oscila antes de asentarse — lo mismo vimos en el simulador con G=0.5.'},
   {q:'Con amortiguamiento crítico (ζ=1), ¿cómo es la respuesta al escalón?', opts:['Oscila indefinidamente','Nunca llega al valor final','Llega al valor final lo más rápido posible, sin oscilar','Es idéntica a la de ζ=0'], correct:2, expl:'ζ=1 es el punto justo donde el sistema deja de oscilar — la frontera entre subamortiguado y sobreamortiguado, y la respuesta más rápida sin overshoot.'},
+  {q:'¿De qué depende el orden de un modelo matemático?', opts:['Del tamaño físico del sistema','De la cantidad de elementos independientes que almacenan energía','De si el sistema es eléctrico o mecánico','De la cantidad de entradas que tiene'], correct:1, expl:'RC y el calefactor de agua tienen 1 elemento de energía (C o Cc) → primer orden. RLC y masa-resorte-amortiguador tienen 2 (L y C, o masa y resorte) → segundo orden.'},
+  {q:'La cátedra usa la analogía fuerza↔corriente para pasar de mecánico a eléctrico. ¿Cómo se llama esa convención y por qué se eligió?', opts:['Analogía de impedancia, porque preserva la resistencia','Analogía de movilidad, porque preserva la topología (los paralelos mecánicos siguen siendo paralelos eléctricos)','No tiene nombre, es arbitraria','Analogía de Laplace, porque usa la transformada'], correct:1, expl:'Existen dos analogías estándar (fuerza-tensión y fuerza-corriente); la de fuerza-corriente se llama "de movilidad" y se eligió porque un paralelo mecánico (resorte y amortiguador contra la masa) sigue siendo un paralelo en el circuito — por eso el amortiguador se expresa en conductancia.'},
 ];
 let quizIdx=0, quizScore=0, quizAnswered=false;
 

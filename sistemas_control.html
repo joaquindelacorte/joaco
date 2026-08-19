@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Sistemas de Control — Apuntes</title>
+<meta name="description" content="Apuntes de Sistemas de Control: lazo abierto/cerrado, modelado matemático, analogías y simuladores de respuesta al escalón — clase a clase"/>
+<style>
+:root{
+  --main:#3730a3;--main-lt:#4f46e5;--main-bg:#e0e7ff;
+  --amber:#b45309;--amber-bg:#fef9c3;
+  --teal:#0d9488;--teal-bg:#ccfbf1;
+  --orange:#c2410c;--orange-bg:#ffedd5;
+  --red:#b91c1c;--red-bg:#fee2e2;
+  --green:#15803d;--green-bg:#dcfce7;
+  --gray:#374151;--gray-lt:#6b7280;
+  --bg:#f5f6fb;--card:#fff;--border:#e2e8f0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65;overflow-x:hidden;-webkit-tap-highlight-color:rgba(55,48,163,.15);-webkit-font-smoothing:antialiased}
+img,svg,video{max-width:100%;height:auto}
+table{max-width:100%}
+button,select,input[type=range],textarea{min-height:44px}
+.opt-btn,.tab-btn,.preset-btn,.diag-btn,.next-q-btn,.retry-btn{min-height:44px}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:6px;background:var(--border);border-radius:3px}
+input[type=range]::-moz-range-track{height:6px;background:var(--border);border-radius:3px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:var(--main-lt);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);margin-top:-8px;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--main-lt);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);cursor:pointer}
+textarea{width:100%;font-family:inherit;font-size:.88rem;padding:.6rem .7rem;border:1px solid var(--border);border-radius:8px;resize:vertical;color:var(--gray)}
+@media(hover:none){.card:hover{box-shadow:0 1px 4px rgba(0,0,0,.05);transform:none}}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:var(--main);display:flex;align-items:center;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.brand{color:#fff;font-size:1.05rem;font-weight:800;padding:.8rem 1.2rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.2)}
+.tabs{display:flex;overflow-x:auto;flex:1}
+.tab-btn{padding:.75rem 1rem;border:none;background:transparent;color:rgba(255,255,255,.75);font-size:.83rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s;font-family:inherit}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tab-btn.active{color:#fff;border-bottom-color:#a5b4fc;background:rgba(255,255,255,.08)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1e1b4b 0%,var(--main-lt) 100%);color:#fff;text-align:center;padding:2.5rem 1rem 2rem}
+.hero h1{font-size:2.1rem;font-weight:900;letter-spacing:-.5px}
+.hero p{opacity:.88;margin-top:.4rem;max-width:640px;margin-left:auto;margin-right:auto}
+.badges-sum{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.badge-chip{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.25rem .85rem;font-size:.78rem;font-weight:700}
+.lvl-chip{background:#fff;color:var(--main);border-radius:2rem;padding:.2rem .7rem;font-size:.75rem;font-weight:800;margin-left:.5rem}
+
+/* LAYOUT */
+.page{display:none}.page.active{display:block}
+.container{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+.stitle{display:flex;align-items:center;gap:.6rem;font-size:1.3rem;font-weight:800;color:var(--main);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid var(--main-bg)}
+.stitle:first-child{margin-top:0}
+.stitle .ico{font-size:1.3rem}
+.sub{font-size:1.05rem;font-weight:700;color:var(--main-lt);margin:1.4rem 0 .7rem}
+.lead{font-size:.95rem;color:var(--gray);margin-bottom:1rem}
+.lead b{color:var(--main)}
+.src-tag{display:inline-block;font-size:.7rem;font-weight:700;color:var(--main-lt);background:var(--main-bg);border-radius:2rem;padding:.15rem .6rem;margin-bottom:.8rem}
+
+/* CARDS */
+.grid{display:grid;gap:1.1rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;box-shadow:0 1px 4px rgba(0,0,0,.05);transition:.2s}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.card h3{font-size:1rem;font-weight:700;margin-bottom:.5rem;color:var(--main)}
+.card p,.card li{font-size:.9rem;color:var(--gray)}
+.card ul,.card ol{margin-left:1.2rem;margin-top:.4rem}
+.card.bl{border-left:4px solid var(--main-lt);background:var(--main-bg)}
+.card.gr{border-left:4px solid var(--green);background:var(--green-bg)}
+.card.or{border-left:4px solid var(--orange);background:var(--orange-bg)}
+.card.re{border-left:4px solid var(--red);background:var(--red-bg)}
+.card.te{border-left:4px solid var(--teal);background:var(--teal-bg)}
+.card.am{border-left:4px solid var(--amber);background:var(--amber-bg)}
+
+/* FORMULA */
+.fbox{background:#181633;color:#e8e6ff;border-radius:10px;padding:1.1rem 1.3rem;font-family:'Courier New',monospace;text-align:center;margin:.8rem 0;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.fbox .big{font-size:1.2rem;font-weight:700;color:#a5b4fc;display:block;margin-bottom:.3rem}
+.fbox .sub-f{font-size:.85rem;color:#c7c5e8;display:block;margin-top:.25rem}
+.fbox .unit{font-size:.78rem;color:#8b88b3;display:block;margin-top:.3rem}
+
+/* CODE */
+.code{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1rem 1.2rem;font-family:'Consolas','Courier New',monospace;font-size:.8rem;line-height:1.6;overflow-x:auto;margin:.8rem 0;white-space:pre}
+
+/* TABLE */
+.twrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);margin:.6rem 0}
+table{width:100%;border-collapse:collapse;font-size:.87rem;background:#fff}
+th{background:var(--main);color:#fff;padding:.65rem .9rem;text-align:left;font-weight:600}
+td{padding:.6rem .9rem;border-bottom:1px solid var(--border)}
+tr:last-child td{border:none}
+tr:nth-child(even) td{background:var(--main-bg)}
+
+/* TIP / NOTE / WARN */
+.tip{display:flex;gap:.7rem;align-items:flex-start;background:#fffbeb;border:1px solid #fbbf24;border-radius:10px;padding:.85rem 1.1rem;margin:.9rem 0;font-size:.9rem}
+.tip-i{flex-shrink:0;font-size:1.05rem}
+.note{background:var(--main-bg);border-left:4px solid var(--main-lt);border-radius:0 8px 8px 0;padding:.8rem 1rem;font-size:.92rem;margin:.9rem 0;color:#312e81}
+.warn{background:var(--red-bg);border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:.8rem 1rem;font-size:.92rem;margin:.9rem 0;color:#7f1d1d}
+
+/* DIAGRAM */
+.diagram{background:#fafaff;border:1px solid var(--border);border-radius:10px;padding:1rem;margin:.9rem 0;text-align:center}
+.dcap{font-size:.82rem;color:var(--gray-lt);margin-top:.6rem;font-style:italic}
+.diag-toggle{display:flex;gap:.5rem;justify-content:center;margin-bottom:.8rem}
+.diag-btn{border:2px solid var(--border);background:#fff;border-radius:8px;padding:.5rem 1.1rem;font-size:.85rem;font-weight:700;cursor:pointer;color:var(--gray-lt);font-family:inherit;transition:.15s}
+.diag-btn.active{border-color:var(--main);background:var(--main-bg);color:var(--main)}
+
+/* ACCORDION */
+details{border:1px solid var(--border);border-radius:10px;margin-bottom:.7rem;overflow:hidden}
+details summary{padding:.9rem 1.1rem;cursor:pointer;font-weight:600;font-size:.92rem;background:var(--card);list-style:none;display:flex;justify-content:space-between;align-items:center;user-select:none}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:'＋';color:var(--main-lt)}
+details[open] summary::after{content:'－'}
+details[open] summary{background:var(--main-bg);color:var(--main)}
+.dbody{padding:1.1rem;background:var(--card);border-top:1px solid var(--border);font-size:.9rem;line-height:1.7}
+
+/* TOSTADORA */
+.tostadora-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:.9rem 0}
+.tostadora-field label{display:block;font-size:.82rem;font-weight:700;color:var(--main);margin-bottom:.35rem}
+
+/* SIMULADORES */
+.sim-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;margin-bottom:1.3rem}
+.sim-flex{display:grid;grid-template-columns:230px 1fr;gap:1.2rem}
+@media(max-width:720px){.sim-flex{grid-template-columns:1fr}}
+.slider-row{margin-bottom:1rem}
+.slider-row label{display:flex;justify-content:space-between;font-size:.85rem;font-weight:600;color:var(--gray);margin-bottom:.35rem}
+.slider-row label .val{color:var(--main);font-family:'Courier New',monospace;font-weight:700}
+.preset-row{display:flex;flex-direction:column;gap:.5rem;margin-top:.5rem}
+.preset-btn{border:1px solid var(--border);background:#fdfaff;border-radius:8px;padding:.55rem .6rem;font-size:.8rem;font-weight:700;cursor:pointer;color:var(--gray);font-family:inherit;transition:.15s;text-align:left}
+.preset-btn:hover{border-color:var(--main-lt);color:var(--main)}
+.preset-btn.done{background:var(--green-bg);border-color:var(--green);color:#14532d}
+canvas.chart{width:100%;height:240px;background:#fbfbff;border-radius:8px;border:1px solid var(--border)}
+.chart-legend{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.7rem;font-size:.78rem}
+.chart-legend span.leg-sw{width:14px;height:4px;border-radius:2px;display:inline-block;margin-right:.35rem;vertical-align:middle}
+
+/* BADGES */
+.badge-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.8rem;margin:1rem 0 1.6rem}
+.badge-item{border:2px solid var(--border);border-radius:10px;padding:.9rem;text-align:center;background:#fdfaff;opacity:.5;filter:grayscale(1);transition:.25s}
+.badge-item.unlocked{opacity:1;filter:none;border-color:var(--main);background:var(--main-bg);box-shadow:0 2px 10px rgba(55,48,163,.15)}
+.badge-item .bi{font-size:1.7rem;display:block;margin-bottom:.35rem}
+.badge-item .bn{font-size:.78rem;font-weight:700;color:var(--gray)}
+.badge-item.unlocked .bn{color:var(--main)}
+
+/* QUIZ */
+.quiz-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.4rem}
+.quiz-progress{font-size:.8rem;color:var(--gray-lt);margin-bottom:.6rem;font-weight:600}
+.quiz-q{font-size:1.02rem;font-weight:700;color:var(--gray);margin-bottom:1rem}
+.quiz-opts{display:flex;flex-direction:column;gap:.6rem}
+.opt-btn{text-align:left;border:2px solid var(--border);background:#fff;border-radius:8px;padding:.75rem 1rem;font-size:.9rem;cursor:pointer;color:var(--gray);font-family:inherit;transition:.15s}
+.opt-btn:hover{border-color:var(--main-lt)}
+.opt-btn.correct{border-color:var(--green);background:var(--green-bg);color:#14532d;font-weight:700}
+.opt-btn.wrong{border-color:var(--red);background:var(--red-bg);color:#7f1d1d;font-weight:700}
+.opt-btn.disabled{pointer-events:none}
+.quiz-expl{margin-top:1rem;padding:.9rem;border-radius:8px;background:var(--main-bg);color:#312e81;font-size:.87rem;display:none}
+.quiz-expl.show{display:block}
+.next-q-btn{margin-top:1.1rem;border:none;background:var(--main);color:#fff;font-weight:700;padding:.65rem 1.3rem;border-radius:8px;cursor:pointer;font-family:inherit;display:none}
+.next-q-btn.show{display:inline-block}
+.quiz-result{text-align:center}
+.quiz-result .score{font-size:2.6rem;font-weight:900;color:var(--main);margin:.6rem 0}
+.quiz-score-display{font-size:.85rem;color:var(--gray-lt);font-weight:700}
+.retry-btn{margin-top:1rem;border:none;background:var(--main);color:#fff;font-weight:700;padding:.65rem 1.4rem;border-radius:8px;cursor:pointer;font-family:inherit}
+
+footer{text-align:center;padding:2rem 1rem 3rem;font-size:.8rem;color:var(--gray-lt)}
+footer a{color:var(--main)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">🎛️ Sistemas de Control</div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('c1')">📖 Clase 1</button>
+    <button class="tab-btn" onclick="showTab('c2')">🧮 Clase 2</button>
+    <button class="tab-btn" onclick="showTab('sim')">🧪 Simuladores</button>
+    <button class="tab-btn" onclick="showTab('quiz')">🏅 Insignias · Quiz</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>Sistemas de Control</h1>
+  <p>Apuntes de la materia, clase a clase — teoría fiel a las diapositivas de cátedra, diagramas de bloques, modelado matemático y simuladores de respuesta al escalón para entender de una vez el efecto de cada parámetro.</p>
+  <div class="badges-sum">
+    <span class="badge-chip">📖 Clase 1 y 2</span>
+    <span class="badge-chip">🧪 2 simuladores</span>
+    <span class="badge-chip">🏅 Insignias<span class="lvl-chip" id="badge-count-chip">0/6</span></span>
+  </div>
+</div>
+
+<!-- ================= CLASE 1 ================= -->
+<div class="page active" id="page-c1">
+  <div class="container">
+
+    <span class="src-tag">📎 Clase 1 · 3 de agosto de 2026 · ¿Qué es Controlar?</span>
+
+    <div class="stitle"><span class="ico">🌍</span>Tipos de sistemas</div>
+    <p class="lead">Controlar no es un concepto exclusivo de la ingeniería — la misma idea de "medir, comparar contra un objetivo y corregir" aparece en dominios muy distintos.</p>
+    <div class="grid g3">
+      <div class="card bl">
+        <h3>⚙️ Artificiales</h3>
+        <ul>
+          <li>Controles de temperatura</li>
+          <li>Velocidad</li>
+          <li>Caudal, etc.</li>
+        </ul>
+      </div>
+      <div class="card te">
+        <h3>🌿 Naturales</h3>
+        <ul>
+          <li>Transpiración para regular la temperatura corporal</li>
+          <li>Población de presas y depredadores</li>
+        </ul>
+      </div>
+      <div class="card am">
+        <h3>💰 Económicos</h3>
+        <ul>
+          <li>Gasto público</li>
+          <li>Ley de oferta y demanda</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">🔁</span>Sistemas de lazo abierto y cerrado</div>
+    <p class="lead">La diferencia central de toda la materia: si el controlador <b>mide la salida real y la usa para corregirse</b>, es de lazo cerrado. Si no, es de lazo abierto.</p>
+
+    <div class="diagram">
+      <div class="diag-toggle">
+        <button class="diag-btn active" id="btnDiagAbierto" onclick="showDiagram('abierto')">🔓 Lazo abierto</button>
+        <button class="diag-btn" id="btnDiagCerrado" onclick="showDiagram('cerrado')">🔁 Lazo cerrado</button>
+      </div>
+      <div id="diagHolder"></div>
+      <p class="dcap" id="diagCap">E(s): señal de entrada/error · C: controlador · U(s): señal de control · G: planta · Y(s): salida</p>
+    </div>
+
+    <div class="tip"><span class="tip-i">💡</span><div>Notá que en el lazo abierto no hay realimentación: si algo perturba la salida Y(s) (por ejemplo el rozamiento cambia, o entra ruido), el controlador nunca se entera. En el lazo cerrado, esa diferencia entre R(s) (referencia) e Y(s) realimentada se convierte en el error E(s) que sigue corrigiendo el sistema todo el tiempo.</div></div>
+
+    <div class="stitle"><span class="ico">🏛️</span>Tres hitos en la historia de los sistemas de control</div>
+    <div class="grid g3">
+      <div class="card bl">
+        <svg viewBox="0 0 100 100" width="60" style="display:block;margin:0 auto .5rem">
+          <rect x="30" y="15" width="40" height="15" rx="3" fill="#4f46e5"/>
+          <rect x="40" y="30" width="20" height="45" fill="none" stroke="#4f46e5" stroke-width="3"/>
+          <circle cx="50" cy="60" r="7" fill="#a5b4fc"/>
+          <path d="M40,75 h20 v10 h-20 z" fill="#4f46e5"/>
+          <line x1="35" y1="40" x2="45" y2="40" stroke="#a5b4fc" stroke-width="2"/>
+        </svg>
+        <h3>Reloj de agua de Ktesibios</h3>
+        <p><b>~270 a.C., Alejandría.</b> Un flotador regulaba el nivel de agua para que goteara a caudal constante — el primer mecanismo de control por realimentación conocido de la historia.</p>
+      </div>
+      <div class="card or">
+        <svg viewBox="0 0 100 100" width="60" style="display:block;margin:0 auto .5rem">
+          <line x1="50" y1="20" x2="50" y2="55" stroke="#c2410c" stroke-width="4"/>
+          <line x1="50" y1="35" x2="25" y2="60" stroke="#c2410c" stroke-width="4"/>
+          <line x1="50" y1="35" x2="75" y2="60" stroke="#c2410c" stroke-width="4"/>
+          <circle cx="25" cy="60" r="9" fill="#ea580c"/>
+          <circle cx="75" cy="60" r="9" fill="#ea580c"/>
+          <rect x="42" y="75" width="16" height="14" fill="#c2410c"/>
+        </svg>
+        <h3>Regulador centrífugo de Watt</h3>
+        <p><b>1788.</b> Bolas giratorias que se abren con la velocidad para regular el vapor de la máquina — el primer control industrial masivo. Sus oscilaciones inesperadas motivaron el análisis matemático de estabilidad de Maxwell en 1868.</p>
+      </div>
+      <div class="card gr">
+        <svg viewBox="0 0 100 100" width="60" style="display:block;margin:0 auto .5rem">
+          <rect x="25" y="35" width="50" height="45" rx="4" fill="none" stroke="#15803d" stroke-width="3"/>
+          <circle cx="50" cy="30" r="10" fill="none" stroke="#15803d" stroke-width="3"/>
+          <line x1="50" y1="20" x2="50" y2="10" stroke="#15803d" stroke-width="3"/>
+          <circle cx="38" cy="55" r="5" fill="#22c55e"/>
+          <circle cx="62" cy="55" r="5" fill="#22c55e"/>
+          <line x1="30" y1="80" x2="30" y2="88" stroke="#15803d" stroke-width="3"/>
+          <line x1="70" y1="80" x2="70" y2="88" stroke="#15803d" stroke-width="3"/>
+        </svg>
+        <h3>Director de tiro (WWII)</h3>
+        <p><b>Años 1940.</b> Computadoras electromecánicas tipo M7 que apuntaban artillería antiaérea siguiendo blancos en movimiento — antecedente directo de la teoría de control clásica (Nyquist, Bode) y la cibernética de Wiener.</p>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">🛠️</span>El trabajo del ingeniero de control</div>
+    <div class="card bl">
+      <ol>
+        <li>Estudiar o establecer <b>especificaciones</b></li>
+        <li>Analizar el sistema</li>
+        <li>Adoptar o diseñar una <b>estrategia de control</b></li>
+        <li>Probar contra las especificaciones</li>
+        <li>Si se cumplen... <b>cobrar</b> 😄</li>
+      </ol>
+    </div>
+
+    <div class="stitle"><span class="ico">🍞</span>Ejercicio: la tostadora del futuro</div>
+    <p class="lead">Debe ser fácil de usar, no debe expulsar las tostadas como si fuera un cañonazo, y el nivel de tostado tiene que ser independiente del tipo y estado del pan. Pensá qué <b>sensores</b>, <b>actuadores</b> y <b>lógica de control</b> usarías — no hay respuesta única, es diseño conceptual. Se guarda solo en este navegador.</p>
+    <div class="card">
+      <div class="tostadora-grid">
+        <div class="tostadora-field">
+          <label>🔍 Sensores</label>
+          <textarea id="tstSensores" rows="3" placeholder="¿Qué mediría el sistema?" oninput="onTostadoraInput()"></textarea>
+        </div>
+        <div class="tostadora-field">
+          <label>⚡ Actuadores</label>
+          <textarea id="tstActuadores" rows="3" placeholder="¿Qué acciones físicas ejecutaría?" oninput="onTostadoraInput()"></textarea>
+        </div>
+        <div class="tostadora-field">
+          <label>🧠 Lógica de control</label>
+          <textarea id="tstLogica" rows="3" placeholder="¿Cómo decide cuándo parar?" oninput="onTostadoraInput()"></textarea>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= CLASE 2 ================= -->
+<div class="page" id="page-c2">
+  <div class="container">
+
+    <span class="src-tag">📎 Clase 2 · 17 de agosto de 2026 · Modelos Matemáticos</span>
+
+    <div class="stitle"><span class="ico">🗂️</span>Tipos de modelos</div>
+    <div class="grid g2">
+      <div class="card">
+        <h3>Otras formas de modelar</h3>
+        <ul>
+          <li><b>Modelos a escala</b> — réplicas físicas reducidas</li>
+          <li><b>Modelos híbridos</b> — combinan partes físicas y simuladas</li>
+          <li><b>Simulaciones</b> — corridas numéricas sin fórmula cerrada</li>
+        </ul>
+      </div>
+      <div class="card bl">
+        <h3>📐 Modelos matemáticos (el foco de la materia)</h3>
+        <ul>
+          <li>Manipulables y modificables con bajísimo costo</li>
+          <li>Permiten llevarlos a situaciones a las que no se puede llevar un modelo de otro tipo</li>
+          <li>Dan respuesta directa al comportamiento del sistema</li>
+          <li>Pueden ser muy difíciles de resolver</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">🔧</span>Cuatro sistemas físicos modelados</div>
+    <p class="lead">La idea central de esta clase: sistemas físicamente muy distintos (un circuito, un tanque de agua, una masa con resorte) se describen con la <b>misma forma matemática</b>. Eso es lo que hace tan potente el modelado.</p>
+
+    <div class="sub">1 · Circuito RC alimentado por tensión</div>
+    <div class="grid g2">
+      <div class="diagram" style="margin:0">
+        <svg viewBox="0 0 260 150" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="35" cy="80" r="22" fill="none" stroke="#374151" stroke-width="2"/>
+          <text x="35" y="72" font-size="11" text-anchor="middle" fill="#374151">+</text>
+          <text x="35" y="94" font-size="11" text-anchor="middle" fill="#374151">−</text>
+          <text x="35" y="118" font-size="12" text-anchor="middle" fill="#374151">Ve</text>
+          <line x1="35" y1="58" x2="35" y2="35" stroke="#374151" stroke-width="2"/>
+          <line x1="35" y1="35" x2="210" y2="35" stroke="#374151" stroke-width="2"/>
+          <line x1="90" y1="35" x2="150" y2="35" stroke="#4f46e5" stroke-width="2"/>
+          <path d="M90,35 l6,-7 l8,14 l8,-14 l8,14 l8,-14 l8,14 l6,-7" fill="none" stroke="#4f46e5" stroke-width="2"/>
+          <text x="120" y="24" font-size="12" text-anchor="middle" fill="#4f46e5">R</text>
+          <text x="15" y="30" font-size="12" fill="#374151">i</text>
+          <line x1="210" y1="35" x2="210" y2="60" stroke="#374151" stroke-width="2"/>
+          <line x1="195" y1="60" x2="225" y2="60" stroke="#4f46e5" stroke-width="2"/>
+          <line x1="195" y1="68" x2="225" y2="68" stroke="#4f46e5" stroke-width="2"/>
+          <text x="180" y="68" font-size="12" fill="#4f46e5">C</text>
+          <line x1="210" y1="68" x2="210" y2="102" stroke="#374151" stroke-width="2"/>
+          <line x1="35" y1="102" x2="210" y2="102" stroke="#374151" stroke-width="2"/>
+          <line x1="235" y1="45" x2="235" y2="90" stroke="#374151" stroke-width="1.5"/>
+          <path d="M235,45 l-4,8 l8,0 z" fill="#374151"/>
+          <path d="M235,90 l-4,-8 l8,0 z" fill="#374151"/>
+          <text x="248" y="70" font-size="12" fill="#374151">Vs</text>
+        </svg>
+      </div>
+      <div>
+        <div class="fbox">
+          <span class="big">F(s) = Vs(s)/Ve(s) = 1 / (1 + RCs)</span>
+          <span class="sub-f">función de transferencia del circuito RC</span>
+        </div>
+        <p class="lead">La tensión en el capacitor no puede cambiar instantáneamente — sube exponencialmente hacia Ve con una velocidad marcada por el producto <b>R·C</b>.</p>
+      </div>
+    </div>
+
+    <div class="sub">2 · Sistema térmico simple: calefactor de agua</div>
+    <div class="grid g2">
+      <div class="diagram" style="margin:0">
+        <svg viewBox="0 0 260 150" xmlns="http://www.w3.org/2000/svg">
+          <rect x="90" y="20" width="130" height="110" fill="none" stroke="#374151" stroke-width="2"/>
+          <text x="205" y="45" font-size="13" fill="#374151">T</text>
+          <text x="205" y="60" font-size="13" fill="#c2410c">Cc</text>
+          <rect x="130" y="55" width="20" height="45" fill="none" stroke="#c2410c" stroke-width="2"/>
+          <path d="M140,55 v45" stroke="#c2410c" stroke-width="2" stroke-dasharray="2 3"/>
+          <text x="118" y="70" font-size="12" fill="#c2410c">Te</text>
+          <text x="118" y="112" font-size="12" fill="#c2410c">Rt</text>
+          <circle cx="30" cy="55" r="3" fill="#374151"/>
+          <circle cx="30" cy="100" r="3" fill="#374151"/>
+          <line x1="30" y1="55" x2="130" y2="60" stroke="#374151" stroke-width="1.5"/>
+          <line x1="30" y1="100" x2="130" y2="95" stroke="#374151" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="fbox">
+          <span class="big">F(s) = T(s)/Te(s) = 1 / (1 + Rt·Cc·s)</span>
+          <span class="sub-f">Rt: resistencia térmica · Cc: capacidad calorífica</span>
+        </div>
+        <p class="lead">Misma estructura matemática que el circuito RC — solo cambian los nombres de las variables. Este es exactamente el modelo que usa el <a href="pid_horno.html">simulador de PID del horno</a>.</p>
+      </div>
+    </div>
+
+    <div class="sub">3 · Sistema masa-elasticidad-viscosidad</div>
+    <div class="grid g2">
+      <div class="diagram" style="margin:0">
+        <svg viewBox="0 0 260 150" xmlns="http://www.w3.org/2000/svg">
+          <line x1="30" y1="20" x2="30" y2="130" stroke="#374151" stroke-width="3"/>
+          <line x1="24" y1="24" x2="16" y2="16" stroke="#374151"/><line x1="24" y1="40" x2="16" y2="32" stroke="#374151"/>
+          <line x1="24" y1="56" x2="16" y2="48" stroke="#374151"/><line x1="24" y1="72" x2="16" y2="64" stroke="#374151"/>
+          <line x1="24" y1="88" x2="16" y2="80" stroke="#374151"/><line x1="24" y1="104" x2="16" y2="96" stroke="#374151"/>
+          <line x1="24" y1="120" x2="16" y2="112" stroke="#374151"/>
+          <rect x="55" y="35" width="45" height="16" fill="none" stroke="#0d9488" stroke-width="2"/>
+          <rect x="65" y="35" width="6" height="16" fill="#0d9488"/>
+          <line x1="30" y1="43" x2="55" y2="43" stroke="#0d9488" stroke-width="2"/>
+          <line x1="100" y1="43" x2="140" y2="43" stroke="#0d9488" stroke-width="2"/>
+          <text x="77" y="30" font-size="11" text-anchor="middle" fill="#0d9488">B</text>
+          <path d="M30,100 l8,-6 l8,12 l8,-12 l8,12 l8,-12 l8,12 l8,-6" fill="none" stroke="#0d9488" stroke-width="2"/>
+          <line x1="94" y1="100" x2="140" y2="100" stroke="#0d9488" stroke-width="2"/>
+          <text x="62" y="118" font-size="11" text-anchor="middle" fill="#0d9488">K</text>
+          <rect x="140" y="25" width="55" height="90" fill="none" stroke="#374151" stroke-width="2"/>
+          <text x="167" y="75" font-size="14" text-anchor="middle" fill="#374151">M</text>
+          <line x1="195" y1="70" x2="230" y2="70" stroke="#374151" stroke-width="2"/>
+          <path d="M230,70 l-7,-4 l0,8 z" fill="#374151"/>
+          <text x="235" y="74" font-size="12" fill="#374151">f(t)</text>
+          <line x1="167" y1="16" x2="167" y2="24" stroke="#374151" stroke-width="1.5"/>
+          <path d="M167,16 l-4,7 l8,0 z" fill="#374151"/>
+          <text x="180" y="14" font-size="11" fill="#374151">x(t)</text>
+        </svg>
+      </div>
+      <div>
+        <div class="fbox">
+          <span class="big">f(t) = M·d²x/dt² + B·dx/dt + K·x</span>
+          <span class="sub-f">ecuación de movimiento (Leyes de Newton)</span>
+        </div>
+        <p class="lead">M: masa (inercia) · B: amortiguador (fricción viscosa) · K: resorte (elasticidad). Es un sistema de <b>segundo orden</b> — a diferencia de los dos anteriores, puede oscilar.</p>
+      </div>
+    </div>
+
+    <div class="sub">4 · Sistema resistencia-inductancia-capacidad (RLC paralelo)</div>
+    <div class="grid g2">
+      <div class="diagram" style="margin:0">
+        <svg viewBox="0 0 260 150" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="35" cy="75" r="18" fill="none" stroke="#374151" stroke-width="2"/>
+          <line x1="35" y1="60" x2="35" y2="90" stroke="#374151" stroke-width="2"/>
+          <path d="M35,64 l-5,7 l10,0 z" fill="#374151"/>
+          <text x="35" y="105" font-size="11" text-anchor="middle" fill="#374151">i(t)</text>
+          <line x1="35" y1="30" x2="230" y2="30" stroke="#374151" stroke-width="2"/>
+          <line x1="35" y1="120" x2="230" y2="120" stroke="#374151" stroke-width="2"/>
+          <line x1="35" y1="57" x2="35" y2="30" stroke="#374151" stroke-width="2"/>
+          <line x1="35" y1="93" x2="35" y2="120" stroke="#374151" stroke-width="2"/>
+          <line x1="95" y1="30" x2="95" y2="120" stroke="#4f46e5" stroke-width="2"/>
+          <path d="M95,45 l7,3 l-14,6 l14,6 l-14,6 l14,6 l-7,3" fill="none" stroke="#4f46e5" stroke-width="2"/>
+          <text x="95" y="20" font-size="12" text-anchor="middle" fill="#4f46e5">R</text>
+          <line x1="140" y1="30" x2="140" y2="120" stroke="#0d9488" stroke-width="2"/>
+          <path d="M140,45 q8,5 0,10 q-8,5 0,10 q8,5 0,10 q-8,5 0,10" fill="none" stroke="#0d9488" stroke-width="2"/>
+          <text x="140" y="20" font-size="12" text-anchor="middle" fill="#0d9488">L</text>
+          <line x1="185" y1="30" x2="185" y2="60" stroke="#c2410c" stroke-width="2"/>
+          <line x1="175" y1="60" x2="195" y2="60" stroke="#c2410c" stroke-width="2"/>
+          <line x1="175" y1="68" x2="195" y2="68" stroke="#c2410c" stroke-width="2"/>
+          <line x1="185" y1="68" x2="185" y2="120" stroke="#c2410c" stroke-width="2"/>
+          <text x="185" y="20" font-size="12" text-anchor="middle" fill="#c2410c">C</text>
+          <line x1="235" y1="45" x2="235" y2="105" stroke="#374151" stroke-width="1.5"/>
+          <path d="M235,45 l-4,8 l8,0 z" fill="#374151"/>
+          <path d="M235,105 l-4,-8 l8,0 z" fill="#374151"/>
+          <text x="248" y="78" font-size="12" fill="#374151">v(t)</text>
+        </svg>
+      </div>
+      <div>
+        <div class="fbox">
+          <span class="big">i(t) = C·dv/dt + (1/R)·v + (1/L)·∫v dt</span>
+          <span class="sub-f">ecuación de tensión (Kirchhoff)</span>
+        </div>
+        <p class="lead">También segundo orden. Fijate que la resistencia aparece como <b>1/R</b> (conductancia) porque está en paralelo — esto es clave para la analogía con el sistema mecánico.</p>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">🔗</span>Analogías entre dominios</div>
+    <p class="lead">Ya viste que RC ↔ calefactor de agua tienen la misma función de transferencia, y que masa-resorte-amortiguador ↔ RLC paralelo son ambos de segundo orden. Esto no es casualidad: son <b>análogos</b> — mismo modelo matemático, distinto fenómeno físico.</p>
+
+    <details ontoggle="onAnalogiaToggle('termica')">
+      <summary>🌡️ Analogía térmica ↔ eléctrica <span></span></summary>
+      <div class="dbody">
+        <div class="twrap">
+          <table>
+            <tr><th>Variables análogas</th><th></th></tr>
+            <tr><td>q(t) — flujo de calor</td><td>↔ i(t) — corriente</td></tr>
+            <tr><td>T(t) — temperatura</td><td>↔ v(t) — tensión</td></tr>
+          </table>
+        </div>
+        <div class="twrap" style="margin-top:.6rem">
+          <table>
+            <tr><th>Componentes análogos</th><th></th></tr>
+            <tr><td>Cc — capacidad calorífica</td><td>↔ Capacitor</td></tr>
+            <tr><td>Rt — resistencia térmica</td><td>↔ Resistor</td></tr>
+          </table>
+        </div>
+      </div>
+    </details>
+
+    <details ontoggle="onAnalogiaToggle('mecanica')">
+      <summary>⚙️ Analogía mecánica ↔ eléctrica <span></span></summary>
+      <div class="dbody">
+        <p style="margin-bottom:.7rem">Reescribiendo la ecuación de movimiento en función de la <b>velocidad</b> v(t) = dx/dt:</p>
+        <div class="fbox" style="margin:.5rem 0 1rem">
+          <span class="big" style="font-size:1rem">f(t) = M·dv/dt + B·v + K·∫v dt</span>
+        </div>
+        <p style="margin-bottom:.7rem">Que tiene exactamente la misma estructura que la ecuación del RLC paralelo (i = C·dv/dt + (1/R)v + (1/L)∫v dt).</p>
+        <div class="twrap">
+          <table>
+            <tr><th>Variables análogas</th><th></th></tr>
+            <tr><td>f(t) — fuerza</td><td>↔ i(t) — corriente</td></tr>
+            <tr><td>v(t) — velocidad</td><td>↔ v(t) — tensión</td></tr>
+          </table>
+        </div>
+        <div class="twrap" style="margin-top:.6rem">
+          <table>
+            <tr><th>Componentes análogos</th><th></th></tr>
+            <tr><td>Masa (M)</td><td>↔ Capacitor</td></tr>
+            <tr><td>Resorte (K)</td><td>↔ Inductor</td></tr>
+            <tr><td>Amortiguador (B)</td><td>↔ Resistor</td></tr>
+          </table>
+        </div>
+        <div class="warn" style="margin-top:.8rem">⚠️ Ojo con el amortiguador: como el circuito análogo es un RLC <b>paralelo</b>, el amortiguador se tiene que caracterizar por su <b>conductancia</b> (en Siemens), no por su resistencia en Ohms — en un paralelo los elementos resistivos se suman como conductancias, no como resistencias.</div>
+      </div>
+    </details>
+
+  </div>
+</div>
+
+<!-- ================= SIMULADORES ================= -->
+<div class="page" id="page-sim">
+  <div class="container">
+
+    <div class="stitle"><span class="ico">🧪</span>Simuladores de respuesta al escalón</div>
+    <p class="lead">Recrean en el navegador los dos scripts de Octave de la Clase 2 — movés los parámetros y mirás en vivo lo que en la clase de laboratorio se ve corriendo <code>step()</code>.</p>
+
+    <div class="sub">1 · Sistema de primer orden — efecto de τ</div>
+    <div class="sim-panel">
+      <div class="sim-flex">
+        <div>
+          <div class="slider-row">
+            <label>τ (constante de tiempo) <span class="val" id="valTau">1.0 s</span></label>
+            <input type="range" id="sldTau" min="0.2" max="8" step="0.1" value="1" oninput="onTauChange()">
+          </div>
+          <p style="font-size:.8rem;color:var(--gray-lt);margin-top:.6rem">G(s) = 1 / (τs + 1)</p>
+          <label style="display:flex;gap:.4rem;align-items:center;font-size:.82rem;margin-top:.8rem;cursor:pointer">
+            <input type="checkbox" id="chkCompare" checked onchange="drawFirstOrder()" style="min-height:auto;width:16px;height:16px">
+            Comparar rápido (τ=0.2) y lento (τ=5)
+          </label>
+        </div>
+        <div>
+          <canvas class="chart" id="chartFirst" width="700" height="240"></canvas>
+          <div class="chart-legend">
+            <span><span class="leg-sw" style="background:#4f46e5"></span>τ actual</span>
+            <span><span class="leg-sw" style="background:#22c55e"></span>rápido (τ=0.2)</span>
+            <span><span class="leg-sw" style="background:#dc2626"></span>lento (τ=5)</span>
+          </div>
+        </div>
+      </div>
+      <details style="margin-top:1rem">
+        <summary>Ver script de Octave (Clase 2 - Script 1) <span></span></summary>
+        <div class="dbody">
+<div class="code">%% CLASE 2 - Script 1: PRIMER SISTEMA EN OCTAVE
+
+pkg load control; clear; close all; clc;
+
+s = tf('s'); % Define la variable "s"
+
+% Definir un sistema de 1er orden (como un circuito RC)
+tau = 1;  % Constante de tiempo (segundos)
+G = 1 / (tau * s + 1);
+
+figure(1); step(G, 5); grid on;
+title('Primera simulación: ¿Cómo responde un sistema con inercia?');
+xlabel('Tiempo (s)'); ylabel('Salida');
+pause();
+
+% ACTIVIDAD: Cambiar tau a 0.2 (rápido) y a 5 (lento). Ver el gráfico.
+G_rapida = 1 / (0.2 * s + 1);
+G_lenta = 1 / (5 * s + 1);
+step(G_rapida,5); hold on; step(G_lenta,5);
+pause();</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="sub">2 · Sistema de segundo orden — RLC vs. masa-resorte</div>
+    <div class="sim-panel">
+      <div class="sim-flex">
+        <div>
+          <div class="slider-row">
+            <label>G (conductancia) <span class="val" id="valG">0.50</span></label>
+            <input type="range" id="sldG" min="0.1" max="6" step="0.05" value="0.5" oninput="onGChange()">
+          </div>
+          <p style="font-size:.8rem;color:var(--gray-lt);margin:.3rem 0 .8rem">L=1, C=1 (fijos) → ζ = G/2</p>
+          <div class="preset-row">
+            <button class="preset-btn" id="presetOscila" onclick="applyPresetG(0.5,'presetOscila')">🌊 Oscila (G=0.5)</button>
+            <button class="preset-btn" id="presetCritico" onclick="applyPresetG(2,'presetCritico')">🎯 Crítico (G=2)</button>
+            <button class="preset-btn" id="presetLento" onclick="applyPresetG(5,'presetLento')">🐌 Lento (G=5)</button>
+          </div>
+        </div>
+        <div>
+          <canvas class="chart" id="chartSecond" width="700" height="240"></canvas>
+          <div class="chart-legend">
+            <span><span class="leg-sw" style="background:#4f46e5"></span>respuesta y(t)</span>
+            <span><span class="leg-sw" style="background:#9ca3af;border:1px dashed #9ca3af"></span>referencia (escalón)</span>
+          </div>
+          <p style="font-size:.82rem;color:var(--gray-lt);margin-top:.5rem" id="dampInfo">ζ = 0.25 → subamortiguado, oscila</p>
+        </div>
+      </div>
+      <div class="note">Por la analogía de arriba, esta misma curva describe tanto la tensión de un RLC paralelo como la posición de una masa-resorte-amortiguador — "conductancia" acá también podés leerlo como "cuánto amortiguamiento tiene el sistema".</div>
+      <details style="margin-top:1rem">
+        <summary>Ver script de Octave (Clase 2 - Script 2) <span></span></summary>
+        <div class="dbody">
+<div class="code">%% CLASE 2 - Script 2: RLC vs MASA-RESORTE
+pkg load control; clear; close all; clc; s = tf('s');
+
+L = 1; C = 1;
+G_baja = 0.5;  % OSCILA con CONDUCTANCIA BAJA
+% G_baja = 2;      % CRÍTICO
+G_alta = 5;      % LENTO con CONDUCTANCIA ALTA
+G_elec_osc = 1 / (L*C*s^2 + G_baja*C*s + 1);
+G_elec_lento = 1 / (L*C*s^2 + G_alta*C*s + 1);
+
+figure(1);
+step(G_elec_osc, 'r-', 25);
+
+hold on;
+step(G_elec_lento, 'b--', 25);
+grid on;
+legend('Conductancia BAJA', 'Conductancia ALTA');
+title('La amortiguación depende de la disipación de energía' );
+disp('ACTIVIDAD: Cambie G_baja a 2 (amortiguamiento crítico). La oscilación desaparece.');
+pause();</div>
+        </div>
+      </details>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= QUIZ / BADGES ================= -->
+<div class="page" id="page-quiz">
+  <div class="container">
+
+    <div class="stitle"><span class="ico">🏅</span>Tus insignias<span class="lvl-chip" id="badge-count-chip2">0/6</span></div>
+    <p class="lead">Se desbloquean recorriendo las pestañas anteriores. Tu progreso se guarda automáticamente en este navegador (localStorage) — cada clase nueva que sumemos va a traer más.</p>
+    <div class="badge-grid" id="badgeGrid"></div>
+
+    <div class="stitle"><span class="ico">🧠</span>Quiz — Clase 1 y 2</div>
+    <div class="quiz-box" id="quizBox"></div>
+
+  </div>
+</div>
+
+<footer>Apuntes de cátedra (Ing. Jorge Tirabasso, UN Pilar) reorganizados para repasar · <a href="index.html">← volver al inicio</a></footer>
+
+<script>
+/* ===================== NAV ===================== */
+function showTab(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  event.target.classList.add('active');
+  if(id==='quiz'){ renderBadges(); }
+  if(id==='sim'){ drawFirstOrder(); drawSecondOrder(); }
+}
+
+/* ===================== STORE / BADGES ===================== */
+const Store = {
+  get(k,d){ try{ const v=localStorage.getItem('sisctrl_'+k); return v!==null?JSON.parse(v):d; }catch(e){ return d; } },
+  set(k,v){ try{ localStorage.setItem('sisctrl_'+k, JSON.stringify(v)); }catch(e){} }
+};
+
+const BADGES = [
+  {id:'lazo_comparado', ico:'🔁', name:'Lazo comparado', desc:'Viste el diagrama de lazo abierto y el de lazo cerrado'},
+  {id:'tostadora', ico:'🍞', name:'Diseñador', desc:'Completaste el ejercicio de la tostadora del futuro'},
+  {id:'primer_orden', ico:'⏱️', name:'Constante de tiempo', desc:'Jugaste con τ en el simulador de primer orden'},
+  {id:'segundo_orden', ico:'🌊', name:'Tres amortiguamientos', desc:'Probaste los presets oscila / crítico / lento'},
+  {id:'analogia', ico:'🔗', name:'Cazador de analogías', desc:'Revisaste la analogía térmica y la mecánica'},
+  {id:'quiz_aprobado', ico:'🏆', name:'Quiz aprobado', desc:'Sacaste 70% o más en el quiz final'},
+];
+let unlocked = Store.get('badges', {});
+
+function unlockBadge(id){
+  if(unlocked[id]) return;
+  unlocked[id] = true;
+  Store.set('badges', unlocked);
+  updateBadgeCount();
+  renderBadges();
+}
+function updateBadgeCount(){
+  const n = Object.keys(unlocked).filter(k=>unlocked[k]).length;
+  document.getElementById('badge-count-chip').textContent = n+'/'+BADGES.length;
+  const chip2 = document.getElementById('badge-count-chip2');
+  if(chip2) chip2.textContent = n+'/'+BADGES.length;
+}
+function renderBadges(){
+  const grid = document.getElementById('badgeGrid');
+  if(!grid) return;
+  grid.innerHTML = BADGES.map(b=>{
+    const u = !!unlocked[b.id];
+    return '<div class="badge-item'+(u?' unlocked':'')+'"><span class="bi">'+b.ico+'</span><div class="bn">'+b.name+'</div><div style="font-size:.7rem;color:#6b7280;margin-top:.25rem">'+b.desc+'</div></div>';
+  }).join('');
+}
+updateBadgeCount();
+
+/* ===================== CLASE 1: DIAGRAMA LAZO ===================== */
+const DIAG_ABIERTO = `
+<svg viewBox="0 0 620 170" xmlns="http://www.w3.org/2000/svg">
+  <defs><marker id="ar1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
+  <text x="10" y="75" font-size="14" fill="#374151" font-weight="700">E(s)</text>
+  <line x1="55" y1="70" x2="120" y2="70" stroke="#4f46e5" stroke-width="2" marker-end="url(#ar1)"/>
+  <rect x="122" y="45" width="100" height="55" rx="6" fill="#e0e7ff" stroke="#4f46e5" stroke-width="1.5"/>
+  <text x="172" y="78" font-size="16" fill="#3730a3" text-anchor="middle" font-weight="700">C</text>
+  <line x1="222" y1="70" x2="290" y2="70" stroke="#4f46e5" stroke-width="2" marker-end="url(#ar1)"/>
+  <text x="256" y="60" font-size="12" fill="#6b7280" text-anchor="middle">U(s)</text>
+  <rect x="292" y="45" width="100" height="55" rx="6" fill="#ccfbf1" stroke="#0d9488" stroke-width="1.5"/>
+  <text x="342" y="78" font-size="16" fill="#0d9488" text-anchor="middle" font-weight="700">G</text>
+  <line x1="392" y1="70" x2="460" y2="70" stroke="#374151" stroke-width="2" marker-end="url(#ar1)"/>
+  <text x="470" y="75" font-size="14" fill="#374151" font-weight="700">Y(s)</text>
+</svg>`;
+const DIAG_CERRADO = `
+<svg viewBox="0 0 620 190" xmlns="http://www.w3.org/2000/svg">
+  <defs><marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
+  <text x="10" y="75" font-size="14" fill="#374151" font-weight="700">R(s)</text>
+  <line x1="55" y1="70" x2="105" y2="70" stroke="#4f46e5" stroke-width="2" marker-end="url(#ar2)"/>
+  <circle cx="122" cy="70" r="17" fill="#fff" stroke="#4f46e5" stroke-width="2"/>
+  <text x="115" y="63" font-size="11" fill="#4f46e5">+</text>
+  <text x="115" y="83" font-size="11" fill="#dc2626">−</text>
+  <text x="122" y="105" font-size="12" fill="#6b7280" text-anchor="middle">E(s)</text>
+  <line x1="139" y1="70" x2="190" y2="70" stroke="#4f46e5" stroke-width="2" marker-end="url(#ar2)"/>
+  <rect x="192" y="45" width="100" height="55" rx="6" fill="#e0e7ff" stroke="#4f46e5" stroke-width="1.5"/>
+  <text x="242" y="78" font-size="16" fill="#3730a3" text-anchor="middle" font-weight="700">C</text>
+  <line x1="292" y1="70" x2="355" y2="70" stroke="#4f46e5" stroke-width="2" marker-end="url(#ar2)"/>
+  <text x="323" y="60" font-size="12" fill="#6b7280" text-anchor="middle">U(s)</text>
+  <rect x="357" y="45" width="100" height="55" rx="6" fill="#ccfbf1" stroke="#0d9488" stroke-width="1.5"/>
+  <text x="407" y="78" font-size="16" fill="#0d9488" text-anchor="middle" font-weight="700">G</text>
+  <line x1="457" y1="70" x2="520" y2="70" stroke="#374151" stroke-width="2" marker-end="url(#ar2)"/>
+  <text x="530" y="75" font-size="14" fill="#374151" font-weight="700">Y(s)</text>
+  <path d="M525,70 V150 H122 V87" fill="none" stroke="#374151" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#ar2)"/>
+</svg>`;
+let diagramsSeen = new Set();
+function showDiagram(kind){
+  document.getElementById('diagHolder').innerHTML = kind==='abierto' ? DIAG_ABIERTO : DIAG_CERRADO;
+  document.getElementById('btnDiagAbierto').classList.toggle('active', kind==='abierto');
+  document.getElementById('btnDiagCerrado').classList.toggle('active', kind==='cerrado');
+  document.getElementById('diagCap').textContent = kind==='abierto'
+    ? 'Lazo abierto: E(s): entrada · C: controlador · U(s): señal de control · G: planta · Y(s): salida. Sin realimentación.'
+    : 'Lazo cerrado: R(s): referencia · el sumador resta la salida realimentada Y(s) para formar el error E(s) · C: controlador · G: planta · Y(s): salida realimentada.';
+  diagramsSeen.add(kind);
+  if(diagramsSeen.size>=2) unlockBadge('lazo_comparado');
+}
+showDiagram('abierto');
+
+/* ===================== CLASE 1: TOSTADORA ===================== */
+['tstSensores','tstActuadores','tstLogica'].forEach(id=>{
+  const el = document.getElementById(id);
+  el.value = Store.get(id, '');
+});
+function onTostadoraInput(){
+  const s = document.getElementById('tstSensores').value;
+  const a = document.getElementById('tstActuadores').value;
+  const l = document.getElementById('tstLogica').value;
+  Store.set('tstSensores', s); Store.set('tstActuadores', a); Store.set('tstLogica', l);
+  if((s+a+l).trim().length > 15) unlockBadge('tostadora');
+}
+
+/* ===================== CLASE 2: ANALOGIAS ===================== */
+let analogiasSeen = new Set();
+function onAnalogiaToggle(kind){
+  if(event.target.open) analogiasSeen.add(kind);
+  if(analogiasSeen.size>=2) unlockBadge('analogia');
+}
+
+/* ===================== SIMULADOR 1: PRIMER ORDEN ===================== */
+let tauTouched = false;
+function onTauChange(){
+  document.getElementById('valTau').textContent = parseFloat(document.getElementById('sldTau').value).toFixed(1)+' s';
+  if(!tauTouched){ tauTouched=true; unlockBadge('primer_orden'); }
+  drawFirstOrder();
+}
+function firstOrderStep(t, tau){ return 1 - Math.exp(-t/tau); }
+
+function drawFirstOrder(){
+  const cv = document.getElementById('chartFirst'); if(!cv) return;
+  const ctx = cv.getContext('2d');
+  const dpr = window.devicePixelRatio||1;
+  const cssW = cv.clientWidth||700, cssH=240;
+  if(cv.width!==cssW*dpr||cv.height!==cssH*dpr){ cv.width=cssW*dpr; cv.height=cssH*dpr; }
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const w=cssW,h=cssH; ctx.clearRect(0,0,w,h);
+  const padL=38,padR=10,padT=10,padB=24, plotW=w-padL-padR, plotH=h-padT-padB;
+  const tMax=10, yMax=1.15;
+  ctx.strokeStyle='#e2e8f0'; ctx.fillStyle='#6b7280'; ctx.font='10px Segoe UI'; ctx.lineWidth=1;
+  for(let v=0; v<=1; v+=0.25){
+    const y=padT+plotH*(1-v/yMax);
+    ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(w-padR,y); ctx.stroke();
+    ctx.fillText(v.toFixed(2), 4, y+3);
+  }
+  const xOf = t => padL + plotW*(t/tMax);
+  const yOf = y => padT + plotH*(1-y/yMax);
+  function plotCurve(tau,color,dash){
+    ctx.strokeStyle=color; ctx.lineWidth=2.2; if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+    ctx.beginPath();
+    for(let i=0;i<=200;i++){ const t=tMax*i/200; const y=firstOrderStep(t,tau); const x=xOf(t); const yy=yOf(y); i===0?ctx.moveTo(x,yy):ctx.lineTo(x,yy); }
+    ctx.stroke();
+  }
+  if(document.getElementById('chkCompare').checked){ plotCurve(0.2,'#22c55e',[4,3]); plotCurve(5,'#dc2626',[4,3]); }
+  const tau = parseFloat(document.getElementById('sldTau').value);
+  plotCurve(tau,'#4f46e5',null);
+  ctx.setLineDash([]);
+  ctx.fillStyle='#6b7280'; ctx.font='10px Segoe UI';
+  ctx.fillText('t (s) →', padL, h-6);
+}
+
+/* ===================== SIMULADOR 2: SEGUNDO ORDEN ===================== */
+let presetsSeenG = new Set();
+function applyPresetG(g,btnId){
+  document.getElementById('sldG').value = g;
+  onGChange();
+  presetsSeenG.add(btnId);
+  document.getElementById(btnId).classList.add('done');
+  if(presetsSeenG.size>=3) unlockBadge('segundo_orden');
+}
+function onGChange(){
+  document.getElementById('valG').textContent = parseFloat(document.getElementById('sldG').value).toFixed(2);
+  drawSecondOrder();
+}
+function secondOrderStep(t, wn, zeta){
+  if(zeta<0.999){
+    const wd = wn*Math.sqrt(1-zeta*zeta);
+    return 1 - Math.exp(-zeta*wn*t)*( Math.cos(wd*t) + (zeta/Math.sqrt(1-zeta*zeta))*Math.sin(wd*t) );
+  } else if(zeta<1.001){
+    return 1 - Math.exp(-wn*t)*(1+wn*t);
+  } else {
+    const wd = wn*Math.sqrt(zeta*zeta-1);
+    return 1 - Math.exp(-zeta*wn*t)*( Math.cosh(wd*t) + (zeta/Math.sqrt(zeta*zeta-1))*Math.sinh(wd*t) );
+  }
+}
+function drawSecondOrder(){
+  const cv = document.getElementById('chartSecond'); if(!cv) return;
+  const ctx = cv.getContext('2d');
+  const dpr = window.devicePixelRatio||1;
+  const cssW = cv.clientWidth||700, cssH=240;
+  if(cv.width!==cssW*dpr||cv.height!==cssH*dpr){ cv.width=cssW*dpr; cv.height=cssH*dpr; }
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const w=cssW,h=cssH; ctx.clearRect(0,0,w,h);
+
+  const G = parseFloat(document.getElementById('sldG').value);
+  const L=1,C=1, wn=1/Math.sqrt(L*C), zeta=G*C/(2*Math.sqrt(L*C));
+  const tMax=25;
+  const N=300; const ys=[];
+  for(let i=0;i<=N;i++){ ys.push(secondOrderStep(tMax*i/N, wn, zeta)); }
+  const yMax = Math.max(1.2, Math.max(...ys)*1.1);
+
+  const padL=38,padR=10,padT=10,padB=24, plotW=w-padL-padR, plotH=h-padT-padB;
+  ctx.strokeStyle='#e2e8f0'; ctx.fillStyle='#6b7280'; ctx.font='10px Segoe UI'; ctx.lineWidth=1;
+  for(let v=0; v<=yMax; v+=0.25){
+    const y=padT+plotH*(1-v/yMax);
+    ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(w-padR,y); ctx.stroke();
+    ctx.fillText(v.toFixed(2), 4, y+3);
+  }
+  const xOf = t => padL + plotW*(t/tMax);
+  const yOf = y => padT + plotH*(1-y/yMax);
+
+  ctx.strokeStyle='#9ca3af'; ctx.setLineDash([5,4]); ctx.lineWidth=1.3;
+  ctx.beginPath(); ctx.moveTo(xOf(0),yOf(1)); ctx.lineTo(xOf(tMax),yOf(1)); ctx.stroke(); ctx.setLineDash([]);
+
+  ctx.strokeStyle='#4f46e5'; ctx.lineWidth=2.4;
+  ctx.beginPath();
+  for(let i=0;i<=N;i++){ const t=tMax*i/N; const x=xOf(t), y=yOf(ys[i]); i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); }
+  ctx.stroke();
+
+  ctx.fillStyle='#6b7280'; ctx.font='10px Segoe UI';
+  ctx.fillText('t (s) →', padL, h-6);
+
+  const info = document.getElementById('dampInfo');
+  let txt = 'ζ = '+zeta.toFixed(2)+' → ';
+  if(zeta<0.999) txt += 'subamortiguado, oscila';
+  else if(zeta<1.001) txt += 'amortiguamiento crítico, la respuesta más rápida sin oscilar';
+  else txt += 'sobreamortiguado, lento';
+  info.textContent = txt;
+}
+
+window.addEventListener('resize', ()=>{ drawFirstOrder(); drawSecondOrder(); });
+drawFirstOrder();
+drawSecondOrder();
+
+/* ===================== QUIZ ===================== */
+const QUIZ = [
+  {q:'¿Qué diferencia principal tiene un sistema de lazo cerrado frente a uno de lazo abierto?', opts:['Usa más energía','Mide la salida real y la realimenta para corregir el error','No tiene controlador','Es siempre más simple de construir'], correct:1, expl:'El lazo cerrado compara la salida realimentada Y(s) contra la referencia R(s) para generar el error E(s) que sigue corrigiendo.'},
+  {q:'¿Cuál de estos fue de los primeros mecanismos de control por realimentación de la historia?', opts:['El motor a vapor de Newcomen','El reloj de agua de Ktesibios','El transistor','El PLC'], correct:1, expl:'El reloj de agua de Ktesibios (~270 a.C.) usaba un flotador para regular el caudal — el ejemplo más antiguo conocido de realimentación.'},
+  {q:'Según la clase, ¿cuál es una ventaja clave de los modelos matemáticos frente a un modelo a escala?', opts:['Son siempre más baratos de construir físicamente','Son manipulables y modificables con bajísimo costo, y permiten llevar el sistema a situaciones imposibles de replicar físicamente','No requieren ninguna validación','Siempre son fáciles de resolver'], correct:1, expl:'Un modelo matemático se puede modificar y llevar a extremos (fallas, condiciones límite) sin el costo ni el riesgo de un modelo físico.'},
+  {q:'En la analogía térmica-eléctrica, ¿a qué componente eléctrico equivale la capacidad calorífica Cc?', opts:['A una resistencia', 'A un capacitor', 'A un inductor', 'A una fuente de corriente'], correct:1, expl:'Cc acumula "carga térmica" igual que un capacitor acumula carga eléctrica — ambos aparecen en el denominador junto a una resistencia.'},
+  {q:'¿Por qué en la analogía mecánica-eléctrica el amortiguador se expresa en conductancia y no en resistencia?', opts:['Es solo una convención sin motivo físico','Porque la ecuación del sistema (en función de la velocidad) tiene la misma forma que un RLC en PARALELO, donde los elementos resistivos se suman como conductancias','Porque la resistencia no existe en sistemas mecánicos','Porque el resorte ya cumple ese rol'], correct:1, expl:'En un circuito paralelo, la ley de nodos suma admitancias (1/R), no resistencias — por eso el amortiguador se define por conductancia para que la analogía cierre matemáticamente.'},
+  {q:'La función de transferencia de un circuito RC es F(s) = 1/(1+RCs). ¿De qué orden es este sistema?', opts:['Orden cero','Primer orden','Segundo orden','No tiene orden definido'], correct:1, expl:'Solo hay una potencia de s en el denominador (s¹) — es un sistema de primer orden, no puede oscilar.'},
+  {q:'En un sistema de segundo orden, ¿qué hace que la respuesta al escalón oscile en vez de asentarse suavemente?', opts:['Un amortiguamiento (ζ) bajo, por conductancia/resistencia baja de disipación', 'Un amortiguamiento alto', 'Que la masa sea muy grande', 'Que no tenga entrada'], correct:0, expl:'Con poca disipación de energía (conductancia baja) el sistema es subamortiguado (ζ<1) y oscila antes de asentarse — lo mismo vimos en el simulador con G=0.5.'},
+  {q:'Con amortiguamiento crítico (ζ=1), ¿cómo es la respuesta al escalón?', opts:['Oscila indefinidamente','Nunca llega al valor final','Llega al valor final lo más rápido posible, sin oscilar','Es idéntica a la de ζ=0'], correct:2, expl:'ζ=1 es el punto justo donde el sistema deja de oscilar — la frontera entre subamortiguado y sobreamortiguado, y la respuesta más rápida sin overshoot.'},
+];
+let quizIdx=0, quizScore=0, quizAnswered=false;
+
+function renderQuiz(){
+  const box = document.getElementById('quizBox');
+  if(quizIdx>=QUIZ.length){ showQuizResult(); return; }
+  const q = QUIZ[quizIdx];
+  quizAnswered=false;
+  box.innerHTML =
+    '<div class="quiz-progress">Pregunta '+(quizIdx+1)+' / '+QUIZ.length+'</div>'+
+    '<div class="quiz-q">'+q.q+'</div>'+
+    '<div class="quiz-opts">'+q.opts.map((o,i)=>'<button class="opt-btn" onclick="answerQuiz('+i+')">'+o+'</button>').join('')+'</div>'+
+    '<div class="quiz-expl" id="quizExpl">'+q.expl+'</div>'+
+    '<button class="next-q-btn" id="nextQBtn" onclick="nextQuiz()">Siguiente →</button>';
+}
+
+function answerQuiz(i){
+  if(quizAnswered) return;
+  quizAnswered=true;
+  const q = QUIZ[quizIdx];
+  const btns = document.querySelectorAll('.opt-btn');
+  btns.forEach((b,idx)=>{
+    b.classList.add('disabled');
+    if(idx===q.correct) b.classList.add('correct');
+    else if(idx===i) b.classList.add('wrong');
+  });
+  if(i===q.correct) quizScore++;
+  document.getElementById('quizExpl').classList.add('show');
+  document.getElementById('nextQBtn').classList.add('show');
+}
+
+function nextQuiz(){ quizIdx++; renderQuiz(); }
+
+function showQuizResult(){
+  const box = document.getElementById('quizBox');
+  const pct = Math.round(100*quizScore/QUIZ.length);
+  const best = Math.max(pct, parseInt(localStorage.getItem('sisctrl_best')||'0'));
+  localStorage.setItem('sisctrl_best', best);
+  if(pct>=70) unlockBadge('quiz_aprobado');
+  box.innerHTML =
+    '<div class="quiz-result">'+
+    '<div style="font-size:2.2rem">'+(pct>=70?'🎉':'📚')+'</div>'+
+    '<div class="score">'+quizScore+' / '+QUIZ.length+'</div>'+
+    '<div class="quiz-score-display">🥇 Mejor: '+best+'%</div>'+
+    '<p style="margin-top:.8rem;color:#6b7280">'+(pct>=70?'¡Bien ahí! Tenés claros los fundamentos de Clase 1 y 2.':'Repasá las pestañas de teoría y volvé a intentar.')+'</p>'+
+    '<button class="retry-btn" onclick="restartQuiz()">Reintentar</button>'+
+    '</div>';
+}
+
+function restartQuiz(){ quizIdx=0; quizScore=0; renderQuiz(); }
+renderQuiz();
+renderBadges();
+</script>
+</body>
+</html>

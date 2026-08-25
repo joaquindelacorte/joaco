@@ -39,6 +39,9 @@ Sitio personal de Joaquín De La Corte, deployado en [Netlify](https://www.netli
 - [Teoría](sistemas-control/teoria.html) — Apuntes de cátedra clase a clase: lazo abierto/cerrado, modelado matemático, analogías
 - [Control PID — Horno](sistemas-control/pid-horno.html) — Proporcional, integral y derivativo, simulador térmico en vivo
 
+### Automatización Industrial
+- [Conversión de Bases Numéricas](automatizacion-industrial/conversion-bases.html) — Reglas mnemotécnicas (binario/decimal/hexadecimal) + calculadora interactiva
+
 ### Otros
 - [LLMs — Cómo piensan](otros/llm.html)
 - [Mundial 2026 · Simulador](otros/mundial-2026.html)
@@ -56,5 +59,6 @@ estadistica/
 hidraulica/
 robotica/
 sistemas-control/
+automatizacion-industrial/
 otros/
 ```

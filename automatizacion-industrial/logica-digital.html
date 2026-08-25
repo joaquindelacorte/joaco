@@ -83,6 +83,8 @@ h2.section-title{font-size:1.3rem;font-weight:800;color:#0c1a2e;margin:3rem 0 .5
 .gate-card{background:#1c1f28;border:1px solid #2e323e;border-radius:12px;padding:1rem 1rem 1.1rem;text-align:center}
 .gate-card h3{color:#f2a340;font-size:.95rem;font-weight:800;letter-spacing:.5px;margin-bottom:.15rem}
 .gate-card .gate-formula{color:#8b93a7;font-family:'Courier New',monospace;font-size:.78rem;margin-bottom:.8rem}
+.gate-svg-wrap{margin-bottom:.7rem}
+.gate-svg{width:100%;max-width:170px;height:auto;display:block;margin:0 auto}
 .gate-toggles{display:flex;justify-content:center;gap:.6rem;margin-bottom:.8rem}
 .toggle-wrap{display:flex;flex-direction:column;align-items:center;gap:.3rem}
 .toggle-lbl{font-size:.72rem;color:#8b93a7;font-weight:700}
@@ -240,15 +242,62 @@ convert();
 
 /* ---- Simulador de compuertas lógicas ---- */
 const GATES = [
-  { name: 'BUF',  formula: 'Q = A',        inputs: 1, fn: (a,b) => a },
-  { name: 'NOT',  formula: 'Q = ¬A',       inputs: 1, fn: (a,b) => a ? 0 : 1 },
-  { name: 'AND',  formula: 'Q = A · B',    inputs: 2, fn: (a,b) => (a && b) ? 1 : 0 },
-  { name: 'NAND', formula: 'Q = ¬(A · B)', inputs: 2, fn: (a,b) => (a && b) ? 0 : 1 },
-  { name: 'OR',   formula: 'Q = A + B',    inputs: 2, fn: (a,b) => (a || b) ? 1 : 0 },
-  { name: 'NOR',  formula: 'Q = ¬(A + B)', inputs: 2, fn: (a,b) => (a || b) ? 0 : 1 },
-  { name: 'XOR',  formula: 'Q = A ⊕ B',    inputs: 2, fn: (a,b) => (a !== b) ? 1 : 0 },
-  { name: 'XNOR', formula: 'Q = ¬(A ⊕ B)', inputs: 2, fn: (a,b) => (a === b) ? 1 : 0 },
+  { name: 'BUF',  formula: 'Q = A',        inputs: 1, shape: 'triangle', inv: false, fn: (a,b) => a },
+  { name: 'NOT',  formula: 'Q = ¬A',       inputs: 1, shape: 'triangle', inv: true,  fn: (a,b) => a ? 0 : 1 },
+  { name: 'AND',  formula: 'Q = A · B',    inputs: 2, shape: 'and',      inv: false, fn: (a,b) => (a && b) ? 1 : 0 },
+  { name: 'NAND', formula: 'Q = ¬(A · B)', inputs: 2, shape: 'and',      inv: true,  fn: (a,b) => (a && b) ? 0 : 1 },
+  { name: 'OR',   formula: 'Q = A + B',    inputs: 2, shape: 'or',       inv: false, fn: (a,b) => (a || b) ? 1 : 0 },
+  { name: 'NOR',  formula: 'Q = ¬(A + B)', inputs: 2, shape: 'or',       inv: true,  fn: (a,b) => (a || b) ? 0 : 1 },
+  { name: 'XOR',  formula: 'Q = A ⊕ B',    inputs: 2, shape: 'xor',      inv: false, fn: (a,b) => (a !== b) ? 1 : 0 },
+  { name: 'XNOR', formula: 'Q = ¬(A ⊕ B)', inputs: 2, shape: 'xor',      inv: true,  fn: (a,b) => (a === b) ? 1 : 0 },
 ];
+
+/* Dibuja el símbolo estándar de cada compuerta en SVG (viewBox 0 0 90 44) */
+function gateSvg(gate){
+  const S = '#f2a340'; // stroke color
+  const inputs = gate.inputs;
+  const bodyStartX = 22; // donde arranca el cuerpo de la compuerta
+  let bodyPath = '';
+  let extraCurve = '';
+  let tipX = 60; // punta / salida del cuerpo antes del burbujita
+
+  if(gate.shape === 'triangle'){
+    bodyPath = `M${bodyStartX},6 L${bodyStartX},38 L60,22 Z`;
+    tipX = 60;
+  } else if(gate.shape === 'and'){
+    bodyPath = `M${bodyStartX},6 L${bodyStartX},38 L42,38 A16,16 0 0 0 42,6 Z`;
+    tipX = 58;
+  } else if(gate.shape === 'or' || gate.shape === 'xor'){
+    bodyPath = `M${bodyStartX},6 Q40,6 60,22 Q40,38 ${bodyStartX},38 Q30,22 ${bodyStartX},6 Z`;
+    tipX = 60;
+    if(gate.shape === 'xor'){
+      extraCurve = `<path d="M${bodyStartX-5},6 Q${bodyStartX+5},22 ${bodyStartX-5},38" fill="none" stroke="${S}" stroke-width="2"/>`;
+    }
+  }
+
+  // Líneas de entrada
+  const inLines = inputs === 1
+    ? `<line x1="4" y1="22" x2="${bodyStartX}" y2="22" stroke="${S}" stroke-width="2"/>
+       <text x="2" y="14" font-size="9" fill="#8b93a7" font-family="monospace">A</text>`
+    : `<line x1="4" y1="12" x2="${bodyStartX}" y2="12" stroke="${S}" stroke-width="2"/>
+       <line x1="4" y1="32" x2="${bodyStartX}" y2="32" stroke="${S}" stroke-width="2"/>
+       <text x="2" y="9" font-size="9" fill="#8b93a7" font-family="monospace">A</text>
+       <text x="2" y="41" font-size="9" fill="#8b93a7" font-family="monospace">B</text>`;
+
+  // Salida: burbuja si es compuerta inversora
+  const outLine = gate.inv
+    ? `<circle cx="${tipX+4}" cy="22" r="3.2" fill="#12141a" stroke="${S}" stroke-width="2"/>
+       <line x1="${tipX+7.2}" y1="22" x2="86" y2="22" stroke="${S}" stroke-width="2"/>`
+    : `<line x1="${tipX}" y1="22" x2="86" y2="22" stroke="${S}" stroke-width="2"/>`;
+
+  return `<svg viewBox="0 0 90 44" class="gate-svg">
+    ${inLines}
+    ${extraCurve}
+    <path d="${bodyPath}" fill="none" stroke="${S}" stroke-width="2" stroke-linejoin="round"/>
+    ${outLine}
+    <text x="87" y="19" font-size="9" fill="#8b93a7" font-family="monospace" text-anchor="end">Q</text>
+  </svg>`;
+}
 
 const grid = document.getElementById('gateGrid');
 
@@ -266,6 +315,11 @@ GATES.forEach(gate => {
   formula.className = 'gate-formula';
   formula.textContent = gate.formula;
   card.appendChild(formula);
+
+  const svgWrap = document.createElement('div');
+  svgWrap.className = 'gate-svg-wrap';
+  svgWrap.innerHTML = gateSvg(gate);
+  card.appendChild(svgWrap);
 
   const toggles = document.createElement('div');
   toggles.className = 'gate-toggles';

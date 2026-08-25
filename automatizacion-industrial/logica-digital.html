@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Automatización Industrial — Conversión de Bases Numéricas</title>
+<title>Automatización Industrial — Lógica Digital</title>
 <style>
 :root{
   --blue:#0369a1;--blue-lt:#0284c7;--blue-bg:#e0f2fe;
@@ -23,13 +23,20 @@ body{
   line-height:1.65;
   -webkit-font-smoothing:antialiased;
 }
-.container{max-width:820px;margin:0 auto;padding:2.5rem 1.2rem 5rem}
-header{text-align:center;margin-bottom:2.5rem}
+.container{max-width:860px;margin:0 auto;padding:2.5rem 1.2rem 5rem}
+header{text-align:center;margin-bottom:2rem}
 .eyebrow{display:inline-block;font-size:.78rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--blue);background:var(--blue-bg);padding:.35rem .9rem;border-radius:999px;margin-bottom:.9rem}
 h1{font-size:1.7rem;font-weight:800;color:#0c1a2e;margin-bottom:.5rem}
-header p{color:var(--gray-lt);font-size:.95rem;max-width:560px;margin:0 auto}
+header p{color:var(--gray-lt);font-size:.95rem;max-width:600px;margin:0 auto}
 a.back{display:inline-block;margin-bottom:1.5rem;font-size:.85rem;color:var(--blue);text-decoration:none;font-weight:600}
 a.back:hover{text-decoration:underline}
+
+.section-nav{display:flex;justify-content:center;gap:.6rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.section-nav a{font-size:.83rem;font-weight:700;color:var(--blue);background:var(--blue-bg);padding:.5rem 1.1rem;border-radius:999px;text-decoration:none;transition:.15s}
+.section-nav a:hover{background:var(--blue);color:#fff}
+
+h2.section-title{font-size:1.3rem;font-weight:800;color:#0c1a2e;margin:3rem 0 .5rem;text-align:center}
+.section-sub{text-align:center;color:var(--gray-lt);font-size:.9rem;max-width:600px;margin:0 auto 1.8rem}
 
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.4rem 1.5rem;margin-bottom:1.3rem;box-shadow:0 1px 6px rgba(0,0,0,.05)}
 .card h2{font-size:1.05rem;font-weight:800;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem}
@@ -63,6 +70,29 @@ a.back:hover{text-decoration:underline}
 .res-value{font-family:'Courier New',monospace;font-size:1.15rem;font-weight:700;color:#0c1a2e;word-break:break-all}
 .calc-error{color:#b91c1c;font-size:.85rem;text-align:center;margin-top:.5rem;min-height:1.1rem}
 
+/* ══════ Compuertas lógicas ══════ */
+.gate-intro{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.4rem 1.5rem;margin-bottom:1.6rem;box-shadow:0 1px 6px rgba(0,0,0,.05)}
+.gate-intro p{font-size:.92rem;line-height:1.75;margin-bottom:.6rem}
+.gate-intro table{width:100%;border-collapse:collapse;margin-top:.8rem;font-size:.85rem}
+.gate-intro th,.gate-intro td{border:1px solid var(--border);padding:.5rem .7rem;text-align:center}
+.gate-intro th{background:#f8fafc;font-weight:700;color:var(--gray-lt)}
+
+.gate-board{background:#12141a;border-radius:18px;padding:1.6rem 1.2rem;box-shadow:0 6px 28px rgba(0,0,0,.25)}
+.gate-board-title{display:flex;align-items:center;justify-content:center;gap:.5rem;color:#f2a340;font-weight:800;letter-spacing:1px;font-size:.9rem;text-transform:uppercase;margin-bottom:1.3rem}
+.gate-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
+.gate-card{background:#1c1f28;border:1px solid #2e323e;border-radius:12px;padding:1rem 1rem 1.1rem;text-align:center}
+.gate-card h3{color:#f2a340;font-size:.95rem;font-weight:800;letter-spacing:.5px;margin-bottom:.15rem}
+.gate-card .gate-formula{color:#8b93a7;font-family:'Courier New',monospace;font-size:.78rem;margin-bottom:.8rem}
+.gate-toggles{display:flex;justify-content:center;gap:.6rem;margin-bottom:.8rem}
+.toggle-wrap{display:flex;flex-direction:column;align-items:center;gap:.3rem}
+.toggle-lbl{font-size:.72rem;color:#8b93a7;font-weight:700}
+.toggle-btn{width:44px;height:44px;border-radius:50%;border:2px solid #3a3f4d;background:#20242f;color:#8b93a7;font-weight:800;font-size:.95rem;cursor:pointer;transition:.15s}
+.toggle-btn.on{background:#f2a340;border-color:#f2a340;color:#1c1f28}
+.gate-output{display:flex;flex-direction:column;align-items:center;gap:.3rem}
+.led{width:34px;height:34px;border-radius:50%;background:#2a2e38;border:2px solid #3a3f4d;box-shadow:inset 0 2px 4px rgba(0,0,0,.4);transition:.15s;margin:0 auto}
+.led.on{background:#ff9d2e;border-color:#ffb454;box-shadow:0 0 14px 3px rgba(255,157,46,.7),inset 0 1px 2px rgba(255,255,255,.4)}
+.gate-out-lbl{font-size:.72rem;color:#8b93a7;font-weight:700}
+
 footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)}
 </style>
 </head>
@@ -71,9 +101,17 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
   <a class="back" href="../index.html">← Volver al inicio</a>
   <header>
     <span class="eyebrow">Automatización Industrial</span>
-    <h1>Conversión de Bases Numéricas</h1>
-    <p>Reglas mnemotécnicas para convertir entre binario, decimal y hexadecimal, más una calculadora para probarlo al toque.</p>
+    <h1>Lógica Digital</h1>
+    <p>Conversión de bases numéricas y compuertas lógicas: reglas, explicación y simuladores interactivos.</p>
   </header>
+
+  <div class="section-nav">
+    <a href="#bases">🔢 Conversión de bases</a>
+    <a href="#compuertas">🔌 Compuertas lógicas</a>
+  </div>
+
+  <h2 class="section-title" id="bases">🔢 Conversión de Bases Numéricas</h2>
+  <p class="section-sub">Reglas mnemotécnicas para convertir entre binario, decimal y hexadecimal, más una calculadora para probarlo al toque.</p>
 
   <div class="card c-bin">
     <h2>🔵 Binario → Decimal</h2>
@@ -121,10 +159,36 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
     </div>
   </div>
 
+  <h2 class="section-title" id="compuertas">🔌 Compuertas Lógicas</h2>
+  <p class="section-sub">Una compuerta lógica es un circuito que combina una o más entradas binarias (0/1) y devuelve una salida binaria según una regla fija. Son la base de todo circuito digital.</p>
+
+  <div class="gate-intro">
+    <p><strong>Cómo leerlas:</strong> A y B son las entradas (podés "prenderlas" o "apagarlas", como una llave). Q es la salida. Tocá los círculos de A/B del simulador de abajo y mirá cómo cambia el LED de salida.</p>
+    <table>
+      <thead><tr><th>Compuerta</th><th>Regla</th></tr></thead>
+      <tbody>
+        <tr><td><strong>BUF</strong></td><td>Repite la entrada: Q = A</td></tr>
+        <tr><td><strong>NOT</strong></td><td>Invierte la entrada: Q = ¬A</td></tr>
+        <tr><td><strong>AND</strong></td><td>Q = 1 solo si A y B son 1</td></tr>
+        <tr><td><strong>NAND</strong></td><td>Lo opuesto a AND: Q = 0 solo si A y B son 1</td></tr>
+        <tr><td><strong>OR</strong></td><td>Q = 1 si A o B (o ambos) son 1</td></tr>
+        <tr><td><strong>NOR</strong></td><td>Lo opuesto a OR: Q = 1 solo si A y B son 0</td></tr>
+        <tr><td><strong>XOR</strong></td><td>Q = 1 si A y B son distintos</td></tr>
+        <tr><td><strong>XNOR</strong></td><td>Q = 1 si A y B son iguales</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="gate-board">
+    <div class="gate-board-title">⚡ Simulador de compuertas</div>
+    <div class="gate-grid" id="gateGrid"></div>
+  </div>
+
   <footer>Automatización y Control · Universidad de Pilar</footer>
 </div>
 
 <script>
+/* ---- Calculadora de bases ---- */
 const input = document.getElementById('calcInput');
 const buttons = document.querySelectorAll('.base-btn');
 const errBox = document.getElementById('calcError');
@@ -173,6 +237,85 @@ buttons.forEach(btn => {
 
 input.addEventListener('input', convert);
 convert();
+
+/* ---- Simulador de compuertas lógicas ---- */
+const GATES = [
+  { name: 'BUF',  formula: 'Q = A',        inputs: 1, fn: (a,b) => a },
+  { name: 'NOT',  formula: 'Q = ¬A',       inputs: 1, fn: (a,b) => a ? 0 : 1 },
+  { name: 'AND',  formula: 'Q = A · B',    inputs: 2, fn: (a,b) => (a && b) ? 1 : 0 },
+  { name: 'NAND', formula: 'Q = ¬(A · B)', inputs: 2, fn: (a,b) => (a && b) ? 0 : 1 },
+  { name: 'OR',   formula: 'Q = A + B',    inputs: 2, fn: (a,b) => (a || b) ? 1 : 0 },
+  { name: 'NOR',  formula: 'Q = ¬(A + B)', inputs: 2, fn: (a,b) => (a || b) ? 0 : 1 },
+  { name: 'XOR',  formula: 'Q = A ⊕ B',    inputs: 2, fn: (a,b) => (a !== b) ? 1 : 0 },
+  { name: 'XNOR', formula: 'Q = ¬(A ⊕ B)', inputs: 2, fn: (a,b) => (a === b) ? 1 : 0 },
+];
+
+const grid = document.getElementById('gateGrid');
+
+GATES.forEach(gate => {
+  const state = { a: 0, b: 0 };
+
+  const card = document.createElement('div');
+  card.className = 'gate-card';
+
+  const title = document.createElement('h3');
+  title.textContent = gate.name;
+  card.appendChild(title);
+
+  const formula = document.createElement('div');
+  formula.className = 'gate-formula';
+  formula.textContent = gate.formula;
+  card.appendChild(formula);
+
+  const toggles = document.createElement('div');
+  toggles.className = 'gate-toggles';
+
+  function makeToggle(labelText, key){
+    const wrap = document.createElement('div');
+    wrap.className = 'toggle-wrap';
+    const lbl = document.createElement('span');
+    lbl.className = 'toggle-lbl';
+    lbl.textContent = labelText;
+    const btn = document.createElement('button');
+    btn.className = 'toggle-btn';
+    btn.textContent = state[key];
+    btn.addEventListener('click', () => {
+      state[key] = state[key] ? 0 : 1;
+      btn.textContent = state[key];
+      btn.classList.toggle('on', !!state[key]);
+      update();
+    });
+    wrap.appendChild(lbl);
+    wrap.appendChild(btn);
+    return wrap;
+  }
+
+  toggles.appendChild(makeToggle('A', 'a'));
+  if(gate.inputs === 2){
+    toggles.appendChild(makeToggle('B', 'b'));
+  }
+  card.appendChild(toggles);
+
+  const output = document.createElement('div');
+  output.className = 'gate-output';
+  const led = document.createElement('div');
+  led.className = 'led';
+  const outLbl = document.createElement('span');
+  outLbl.className = 'gate-out-lbl';
+  outLbl.textContent = 'Q = 0';
+  output.appendChild(led);
+  output.appendChild(outLbl);
+  card.appendChild(output);
+
+  function update(){
+    const q = gate.fn(state.a, state.b);
+    led.classList.toggle('on', !!q);
+    outLbl.textContent = 'Q = ' + q;
+  }
+
+  update();
+  grid.appendChild(card);
+});
 </script>
 </body>
 </html>

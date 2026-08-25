@@ -40,7 +40,7 @@ Sitio personal de Joaquín De La Corte, deployado en [Netlify](https://www.netli
 - [Control PID — Horno](sistemas-control/pid-horno.html) — Proporcional, integral y derivativo, simulador térmico en vivo
 
 ### Automatización Industrial
-- [Conversión de Bases Numéricas](automatizacion-industrial/conversion-bases.html) — Reglas mnemotécnicas (binario/decimal/hexadecimal) + calculadora interactiva
+- [Lógica Digital](automatizacion-industrial/logica-digital.html) — Conversión de bases (binario/decimal/hex) con calculadora, y compuertas lógicas (BUF/NOT/AND/NAND/OR/NOR/XOR/XNOR) con simulador interactivo
 
 ### Otros
 - [LLMs — Cómo piensan](otros/llm.html)

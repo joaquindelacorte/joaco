@@ -174,6 +174,7 @@ footer a{color:var(--main)}
   <div class="tabs">
     <button class="tab-btn active" onclick="showTab('c1')">📖 Clase 1</button>
     <button class="tab-btn" onclick="showTab('c2')">🧮 Clase 2</button>
+    <button class="tab-btn" onclick="showTab('c3')">🔁 Clase 3</button>
     <button class="tab-btn" onclick="showTab('sim')">🧪 Simuladores</button>
     <button class="tab-btn" onclick="showTab('quiz')">🏅 Insignias · Quiz</button>
   </div>
@@ -183,7 +184,7 @@ footer a{color:var(--main)}
   <h1>Sistemas de Control</h1>
   <p>Apuntes de la materia, clase a clase — teoría fiel a las diapositivas de cátedra, diagramas de bloques, modelado matemático y simuladores de respuesta al escalón para entender de una vez el efecto de cada parámetro.</p>
   <div class="badges-sum">
-    <span class="badge-chip">📖 Clase 1 y 2</span>
+    <span class="badge-chip">📖 Clase 1, 2 y 3</span>
     <span class="badge-chip">🧪 2 simuladores</span>
     <span class="badge-chip">🏅 Insignias<span class="lvl-chip" id="badge-count-chip">0/6</span></span>
   </div>
@@ -616,6 +617,172 @@ footer a{color:var(--main)}
         <p class="dcap">Fuentes: <a href="https://en.wikipedia.org/wiki/Mobility_analogy" target="_blank" rel="noopener">Wikipedia — Mobility analogy</a>, <a href="https://en.wikibooks.org/wiki/Engineering_Acoustics/Electro-Mechanical_Analogies" target="_blank" rel="noopener">Wikibooks — Electro-Mechanical Analogies</a></p>
       </div>
     </details>
+
+  </div>
+</div>
+
+<!-- ================= CLASE 3 ================= -->
+<div class="page" id="page-c3">
+  <div class="container">
+
+    <span class="src-tag">📎 Clase 3 · Cerrando el Lazo de Control</span>
+
+    <div class="stitle"><span class="ico">🧩</span>Variables y componentes del diagrama</div>
+    <p class="lead">Antes de deducir nada, hay que tener clarísimo qué representa cada letra del diagrama de bloques. Son las mismas seis variables que vas a usar en <b>todos</b> los problemas de lazo cerrado de la materia.</p>
+
+    <div class="grid g3">
+      <div class="card bl">
+        <h3>c — Consigna / Referencia (Set Point)</h3>
+        <p>El valor deseado que se quiere alcanzar. Es lo que vos "le pedís" al sistema.</p>
+        <p style="margin-top:.5rem"><b>Ejemplos reales:</b> ajustar el termostato a 20 °C, poner el control de crucero en 100 km/h, marcar 37 °C en el body de un incubadora neonatal.</p>
+      </div>
+      <div class="card gr">
+        <h3>y — Salida (Variable controlada)</h3>
+        <p>La variable real, medible, que efectivamente se obtiene del sistema — casi nunca coincide exactamente con la consigna en todo instante.</p>
+        <p style="margin-top:.5rem"><b>Ejemplos reales:</b> la temperatura real de la habitación, la velocidad real del auto medida por la rueda, el nivel real de agua de un tanque.</p>
+      </div>
+      <div class="card or">
+        <h3>G — Planta / Proceso</h3>
+        <p>El elemento físico que transforma una entrada (la señal de control o el error) en la salida real. Es "lo que se controla".</p>
+        <p style="margin-top:.5rem"><b>Ejemplos reales:</b> el motor del auto, el calefactor del termotanque, el actuador de una válvula.</p>
+      </div>
+      <div class="card te">
+        <h3>H — Sensor / Realimentación</h3>
+        <p>El dispositivo que mide la salida real <code>y</code> y la adapta (escala, filtra) para poder compararla contra la consigna.</p>
+        <p style="margin-top:.5rem"><b>Ejemplos reales:</b> un termómetro/termocupla, un velocímetro, un sensor óptico de nivel.</p>
+      </div>
+      <div class="card am">
+        <h3>r — Señal realimentada</h3>
+        <div class="fbox"><span class="big">r = y · H</span></div>
+        <p>Es lo que el sensor efectivamente "le devuelve" al comparador — la medición de la salida, ya procesada por H.</p>
+      </div>
+      <div class="card re">
+        <h3>e — Error de control</h3>
+        <div class="fbox"><span class="big">e = c − r</span></div>
+        <p>La diferencia entre lo que se quiere (c) y lo que se mide (r). Es el motor de todo sistema de lazo cerrado: mientras haya error, el sistema sigue corrigiendo.</p>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">🔓</span>Sistema de lazo abierto</div>
+    <div class="fbox"><span class="big">y = c · G</span></div>
+    <div class="diagram">
+      <svg viewBox="0 0 340 90" width="100%" style="max-width:420px;display:block;margin:0 auto">
+        <line x1="10" y1="45" x2="60" y2="45" stroke="#374151" stroke-width="2"/>
+        <text x="30" y="38" font-size="11" text-anchor="middle" fill="#374151">c</text>
+        <polygon points="60,45 52,40 52,50" fill="#374151"/>
+        <rect x="60" y="20" width="80" height="50" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"/>
+        <text x="100" y="49" font-size="16" text-anchor="middle" fill="#0369a1" font-weight="700">G</text>
+        <line x1="140" y1="45" x2="200" y2="45" stroke="#374151" stroke-width="2"/>
+        <polygon points="200,45 192,40 192,50" fill="#374151"/>
+        <text x="215" y="38" font-size="11" text-anchor="middle" fill="#374151">y</text>
+      </svg>
+      <p class="dcap">La consigna c entra directo a la planta G, sin medir nunca la salida y.</p>
+    </div>
+    <div class="grid g2">
+      <div class="card bl">
+        <h3>Funcionamiento</h3>
+        <p>La consigna <code>c</code> entra directamente al proceso <code>G</code> sin medir el resultado <code>y</code>. No hay sensor ni comparador en el circuito.</p>
+      </div>
+      <div class="card">
+        <h3>Características</h3>
+        <ul>
+          <li>No hay realimentación.</li>
+          <li>El sistema no sabe si cometió un error ni puede corregir perturbaciones externas.</li>
+          <li><b>Ejemplos reales:</b> un lavarropas por tiempo (lava 40 min sin importar si la ropa quedó limpia), un ventilador estándar sin sensor de temperatura, un microondas a tiempo fijo.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">🔁</span>Sistema de lazo cerrado</div>
+    <div class="grid g3" style="margin-bottom:1rem">
+      <div class="fbox"><span class="sub-f">1) El sensor mide la salida</span><span class="big">r = y · H</span></div>
+      <div class="fbox"><span class="sub-f">2) El comparador calcula la diferencia</span><span class="big">e = c − r</span></div>
+      <div class="fbox"><span class="sub-f">3) La planta actúa según el error</span><span class="big">y = e · G</span></div>
+    </div>
+    <div class="diagram">
+      <svg viewBox="0 0 340 150" width="100%" style="max-width:420px;display:block;margin:0 auto">
+        <line x1="5" y1="45" x2="45" y2="45" stroke="#374151" stroke-width="2"/>
+        <text x="18" y="38" font-size="11" text-anchor="middle" fill="#374151">c</text>
+        <polygon points="45,45 37,40 37,50" fill="#374151"/>
+        <circle cx="55" cy="45" r="12" fill="#fff" stroke="#374151" stroke-width="2"/>
+        <text x="55" y="49" font-size="14" text-anchor="middle" fill="#374151">+</text>
+        <text x="55" y="70" font-size="10" text-anchor="middle" fill="#dc2626">−</text>
+        <line x1="67" y1="45" x2="105" y2="45" stroke="#374151" stroke-width="2"/>
+        <text x="80" y="38" font-size="11" text-anchor="middle" fill="#374151">e</text>
+        <polygon points="105,45 97,40 97,50" fill="#374151"/>
+        <rect x="105" y="20" width="80" height="50" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"/>
+        <text x="145" y="49" font-size="16" text-anchor="middle" fill="#0369a1" font-weight="700">G</text>
+        <line x1="185" y1="45" x2="240" y2="45" stroke="#374151" stroke-width="2"/>
+        <polygon points="240,45 232,40 232,50" fill="#374151"/>
+        <text x="255" y="38" font-size="11" text-anchor="middle" fill="#374151">y</text>
+        <line x1="215" y1="45" x2="215" y2="110" stroke="#374151" stroke-width="2"/>
+        <line x1="55" y1="110" x2="215" y2="110" stroke="#374151" stroke-width="2"/>
+        <line x1="55" y1="110" x2="55" y2="57" stroke="#374151" stroke-width="2"/>
+        <polygon points="55,57 50,65 60,65" fill="#374151"/>
+        <rect x="105" y="95" width="60" height="30" rx="6" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/>
+        <text x="135" y="115" font-size="14" text-anchor="middle" fill="#0d9488" font-weight="700">H</text>
+        <text x="135" y="145" font-size="11" text-anchor="middle" fill="#374151">r (realimentación)</text>
+      </svg>
+      <p class="dcap">c: consigna · e: error · G: planta · y: salida · H: sensor · r: señal realimentada</p>
+    </div>
+    <div class="grid g2">
+      <div class="card gr">
+        <h3>Funcionamiento</h3>
+        <p>La salida <code>y</code> se mide mediante <code>H</code>, vuelve hacia atrás (realimentación) y se compara con la consigna <code>c</code>. La diferencia genera el error <code>e</code>, que es la entrada con la que la planta <code>G</code> ajusta su comportamiento.</p>
+      </div>
+      <div class="card">
+        <h3>Características</h3>
+        <ul>
+          <li>Modifica la acción según la respuesta real del sistema.</li>
+          <li>Capaz de autocorregirse ante perturbaciones externas.</li>
+          <li><b>Ejemplos reales:</b> un aire acondicionado con termostato (corta cuando ya llegó a la temperatura y retoma si sube), un piloto automático de avión, el control de crucero adaptativo, la regulación de glucosa del cuerpo humano (insulina/glucagón), una plancha con termostato.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">🧮</span>Deducción de la función de transferencia global (lazo cerrado)</div>
+    <p class="lead">El objetivo: relacionar directamente la salida <code>y</code> con la consigna <code>c</code>, sin que aparezcan <code>e</code> ni <code>r</code> en el medio — esa relación <code>y/c</code> es la <b>función de transferencia de lazo cerrado</b>, y es lo que vas a usar de acá en adelante para analizar estabilidad y respuesta.</p>
+
+    <div class="card bl">
+      <ol style="display:flex;flex-direction:column;gap:.9rem">
+        <li><b>Sustituimos el error <code>e</code> en la salida:</b>
+          <div class="fbox" style="margin-top:.4rem"><span class="sub-f">y = e · G</span><span class="big">y = (c − r) · G</span></div>
+        </li>
+        <li><b>Reemplazamos la señal realimentada <code>r</code>:</b>
+          <div class="fbox" style="margin-top:.4rem"><span class="big">y = (c − y · H) · G</span></div>
+        </li>
+        <li><b>Aplicamos propiedad distributiva:</b>
+          <div class="fbox" style="margin-top:.4rem"><span class="big">y = c · G − y · G · H</span></div>
+        </li>
+        <li><b>Agrupamos los términos con <code>y</code> del lado izquierdo:</b>
+          <div class="fbox" style="margin-top:.4rem"><span class="big">y + y · G · H = c · G</span></div>
+        </li>
+        <li><b>Sacamos factor común <code>y</code>:</b>
+          <div class="fbox" style="margin-top:.4rem"><span class="big">y · (1 + G · H) = c · G</span></div>
+        </li>
+        <li><b>Despejamos la relación Salida / Consigna:</b>
+          <div class="fbox" style="margin-top:.4rem;background:#0c1a2e"><span class="big" style="font-size:1.4rem;color:#7dd3fc">y / c = G / (1 + G · H)</span></div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="tip"><span class="tip-i">💡</span><div>Esta fórmula <code>G / (1 + G·H)</code> te va a perseguir el resto de la materia — es <b>LA</b> función de transferencia de lazo cerrado con realimentación negativa. Cuando <code>H = 1</code> (realimentación unitaria, el sensor no escala nada), queda simplemente <code>G / (1 + G)</code>.</div></div>
+
+    <div class="stitle"><span class="ico">🌎</span>Ejemplos de la vida real, mapeados al diagrama</div>
+    <p class="lead">Para que la fórmula deje de ser abstracta, así se ve <code>c, y, G, H</code> en cuatro sistemas cotidianos:</p>
+
+    <div class="twrap">
+      <table>
+        <tr><th>Sistema</th><th>c (consigna)</th><th>y (salida)</th><th>G (planta)</th><th>H (sensor)</th></tr>
+        <tr><td><b>Aire acondicionado</b></td><td>Temperatura seteada (ej. 22 °C)</td><td>Temperatura real del ambiente</td><td>Compresor + serpentina</td><td>Termostato</td></tr>
+        <tr><td><b>Control de crucero</b></td><td>Velocidad seteada (ej. 100 km/h)</td><td>Velocidad real del auto</td><td>Motor + transmisión</td><td>Sensor de velocidad de rueda</td></tr>
+        <tr><td><b>Ducha con termotanque</b></td><td>Temperatura deseada del agua</td><td>Temperatura real del agua que sale</td><td>Resistencia calefactora</td><td>Termocupla / bulbo sensor</td></tr>
+        <tr><td><b>Tanque de agua con flotante</b></td><td>Nivel deseado del tanque</td><td>Nivel real del agua</td><td>Válvula de entrada de agua</td><td>Flotante mecánico</td></tr>
+        <tr><td><b>Termorregulación corporal</b></td><td>~37 °C (set point hipotalámico)</td><td>Temperatura corporal real</td><td>Músculos (escalofríos) / glándulas sudoríparas</td><td>Termorreceptores de piel e hipotálamo</td></tr>
+      </table>
+    </div>
+
+    <div class="tip"><span class="tip-i">💡</span><div>Dato interesante: en la termorregulación corporal, el error <code>e</code> nunca llega exactamente a cero — siempre queda un pequeño margen, por eso sudamos o tiritamos en ciclos y no de forma continua. Es exactamente el mismo comportamiento que vas a ver en los simuladores de respuesta al escalón de la pestaña "Simuladores": el sistema oscila o se acerca gradualmente al valor deseado, pero rara vez lo toca de forma perfecta e instantánea.</div></div>
 
   </div>
 </div>

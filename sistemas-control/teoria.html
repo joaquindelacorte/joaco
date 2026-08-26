@@ -882,6 +882,28 @@ footer a{color:var(--main)}
 
     <div class="tip"><span class="tip-i">💡</span><div>Por eso en la práctica: un PID mal sintonizado (ganancia muy alta) hace que una válvula "cacetee"; y un robot teleoperado por una red con mucha latencia se vuelve inmanejable aunque el robot en sí sea perfectamente estable — el retardo de la red es, matemáticamente, la misma causa de inestabilidad que viste acá.</div></div>
 
+    <div class="stitle"><span class="ico">📊</span>Resultados de las Simulaciones (cátedra)</div>
+    <p class="lead">Tabla de la diapositiva de cátedra — corridas de referencia para contrastar contra lo que viste en los simuladores de arriba. H=1 salvo que se indique lo contrario.</p>
+    <div class="twrap">
+      <table>
+        <tr><th>G</th><th>H</th><th>Kp</th><th>Comentario</th></tr>
+        <tr><td rowspan="3"><code>1/(s+1)</code></td><td rowspan="3">1</td><td>1</td><td rowspan="3">Aumentar la ganancia nunca crea inestabilidad — con Kp=1000 el sistema es rápido y preciso.</td></tr>
+        <tr><td>10</td></tr>
+        <tr><td>1000</td></tr>
+        <tr><td rowspan="4"><code>1/[(s+1)(s+2)]</code></td><td rowspan="4">1</td><td>1</td><td>Mínimo sobrepaso.</td></tr>
+        <tr><td>10</td><td>Baja amortiguación, sobrepaso 25%.</td></tr>
+        <tr><td>100</td><td>Sobrepaso 70%.</td></tr>
+        <tr><td>1000</td><td>Oscilatorio amortiguado.</td></tr>
+        <tr><td rowspan="3"><code>1/(s²+2s+10)</code></td><td rowspan="3">1</td><td>1</td><td>Baja amortiguación.</td></tr>
+        <tr><td>30</td><td>Polos: p₁,p₂ = 1 ± 3j</td></tr>
+        <tr><td>100</td><td>Polos: p₁,p₂ = 1 ± 3j</td></tr>
+        <tr><td rowspan="3"><code>1/(s+1)</code></td><td rowspan="3"><code>1/(s+4)</code></td><td>—</td><td rowspan="3"><i>Sin datos en la diapositiva original — quedó pendiente</i></td></tr>
+        <tr><td>—</td></tr>
+        <tr><td>—</td></tr>
+      </table>
+    </div>
+    <div class="tip"><span class="tip-i">⚠️</span><div>Ojo con la fila de <code>1/(s²+2s+10)</code>: la diapositiva anota los polos como <code>1 ± 3j</code> (parte real <b>positiva</b>, que sería inestable), pero por la propia forma de <code>G</code> los polos de lazo abierto ya están en <code>−1 ± 3j</code>, y cerrar el lazo con ganancia proporcional pura no cambia esa parte real en este caso — debería seguir siendo <code>−1 ± 3j</code> (estable, solo cada vez menos amortiguado a medida que Kp crece). Puede ser un typo de la diapositiva (falta el signo menos) — confirmalo con la cátedra o el apunte original antes de estudiarlo así.</div></div>
+
   </div>
 </div>
 

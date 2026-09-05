@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Por qué automaticé el 40 % de mi trabajo — Joaquín De La Corte</title>
+  <meta name="description" content="En Grupo Moura automaticé reportes, validaciones y flujos de aprobación. Acá te cuento el proceso: qué salió bien, qué no, y las decisiones que tomaría diferente.">
+  <meta property="og:title" content="Por qué automaticé el 40 % de mi trabajo — Joaquín De La Corte">
+  <meta property="og:description" content="En Grupo Moura automaticé reportes, validaciones y flujos de aprobación. Acá te cuento el proceso: qué salió bien, qué no, y las decisiones que tomaría diferente.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://joacodelacorte.netlify.app/blog/posts/por-que-automatize-mi-trabajo.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;900&family=Fraunces:ital,wght@1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="../blog.css">
+</head>
+<body>
+
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="../../" class="nav__brand">Joaquín De La Corte</a>
+      <button class="nav__toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav__links" id="navLinks">
+        <a href="../../#proyectos">Proyectos</a>
+        <a href="../../#experiencia">Experiencia</a>
+        <a href="../../#apuntes">Apuntes</a>
+        <a href="../../#sobre-mi">Sobre mí</a>
+        <a href="../../#stack">Herramientas</a>
+        <a href="../index.html" style="color: var(--ink); font-weight: 600;">Blog</a>
+        <a href="../../#contacto">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="post-header" style="padding-left: 6vw; padding-right: 6vw;">
+    <span class="eyebrow eyebrow--teal">Automatización</span>
+    <h1>Por qué automaticé el 40 % de mi trabajo (y qué aprendí)</h1>
+    <div class="post-header__meta">
+      <span>5 sep 2026</span>
+      <span>·</span>
+      <span>6 min de lectura</span>
+    </div>
+  </section>
+
+  <!--
+    ADSENSE SLOT 1 (LEADERBOARD 728×90)
+    Posición: entre encabezado y cuerpo del post.
+  -->
+  <div style="padding-left: 6vw; padding-right: 6vw; margin-bottom: 3vh;">
+    <div class="ad-slot ad-slot--leaderboard">
+      Publicidad · 728 × 90 — AdSense slot 1
+    </div>
+  </div>
+
+  <article class="post-body" style="padding-left: 6vw; padding-right: 6vw;">
+    <div class="post-content">
+
+      <p>
+        Cuando entré a Grupo Moura como BP de Proyectos IT, heredé un volumen de reportes manuales que consumía fácil tres horas por semana. Consolidaciones en Excel, exportaciones de SAP copiadas a mano, aprobaciones que viajaban por mail. El primer mes lo hice todo a mano para entender la lógica. El segundo mes empecé a automatizar.
+      </p>
+
+      <h2>El inventario: ¿qué valía la pena automatizar?</h2>
+      <p>
+        No todo es candidato. La regla que uso: si la tarea es repetitiva, tiene pasos bien definidos y el resultado es verificable, entra en la lista. Si requiere juicio o contexto que cambia cada vez, no.
+      </p>
+      <p>
+        En mi caso, los tres candidatos principales fueron: (1) el reporte semanal de estado de proyectos, (2) la validación de solicitudes contra el catálogo de servicios, y (3) las notificaciones de vencimiento de hitos en Azure DevOps.
+      </p>
+
+      <h2>El stack que usé</h2>
+      <p>
+        Power Automate para los flujos de aprobación y notificaciones: integración nativa con Teams, SharePoint y correo, sin código. SAP GUI Scripting con VBA para las exportaciones —es frágil, pero cuando la interfaz no tiene API es la única salida. Python para el procesamiento de los datos exportados: limpieza, consolidación y generación del reporte en Excel con openpyxl.
+      </p>
+      <p>
+        Nada de esto es glamoroso. No hay LLMs, ni pipelines de ML. Es automatización de nivel 1: eliminar el trabajo manual que no agrega valor.
+      </p>
+
+      <!--
+        ADSENSE SLOT 2 (RECTANGLE 300×250)
+        Posición: mitad del artículo.
+      -->
+      <div class="ad-slot ad-slot--rectangle">
+        Publicidad · 300 × 250 — AdSense slot 2
+      </div>
+
+      <h2>Lo que no salió bien</h2>
+      <p>
+        El scripting de SAP GUI. Cada actualización del sistema rompe selectores y hay que revisar. Lo resolví documentando cada script con comentarios que explican qué campo busca y por qué, para que el próximo mantenimiento sea rápido.
+      </p>
+      <p>
+        El otro problema fue la resistencia interna: cuando automatizás algo que alguien hacía manualmente, esa persona siente que le sacás trabajo. La solución no es técnica: es mostrarle qué puede hacer con el tiempo que recupera.
+      </p>
+
+      <h2>El resultado real</h2>
+      <p>
+        El 40 % del que hablo no es un número exacto —es la estimación de tiempo recuperado en las primeras cuatro semanas. Lo que sí es exacto: el reporte semanal pasó de 2.5 horas a 12 minutos. Las notificaciones de vencimiento dejaron de depender de que alguien se acordara. Y el proceso de aprobación de solicitudes bajó de 3 días promedio a menos de 24 horas.
+      </p>
+      <p>
+        Si tuviese que recomenzar, empezaría por documentar el proceso manual antes de automatizarlo. Parece obvio. No lo es.
+      </p>
+
+    </div>
+  </article>
+
+  <!--
+    ADSENSE SLOT 3 (LEADERBOARD 728×90)
+    Posición: pie del artículo.
+  -->
+  <div style="padding-left: 6vw; padding-right: 6vw; margin-bottom: 3vh;">
+    <div class="ad-slot ad-slot--leaderboard">
+      Publicidad · 728 × 90 — AdSense slot 3
+    </div>
+  </div>
+
+  <div class="post-footer" style="padding-left: 6vw; padding-right: 6vw;">
+    <a href="../index.html" class="post-footer__back">← Volver al blog</a>
+  </div>
+
+  <footer class="contact" id="contacto">
+    <div class="contact__inner">
+      <span class="eyebrow eyebrow--light">Contacto</span>
+      <h2>¿Charlamos?</h2>
+      <p>Escribime si tenés un proyecto de automatización, datos o IA en mente, o simplemente querés conectar.</p>
+      <a href="mailto:joaquin@delacorte.ar" class="contact__email">joaquin@delacorte.ar</a>
+      <div class="contact__socials">
+        <a href="https://github.com/joaquindelacorte" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/joaquindelacorte/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+    <div class="contact__foot">
+      <span>© 2026 Joaquín De La Corte</span>
+      <span>lazo cerrado v1.0</span>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('navToggle');
+    const links = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      const isOpen = links.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', isOpen);
+      toggle.classList.toggle('is-open');
+    });
+    links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      links.classList.remove('is-open');
+      toggle.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }));
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('is-scrolled', window.scrollY > 40);
+    });
+  </script>
+
+</body>
+</html>

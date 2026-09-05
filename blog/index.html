@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — Joaquín De La Corte</title>
+  <meta name="description" content="Artículos de Joaquín De La Corte sobre automatización, datos, IA y desarrollo de software.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;900&family=Fraunces:ital,wght@1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="blog.css">
+</head>
+<body>
+
+  <!-- ============ NAV ============ -->
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="../" class="nav__brand">Joaquín De La Corte</a>
+      <button class="nav__toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav__links" id="navLinks">
+        <a href="../#proyectos">Proyectos</a>
+        <a href="../#experiencia">Experiencia</a>
+        <a href="../#apuntes">Apuntes</a>
+        <a href="../#sobre-mi">Sobre mí</a>
+        <a href="../#stack">Herramientas</a>
+        <a href="index.html" style="color: var(--ink); font-weight: 600;">Blog</a>
+        <a href="../#contacto">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="blog-hero" style="padding-left: 6vw; padding-right: 6vw;">
+    <span class="eyebrow eyebrow--teal">Blog</span>
+    <h1>Notas del proceso</h1>
+    <p class="blog-hero__sub">Automatización, datos, IA y lo que voy aprendiendo. Publicación: dos veces por semana.</p>
+  </section>
+
+  <!-- ============ ADSENSE SLOT 1 — Leaderboard debajo del hero ============ -->
+  <!--
+    ADSENSE SLOT 1 (LEADERBOARD 728×90)
+    Reemplazar el div.ad-slot por el script de AdSense cuando esté listo.
+    Posición: debajo del encabezado del blog, antes del listado.
+  -->
+  <div style="padding-left: 6vw; padding-right: 6vw; margin-bottom: 3vh;">
+    <div class="ad-slot ad-slot--leaderboard">
+      Publicidad · 728 × 90 — AdSense slot 1
+    </div>
+  </div>
+
+  <!-- ============ LISTADO + SIDEBAR ============ -->
+  <div class="blog-layout" style="padding-left: 6vw; padding-right: 6vw;">
+
+    <!-- POSTS -->
+    <main class="post-list">
+
+      <!-- POST 1 -->
+      <article class="post-card">
+        <div class="post-card__meta">
+          <span class="post-card__date">5 sep 2026</span>
+          <span class="post-card__tag">Automatización</span>
+        </div>
+        <h2><a href="posts/por-que-automatize-mi-trabajo.html">Por qué automaticé el 40 % de mi trabajo (y qué aprendí)</a></h2>
+        <p class="post-card__excerpt">
+          En Grupo Moura automaticé reportes, validaciones y flujos de aprobación usando Power Automate, SAP Scripting y Python. Acá te cuento el proceso: qué salió bien, qué no, y las decisiones que tomaría diferente.
+        </p>
+        <a href="posts/por-que-automatize-mi-trabajo.html" class="post-card__read">Leer →</a>
+      </article>
+
+      <!-- POST 2 -->
+      <article class="post-card">
+        <div class="post-card__meta">
+          <span class="post-card__date">2 sep 2026</span>
+          <span class="post-card__tag">IA aplicada</span>
+        </div>
+        <h2><a href="posts/ia-en-planta-de-produccion.html">IA en la planta: casos reales, sin hype</a></h2>
+        <p class="post-card__excerpt">
+          Hay un abismo entre los casos de estudio de LinkedIn y lo que realmente funciona en un piso de producción. Tres experiencias propias con modelos de predicción de fallas, OCR de formularios y clasificación de imágenes.
+        </p>
+        <a href="posts/ia-en-planta-de-produccion.html" class="post-card__read">Leer →</a>
+      </article>
+
+      <!-- POST 3 (placeholder — próximo) -->
+      <article class="post-card" style="opacity: 0.5;">
+        <div class="post-card__meta">
+          <span class="post-card__date">Próximamente</span>
+          <span class="post-card__tag">Datos</span>
+        </div>
+        <h2>Construir un dashboard de OEE desde cero</h2>
+        <p class="post-card__excerpt">
+          De los datos crudos del PLC al reporte ejecutivo en Power BI. Todo el pipeline: extracción, limpieza, modelo de datos y visualización.
+        </p>
+      </article>
+
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="blog-sidebar">
+
+      <!-- ADSENSE SLOT 2 — Rectangle sidebar -->
+      <!--
+        ADSENSE SLOT 2 (RECTANGLE 300×250)
+        Reemplazar el div.ad-slot por el script de AdSense cuando esté listo.
+        Posición: sidebar derecho, fijo al hacer scroll.
+      -->
+      <div class="ad-slot ad-slot--rectangle">
+        Publicidad · 300 × 250 — AdSense slot 2
+      </div>
+
+      <!-- CATEGORÍAS -->
+      <div class="sidebar-box">
+        <h3>Temas</h3>
+        <ul>
+          <li><a href="#">Automatización</a></li>
+          <li><a href="#">IA aplicada</a></li>
+          <li><a href="#">Datos & Analytics</a></li>
+          <li><a href="#">Desarrollo de software</a></li>
+          <li><a href="#">Carrera & proceso</a></li>
+        </ul>
+      </div>
+
+      <!-- SOBRE EL AUTOR -->
+      <div class="sidebar-box">
+        <h3>Quién escribe</h3>
+        <p style="font-size: 0.88rem; color: var(--ink-soft); line-height: 1.55; margin: 0;">
+          Joaquín De La Corte. BP de Proyectos IT en Grupo Moura. Polímata especializado en IA, con base en automatización industrial.
+          <a href="../#sobre-mi" style="color: var(--teal); font-weight: 600; display: inline-block; margin-top: 0.5rem;">Leer más →</a>
+        </p>
+      </div>
+
+    </aside>
+  </div>
+
+  <!-- ============ ADSENSE SLOT 3 — Leaderboard al pie del listado ============ -->
+  <!--
+    ADSENSE SLOT 3 (LEADERBOARD 728×90)
+    Reemplazar el div.ad-slot por el script de AdSense cuando esté listo.
+    Posición: pie de la sección de posts, antes del footer.
+  -->
+  <div style="padding-left: 6vw; padding-right: 6vw; margin-bottom: 6vh;">
+    <div class="ad-slot ad-slot--leaderboard">
+      Publicidad · 728 × 90 — AdSense slot 3
+    </div>
+  </div>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="contact" id="contacto">
+    <div class="contact__inner">
+      <span class="eyebrow eyebrow--light">Contacto</span>
+      <h2>¿Charlamos?</h2>
+      <p>Escribime si tenés un proyecto de automatización, datos o IA en mente, o simplemente querés conectar.</p>
+      <a href="mailto:joaquin@delacorte.ar" class="contact__email">joaquin@delacorte.ar</a>
+      <div class="contact__socials">
+        <a href="https://github.com/joaquindelacorte" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/joaquindelacorte/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+    <div class="contact__foot">
+      <span>© 2026 Joaquín De La Corte</span>
+      <span>lazo cerrado v1.0</span>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('navToggle');
+    const links = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      const isOpen = links.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', isOpen);
+      toggle.classList.toggle('is-open');
+    });
+    links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      links.classList.remove('is-open');
+      toggle.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }));
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('is-scrolled', window.scrollY > 40);
+    });
+  </script>
+
+</body>
+</html>

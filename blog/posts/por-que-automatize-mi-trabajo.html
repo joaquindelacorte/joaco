@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-slug="por-que-automatize-mi-trabajo">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,6 +42,7 @@
       <span>5 sep 2026</span>
       <span>·</span>
       <span>6 min de lectura</span>
+      <span id="view-count" style="color: var(--ink-soft); font-size: 0.78rem;"></span>
     </div>
   </section>
 
@@ -153,6 +154,37 @@
     window.addEventListener('scroll', () => {
       nav.classList.toggle('is-scrolled', window.scrollY > 40);
     });
+  </script>
+
+
+  <!-- CONTADOR DE VISITAS — Supabase -->
+  <script>
+    (async function() {
+      const SUPABASE_URL = 'https://noiwscxigjnowdwmycek.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vaXdzY3hpZ2pub3dkd215Y2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1Mzg2MDQsImV4cCI6MjEwNDExNDYwNH0.DVQNnv5WF_PjaeyeCHqpPBM8AFRz3aPJgTzFA8Yg29w';
+      const slug = document.documentElement.dataset.slug;
+      if (!slug) return;
+
+      // Incrementar y mostrar
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/increment_views', {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ p_slug: slug })
+        });
+        if (res.ok) {
+          const count = await res.json();
+          const el = document.getElementById('view-count');
+          if (el) el.textContent = count.toLocaleString('es-AR') + ' visitas';
+        }
+      } catch(e) {
+        // silencioso — no rompemos el post si falla
+      }
+    })();
   </script>
 
 </body>

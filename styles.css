@@ -2,19 +2,19 @@
    TOKENS
    ============================================ */
 :root {
-  --paper:      #F2F4F7;
+  --paper:      #ECEEF2;
   --paper-white:#FFFFFF;
-  --ink:        #10151F;
-  --ink-soft:   #57616F;
-  --line:       #DDE2E7;
+  --ink:        #0B1629;
+  --ink-soft:   #4A5568;
+  --line:       #CDD2DB;
 
-  --teal:  #1E7F82;
-  --amber: #E8A33D;
-  --rust:  #B5502D;
-  --slate: #3B5169;
+  --teal:  #1A56DB;
+  --amber: #F59E0B;
+  --rust:  #EA580C;
+  --slate: #374151;
 
   --font-display: "Archivo", sans-serif;
-  --font-accent:  "Fraunces", serif;
+  --font-accent:  "JetBrains Mono", monospace;
   --font-body:    "Inter", sans-serif;
 
   --max-width: 1100px;
@@ -53,9 +53,11 @@ section, footer, header { padding-left: 6vw; padding-right: 6vw; }
 .eyebrow {
   display: inline-block;
   font-family: var(--font-accent);
-  font-style: italic;
-  font-weight: 500;
-  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--rust);
   margin-bottom: 0.6rem;
 }

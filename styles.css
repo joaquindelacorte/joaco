@@ -378,3 +378,106 @@ section, footer, header { padding-left: 6vw; padding-right: 6vw; }
 
   .exp-card__top { flex-direction: column; gap: 0.2rem; }
 }
+
+
+/* ============================================
+   DECORACIONES DE FONDO — Automatización industrial
+   ============================================ */
+
+/* Dot-grid sutil en el fondo general */
+body {
+  background-image: radial-gradient(circle, var(--line) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Posicionamiento de SVGs decorativos */
+.bg-deco-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Asegurar que el contenido quede encima */
+header, section, footer, .nav {
+  position: relative;
+  z-index: 1;
+}
+
+.bg-gear {
+  position: absolute;
+  color: var(--teal);
+  opacity: 0.055;
+  fill: currentColor;
+}
+
+.bg-circuit {
+  position: absolute;
+  color: var(--teal);
+  opacity: 0.05;
+}
+
+.bg-wave {
+  position: absolute;
+  opacity: 0.06;
+}
+
+/* Posiciones específicas */
+.bg-gear--1 {
+  width: 420px;
+  top: -60px;
+  right: -80px;
+  animation: gear-spin 60s linear infinite;
+}
+.bg-gear--2 {
+  width: 220px;
+  top: 320px;
+  right: 60px;
+  animation: gear-spin 40s linear infinite reverse;
+}
+.bg-gear--3 {
+  width: 160px;
+  bottom: 40%;
+  left: -30px;
+  animation: gear-spin 50s linear infinite;
+}
+.bg-gear--4 {
+  width: 100px;
+  bottom: 38%;
+  left: 95px;
+  animation: gear-spin 30s linear infinite reverse;
+}
+
+.bg-circuit--1 {
+  width: 200px;
+  bottom: 20%;
+  right: 5%;
+}
+.bg-circuit--2 {
+  width: 160px;
+  top: 55%;
+  left: 3%;
+}
+
+.bg-wave--1 {
+  width: 340px;
+  top: 62%;
+  right: 8%;
+}
+
+@keyframes gear-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-gear { animation: none !important; }
+}
+
+@media (max-width: 800px) {
+  .bg-gear--1 { width: 260px; right: -60px; }
+  .bg-gear--2 { display: none; }
+  .bg-gear--3 { width: 120px; }
+  .bg-gear--4 { display: none; }
+}

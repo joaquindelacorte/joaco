@@ -912,106 +912,251 @@ footer a{color:var(--main)}
 <div class="page" id="page-c5">
   <div class="container">
 
-    <span class="src-tag">&#128203; Clase 5 &middot; 8 de septiembre de 2026 &middot; N&uacute;meros Complejos, Filtros y Ruido Blanco</span>
+    <span class="src-tag">&#128203; Clase 5 &middot; 8 de septiembre de 2026 &middot; N&uacute;meros Complejos, Filtros, Frecuencia y Ruido Blanco</span>
 
-    <div class="stitle"><span class="ico">&#119894;</span>N&uacute;meros Complejos en Sistemas de Control</div>
-    <p class="lead">Los sistemas de control viven en el dominio de Laplace &mdash; el plano complejo <b>s = &sigma; + j&omega;</b>. Entender los n&uacute;meros complejos es entender d&oacute;nde est&aacute;n los polos y ceros, y por qu&eacute; el sistema se comporta como se comporta.</p>
+    <!-- ─── 1. NUMEROS COMPLEJOS ─────────────────────────────────── -->
+    <div class="stitle"><span class="ico">&#120164;</span>1. N&uacute;meros Complejos — por qu&eacute; los usamos en control</div>
+    <p class="lead">Cuando analizamos un circuito RC o la suspensi&oacute;n de un auto con la Transformada de Laplace, la variable <code>s</code> es compleja: <b>s = &sigma; + j&omega;</b>. No es una abstracci&oacute;n matem&aacute;tica; es una forma de codificar <em>dos cosas a la vez</em>: cu&aacute;nto decae una se&ntilde;al (&sigma;) y a qu&eacute; velocidad oscila (&omega;).</p>
+
     <div class="grid g2">
       <div class="card">
-        <h3>El plano complejo s</h3>
-        <ul>
-          <li><b>Eje real &sigma;</b> &rarr; controla la velocidad de respuesta</li>
-          <li><b>Eje imaginario j&omega;</b> &rarr; controla la frecuencia de oscilaci&oacute;n</li>
-          <li>Polo en &sigma; &lt; 0 &rarr; sistema estable (decae)</li>
-          <li>Polo en &sigma; &gt; 0 &rarr; sistema inestable (crece sin l&iacute;mite)</li>
-          <li>Polo m&aacute;s a la izquierda &rarr; <b>m&aacute;s r&aacute;pido</b> (&tau; = &minus;1/&sigma; m&aacute;s chico)</li>
-        </ul>
+        <h3>Qu&eacute; significa cada parte</h3>
+        <table style="width:100%;border-collapse:collapse;font-size:.9rem">
+          <tr style="background:var(--main-bg)"><th style="padding:.4rem .6rem;text-align:left">Parte</th><th style="padding:.4rem .6rem;text-align:left">Significado f&iacute;sico</th><th style="padding:.4rem .6rem;text-align:left">Efecto en la respuesta</th></tr>
+          <tr><td style="padding:.3rem .6rem"><code>&sigma;</code> (parte real)</td><td style="padding:.3rem .6rem">Velocidad de decaimiento o crecimiento</td><td style="padding:.3rem .6rem">&sigma; &lt; 0 → decae (estable); &sigma; &gt; 0 → explota</td></tr>
+          <tr style="background:#f8f9ff"><td style="padding:.3rem .6rem"><code>j&omega;</code> (parte imag.)</td><td style="padding:.3rem .6rem">Frecuencia de oscilaci&oacute;n</td><td style="padding:.3rem .6rem">&omega; = 0 → sin oscilaci&oacute;n; &omega; alto → oscila r&aacute;pido</td></tr>
+          <tr><td style="padding:.3rem .6rem"><code>|s|</code> (m&oacute;dulo)</td><td style="padding:.3rem .6rem">Magnitud de la respuesta</td><td style="padding:.3rem .6rem">Amplitud de la se&ntilde;al en esa frecuencia</td></tr>
+          <tr style="background:#f8f9ff"><td style="padding:.3rem .6rem"><code>&ang;s</code> (argumento)</td><td style="padding:.3rem .6rem">Fase</td><td style="padding:.3rem .6rem">Cuanto se retrasa la salida respecto a la entrada</td></tr>
+        </table>
       </div>
       <div class="card bl">
-        <h3>M&oacute;dulo |H(s)| en 3D</h3>
-        <p>El gr&aacute;fico 3D que vimos en clase muestra el m&oacute;dulo de la funci&oacute;n de transferencia sobre el plano complejo:</p>
-        <ul>
-          <li>&#128314; <b>Polos</b> &rarr; picos que van al infinito</li>
-          <li>&#11096; <b>Ceros</b> &rarr; valles que tocan cero</li>
-          <li>La secci&oacute;n j&omega; del plano 3D es la respuesta en frecuencia (Bode)</li>
-        </ul>
-        <canvas id="canvas3d" width="320" height="180" style="width:100%;border-radius:8px;margin-top:.8rem;background:#1e1b4b"></canvas>
+        <h3>El plano complejo s — mapa de comportamientos</h3>
+        <canvas id="sPlane" height="220" style="width:100%"></canvas>
+        <p style="font-size:.82rem;color:var(--gray-lt);margin-top:.4rem">Hac&eacute; clic en cualquier punto para ver c&oacute;mo responde el sistema con ese polo.</p>
       </div>
     </div>
 
-    <div class="stitle"><span class="ico">&#9201;</span>&iquest;Cu&aacute;l sistema es m&aacute;s r&aacute;pido?</div>
-    <p class="lead">Pregunta del profesor: la velocidad depende de d&oacute;nde est&aacute; el polo en el eje real. &tau; = &minus;1/&sigma;. Polo m&aacute;s a la izquierda = &tau; m&aacute;s chico = m&aacute;s r&aacute;pido.</p>
-    <div class="card" style="max-width:600px">
-      <label><b>Polo sistema A:</b> &sigma;<sub>A</sub> = <span id="pA-val">-1</span></label><br>
-      <input type="range" id="pA" min="-8" max="-0.2" step="0.1" value="-1" oninput="document.getElementById('pA-val').textContent=this.value;drawSpeed()" style="width:100%;margin:.4rem 0 .8rem"><br>
-      <label><b>Polo sistema B:</b> &sigma;<sub>B</sub> = <span id="pB-val">-3</span></label><br>
-      <input type="range" id="pB" min="-8" max="-0.2" step="0.1" value="-3" oninput="document.getElementById('pB-val').textContent=this.value;drawSpeed()" style="width:100%;margin:.4rem 0 .8rem">
-      <div id="speed-verdict" style="margin:.5rem 0;font-weight:700;color:var(--main)"></div>
-      <canvas id="speedChart" height="180" style="width:100%"></canvas>
+    <div class="card" style="margin-top:1.2rem">
+      <h3>&#127911; Simulador del plano s — polos y respuesta temporal</h3>
+      <p style="font-size:.9rem;margin-bottom:.8rem">Mov&eacute; los sliders para ubicar el polo. El sistema tiene FT = 1/(s&minus;p) donde p = &sigma; + j&omega;.</p>
+      <div style="display:flex;gap:2rem;flex-wrap:wrap">
+        <label style="flex:1;min-width:200px">
+          <b>Parte real &sigma;:</b> <span id="sigma-val">-1.0</span>
+          <input type="range" id="sigmaSlider" min="-5" max="1" step="0.1" value="-1" oninput="document.getElementById('sigma-val').textContent=parseFloat(this.value).toFixed(1);updateSPlane()" style="width:100%;display:block;margin-top:.3rem">
+          <small style="color:var(--gray-lt)">&sigma; &lt; 0 = estable &nbsp;&bull;&nbsp; &sigma; &gt; 0 = inestable</small>
+        </label>
+        <label style="flex:1;min-width:200px">
+          <b>Parte imaginaria &omega;:</b> <span id="omega-val">0.0</span>
+          <input type="range" id="omegaSlider" min="-5" max="5" step="0.1" value="0" oninput="document.getElementById('omega-val').textContent=parseFloat(this.value).toFixed(1);updateSPlane()" style="width:100%;display:block;margin-top:.3rem">
+          <small style="color:var(--gray-lt)">&omega; = 0 = sin oscilaci&oacute;n &nbsp;&bull;&nbsp; |&omega;| alto = oscila r&aacute;pido</small>
+        </label>
+      </div>
+      <div id="splane-info" style="margin:.6rem 0;padding:.5rem .8rem;border-radius:6px;background:var(--main-bg);font-size:.9rem;font-weight:600"></div>
+      <canvas id="spaneResp" height="160" style="width:100%;margin-top:.4rem"></canvas>
     </div>
 
-    <div class="stitle"><span class="ico">&#128250;</span>Filtros: Pasa Bajos y Pasa Altos</div>
+    <!-- ─── 2. MODULO 3D ──────────────────────────────────────────── -->
+    <div class="stitle"><span class="ico">&#127965;</span>2. El gr&aacute;fico 3D de |H(s)| — lo que vimos en clase</div>
+    <p class="lead">La funci&oacute;n de transferencia H(s) asigna un n&uacute;mero complejo a cada punto del plano s. Si graficamos su <b>m&oacute;dulo |H(s)|</b> en el eje vertical, obtenemos una superficie 3D que muestra de un vistazo toda la "personalidad" del sistema.</p>
+    <div class="grid g2">
+      <div class="card bl">
+        <h3>C&oacute;mo leer el gr&aacute;fico</h3>
+        <ul>
+          <li><b>&#128314; Picos (van al &infin;)</b> → Polos. Son las frecuencias donde el sistema "resuena". Si est&aacute;n en el semiplano izquierdo, el sistema es estable.</li>
+          <li><b>&#11096; Valles (tocan 0)</b> → Ceros. El sistema <em>bloquea completamente</em> esa frecuencia.</li>
+          <li><b>Secci&oacute;n sobre el eje j&omega;</b> → Es exactamente la respuesta en frecuencia (diagrama de Bode). La altura en cada &omega; es el m&oacute;dulo de la ganancia.</li>
+          <li><b>Secci&oacute;n sobre el eje &sigma;</b> → Respuesta al impulso del sistema.</li>
+        </ul>
+        <div style="margin-top:.8rem;padding:.6rem;background:var(--amber-bg);border-radius:6px;font-size:.87rem">
+          <b>Pregunta del profesor:</b> ¿Cu&aacute;l sistema es m&aacute;s r&aacute;pido?<br>
+          El que tiene el polo m&aacute;s a la <em>izquierda</em> (&sigma; m&aacute;s negativo). La constante de tiempo &tau; = &minus;1/&sigma; es m&aacute;s chica &rarr; llega al r&eacute;gimen permanente antes.
+        </div>
+      </div>
+      <div class="card">
+        <h3>Superficie 3D interactiva</h3>
+        <label style="font-size:.88rem"><b>Polo en s = </b>
+          <select id="pole3d-sel" onchange="draw3DModule()" style="font-family:inherit;padding:.2rem .4rem;border-radius:4px;border:1px solid var(--border)">
+            <option value="-1,0">-1 + 0j (1er orden estable)</option>
+            <option value="-1,2">-1 + 2j (oscilante estable)</option>
+            <option value="-0.2,3">-0.2 + 3j (muy poco amortiguado)</option>
+            <option value="0.5,0">+0.5 + 0j (inestable)</option>
+          </select>
+        </label>
+        <canvas id="canvas3d" width="380" height="220" style="width:100%;border-radius:8px;margin-top:.6rem;background:#1e1b4b"></canvas>
+        <p style="font-size:.8rem;color:#a5b4fc;margin-top:.3rem">Colores c&aacute;lidos = alto m&oacute;dulo (polo). Fr&iacute;os = bajo m&oacute;dulo.</p>
+      </div>
+    </div>
+
+    <!-- ─── 3. GENERADOR DE FRECUENCIA ───────────────────────────── -->
+    <div class="stitle"><span class="ico">&#127921;</span>3. Generador de Frecuencia — c&oacute;mo se caracteriza un sistema</div>
+    <p class="lead">El generador de frecuencia que usamos en el laboratorio produce una senoide de amplitud fija y frecuencia variable. Al barrido de frecuencias lo llamamos <b>sweep</b>. Cada valor de frecuencia nos da un punto del diagrama de Bode.</p>
     <div class="grid g2">
       <div class="card">
-        <h3>&#128309; Filtro Pasa Bajos (RC)</h3>
-        <p><b>FT:</b> H(s) = &omega;c / (s + &omega;c)</p>
-        <ul>
-          <li>1 polo en s = &minus;&omega;c</li>
-          <li>Sin ceros</li>
-          <li>&tau; = 1/&omega;c = RC</li>
-          <li>Aten&uacute;a ruido de alta frecuencia</li>
-          <li>Responde <b>m&aacute;s lento</b> a cambios bruscos</li>
+        <h3>Procedimiento de caracterizaci&oacute;n</h3>
+        <ol style="line-height:1.9">
+          <li>Conectar la entrada del sistema al generador: <code>x(t) = A·sin(&omega;t)</code></li>
+          <li>Medir la salida en r&eacute;gimen permanente: <code>y(t) = B·sin(&omega;t + &phi;)</code></li>
+          <li>Calcular ganancia: <code>|H(j&omega;)| = B/A</code></li>
+          <li>Medir el desfase: <code>&ang;H(j&omega;) = &phi;</code></li>
+          <li>Repetir para varias frecuencias &rarr; construís el Bode experimentalmente</li>
+        </ol>
+      </div>
+      <div class="card bl">
+        <h3>&#127814; Simulador de sweep de frecuencia</h3>
+        <label><b>Frecuencia de entrada:</b> &omega; = <span id="sweep-w">1</span> rad/s
+          <input type="range" id="sweepSlider" min="-2" max="2" step="0.05" value="0"
+            oninput="document.getElementById('sweep-w').textContent=Math.pow(10,parseFloat(this.value)).toFixed(2);drawSweep()"
+            style="width:100%;display:block;margin-top:.3rem">
+          <small style="color:var(--gray-lt)">0.01 &nbsp;←&nbsp; log(w) &nbsp;→&nbsp; 100 rad/s</small>
+        </label>
+        <canvas id="sweepChart" height="180" style="width:100%;margin-top:.6rem"></canvas>
+        <p style="font-size:.8rem;color:var(--gray-lt);margin-top:.3rem">Azul = entrada senoidal &nbsp;&bull;&nbsp; Naranja = salida del pasa bajos (RC, &omega;c=1) &nbsp;&bull;&nbsp; Verde = pasa altos</p>
+      </div>
+    </div>
+
+    <!-- ─── 4. FILTROS PROFUNDIDAD ────────────────────────────────── -->
+    <div class="stitle"><span class="ico">&#127908;</span>4. Filtros — Pasa Bajos y Pasa Altos en profundidad</div>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>&#128309; Filtro Pasa Bajos RC</h3>
+        <p><b>Circuito:</b> Resistencia R en serie, capacitor C a masa. La salida es la tensi&oacute;n en C.</p>
+        <p style="margin:.5rem 0"><b>Ecuaci&oacute;n diferencial:</b></p>
+        <p><code>RC · dy/dt + y = x</code></p>
+        <p style="margin:.5rem 0"><b>Funci&oacute;n de transferencia:</b></p>
+        <p><code>H(s) = &omega;c / (s + &omega;c) &nbsp;&nbsp; con &omega;c = 1/RC</code></p>
+        <p style="margin:.5rem 0"><b>Respuesta en frecuencia:</b> <code>H(j&omega;) = &omega;c / (j&omega; + &omega;c)</code></p>
+        <ul style="margin-top:.6rem">
+          <li>En &omega; = 0: |H| = 1 (deja pasar la continua)</li>
+          <li>En &omega; = &omega;c: |H| = 0.707 (&minus;3 dB, frecuencia de corte)</li>
+          <li>En &omega; ≫ &omega;c: |H| ≈ 0 (bloquea altas frecuencias)</li>
+          <li>Pendiente: &minus;20 dB/d&eacute;cada (1 polo)</li>
         </ul>
+        <div style="margin-top:.8rem;padding:.5rem;background:var(--main-bg);border-radius:6px;font-size:.85rem">
+          <b>En el plano s:</b> polo en s = &minus;&omega;c (semiplano izquierdo). Sin ceros.
+        </div>
       </div>
       <div class="card" style="border-left:4px solid var(--orange)">
-        <h3>&#128992; Filtro Pasa Altos (RC)</h3>
-        <p><b>FT:</b> H(s) = s / (s + &omega;c)</p>
-        <ul>
-          <li>1 polo en s = &minus;&omega;c</li>
-          <li>1 cero en s = 0 (bloquea continua)</li>
-          <li>Responde <b>m&aacute;s r&aacute;pido</b> a cambios bruscos</li>
-          <li>Amplifica el ruido de alta frecuencia</li>
+        <h3>&#128992; Filtro Pasa Altos RC</h3>
+        <p><b>Circuito:</b> Capacitor C en serie, resistencia R a masa. La salida es la tensi&oacute;n en R.</p>
+        <p style="margin:.5rem 0"><b>Ecuaci&oacute;n diferencial:</b></p>
+        <p><code>RC · dy/dt + y = RC · dx/dt</code></p>
+        <p style="margin:.5rem 0"><b>Funci&oacute;n de transferencia:</b></p>
+        <p><code>H(s) = s / (s + &omega;c)</code></p>
+        <p style="margin:.5rem 0"><b>Respuesta en frecuencia:</b> <code>H(j&omega;) = j&omega; / (j&omega; + &omega;c)</code></p>
+        <ul style="margin-top:.6rem">
+          <li>En &omega; = 0: |H| = 0 (bloquea la continua)</li>
+          <li>En &omega; = &omega;c: |H| = 0.707 (&minus;3 dB)</li>
+          <li>En &omega; ≫ &omega;c: |H| ≈ 1 (deja pasar altas)</li>
+          <li>Pendiente: +20 dB/d&eacute;cada (1 cero en origen)</li>
         </ul>
+        <div style="margin-top:.8rem;padding:.5rem;background:var(--amber-bg);border-radius:6px;font-size:.85rem">
+          <b>En el plano s:</b> polo en s = &minus;&omega;c + cero en s = 0. El cero es lo que hace que "deje pasar" las altas.
+        </div>
       </div>
-    </div>
-    <div class="card" style="margin-top:1.5rem">
-      <h3>&#127923; Simulador de filtros &mdash; respuesta en frecuencia</h3>
-      <label><b>Frecuencia de corte &omega;c:</b> <span id="wc-val">1</span> rad/s
-        <input type="range" id="wcSlider" min="0.1" max="10" step="0.1" value="1" oninput="document.getElementById('wc-val').textContent=parseFloat(this.value).toFixed(1);drawFilters()" style="width:200px;margin-left:.6rem">
-      </label>
-      <canvas id="filterChart" height="220" style="width:100%;margin-top:.8rem"></canvas>
-      <p style="font-size:.8rem;color:var(--gray-lt);margin-top:.4rem">Azul = Pasa Bajos &middot; Naranja = Pasa Altos &middot; Verde = &omega;c</p>
     </div>
 
-    <div class="stitle"><span class="ico">&#128225;</span>Ruido Blanco</div>
+    <!-- Simulador filtros con Bode -->
+    <div class="card" style="margin-top:1.5rem">
+      <h3>&#127912; Simulador completo — Respuesta temporal + Bode (magnitud y fase)</h3>
+      <div style="display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center;margin:.6rem 0 1rem">
+        <label><b>&omega;c (frecuencia de corte):</b> <span id="wc-val">1.0</span> rad/s
+          <input type="range" id="wcSlider" min="-1" max="1.7" step="0.05" value="0"
+            oninput="var v=Math.pow(10,parseFloat(this.value));document.getElementById('wc-val').textContent=v.toFixed(2);drawFilters()"
+            style="width:180px;display:block;margin-top:.3rem">
+        </label>
+        <div style="display:flex;gap:.6rem">
+          <button onclick="document.getElementById('showLP').checked=!document.getElementById('showLP').checked;drawFilters()" id="btnLP"
+            style="padding:.3rem .8rem;border:2px solid #4f46e5;background:#4f46e5;color:#fff;border-radius:6px;cursor:pointer;font-family:inherit;font-size:.85rem">&#9646; Pasa Bajos</button>
+          <button onclick="document.getElementById('showHP').checked=!document.getElementById('showHP').checked;drawFilters()" id="btnHP"
+            style="padding:.3rem .8rem;border:2px solid #ea580c;background:#ea580c;color:#fff;border-radius:6px;cursor:pointer;font-family:inherit;font-size:.85rem">&#9646; Pasa Altos</button>
+        </div>
+        <input type="checkbox" id="showLP" checked style="display:none">
+        <input type="checkbox" id="showHP" checked style="display:none">
+      </div>
+      <div class="grid g2" style="gap:.8rem">
+        <div>
+          <p style="font-size:.85rem;font-weight:700;margin-bottom:.3rem">Magnitud |H(j&omega;)| [lineal]</p>
+          <canvas id="filterMag" height="180" style="width:100%"></canvas>
+        </div>
+        <div>
+          <p style="font-size:.85rem;font-weight:700;margin-bottom:.3rem">Fase &ang;H(j&omega;) [grados]</p>
+          <canvas id="filterPhase" height="180" style="width:100%"></canvas>
+        </div>
+      </div>
+      <div style="margin-top:.8rem">
+        <p style="font-size:.85rem;font-weight:700;margin-bottom:.3rem">Magnitud en dB &nbsp;<span style="font-size:.8rem;color:var(--gray-lt);font-weight:400">(Bode de amplitud — escala logar&iacute;tmica en &omega;)</span></p>
+        <canvas id="filterBode" height="180" style="width:100%"></canvas>
+      </div>
+      <p style="font-size:.8rem;color:var(--gray-lt);margin-top:.5rem">Azul = Pasa Bajos &nbsp;&bull;&nbsp; Naranja = Pasa Altos &nbsp;&bull;&nbsp; Verde punteado = &omega;c &nbsp;&bull;&nbsp; Gris punteado = &minus;3 dB / 0.707</p>
+    </div>
+
+    <!-- Comparacion velocidad -->
+    <div class="card" style="margin-top:1.5rem">
+      <h3>&#9201; &iquest;Cu&aacute;l es m&aacute;s r&aacute;pido? — Comparador de polos</h3>
+      <p style="font-size:.9rem;margin-bottom:.8rem">La constante de tiempo &tau; = &minus;1/&sigma; dice cu&aacute;nto tarda el sistema en llegar al 63% de su valor final. Polo m&aacute;s a la izquierda = &tau; m&aacute;s chico = m&aacute;s r&aacute;pido.</p>
+      <div style="display:flex;gap:2rem;flex-wrap:wrap">
+        <label style="flex:1;min-width:180px"><b>Polo A:</b> &sigma;<sub>A</sub> = <span id="pA-val">-1</span> (τ = <span id="tauA-val">1.00</span>s)
+          <input type="range" id="pA" min="-8" max="-0.2" step="0.1" value="-1" oninput="document.getElementById('pA-val').textContent=this.value;document.getElementById('tauA-val').textContent=(-1/parseFloat(this.value)).toFixed(2);drawSpeed()" style="width:100%;display:block;margin-top:.3rem">
+        </label>
+        <label style="flex:1;min-width:180px"><b>Polo B:</b> &sigma;<sub>B</sub> = <span id="pB-val">-3</span> (τ = <span id="tauB-val">0.33</span>s)
+          <input type="range" id="pB" min="-8" max="-0.2" step="0.1" value="-3" oninput="document.getElementById('pB-val').textContent=this.value;document.getElementById('tauB-val').textContent=(-1/parseFloat(this.value)).toFixed(2);drawSpeed()" style="width:100%;display:block;margin-top:.3rem">
+        </label>
+      </div>
+      <div id="speed-verdict" style="margin:.6rem 0;padding:.4rem .8rem;border-radius:6px;background:var(--main-bg);font-weight:700;color:var(--main)"></div>
+      <canvas id="speedChart" height="190" style="width:100%"></canvas>
+    </div>
+
+    <!-- ─── 5. RUIDO BLANCO ───────────────────────────────────────── -->
+    <div class="stitle"><span class="ico">&#128225;</span>5. Ruido Blanco — de la teor&iacute;a al PID</div>
     <div class="grid g2">
       <div class="card">
-        <h3>&iquest;Qu&eacute; es?</h3>
-        <ul>
-          <li>Se&ntilde;al aleatoria con potencia <b>uniforme en todas las frecuencias</b></li>
-          <li>Espectro plano (como luz blanca = todos los colores)</li>
-          <li>Modela ruido el&eacute;ctrico, de sensores, perturbaciones</li>
+        <h3>Definici&oacute;n y propiedades</h3>
+        <p>El ruido blanco es una se&ntilde;al aleatoria cuya <b>densidad espectral de potencia (PSD)</b> es constante en todas las frecuencias.</p>
+        <ul style="margin-top:.5rem">
+          <li><b>Media cero:</b> E[x(t)] = 0 (no tiene componente continua)</li>
+          <li><b>Sin correlaci&oacute;n temporal:</b> x(t) y x(t+&Delta;) son independientes</li>
+          <li><b>Espectro plano:</b> S(&omega;) = N₀/2 para todo &omega;</li>
+          <li>An&aacute;logo a la luz blanca: contiene <em>todos los colores de frecuencia</em> por igual</li>
         </ul>
+        <div style="margin-top:.8rem;padding:.5rem;background:var(--teal-bg);border-radius:6px;font-size:.85rem">
+          <b>En la pr&aacute;ctica:</b> el ruido de un sensor o de un ADC se modela como ruido blanco (o "casi blanco") en el rango de frecuencias de inter&eacute;s.
+        </div>
       </div>
       <div class="card bl">
-        <h3>Por qu&eacute; importa en control</h3>
-        <ul>
-          <li>El t&eacute;rmino <b>D</b> del PID amplifica el ruido &rarr; se limita su ganancia</li>
-          <li>El <b>pasa bajos</b> lo aten&uacute;a &rarr; se usa antes de derivar</li>
-          <li>El generador de frecuencia barre todas las frecuencias para caracterizar el sistema</li>
-        </ul>
+        <h3>Por qu&eacute; destroza al t&eacute;rmino D del PID</h3>
+        <p>La acci&oacute;n derivativa calcula:</p>
+        <p style="margin:.4rem 0"><code>u_D(t) = Kd · de/dt</code></p>
+        <p>En el dominio de la frecuencia, derivar es multiplicar por <code>j&omega;</code>. Si la se&ntilde;al tiene ruido blanco, el t&eacute;rmino D <b>amplifica todas las frecuencias altas por igual</b> &rarr; la salida del controlador se vuelve muy ruidosa.</p>
+        <p style="margin-top:.6rem"><b>Soluci&oacute;n:</b> filtrar la se&ntilde;al de error con un pasa bajos <em>antes</em> de derivar:</p>
+        <p><code>H_D(s) = Kd · s / (1 + s/&omega;_f)</code></p>
+        <p style="font-size:.85rem;color:var(--gray-lt);margin-top:.3rem">donde &omega;_f es la frecuencia de corte del filtro (&asymp; 5&ndash;10&times; &omega;c del sistema).</p>
       </div>
     </div>
+
     <div class="card" style="margin-top:1rem">
-      <h3>&#127922; Ruido blanco + filtro pasa bajos</h3>
-      <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;margin:.5rem 0">
-        <label>&omega;c del filtro: <span id="nc-val">2</span> rad/s
-          <input type="range" id="ncSlider" min="0.5" max="20" step="0.5" value="2" oninput="document.getElementById('nc-val').textContent=this.value;drawNoise()" style="width:140px;margin-left:.4rem">
+      <h3>&#127922; Simulador: espectro del ruido blanco + efecto del filtro</h3>
+      <div style="display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center;margin:.5rem 0">
+        <label><b>&omega;c del filtro:</b> <span id="nc-val">2</span> rad/s
+          <input type="range" id="ncSlider" min="0.5" max="20" step="0.5" value="2"
+            oninput="document.getElementById('nc-val').textContent=this.value;drawNoise()"
+            style="width:160px;display:block;margin-top:.3rem">
         </label>
-        <button onclick="_noiseData=null;drawNoise()" style="padding:.3rem .9rem;border:1px solid var(--main);background:transparent;color:var(--main);border-radius:6px;cursor:pointer;font-family:inherit;font-size:.85rem">&#8635; Nueva muestra</button>
+        <button onclick="_noiseData=null;drawNoise()"
+          style="padding:.3rem .9rem;border:1px solid var(--main);background:transparent;color:var(--main);border-radius:6px;cursor:pointer;font-family:inherit;font-size:.85rem">&#8635; Nueva muestra</button>
       </div>
-      <canvas id="noiseChart" height="180" style="width:100%"></canvas>
-      <p style="font-size:.8rem;color:var(--gray-lt);margin-top:.4rem">Gris = ruido blanco &middot; Azul = se&ntilde;al filtrada</p>
+      <div class="grid g2" style="gap:.8rem">
+        <div>
+          <p style="font-size:.85rem;font-weight:700;margin-bottom:.3rem">Se&ntilde;al temporal</p>
+          <canvas id="noiseChart" height="160" style="width:100%"></canvas>
+          <p style="font-size:.78rem;color:var(--gray-lt)">Gris = ruido blanco &nbsp;&bull;&nbsp; Azul = filtrado</p>
+        </div>
+        <div>
+          <p style="font-size:.85rem;font-weight:700;margin-bottom:.3rem">Espectro de potencia (PSD estimada)</p>
+          <canvas id="noiseSpectrum" height="160" style="width:100%"></canvas>
+          <p style="font-size:.78rem;color:var(--gray-lt)">Gris = ruido (plano) &nbsp;&bull;&nbsp; Azul = filtrado (cae en altas)</p>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -1218,7 +1363,7 @@ function showTab(id){
   if(id==='quiz'){ renderBadges(); }
   if(id==='sim'){ drawFirstOrder(); drawSecondOrder(); drawAcChart(); }
   if(id==='c4'){ onGainKChange(); onDelayChange(); }
-  if(id==='c5'){ drawSpeed(); drawFilters(); drawNoise(); draw3DModule(); }
+  if(id==='c5'){ initC5(); }
 }
 
 /* ===================== STORE / BADGES ===================== */
@@ -1737,140 +1882,385 @@ function restartQuiz(){ quizIdx=0; quizScore=0; renderQuiz(); }
 renderQuiz();
 renderBadges();
 
+
 /* ===================== CLASE 5 ===================== */
-function drawSpeed(){
-  var cv=document.getElementById('speedChart'); if(!cv) return;
-  var ctx=cv.getContext('2d');
-  var dpr=window.devicePixelRatio||1;
-  var cssW=cv.clientWidth||500, cssH=180;
-  if(cv.width!==cssW*dpr||cv.height!==cssH*dpr){cv.width=cssW*dpr;cv.height=cssH*dpr;}
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-  var w=cssW,h=cssH; ctx.clearRect(0,0,w,h);
-  var pA=parseFloat(document.getElementById('pA').value);
-  var pB=parseFloat(document.getElementById('pB').value);
-  var tMax=8, N=300;
-  var padL=40,padR=10,padT=14,padB=24, pw=w-padL-padR, ph=h-padT-padB;
-  ctx.strokeStyle='#e2e8f0'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(padL,padT); ctx.lineTo(padL,padT+ph); ctx.lineTo(padL+pw,padT+ph); ctx.stroke();
-  ctx.fillStyle='#9ca3af'; ctx.font='10px system-ui';
-  ctx.fillText('0',padL-8,padT+ph+14); ctx.fillText(tMax+'s',padL+pw-14,padT+ph+14); ctx.fillText('1',padL-14,padT+8);
-  ctx.setLineDash([4,4]); ctx.strokeStyle='#9ca3af'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(padL,padT); ctx.lineTo(padL+pw,padT); ctx.stroke();
-  ctx.setLineDash([]);
-  function drawCurve(pole, color, label){
-    ctx.strokeStyle=color; ctx.lineWidth=2.5; ctx.beginPath();
-    for(var i=0;i<=N;i++){
-      var t=(i/N)*tMax, y=1-Math.exp(pole*t);
-      var px=padL+(t/tMax)*pw, py=padT+(1-Math.min(y,1.05))*ph;
-      i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
-    }
-    ctx.stroke();
-    var tau=-1/pole, px=padL+(Math.min(tau,tMax)/tMax)*pw;
-    ctx.strokeStyle=color; ctx.lineWidth=1; ctx.setLineDash([3,3]);
-    ctx.beginPath(); ctx.moveTo(px,padT); ctx.lineTo(px,padT+ph); ctx.stroke();
-    ctx.setLineDash([]);
-    if(px<padL+pw-50){ctx.fillStyle=color;ctx.font='bold 11px system-ui';ctx.fillText('tau='+tau.toFixed(2)+'s',px+4,padT+14+(label==='B'?14:0));}
-  }
-  drawCurve(pA,'#4f46e5','A'); drawCurve(pB,'#ea580c','B');
-  var tauA=-1/pA, tauB=-1/pB;
-  var verd=document.getElementById('speed-verdict');
-  if(Math.abs(tauA-tauB)<0.05) verd.textContent='Ambos igual de rapidos';
-  else if(tauA<tauB) verd.textContent='Sistema A mas rapido (tauA='+tauA.toFixed(2)+'s < tauB='+tauB.toFixed(2)+'s)';
-  else verd.textContent='Sistema B mas rapido (tauB='+tauB.toFixed(2)+'s < tauA='+tauA.toFixed(2)+'s)';
-  ctx.fillStyle='#4f46e5';ctx.font='bold 12px system-ui';ctx.fillText('A',padL+pw-20,padT+20);
-  ctx.fillStyle='#ea580c';ctx.fillText('B',padL+pw-20,padT+36);
+
+/* ── Plano s ── */
+function updateSPlane(){
+  var sigma=parseFloat(document.getElementById('sigmaSlider').value);
+  var omega=parseFloat(document.getElementById('omegaSlider').value);
+  var info=document.getElementById('splane-info');
+  var tau = sigma<0 ? (-1/sigma).toFixed(2) : '∞ (inestable)';
+  var wn = Math.sqrt(sigma*sigma+omega*omega).toFixed(2);
+  var stable = sigma<0;
+  info.style.background = stable ? 'var(--main-bg)' : 'var(--red-bg)';
+  info.textContent = (stable?'✅ Estable':'🔴 Inestable') +
+    '  |  σ='+sigma.toFixed(1)+', ω='+omega.toFixed(1) +
+    '  |  τ='+tau+'s  |  ωn='+wn+' rad/s  |  ' +
+    (Math.abs(omega)<0.001 ? 'Sin oscilación' : ('Oscila a '+Math.abs(omega).toFixed(1)+' rad/s'));
+  drawSpaneResp(sigma, omega);
 }
 
-function drawFilters(){
-  var cv=document.getElementById('filterChart'); if(!cv) return;
+function drawSpaneResp(sigma, omega){
+  var cv=document.getElementById('spaneResp'); if(!cv)return;
   var ctx=cv.getContext('2d');
   var dpr=window.devicePixelRatio||1;
-  var cssW=cv.clientWidth||500, cssH=220;
+  var cssW=cv.clientWidth||500, cssH=160;
   if(cv.width!==cssW*dpr||cv.height!==cssH*dpr){cv.width=cssW*dpr;cv.height=cssH*dpr;}
   ctx.setTransform(dpr,0,0,dpr,0,0);
   var w=cssW,h=cssH; ctx.clearRect(0,0,w,h);
-  var wc=parseFloat(document.getElementById('wcSlider').value);
-  var N=300, wMin=0.01, wMax=100;
-  var padL=42,padR=10,padT=10,padB=28, pw=w-padL-padR, ph=h-padT-padB;
-  ctx.strokeStyle='#e2e8f0'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(padL,padT); ctx.lineTo(padL,padT+ph); ctx.lineTo(padL+pw,padT+ph); ctx.stroke();
-  ctx.fillStyle='#9ca3af'; ctx.font='10px system-ui';
-  ctx.fillText('|H|',padL-26,padT+10); ctx.fillText('1',padL-12,padT+8); ctx.fillText('0.7',padL-24,padT+ph*0.29+6);
-  var y707=padT+ph*(1-0.707);
-  ctx.setLineDash([4,4]); ctx.strokeStyle='#9ca3af'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(padL,y707); ctx.lineTo(padL+pw,y707); ctx.stroke();
-  ctx.setLineDash([]);
-  function wToX(wv){return padL+(Math.log10(wv/wMin)/Math.log10(wMax/wMin))*pw;}
-  function magToY(m){return padT+(1-Math.min(m,1.02))*ph;}
-  ctx.strokeStyle='#4f46e5'; ctx.lineWidth=2.5; ctx.beginPath();
-  for(var i=0;i<=N;i++){var wv=wMin*Math.pow(wMax/wMin,i/N);var m=wc/Math.sqrt(wv*wv+wc*wc);i===0?ctx.moveTo(wToX(wv),magToY(m)):ctx.lineTo(wToX(wv),magToY(m));}
-  ctx.stroke();
-  ctx.strokeStyle='#ea580c'; ctx.lineWidth=2.5; ctx.beginPath();
-  for(var i=0;i<=N;i++){var wv=wMin*Math.pow(wMax/wMin,i/N);var m=wv/Math.sqrt(wv*wv+wc*wc);i===0?ctx.moveTo(wToX(wv),magToY(m)):ctx.lineTo(wToX(wv),magToY(m));}
-  ctx.stroke();
-  var xcw=wToX(wc);
-  ctx.strokeStyle='#15803d'; ctx.lineWidth=1.5; ctx.setLineDash([4,4]);
-  ctx.beginPath(); ctx.moveTo(xcw,padT); ctx.lineTo(xcw,padT+ph); ctx.stroke(); ctx.setLineDash([]);
-  ctx.fillStyle='#15803d';ctx.font='11px system-ui';ctx.fillText('wc='+wc.toFixed(1),xcw+4,padT+20);
-  [0.1,1,10,100].forEach(function(v){
-    var x=wToX(v); if(x>padL&&x<padL+pw){ctx.fillStyle='#9ca3af';ctx.font='10px system-ui';ctx.fillText(v,x-8,padT+ph+16);}
-  });
-  ctx.fillStyle='#4f46e5';ctx.font='bold 11px system-ui';ctx.fillText('Pasa Bajos',padL+4,padT+20);
-  ctx.fillStyle='#ea580c';ctx.fillText('Pasa Altos',padL+4,padT+34);
-}
-
-var _noiseData=null;
-function drawNoise(){
-  var cv=document.getElementById('noiseChart'); if(!cv) return;
-  var ctx=cv.getContext('2d');
-  var dpr=window.devicePixelRatio||1;
-  var cssW=cv.clientWidth||500, cssH=180;
-  if(cv.width!==cssW*dpr||cv.height!==cssH*dpr){cv.width=cssW*dpr;cv.height=cssH*dpr;}
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-  var w=cssW,h=cssH; ctx.clearRect(0,0,w,h);
-  var N=300, wc=parseFloat(document.getElementById('ncSlider').value), dt=0.05;
-  var padL=10,padR=10,padT=10,padB=20, pw=w-padL-padR, ph=h-padT-padB;
-  if(!_noiseData){_noiseData=Array.from({length:N},function(){return (Math.random()-0.5)*2;});}
-  var noise=_noiseData;
-  var alpha=1/(1+wc*dt), filtered=[noise[0]];
-  for(var i=1;i<N;i++) filtered.push(alpha*filtered[i-1]+(1-alpha)*noise[i]);
-  var yMin=-1.3, yMax=1.3, yRange=yMax-yMin;
+  var tMax=8, N=400;
+  var padL=42,padR=10,padT=10,padB=24, pw=w-padL-padR, ph=h-padT-padB;
   ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;
-  ctx.beginPath();ctx.moveTo(padL,padT+ph/2);ctx.lineTo(padL+pw,padT+ph/2);ctx.stroke();
-  function toY(v){return padT+(1-(v-yMin)/yRange)*ph;}
-  ctx.strokeStyle='rgba(107,114,128,0.45)';ctx.lineWidth=1;ctx.beginPath();
-  for(var i=0;i<N;i++){var x=padL+(i/(N-1))*pw;i===0?ctx.moveTo(x,toY(noise[i])):ctx.lineTo(x,toY(noise[i]));}
-  ctx.stroke();
+  ctx.beginPath();ctx.moveTo(padL,padT);ctx.lineTo(padL,padT+ph);ctx.lineTo(padL+pw,padT+ph);ctx.stroke();
+  ctx.fillStyle='#9ca3af';ctx.font='10px system-ui';
+  ctx.fillText('0',padL-8,padT+ph+14);ctx.fillText(tMax+'s',padL+pw-14,padT+ph+14);
+  // zero line
+  var y0=padT+ph*0.5;
+  ctx.setLineDash([3,3]);ctx.strokeStyle='#9ca3af';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(padL,y0);ctx.lineTo(padL+pw,y0);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillText('0',padL-14,y0+4);ctx.fillText('1',padL-14,padT+6);
+
+  // y(t) = e^(sigma*t)*cos(omega*t) (impulse response)
+  var vals=[];
+  for(var i=0;i<=N;i++){
+    var t=(i/N)*tMax;
+    vals.push(Math.exp(sigma*t)*Math.cos(omega*t));
+  }
+  var yMax=Math.max(...vals.map(Math.abs),0.1)*1.1;
+
   ctx.strokeStyle='#4f46e5';ctx.lineWidth=2;ctx.beginPath();
-  for(var i=0;i<N;i++){var x=padL+(i/(N-1))*pw;i===0?ctx.moveTo(x,toY(filtered[i])):ctx.lineTo(x,toY(filtered[i]));}
+  for(var i=0;i<=N;i++){
+    var t=(i/N)*tMax;
+    var v=Math.exp(sigma*t)*Math.cos(omega*t);
+    var px=padL+(t/tMax)*pw;
+    var py=y0-(v/yMax)*ph*0.48;
+    i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+  }
   ctx.stroke();
 }
 
+/* ── 3D Module ── */
 function draw3DModule(){
-  var cv=document.getElementById('canvas3d'); if(!cv) return;
+  var cv=document.getElementById('canvas3d');if(!cv)return;
   var ctx=cv.getContext('2d');
-  var W=cv.width||320, H=cv.height||180;
+  var W=cv.clientWidth||380, H=220;
+  cv.width=W; cv.height=H;
   ctx.clearRect(0,0,W,H);
-  var cols=28, rows=28, sMin=-4, sMax=4;
-  function getZ(sr,si){var re=sr+1,im=si,mag=Math.sqrt(re*re+im*im);return Math.min(3,1/(mag+0.08));}
-  function proj(xi,yi,zi){var scale=W/cols/2.2,ox=W/2,oy=H*0.7;return [ox+(xi-yi)*scale*1.3, oy-(xi+yi)*scale*0.55+zi*16];}
+  var sel=document.getElementById('pole3d-sel').value.split(',');
+  var pr=parseFloat(sel[0]),pi=parseFloat(sel[1]);
+  var cols=32,rows=32,sMin=-5,sMax=5;
+  function getZ(sr,si){
+    var re=sr-pr,im=si-pi,mag=Math.sqrt(re*re+im*im);
+    return Math.min(4,1/(mag+0.07));
+  }
+  function proj(xi,yi,zi){
+    var scale=W/cols/2.2,ox=W/2,oy=H*0.72;
+    return[ox+(xi-yi)*scale*1.3, oy-(xi+yi)*scale*0.52+zi*14];
+  }
   for(var rr=rows-1;rr>=0;rr--){
     for(var c=0;c<cols;c++){
-      var sr0=sMin+(c/cols)*(sMax-sMin), si0=sMin+(rr/rows)*(sMax-sMin);
-      var sr1=sMin+((c+1)/cols)*(sMax-sMin), si1=sMin+((rr+1)/rows)*(sMax-sMin);
+      var sr0=sMin+(c/cols)*(sMax-sMin),si0=sMin+(rr/rows)*(sMax-sMin);
+      var sr1=sMin+((c+1)/cols)*(sMax-sMin),si1=sMin+((rr+1)/rows)*(sMax-sMin);
       var z00=getZ(sr0,si0),z10=getZ(sr1,si0),z01=getZ(sr0,si1),z11=getZ(sr1,si1);
-      var zA=(z00+z10+z01+z11)/4, t=Math.min(1,zA/2.5);
-      var r2=Math.round(30+t*190),g2=Math.round(40+t*90),b2=Math.round(163+t*70);
+      var zA=(z00+z10+z01+z11)/4,t=Math.min(1,zA/3);
+      var r2=Math.round(30+t*200),g2=Math.round(40+t*80),b2=Math.round(163+t*60);
       ctx.fillStyle='rgb('+r2+','+g2+','+b2+')';
-      ctx.strokeStyle='rgba(0,0,0,0.1)'; ctx.lineWidth=0.4;
+      ctx.strokeStyle='rgba(0,0,0,0.08)';ctx.lineWidth=0.4;
       var p1=proj(c,rr,z00),p2=proj(c+1,rr,z10),p3=proj(c+1,rr+1,z11),p4=proj(c,rr+1,z01);
       ctx.beginPath();ctx.moveTo(p1[0],p1[1]);ctx.lineTo(p2[0],p2[1]);ctx.lineTo(p3[0],p3[1]);ctx.lineTo(p4[0],p4[1]);
       ctx.closePath();ctx.fill();ctx.stroke();
     }
   }
-  ctx.fillStyle='#a5b4fc';ctx.font='bold 10px system-ui';ctx.fillText('|H(s)| con polo en s=-1',8,14);
+  ctx.fillStyle='#a5b4fc';ctx.font='bold 10px system-ui';
+  ctx.fillText('|H(s)| — polo en s=('+pr+','+pi+'j)',8,14);
   ctx.fillStyle='rgba(165,180,252,0.7)';ctx.font='9px system-ui';
-  ctx.fillText('Pico = polo (inestabilidad)',8,H-10);
+  ctx.fillText('← σ',W-28,H-8);ctx.fillText('↑ jω',12,H-8);
+}
+
+/* ── Sweep ── */
+function drawSweep(){
+  var cv=document.getElementById('sweepChart');if(!cv)return;
+  var ctx=cv.getContext('2d');
+  var dpr=window.devicePixelRatio||1;
+  var cssW=cv.clientWidth||500,cssH=180;
+  if(cv.width!==cssW*dpr||cv.height!==cssH*dpr){cv.width=cssW*dpr;cv.height=cssH*dpr;}
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  var w=cssW,h=cssH;ctx.clearRect(0,0,w,h);
+  var wlog=parseFloat(document.getElementById('sweepSlider').value);
+  var wc_in=Math.pow(10,wlog);
+  var wc=1; // filter wc fixed at 1
+  var T=Math.max(8,20/wc_in),N=400;
+  var padL=10,padR=10,padT=10,padB=20,pw=w-padL-padR,ph=h-padT-padB;
+  var y0=padT+ph/2;
+  ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(padL,y0);ctx.lineTo(padL+pw,y0);ctx.stroke();
+
+  // LP gain and phase at wc_in
+  var magLP=wc/Math.sqrt(wc_in*wc_in+wc*wc);
+  var phiLP=-Math.atan2(wc_in,wc);
+  var magHP=wc_in/Math.sqrt(wc_in*wc_in+wc*wc);
+  var phiHP=Math.PI/2-Math.atan2(wc_in,wc);
+
+  function drawSine(mag,phi,color,lw){
+    ctx.strokeStyle=color;ctx.lineWidth=lw;ctx.beginPath();
+    for(var i=0;i<=N;i++){
+      var t=(i/N)*T;
+      var v=mag*Math.sin(wc_in*t+phi);
+      var px=padL+(i/N)*pw,py=y0-v*ph*0.42;
+      i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    }
+    ctx.stroke();
+  }
+  drawSine(1,0,'rgba(100,100,100,0.35)',1);       // reference (gray thin)
+  drawSine(1,0,'#6b7280',1.5);                    // input
+  drawSine(magLP,phiLP,'#4f46e5',2.5);            // LP output
+  drawSine(magHP,phiHP,'#ea580c',2.5);            // HP output
+
+  ctx.fillStyle='#9ca3af';ctx.font='10px system-ui';
+  ctx.fillText('|LP|='+magLP.toFixed(2),padL+4,padT+14);
+  ctx.fillStyle='#4f46e5';ctx.fillText('|LP|='+magLP.toFixed(2),padL+4,padT+14);
+  ctx.fillStyle='#ea580c';ctx.fillText('|HP|='+magHP.toFixed(2),padL+4,padT+28);
+}
+
+/* ── Filtros completos ── */
+function drawFilters(){
+  var wc_log=parseFloat(document.getElementById('wcSlider').value);
+  var wc=Math.pow(10,wc_log);
+  var showLP=document.getElementById('showLP').checked;
+  var showHP=document.getElementById('showHP').checked;
+  var N=400,wMin=0.001,wMax=1000;
+
+  function wToXlog(wv,pw,padL){return padL+(Math.log10(wv/wMin)/Math.log10(wMax/wMin))*pw;}
+
+  // ─ Magnitude linear ─
+  (function(){
+    var cv=document.getElementById('filterMag');if(!cv)return;
+    var ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1;
+    var cssW=cv.clientWidth||400,cssH=180;
+    if(cv.width!==cssW*dpr||cv.height!==cssH*dpr){cv.width=cssW*dpr;cv.height=cssH*dpr;}
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    var w=cssW,h=cssH;ctx.clearRect(0,0,w,h);
+    var padL=36,padR=8,padT=10,padB=24,pw=w-padL-padR,ph=h-padT-padB;
+    ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(padL,padT);ctx.lineTo(padL,padT+ph);ctx.lineTo(padL+pw,padT+ph);ctx.stroke();
+    ctx.fillStyle='#9ca3af';ctx.font='10px system-ui';
+    ctx.fillText('|H|',padL-28,padT+10);ctx.fillText('1',padL-12,padT+6);ctx.fillText('0.7',padL-24,padT+ph*0.29+6);
+    var y07=padT+ph*(1-0.707);
+    ctx.setLineDash([4,4]);ctx.strokeStyle='#9ca3af';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(padL,y07);ctx.lineTo(padL+pw,y07);ctx.stroke();ctx.setLineDash([]);
+    function magToY(m){return padT+(1-Math.min(m,1.02))*ph;}
+    if(showLP){ctx.strokeStyle='#4f46e5';ctx.lineWidth=2.5;ctx.beginPath();for(var i=0;i<=N;i++){var wv=wMin*Math.pow(wMax/wMin,i/N);var m=wc/Math.sqrt(wv*wv+wc*wc);i===0?ctx.moveTo(wToXlog(wv,pw,padL),magToY(m)):ctx.lineTo(wToXlog(wv,pw,padL),magToY(m));}ctx.stroke();}
+    if(showHP){ctx.strokeStyle='#ea580c';ctx.lineWidth=2.5;ctx.beginPath();for(var i=0;i<=N;i++){var wv=wMin*Math.pow(wMax/wMin,i/N);var m=wv/Math.sqrt(wv*wv+wc*wc);i===0?ctx.moveTo(wToXlog(wv,pw,padL),magToY(m)):ctx.lineTo(wToXlog(wv,pw,padL),magToY(m));}ctx.stroke();}
+    var xcw=wToXlog(wc,pw,padL);
+    ctx.strokeStyle='#15803d';ctx.lineWidth=1.5;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(xcw,padT);ctx.lineTo(xcw,padT+ph);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle='#15803d';ctx.font='10px system-ui';ctx.fillText('ωc',xcw+3,padT+14);
+    [0.01,0.1,1,10,100,1000].forEach(function(v){var x=wToXlog(v,pw,padL);if(x>padL&&x<padL+pw){ctx.fillStyle='#9ca3af';ctx.font='9px system-ui';ctx.fillText(v,x-8,padT+ph+16);}});
+  })();
+
+  // ─ Phase ─
+  (function(){
+    var cv=document.getElementById('filterPhase');if(!cv)return;
+    var ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1;
+    var cssW=cv.clientWidth||400,cssH=180;
+    if(cv.width!==cssW*dpr||cv.height!==cssH*dpr){cv.width=cssW*dpr;cv.height=cssH*dpr;}
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    var w=cssW,h=cssH;ctx.clearRect(0,0,w,h);
+    var padL=36,padR=8,padT=10,padB=24,pw=w-padL-padR,ph=h-padT-padB;
+    ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(padL,padT);ctx.lineTo(padL,padT+ph);ctx.lineTo(padL+pw,padT+ph);ctx.stroke();
+    ctx.fillStyle='#9ca3af';ctx.font='9px system-ui';
+    ['90','45','0','-45','-90'].forEach(function(v,i){
+      var y=padT+i*(ph/4);
+      ctx.fillText(v+'°',padL-28,y+4);
+      ctx.strokeStyle='#f1f5f9';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(padL+pw,y);ctx.stroke();
+    });
+    var phToY=function(deg){return padT+(1-(deg+90)/180)*ph;};
+    if(showLP){ctx.strokeStyle='#4f46e5';ctx.lineWidth=2.5;ctx.beginPath();for(var i=0;i<=N;i++){var wv=wMin*Math.pow(wMax/wMin,i/N);var phi=-Math.atan2(wv,wc)*180/Math.PI;i===0?ctx.moveTo(wToXlog(wv,pw,padL),phToY(phi)):ctx.lineTo(wToXlog(wv,pw,padL),phToY(phi));}ctx.stroke();}
+    if(showHP){ctx.strokeStyle='#ea580c';ctx.lineWidth=2.5;ctx.beginPath();for(var i=0;i<=N;i++){var wv=wMin*Math.pow(wMax/wMin,i/N);var phi=90-Math.atan2(wv,wc)*180/Math.PI;i===0?ctx.moveTo(wToXlog(wv,pw,padL),phToY(phi)):ctx.lineTo(wToXlog(wv,pw,padL),phToY(phi));}ctx.stroke();}
+    var xcw=wToXlog(wc,pw,padL);
+    ctx.strokeStyle='#15803d';ctx.lineWidth=1.5;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(xcw,padT);ctx.lineTo(xcw,padT+ph);ctx.stroke();ctx.setLineDash([]);
+    [0.01,0.1,1,10,100,1000].forEach(function(v){var x=wToXlog(v,pw,padL);if(x>padL&&x<padL+pw){ctx.fillStyle='#9ca3af';ctx.font='9px system-ui';ctx.fillText(v,x-8,padT+ph+16);}});
+  })();
+
+  // ─ Bode dB ─
+  (function(){
+    var cv=document.getElementById('filterBode');if(!cv)return;
+    var ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1;
+    var cssW=cv.clientWidth||400,cssH=180;
+    if(cv.width!==cssW*dpr||cv.height!==cssH*dpr){cv.width=cssW*dpr;cv.height=cssH*dpr;}
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    var w=cssW,h=cssH;ctx.clearRect(0,0,w,h);
+    var padL=42,padR=8,padT=10,padB=24,pw=w-padL-padR,ph=h-padT-padB;
+    var dbMax=6,dbMin=-60,dbRange=dbMax-dbMin;
+    ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(padL,padT);ctx.lineTo(padL,padT+ph);ctx.lineTo(padL+pw,padT+ph);ctx.stroke();
+    ctx.fillStyle='#9ca3af';ctx.font='9px system-ui';
+    [6,0,-20,-40,-60].forEach(function(db){
+      var y=padT+(1-(db-dbMin)/dbRange)*ph;
+      ctx.fillText(db+'dB',padL-34,y+4);
+      ctx.strokeStyle='#f1f5f9';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(padL+pw,y);ctx.stroke();
+    });
+    var dbToY=function(db){return padT+(1-(db-dbMin)/dbRange)*ph;};
+    var magTodB=function(m){return 20*Math.log10(Math.max(m,1e-6));};
+    // -3dB line
+    var y3=dbToY(-3);
+    ctx.setLineDash([4,4]);ctx.strokeStyle='#9ca3af';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(padL,y3);ctx.lineTo(padL+pw,y3);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle='#9ca3af';ctx.font='9px system-ui';ctx.fillText('-3dB',padL+pw-32,y3-3);
+
+    if(showLP){ctx.strokeStyle='#4f46e5';ctx.lineWidth=2.5;ctx.beginPath();for(var i=0;i<=N;i++){var wv=wMin*Math.pow(wMax/wMin,i/N);var m=wc/Math.sqrt(wv*wv+wc*wc);var db=magTodB(m);var x=wToXlog(wv,pw,padL),y=dbToY(db);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();}
+    if(showHP){ctx.strokeStyle='#ea580c';ctx.lineWidth=2.5;ctx.beginPath();for(var i=0;i<=N;i++){var wv=wMin*Math.pow(wMax/wMin,i/N);var m=wv/Math.sqrt(wv*wv+wc*wc);var db=magTodB(m);var x=wToXlog(wv,pw,padL),y=dbToY(db);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();}
+    var xcw=wToXlog(wc,pw,padL);
+    ctx.strokeStyle='#15803d';ctx.lineWidth=1.5;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(xcw,padT);ctx.lineTo(xcw,padT+ph);ctx.stroke();ctx.setLineDash([]);
+    [0.01,0.1,1,10,100,1000].forEach(function(v){var x=wToXlog(v,pw,padL);if(x>padL&&x<padL+pw){ctx.fillStyle='#9ca3af';ctx.font='9px system-ui';ctx.fillText(v,x-8,padT+ph+16);}});
+  })();
+}
+
+/* ── Speed ── */
+function drawSpeed(){
+  var cv=document.getElementById('speedChart');if(!cv)return;
+  var ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1;
+  var cssW=cv.clientWidth||500,cssH=190;
+  if(cv.width!==cssW*dpr||cv.height!==cssH*dpr){cv.width=cssW*dpr;cv.height=cssH*dpr;}
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  var w=cssW,h=cssH;ctx.clearRect(0,0,w,h);
+  var pA=parseFloat(document.getElementById('pA').value);
+  var pB=parseFloat(document.getElementById('pB').value);
+  var tMax=10,N=400;
+  var padL=42,padR=10,padT=14,padB=28,pw=w-padL-padR,ph=h-padT-padB;
+  ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(padL,padT);ctx.lineTo(padL,padT+ph);ctx.lineTo(padL+pw,padT+ph);ctx.stroke();
+  ctx.fillStyle='#9ca3af';ctx.font='10px system-ui';
+  ctx.fillText('0',padL-8,padT+ph+16);ctx.fillText(tMax+'s',padL+pw-14,padT+ph+16);
+  ctx.fillText('1',padL-14,padT+8);ctx.fillText('y(t)',padL-28,padT+ph/2+4);
+  // setpoint
+  ctx.setLineDash([4,4]);ctx.strokeStyle='#9ca3af';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(padL,padT);ctx.lineTo(padL+pw,padT);ctx.stroke();
+  ctx.setLineDash([]);
+  // 63% line
+  var y63=padT+ph*(1-0.632);
+  ctx.setLineDash([2,4]);ctx.strokeStyle='#d1d5db';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(padL,y63);ctx.lineTo(padL+pw,y63);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='#9ca3af';ctx.font='9px system-ui';ctx.fillText('63%',padL+pw-24,y63-3);
+
+  function drawCurve(pole,color,label){
+    ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.beginPath();
+    for(var i=0;i<=N;i++){
+      var t=(i/N)*tMax,y=1-Math.exp(pole*t);
+      var px=padL+(t/tMax)*pw,py=padT+(1-Math.min(y,1.05))*ph;
+      i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    }
+    ctx.stroke();
+    var tau=-1/pole,tx=padL+(Math.min(tau,tMax)/tMax)*pw;
+    ctx.strokeStyle=color;ctx.lineWidth=1;ctx.setLineDash([3,3]);
+    ctx.beginPath();ctx.moveTo(tx,padT);ctx.lineTo(tx,padT+ph);ctx.stroke();
+    ctx.setLineDash([]);
+    if(tx<padL+pw-60){ctx.fillStyle=color;ctx.font='bold 11px system-ui';ctx.fillText(label+': τ='+tau.toFixed(2)+'s',tx+4,padT+14+(label==='B'?16:0));}
+  }
+  drawCurve(pA,'#4f46e5','A');
+  drawCurve(pB,'#ea580c','B');
+  var tauA=-1/pA,tauB=-1/pB;
+  var v=document.getElementById('speed-verdict');
+  v.style.background=Math.abs(tauA-tauB)<0.05?'var(--main-bg)':tauA<tauB?'var(--green-bg)':'var(--amber-bg)';
+  v.style.color=Math.abs(tauA-tauB)<0.05?'var(--main)':tauA<tauB?'var(--green)':'var(--amber)';
+  if(Math.abs(tauA-tauB)<0.05) v.textContent='⚖️ Iguales (τ = '+tauA.toFixed(2)+'s)';
+  else if(tauA<tauB) v.innerHTML='🏆 A más rápido &nbsp;(τ<sub>A</sub>='+tauA.toFixed(2)+'s &lt; τ<sub>B</sub>='+tauB.toFixed(2)+'s)  |  σ<sub>A</sub>='+pA+' más negativo → polo más a la izquierda';
+  else v.innerHTML='🏆 B más rápido &nbsp;(τ<sub>B</sub>='+tauB.toFixed(2)+'s &lt; τ<sub>A</sub>='+tauA.toFixed(2)+'s)  |  σ<sub>B</sub>='+pB+' más negativo → polo más a la izquierda';
+}
+
+/* ── Noise ── */
+var _noiseData=null;
+function drawNoise(){
+  var wc=parseFloat(document.getElementById('ncSlider').value);
+  var N=512,dt=0.05;
+  if(!_noiseData){_noiseData=Array.from({length:N},function(){return (Math.random()-0.5)*2;});}
+  var noise=_noiseData;
+  var alpha=1/(1+wc*dt),filtered=[noise[0]];
+  for(var i=1;i<N;i++) filtered.push(alpha*filtered[i-1]+(1-alpha)*noise[i]);
+
+  // ─ Time domain ─
+  (function(){
+    var cv=document.getElementById('noiseChart');if(!cv)return;
+    var ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1;
+    var cssW=cv.clientWidth||400,cssH=160;
+    if(cv.width!==cssW*dpr||cv.height!==cssH*dpr){cv.width=cssW*dpr;cv.height=cssH*dpr;}
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    var w=cssW,h=cssH;ctx.clearRect(0,0,w,h);
+    var padL=8,padR=8,padT=8,padB=16,pw=w-padL-padR,ph=h-padT-padB;
+    var yMin=-1.4,yMax=1.4,yR=yMax-yMin;
+    var y0=padT+(1-(-yMin)/yR)*ph;
+    ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(padL,y0);ctx.lineTo(padL+pw,y0);ctx.stroke();
+    function toY(v){return padT+(1-(v-yMin)/yR)*ph;}
+    ctx.strokeStyle='rgba(107,114,128,0.4)';ctx.lineWidth=1;ctx.beginPath();
+    for(var i=0;i<N;i++){var x=padL+(i/(N-1))*pw;i===0?ctx.moveTo(x,toY(noise[i])):ctx.lineTo(x,toY(noise[i]));}
+    ctx.stroke();
+    ctx.strokeStyle='#4f46e5';ctx.lineWidth=2;ctx.beginPath();
+    for(var i=0;i<N;i++){var x=padL+(i/(N-1))*pw;i===0?ctx.moveTo(x,toY(filtered[i])):ctx.lineTo(x,toY(filtered[i]));}
+    ctx.stroke();
+  })();
+
+  // ─ Spectrum (simple DFT magnitude squared, averaged in bins) ─
+  (function(){
+    var cv=document.getElementById('noiseSpectrum');if(!cv)return;
+    var ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1;
+    var cssW=cv.clientWidth||400,cssH=160;
+    if(cv.width!==cssW*dpr||cv.height!==cssH*dpr){cv.width=cssW*dpr;cv.height=cssH*dpr;}
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    var w=cssW,h=cssH;ctx.clearRect(0,0,w,h);
+    var padL=36,padR=8,padT=8,padB=20,pw=w-padL-padR,ph=h-padT-padB;
+
+    // Compute DFT magnitude for noise and filtered (only first N/2 bins)
+    var M=N/2;
+    function dftMag(sig){
+      var out=[];
+      for(var k=0;k<M;k++){
+        var re=0,im=0;
+        for(var n=0;n<N;n++){re+=sig[n]*Math.cos(2*Math.PI*k*n/N);im-=sig[n]*Math.sin(2*Math.PI*k*n/N);}
+        out.push(Math.sqrt(re*re+im*im)/N);
+      }
+      return out;
+    }
+    var magN=dftMag(noise);
+    var magF=dftMag(filtered);
+    // Smooth (moving average, window 5)
+    function smooth(arr,win){var out=[];for(var i=0;i<arr.length;i++){var s=0,c=0;for(var j=Math.max(0,i-win);j<=Math.min(arr.length-1,i+win);j++){s+=arr[j];c++;}out.push(s/c);}return out;}
+    magN=smooth(magN,4); magF=smooth(magF,4);
+    var yMax=Math.max(...magN)*1.1||0.1;
+    function toY(v){return padT+(1-Math.min(v/yMax,1.02))*ph;}
+
+    ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(padL,padT);ctx.lineTo(padL,padT+ph);ctx.lineTo(padL+pw,padT+ph);ctx.stroke();
+    ctx.fillStyle='#9ca3af';ctx.font='9px system-ui';ctx.fillText('PSD',padL-30,padT+10);
+    ctx.fillText('0',padL-8,padT+ph+14);ctx.fillText('Nyq',padL+pw-18,padT+ph+14);
+
+    ctx.strokeStyle='rgba(107,114,128,0.5)';ctx.lineWidth=1.5;ctx.beginPath();
+    for(var k=0;k<M;k++){var x=padL+(k/M)*pw;k===0?ctx.moveTo(x,toY(magN[k])):ctx.lineTo(x,toY(magN[k]));}
+    ctx.stroke();
+    ctx.strokeStyle='#4f46e5';ctx.lineWidth=2;ctx.beginPath();
+    for(var k=0;k<M;k++){var x=padL+(k/M)*pw;k===0?ctx.moveTo(x,toY(magF[k])):ctx.lineTo(x,toY(magF[k]));}
+    ctx.stroke();
+
+    // wc marker
+    var wcBin=Math.round(wc*dt*M);
+    if(wcBin>0&&wcBin<M){
+      var xcw=padL+(wcBin/M)*pw;
+      ctx.strokeStyle='#15803d';ctx.lineWidth=1.5;ctx.setLineDash([4,4]);
+      ctx.beginPath();ctx.moveTo(xcw,padT);ctx.lineTo(xcw,padT+ph);ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle='#15803d';ctx.font='9px system-ui';ctx.fillText('ωc',xcw+3,padT+12);
+    }
+  })();
+}
+
+function initC5(){
+  updateSPlane();
+  draw3DModule();
+  drawSweep();
+  drawFilters();
+  drawSpeed();
+  drawNoise();
 }
 
 </script>

@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Simulador Encoder Óptico — Sistemas de Control</title>
+<meta name="description" content="Simulador interactivo de encoder óptico incremental: disco 3D, osciloscopio virtual, diagrama de Bode y métricas de degradación RC en tiempo real."/>
+<style>
+/* ===================== DESIGN SYSTEM (igual a teoria.html) ===================== */
+:root{
+  --main:#3730a3;--main-lt:#4f46e5;--main-bg:#e0e7ff;
+  --amber:#b45309;--amber-bg:#fef9c3;
+  --teal:#0d9488;--teal-bg:#ccfbf1;
+  --orange:#c2410c;--orange-bg:#ffedd5;
+  --red:#b91c1c;--red-bg:#fee2e2;
+  --green:#15803d;--green-bg:#dcfce7;
+  --gray:#374151;--gray-lt:#6b7280;
+  --bg:#f5f6fb;--card:#fff;--border:#e2e8f0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:var(--main);display:flex;align-items:center;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.brand{color:#fff;font-size:1.05rem;font-weight:800;padding:.8rem 1.2rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.2);text-decoration:none;display:block}
+.tabs{display:flex;overflow-x:auto;flex:1}
+.tab-btn{padding:.75rem 1rem;border:none;background:transparent;color:rgba(255,255,255,.75);font-size:.83rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s;font-family:inherit;text-decoration:none;display:flex;align-items:center}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tab-btn.active{color:#fff;border-bottom-color:#a5b4fc;background:rgba(255,255,255,.08)}
+/* HERO */
+.hero{background:linear-gradient(135deg,#1e1b4b 0%,var(--main-lt) 100%);color:#fff;text-align:center;padding:2.5rem 1rem 2rem}
+.hero h1{font-size:2.1rem;font-weight:900;letter-spacing:-.5px}
+.hero p{opacity:.88;margin-top:.4rem;max-width:680px;margin-left:auto;margin-right:auto;font-size:.97rem}
+.badges-sum{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.badge-chip{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.25rem .85rem;font-size:.78rem;font-weight:700}
+/* LAYOUT */
+.container{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+.stitle{display:flex;align-items:center;gap:.6rem;font-size:1.3rem;font-weight:800;color:var(--main);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid var(--main-bg)}
+/* CARDS */
+.grid{display:grid;gap:1.1rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.card h3{font-size:1rem;font-weight:700;margin-bottom:.5rem;color:var(--main)}
+.card p,.card li{font-size:.9rem;color:var(--gray)}
+.card ul{margin-left:1.2rem;margin-top:.4rem}
+.card.bl{border-left:4px solid var(--main-lt);background:var(--main-bg)}
+.card.gr{border-left:4px solid var(--green);background:var(--green-bg)}
+.card.or{border-left:4px solid var(--orange);background:var(--orange-bg)}
+.card.re{border-left:4px solid var(--red);background:var(--red-bg)}
+.card.te{border-left:4px solid var(--teal);background:var(--teal-bg)}
+/* FORMULA BOX */
+.fbox{background:#181633;color:#e8e6ff;border-radius:10px;padding:1.1rem 1.3rem;font-family:'Courier New',monospace;text-align:center;margin:.8rem 0;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.fbox .big{font-size:1.15rem;font-weight:700;color:#a5b4fc;display:block;margin-bottom:.3rem}
+.fbox .sub-f{font-size:.83rem;color:#c7c5e8;display:block;margin-top:.25rem}
+.fbox .unit{font-size:.75rem;color:#8b88b3;display:block;margin-top:.3rem}
+/* NOTE */
+.note{background:var(--main-bg);border-left:4px solid var(--main-lt);border-radius:0 8px 8px 0;padding:.8rem 1rem;font-size:.88rem;margin:.8rem 0;color:#312e81}
+/* SLIDERS */
+.slider-row{margin-bottom:.85rem}
+.slider-row label{display:flex;justify-content:space-between;font-size:.83rem;font-weight:600;color:var(--gray);margin-bottom:.3rem}
+.slider-row label .val{color:var(--main);font-family:'Courier New',monospace;font-weight:700}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer;width:100%}
+input[type=range]::-webkit-slider-runnable-track{height:6px;background:var(--border);border-radius:3px}
+input[type=range]::-moz-range-track{height:6px;background:var(--border);border-radius:3px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:var(--main-lt);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);margin-top:-7px;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--main-lt);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);cursor:pointer}
+/* FOOTER */
+footer{text-align:center;padding:2rem 1rem 3rem;font-size:.8rem;color:var(--gray-lt)}
+footer a{color:var(--main)}
+
+/* ===================== SIMULATOR STYLES ===================== */
+.sim-row1{display:grid;grid-template-columns:310px 1fr;gap:1.2rem;margin-bottom:1.2rem;align-items:start}
+@media(max-width:780px){.sim-row1{grid-template-columns:1fr}}
+.sim-row2{margin-bottom:1.2rem}
+.sim-row3{display:grid;grid-template-columns:1fr 340px;gap:1.2rem;margin-bottom:1.2rem}
+@media(max-width:780px){.sim-row3{grid-template-columns:1fr}}
+
+/* Controls panel */
+.ctrl-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem}
+.ctrl-panel h2{font-size:.92rem;font-weight:800;color:var(--main);margin-bottom:.9rem;padding-bottom:.45rem;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.05em}
+.toggle-row{display:flex;gap:.5rem;margin-bottom:.9rem;flex-wrap:wrap}
+.tog-btn{border:2px solid var(--border);background:#fff;border-radius:8px;padding:.35rem .8rem;font-size:.78rem;font-weight:700;cursor:pointer;color:var(--gray-lt);font-family:inherit;transition:.15s}
+.tog-btn:hover{border-color:var(--main-lt);color:var(--main)}
+.tog-btn.active{border-color:var(--main);background:var(--main-bg);color:var(--main)}
+
+/* 3D Disk panel */
+.disk-panel{background:#080815;border:1px solid #1d1d40;border-radius:12px;overflow:hidden;position:relative;height:420px}
+.disk-panel canvas{display:block}
+.disk-hud{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;gap:.4rem;flex-wrap:wrap}
+.hud-badge{background:rgba(0,0,0,.65);backdrop-filter:blur(4px);color:#a5b4fc;font-size:.72rem;font-weight:700;padding:.22rem .65rem;border-radius:2rem;font-family:'Courier New',monospace;border:1px solid rgba(165,180,252,.2)}
+.sensor-badge{font-family:'Courier New',monospace;font-size:.72rem;font-weight:700;padding:.22rem .75rem;border-radius:2rem;border:1px solid;transition:all .08s}
+.sensor-badge.on{background:rgba(0,255,68,.12);color:#00ff44;border-color:rgba(0,255,68,.3)}
+.sensor-badge.off{background:rgba(255,51,0,.12);color:#ff5533;border-color:rgba(255,51,0,.3)}
+
+/* Oscilloscope */
+.osc-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem}
+.osc-panel h2{font-size:.92rem;font-weight:800;color:var(--main);margin-bottom:.7rem;text-transform:uppercase;letter-spacing:.05em}
+.osc-wrap{background:#080815;border-radius:8px;border:1px solid #1d1d40;padding:.7rem;position:relative}
+.chart-leg{display:flex;gap:.9rem;flex-wrap:wrap;margin-top:.6rem;font-size:.76rem;color:var(--gray-lt);align-items:center}
+.leg{display:flex;align-items:center;gap:.35rem}
+.leg-sw{width:14px;height:3px;border-radius:2px;display:inline-block}
+.leg-sw.dash{background:repeating-linear-gradient(90deg,#ef4444 0 5px,transparent 5px 8px);height:2px}
+
+/* Bode panel */
+.bode-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem}
+.bode-panel h2{font-size:.92rem;font-weight:800;color:var(--main);margin-bottom:.7rem;text-transform:uppercase;letter-spacing:.05em}
+.bode-info{font-size:.76rem;color:var(--gray-lt);margin-top:.5rem;font-family:'Courier New',monospace}
+
+/* Metrics panel */
+.metrics-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem}
+.metrics-panel h2{font-size:.92rem;font-weight:800;color:var(--main);margin-bottom:.7rem;text-transform:uppercase;letter-spacing:.05em}
+.m-row{display:flex;justify-content:space-between;align-items:center;padding:.28rem 0;border-bottom:1px solid var(--border);font-size:.8rem}
+.m-row:last-of-type{border-bottom:none}
+.m-lbl{color:var(--gray-lt);font-weight:600}
+.m-val{color:var(--main);font-family:'Courier New',monospace;font-weight:700;font-size:.78rem}
+
+/* Pulse counter */
+.pulse-ctr{display:flex;gap:.5rem;margin:.8rem 0 0}
+.pctr-box{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.55rem;text-align:center}
+.pctr-val{font-size:1.2rem;font-weight:900;color:var(--main);font-family:'Courier New',monospace;display:block}
+.pctr-lbl{font-size:.65rem;color:var(--gray-lt);font-weight:700;text-transform:uppercase;letter-spacing:.04em;display:block;margin-top:.1rem}
+
+/* Semaphore */
+.sema{border-radius:10px;padding:.9rem 1rem;text-align:center;margin-top:.8rem;transition:background .35s,border-color .35s}
+.sema.green{background:var(--green-bg);border:2px solid var(--green)}
+.sema.yellow{background:var(--amber-bg);border:2px solid var(--amber)}
+.sema.red{background:var(--red-bg);border:2px solid var(--red)}
+.sema-dot{width:16px;height:16px;border-radius:50%;display:inline-block;vertical-align:middle;margin-right:.4rem}
+.sema.green .sema-dot{background:var(--green);box-shadow:0 0 8px var(--green)}
+.sema.yellow .sema-dot{background:var(--amber);box-shadow:0 0 8px var(--amber)}
+.sema.red .sema-dot{background:var(--red);box-shadow:0 0 8px var(--red)}
+.sema-title{font-size:.88rem;font-weight:800}
+.sema.green .sema-title{color:var(--green)}
+.sema.yellow .sema-title{color:var(--amber)}
+.sema.red .sema-title{color:var(--red)}
+.sema-desc{font-size:.75rem;margin-top:.35rem;line-height:1.5;text-align:left}
+.sema.green .sema-desc{color:#14532d}
+.sema.yellow .sema-desc{color:#92400e}
+.sema.red .sema-desc{color:#7f1d1d}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="brand" href="teoria.html">🎛️ Sistemas de Control</a>
+  <div class="tabs">
+    <a class="tab-btn" href="teoria.html">📖 Apuntes</a>
+    <a class="tab-btn active" href="#">⚙️ Encoder Óptico</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>⚙️ Simulador de Encoder Óptico</h1>
+  <p>Modelado interactivo del funcionamiento mecánico, generación de señales A/B en cuadratura y degradación por respuesta en frecuencia del circuito RC de acoplamiento.</p>
+  <div class="badges-sum">
+    <span class="badge-chip">🔁 Cuadratura A/B</span>
+    <span class="badge-chip">📉 Modelo RC — Laplace</span>
+    <span class="badge-chip">🎛️ Disco 3D + Osciloscopio + Bode</span>
+    <span class="badge-chip">🚦 Semáforo de integridad</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ROW 1: Controls + 3D Disk -->
+  <div class="sim-row1">
+
+    <!-- Panel de Control -->
+    <div class="ctrl-panel">
+      <h2>🎛️ Panel de Control</h2>
+
+      <!-- Sentido -->
+      <div style="margin-bottom:.6rem">
+        <div style="font-size:.78rem;font-weight:700;color:var(--gray-lt);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.05em">Sentido de giro</div>
+        <div class="toggle-row">
+          <button class="tog-btn active" id="btn-cw" onclick="setDir('cw')">↻ Horario (CW)</button>
+          <button class="tog-btn" id="btn-ccw" onclick="setDir('ccw')">↺ Anti-horario (CCW)</button>
+        </div>
+      </div>
+
+      <!-- Driver -->
+      <div style="margin-bottom:.8rem">
+        <div style="font-size:.78rem;font-weight:700;color:var(--gray-lt);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.05em">Tipo de driver</div>
+        <div class="toggle-row">
+          <button class="tog-btn active" id="btn-oc" onclick="setDriver('oc')">Open Collector</button>
+          <button class="tog-btn" id="btn-ld" onclick="setDriver('ld')">Line Driver</button>
+        </div>
+        <div class="note" id="driver-note" style="margin-top:.4rem;font-size:.78rem">
+          <b>Open Collector:</b> señal vulnerable a ruido. Requiere resistencia pull-up (R).
+        </div>
+      </div>
+
+      <!-- Sliders cinemática -->
+      <div class="slider-row">
+        <label>Velocidad (n) <span class="val" id="v-rpm">1000</span> RPM</label>
+        <input type="range" id="sl-rpm" min="10" max="10000" value="1000" step="10" oninput="onSlider()">
+      </div>
+      <div class="slider-row">
+        <label>Resolución (N) <span class="val" id="v-ppr">100</span> PPR</label>
+        <input type="range" id="sl-ppr" min="4" max="2000" value="100" step="1" oninput="onSlider()">
+      </div>
+      <div class="slider-row">
+        <label>Radio pista (r) <span class="val" id="v-r">30</span> mm</label>
+        <input type="range" id="sl-r" min="5" max="100" value="30" step="1" oninput="onSlider()">
+      </div>
+
+      <!-- Sliders RC -->
+      <div class="slider-row">
+        <label>Resistencia (R) <span class="val" id="v-res">1000</span> Ω</label>
+        <input type="range" id="sl-res" min="10" max="10000" value="1000" step="10" oninput="onSlider()">
+      </div>
+      <div class="slider-row">
+        <label>Capacitancia (C) <span class="val" id="v-cap">100</span> nF</label>
+        <input type="range" id="sl-cap" min="1" max="10000" value="100" step="1" oninput="onSlider()">
+      </div>
+
+      <!-- Sliders tensión -->
+      <div class="slider-row">
+        <label>V_max <span class="val" id="v-vmax">5.0</span> V</label>
+        <input type="range" id="sl-vmax" min="3.3" max="24" value="5" step="0.1" oninput="onSlider()">
+      </div>
+      <div class="slider-row">
+        <label>V_IH (umbral '1') <span class="val" id="v-vih">3.0</span> V</label>
+        <input type="range" id="sl-vih" min="0.5" max="23" value="3.0" step="0.1" oninput="onSlider()">
+      </div>
+      <div class="slider-row">
+        <label>V_IL (umbral '0') <span class="val" id="v-vil">0.8</span> V</label>
+        <input type="range" id="sl-vil" min="0" max="10" value="0.8" step="0.1" oninput="onSlider()">
+      </div>
+    </div>
+
+    <!-- Disco 3D -->
+    <div class="disk-panel" id="disk-container">
+      <div class="disk-hud">
+        <span class="hud-badge" id="hud-info">1000 RPM · 100 PPR · r=30mm</span>
+        <span class="sensor-badge on" id="sensor-badge">● SLOT</span>
+      </div>
+    </div>
+
+  </div><!-- end sim-row1 -->
+
+  <!-- ROW 2: Osciloscopio -->
+  <div class="osc-panel">
+    <h2>📺 Osciloscopio Virtual — Señales A, B y V<sub>out</sub>(t)</h2>
+    <div class="osc-wrap">
+      <canvas id="chart-osc" height="160"></canvas>
+    </div>
+    <div class="chart-leg">
+      <div class="leg"><span class="leg-sw" style="background:#4f46e5;height:2px"></span> Canal A (V_in ideal)</div>
+      <div class="leg"><span class="leg-sw" style="background:#16a34a;height:2px"></span> Canal B (cuadratura)</div>
+      <div class="leg"><span class="leg-sw" style="background:#f97316;height:2px"></span> V_out(t) — respuesta RC</div>
+      <div class="leg"><span class="leg-sw dash"></span> Umbral V_IH</div>
+      <div class="leg"><span class="leg-sw" style="background:repeating-linear-gradient(90deg,#fb923c 0 3px,transparent 3px 6px);height:2px"></span> Umbral V_IL</div>
+    </div>
+  </div>
+
+  <!-- ROW 3: Bode + Métricas -->
+  <div class="sim-row3">
+
+    <div class="bode-panel">
+      <h2>📉 Diagrama de Bode — H(s) = 1/(τs+1)</h2>
+      <canvas id="chart-bode" height="240"></canvas>
+      <div class="bode-info" id="bode-info">f_c = 1592 Hz · f_pulso = 1667 Hz · Atenuación = −0.17 dB</div>
+    </div>
+
+    <div class="metrics-panel">
+      <h2>📊 Métricas calculadas</h2>
+
+      <div class="m-row"><span class="m-lbl">f_pulso</span><span class="m-val" id="m-fp">1667 Hz</span></div>
+      <div class="m-row"><span class="m-lbl">T_pulso</span><span class="m-val" id="m-tp">600 µs</span></div>
+      <div class="m-row"><span class="m-lbl">T_alto</span><span class="m-val" id="m-ta">300 µs</span></div>
+      <div class="m-row"><span class="m-lbl">τ = R·C</span><span class="m-val" id="m-tau">100 µs</span></div>
+      <div class="m-row"><span class="m-lbl">f_c (−3 dB)</span><span class="m-val" id="m-fc">1592 Hz</span></div>
+      <div class="m-row"><span class="m-lbl">3τ (umbral crítico)</span><span class="m-val" id="m-3tau">300 µs</span></div>
+      <div class="m-row"><span class="m-lbl">V_peak (V_out máx)</span><span class="m-val" id="m-vp">4.82 V</span></div>
+      <div class="m-row"><span class="m-lbl">d (paso ranuras)</span><span class="m-val" id="m-d">1.885 mm</span></div>
+      <div class="m-row"><span class="m-lbl">w (ancho ventana)</span><span class="m-val" id="m-w">0.942 mm</span></div>
+      <div class="m-row"><span class="m-lbl">Δθ (por pulso)</span><span class="m-val" id="m-dth">3.600°</span></div>
+
+      <div class="pulse-ctr">
+        <div class="pctr-box">
+          <span class="pctr-val" id="p-ideal">1667</span>
+          <span class="pctr-lbl">Pulsos ideales/s</span>
+        </div>
+        <div class="pctr-box">
+          <span class="pctr-val" id="p-real">1667</span>
+          <span class="pctr-lbl">Detectables/s</span>
+        </div>
+      </div>
+
+      <div class="sema green" id="semaphore">
+        <span class="sema-dot"></span>
+        <span class="sema-title" id="sema-title">OPERACIÓN NORMAL</span>
+        <p class="sema-desc" id="sema-desc">El tiempo de carga (T_alto) es mayor a 3τ. El capacitor alcanza ≥ 95% de V_max. Sin pérdida de pulsos.</p>
+      </div>
+    </div>
+
+  </div><!-- end sim-row3 -->
+
+  <!-- ROW 4: Tarjetas educativas -->
+  <div class="stitle"><span>📚</span> Fundamentos teóricos</div>
+  <div class="grid g2">
+
+    <div class="card bl">
+      <h3>🔵 Geometría del Disco</h3>
+      <p>El disco codificador tiene <em>N</em> ranuras distribuidas uniformemente sobre la pista de lectura de radio <em>r</em>.</p>
+      <div class="fbox">
+        <span class="big">d = (2π · r) / N</span>
+        <span class="sub-f">Paso entre centros de ranura · Δθ = 360° / N</span>
+        <span class="unit">d [mm] · w = d/2 (ancho ventana, DC=50%)</span>
+      </div>
+      <p>A mayor PPR y menor radio, las ranuras son más estrechas y las exigencias mecánicas más altas.</p>
+    </div>
+
+    <div class="card te">
+      <h3>🟢 Señal en Cuadratura A / B</h3>
+      <p>Dos fotosensores desfasados 90° generan señales que permiten detectar posición <em>y</em> sentido de giro:</p>
+      <div class="fbox">
+        <span class="big">f_pulso = (N · n) / 60 [Hz]</span>
+        <span class="sub-f">T_pulso = 1 / f_pulso · T_alto = T_pulso / 2</span>
+      </div>
+      <ul>
+        <li><b>CW:</b> A adelanta a B en T/4 (90°)</li>
+        <li><b>CCW:</b> B adelanta a A en T/4 (90°)</li>
+      </ul>
+    </div>
+
+    <div class="card or">
+      <h3>🟠 Modelo RC — Transformada de Laplace</h3>
+      <p>La resistencia de pull-up y la capacitancia parásita del cable forman un filtro paso-bajo de primer orden:</p>
+      <div class="fbox">
+        <span class="big">H(s) = V_out(s) / V_in(s) = 1 / (τs + 1)</span>
+        <span class="sub-f">τ = R · C [s] · · · f_c = 1 / (2πτ) [Hz]</span>
+        <span class="unit">Respuesta: v_out(t) = V_max · (1 − e^(−t/τ)) en carga</span>
+      </div>
+    </div>
+
+    <div class="card re">
+      <h3>🔴 Criterio de Fallo a Alta Velocidad</h3>
+      <p>El controlador QEI solo detecta un pulso si la señal cruza los umbrales durante el tiempo disponible:</p>
+      <div class="fbox">
+        <span class="big">V_peak = V_max / (1 + e^(−T_alto/τ))</span>
+        <span class="sub-f">Si T_alto &lt; 3τ → atenuación severa</span>
+        <span class="unit">Si V_peak &lt; V_IH → PÉRDIDA DE CONTEO</span>
+      </div>
+      <p>A mayor velocidad o mayor τ (R·C), el riesgo de pérdida aumenta. El osciloscopio muestra la degradación en tiempo real.</p>
+    </div>
+
+  </div><!-- end grid -->
+
+</div><!-- end container -->
+
+<footer>
+  <a href="teoria.html">← Volver a los apuntes de Sistemas de Control</a>
+</footer>
+
+<!-- CDN: Three.js r128 + Chart.js v4 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+'use strict';
+
+/* ============================= STATE ============================= */
+// Valores de los parámetros de simulación
+const S = {
+  n: 1000,      // RPM
+  N: 100,       // PPR
+  r: 30,        // mm
+  R: 1000,      // Ohm
+  C: 100e-9,    // Farads (slider en nF)
+  V_max: 5.0,   // V
+  V_IH: 3.0,    // V
+  V_IL: 0.8,    // V
+  dir: 'cw',
+  driver: 'oc'
+};
+
+/* ============================= CÁLCULOS ============================= */
+/**
+ * Calcula todas las variables derivadas a partir del estado S.
+ * Usa la solución analítica de estado estacionario para el circuito RC.
+ */
+function calc() {
+  const { n, N, r, R, C, V_max, V_IH } = S;
+
+  const f_pulse  = (N * n) / 60;         // Hz
+  const T_pulse  = 1 / f_pulse;           // s
+  const T_high   = T_pulse / 2;           // s (DC 50%)
+  const tau      = R * C;                 // s
+  const f_c      = 1 / (2 * Math.PI * tau); // Hz
+
+  // Solución en estado estacionario para onda cuadrada RC
+  // V0_charge: tensión al inicio del flanco de subida (SS)
+  // V_peak:    tensión al inicio del flanco de bajada (SS)
+  const alpha    = Math.exp(-T_high / tau);
+  const V_peak   = V_max / (1 + alpha);     // V pico real
+  const V0_chg   = V_max * alpha / (1 + alpha); // V inicial del ciclo de carga
+
+  // Geometría del disco
+  const d     = (2 * Math.PI * r) / N;  // mm
+  const w     = d / 2;                   // mm
+  const dtheta = 360 / N;                // grados
+
+  // Criterio de integridad
+  let status;
+  if (T_high >= 3 * tau && V_peak >= V_IH) {
+    status = 'green';
+  } else if (T_high >= tau) {
+    status = 'yellow';
+  } else {
+    status = 'red';
+  }
+
+  // Estimación de pulsos detectables/s
+  const p_ideal = Math.round(f_pulse);
+  let p_real;
+  if (status === 'green')  p_real = p_ideal;
+  else if (status === 'yellow') p_real = V_peak >= V_IH ? Math.round(p_ideal * 0.85) : Math.round(p_ideal * 0.4);
+  else                     p_real = V_peak < V_IH ? 0 : Math.round(p_ideal * 0.15);
+
+  return { f_pulse, T_pulse, T_high, tau, f_c, alpha, V_peak, V0_chg,
+           d, w, dtheta, status, p_ideal, p_real };
+}
+
+/* ============================= FORMATO ============================= */
+function fHz(v) {
+  if (v >= 1e6) return (v/1e6).toFixed(3) + ' MHz';
+  if (v >= 1e3) return (v/1e3).toFixed(2) + ' kHz';
+  return v.toFixed(1) + ' Hz';
+}
+function fTime(v) {
+  if (v < 1e-6) return (v*1e9).toFixed(1) + ' ns';
+  if (v < 1e-3) return (v*1e6).toFixed(2) + ' µs';
+  return (v*1e3).toFixed(3) + ' ms';
+}
+
+/* ============================= MÉTRICAS UI ============================= */
+function updateMetrics() {
+  const c = calc();
+  const { V_max, V_IH } = S;
+
+  document.getElementById('m-fp').textContent    = fHz(c.f_pulse);
+  document.getElementById('m-tp').textContent    = fTime(c.T_pulse);
+  document.getElementById('m-ta').textContent    = fTime(c.T_high);
+  document.getElementById('m-tau').textContent   = fTime(c.tau);
+  document.getElementById('m-fc').textContent    = fHz(c.f_c);
+  document.getElementById('m-3tau').textContent  = fTime(3 * c.tau);
+  document.getElementById('m-vp').textContent    = c.V_peak.toFixed(3) + ' V';
+  document.getElementById('m-d').textContent     = c.d.toFixed(3) + ' mm';
+  document.getElementById('m-w').textContent     = c.w.toFixed(3) + ' mm';
+  document.getElementById('m-dth').textContent   = c.dtheta.toFixed(3) + '°';
+  document.getElementById('p-ideal').textContent = c.p_ideal.toLocaleString();
+  document.getElementById('p-real').textContent  = c.p_real.toLocaleString();
+  document.getElementById('hud-info').textContent = `${S.n} RPM · ${S.N} PPR · r=${S.r}mm`;
+
+  // Semáforo
+  const sema = document.getElementById('semaphore');
+  sema.className = 'sema ' + c.status;
+
+  const titles = {
+    green:  'OPERACIÓN NORMAL',
+    yellow: 'ATENUACIÓN LEVE',
+    red:    'PÉRDIDA DE CONTEO / ERROR'
+  };
+  const descs = {
+    green:  `T_alto = ${fTime(c.T_high)} ≥ 3τ = ${fTime(3*c.tau)}. V_peak = ${c.V_peak.toFixed(2)} V ≥ V_IH = ${V_IH} V. El circuito tiene tiempo suficiente para cargar correctamente. Sin pérdida de pulsos.`,
+    yellow: `T_alto = ${fTime(c.T_high)} está entre τ y 3τ. El capacitor alcanza ${(c.V_peak/V_max*100).toFixed(1)}% de V_max (${c.V_peak.toFixed(2)} V). Pueden aparecer lecturas inestables a esta velocidad.`,
+    red:    `T_alto = ${fTime(c.T_high)} < τ = ${fTime(c.tau)}. V_peak = ${c.V_peak.toFixed(2)} V${c.V_peak < V_IH ? ' < V_IH = ' + V_IH + ' V' : ''}. El controlador QEI no detecta los pulsos correctamente.`
+  };
+
+  document.getElementById('sema-title').textContent = titles[c.status];
+  document.getElementById('sema-desc').textContent  = descs[c.status];
+}
+
+/* ============================= OSCILOSCOPIO ============================= */
+let oscChart = null;
+
+/**
+ * Genera los datos para el osciloscopio.
+ * 4 períodos completos, 150 puntos por período.
+ * Solución de estado estacionario para V_out.
+ */
+function genOscData() {
+  const c = calc();
+  const { f_pulse, T_pulse, T_high, tau, alpha, V_peak, V0_chg } = c;
+  const { V_max, V_IH, V_IL } = S;
+
+  const periods = 4;
+  const pts     = 120; // puntos por período
+  const total   = periods * pts;
+
+  // Desfase cuadratura: CW → B retrasado T/4; CCW → B adelantado T/4
+  const phShift = S.dir === 'cw' ? T_pulse / 4 : -T_pulse / 4;
+
+  const labels = [], dA = [], dB = [], dOut = [], dVih = [], dVil = [];
+
+  for (let i = 0; i <= total; i++) {
+    const t      = (i / total) * periods * T_pulse;
+    const t_us   = (t * 1e6).toFixed(2);
+    labels.push(t_us);
+
+    // Canal A — onda cuadrada ideal
+    const tA = t % T_pulse;
+    dA.push(tA < T_high ? V_max : 0);
+
+    // Canal B — onda cuadrada con desfase de cuadratura
+    const tB = ((t - phShift) % T_pulse + T_pulse) % T_pulse;
+    dB.push(tB < T_high ? V_max : 0);
+
+    // V_out — respuesta RC en estado estacionario
+    const tInP = t % T_pulse;
+    let vout;
+    if (tInP < T_high) {
+      // Fase de carga: parte de V0_chg hacia V_max
+      vout = V_max + (V0_chg - V_max) * Math.exp(-tInP / tau);
+    } else {
+      // Fase de descarga: parte de V_peak hacia 0
+      vout = V_peak * Math.exp(-(tInP - T_high) / tau);
+    }
+    dOut.push(parseFloat(vout.toFixed(5)));
+    dVih.push(V_IH);
+    dVil.push(V_IL);
+  }
+  return { labels, dA, dB, dOut, dVih, dVil };
+}
+
+// Plugin para fondo oscuro del canvas
+const darkBgPlugin = {
+  id: 'darkBg',
+  beforeDraw(chart) {
+    const { ctx, width, height } = chart;
+    ctx.save();
+    ctx.fillStyle = '#080815';
+    ctx.fillRect(0, 0, width, height);
+    ctx.restore();
+  }
+};
+
+function initOscChart() {
+  const ctx = document.getElementById('chart-osc').getContext('2d');
+  const d   = genOscData();
+
+  oscChart = new Chart(ctx, {
+    type: 'line',
+    plugins: [darkBgPlugin],
+    data: {
+      labels: d.labels,
+      datasets: [
+        {
+          label: 'Canal A',
+          data: d.dA,
+          borderColor: '#4f46e5',
+          borderWidth: 2,
+          pointRadius: 0,
+          stepped: 'before',
+          fill: false
+        },
+        {
+          label: 'Canal B',
+          data: d.dB,
+          borderColor: '#16a34a',
+          borderWidth: 2,
+          pointRadius: 0,
+          stepped: 'before',
+          fill: false
+        },
+        {
+          label: 'V_out RC',
+          data: d.dOut,
+          borderColor: '#f97316',
+          borderWidth: 2,
+          pointRadius: 0,
+          tension: 0,
+          fill: false
+        },
+        {
+          label: 'V_IH',
+          data: d.dVih,
+          borderColor: '#ef4444',
+          borderWidth: 1.5,
+          borderDash: [6, 4],
+          pointRadius: 0,
+          fill: false
+        },
+        {
+          label: 'V_IL',
+          data: d.dVil,
+          borderColor: '#fb923c',
+          borderWidth: 1.5,
+          borderDash: [3, 3],
+          pointRadius: 0,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      animation: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+          backgroundColor: 'rgba(8,8,21,0.95)',
+          titleColor: '#a5b4fc',
+          bodyColor: '#c7c5e8',
+          borderColor: '#2d2d4e',
+          borderWidth: 1,
+          callbacks: {
+            title: items => items[0].label + ' µs',
+            label: item => ` ${item.dataset.label}: ${parseFloat(item.raw).toFixed(3)} V`
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: '#555',
+            maxTicksLimit: 9,
+            font: { size: 9, family: 'Courier New' }
+          },
+          title: { display: true, text: 'Tiempo [µs]', color: '#555', font: { size: 10 } },
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          border: { color: '#222' }
+        },
+        y: {
+          min: -0.3,
+          max: S.V_max * 1.12,
+          ticks: {
+            color: '#555',
+            font: { size: 9, family: 'Courier New' },
+            callback: v => v.toFixed(1) + 'V'
+          },
+          title: { display: true, text: 'Tensión [V]', color: '#555', font: { size: 10 } },
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          border: { color: '#222' }
+        }
+      }
+    }
+  });
+}
+
+function updateOscChart() {
+  if (!oscChart) return;
+  const d = genOscData();
+  oscChart.data.labels            = d.labels;
+  oscChart.data.datasets[0].data  = d.dA;
+  oscChart.data.datasets[1].data  = d.dB;
+  oscChart.data.datasets[2].data  = d.dOut;
+  oscChart.data.datasets[3].data  = d.dVih;
+  oscChart.data.datasets[4].data  = d.dVil;
+  oscChart.options.scales.y.max   = S.V_max * 1.12;
+  oscChart.update('none');
+}
+
+/* ============================= BODE ============================= */
+let bodeChart = null;
+
+function genBodeData() {
+  const c = calc();
+  const { tau, f_pulse, f_c } = c;
+
+  const n = 250, f_min = 0.5, f_max = 2e6;
+  const pts = [];
+
+  for (let i = 0; i < n; i++) {
+    const f = f_min * Math.pow(f_max / f_min, i / (n - 1));
+    const omega = 2 * Math.PI * f;
+    const H = 1 / Math.sqrt(1 + Math.pow(omega * tau, 2));
+    pts.push({ x: f, y: 20 * Math.log10(H) });
+  }
+
+  // Punto de operación actual (f_pulse)
+  const omega_p = 2 * Math.PI * f_pulse;
+  const H_p     = 1 / Math.sqrt(1 + Math.pow(omega_p * tau, 2));
+  const gain_p  = 20 * Math.log10(H_p);
+
+  return { pts, f_pulse, f_c, gain_p };
+}
+
+function initBodeChart() {
+  const ctx = document.getElementById('chart-bode').getContext('2d');
+  const d   = genBodeData();
+
+  bodeChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      datasets: [
+        {
+          label: '|H(jω)| [dB]',
+          data: d.pts,
+          borderColor: '#4f46e5',
+          borderWidth: 2,
+          pointRadius: 0,
+          tension: 0.2,
+          fill: false
+        },
+        // Línea vertical f_c (frecuencia de corte)
+        {
+          label: 'f_c (−3 dB)',
+          data: [{ x: d.f_c, y: 5 }, { x: d.f_c, y: -60 }],
+          borderColor: '#f97316',
+          borderWidth: 1.5,
+          borderDash: [5, 4],
+          pointRadius: 0,
+          tension: 0,
+          fill: false
+        },
+        // Punto de operación (f_pulse)
+        {
+          label: 'f_pulso actual',
+          data: [{ x: d.f_pulse, y: d.gain_p }],
+          borderColor: '#ef4444',
+          backgroundColor: '#ef4444',
+          pointRadius: 8,
+          pointHoverRadius: 10,
+          showLine: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      animation: false,
+      plugins: {
+        legend: {
+          display: true,
+          labels: { color: '#555', font: { size: 10 }, boxWidth: 14 }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(15,15,26,0.9)',
+          titleColor: '#a5b4fc',
+          bodyColor: '#c7c5e8',
+          callbacks: {
+            title: items => fHz(items[0].parsed.x),
+            label: item => ` ${item.dataset.label}: ${item.parsed.y.toFixed(2)} dB`
+          }
+        }
+      },
+      scales: {
+        x: {
+          type: 'logarithmic',
+          title: { display: true, text: 'Frecuencia [Hz]', color: '#555', font: { size: 10 } },
+          min: 0.5,
+          max: 2e6,
+          ticks: {
+            color: '#555',
+            font: { size: 9, family: 'Courier New' },
+            callback: v => {
+              if (v === 1) return '1 Hz';
+              if (v === 10) return '10 Hz';
+              if (v === 100) return '100 Hz';
+              if (v === 1000) return '1 kHz';
+              if (v === 10000) return '10 kHz';
+              if (v === 100000) return '100 kHz';
+              if (v === 1000000) return '1 MHz';
+              return '';
+            }
+          },
+          grid: { color: 'rgba(0,0,0,0.07)' }
+        },
+        y: {
+          min: -60,
+          max: 5,
+          title: { display: true, text: '|H| [dB]', color: '#555', font: { size: 10 } },
+          ticks: {
+            color: '#555',
+            font: { size: 9, family: 'Courier New' },
+            callback: v => v + ' dB'
+          },
+          grid: { color: 'rgba(0,0,0,0.07)' }
+        }
+      }
+    }
+  });
+}
+
+function updateBodeChart() {
+  if (!bodeChart) return;
+  const d = genBodeData();
+  bodeChart.data.datasets[0].data = d.pts;
+  bodeChart.data.datasets[1].data = [{ x: d.f_c, y: 5 }, { x: d.f_c, y: -60 }];
+  bodeChart.data.datasets[2].data = [{ x: d.f_pulse, y: d.gain_p }];
+  bodeChart.update('none');
+
+  // Info debajo del bode
+  const c = calc();
+  const omega_p = 2 * Math.PI * c.f_pulse;
+  const H_p = 1 / Math.sqrt(1 + Math.pow(omega_p * c.tau, 2));
+  const db  = 20 * Math.log10(H_p);
+  document.getElementById('bode-info').textContent =
+    `f_c = ${fHz(c.f_c)} · f_pulso = ${fHz(c.f_pulse)} · Atenuación = ${db.toFixed(2)} dB`;
+}
+
+/* ============================= THREE.JS ============================= */
+let threeScene, threeCamera, threeRenderer;
+let diskGroup, sensorMat, sensorMesh;
+let diskAngle = 0, lastT = 0;
+
+/**
+ * Crea la textura del disco con N ranuras usando Canvas 2D.
+ * Visual limitado a 512 ranuras para no saturar la imagen.
+ */
+function createDiskTex(N) {
+  const sz = 512;
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = sz;
+  const ctx = cv.getContext('2d');
+
+  // Fondo oscuro
+  ctx.fillStyle = '#0d0d22';
+  ctx.fillRect(0, 0, sz, sz);
+
+  const cx = sz / 2, cy = sz / 2;
+  const outerR = sz * 0.455;
+  const innerR = sz * 0.265;
+
+  // Aro base (ligeramente más claro)
+  ctx.beginPath();
+  ctx.arc(cx, cy, outerR, 0, 2 * Math.PI);
+  ctx.arc(cx, cy, innerR, 0, 2 * Math.PI, true);
+  ctx.fillStyle = '#151530';
+  ctx.fill();
+
+  // Ranuras (limit visual a 512)
+  const visN = Math.min(N, 512);
+  const angPerSlot = (2 * Math.PI) / visN;
+
+  for (let i = 0; i < visN; i++) {
+    const a0 = i * angPerSlot - Math.PI / 2;
+    const a1 = a0 + angPerSlot * 0.5; // DC 50%
+    ctx.beginPath();
+    ctx.moveTo(cx + innerR * Math.cos(a0), cy + innerR * Math.sin(a0));
+    ctx.arc(cx, cy, outerR, a0, a1);
+    ctx.arc(cx, cy, innerR, a1, a0, true);
+    ctx.closePath();
+    ctx.fillStyle = '#eeeeff';
+    ctx.fill();
+  }
+
+  // Borde exterior e interior del aro
+  ctx.beginPath(); ctx.arc(cx, cy, outerR + 2, 0, 2*Math.PI);
+  ctx.strokeStyle = '#2a2a66'; ctx.lineWidth = 3; ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx, cy, innerR - 1, 0, 2*Math.PI);
+  ctx.strokeStyle = '#2a2a66'; ctx.lineWidth = 2; ctx.stroke();
+
+  // Radio interno (cuerpo del disco) con gradiente radial
+  const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, innerR);
+  grad.addColorStop(0, '#1a1a44');
+  grad.addColorStop(1, '#111130');
+  ctx.beginPath(); ctx.arc(cx, cy, innerR - 2, 0, 2*Math.PI);
+  ctx.fillStyle = grad; ctx.fill();
+
+  // Hub (centro)
+  ctx.beginPath(); ctx.arc(cx, cy, sz * 0.075, 0, 2*Math.PI);
+  ctx.fillStyle = '#888899'; ctx.fill();
+  ctx.beginPath(); ctx.arc(cx, cy, sz * 0.038, 0, 2*Math.PI);
+  ctx.fillStyle = '#555566'; ctx.fill();
+
+  // 4 orificios de referencia
+  for (let i = 0; i < 4; i++) {
+    const a = i * Math.PI / 2;
+    const mr = sz * 0.19;
+    ctx.beginPath();
+    ctx.arc(cx + mr * Math.cos(a), cy + mr * Math.sin(a), 6, 0, 2*Math.PI);
+    ctx.fillStyle = '#33334d'; ctx.fill();
+    ctx.beginPath();
+    ctx.arc(cx + mr * Math.cos(a), cy + mr * Math.sin(a), 3, 0, 2*Math.PI);
+    ctx.fillStyle = '#1a1a33'; ctx.fill();
+  }
+
+  return cv;
+}
+
+function initThree() {
+  const container = document.getElementById('disk-container');
+  const w = container.clientWidth || 640;
+  const h = container.clientHeight || 420;
+
+  threeScene = new THREE.Scene();
+  threeScene.background = new THREE.Color(0x080815);
+
+  // Grilla de referencia
+  const grid = new THREE.GridHelper(10, 10, 0x1a1a55, 0x0f0f33);
+  grid.position.y = -0.65;
+  threeScene.add(grid);
+
+  // Cámara perspectiva levemente inclinada (vista 3D)
+  threeCamera = new THREE.PerspectiveCamera(38, w / h, 0.1, 100);
+  threeCamera.position.set(0, 4.2, 5.8);
+  threeCamera.lookAt(0, 0, 0);
+
+  // Renderer
+  threeRenderer = new THREE.WebGLRenderer({ antialias: true });
+  threeRenderer.setSize(w, h);
+  threeRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(threeRenderer.domElement);
+  threeRenderer.domElement.style.position = 'absolute';
+  threeRenderer.domElement.style.top = '0';
+  threeRenderer.domElement.style.left = '0';
+
+  // Iluminación
+  threeScene.add(new THREE.AmbientLight(0xaaaacc, 0.55));
+  const key = new THREE.DirectionalLight(0xffffff, 0.9);
+  key.position.set(5, 9, 4); threeScene.add(key);
+  const fill = new THREE.PointLight(0x4040ff, 0.5, 20);
+  fill.position.set(-5, 4, -3); threeScene.add(fill);
+  const rim = new THREE.DirectionalLight(0x8888ff, 0.3);
+  rim.position.set(-3, -2, 5); threeScene.add(rim);
+
+  // Grupo del disco
+  diskGroup = new THREE.Group();
+  threeScene.add(diskGroup);
+  buildDisk();
+
+  // Sensor y soporte
+  buildSensor();
+
+  // Eje del motor
+  const axleGeo = new THREE.CylinderGeometry(0.12, 0.12, 2.5, 16);
+  const axleMat = new THREE.MeshPhongMaterial({ color: 0x999999, shininess: 150 });
+  threeScene.add(new THREE.Mesh(axleGeo, axleMat));
+
+  requestAnimationFrame(animateThree);
+}
+
+function buildDisk() {
+  // Limpiar meshes anteriores del grupo
+  while (diskGroup.children.length > 0) diskGroup.remove(diskGroup.children[0]);
+
+  const tex = new THREE.CanvasTexture(createDiskTex(S.N));
+
+  // Cara frontal del disco (CircleGeometry con textura)
+  const faceGeo = new THREE.CircleGeometry(2, 128);
+  const faceMat = new THREE.MeshPhongMaterial({ map: tex, shininess: 60 });
+  const face = new THREE.Mesh(faceGeo, faceMat);
+  face.rotation.x = -Math.PI / 2;
+  face.position.y = 0.08;
+  diskGroup.add(face);
+
+  // Cara trasera (sin textura, oscura)
+  const backGeo = new THREE.CircleGeometry(2, 64);
+  const backMat = new THREE.MeshPhongMaterial({ color: 0x0a0a1e, shininess: 20 });
+  const back = new THREE.Mesh(backGeo, backMat);
+  back.rotation.x = Math.PI / 2;
+  back.position.y = -0.08;
+  diskGroup.add(back);
+
+  // Canto del disco (cilindro hueco, lateral)
+  const rimGeo = new THREE.CylinderGeometry(2, 2, 0.16, 128, 1, true);
+  const rimMat = new THREE.MeshPhongMaterial({ color: 0x151540, shininess: 100, side: THREE.DoubleSide });
+  diskGroup.add(new THREE.Mesh(rimGeo, rimMat));
+}
+
+function buildSensor() {
+  // Soporte / bracket del sensor
+  const brkGeo = new THREE.BoxGeometry(0.07, 0.75, 0.45);
+  const brkMat = new THREE.MeshPhongMaterial({ color: 0x445566, shininess: 60 });
+  const brk = new THREE.Mesh(brkGeo, brkMat);
+  brk.position.set(1.65, 0.42, 0);
+  threeScene.add(brk);
+
+  // LED sensor (esfera)
+  const ledGeo = new THREE.SphereGeometry(0.1, 16, 16);
+  sensorMat = new THREE.MeshPhongMaterial({ color: 0xff3300, emissive: 0xaa1100, shininess: 120 });
+  sensorMesh = new THREE.Mesh(ledGeo, sensorMat);
+  sensorMesh.position.set(1.65, 0.08, 0);
+  threeScene.add(sensorMesh);
+}
+
+/**
+ * Determina si el sensor está sobre una ranura (slot = luz visible)
+ * en función del ángulo actual del disco y el número de ranuras N.
+ */
+function isOverSlot(angle, N) {
+  const aPerSlot = (2 * Math.PI) / N;
+  const norm = ((angle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+  return (norm % aPerSlot) < (aPerSlot / 2);
+}
+
+function animateThree(time) {
+  requestAnimationFrame(animateThree);
+  const dt = Math.min((time - lastT) / 1000, 0.05);
+  lastT = time;
+
+  // Velocidad visual capped a 600 RPM para que el disco sea visible
+  const vRPM = Math.min(S.n, 600);
+  const omega = (vRPM / 60) * 2 * Math.PI;
+  diskAngle += omega * dt;
+  diskGroup.rotation.y = diskAngle;
+
+  // Actualizar color del LED según detección
+  const slot = isOverSlot(diskAngle, S.N);
+  if (slot) {
+    sensorMat.color.setHex(0x00ff44);
+    sensorMat.emissive.setHex(0x00bb33);
+  } else {
+    sensorMat.color.setHex(0xff3300);
+    sensorMat.emissive.setHex(0xaa1100);
+  }
+
+  // Badge sensor en el HUD
+  const badge = document.getElementById('sensor-badge');
+  badge.textContent = slot ? '● SLOT' : '● GAP';
+  badge.className = 'sensor-badge ' + (slot ? 'on' : 'off');
+
+  threeRenderer.render(threeScene, threeCamera);
+}
+
+/* ============================= HANDLERS ============================= */
+let pprChanged = false;
+
+function onSlider() {
+  const prevN = S.N;
+
+  S.n     = parseFloat(document.getElementById('sl-rpm').value);
+  S.N     = parseInt(document.getElementById('sl-ppr').value);
+  S.r     = parseFloat(document.getElementById('sl-r').value);
+  S.R     = parseFloat(document.getElementById('sl-res').value);
+  S.C     = parseFloat(document.getElementById('sl-cap').value) * 1e-9;
+  S.V_max = parseFloat(document.getElementById('sl-vmax').value);
+  S.V_IH  = Math.min(parseFloat(document.getElementById('sl-vih').value), S.V_max * 0.96);
+  S.V_IL  = Math.min(parseFloat(document.getElementById('sl-vil').value), S.V_IH * 0.95);
+
+  // Actualizar labels
+  document.getElementById('v-rpm').textContent  = S.n;
+  document.getElementById('v-ppr').textContent  = S.N;
+  document.getElementById('v-r').textContent    = S.r;
+  document.getElementById('v-res').textContent  = S.R;
+  document.getElementById('v-cap').textContent  = document.getElementById('sl-cap').value;
+  document.getElementById('v-vmax').textContent = S.V_max.toFixed(1);
+  document.getElementById('v-vih').textContent  = S.V_IH.toFixed(1);
+  document.getElementById('v-vil').textContent  = S.V_IL.toFixed(1);
+
+  // Reconstruir textura del disco solo si cambió PPR
+  if (S.N !== prevN) buildDisk();
+
+  // Actualizar todo
+  updateMetrics();
+  updateOscChart();
+  updateBodeChart();
+}
+
+function setDir(dir) {
+  S.dir = dir;
+  document.getElementById('btn-cw').classList.toggle('active', dir === 'cw');
+  document.getElementById('btn-ccw').classList.toggle('active', dir === 'ccw');
+  updateOscChart();
+}
+
+function setDriver(drv) {
+  S.driver = drv;
+  document.getElementById('btn-oc').classList.toggle('active', drv === 'oc');
+  document.getElementById('btn-ld').classList.toggle('active', drv === 'ld');
+  document.getElementById('driver-note').innerHTML = drv === 'oc'
+    ? '<b>Open Collector:</b> señal vulnerable a ruido de línea. Requiere resistencia pull-up (R).'
+    : '<b>Line Driver:</b> salida diferencial de baja impedancia. Alta inmunidad al ruido. R modela la resistencia de terminación.';
+}
+
+/* ============================= RESIZE ============================= */
+window.addEventListener('resize', () => {
+  if (!threeRenderer) return;
+  const c = document.getElementById('disk-container');
+  const w = c.clientWidth;
+  const h = c.clientHeight || 420;
+  threeCamera.aspect = w / h;
+  threeCamera.updateProjectionMatrix();
+  threeRenderer.setSize(w, h);
+});
+
+/* ============================= INIT ============================= */
+window.addEventListener('load', () => {
+  initThree();
+  initOscChart();
+  initBodeChart();
+  updateMetrics();
+  updateBodeChart();
+});
+</script>
+</body>
+</html>

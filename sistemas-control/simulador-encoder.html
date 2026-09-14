@@ -53,6 +53,7 @@ nav{position:sticky;top:0;z-index:200;background:var(--main);display:flex;align-
 .fbox .big{font-size:1.15rem;font-weight:700;color:#a5b4fc;display:block;margin-bottom:.3rem}
 .fbox .sub-f{font-size:.83rem;color:#c7c5e8;display:block;margin-top:.25rem}
 .fbox .unit{font-size:.75rem;color:#8b88b3;display:block;margin-top:.3rem}
+.fbox-nums{display:block;margin-top:.55rem;padding-top:.45rem;border-top:1px solid rgba(165,180,252,.15);font-size:.8rem;color:#7ee8a2;font-family:'Courier New',monospace;line-height:1.75;text-align:left;white-space:pre-wrap}
 /* NOTE */
 .note{background:var(--main-bg);border-left:4px solid var(--main-lt);border-radius:0 8px 8px 0;padding:.8rem 1rem;font-size:.88rem;margin:.8rem 0;color:#312e81}
 /* SLIDERS */
@@ -310,6 +311,7 @@ footer a{color:var(--main)}
         <span class="big">d = (2π · r) / N</span>
         <span class="sub-f">Paso entre centros de ranura · Δθ = 360° / N</span>
         <span class="unit">d [mm] · w = d/2 (ancho ventana, DC=50%)</span>
+        <span class="fbox-nums" id="fn-geo"></span>
       </div>
       <p>A mayor PPR y menor radio, las ranuras son más estrechas y las exigencias mecánicas más altas.</p>
     </div>
@@ -320,6 +322,7 @@ footer a{color:var(--main)}
       <div class="fbox">
         <span class="big">f_pulso = (N · n) / 60 [Hz]</span>
         <span class="sub-f">T_pulso = 1 / f_pulso · T_alto = T_pulso / 2</span>
+        <span class="fbox-nums" id="fn-sig"></span>
       </div>
       <ul>
         <li><b>CW:</b> A adelanta a B en T/4 (90°)</li>
@@ -334,6 +337,7 @@ footer a{color:var(--main)}
         <span class="big">H(s) = V_out(s) / V_in(s) = 1 / (τs + 1)</span>
         <span class="sub-f">τ = R · C [s] · · · f_c = 1 / (2πτ) [Hz]</span>
         <span class="unit">Respuesta: v_out(t) = V_max · (1 − e^(−t/τ)) en carga</span>
+        <span class="fbox-nums" id="fn-rc"></span>
       </div>
     </div>
 
@@ -344,6 +348,7 @@ footer a{color:var(--main)}
         <span class="big">V_peak = V_max / (1 + e^(−T_alto/τ))</span>
         <span class="sub-f">Si T_alto &lt; 3τ → atenuación severa</span>
         <span class="unit">Si V_peak &lt; V_IH → PÉRDIDA DE CONTEO</span>
+        <span class="fbox-nums" id="fn-fallo"></span>
       </div>
       <p>A mayor velocidad o mayor τ (R·C), el riesgo de pérdida aumenta. El osciloscopio muestra la degradación en tiempo real.</p>
     </div>
@@ -1009,7 +1014,62 @@ function animateThree(time) {
   threeRenderer.render(threeScene, threeCamera);
 }
 
-/* ============================= HANDLERS ============================= */
+/* ============================= FÓRMULAS CON NÚMEROS ============================= */
+/**
+ * Actualiza las tarjetas educativas mostrando fórmula + sustitución numérica.
+ * Se llama cada vez que cambia un slider.
+ */
+function updateFormulaNums() {
+  const c = calc();
+  const { n, N, r, R, C, V_max, V_IH, V_IL } = S;
+  const C_nF = (C * 1e9).toFixed(0);
+  const tau_us = (c.tau * 1e6).toFixed(2);
+  const tau_3_us = (3 * c.tau * 1e6).toFixed(2);
+  const T_high_us = (c.T_high * 1e6).toFixed(2);
+
+  // ── Tarjeta 1: Geometría del disco ──
+  const el_geo = document.getElementById('fn-geo');
+  if (el_geo) {
+    el_geo.innerHTML =
+      `d = (2π · ${r}) / ${N} = <b>${c.d.toFixed(3)} mm</b>\n` +
+      `w = d / 2 = ${c.d.toFixed(3)} / 2 = <b>${c.w.toFixed(3)} mm</b>\n` +
+      `Δθ = 360° / ${N} = <b>${c.dtheta.toFixed(3)}°</b>`;
+  }
+
+  // ── Tarjeta 2: Señal en cuadratura ──
+  const el_sig = document.getElementById('fn-sig');
+  if (el_sig) {
+    el_sig.innerHTML =
+      `f_pulso = (${N} · ${n}) / 60 = <b>${fHz(c.f_pulse)}</b>\n` +
+      `T_pulso = 1 / ${fHz(c.f_pulse)} = <b>${fTime(c.T_pulse)}</b>\n` +
+      `T_alto  = ${fTime(c.T_pulse)} / 2 = <b>${fTime(c.T_high)}</b>`;
+  }
+
+  // ── Tarjeta 3: Modelo RC ──
+  const el_rc = document.getElementById('fn-rc');
+  if (el_rc) {
+    el_rc.innerHTML =
+      `τ = R · C = ${R} Ω · ${C_nF} nF = <b>${fTime(c.tau)}</b>\n` +
+      `f_c = 1 / (2π · ${tau_us} µs) = <b>${fHz(c.f_c)}</b>\n` +
+      `H(s) = 1 / (${tau_us}µs · s + 1)`;
+  }
+
+  // ── Tarjeta 4: Criterio de fallo ──
+  const el_fallo = document.getElementById('fn-fallo');
+  if (el_fallo) {
+    const cond3tau = T_high_us >= tau_3_us
+      ? `✓ ${T_high_us} µs ≥ 3τ = ${tau_3_us} µs`
+      : `✗ ${T_high_us} µs < 3τ = ${tau_3_us} µs`;
+    const condVih = c.V_peak >= V_IH
+      ? `✓ ${c.V_peak.toFixed(3)} V ≥ V_IH = ${V_IH} V`
+      : `✗ ${c.V_peak.toFixed(3)} V < V_IH = ${V_IH} V`;
+    el_fallo.innerHTML =
+      `V_peak = ${V_max} / (1 + e^(−${T_high_us}µs/${tau_us}µs)) = <b>${c.V_peak.toFixed(3)} V</b>\n` +
+      `${cond3tau}\n${condVih}`;
+  }
+}
+
+
 let pprChanged = false;
 
 function onSlider() {
@@ -1041,6 +1101,7 @@ function onSlider() {
   updateMetrics();
   updateOscChart();
   updateBodeChart();
+  updateFormulaNums();
 }
 
 function setDir(dir) {
@@ -1077,6 +1138,7 @@ window.addEventListener('load', () => {
   initBodeChart();
   updateMetrics();
   updateBodeChart();
+  updateFormulaNums();
 });
 </script>
 </body>

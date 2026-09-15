@@ -413,6 +413,48 @@ footer a{color:var(--main)}
       </div>
     </details>
 
+    <div class="sub">Ejemplo resuelto · RC de primer orden discretizado con Euler hacia adelante</div>
+    <span class="supp-tag">🧮 Del sistema físico continuo a una ecuación para programar</span>
+    <div class="grid g2">
+      <div class="card bl">
+        <h3>1 · Modelo continuo del circuito RC</h3>
+        <p>Elegimos valores físicos cuyo producto es <b>R·C = 5 s</b>. Si <b>u(t) = Ve(t)</b> es la tensión de entrada y <b>y(t) = Vc(t)</b> la tensión del capacitor, el modelo RC queda:</p>
+        <div class="fbox">
+          <span class="big">5·dy/dt + y = u</span>
+          <span class="sub-f">G(s) = 1/(5s + 1)</span>
+        </div>
+        <p>Es un sistema de <b>primer orden</b> con constante de tiempo τ = 5 s: ante una entrada constante, la salida se acerca gradualmente al valor de entrada.</p>
+      </div>
+      <div class="card te">
+        <h3>2 · Aproximación de Euler hacia adelante</h3>
+        <p>Con período de muestreo <b>Ts = 1 s</b>, Euler-forward aproxima la derivada usando el valor actual:</p>
+        <div class="fbox">
+          <span class="big">dy/dt ≈ (y[k+1] − y[k]) / Ts</span>
+          <span class="sub-f">5·(y[k+1] − y[k])/1 + y[k] = u[k]</span>
+        </div>
+        <p>Despejando la salida del siguiente instante:</p>
+        <div class="fbox">
+          <span class="big">y[k+1] = 0.8 y[k] + 0.2 u[k]</span>
+          <span class="sub-f">cada segundo queda el 80% de la salida actual y entra el 20% de la entrada actual</span>
+        </div>
+      </div>
+    </div>
+    <details>
+      <summary>Pasaje a función de transferencia en z <span></span></summary>
+      <div class="dbody">
+        <p>Si se escribe la misma ecuación desplazada un instante, la convención entrada/salida es:</p>
+        <div class="fbox">
+          <span class="big">y[k] = 0.8 y[k-1] + 0.2 u[k-1]</span>
+        </div>
+        <p>Aplicando transformada Z con condiciones iniciales nulas:</p>
+        <div class="fbox">
+          <span class="big">Y(z) = 0.8 z<sup>-1</sup>Y(z) + 0.2 z<sup>-1</sup>U(z)</span>
+          <span class="sub-f">G(z) = 0.2 z^-1/(1 - 0.8 z^-1)</span>
+        </div>
+        <p>El factor <b>z<sup>-1</sup></b> representa un retardo de una muestra: la salida en k usa la entrada y la salida conocidas en k−1.</p>
+      </div>
+    </details>
+
     <div class="sub">2 · Sistema térmico simple: calefactor de agua</div>
     <div class="grid g2">
       <div class="diagram" style="margin:0">

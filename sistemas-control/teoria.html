@@ -142,6 +142,7 @@ details[open] summary{background:var(--main-bg);color:var(--main)}
 canvas.chart{width:100%;height:240px;background:#fbfbff;border-radius:8px;border:1px solid var(--border)}
 .chart-legend{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.7rem;font-size:.78rem}
 .chart-legend span.leg-sw{width:14px;height:4px;border-radius:2px;display:inline-block;margin-right:.35rem;vertical-align:middle}
+.euler-sim{margin:1rem 0 1.3rem}.euler-readout{background:#fbfbff;border:1px solid var(--border);border-radius:8px;padding:.75rem .9rem;font-size:.84rem;color:var(--gray);line-height:1.65}.euler-readout b{color:var(--main);font-family:'Courier New',monospace}.euler-note{font-size:.86rem;margin-top:.75rem;color:var(--gray)}
 
 /* BADGES */
 .badge-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.8rem;margin:1rem 0 1.6rem}
@@ -179,13 +180,15 @@ footer a{color:var(--main)}
 <nav>
   <div class="brand">🎛️ Sistemas de Control</div>
   <div class="tabs">
-    <button class="tab-btn active" onclick="showTab('c1')">📖 Clase 1</button>
+    <button class="tab-btn active" id="tab-c1" onclick="showTab('c1')">📖 Clase 1</button>
     <button class="tab-btn" onclick="showTab('c2')">🧮 Clase 2</button>
     <button class="tab-btn" onclick="showTab('c3')">🔁 Clase 3</button>
     <button class="tab-btn" onclick="showTab('c4')">📉 Clase 4</button>
     <button class="tab-btn" onclick="showTab('c5')">🌊 Clase 5</button>
+    <button class="tab-btn" onclick="showTab('c6')">🎚️ Clase 6</button>
     <button class="tab-btn" onclick="showTab('sim')">🧪 Simuladores</button>
     <button class="tab-btn" onclick="showTab('quiz')">🏅 Insignias · Quiz</button>
+    <button class="tab-btn" onclick="goToEulerExample()">⚡ RC + Euler</button>
     <a class="tab-btn" href="simulador-encoder.html" style="text-decoration:none">⚙️ Encoder</a>
   </div>
 </nav>
@@ -317,6 +320,36 @@ footer a{color:var(--main)}
       </div>
     </div>
 
+    <div id="ejemplo-euler" class="sub">Ejemplo resuelto · RC de primer orden discretizado con Euler hacia adelante</div>
+    <span class="supp-tag">🧮 Del sistema físico continuo a una ecuación para programar</span>
+    <div class="grid g2">
+      <div class="card bl">
+        <h3>1 · Modelo continuo del circuito RC</h3>
+        <p>Para un circuito con <b>R·C = 5 s</b>, entrada <b>u(t)</b> y tensión del capacitor <b>y(t)</b>:</p>
+        <div class="fbox"><span class="big">5·dy/dt + y = u</span><span class="sub-f">G(s) = 1/(5s + 1) · τ = 5 s</span></div>
+        <p>Ante un escalón U y condición inicial nula, la respuesta exacta es <b>y(t) = U(1 − e<sup>−t/5</sup>)</b>.</p>
+      </div>
+      <div class="card te">
+        <h3>2 · Euler hacia adelante, Ts = 1 s</h3>
+        <p>Euler usa la pendiente conocida en la muestra actual:</p>
+        <div class="fbox"><span class="big">dy/dt ≈ (y[k+1] − y[k]) / Ts</span><span class="sub-f">5·(y[k+1] − y[k])/1 + y[k] = u[k]</span></div>
+        <div class="fbox"><span class="big">y[k+1] = 0.8 y[k] + 0.2 u[k]</span><span class="sub-f">cada segundo conserva 80% de y y suma 20% de U</span></div>
+      </div>
+    </div>
+    <div class="sim-panel euler-sim" aria-labelledby="euler-sim-title">
+      <h3 id="euler-sim-title" style="color:var(--main);margin-bottom:.45rem">⚡ Simulador visual · RC continuo vs. Euler-forward</h3>
+      <p class="lead">Mové el escalón y el período de muestreo para ver cómo una sucesión de cálculos aproxima la carga continua del capacitor.</p>
+      <div class="sim-flex"><div>
+        <div class="slider-row"><label for="eulerAmplitude">Escalón U <span class="val" id="eulerAmplitudeVal">10.0 V</span></label><input id="eulerAmplitude" type="range" min="1" max="20" value="10" step="0.5" oninput="drawEulerRC()"/></div>
+        <div class="slider-row"><label for="eulerTs">Período Ts <span class="val" id="eulerTsVal">1.00 s</span></label><input id="eulerTs" type="range" min="0.25" max="2.5" value="1" step="0.25" oninput="drawEulerRC()"/></div>
+        <div class="euler-readout" id="eulerReadout"></div>
+      </div><div>
+        <canvas class="chart" id="eulerChart" aria-label="Gráfico de respuesta continua RC y muestras Euler-forward"></canvas>
+        <div class="chart-legend" aria-label="Leyenda del gráfico"><span><span class="leg-sw" style="background:#4f46e5"></span>Analítica continua: y(t) = U(1 − e<sup>−t/5</sup>)</span><span><span class="leg-sw" style="background:#ea580c"></span>Muestras y escalones de Euler-forward</span><span><span class="leg-sw" style="background:#9ca3af"></span>Entrada final U</span></div>
+        <p class="euler-note"><b>Cómo leerlo:</b> al bajar Ts aparecen más muestras por constante de tiempo y Euler sigue mejor la curva. Al subir Ts, cada salto usa una pendiente vieja durante más tiempo y el error visible aumenta.</p>
+      </div></div>
+    </div>
+
   </div>
 </div>
 
@@ -413,47 +446,6 @@ footer a{color:var(--main)}
       </div>
     </details>
 
-    <div id="ejemplo-euler" class="sub">Ejemplo resuelto · RC de primer orden discretizado con Euler hacia adelante</div>
-    <span class="supp-tag">🧮 Del sistema físico continuo a una ecuación para programar</span>
-    <div class="grid g2">
-      <div class="card bl">
-        <h3>1 · Modelo continuo del circuito RC</h3>
-        <p>Elegimos valores físicos cuyo producto es <b>R·C = 5 s</b>. Si <b>u(t) = Ve(t)</b> es la tensión de entrada y <b>y(t) = Vc(t)</b> la tensión del capacitor, el modelo RC queda:</p>
-        <div class="fbox">
-          <span class="big">5·dy/dt + y = u</span>
-          <span class="sub-f">G(s) = 1/(5s + 1)</span>
-        </div>
-        <p>Es un sistema de <b>primer orden</b> con constante de tiempo τ = 5 s: ante una entrada constante, la salida se acerca gradualmente al valor de entrada.</p>
-      </div>
-      <div class="card te">
-        <h3>2 · Aproximación de Euler hacia adelante</h3>
-        <p>Con período de muestreo <b>Ts = 1 s</b>, Euler-forward aproxima la derivada usando el valor actual:</p>
-        <div class="fbox">
-          <span class="big">dy/dt ≈ (y[k+1] − y[k]) / Ts</span>
-          <span class="sub-f">5·(y[k+1] − y[k])/1 + y[k] = u[k]</span>
-        </div>
-        <p>Despejando la salida del siguiente instante:</p>
-        <div class="fbox">
-          <span class="big">y[k+1] = 0.8 y[k] + 0.2 u[k]</span>
-          <span class="sub-f">cada segundo queda el 80% de la salida actual y entra el 20% de la entrada actual</span>
-        </div>
-      </div>
-    </div>
-    <details>
-      <summary>Pasaje a función de transferencia en z <span></span></summary>
-      <div class="dbody">
-        <p>Si se escribe la misma ecuación desplazada un instante, la convención entrada/salida es:</p>
-        <div class="fbox">
-          <span class="big">y[k] = 0.8 y[k-1] + 0.2 u[k-1]</span>
-        </div>
-        <p>Aplicando transformada Z con condiciones iniciales nulas:</p>
-        <div class="fbox">
-          <span class="big">Y(z) = 0.8 z<sup>-1</sup>Y(z) + 0.2 z<sup>-1</sup>U(z)</span>
-          <span class="sub-f">G(z) = 0.2 z^-1/(1 - 0.8 z^-1)</span>
-        </div>
-        <p>El factor <b>z<sup>-1</sup></b> representa un retardo de una muestra: la salida en k usa la entrada y la salida conocidas en k−1.</p>
-      </div>
-    </details>
 
     <div class="sub">2 · Sistema térmico simple: calefactor de agua</div>
     <div class="grid g2">
@@ -1206,6 +1198,37 @@ footer a{color:var(--main)}
 </div>
 
 
+<!-- ================= CLASE 6 ================= -->
+<div class="page" id="page-c6">
+  <div class="container">
+    <span class="src-tag">📎 Clase 6 · Control On-Off y proporcional sobre una planta de primer orden</span>
+    <div class="stitle"><span class="ico">🎚️</span>On-Off con histéresis vs. control proporcional</div>
+    <p class="lead">Ambos controladores llevan la salida hacia la referencia, pero lo hacen de forma muy distinta: On-Off conmuta un actuador real entre apagado y encendido; P modula el esfuerzo de acuerdo con el error.</p>
+    <div class="grid g2">
+      <div class="card or"><h3>On-Off con histéresis</h3><p>El actuador vale <b>0 o 10</b>. Con histéresis ±h evita conmutar ante cada variación pequeña: enciende cuando y &lt; r−h y apaga cuando y &gt; r+h. La consecuencia normal es un ciclo alrededor del setpoint.</p></div>
+      <div class="card bl"><h3>Proporcional P</h3><p>Usa <b>u = Kp(r−y)</b>. La acción se hace pequeña al acercarse a r, por eso puede quedar un error estacionario: sin integrador no alcanza exactamente la referencia.</p></div>
+    </div>
+    <div class="sim-panel" aria-labelledby="onoff-p-title">
+      <h3 id="onoff-p-title" style="color:var(--main);margin-bottom:.45rem">Simulador · τ·dy/dt + y = K·u</h3>
+      <div class="sim-flex"><div>
+        <div class="slider-row"><label for="onoffTau">τ de la planta <span class="val" id="onoffTauVal">1.00 s</span></label><input id="onoffTau" type="range" min="0.25" max="4" step="0.25" value="1" oninput="drawOnOffPSim()"/></div>
+        <div class="slider-row"><label for="onoffK">Ganancia K <span class="val" id="onoffKVal">1.00</span></label><input id="onoffK" type="range" min="0.25" max="3" step="0.25" value="1" oninput="drawOnOffPSim()"/></div>
+        <div class="slider-row"><label for="onoffKp">Ganancia Kp <span class="val" id="onoffKpVal">3.00</span></label><input id="onoffKp" type="range" min="0.5" max="10" step="0.5" value="3" oninput="drawOnOffPSim()"/></div>
+        <div class="slider-row"><label for="onoffSetpoint">Setpoint r <span class="val" id="onoffSetpointVal">1.00</span></label><input id="onoffSetpoint" type="range" min="0.25" max="3" step="0.25" value="1" oninput="drawOnOffPSim()"/></div>
+        <div class="slider-row"><label for="onoffHysteresis">Histéresis ±h <span class="val" id="onoffHysteresisVal">±0.05</span></label><input id="onoffHysteresis" type="range" min="0.01" max="0.5" step="0.01" value="0.05" oninput="drawOnOffPSim()"/></div>
+        <div class="slider-row"><label for="onoffDt">Paso de simulación dt <span class="val" id="onoffDtVal">0.01 s</span></label><input id="onoffDt" type="range" min="0.005" max="0.05" step="0.005" value="0.01" oninput="drawOnOffPSim()"/></div>
+        <div class="euler-readout" id="onoffPReadout"></div>
+      </div><div>
+        <canvas class="chart" id="onoffPChart" aria-label="Comparación de salidas On-Off y proporcional"></canvas>
+        <div class="chart-legend"><span><span class="leg-sw" style="background:#ea580c"></span>On-Off con histéresis</span><span><span class="leg-sw" style="background:#4f46e5"></span>Proporcional P</span><span><span class="leg-sw" style="background:#9ca3af"></span>Setpoint r</span></div>
+        <canvas class="chart" id="onoffEffortChart" aria-label="Pérdida y esfuerzo en ambos modos" style="margin-top:1rem"></canvas>
+        <div class="chart-legend"><span><span class="leg-sw" style="background:#b91c1c"></span>Pérdida −y/τ</span><span><span class="leg-sw" style="background:#15803d"></span>Esfuerzo K·u/τ</span><span style="color:var(--gray-lt)">trazo fino = On-Off · grueso = P</span></div>
+      </div></div>
+      <p class="euler-note"><b>Interpretación:</b> On-Off entrega esfuerzo máximo o nulo; por inercia, la salida cruza los umbrales y oscila. P equilibra pérdida y esfuerzo suavemente, pero ese equilibrio ocurre por debajo de r: el offset desaparece recién al agregar acción integral.</p>
+    </div>
+  </div>
+</div>
+
 <!-- ================= SIMULADORES ================= -->
 <div class="page" id="page-sim">
   <div class="container">
@@ -1402,12 +1425,101 @@ function showTab(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
-  event.target.classList.add('active');
+  var trigger=arguments[1]||(typeof event!=='undefined'?event.target:null);
+  if(trigger) trigger.classList.add('active');
   if(id==='quiz'){ renderBadges(); }
   if(id==='sim'){ drawFirstOrder(); drawSecondOrder(); drawAcChart(); }
   if(id==='c4'){ onGainKChange(); onDelayChange(); }
   if(id==='c5'){ initC5(); }
+  if(id==='c6'){ drawOnOffPSim(); }
 }
+
+function goToEulerExample(){
+  showTab('c1',document.getElementById('tab-c1'));
+  requestAnimationFrame(function(){
+    var example=document.getElementById('ejemplo-euler');
+    if(example) example.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+}
+
+/* ===================== SIMULADOR: RC CONTINUO VS. EULER ===================== */
+function drawEulerRC(){
+  var cv=document.getElementById('eulerChart');
+  var amplitude=document.getElementById('eulerAmplitude');
+  var tsControl=document.getElementById('eulerTs');
+  if(!cv||!amplitude||!tsControl) return;
+  var U=parseFloat(amplitude.value),Ts=parseFloat(tsControl.value),tau=5,tMax=25;
+  document.getElementById('eulerAmplitudeVal').textContent=U.toFixed(1)+' V';
+  document.getElementById('eulerTsVal').textContent=Ts.toFixed(2)+' s';
+  var a=1-Ts/tau,b=Ts/tau,y=0,samples=[{t:0,y:0}];
+  for(var t=0;t<tMax-1e-9;t+=Ts){
+    y=a*y+b*U;
+    samples.push({t:Math.min(t+Ts,tMax),y:y});
+  }
+  var nearest=samples.reduce(function(best,s){return Math.abs(s.t-tau)<Math.abs(best.t-tau)?s:best;});
+  var exactTau=U*(1-Math.exp(-1));
+  document.getElementById('eulerReadout').innerHTML='<b>Euler:</b> y[k+1] = '+a.toFixed(2)+'·y[k] + '+b.toFixed(2)+'·U<br>'+
+    '<b>En t ≈ 5 s:</b> analítica '+exactTau.toFixed(2)+' V · Euler '+nearest.y.toFixed(2)+' V<br>'+
+    (Ts===1?'<b>Con Ts = 1 s:</b> y[k+1] = 0.8·y[k] + 0.2·U':'<b>Regla:</b> Ts/5 es la fracción de U que entra en cada paso.');
+
+  var ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1;
+  var w=cv.clientWidth||600,h=cv.clientHeight||240;
+  if(cv.width!==w*dpr||cv.height!==h*dpr){cv.width=w*dpr;cv.height=h*dpr;}
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+  var padL=42,padR=12,padT=14,padB=30,pw=w-padL-padR,ph=h-padT-padB;
+  var yMax=Math.max(1,U*1.12),xOf=function(t){return padL+t/tMax*pw;},yOf=function(v){return padT+(1-v/yMax)*ph;};
+  ctx.font='10px Segoe UI';ctx.lineWidth=1;ctx.strokeStyle='#e2e8f0';ctx.fillStyle='#6b7280';
+  for(var grid=0;grid<=5;grid++){
+    var gv=U*grid/5,gy=yOf(gv);ctx.beginPath();ctx.moveTo(padL,gy);ctx.lineTo(w-padR,gy);ctx.stroke();ctx.fillText(gv.toFixed(1),4,gy+3);
+  }
+  for(var gx=0;gx<=5;gx++){
+    var gt=tMax*gx/5,x=xOf(gt);ctx.beginPath();ctx.moveTo(x,padT);ctx.lineTo(x,padT+ph);ctx.stroke();ctx.fillText(gt.toFixed(0)+'s',x-7,h-10);
+  }
+  ctx.strokeStyle='#9ca3af';ctx.setLineDash([5,4]);ctx.beginPath();ctx.moveTo(padL,yOf(U));ctx.lineTo(w-padR,yOf(U));ctx.stroke();ctx.setLineDash([]);
+  ctx.strokeStyle='#4f46e5';ctx.lineWidth=2.5;ctx.beginPath();
+  for(var i=0;i<=300;i++){var time=tMax*i/300,continuous=U*(1-Math.exp(-time/tau));i===0?ctx.moveTo(xOf(time),yOf(continuous)):ctx.lineTo(xOf(time),yOf(continuous));}
+  ctx.stroke();
+  ctx.strokeStyle='#ea580c';ctx.lineWidth=2;ctx.beginPath();
+  samples.forEach(function(s,index){
+    var previous=index? samples[index-1]:s;
+    if(index===0) ctx.moveTo(xOf(s.t),yOf(s.y));
+    else {ctx.lineTo(xOf(s.t),yOf(previous.y));ctx.lineTo(xOf(s.t),yOf(s.y));}
+  });ctx.stroke();
+  ctx.fillStyle='#ea580c';samples.forEach(function(s){ctx.beginPath();ctx.arc(xOf(s.t),yOf(s.y),3,0,Math.PI*2);ctx.fill();});
+  ctx.fillStyle='#6b7280';ctx.font='10px Segoe UI';ctx.fillText('y (V)',5,padT+9);ctx.fillText('tiempo (s) →',padL+pw/2-30,h-10);
+}
+drawEulerRC();
+
+/* ===================== CLASE 6: ON-OFF VS. P ===================== */
+function drawOnOffPSim(){
+  var keys=['onoffTau','onoffK','onoffKp','onoffSetpoint','onoffHysteresis','onoffDt'];
+  if(!document.getElementById(keys[0])) return;
+  var v=keys.map(function(id){return parseFloat(document.getElementById(id).value);}),tau=v[0],K=v[1],Kp=v[2],r=v[3],hys=v[4],dt=v[5],tMax=15,n=Math.round(tMax/dt);
+  ['onoffTauVal','onoffKVal','onoffKpVal','onoffSetpointVal','onoffHysteresisVal','onoffDtVal'].forEach(function(id,i){document.getElementById(id).textContent=(i===4?'±':'')+v[i].toFixed(i===5?3:2)+(i===0||i===5?' s':'');});
+  var yo=0,yp=0,uo=10,on=[],prop=[],onLoss=[],onEff=[],pLoss=[],pEff=[];
+  for(var i=0;i<=n;i++){
+    on.push(yo);prop.push(yp);onLoss.push(-yo/tau);onEff.push(K*uo/tau);
+    var up=Kp*(r-yp);pLoss.push(-yp/tau);pEff.push(K*up/tau);
+    if(yo<r-hys) uo=10; else if(yo>r+hys) uo=0;
+    yo+=dt*(-yo+K*uo)/tau;yp+=dt*(-yp+K*up)/tau;
+  }
+  var yss=K*Kp*r/(1+K*Kp),offset=r/(1+K*Kp);
+  document.getElementById('onoffPReadout').innerHTML='<b>Equilibrio P:</b> y<sub>ss</sub> = K·Kp·r/(1 + K·Kp) = '+yss.toFixed(3)+'<br><b>Offset:</b> r/(1 + K·Kp) = '+offset.toFixed(3)+'<br><b>On-Off:</b> conmuta entre 0 y 10 alrededor de r ± '+hys.toFixed(2)+'.';
+  function chart(id,series,lo,hi){
+    var cv=document.getElementById(id),ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1,w=cv.clientWidth||600,h=cv.clientHeight||240;
+    if(cv.width!==w*dpr||cv.height!==h*dpr){cv.width=w*dpr;cv.height=h*dpr;}ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+    var l=42,rr=12,tt=12,bb=27,pw=w-l-rr,ph=h-tt-bb,x=function(i){return l+i/n*pw;},y=function(z){return tt+(hi-z)/(hi-lo)*ph;};
+    ctx.font='10px Segoe UI';ctx.strokeStyle='#e2e8f0';ctx.fillStyle='#6b7280';ctx.lineWidth=1;
+    for(var g=0;g<=4;g++){var gv=lo+(hi-lo)*g/4,gy=y(gv);ctx.beginPath();ctx.moveTo(l,gy);ctx.lineTo(w-rr,gy);ctx.stroke();ctx.fillText(gv.toFixed(1),4,gy+3);}
+    [0,5,10,15].forEach(function(t){ctx.fillText(t+'s',x(Math.round(t/dt))-7,h-8);});
+    series.forEach(function(s){ctx.strokeStyle=s.color;ctx.lineWidth=s.width||2;ctx.setLineDash(s.dash||[]);ctx.beginPath();s.data.forEach(function(z,i){i?ctx.lineTo(x(i),y(z)):ctx.moveTo(x(i),y(z));});ctx.stroke();ctx.setLineDash([]);});
+    ctx.fillStyle='#6b7280';ctx.fillText('tiempo (s) →',l+pw/2-30,h-8);
+  }
+  var top=Math.max(r*1.25,K*10*1.05,1.2);chart('onoffPChart',[{data:on,color:'#ea580c'},{data:prop,color:'#4f46e5'},{data:Array(n+1).fill(r),color:'#9ca3af',dash:[5,4],width:1.5}],0,top);
+  var m=Math.max.apply(null,onEff.concat(pEff,onLoss,pLoss).map(Math.abs).concat([1]))*1.15;
+  chart('onoffEffortChart',[{data:onLoss,color:'rgba(185,28,28,.55)',width:1},{data:onEff,color:'rgba(21,128,61,.55)',width:1},{data:pLoss,color:'#b91c1c',width:2.3},{data:pEff,color:'#15803d',width:2.3}],-m,m);
+}
+drawOnOffPSim();
 
 /* ===================== STORE / BADGES ===================== */
 const Store = {
@@ -1626,7 +1738,7 @@ function drawSecondOrder(){
   info.textContent = txt;
 }
 
-window.addEventListener('resize', ()=>{ drawFirstOrder(); drawSecondOrder(); drawAcChart(); });
+window.addEventListener('resize', ()=>{ drawFirstOrder(); drawSecondOrder(); drawAcChart(); drawEulerRC(); drawOnOffPSim(); });
 drawFirstOrder();
 drawSecondOrder();
 

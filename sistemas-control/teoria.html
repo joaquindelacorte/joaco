@@ -143,6 +143,8 @@ canvas.chart{width:100%;height:240px;background:#fbfbff;border-radius:8px;border
 .chart-legend{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.7rem;font-size:.78rem}
 .chart-legend span.leg-sw{width:14px;height:4px;border-radius:2px;display:inline-block;margin-right:.35rem;vertical-align:middle}
 .euler-sim{margin:1rem 0 1.3rem}.euler-readout{background:#fbfbff;border:1px solid var(--border);border-radius:8px;padding:.75rem .9rem;font-size:.84rem;color:var(--gray);line-height:1.65}.euler-readout b{color:var(--main);font-family:'Courier New',monospace}.euler-note{font-size:.86rem;margin-top:.75rem;color:var(--gray)}
+.process-visual{margin-top:1rem;padding:1rem;border:1px solid var(--border);border-radius:10px;background:#fbfbff;font-size:.85rem}.process-visual p{margin:.2rem 0 .6rem}.anim-btn{min-height:36px;margin:0 .4rem .6rem 0;padding:.4rem .75rem;border:1px solid var(--main-lt);border-radius:7px;background:#fff;color:var(--main);font:700 .8rem inherit;cursor:pointer}.anim-btn:hover{background:var(--main-bg)}.process-svg{display:block;width:100%;max-width:620px;height:auto;margin:auto}.tank-outline{fill:#fff;stroke:#475569;stroke-width:3}.water{transition:height .08s,y .08s}.on-water{fill:#fb923c}.p-water{fill:#818cf8}.setpoint-line{stroke:#64748b;stroke-width:2;stroke-dasharray:6 4}.actuator-off{fill:#cbd5e1}.actuator-on{fill:#f97316}.valve-track{fill:#cbd5e1}.valve-fill{fill:#4f46e5}.process-svg text{fill:#374151;font:700 13px 'Segoe UI',sans-serif}.process-svg .svg-small{font:11px 'Segoe UI',sans-serif}.sr-status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(prefers-reduced-motion:reduce){.water{transition:none}}
 
 /* BADGES */
 .badge-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.8rem;margin:1rem 0 1.6rem}
@@ -325,29 +327,58 @@ footer a{color:var(--main)}
     <div class="grid g2">
       <div class="card bl">
         <h3>1 · Modelo continuo del circuito RC</h3>
-        <p>Para un circuito con <b>R·C = 5 s</b>, entrada <b>u(t)</b> y tensión del capacitor <b>y(t)</b>:</p>
-        <div class="fbox"><span class="big">5·dy/dt + y = u</span><span class="sub-f">G(s) = 1/(5s + 1) · τ = 5 s</span></div>
-        <p>Ante un escalón U y condición inicial nula, la respuesta exacta es <b>y(t) = U(1 − e<sup>−t/5</sup>)</b>.</p>
+        <p><b>u(t)</b> es la tensión que aplica la fuente (V), <b>y(t)</b> la tensión medida en el capacitor (V), <b>R</b> la resistencia (Ω) y <b>C</b> la capacitancia (F). La corriente <b>i(t)</b> (A) es la misma por R y C porque están en serie.</p>
+        <div class="fbox"><span class="big">RC·dy/dt + y = u</span><span class="sub-f">para este ejemplo: RC = τ = 5 s → 5·dy/dt + y = u</span></div>
+        <p>El capacitor guarda carga: para que y cambie tiene que circular corriente. Por eso y no puede saltar instantáneamente cuando u salta; se acerca gradualmente. <b>τ = R·C</b> tiene unidades Ω·F = s y fija la rapidez: a mayor τ, más lenta la carga. Con y(0)=0 y un escalón constante U, la solución exacta es <b>y(t) = U(1 − e<sup>−t/5</sup>)</b>; al cabo de τ llega aproximadamente al 63% de U.</p>
       </div>
       <div class="card te">
         <h3>2 · Euler hacia adelante, Ts = 1 s</h3>
-        <p>Euler usa la pendiente conocida en la muestra actual:</p>
-        <div class="fbox"><span class="big">dy/dt ≈ (y[k+1] − y[k]) / Ts</span><span class="sub-f">5·(y[k+1] − y[k])/1 + y[k] = u[k]</span></div>
-        <div class="fbox"><span class="big">y[k+1] = 0.8 y[k] + 0.2 u[k]</span><span class="sub-f">cada segundo conserva 80% de y y suma 20% de U</span></div>
+        <p>Una computadora no conoce una curva completa: guarda muestras y[0], y[1], … separadas por <b>Ts</b> segundos. Euler reemplaza la pendiente actual por el cambio que predice hasta la próxima muestra.</p>
+        <div class="fbox"><span class="big">dy/dt ≈ (y[k+1] − y[k]) / Ts</span><span class="sub-f">en la ecuación: τ·(y[k+1] − y[k])/Ts + y[k] = u[k]</span></div>
+        <div class="fbox"><span class="big">y[k+1] = (1 − Ts/τ)y[k] + (Ts/τ)u[k]</span><span class="sub-f">con τ = 5 s y Ts = 1 s: y[k+1] = 0.8·y[k] + 0.2·u[k]</span></div>
+        <p>Así, cada segundo se conserva el 80% del valor ya cargado y se agrega el 20% de la entrada. No es una fórmula mágica: sale de despejar y[k+1].</p>
       </div>
     </div>
+    <details>
+      <summary>Ver de dónde sale: de Kirchhoff a RC·dy/dt + y = u</summary>
+      <div class="dbody"><ol class="deriv-steps">
+        <li>Recorré la única malla: la fuente entrega <b>u</b>; en la resistencia cae <b>R·i</b> (ley de Ohm); en el capacitor cae <b>y</b>. Kirchhoff dice: <b>u = R·i + y</b>.</li>
+        <li>Para un capacitor, la corriente necesaria para cambiar su tensión es <b>i = C·dy/dt</b>. Si y cambia rápido, hace falta más corriente.</li>
+        <li>Sustituí esa corriente en Kirchhoff: <b>u = R·(C·dy/dt) + y = RC·dy/dt + y</b>.</li>
+        <li>Reordenando: <b>RC·dy/dt + y = u</b>. El producto <b>RC</b> se llama <b>τ</b>: R limita la corriente y C determina cuánta carga hace falta; juntas determinan cuánto tarda y en responder.</li>
+      </ol></div>
+    </details>
+    <details>
+      <summary>Ver de dónde sale: Euler, paso por paso</summary>
+      <div class="dbody"><ol class="deriv-steps">
+        <li>Partí de <b>τ·dy/dt + y = u</b> y mirá el instante k: reemplazá <b>dy/dt</b> por <b>(y[k+1]−y[k])/Ts</b>.</li>
+        <li>Queda <b>τ(y[k+1]−y[k])/Ts + y[k] = u[k]</b>.</li>
+        <li>Multiplicá por Ts/τ: <b>y[k+1]−y[k] + (Ts/τ)y[k] = (Ts/τ)u[k]</b>.</li>
+        <li>Pasá y[k] al otro lado: <b>y[k+1] = (1−Ts/τ)y[k] + (Ts/τ)u[k]</b>.</li>
+        <li>Con τ=5 s y Ts=1 s, Ts/τ=1/5=0.2 y 1−Ts/τ=0.8. Por eso aparecen <b>0.8</b> y <b>0.2</b>.</li>
+      </ol></div>
+    </details>
     <div class="sim-panel euler-sim" aria-labelledby="euler-sim-title">
       <h3 id="euler-sim-title" style="color:var(--main);margin-bottom:.45rem">⚡ Simulador visual · RC continuo vs. Euler-forward</h3>
-      <p class="lead">Mové el escalón y el período de muestreo para ver cómo una sucesión de cálculos aproxima la carga continua del capacitor.</p>
+      <p class="lead"><b>Cómo usar el simulador RC:</b> primero mové <b>U</b>: cambia la altura final de la entrada y de ambas respuestas, en voltios. Después mové <b>Ts</b>: no cambia el circuito (τ sigue en 5 s), sino cada cuánto Euler recalcula; un Ts menor da más puntos y normalmente una aproximación más fiel.</p>
       <div class="sim-flex"><div>
         <div class="slider-row"><label for="eulerAmplitude">Escalón U <span class="val" id="eulerAmplitudeVal">10.0 V</span></label><input id="eulerAmplitude" type="range" min="1" max="20" value="10" step="0.5" oninput="drawEulerRC()"/></div>
         <div class="slider-row"><label for="eulerTs">Período Ts <span class="val" id="eulerTsVal">1.00 s</span></label><input id="eulerTs" type="range" min="0.25" max="2.5" value="1" step="0.25" oninput="drawEulerRC()"/></div>
         <div class="euler-readout" id="eulerReadout"></div>
       </div><div>
         <canvas class="chart" id="eulerChart" aria-label="Gráfico de respuesta continua RC y muestras Euler-forward"></canvas>
-        <div class="chart-legend" aria-label="Leyenda del gráfico"><span><span class="leg-sw" style="background:#4f46e5"></span>Analítica continua: y(t) = U(1 − e<sup>−t/5</sup>)</span><span><span class="leg-sw" style="background:#ea580c"></span>Muestras y escalones de Euler-forward</span><span><span class="leg-sw" style="background:#9ca3af"></span>Entrada final U</span></div>
-        <p class="euler-note"><b>Cómo leerlo:</b> al bajar Ts aparecen más muestras por constante de tiempo y Euler sigue mejor la curva. Al subir Ts, cada salto usa una pendiente vieja durante más tiempo y el error visible aumenta.</p>
+        <div class="chart-legend" aria-label="Leyenda del gráfico"><span><span class="leg-sw" style="background:#4f46e5"></span>Azul continuo: solución física exacta y(t)</span><span><span class="leg-sw" style="background:#ea580c"></span>Naranja en escalones y puntos: cálculos y[k] de Euler</span><span><span class="leg-sw" style="background:#9ca3af"></span>Gris punteado: valor final de entrada U</span></div>
+        <p class="euler-note"><b>Cómo leerlo:</b> eje horizontal = tiempo (s); eje vertical = tensión y (V). Cada punto naranja es una muestra y cada tramo horizontal mantiene el último cálculo hasta la siguiente muestra. Compará esos puntos con la curva azul: al bajar Ts aparecen más muestras por constante de tiempo y Euler la sigue mejor; al subir Ts usa una pendiente vieja durante más tiempo y el error visible aumenta.</p>
       </div></div>
+      <div class="process-visual" aria-labelledby="rc-anim-title">
+        <div><b id="rc-anim-title">Animación · carga del capacitor y muestras de Euler</b><p>La barra azul representa la tensión continua del capacitor; los escalones naranjas son las estimaciones que Euler actualiza cada Ts. Cambiar U o Ts también cambia esta vista.</p></div>
+        <button class="anim-btn" id="rcAnimToggle" type="button" aria-pressed="false" onclick="toggleRCAnimation()">Pausar animación</button>
+        <button class="anim-btn" type="button" onclick="replayRCAnimation()">Repetir</button>
+        <svg class="process-svg" viewBox="0 0 620 155" role="img" aria-describedby="rcAnimDesc"><desc id="rcAnimDesc">Indicador de carga continua azul y escalera naranja de Euler que avanza hasta el escalón de entrada.</desc>
+          <text id="rcInputLabel" x="20" y="25">u = U</text><line id="rcInputLine" x1="90" y1="22" x2="590" y2="22" class="setpoint-line"/><rect x="48" y="45" width="100" height="84" rx="8" class="tank-outline"/><rect id="rcCharge" x="50" y="127" width="96" height="0" class="water p-water"/><text x="98" y="147" text-anchor="middle" class="svg-small">y continua</text><path id="rcEulerStair" d="M190 127 H210 V127" fill="none" stroke="#ea580c" stroke-width="4"/><text x="390" y="147" text-anchor="middle" class="svg-small">puntos/escalones y[k] de Euler</text>
+        </svg>
+        <p class="sr-status" id="rcAnimStatus" aria-live="polite">Animación reproduciéndose.</p>
+      </div>
     </div>
 
   </div>
@@ -1205,11 +1236,32 @@ footer a{color:var(--main)}
     <div class="stitle"><span class="ico">🎚️</span>On-Off con histéresis vs. control proporcional</div>
     <p class="lead">Ambos controladores llevan la salida hacia la referencia, pero lo hacen de forma muy distinta: On-Off conmuta un actuador real entre apagado y encendido; P modula el esfuerzo de acuerdo con el error.</p>
     <div class="grid g2">
-      <div class="card or"><h3>On-Off con histéresis</h3><p>El actuador vale <b>0 o 10</b>. Con histéresis ±h evita conmutar ante cada variación pequeña: enciende cuando y &lt; r−h y apaga cuando y &gt; r+h. La consecuencia normal es un ciclo alrededor del setpoint.</p></div>
-      <div class="card bl"><h3>Proporcional P</h3><p>Usa <b>u = Kp(r−y)</b>. La acción se hace pequeña al acercarse a r, por eso puede quedar un error estacionario: sin integrador no alcanza exactamente la referencia.</p></div>
+      <div class="card or"><h3>On-Off con histéresis</h3><p>El actuador vale <b>0 o 10</b>. La banda muerta evita conmutar ante cada variación pequeña: enciende si <b>e = r−y &gt; h</b> (equivale a y &lt; r−h), apaga si <b>e &lt; −h</b> (y &gt; r+h) y, dentro de la banda, conserva su último estado. Como la planta tarda en responder, al apagar todavía sube un poco y al encender todavía baja: por eso cicla.</p></div>
+      <div class="card bl"><h3>Proporcional P</h3><p>Usa <b>u = Kp(r−y)</b>: error grande → más esfuerzo; al acercarse a r, u se reduce. Para sostener una salida y hace falta esfuerzo, así que queda un error que produzca ese u; sin integrador no alcanza exactamente r.</p></div>
     </div>
+    <details>
+      <summary>Ver de dónde sale: qué significa τ·dy/dt + y = K·u</summary>
+      <div class="dbody"><ol class="deriv-steps">
+        <li><b>y</b> es la salida medida (por ejemplo, nivel de un tanque en m o temperatura en °C); <b>u</b> es la orden al actuador. La ecuación <b>τ·dy/dt + y = K·u</b> modela una planta que no puede cambiar de golpe.</li>
+        <li><b>dy/dt</b> es la velocidad de cambio de y (unidades de y/s). El término <b>τ·dy/dt</b> representa la inercia: con τ en segundos, un τ mayor hace la respuesta más lenta.</li>
+        <li><b>y</b> es la pérdida o retorno natural: cuanto más alta la salida, más cuesta seguir subiéndola. <b>K·u</b> es el efecto que aporta el actuador; K convierte unidades de u en unidades de y.</li>
+        <li>Despejando la pendiente: <b>dy/dt = −y/τ + K·u/τ</b>. El primer término (rojo en el panel inferior) baja y; el segundo (verde) la sube. Cuando se igualan, dy/dt=0 y la salida queda constante.</li>
+        <li>Euler hacia adelante lo lleva a pasos: <b>y[k+1] = y[k] + dt·(−y[k]/τ + K·u[k]/τ)</b>. <b>dt</b>, en segundos, es el intervalo de cálculo: menor dt da una simulación más fina; no es un parámetro físico de la planta.</li>
+      </ol></div>
+    </details>
+    <details>
+      <summary>Ver de dónde sale: el equilibrio proporcional y su offset</summary>
+      <div class="dbody"><ol class="deriv-steps">
+        <li>En equilibrio la salida deja de cambiar, por lo tanto <b>dy/dt = 0</b>. En la planta queda <b>y = K·u</b>.</li>
+        <li>Para P, <b>u = Kp(r−y)</b>. Sustituí: <b>y = K·Kp(r−y)</b>.</li>
+        <li>Distribuí: <b>y = K·Kp·r − K·Kp·y</b>. Reuní los términos con y: <b>y(1 + K·Kp) = K·Kp·r</b>.</li>
+        <li>Dividí por (1 + K·Kp): <b>y<sub>ss</sub> = K·Kp·r/(1 + K·Kp)</b>. Entonces <b>offset = r−y<sub>ss</sub> = r/(1 + K·Kp)</b>.</li>
+        <li>Kp grande reduce el offset, pero no lo hace exactamente cero con un Kp finito. La acción integral es la que acumula ese error y puede eliminarlo.</li>
+      </ol></div>
+    </details>
     <div class="sim-panel" aria-labelledby="onoff-p-title">
       <h3 id="onoff-p-title" style="color:var(--main);margin-bottom:.45rem">Simulador · τ·dy/dt + y = K·u</h3>
+      <p class="lead"><b>Cómo usar el simulador:</b> empezá con los valores iniciales. Cambiá <b>r</b> para mover la meta; <b>τ</b> para hacer la planta lenta o rápida; <b>K</b> para cambiar cuánto efecto tiene una misma orden; <b>Kp</b> para reducir el offset proporcional; <b>±h</b> para ensanchar o achicar la banda del On-Off; y <b>dt</b> para la resolución numérica. τ y dt se miden en s; r, y y h comparten unidades; K tiene unidades de y por unidad de u; Kp tiene unidades de u por unidad de y.</p>
       <div class="sim-flex"><div>
         <div class="slider-row"><label for="onoffTau">τ de la planta <span class="val" id="onoffTauVal">1.00 s</span></label><input id="onoffTau" type="range" min="0.25" max="4" step="0.25" value="1" oninput="drawOnOffPSim()"/></div>
         <div class="slider-row"><label for="onoffK">Ganancia K <span class="val" id="onoffKVal">1.00</span></label><input id="onoffK" type="range" min="0.25" max="3" step="0.25" value="1" oninput="drawOnOffPSim()"/></div>
@@ -1219,11 +1271,25 @@ footer a{color:var(--main)}
         <div class="slider-row"><label for="onoffDt">Paso de simulación dt <span class="val" id="onoffDtVal">0.01 s</span></label><input id="onoffDt" type="range" min="0.005" max="0.05" step="0.005" value="0.01" oninput="drawOnOffPSim()"/></div>
         <div class="euler-readout" id="onoffPReadout"></div>
       </div><div>
-        <canvas class="chart" id="onoffPChart" aria-label="Comparación de salidas On-Off y proporcional"></canvas>
-        <div class="chart-legend"><span><span class="leg-sw" style="background:#ea580c"></span>On-Off con histéresis</span><span><span class="leg-sw" style="background:#4f46e5"></span>Proporcional P</span><span><span class="leg-sw" style="background:#9ca3af"></span>Setpoint r</span></div>
-        <canvas class="chart" id="onoffEffortChart" aria-label="Pérdida y esfuerzo en ambos modos" style="margin-top:1rem"></canvas>
-        <div class="chart-legend"><span><span class="leg-sw" style="background:#b91c1c"></span>Pérdida −y/τ</span><span><span class="leg-sw" style="background:#15803d"></span>Esfuerzo K·u/τ</span><span style="color:var(--gray-lt)">trazo fino = On-Off · grueso = P</span></div>
+        <canvas class="chart" id="onoffPChart" aria-label="Panel superior: comparación de salidas On-Off y proporcional"></canvas>
+        <div class="chart-legend"><span><span class="leg-sw" style="background:#ea580c"></span>Naranja: salida On-Off con histéresis</span><span><span class="leg-sw" style="background:#4f46e5"></span>Azul: salida proporcional P</span><span><span class="leg-sw" style="background:#9ca3af"></span>Gris punteado: setpoint r</span></div>
+        <p class="euler-note"><b>Panel superior:</b> eje x = tiempo (s); eje y = salida y, en las mismas unidades que r. Mirá cómo el naranja cruza alternadamente la banda alrededor de r, mientras el azul se estabiliza por debajo de la línea gris: esa distancia es el offset.</p>
+        <canvas class="chart" id="onoffEffortChart" aria-label="Panel inferior: pérdida y esfuerzo en ambos modos" style="margin-top:1rem"></canvas>
+        <div class="chart-legend"><span><span class="leg-sw" style="background:#b91c1c"></span>Rojo: pérdida −y/τ</span><span><span class="leg-sw" style="background:#15803d"></span>Verde: esfuerzo K·u/τ</span><span style="color:var(--gray-lt)">fino = On-Off; grueso = P</span></div>
+        <p class="euler-note"><b>Panel inferior:</b> eje x = tiempo (s); eje y = contribución a dy/dt (unidades de y/s). La suma rojo + verde es la pendiente de y. En P, las líneas gruesas se igualan; en On-Off, la verde fina salta entre máximo y cero.</p>
       </div></div>
+      <div class="process-visual" aria-labelledby="process-visual-title">
+        <div><b id="process-visual-title">Animación intuitiva · dos tanques, misma planta</b><p>Izquierda: el interruptor On-Off sólo abre/cierra y el nivel cicla. Derecha: la válvula P se abre proporcionalmente al error y queda parcialmente abierta para sostener un nivel algo menor que r.</p></div>
+        <button class="anim-btn" id="processAnimToggle" type="button" aria-pressed="false" onclick="toggleProcessAnimation()">Pausar animación</button>
+        <button class="anim-btn" type="button" onclick="replayProcessAnimation()">Repetir</button>
+        <svg class="process-svg" viewBox="0 0 620 190" role="img" aria-describedby="processAnimDesc"><desc id="processAnimDesc">Dos tanques animados: a la izquierda un actuador On-Off que alterna encendido y apagado; a la derecha una válvula proporcional parcialmente abierta. Una línea punteada representa el setpoint.</desc>
+          <text x="105" y="18" text-anchor="middle">On-Off</text><text x="420" y="18" text-anchor="middle">Proporcional P</text>
+          <rect x="45" y="35" width="120" height="130" rx="8" class="tank-outline"/><rect id="onTankWater" x="47" y="130" width="116" height="33" class="water on-water"/><line id="onTankSetpoint" x1="45" x2="165" y1="92" y2="92" class="setpoint-line"/>
+          <rect x="320" y="35" width="120" height="130" rx="8" class="tank-outline"/><rect id="pTankWater" x="322" y="130" width="116" height="33" class="water p-water"/><line id="pTankSetpoint" x1="320" x2="440" y1="92" y2="92" class="setpoint-line"/>
+          <circle id="onActuator" cx="105" cy="178" r="8" class="actuator-off"/><text x="122" y="182" class="svg-small">bomba 0 / 10</text><rect x="390" y="172" width="48" height="12" rx="6" class="valve-track"/><rect id="pValve" x="390" y="172" width="25" height="12" rx="6" class="valve-fill"/><text x="452" y="182" class="svg-small">válvula u</text>
+        </svg>
+        <p class="sr-status" id="processAnimStatus" aria-live="polite">Animación reproduciéndose.</p>
+      </div>
       <p class="euler-note"><b>Interpretación:</b> On-Off entrega esfuerzo máximo o nulo; por inercia, la salida cruza los umbrales y oscila. P equilibra pérdida y esfuerzo suavemente, pero ese equilibrio ocurre por debajo de r: el offset desaparece recién al agregar acción integral.</p>
     </div>
   </div>
@@ -1490,6 +1556,40 @@ function drawEulerRC(){
 }
 drawEulerRC();
 
+/* ===================== ANIMACIONES PEDAGÓGICAS ===================== */
+var prefersReducedMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var rcAnimation={paused:prefersReducedMotion,start:null,frame:null};
+var processAnimation={paused:prefersReducedMotion,start:null,frame:null};
+function setAnimButton(id,paused){var b=document.getElementById(id);if(b){b.textContent=paused?'Reanudar animación':'Pausar animación';b.setAttribute('aria-pressed',paused?'true':'false');}}
+function drawRCAnimation(now){
+  var charge=document.getElementById('rcCharge'),stair=document.getElementById('rcEulerStair');
+  if(!charge||!stair) return;
+  if(rcAnimation.start===null) rcAnimation.start=now;
+  var elapsed=((now-rcAnimation.start)%6000)/6000*20;
+  var ts=parseFloat(document.getElementById('eulerTs').value),U=parseFloat(document.getElementById('eulerAmplitude').value),tau=5,continuous=U*(1-Math.exp(-elapsed/tau)),steps=Math.floor(elapsed/ts),ye=0,path='M190 127';
+  for(var k=0;k<steps;k++){var x=190+(k+1)*ts/20*390;path+=' H'+x.toFixed(1);ye=(1-ts/tau)*ye+ts/tau*U;path+=' V'+(127-82*ye/20).toFixed(1);}
+  var finalX=190+Math.min(elapsed,20)/20*390;path+=' H'+finalX.toFixed(1);
+  charge.setAttribute('y',(127-82*continuous/20).toFixed(1));charge.setAttribute('height',(82*continuous/20).toFixed(1));stair.setAttribute('d',path);document.getElementById('rcInputLabel').textContent='u = '+U.toFixed(1)+' V';var inputY=(127-82*U/20).toFixed(1);document.getElementById('rcInputLine').setAttribute('y1',inputY);document.getElementById('rcInputLine').setAttribute('y2',inputY);
+  if(!rcAnimation.paused) rcAnimation.frame=requestAnimationFrame(drawRCAnimation);
+}
+function toggleRCAnimation(){rcAnimation.paused=!rcAnimation.paused;setAnimButton('rcAnimToggle',rcAnimation.paused);document.getElementById('rcAnimStatus').textContent=rcAnimation.paused?'Animación pausada.':'Animación reproduciéndose.';if(!rcAnimation.paused){rcAnimation.start=null;rcAnimation.frame=requestAnimationFrame(drawRCAnimation);}}
+function replayRCAnimation(){rcAnimation.start=null;rcAnimation.paused=false;setAnimButton('rcAnimToggle',false);document.getElementById('rcAnimStatus').textContent='Animación reiniciada.';cancelAnimationFrame(rcAnimation.frame);rcAnimation.frame=requestAnimationFrame(drawRCAnimation);}
+function drawProcessAnimation(now){
+  var onWater=document.getElementById('onTankWater'),pWater=document.getElementById('pTankWater');
+  if(!onWater||!pWater) return;
+  if(processAnimation.start===null) processAnimation.start=now;
+  var tau=parseFloat(document.getElementById('onoffTau').value),K=parseFloat(document.getElementById('onoffK').value),Kp=parseFloat(document.getElementById('onoffKp').value),r=parseFloat(document.getElementById('onoffSetpoint').value),h=parseFloat(document.getElementById('onoffHysteresis').value),dt=parseFloat(document.getElementById('onoffDt').value),t=((now-processAnimation.start)%7000)/7000*12,yo=0,yp=0,uo=10,up=0;
+  for(var j=0;j<Math.floor(t/dt);j++){if(yo<r-h) uo=10;else if(yo>r+h) uo=0;up=Kp*(r-yp);yo+=dt*(-yo+K*uo)/tau;yp+=dt*(-yp+K*up)/tau;}
+  var top=Math.max(r*1.25,K*10*1.05,1.2),water=function(el,value){var height=Math.max(0,Math.min(126,130*value/top));el.setAttribute('y',(163-height).toFixed(1));el.setAttribute('height',height.toFixed(1));};
+  water(onWater,yo);water(pWater,yp);
+  var setY=(165-130*r/top).toFixed(1);document.getElementById('onTankSetpoint').setAttribute('y1',setY);document.getElementById('onTankSetpoint').setAttribute('y2',setY);document.getElementById('pTankSetpoint').setAttribute('y1',setY);document.getElementById('pTankSetpoint').setAttribute('y2',setY);
+  document.getElementById('onActuator').setAttribute('class',uo?'actuator-on':'actuator-off');document.getElementById('pValve').setAttribute('width',Math.max(2,Math.min(48,48*up/Math.max(10,Kp*r))).toFixed(1));
+  if(!processAnimation.paused) processAnimation.frame=requestAnimationFrame(drawProcessAnimation);
+}
+function toggleProcessAnimation(){processAnimation.paused=!processAnimation.paused;setAnimButton('processAnimToggle',processAnimation.paused);document.getElementById('processAnimStatus').textContent=processAnimation.paused?'Animación pausada.':'Animación reproduciéndose.';if(!processAnimation.paused){processAnimation.start=null;processAnimation.frame=requestAnimationFrame(drawProcessAnimation);}}
+function replayProcessAnimation(){processAnimation.start=null;processAnimation.paused=false;setAnimButton('processAnimToggle',false);document.getElementById('processAnimStatus').textContent='Animación reiniciada.';cancelAnimationFrame(processAnimation.frame);processAnimation.frame=requestAnimationFrame(drawProcessAnimation);}
+if(prefersReducedMotion){setAnimButton('rcAnimToggle',true);setAnimButton('processAnimToggle',true);document.getElementById('rcAnimStatus').textContent='Animación pausada por la preferencia de movimiento reducido.';document.getElementById('processAnimStatus').textContent='Animación pausada por la preferencia de movimiento reducido.';}else{rcAnimation.frame=requestAnimationFrame(drawRCAnimation);processAnimation.frame=requestAnimationFrame(drawProcessAnimation);}
+
 /* ===================== CLASE 6: ON-OFF VS. P ===================== */
 function drawOnOffPSim(){
   var keys=['onoffTau','onoffK','onoffKp','onoffSetpoint','onoffHysteresis','onoffDt'];
@@ -1498,14 +1598,14 @@ function drawOnOffPSim(){
   ['onoffTauVal','onoffKVal','onoffKpVal','onoffSetpointVal','onoffHysteresisVal','onoffDtVal'].forEach(function(id,i){document.getElementById(id).textContent=(i===4?'±':'')+v[i].toFixed(i===5?3:2)+(i===0||i===5?' s':'');});
   var yo=0,yp=0,uo=10,on=[],prop=[],onLoss=[],onEff=[],pLoss=[],pEff=[];
   for(var i=0;i<=n;i++){
-    on.push(yo);prop.push(yp);onLoss.push(-yo/tau);onEff.push(K*uo/tau);
-    var up=Kp*(r-yp);pLoss.push(-yp/tau);pEff.push(K*up/tau);
     if(yo<r-hys) uo=10; else if(yo>r+hys) uo=0;
+    var up=Kp*(r-yp);
+    on.push(yo);prop.push(yp);onLoss.push(-yo/tau);onEff.push(K*uo/tau);pLoss.push(-yp/tau);pEff.push(K*up/tau);
     yo+=dt*(-yo+K*uo)/tau;yp+=dt*(-yp+K*up)/tau;
   }
   var yss=K*Kp*r/(1+K*Kp),offset=r/(1+K*Kp);
   document.getElementById('onoffPReadout').innerHTML='<b>Equilibrio P:</b> y<sub>ss</sub> = K·Kp·r/(1 + K·Kp) = '+yss.toFixed(3)+'<br><b>Offset:</b> r/(1 + K·Kp) = '+offset.toFixed(3)+'<br><b>On-Off:</b> conmuta entre 0 y 10 alrededor de r ± '+hys.toFixed(2)+'.';
-  function chart(id,series,lo,hi){
+  function chart(id,series,lo,hi,yLabel){
     var cv=document.getElementById(id),ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1,w=cv.clientWidth||600,h=cv.clientHeight||240;
     if(cv.width!==w*dpr||cv.height!==h*dpr){cv.width=w*dpr;cv.height=h*dpr;}ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
     var l=42,rr=12,tt=12,bb=27,pw=w-l-rr,ph=h-tt-bb,x=function(i){return l+i/n*pw;},y=function(z){return tt+(hi-z)/(hi-lo)*ph;};
@@ -1513,11 +1613,11 @@ function drawOnOffPSim(){
     for(var g=0;g<=4;g++){var gv=lo+(hi-lo)*g/4,gy=y(gv);ctx.beginPath();ctx.moveTo(l,gy);ctx.lineTo(w-rr,gy);ctx.stroke();ctx.fillText(gv.toFixed(1),4,gy+3);}
     [0,5,10,15].forEach(function(t){ctx.fillText(t+'s',x(Math.round(t/dt))-7,h-8);});
     series.forEach(function(s){ctx.strokeStyle=s.color;ctx.lineWidth=s.width||2;ctx.setLineDash(s.dash||[]);ctx.beginPath();s.data.forEach(function(z,i){i?ctx.lineTo(x(i),y(z)):ctx.moveTo(x(i),y(z));});ctx.stroke();ctx.setLineDash([]);});
-    ctx.fillStyle='#6b7280';ctx.fillText('tiempo (s) →',l+pw/2-30,h-8);
+    ctx.fillStyle='#6b7280';ctx.fillText(yLabel,4,tt+9);ctx.fillText('tiempo (s) →',l+pw/2-30,h-8);
   }
-  var top=Math.max(r*1.25,K*10*1.05,1.2);chart('onoffPChart',[{data:on,color:'#ea580c'},{data:prop,color:'#4f46e5'},{data:Array(n+1).fill(r),color:'#9ca3af',dash:[5,4],width:1.5}],0,top);
+  var top=Math.max(r*1.25,K*10*1.05,1.2);chart('onoffPChart',[{data:on,color:'#ea580c'},{data:prop,color:'#4f46e5'},{data:Array(n+1).fill(r),color:'#9ca3af',dash:[5,4],width:1.5}],0,top,'y');
   var m=Math.max.apply(null,onEff.concat(pEff,onLoss,pLoss).map(Math.abs).concat([1]))*1.15;
-  chart('onoffEffortChart',[{data:onLoss,color:'rgba(185,28,28,.55)',width:1},{data:onEff,color:'rgba(21,128,61,.55)',width:1},{data:pLoss,color:'#b91c1c',width:2.3},{data:pEff,color:'#15803d',width:2.3}],-m,m);
+  chart('onoffEffortChart',[{data:onLoss,color:'rgba(185,28,28,.55)',width:1},{data:onEff,color:'rgba(21,128,61,.55)',width:1},{data:pLoss,color:'#b91c1c',width:2.3},{data:pEff,color:'#15803d',width:2.3}],-m,m,'dy/dt');
 }
 drawOnOffPSim();
 

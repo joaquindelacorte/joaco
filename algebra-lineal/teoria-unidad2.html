@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Álgebra Lineal I — Unidad 2: Sistemas, Matrices y Determinantes (gamificada)</title>
+<meta name="description" content="Sistemas de ecuaciones lineales, Gauss-Jordan, matrices, inversa y determinantes — con simuladores interactivos, insignias y quiz.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+<style>
+:root{
+  --pur:#6d28d9;--pur-lt:#8b5cf6;--pur-bg:#ede9fe;
+  --blue:#1d4ed8;--blue-bg:#dbeafe;
+  --green:#15803d;--green-bg:#dcfce7;
+  --orange:#c2410c;--orange-bg:#fff3e0;
+  --red:#b91c1c;--red-bg:#fee2e2;
+  --teal:#0d9488;--teal-bg:#ccfbf1;
+  --yellow:#d97706;--yellow-bg:#fef9c3;
+  --gray:#374151;--gray-lt:#6b7280;
+  --bg:#f8f7fc;--card:#fff;--border:#e5e2f0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:var(--pur);display:flex;align-items:center;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.brand{color:#fff;font-size:1.05rem;font-weight:800;padding:.8rem 1.2rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.2)}
+.tabs{display:flex;overflow-x:auto;flex:1}
+.tab-btn{padding:.75rem 1.05rem;border:none;background:transparent;color:rgba(255,255,255,.75);font-size:.83rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tab-btn.active{color:#fff;border-bottom-color:#c4b5fd}
+.nav-badges{color:#fff;font-weight:700;font-size:.82rem;padding:.6rem 1.1rem;white-space:nowrap;background:rgba(255,255,255,.12)}
+
+/* GLOBAL PROGRESS */
+.global-progress-wrap{height:5px;background:rgba(0,0,0,.15)}
+.global-progress{height:100%;background:linear-gradient(90deg,#facc15,#fb923c);transition:width .4s ease;width:0}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#2e1065 0%,var(--pur) 60%,var(--pur-lt) 100%);color:#fff;text-align:center;padding:2.5rem 1rem 2rem}
+.hero h1{font-size:2.2rem;font-weight:900;letter-spacing:-.5px}
+.hero p{opacity:.88;margin-top:.4rem}
+.badges{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.25rem .85rem;font-size:.78rem;font-weight:700}
+
+/* LAYOUT */
+.page{display:none}.page.active{display:block}
+.container{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+
+/* SECTION TITLE */
+.stitle{display:flex;align-items:center;gap:.6rem;font-size:1.25rem;font-weight:800;color:var(--pur);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid var(--pur-bg)}
+.stitle:first-of-type{margin-top:.5rem}
+.stitle .ico{font-size:1.2rem}
+.lvl-chip{display:inline-block;background:var(--pur);color:#fff;font-size:.7rem;font-weight:700;padding:.2rem .65rem;border-radius:2rem;margin-left:.6rem;vertical-align:middle}
+
+/* CARDS */
+.grid{display:grid;gap:1.1rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;box-shadow:0 1px 4px rgba(0,0,0,.05);transition:.2s}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.card h3{font-size:.97rem;font-weight:700;margin-bottom:.5rem;color:var(--pur)}
+.card p,.card li{font-size:.9rem;color:var(--gray)}
+.card.pu{border-left:4px solid var(--pur);background:var(--pur-bg)}
+.card.bl{border-left:4px solid var(--blue);background:var(--blue-bg)}
+.card.gr{border-left:4px solid var(--green);background:var(--green-bg)}
+.card.or{border-left:4px solid var(--orange);background:var(--orange-bg)}
+.card.re{border-left:4px solid var(--red);background:var(--red-bg)}
+.card.te{border-left:4px solid var(--teal);background:var(--teal-bg)}
+
+/* FORMULA / CODE */
+.fbox{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1rem 1.3rem;text-align:center;margin:.7rem 0;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.fbox .big{font-size:1.25rem;font-weight:700;color:#c4b5fd;display:block;margin-bottom:.25rem}
+.fbox .sub{font-size:.82rem;color:#94a3b8;display:block;margin-top:.35rem}
+
+/* MATRIX DISPLAY */
+.mat-display{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1rem;font-family:'Courier New',monospace;margin:.7rem 0;overflow-x:auto}
+.mat-display table{border-collapse:collapse;margin:0 auto}
+.mat-display td{padding:.25rem .55rem;text-align:center;font-size:.95rem;min-width:2rem}
+.mat-display .pivot{color:#fbbf24;font-weight:700}
+.mat-display .highlight-row{background:rgba(139,92,246,.2)}
+.mat-display .highlight-col{background:rgba(251,191,36,.1)}
+.mat-display .zero-col{color:#94a3b8}
+.mat-display .bar-col{border-left:2px solid #94a3b8;padding-left:.7rem}
+
+/* TABLE */
+.twrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border)}
+table.std{width:100%;border-collapse:collapse;font-size:.88rem}
+table.std th{background:var(--pur);color:#fff;padding:.65rem 1rem;text-align:left;font-weight:600}
+table.std td{padding:.6rem 1rem;border-bottom:1px solid var(--border)}
+table.std tr:last-child td{border:none}
+table.std tr:nth-child(even) td{background:var(--pur-bg)}
+
+/* TIP / NOTE */
+.tip{display:flex;gap:.7rem;align-items:flex-start;background:#fffbeb;border:1px solid #fbbf24;border-radius:10px;padding:.85rem 1.1rem;margin:.7rem 0;font-size:.88rem}
+.note{background:var(--pur-bg);border-left:4px solid var(--pur);border-radius:0 8px 8px 0;padding:.75rem 1rem;font-size:.9rem;margin:.7rem 0;color:#4c1d95}
+
+/* ACCORDION */
+details{border:1px solid var(--border);border-radius:10px;margin-bottom:.7rem;overflow:hidden}
+details summary{padding:.9rem 1.1rem;cursor:pointer;font-weight:600;font-size:.92rem;background:var(--card);list-style:none;display:flex;justify-content:space-between;align-items:center;user-select:none}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:'＋';color:var(--pur-lt)}
+details[open] summary::after{content:'－'}
+details[open] summary{background:var(--pur-bg);color:var(--pur)}
+.dbody{padding:1.1rem;background:var(--card);border-top:1px solid var(--border);font-size:.9rem;line-height:1.7}
+
+/* CHEAT DARK */
+.cheat{background:linear-gradient(135deg,#2e1065 0%,#6d28d9 100%);color:#e2e8f0;border-radius:14px;padding:1.8rem;margin:1rem 0}
+.cheat h2{color:#c4b5fd;font-size:1.1rem;margin-bottom:1.1rem;text-align:center}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.9rem}
+.citem{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:.85rem}
+.citem .lbl{font-size:.78rem;color:#c4b5fd;font-weight:700;margin-bottom:.3rem}
+.citem .cf{font-size:.85rem;color:#e2e8f0;line-height:1.6}
+
+/* ═══ BADGES / GAMIFICACIÓN ═══ */
+.badges-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem}
+.badge-card{border-radius:12px;padding:1.1rem;border:2px solid var(--border);text-align:center;transition:.25s}
+.badge-card.locked{opacity:.45;filter:grayscale(1)}
+.badge-card.unlocked{border-color:var(--green);background:var(--green-bg)}
+.badge-card .bic{font-size:2.1rem;display:block;margin-bottom:.4rem}
+.badge-card .bname{font-weight:700;font-size:.9rem}
+.badge-card .bdesc{font-size:.78rem;color:var(--gray-lt);margin-top:.3rem}
+
+.badge-toast{position:fixed;bottom:20px;right:20px;background:linear-gradient(135deg,#6d28d9,#4338ca);color:#fff;z-index:9999;padding:1rem 1.3rem;border-radius:12px;display:flex;gap:.8rem;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,.35);transform:translateX(140%);transition:transform .4s cubic-bezier(.34,1.56,.64,1);max-width:300px}
+.badge-toast.show{transform:translateX(0)}
+
+.map-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.9rem}
+.map-card{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:1.1rem;text-align:center;cursor:pointer;transition:.2s}
+.map-card:hover{border-color:var(--pur-lt);transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.map-card .mic{font-size:1.8rem;display:block;margin-bottom:.4rem}
+.map-card .mname{font-weight:700;font-size:.85rem;color:var(--pur)}
+.map-card .mstep{font-size:.7rem;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem}
+
+/* EXP BAR */
+.exp-bar-wrap{background:var(--pur-bg);border-radius:2rem;height:14px;overflow:hidden;margin:.4rem 0}
+.exp-bar{height:100%;background:linear-gradient(90deg,var(--pur),var(--pur-lt));border-radius:2rem;transition:width .5s ease}
+.exp-label{font-size:.78rem;color:var(--pur);font-weight:700;margin-top:.2rem}
+
+/* sim shell */
+.sim{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;margin:1rem 0}
+.sim-controls{display:flex;flex-wrap:wrap;gap:1.1rem;align-items:center;margin-top:.8rem}
+.sim-controls label{font-size:.85rem;font-weight:600;color:var(--gray);display:flex;align-items:center;gap:.35rem}
+.sim-controls input[type=range]{width:140px;vertical-align:middle}
+.sim-controls input[type=number]{width:64px;padding:.35rem .4rem;border-radius:6px;border:1px solid var(--border);font-size:.9rem;text-align:center}
+.sim-val{font-family:'Courier New',monospace;font-weight:700;color:var(--pur)}
+.sim-btn{padding:.65rem 1.2rem;background:var(--pur);color:#fff;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;transition:.2s}
+.sim-btn:hover:not(:disabled){background:var(--pur-lt)}
+.sim-btn:disabled{opacity:.4;cursor:default}
+.sim-btn.ghost{background:transparent;color:var(--pur);border:2px solid var(--pur)}
+.sim-btn.green{background:var(--green)}
+.sim-btn.green:hover{background:#166534}
+.plot{width:100%;height:320px;border-radius:10px;border:1px solid var(--border)}
+.result-box{background:var(--pur-bg);border-radius:10px;padding:1rem 1.2rem;margin-top:1rem;font-size:.92rem;color:#4c1d95}
+.result-box.ok{background:var(--green-bg);color:#14532d}
+.result-box.no{background:var(--red-bg);color:#7f1d1d}
+.result-box.warn{background:var(--yellow-bg);color:#78350f}
+
+/* COMBO */
+.combo-flash{position:fixed;top:80px;right:20px;background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;font-size:1.5rem;font-weight:900;padding:.6rem 1.2rem;border-radius:12px;z-index:9998;transform:translateX(140%);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.combo-flash.show{transform:translateX(0)}
+
+/* Gauss step table */
+.gauss-table-wrap{overflow-x:auto}
+.gauss-table{border-collapse:collapse;width:100%;font-family:'Courier New',monospace;font-size:.95rem}
+.gauss-table td{border:1px solid var(--border);padding:.4rem .7rem;text-align:center;min-width:2.5rem;background:var(--card);transition:background .3s}
+.gauss-table td.pivot-cell{background:#fef3c7;font-weight:900;color:#b45309}
+.gauss-table td.bar{border-left:3px solid var(--pur);background:#f5f3ff}
+.gauss-table td.active-row{background:#dbeafe}
+.gauss-table td.active-col{background:#dcfce7}
+.gauss-op-label{font-size:.82rem;color:var(--pur-lt);font-weight:700;padding:.3rem .5rem;border:none;background:transparent;text-align:left}
+
+/* Matrix input grid */
+.mat-input-grid{display:grid;gap:.35rem;width:fit-content}
+.mat-input-grid input{width:52px;padding:.3rem;text-align:center;border:1px solid var(--border);border-radius:6px;font-size:.9rem;font-family:'Courier New',monospace}
+
+/* PRÁCTICA */
+.ex-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;margin-bottom:1.1rem}
+.ex-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap}
+.ex-num{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--pur-lt)}
+.ex-statement{font-size:.94rem;margin:.4rem 0 .9rem;color:var(--gray)}
+.ex-btns{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.6rem}
+.ex-hint{background:var(--yellow-bg);border-left:4px solid var(--yellow);border-radius:0 8px 8px 0;padding:.7rem 1rem;font-size:.86rem;margin-top:.5rem;color:#78350f;display:none}
+.ex-hint.show{display:block}
+.ex-sol{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1rem 1.2rem;margin-top:.7rem;font-size:.87rem;line-height:1.8;display:none}
+.ex-sol.show{display:block}
+.ex-done{margin-top:.7rem}
+.ex-card.solved{border-color:var(--green);background:var(--green-bg)}
+.ex-check{font-weight:700;color:var(--green);font-size:.85rem}
+
+/* QUIZ */
+#quiz-container{max-width:720px;margin:0 auto}
+.quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:.5rem}
+.quiz-score-display{font-weight:700;font-size:1rem;color:var(--pur)}
+.progress-bar-wrap{background:var(--border);border-radius:2rem;height:8px;margin-bottom:1.5rem;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--pur-lt),#c4b5fd);border-radius:2rem;transition:width .4s ease}
+
+.quiz-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.quiz-card .q-num{font-size:.8rem;font-weight:700;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem}
+.quiz-card .q-text{font-size:1.05rem;font-weight:600;color:var(--gray);margin-bottom:1.3rem;line-height:1.5}
+
+.options{display:grid;gap:.65rem}
+.opt-btn{padding:.85rem 1.1rem;border:2px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;font-size:.9rem;text-align:left;transition:.2s;font-weight:500;color:var(--gray)}
+.opt-btn:hover:not(:disabled){border-color:var(--pur-lt);background:var(--pur-bg);color:var(--pur)}
+.opt-btn.correct{border-color:var(--green);background:var(--green-bg);color:var(--green);font-weight:700}
+.opt-btn.wrong{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+
+.feedback-box{margin-top:1.1rem;padding:.9rem 1.1rem;border-radius:10px;font-size:.9rem;line-height:1.6;display:none}
+.feedback-box.show{display:block}
+.feedback-box.ok{background:var(--green-bg);border:1px solid var(--green);color:var(--green)}
+.feedback-box.ko{background:var(--red-bg);border:1px solid var(--red);color:var(--red)}
+
+.quiz-nav{display:flex;justify-content:flex-end;margin-top:1.2rem}
+.btn-next{padding:.75rem 1.8rem;background:var(--pur);color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:700;cursor:pointer;transition:.2s}
+.btn-next:hover{background:var(--pur-lt)}
+.btn-next:disabled{opacity:.4;cursor:default}
+
+.result-card{background:var(--card);border-radius:16px;padding:2.5rem;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+.result-card .emoji{font-size:4rem;display:block;margin-bottom:.8rem}
+.result-card h2{font-size:1.6rem;font-weight:800;color:var(--pur);margin-bottom:.5rem}
+.result-card .score-big{font-size:3rem;font-weight:900;color:var(--pur);display:block;margin:.5rem 0}
+.result-card p{color:var(--gray-lt);font-size:.95rem;margin-bottom:1.3rem}
+.result-detail{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1.3rem}
+.rstat{border-radius:10px;padding:.8rem;font-weight:700;font-size:1rem}
+.rstat.ok{background:var(--green-bg);color:var(--green)}
+.rstat.ko{background:var(--red-bg);color:var(--red)}
+.btn-retry{padding:.8rem 2rem;background:var(--pur);color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:.5rem}
+
+/* CONFETTI */
+.confetti-piece{position:fixed;width:10px;height:10px;border-radius:2px;animation:fall linear forwards;pointer-events:none;z-index:9999}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+@media(max-width:640px){
+  .hero h1{font-size:1.7rem}
+  nav{flex-direction:column}
+  .brand{text-align:center;border:none;border-bottom:1px solid rgba(255,255,255,.2)}
+  .nav-badges{text-align:center}
+  .plot{height:280px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">🧮 Álgebra I</div>
+  <div class="tabs">
+    <button class="tab-btn active" id="tb-inicio" onclick="showPage('inicio',this)">🏠 Inicio</button>
+    <button class="tab-btn" id="tb-sis" onclick="showPage('sis',this)">⚖️ Sistemas</button>
+    <button class="tab-btn" id="tb-gauss" onclick="showPage('gauss',this)">🪜 Gauss-Jordan</button>
+    <button class="tab-btn" id="tb-mat" onclick="showPage('mat',this)">📦 Matrices</button>
+    <button class="tab-btn" id="tb-inv" onclick="showPage('inv',this)">🔄 Inversa</button>
+    <button class="tab-btn" id="tb-det" onclick="showPage('det',this)">🎯 Determinantes</button>
+    <button class="tab-btn" id="tb-practica" onclick="showPage('practica',this)">✍️ Práctica guiada</button>
+    <button class="tab-btn" id="tb-quiz" onclick="showPage('quiz',this)">🎓 Quiz</button>
+    <button class="tab-btn" id="tb-cheat" onclick="showPage('cheat',this)">📋 Cheatsheet</button>
+  </div>
+  <div class="nav-badges" id="nav-badges">🏅 0/8</div>
+</nav>
+<div class="global-progress-wrap"><div class="global-progress" id="global-progress"></div></div>
+
+<!-- BADGE TOAST -->
+<div class="badge-toast" id="badge-toast">
+  <span id="toast-ico" style="font-size:2rem">🏅</span>
+  <div><div style="font-weight:800;font-size:.95rem">¡Insignia desbloqueada!</div><div id="toast-name" style="font-size:.85rem;opacity:.85"></div></div>
+</div>
+
+<!-- COMBO FLASH -->
+<div class="combo-flash" id="combo-flash">🔥 ×<span id="combo-num">3</span> Racha</div>
+
+<!-- ═══════════════ INICIO ═══════════════ -->
+<div class="page active" id="inicio">
+  <div class="hero">
+    <h1>Álgebra Lineal I — Unidad 2</h1>
+    <p>Sistemas lineales, Gauss-Jordan, Matrices, Inversa y Determinantes — Práctica 3 con simuladores interactivos</p>
+    <div class="badges">
+      <span class="badge">🎮 8 insignias por desbloquear</span>
+      <span class="badge">🪜 Simulador Gauss paso a paso</span>
+      <span class="badge">✍️ 10 ejercicios guiados con pistas</span>
+    </div>
+  </div>
+  <div class="container">
+    <p style="margin-bottom:.8rem"><a href="./teoria" style="color:var(--pur);font-weight:700">← Unidad 1: Vectores y Rectas</a></p>
+
+    <div class="stitle"><span class="ico">⚡</span> Tu EXP de la unidad</div>
+    <div class="exp-bar-wrap"><div class="exp-bar" id="exp-bar" style="width:0%"></div></div>
+    <div class="exp-label" id="exp-label">0 / 800 EXP — completá secciones para subir</div>
+
+    <div class="stitle"><span class="ico">🗺️</span> Mapa de la unidad</div>
+    <p style="margin-bottom:1.2rem;color:var(--gray-lt)">Basado en la Práctica 3 y las clases 4-8 de Álgebra Lineal (Prof. Sebastián Domínguez, UNaP). Completá cada sección, ejecutá los algoritmos en los simuladores y desbloqueá las 8 insignias.</p>
+    <div class="map-grid">
+      <div class="map-card" onclick="showPage('sis',document.getElementById('tb-sis'))">
+        <span class="mic">⚖️</span>
+        <div class="mstep">Paso 1</div>
+        <div class="mname">Sistemas lineales</div>
+      </div>
+      <div class="map-card" onclick="showPage('gauss',document.getElementById('tb-gauss'))">
+        <span class="mic">🪜</span>
+        <div class="mstep">Paso 2</div>
+        <div class="mname">Gauss-Jordan</div>
+      </div>
+      <div class="map-card" onclick="showPage('mat',document.getElementById('tb-mat'))">
+        <span class="mic">📦</span>
+        <div class="mstep">Paso 3</div>
+        <div class="mname">Matrices</div>
+      </div>
+      <div class="map-card" onclick="showPage('inv',document.getElementById('tb-inv'))">
+        <span class="mic">🔄</span>
+        <div class="mstep">Paso 4</div>
+        <div class="mname">Matriz inversa</div>
+      </div>
+      <div class="map-card" onclick="showPage('det',document.getElementById('tb-det'))">
+        <span class="mic">🎯</span>
+        <div class="mstep">Paso 5</div>
+        <div class="mname">Determinantes</div>
+      </div>
+      <div class="map-card" onclick="showPage('practica',document.getElementById('tb-practica'))">
+        <span class="mic">✍️</span>
+        <div class="mstep">Paso 6</div>
+        <div class="mname">Práctica guiada</div>
+      </div>
+      <div class="map-card" onclick="showPage('quiz',document.getElementById('tb-quiz'))">
+        <span class="mic">🎓</span>
+        <div class="mstep">Paso 7</div>
+        <div class="mname">Quiz final</div>
+      </div>
+      <div class="map-card" onclick="showPage('cheat',document.getElementById('tb-cheat'))">
+        <span class="mic">📋</span>
+        <div class="mstep">Extra</div>
+        <div class="mname">Cheatsheet</div>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">🏅</span> Tus insignias <span class="lvl-chip" id="badge-count-chip">0/8</span></div>
+    <div class="badges-grid" id="badges-grid"></div>
+
+    <div class="note" style="margin-top:2rem">
+      💾 Tu progreso (insignias y mejor puntaje del quiz) se guarda automáticamente en este navegador.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SECCIÓN 1: SISTEMAS ═══════════════ -->
+<div class="page" id="sis">
+  <div class="container">
+    <p style="margin-bottom:1rem"><a href="#" onclick="showPage('inicio',document.getElementById('tb-inicio'));return false" style="color:var(--pur);font-weight:700">← Volver al inicio</a></p>
+    <div class="stitle"><span class="ico">⚖️</span> Sistemas de ecuaciones lineales</div>
+
+    <div class="grid g2">
+      <div class="card pu">
+        <h3>¿Qué es un sistema lineal?</h3>
+        <p>Un sistema de <strong>m ecuaciones</strong> con <strong>n incógnitas</strong> $x_1, \ldots, x_n$, con coeficientes $a_{ij}$ y términos independientes $b_i$. Si todos los $b_i = 0$ se llama <strong>homogéneo</strong> (siempre tiene la solución trivial). Si $m = n$ es <strong>cuadrado</strong>.</p>
+      </div>
+      <div class="card bl">
+        <h3>Matriz ampliada</h3>
+        <p>El sistema se representa compactamente como la matriz ampliada $(A|b)$, donde $A$ es la matriz de coeficientes y $b$ el vector de términos independientes. Las columnas de $A$ corresponden a cada incógnita.</p>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">📊</span> Clasificación de sistemas</div>
+    <div class="twrap">
+      <table class="std">
+        <thead><tr><th>Tipo</th><th>Condición (Rouché)</th><th>Soluciones</th><th>Geometría (2×2)</th></tr></thead>
+        <tbody>
+          <tr><td>❌ Incompatible (SI)</td><td>$\rho(A) \neq \rho(A|b)$</td><td>Ninguna</td><td>Rectas paralelas</td></tr>
+          <tr><td>🎯 Compatible determinado (SCD)</td><td>$\rho(A) = \rho(A|b) = n$</td><td>Exactamente 1</td><td>Rectas que se cortan</td></tr>
+          <tr><td>♾️ Compatible indeterminado (SCI)</td><td>$\rho(A) = \rho(A|b) &lt; n$</td><td>Infinitas</td><td>Rectas coincidentes</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card or" style="margin-top:1rem">
+      <h3>⚠️ Operaciones elementales sobre filas</h3>
+      <p style="margin-bottom:.5rem">Transforman el sistema sin cambiar las soluciones:</p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li>Multiplicar fila por escalar $k \neq 0$: $F_i \to k \cdot F_i$</li>
+        <li>Intercambiar dos filas: $F_i \leftrightarrow F_j$</li>
+        <li>Sumar múltiplo de una fila a otra: $F_i \to F_i + k \cdot F_j$</li>
+      </ol>
+    </div>
+
+    <div class="stitle"><span class="ico">🎮</span> Simulador 1 — ¿Qué tipo de sistema es?</div>
+    <div class="tip">💡 <div>Mové los sliders para cambiar los coeficientes. El simulador grafica las rectas en tiempo real y clasifica el sistema automáticamente.</div></div>
+    <div class="sim">
+      <p style="font-size:.88rem;font-weight:700;color:var(--pur);margin-bottom:.6rem">Sistema: $a_1 x + b_1 y = c_1$ y $a_2 x + b_2 y = c_2$</p>
+      <div class="sim-controls">
+        <label>$a_1$: <input type="range" id="s1a1" min="-4" max="4" step="1" value="2" oninput="s1Update()"><span class="sim-val" id="s1a1v">2</span></label>
+        <label>$b_1$: <input type="range" id="s1b1" min="-4" max="4" step="1" value="1" oninput="s1Update()"><span class="sim-val" id="s1b1v">1</span></label>
+        <label>$c_1$: <input type="number" id="s1c1" value="5" step="1" style="width:55px" oninput="s1Update()"></label>
+      </div>
+      <div class="sim-controls">
+        <label>$a_2$: <input type="range" id="s1a2" min="-4" max="4" step="1" value="1" oninput="s1Update()"><span class="sim-val" id="s1a2v">1</span></label>
+        <label>$b_2$: <input type="range" id="s1b2" min="-4" max="4" step="1" value="-1" oninput="s1Update()"><span class="sim-val" id="s1b2v">-1</span></label>
+        <label>$c_2$: <input type="number" id="s1c2" value="1" step="1" style="width:55px" oninput="s1Update()"></label>
+      </div>
+      <div class="sim-controls" style="gap:.5rem">
+        <button class="sim-btn ghost" onclick="s1Preset('det')">🎯 Determinado</button>
+        <button class="sim-btn ghost" onclick="s1Preset('indet')">♾️ Indeterminado</button>
+        <button class="sim-btn ghost" onclick="s1Preset('incomp')">❌ Incompatible</button>
+      </div>
+      <div id="s1plot" class="plot" style="height:280px"></div>
+      <div class="result-box" id="s1result">Cargando...</div>
+      <div style="margin-top:.8rem;font-size:.85rem;color:var(--gray-lt)">
+        <strong>Desafío:</strong> clasificá 3 sistemas distintos para desbloquear la insignia 🔍
+        <span style="margin-left:.5rem;color:var(--pur);font-weight:700" id="s1-counter">0/3</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SECCIÓN 2: GAUSS-JORDAN ═══════════════ -->
+<div class="page" id="gauss">
+  <div class="container">
+    <div class="stitle"><span class="ico">🪜</span> Métodos de Gauss y Gauss-Jordan</div>
+
+    <div class="grid g2">
+      <div class="card pu">
+        <h3>Forma escalonada (Gauss)</h3>
+        <ul style="margin-left:1.2rem;line-height:1.9;font-size:.9rem">
+          <li>Las filas nulas están abajo de todo</li>
+          <li>El primer elemento no nulo de cada fila (<strong>pivote</strong>) está a la derecha del pivote de la fila anterior</li>
+          <li>Los elementos debajo de cada pivote son cero</li>
+        </ul>
+      </div>
+      <div class="card bl">
+        <h3>Forma reducida (Gauss-Jordan)</h3>
+        <ul style="margin-left:1.2rem;line-height:1.9;font-size:.9rem">
+          <li>Todo lo anterior de Gauss, más:</li>
+          <li>Cada pivote vale exactamente <strong>1</strong></li>
+          <li>Los elementos <strong>arriba Y abajo</strong> del pivote son cero</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card or" style="margin-top:.8rem">
+      <h3>⬛ Regla del Rectángulo</h3>
+      <p>Para anular $a_{ij}$ usando pivote $a_{pq}$:</p>
+      <div class="fbox" style="margin:.6rem 0">
+        <span class="big">$a'_{ij} = \dfrac{a_{ij} \cdot a_{pq} - a_{pj} \cdot a_{iq}}{a_{pq}}$</span>
+        <span class="sub">Nuevo elemento = (elemento × pivote − el de su fila en col. pivote × el de col. pivote en su col.) / pivote</span>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">📐</span> Rango y Rouché-Frobenius</div>
+    <div class="fbox">
+      <span class="big" style="font-size:1rem;line-height:2.2">
+        $\rho(A) < \rho(A|b) \Rightarrow$ Incompatible &nbsp;|&nbsp;
+        $\rho(A) = \rho(A|b) = n \Rightarrow$ SCD &nbsp;|&nbsp;
+        $\rho(A) = \rho(A|b) < n \Rightarrow$ SCI
+      </span>
+      <span class="sub">$n$ = número de incógnitas. El rango es el número de filas no nulas en la forma escalonada.</span>
+    </div>
+
+    <div class="stitle"><span class="ico">⭐</span> Simulador 2 — Ejecutá Gauss-Jordan paso a paso</div>
+    <div class="tip">💡 <div><strong>Modo guiado:</strong> elegís el pivote, el simulador aplica la Regla del Rectángulo y muestra la operación. <strong>Modo examen:</strong> tenés que ingresar vos los valores y el simulador verifica si son correctos.</div></div>
+    <div class="sim">
+      <div style="margin-bottom:.8rem">
+        <strong style="font-size:.9rem">Ejemplos precargados:</strong>
+        <div class="sim-controls" style="margin-top:.4rem;gap:.5rem">
+          <button class="sim-btn ghost" onclick="gaussLoad(0)">2×2 simple</button>
+          <button class="sim-btn ghost" onclick="gaussLoad(1)">3×3 cuadrado</button>
+          <button class="sim-btn ghost" onclick="gaussLoad(2)">3×4 indeterminado ⭐</button>
+          <button class="sim-btn ghost" onclick="gaussLoad(3)">3×3 incompatible</button>
+        </div>
+      </div>
+      <div style="margin-bottom:.8rem">
+        <strong style="font-size:.9rem">O ingresá tu propia matriz:</strong>
+        <div class="sim-controls" style="margin-top:.4rem">
+          <label>Filas: <select id="gauss-rows" onchange="gaussBuildInputs()">
+            <option value="2">2</option><option value="3" selected>3</option><option value="4">4</option>
+          </select></label>
+          <label>Cols (incógnitas+1): <select id="gauss-cols" onchange="gaussBuildInputs()">
+            <option value="3">3</option><option value="4" selected>4</option><option value="5">5</option>
+          </select></label>
+        </div>
+        <div id="gauss-input-wrap" style="margin-top:.6rem"></div>
+        <button class="sim-btn" style="margin-top:.6rem" onclick="gaussStart()">▶ Iniciar con esta matriz</button>
+      </div>
+
+      <div id="gauss-mode-wrap" style="display:none">
+        <div style="display:flex;gap:.8rem;margin-bottom:.6rem;flex-wrap:wrap;align-items:center">
+          <strong style="font-size:.88rem">Modo:</strong>
+          <label style="font-size:.85rem;cursor:pointer"><input type="radio" name="gauss-mode" value="guided" checked onchange="gaussModeChange()"> 🤖 Guiado (el sim opera)</label>
+          <label style="font-size:.85rem;cursor:pointer"><input type="radio" name="gauss-mode" value="exam" onchange="gaussModeChange()"> 📝 Examen (ingresás los valores)</label>
+        </div>
+
+        <div id="gauss-board"></div>
+
+        <div id="gauss-step-info" class="result-box" style="margin-top:.7rem">Hacé click en un elemento no nulo para usarlo como pivote.</div>
+
+        <div id="gauss-guided-controls" style="margin-top:.8rem">
+          <p style="font-size:.85rem;color:var(--gray-lt);margin-bottom:.5rem">👆 Hacé click en un elemento de la matriz para seleccionarlo como pivote. El simulador eliminará esa columna.</p>
+        </div>
+
+        <div id="gauss-exam-controls" style="display:none;margin-top:.8rem">
+          <p style="font-size:.85rem;color:var(--pur);font-weight:700;margin-bottom:.5rem" id="gauss-exam-prompt">Seleccioná un pivote (modo examen).</p>
+          <div id="gauss-exam-inputs"></div>
+          <button class="sim-btn green" style="margin-top:.6rem" onclick="gaussExamCheck()">✔ Verificar mis valores</button>
+        </div>
+
+        <div class="sim-controls" style="margin-top:.8rem">
+          <button class="sim-btn ghost" onclick="gaussUndo()">↩ Deshacer</button>
+          <button class="sim-btn ghost" onclick="gaussReset()">🔄 Reiniciar</button>
+        </div>
+        <div style="margin-top:.5rem;font-size:.8rem;color:var(--gray-lt)">Combo: <strong id="gauss-combo">0</strong> pasos correctos seguidos</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SECCIÓN 3: MATRICES ═══════════════ -->
+<div class="page" id="mat">
+  <div class="container">
+    <div class="stitle"><span class="ico">📦</span> Matrices</div>
+
+    <div class="card pu">
+      <h3>Definición</h3>
+      <p>Una matriz $A$ de orden $m \times n$ es un arreglo rectangular de $m$ filas y $n$ columnas. El elemento en fila $i$, columna $j$ se nota $a_{ij}$.</p>
+    </div>
+
+    <div class="stitle"><span class="ico">🔢</span> Tipos especiales</div>
+    <div class="twrap">
+      <table class="std">
+        <thead><tr><th>Tipo</th><th>Condición</th><th>Ejemplo</th></tr></thead>
+        <tbody>
+          <tr><td>Nula $O$</td><td>Todos los $a_{ij} = 0$</td><td>$\begin{pmatrix}0&0\\0&0\end{pmatrix}$</td></tr>
+          <tr><td>Identidad $I_n$</td><td>$a_{ij}=1$ si $i=j$, 0 si no</td><td>$\begin{pmatrix}1&0\\0&1\end{pmatrix}$</td></tr>
+          <tr><td>Diagonal</td><td>$a_{ij}=0$ si $i\neq j$</td><td>$\begin{pmatrix}3&0\\0&5\end{pmatrix}$</td></tr>
+          <tr><td>Escalar</td><td>Diagonal con constante $k$</td><td>$\begin{pmatrix}k&0\\0&k\end{pmatrix}$</td></tr>
+          <tr><td>Triangular superior</td><td>$a_{ij}=0$ si $i > j$</td><td>$\begin{pmatrix}1&2\\0&3\end{pmatrix}$</td></tr>
+          <tr><td>Triangular inferior</td><td>$a_{ij}=0$ si $i < j$</td><td>$\begin{pmatrix}1&0\\4&3\end{pmatrix}$</td></tr>
+          <tr><td>Simétrica</td><td>$A = A^t$ (es decir $a_{ij}=a_{ji}$)</td><td>$\begin{pmatrix}1&2\\2&3\end{pmatrix}$</td></tr>
+          <tr><td>Antisimétrica</td><td>$A = -A^t$, diagonal nula</td><td>$\begin{pmatrix}0&-2\\2&0\end{pmatrix}$</td></tr>
+          <tr><td>Traza $\text{Tr}(A)$</td><td>$\sum_i a_{ii}$ (suma diagonal)</td><td>$\text{Tr}\begin{pmatrix}3&1\\2&5\end{pmatrix} = 8$</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stitle"><span class="ico">➕</span> Operaciones</div>
+    <div class="grid g3">
+      <div class="card gr">
+        <h3>Suma/resta</h3>
+        <p>Solo entre matrices del <strong>mismo orden</strong>: $(A \pm B)_{ij} = a_{ij} \pm b_{ij}$. Elemento a elemento.</p>
+      </div>
+      <div class="card bl">
+        <h3>Producto por escalar</h3>
+        <p>$(k \cdot A)_{ij} = k \cdot a_{ij}$. Multiplica todos los elementos por el escalar $k$.</p>
+      </div>
+      <div class="card or">
+        <h3>Traspuesta</h3>
+        <p>$(A^t)_{ij} = a_{ji}$. Se intercambian filas y columnas. Propiedades: $(A^t)^t = A$, $(kA)^t = kA^t$, $(A+B)^t = A^t + B^t$, $(AB)^t = B^t A^t$.</p>
+      </div>
+    </div>
+
+    <div class="card re" style="margin-top:.8rem">
+      <h3>⚠️ Producto matricial $A \cdot B$</h3>
+      <p style="margin-bottom:.5rem">Requiere que el número de <strong>columnas de $A$</strong> = número de <strong>filas de $B$</strong>.</p>
+      <p>Si $A$ es $n\times u$ y $B$ es $u \times k$, entonces $C = A \cdot B$ es $n \times k$, con:</p>
+      <div class="fbox" style="margin:.5rem 0">
+        <span class="big">$c_{ij} = \sum_{l=1}^{u} a_{il} \cdot b_{lj}$</span>
+        <span class="sub">Fila $i$ de $A$ · Columna $j$ de $B$ (producto interno)</span>
+      </div>
+      <p style="color:#7f1d1d">⚠️ El producto <strong>no es conmutativo</strong>: $A \cdot B \neq B \cdot A$ en general.</p>
+    </div>
+
+    <div class="stitle"><span class="ico">🎮</span> Simulador 3 — Multiplicador de matrices paso a paso</div>
+    <div class="tip">💡 <div>El simulador resalta la fila de $A$ (azul) y columna de $B$ (naranja) que participan en cada elemento. Activá el modo quiz para que te pregunte el resultado antes de revelarlo.</div></div>
+    <div class="sim">
+      <div style="display:flex;flex-wrap:wrap;gap:1.5rem;align-items:flex-start">
+        <div>
+          <p style="font-size:.85rem;font-weight:700;margin-bottom:.4rem">Matriz A (filas × cols):</p>
+          <div style="display:flex;gap:.5rem;margin-bottom:.5rem">
+            <select id="ma-rows" onchange="matBuildInputs()"><option value="2" selected>2</option><option value="3">3</option></select>×
+            <select id="ma-cols" onchange="matBuildInputs()"><option value="2">2</option><option value="3" selected>3</option></select>
+          </div>
+          <div id="ma-inputs"></div>
+        </div>
+        <div>
+          <p style="font-size:.85rem;font-weight:700;margin-bottom:.4rem">Matriz B (filas × cols):</p>
+          <div style="display:flex;gap:.5rem;margin-bottom:.5rem">
+            <span id="mb-rows-label" style="font-size:.85rem;color:var(--pur);font-weight:700">3</span>×
+            <select id="mb-cols" onchange="matBuildInputs()"><option value="2" selected>2</option><option value="3">3</option></select>
+          </div>
+          <div id="mb-inputs"></div>
+        </div>
+      </div>
+      <div class="sim-controls" style="gap:.5rem;margin-top:.8rem">
+        <button class="sim-btn" onclick="matStartSim()">▶ Iniciar simulación</button>
+        <label style="font-size:.85rem;cursor:pointer"><input type="checkbox" id="mat-quiz-mode"> 📝 Modo quiz (ingresá el valor)</label>
+      </div>
+      <div id="mat-sim-area" style="display:none;margin-top:1rem">
+        <div id="mat-display" style="overflow-x:auto"></div>
+        <div id="mat-result-box" class="result-box" style="margin-top:.7rem"></div>
+        <div class="sim-controls" style="margin-top:.6rem">
+          <button class="sim-btn" onclick="matNextStep()" id="mat-next-btn">Siguiente elemento ▶</button>
+          <button class="sim-btn ghost" onclick="matReset()">🔄 Reiniciar</button>
+        </div>
+        <div id="mat-quiz-wrap" style="display:none;margin-top:.6rem">
+          <label style="font-size:.85rem;font-weight:700">Tu respuesta para $c_{ij}$: <input type="number" id="mat-quiz-input" step="any" style="width:80px;margin-left:.4rem"></label>
+          <button class="sim-btn green" style="margin-left:.5rem" onclick="matQuizCheck()">✔ Verificar</button>
+        </div>
+        <div style="margin-top:.4rem;font-size:.8rem;color:var(--gray-lt)">Elementos correctos en quiz: <strong id="mat-quiz-score">0</strong>/5 para desbloquear insignia</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SECCIÓN 4: INVERSA ═══════════════ -->
+<div class="page" id="inv">
+  <div class="container">
+    <div class="stitle"><span class="ico">🔄</span> Matriz inversa</div>
+
+    <div class="grid g2">
+      <div class="card pu">
+        <h3>Definición</h3>
+        <p>La inversa de $A$ (cuadrada) es la matriz $A^{-1}$ tal que $A \cdot A^{-1} = A^{-1} \cdot A = I_n$. Solo existe para matrices cuadradas con $\det(A) \neq 0$.</p>
+      </div>
+      <div class="card bl">
+        <h3>Teorema de invertibilidad</h3>
+        <p>Las siguientes afirmaciones son equivalentes para $A$ cuadrada: $A$ es inversible · $\rho(A) = n$ · $\det(A) \neq 0$ · Las filas (y columnas) de $A$ son linealmente independientes.</p>
+      </div>
+    </div>
+
+    <div class="card or" style="margin-top:.8rem">
+      <h3>Método de Gauss para calcular $A^{-1}$</h3>
+      <ol style="margin-left:1.2rem;line-height:2;font-size:.9rem">
+        <li>Formar la matriz ampliada $(A \mid I_n)$</li>
+        <li>Aplicar Gauss-Jordan hasta transformar $A$ en $I_n$</li>
+        <li>La parte derecha se convierte en $A^{-1}$: $(I_n \mid A^{-1})$</li>
+      </ol>
+    </div>
+
+    <div class="card gr" style="margin-top:.8rem">
+      <h3>Sistema matricial $A \cdot X = b$</h3>
+      <p>Si $A$ es inversible: solución única $X = A^{-1} \cdot b$. Si no es inversible: o hay infinitas soluciones (SCI) o no hay solución (SI), dependiendo de $b$.</p>
+    </div>
+
+    <div class="stitle"><span class="ico">🎮</span> Simulador 4 — Calculá la inversa con Gauss</div>
+    <div class="tip">💡 <div>El simulador construye la forma $(A|I_n)$ automáticamente y ejecuta Gauss-Jordan paso a paso. Al final verifica que $A \cdot A^{-1} = I_n$.</div></div>
+    <div class="sim">
+      <div style="margin-bottom:.8rem">
+        <strong style="font-size:.9rem">Ejemplos precargados:</strong>
+        <div class="sim-controls" style="margin-top:.4rem;gap:.5rem">
+          <button class="sim-btn ghost" onclick="invLoad(0)">2×2: A=(3,2;1,1)</button>
+          <button class="sim-btn ghost" onclick="invLoad(1)">3×3: E=(2,1,1;0,1,1;3,1,-1)</button>
+          <button class="sim-btn ghost" onclick="invLoad(2)">No inversible (fila de ceros)</button>
+        </div>
+      </div>
+      <div style="margin-bottom:.8rem">
+        <strong style="font-size:.9rem">O ingresá una matriz cuadrada:</strong>
+        <div class="sim-controls" style="margin-top:.4rem">
+          <label>Tamaño: <select id="inv-size" onchange="invBuildInputs()">
+            <option value="2" selected>2×2</option><option value="3">3×3</option>
+          </select></label>
+        </div>
+        <div id="inv-input-wrap" style="margin-top:.6rem"></div>
+        <button class="sim-btn" style="margin-top:.6rem" onclick="invStart()">▶ Calcular inversa</button>
+      </div>
+
+      <div id="inv-board" style="display:none">
+        <div id="inv-display"></div>
+        <div id="inv-info" class="result-box" style="margin-top:.7rem"></div>
+        <div class="sim-controls" style="margin-top:.7rem">
+          <button class="sim-btn" onclick="invStep()" id="inv-next-btn">▶ Siguiente paso</button>
+          <button class="sim-btn ghost" onclick="invReset()">🔄 Reiniciar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SECCIÓN 5: DETERMINANTES ═══════════════ -->
+<div class="page" id="det">
+  <div class="container">
+    <div class="stitle"><span class="ico">🎯</span> Determinantes y Regla de Cramer</div>
+
+    <div class="card pu">
+      <h3>Propiedades clave</h3>
+      <ul style="margin-left:1.2rem;line-height:2;font-size:.9rem">
+        <li>$\det(AB) = \det(A) \cdot \det(B)$</li>
+        <li>$\det(A^t) = \det(A)$</li>
+        <li>$\det(kA) = k^n \cdot \det(A)$ para $A \in \mathbb{R}^{n\times n}$</li>
+        <li>$\det(A^{-1}) = 1/\det(A)$</li>
+        <li>$A$ inversible $\Leftrightarrow \det(A) \neq 0$</li>
+      </ul>
+    </div>
+
+    <div class="stitle"><span class="ico">🔢</span> Cálculo de determinantes</div>
+
+    <div class="grid g2">
+      <div class="fbox">
+        <span class="big">$\det\begin{pmatrix}a&b\\c&d\end{pmatrix} = ad - bc$</span>
+        <span class="sub">Determinante 2×2 — fórmula directa</span>
+      </div>
+      <div class="card bl">
+        <h3>Regla de Sarrus (3×3)</h3>
+        <p>Tres diagonales positivas (↘) y tres negativas (↗). La suma de productos positivos menos suma de productos negativos.</p>
+        <p style="margin-top:.5rem;font-family:'Courier New',monospace;font-size:.85rem">$+a_{11}a_{22}a_{33}+a_{12}a_{23}a_{31}+a_{13}a_{21}a_{32}$<br>$-a_{13}a_{22}a_{31}-a_{11}a_{23}a_{32}-a_{12}a_{21}a_{33}$</p>
+      </div>
+    </div>
+
+    <div class="card or" style="margin-top:.8rem">
+      <h3>Regla de Cramer</h3>
+      <p>Solo para sistemas $A \cdot X = b$ con $\det(A) \neq 0$ (SCD):</p>
+      <div class="fbox" style="margin:.5rem 0">
+        <span class="big">$x_i = \dfrac{\det(A_i)}{\det(A)}$</span>
+        <span class="sub">$A_i$ = matriz $A$ con la columna $i$ reemplazada por el vector $b$</span>
+      </div>
+      <p>Útil para sistemas pequeños (2×2 o 3×3). Para sistemas grandes, Gauss es más eficiente.</p>
+    </div>
+
+    <div class="stitle"><span class="ico">🎮</span> Simulador 5 — Calculadora de determinantes</div>
+    <div class="sim">
+      <div style="display:flex;gap:.8rem;margin-bottom:1rem;flex-wrap:wrap">
+        <button class="sim-btn" id="det-mode-2" onclick="detSetMode(2)">2×2</button>
+        <button class="sim-btn ghost" id="det-mode-3s" onclick="detSetMode('3s')">3×3 Sarrus</button>
+        <button class="sim-btn ghost" id="det-mode-3c" onclick="detSetMode('3c')">3×3 Cofactores</button>
+        <button class="sim-btn ghost" id="det-mode-cramer" onclick="detSetMode('cramer')">Cramer 3×3</button>
+      </div>
+
+      <!-- Modo 2×2 -->
+      <div id="det-2x2" style="">
+        <p style="font-size:.85rem;font-weight:700;margin-bottom:.5rem">Ingresá la matriz 2×2:</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.3rem;width:140px">
+          <input type="number" id="d2a" value="3" class="det-cell"><input type="number" id="d2b" value="2" class="det-cell">
+          <input type="number" id="d2c" value="1" class="det-cell"><input type="number" id="d2d" value="4" class="det-cell">
+        </div>
+        <button class="sim-btn" style="margin-top:.7rem" onclick="det2x2Calc()">Calcular ↵</button>
+        <div id="det2-result" class="result-box" style="margin-top:.7rem;display:none"></div>
+      </div>
+
+      <!-- Modo 3×3 Sarrus -->
+      <div id="det-3s" style="display:none">
+        <p style="font-size:.85rem;font-weight:700;margin-bottom:.5rem">Ingresá la matriz 3×3:</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.3rem;width:180px">
+          <input type="number" class="det-cell" id="s3_00" value="1"><input type="number" class="det-cell" id="s3_01" value="2"><input type="number" class="det-cell" id="s3_02" value="3">
+          <input type="number" class="det-cell" id="s3_10" value="4"><input type="number" class="det-cell" id="s3_11" value="5"><input type="number" class="det-cell" id="s3_12" value="6">
+          <input type="number" class="det-cell" id="s3_20" value="7"><input type="number" class="det-cell" id="s3_21" value="8"><input type="number" class="det-cell" id="s3_22" value="0">
+        </div>
+        <button class="sim-btn" style="margin-top:.7rem" onclick="sarrusCalc()">▶ Animar Sarrus</button>
+        <div id="det3s-result" class="result-box" style="margin-top:.7rem;display:none"></div>
+      </div>
+
+      <!-- Modo 3×3 Cofactores -->
+      <div id="det-3c" style="display:none">
+        <p style="font-size:.85rem;font-weight:700;margin-bottom:.5rem">Ingresá la matriz 3×3:</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.3rem;width:180px">
+          <input type="number" class="det-cell" id="c3_00" value="1"><input type="number" class="det-cell" id="c3_01" value="2"><input type="number" class="det-cell" id="c3_02" value="0">
+          <input type="number" class="det-cell" id="c3_10" value="3"><input type="number" class="det-cell" id="c3_11" value="4"><input type="number" class="det-cell" id="c3_12" value="0">
+          <input type="number" class="det-cell" id="c3_20" value="0"><input type="number" class="det-cell" id="c3_21" value="0"><input type="number" class="det-cell" id="c3_22" value="5">
+        </div>
+        <div style="margin:.6rem 0;font-size:.85rem">Expandir por: <select id="cofactor-expand">
+          <option value="r0">Fila 1</option><option value="r1">Fila 2</option><option value="r2">Fila 3</option>
+          <option value="c0">Columna 1</option><option value="c1">Columna 2</option><option value="c2">Columna 3</option>
+        </select></div>
+        <button class="sim-btn" onclick="cofactorCalc()">▶ Calcular por cofactores</button>
+        <div id="det3c-result" class="result-box" style="margin-top:.7rem;display:none"></div>
+      </div>
+
+      <!-- Modo Cramer -->
+      <div id="det-cramer" style="display:none">
+        <p style="font-size:.85rem;font-weight:700;margin-bottom:.5rem">Sistema $A \cdot X = b$ (3×3):</p>
+        <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
+          <div>
+            <p style="font-size:.8rem;color:var(--gray-lt);margin-bottom:.3rem">Matriz A:</p>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.3rem;width:180px">
+              <input type="number" class="det-cell" id="cr_a00" value="1"><input type="number" class="det-cell" id="cr_a01" value="2"><input type="number" class="det-cell" id="cr_a02" value="1">
+              <input type="number" class="det-cell" id="cr_a10" value="2"><input type="number" class="det-cell" id="cr_a11" value="1"><input type="number" class="det-cell" id="cr_a12" value="3">
+              <input type="number" class="det-cell" id="cr_a20" value="1"><input type="number" class="det-cell" id="cr_a21" value="-1"><input type="number" class="det-cell" id="cr_a22" value="2">
+            </div>
+          </div>
+          <div>
+            <p style="font-size:.8rem;color:var(--gray-lt);margin-bottom:.3rem">Vector b:</p>
+            <div style="display:grid;grid-template-columns:1fr;gap:.3rem;width:70px">
+              <input type="number" class="det-cell" id="cr_b0" value="8">
+              <input type="number" class="det-cell" id="cr_b1" value="13">
+              <input type="number" class="det-cell" id="cr_b2" value="6">
+            </div>
+          </div>
+        </div>
+        <button class="sim-btn" style="margin-top:.7rem" onclick="cramerCalc()">▶ Resolver con Cramer</button>
+        <div id="cramer-result" class="result-box" style="margin-top:.7rem;display:none"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SECCIÓN 6: PRÁCTICA ═══════════════ -->
+<div class="page" id="practica">
+  <div class="container">
+    <div class="stitle"><span class="ico">✍️</span> Práctica guiada — Práctica 3</div>
+    <p style="margin-bottom:1rem;color:var(--gray-lt)">10 ejercicios seleccionados con 3 niveles de pistas progresivas. Resolvé 6 para desbloquear la insignia ✍️ Practicante.</p>
+    <div style="margin-bottom:1rem;font-size:.9rem;color:var(--pur);font-weight:700">Resueltos: <span id="prac-done-count">0</span>/10</div>
+    <div id="practica-list"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ SECCIÓN 7: QUIZ ═══════════════ -->
+<div class="page" id="quiz">
+  <div class="container">
+    <div class="stitle"><span class="ico">🎓</span> Quiz final — 15 preguntas</div>
+    <div id="quiz-container"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ SECCIÓN 8: CHEATSHEET ═══════════════ -->
+<div class="page" id="cheat">
+  <div class="container">
+    <div class="stitle"><span class="ico">📋</span> Cheatsheet — Unidad 2</div>
+    <div class="cheat">
+      <h2>📋 Álgebra Lineal I — Unidad 2 — Resumen rápido</h2>
+      <div class="cgrid">
+        <div class="citem">
+          <div class="lbl">ROUCHÉ-FROBENIUS</div>
+          <div class="cf">
+            ρ(A) ≠ ρ(A|b) → SI<br>
+            ρ(A) = ρ(A|b) = n → SCD<br>
+            ρ(A) = ρ(A|b) &lt; n → SCI
+          </div>
+        </div>
+        <div class="citem">
+          <div class="lbl">OPS ELEMENTALES FILA</div>
+          <div class="cf">
+            Fᵢ → k·Fᵢ (k≠0)<br>
+            Fᵢ ↔ Fⱼ (intercambio)<br>
+            Fᵢ → Fᵢ + k·Fⱼ
+          </div>
+        </div>
+        <div class="citem">
+          <div class="lbl">REGLA DEL RECTÁNGULO</div>
+          <div class="cf">
+            a'ᵢⱼ = (aᵢⱼ·apq − apj·aiq) / apq<br>
+            <em>Anula aᵢⱼ usando pivote apq</em>
+          </div>
+        </div>
+        <div class="citem">
+          <div class="lbl">PRODUCTO MATRICIAL</div>
+          <div class="cf">
+            A(n×u)·B(u×k) = C(n×k)<br>
+            cᵢⱼ = Σ aᵢₗ·bₗⱼ<br>
+            ⚠️ No conmutativo
+          </div>
+        </div>
+        <div class="citem">
+          <div class="lbl">INVERSA (Gauss)</div>
+          <div class="cf">
+            (A|Iₙ) → G-J → (Iₙ|A⁻¹)<br>
+            Inversible ⟺ det(A) ≠ 0<br>
+            A·X=b → X = A⁻¹·b
+          </div>
+        </div>
+        <div class="citem">
+          <div class="lbl">DETERMINANTES</div>
+          <div class="cf">
+            2×2: ad − bc<br>
+            det(kA) = kⁿ·det(A)<br>
+            det(AB) = det(A)·det(B)<br>
+            det(A⁻¹) = 1/det(A)
+          </div>
+        </div>
+        <div class="citem">
+          <div class="lbl">CRAMER</div>
+          <div class="cf">
+            Solo si det(A) ≠ 0<br>
+            xᵢ = det(Aᵢ)/det(A)<br>
+            Aᵢ = A con col i ← b
+          </div>
+        </div>
+        <div class="citem">
+          <div class="lbl">TIPOS DE MATRICES</div>
+          <div class="cf">
+            Simétrica: A = Aᵗ<br>
+            Antisimétrica: A = −Aᵗ<br>
+            Traza: Tr(A) = Σ aᵢᵢ<br>
+            Inversible ⟺ ρ(A) = n
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="note" style="margin-top:1.5rem">💡 Imprimí o capturá esta pantalla antes del parcial. Todo lo esencial está acá.</div>
+  </div>
+</div>
+
+<footer>Álgebra Lineal I — Unidad 2 · Prof. Sebastián Domínguez · UNaP Automatización y Control · 2026</footer>
+
+<style>
+.det-cell{width:52px;padding:.3rem;text-align:center;border:1px solid var(--border);border-radius:6px;font-size:.9rem;font-family:'Courier New',monospace}
+</style>
+
+<script>
+// ═══════════════════════════════════════════════════
+// CORE: PAGE NAVIGATION & BADGES
+// ═══════════════════════════════════════════════════
+const INSIGNIAS = [
+  {id:'sistemas',   nombre:'Inspector de sistemas', emoji:'🔍', desc:'Clasificó 3 sistemas distintos'},
+  {id:'gauss',      nombre:'Escalador de matrices',  emoji:'⬆️', desc:'Completó el ejemplo 3×4 en modo examen'},
+  {id:'producto',   nombre:'Operador matricial',     emoji:'✖️', desc:'5 elementos correctos en modo quiz'},
+  {id:'inversa',    nombre:'Inversionalista',        emoji:'🔄', desc:'Calculó la inversa de una matriz 3×3'},
+  {id:'det',        nombre:'Determinante supremo',   emoji:'🎯', desc:'Resolvió un sistema con Cramer'},
+  {id:'practica',   nombre:'Practicante',            emoji:'✍️', desc:'Resolvió 6/10 ejercicios guiados'},
+  {id:'quiz',       nombre:'Algebrista',             emoji:'🎓', desc:'Aprobó el quiz con ≥ 10/15'},
+  {id:'master',     nombre:'Álgebra Master',         emoji:'👑', desc:'Puntaje perfecto en el quiz (15/15)'}
+];
+
+const LS_KEY = 'algebra2_badges_v1';
+const LS_QUIZ = 'algebra2_quiz_best';
+const LS_EXP  = 'algebra2_exp_v1';
+
+function loadBadges(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){ return {}; } }
+function saveBadges(b){ localStorage.setItem(LS_KEY, JSON.stringify(b)); }
+function getExp(){ return parseInt(localStorage.getItem(LS_EXP)||'0',10); }
+function addExp(v){ let e=getExp()+v; localStorage.setItem(LS_EXP,e); refreshExp(); }
+
+function unlockBadge(id){
+  const b = loadBadges();
+  if(b[id]) return;
+  b[id] = true;
+  saveBadges(b);
+  const ins = INSIGNIAS.find(i=>i.id===id);
+  if(ins) showToast(ins.emoji, ins.nombre);
+  refreshUI();
+  addExp(100);
+}
+
+function showToast(ico, name){
+  document.getElementById('toast-ico').textContent = ico;
+  document.getElementById('toast-name').textContent = name;
+  const t = document.getElementById('badge-toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3500);
+}
+
+function refreshUI(){
+  const b = loadBadges();
+  const count = Object.keys(b).length;
+  document.getElementById('nav-badges').textContent = `🏅 ${count}/8`;
+  document.getElementById('badge-count-chip').textContent = `${count}/8`;
+  const grid = document.getElementById('badges-grid');
+  grid.innerHTML = INSIGNIAS.map(ins=>`
+    <div class="badge-card ${b[ins.id]?'unlocked':'locked'}">
+      <span class="bic">${ins.emoji}</span>
+      <div class="bname">${ins.nombre}</div>
+      <div class="bdesc">${ins.desc}</div>
+    </div>`).join('');
+  // progress bar
+  document.getElementById('global-progress').style.width = (count/8*100)+'%';
+}
+
+function refreshExp(){
+  const e = getExp();
+  const pct = Math.min(e/800*100,100);
+  document.getElementById('exp-bar').style.width = pct+'%';
+  document.getElementById('exp-label').textContent = `${e} / 800 EXP${pct>=100?' — ¡Desbloqueá el quiz!':''}`;
+}
+
+function showPage(id, btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ═══════════════════════════════════════════════════
+// SIMULADOR 1 — ¿Qué tipo de sistema?
+// ═══════════════════════════════════════════════════
+let s1_classified = new Set();
+let s1_combo = 0;
+
+function s1Update(){
+  const a1=+document.getElementById('s1a1').value,
+        b1=+document.getElementById('s1b1').value,
+        c1=+document.getElementById('s1c1').value,
+        a2=+document.getElementById('s1a2').value,
+        b2=+document.getElementById('s1b2').value,
+        c2=+document.getElementById('s1c2').value;
+  ['s1a1v','s1b1v','s1a2v','s1b2v'].forEach(id=>{
+    const sl=document.getElementById(id.replace('v',''));
+    if(sl && sl.tagName==='INPUT' && sl.type==='range')
+      document.getElementById(id).textContent=sl.value;
+  });
+
+  const det = a1*b2 - a2*b1;
+  let tipo='', msg='', cls='';
+
+  if(Math.abs(det)>0.0001){
+    const x = (c1*b2 - c2*b1)/det, y = (a1*c2 - a2*c1)/det;
+    tipo='SCD'; msg=`🎯 <strong>Compatible determinado</strong> — Solución única: x = ${x.toFixed(2)}, y = ${y.toFixed(2)}`; cls='ok';
+  } else {
+    // det = 0 → paralelas o coincidentes
+    const cross = a1*c2 - a2*c1;
+    if(Math.abs(cross)>0.0001){ tipo='SI'; msg='❌ <strong>Incompatible</strong> — Las rectas son paralelas, no hay solución.'; cls='no'; }
+    else { tipo='SCI'; msg='♾️ <strong>Compatible indeterminado</strong> — Las rectas son coincidentes, hay infinitas soluciones.'; cls='warn'; }
+  }
+
+  const rBox = document.getElementById('s1result');
+  rBox.className='result-box '+cls;
+  rBox.innerHTML=msg;
+
+  // Plotly
+  const xr=[-8,8];
+  const traces=[];
+  // Recta 1: a1*x + b1*y = c1 → y = (c1 - a1*x)/b1
+  if(Math.abs(b1)>0.001){
+    traces.push({x:xr,y:xr.map(x=>(c1-a1*x)/b1),mode:'lines',name:'Recta 1',line:{color:'#6d28d9',width:3}});
+  } else {
+    const xv=a1?c1/a1:0;
+    traces.push({x:[xv,xv],y:[-10,10],mode:'lines',name:'Recta 1 (vertical)',line:{color:'#6d28d9',width:3}});
+  }
+  if(Math.abs(b2)>0.001){
+    traces.push({x:xr,y:xr.map(x=>(c2-a2*x)/b2),mode:'lines',name:'Recta 2',line:{color:'#f59e0b',width:3}});
+  } else {
+    const xv=a2?c2/a2:0;
+    traces.push({x:[xv,xv],y:[-10,10],mode:'lines',name:'Recta 2 (vertical)',line:{color:'#f59e0b',width:3}});
+  }
+
+  const layout={
+    paper_bgcolor:'#f8f7fc',plot_bgcolor:'#fff',
+    xaxis:{range:[-8,8],zeroline:true,zerolinecolor:'#ccc'},
+    yaxis:{range:[-8,8],zeroline:true,zerolinecolor:'#ccc'},
+    margin:{t:20,b:30,l:40,r:20},
+    legend:{x:0,y:1},height:280
+  };
+  Plotly.react('s1plot',traces,layout,{responsive:true,displayModeBar:false});
+
+  // badge logic
+  s1_classified.add(tipo);
+  document.getElementById('s1-counter').textContent = s1_classified.size+'/3';
+  if(s1_classified.size>=3){ unlockBadge('sistemas'); addExp(20); }
+}
+
+function s1Preset(type){
+  const presets = {
+    det:  {a1:2,b1:1,c1:5,a2:1,b2:-1,c2:1},
+    indet:{a1:2,b1:4,c1:6,a2:1,b2:2,c2:3},
+    incomp:{a1:2,b1:4,c1:6,a2:1,b2:2,c2:5}
+  };
+  const p=presets[type];
+  document.getElementById('s1a1').value=p.a1; document.getElementById('s1b1').value=p.b1; document.getElementById('s1c1').value=p.c1;
+  document.getElementById('s1a2').value=p.a2; document.getElementById('s1b2').value=p.b2; document.getElementById('s1c2').value=p.c2;
+  s1Update();
+}
+
+// ═══════════════════════════════════════════════════
+// SIMULADOR 2 — GAUSS-JORDAN
+// ═══════════════════════════════════════════════════
+let gaussMatrix=[]; // current state
+let gaussHistory=[]; // for undo
+let gaussPivotRow=-1, gaussPivotCol=-1;
+let gaussDone=false;
+let gaussCombo=0;
+let gaussExamPreset=-1; // preset index (2 = 3x4 for badge)
+
+const GAUSS_PRESETS = [
+  [[2,1,5],[1,3,7]],                                        // 2×2
+  [[1,2,1,3],[2,1,3,7],[1,3,2,8]],                          // 3×3
+  [[1,2,-1,0,5],[2,5,2,-1,8],[-1,-1,5,3,7]],               // 3×4 indeterminado
+  [[1,2,3,4],[2,4,6,8],[1,1,1,0]]                           // 3×3 incompatible
+];
+
+function gaussBuildInputs(){
+  const rows=+document.getElementById('gauss-rows').value;
+  const cols=+document.getElementById('gauss-cols').value;
+  let html='<div class="mat-input-grid" style="grid-template-columns:repeat('+cols+',1fr)">';
+  for(let i=0;i<rows;i++) for(let j=0;j<cols;j++){
+    const isBorder = j===cols-2; // separator before last col
+    html+=`<input type="number" id="g_${i}_${j}" value="0" step="any" style="${j===cols-1?'border-left:2px solid var(--pur);':''}">`;
+  }
+  html+='</div>';
+  document.getElementById('gauss-input-wrap').innerHTML=html;
+}
+
+function gaussLoad(idx){
+  gaussExamPreset=idx;
+  const preset=GAUSS_PRESETS[idx];
+  const rows=preset.length, cols=preset[0].length;
+  document.getElementById('gauss-rows').value=rows;
+  document.getElementById('gauss-cols').value=cols;
+  gaussBuildInputs();
+  for(let i=0;i<rows;i++) for(let j=0;j<cols;j++){
+    const el=document.getElementById(`g_${i}_${j}`);
+    if(el) el.value=preset[i][j];
+  }
+}
+
+function gaussStart(){
+  const rows=+document.getElementById('gauss-rows').value;
+  const cols=+document.getElementById('gauss-cols').value;
+  gaussMatrix=[];
+  for(let i=0;i<rows;i++){
+    const row=[];
+    for(let j=0;j<cols;j++){
+      row.push(parseFloat(document.getElementById(`g_${i}_${j}`).value)||0);
+    }
+    gaussMatrix.push(row);
+  }
+  gaussHistory=[];
+  gaussPivotRow=-1; gaussPivotCol=-1;
+  gaussDone=false; gaussCombo=0;
+  document.getElementById('gauss-mode-wrap').style.display='block';
+  gaussRender();
+  addExp(10);
+}
+
+function gaussRender(){
+  const rows=gaussMatrix.length, cols=gaussMatrix[0].length;
+  const mode=document.querySelector('input[name="gauss-mode"]:checked').value;
+  const isReduced=isGaussJordanReduced(gaussMatrix);
+  let html='<div class="gauss-table-wrap"><table class="gauss-table">';
+  for(let i=0;i<rows;i++){
+    html+='<tr>';
+    for(let j=0;j<cols;j++){
+      const isBar=j===cols-1;
+      const val=gaussMatrix[i][j];
+      const disp=Number.isInteger(val)?val:val.toFixed(3).replace(/\.?0+$/,'');
+      const isPiv=(i===gaussPivotRow && j===gaussPivotCol);
+      html+=`<td class="${isBar?'bar':''}${isPiv?' pivot-cell':''}" ${mode==='guided'?`onclick="gaussSelectPivot(${i},${j})" style="cursor:pointer"`:''}>${disp}</td>`;
+    }
+    html+='</tr>';
+  }
+  html+='</table></div>';
+  document.getElementById('gauss-board').innerHTML=html;
+  document.getElementById('gauss-combo').textContent=gaussCombo;
+
+  const info=document.getElementById('gauss-step-info');
+  if(isReduced){
+    gaussDone=true;
+    const rango=countPivots(gaussMatrix);
+    const n=cols-1;
+    let clase='';
+    if(rango<rows && gaussMatrix.some((r,i)=>r.slice(0,-1).every(v=>Math.abs(v)<0.0001) && Math.abs(r[cols-1])>0.0001)){
+      clase='Sistema INCOMPATIBLE ❌';
+    } else if(rango===n){ clase='Sistema COMPATIBLE DETERMINADO 🎯 — solución única'; }
+    else { clase=`Sistema COMPATIBLE INDETERMINADO ♾️ — ${n-rango} variable(s) libre(s)`; }
+    info.className='result-box ok';
+    info.innerHTML=`✅ <strong>Forma reducida alcanzada.</strong> ρ(A) = ${rango}. ${clase}`;
+    if(gaussExamPreset===2) { unlockBadge('gauss'); addExp(150); }
+    addExp(50);
+  } else {
+    info.className='result-box';
+    info.textContent=mode==='guided'?'Hacé click en un elemento no nulo para usarlo como pivote.':'Seleccioná un pivote para el modo examen.';
+  }
+}
+
+function isGaussJordanReduced(mat){
+  const rows=mat.length, cols=mat[0].length;
+  let lastPivCol=-1;
+  for(let i=0;i<rows;i++){
+    let pivFound=false;
+    for(let j=0;j<cols-1;j++){
+      if(Math.abs(mat[i][j])>0.0001){
+        if(j<=lastPivCol) return false;
+        if(Math.abs(mat[i][j]-1)>0.0001) return false;
+        // check all other rows in this col are 0
+        for(let ii=0;ii<rows;ii++){
+          if(ii!==i && Math.abs(mat[ii][j])>0.0001) return false;
+        }
+        lastPivCol=j; pivFound=true; break;
+      }
+    }
+  }
+  return true;
+}
+
+function countPivots(mat){
+  let cnt=0;
+  for(const row of mat){
+    if(row.slice(0,-1).some(v=>Math.abs(v)>0.0001)) cnt++;
+  }
+  return cnt;
+}
+
+function gaussSelectPivot(r,c){
+  const cols=gaussMatrix[0].length;
+  if(c===cols-1) return;
+  if(Math.abs(gaussMatrix[r][c])<0.0001){ 
+    const info=document.getElementById('gauss-step-info');
+    info.className='result-box no'; info.textContent='⚠️ El pivote no puede ser cero. Elegí otro elemento.';
+    return;
+  }
+  const mode=document.querySelector('input[name="gauss-mode"]:checked').value;
+  gaussPivotRow=r; gaussPivotCol=c;
+  if(mode==='guided'){ gaussApplyPivot(); }
+  else { gaussShowExamInputs(); }
+}
+
+function gaussApplyPivot(){
+  const rows=gaussMatrix.length, cols=gaussMatrix[0].length;
+  const r=gaussPivotRow, c=gaussPivotCol;
+  const piv=gaussMatrix[r][c];
+  gaussHistory.push(gaussMatrix.map(row=>[...row]));
+  const newMat=gaussMatrix.map(row=>[...row]);
+  // normalize pivot row
+  for(let j=0;j<cols;j++) newMat[r][j]/=piv;
+  // eliminate other rows
+  for(let i=0;i<rows;i++){
+    if(i===r) continue;
+    const factor=newMat[i][c];
+    for(let j=0;j<cols;j++) newMat[i][j]-=factor*newMat[r][j];
+  }
+  gaussMatrix=newMat;
+  gaussPivotRow=-1; gaussPivotCol=-1;
+  gaussCombo++;
+  if(gaussCombo>=3) showCombo(gaussCombo);
+  gaussRender();
+}
+
+function gaussShowExamInputs(){
+  const rows=gaussMatrix.length, cols=gaussMatrix[0].length;
+  const r=gaussPivotRow, c=gaussPivotCol;
+  const piv=gaussMatrix[r][c];
+  document.getElementById('gauss-exam-controls').style.display='block';
+  const prompt=document.getElementById('gauss-exam-prompt');
+  prompt.textContent=`Pivote seleccionado: fila ${r+1}, col ${c+1} = ${piv}. Ingresá la nueva matriz completa tras aplicar Gauss-Jordan sobre esa columna.`;
+  
+  // build input grid for new matrix
+  let html='<div class="mat-input-grid" style="grid-template-columns:repeat('+cols+',1fr)">';
+  for(let i=0;i<rows;i++) for(let j=0;j<cols;j++){
+    html+=`<input type="number" id="ge_${i}_${j}" value="${gaussMatrix[i][j].toFixed(2)}" step="any" style="${j===cols-1?'border-left:2px solid var(--pur);':''}">`;
+  }
+  html+='</div>';
+  document.getElementById('gauss-exam-inputs').innerHTML=html;
+}
+
+function gaussExamCheck(){
+  const rows=gaussMatrix.length, cols=gaussMatrix[0].length;
+  const r=gaussPivotRow, c=gaussPivotCol;
+  const piv=gaussMatrix[r][c];
+  // compute expected
+  const expected=gaussMatrix.map(row=>[...row]);
+  for(let j=0;j<cols;j++) expected[r][j]/=piv;
+  for(let i=0;i<rows;i++){
+    if(i===r) continue;
+    const factor=expected[i][c];
+    for(let j=0;j<cols;j++) expected[i][j]-=factor*expected[r][j];
+  }
+
+  let allCorrect=true;
+  for(let i=0;i<rows;i++) for(let j=0;j<cols;j++){
+    const userVal=parseFloat(document.getElementById(`ge_${i}_${j}`).value)||0;
+    if(Math.abs(userVal-expected[i][j])>0.05){ allCorrect=false; }
+  }
+
+  const info=document.getElementById('gauss-step-info');
+  if(allCorrect){
+    gaussCombo++;
+    if(gaussCombo>=3) showCombo(gaussCombo);
+    info.className='result-box ok';
+    info.innerHTML='✅ ¡Correcto! Paso aplicado.';
+    gaussHistory.push(gaussMatrix.map(row=>[...row]));
+    gaussMatrix=expected;
+    gaussPivotRow=-1; gaussPivotCol=-1;
+    document.getElementById('gauss-exam-controls').style.display='none';
+    gaussRender();
+  } else {
+    gaussCombo=0;
+    info.className='result-box no';
+    info.innerHTML='❌ Hay errores. Revisá el cálculo usando la Regla del Rectángulo. Esperado (para al menos un elemento): verifcá con el modo guiado.';
+  }
+}
+
+function gaussModeChange(){
+  const mode=document.querySelector('input[name="gauss-mode"]:checked').value;
+  document.getElementById('gauss-guided-controls').style.display=mode==='guided'?'block':'none';
+  document.getElementById('gauss-exam-controls').style.display='none';
+  gaussPivotRow=-1; gaussPivotCol=-1;
+  gaussRender();
+}
+
+function gaussUndo(){
+  if(gaussHistory.length===0) return;
+  gaussMatrix=gaussHistory.pop();
+  gaussDone=false; gaussPivotRow=-1; gaussPivotCol=-1;
+  gaussRender();
+}
+
+function gaussReset(){
+  if(gaussHistory.length===0) return;
+  gaussMatrix=gaussHistory[0].map(r=>[...r]);
+  gaussHistory=[]; gaussPivotRow=-1; gaussPivotCol=-1; gaussDone=false; gaussCombo=0;
+  gaussRender();
+}
+
+function showCombo(n){
+  const el=document.getElementById('combo-flash');
+  document.getElementById('combo-num').textContent=n;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2000);
+}
+
+// ═══════════════════════════════════════════════════
+// SIMULADOR 3 — MULTIPLICADOR DE MATRICES
+// ═══════════════════════════════════════════════════
+let matA=[], matB=[], matC=[];
+let matStep=0;
+let matQuizScore=0;
+let matQuizCorrect=0;
+
+function matBuildInputs(){
+  const ra=+document.getElementById('ma-rows').value;
+  const ca=+document.getElementById('ma-cols').value;
+  const cb=+document.getElementById('mb-cols').value;
+  document.getElementById('mb-rows-label').textContent=ca;
+
+  let html='<div class="mat-input-grid" style="grid-template-columns:repeat('+ca+',1fr)">';
+  for(let i=0;i<ra;i++) for(let j=0;j<ca;j++)
+    html+=`<input type="number" id="ma_${i}_${j}" value="${(i===j?2:1)}" step="any">`;
+  html+='</div>';
+  document.getElementById('ma-inputs').innerHTML=html;
+
+  let htmlB='<div class="mat-input-grid" style="grid-template-columns:repeat('+cb+',1fr)">';
+  for(let i=0;i<ca;i++) for(let j=0;j<cb;j++)
+    htmlB+=`<input type="number" id="mb_${i}_${j}" value="${i===j?1:0}" step="any">`;
+  htmlB+='</div>';
+  document.getElementById('mb-inputs').innerHTML=htmlB;
+}
+
+function matStartSim(){
+  const ra=+document.getElementById('ma-rows').value;
+  const ca=+document.getElementById('ma-cols').value;
+  const cb=+document.getElementById('mb-cols').value;
+  matA=[]; matB=[];
+  for(let i=0;i<ra;i++){ const r=[]; for(let j=0;j<ca;j++) r.push(parseFloat(document.getElementById(`ma_${i}_${j}`).value)||0); matA.push(r); }
+  for(let i=0;i<ca;i++){ const r=[]; for(let j=0;j<cb;j++) r.push(parseFloat(document.getElementById(`mb_${i}_${j}`).value)||0); matB.push(r); }
+  matC=matA.map(row=>Array(cb).fill(null));
+  matStep=0; matQuizCorrect=0;
+  document.getElementById('mat-sim-area').style.display='block';
+  matRender();
+  addExp(10);
+}
+
+function matRender(){
+  const ra=matA.length, ca=matA[0].length, cb=matB[0].length;
+  const ci=Math.floor(matStep/cb), cj=matStep%cb;
+  const quizMode=document.getElementById('mat-quiz-mode').checked;
+
+  // compute current element
+  if(matStep < ra*cb){
+    const val=matA[ci].reduce((s,v,k)=>s+v*matB[k][cj],0);
+    if(!quizMode) matC[ci][cj]=val;
+
+    // display
+    let html='<div style="display:flex;flex-wrap:wrap;gap:2rem;align-items:flex-start">';
+    // Matrix A
+    html+='<div><p style="font-size:.8rem;font-weight:700;margin-bottom:.3rem;color:var(--blue)">A</p><table style="border-collapse:collapse">';
+    for(let i=0;i<ra;i++){
+      html+='<tr>';
+      for(let j=0;j<ca;j++){
+        const bg=i===ci?'background:#dbeafe':'';
+        html+=`<td style="border:1px solid var(--border);padding:.3rem .6rem;font-family:monospace;font-size:.95rem;${bg}">${matA[i][j]}</td>`;
+      }
+      html+='</tr>';
+    }
+    html+='</table></div>';
+    // Matrix B
+    html+='<div><p style="font-size:.8rem;font-weight:700;margin-bottom:.3rem;color:var(--orange)">B</p><table style="border-collapse:collapse">';
+    for(let i=0;i<ca;i++){
+      html+='<tr>';
+      for(let j=0;j<cb;j++){
+        const bg=j===cj?'background:#fff3e0':'';
+        html+=`<td style="border:1px solid var(--border);padding:.3rem .6rem;font-family:monospace;font-size:.95rem;${bg}">${matB[i][j]}</td>`;
+      }
+      html+='</tr>';
+    }
+    html+='</table></div>';
+    // Result C
+    html+='<div><p style="font-size:.8rem;font-weight:700;margin-bottom:.3rem;color:var(--pur)">C = A·B</p><table style="border-collapse:collapse">';
+    for(let i=0;i<ra;i++){
+      html+='<tr>';
+      for(let j=0;j<cb;j++){
+        const isCur=i===ci&&j===cj;
+        const bg=isCur?'background:#ede9fe;font-weight:700':'';
+        const v=matC[i][j];
+        html+=`<td style="border:1px solid var(--border);padding:.3rem .6rem;font-family:monospace;font-size:.95rem;${bg}">${v===null?'?':v}</td>`;
+      }
+      html+='</tr>';
+    }
+    html+='</table></div>';
+    html+='</div>';
+    document.getElementById('mat-display').innerHTML=html;
+
+    // product detail
+    const terms=matA[ci].map((v,k)=>`(${v})(${matB[k][cj]})`).join(' + ');
+    document.getElementById('mat-result-box').innerHTML=`Calculando $c_{${ci+1}${cj+1}}$ = fila ${ci+1} de A · col ${cj+1} de B<br><code>${terms} = ${val}</code>`;
+
+    // quiz
+    if(quizMode){
+      document.getElementById('mat-quiz-wrap').style.display='flex';
+      document.getElementById('mat-next-btn').disabled=true;
+    } else {
+      document.getElementById('mat-quiz-wrap').style.display='none';
+      document.getElementById('mat-next-btn').disabled=false;
+    }
+  }
+}
+
+function matNextStep(){
+  matStep++;
+  const ra=matA.length, cb=matB[0].length;
+  if(matStep>=ra*cb){
+    document.getElementById('mat-result-box').innerHTML='✅ <strong>Producto completo.</strong> La matriz $C = A \\cdot B$ está lista.';
+    document.getElementById('mat-next-btn').disabled=true;
+    addExp(30);
+  } else { matRender(); }
+}
+
+function matQuizCheck(){
+  const ra=matA.length, cb=matB[0].length, ca=matA[0].length;
+  const ci=Math.floor(matStep/cb), cj=matStep%cb;
+  const expected=matA[ci].reduce((s,v,k)=>s+v*matB[k][cj],0);
+  const userVal=parseFloat(document.getElementById('mat-quiz-input').value);
+  const rb=document.getElementById('mat-result-box');
+  if(Math.abs(userVal-expected)<0.01){
+    matC[ci][cj]=expected;
+    matQuizCorrect++;
+    document.getElementById('mat-quiz-score').textContent=matQuizCorrect+'/5';
+    rb.className='result-box ok'; rb.innerHTML='✅ ¡Correcto!';
+    if(matQuizCorrect>=5){ unlockBadge('producto'); addExp(100); }
+    document.getElementById('mat-next-btn').disabled=false;
+    document.getElementById('mat-quiz-wrap').style.display='none';
+    document.getElementById('mat-quiz-input').value='';
+    matStep++;
+    if(matStep<ra*cb) matRender();
+    else { rb.innerHTML='✅ <strong>Quiz completado.</strong>'; document.getElementById('mat-next-btn').disabled=true; }
+  } else {
+    rb.className='result-box no'; rb.innerHTML=`❌ No es correcto. El resultado es <strong>${expected}</strong>. Revisá el producto interno.`;
+  }
+}
+
+function matReset(){
+  document.getElementById('mat-sim-area').style.display='none';
+  matStep=0; matQuizCorrect=0;
+}
+
+// ═══════════════════════════════════════════════════
+// SIMULADOR 4 — INVERSA
+// ═══════════════════════════════════════════════════
+const INV_PRESETS=[
+  [[3,2],[1,1]],
+  [[2,1,1],[0,1,1],[3,1,-1]],
+  [[1,1,0],[0,1,1],[0,2,2]]
+];
+let invMatrix=[], invIdentity=[], invHistory=[], invSize=2, invDone=false;
+let invAutoSteps=[], invAutoIdx=0;
+
+function invBuildInputs(){
+  invSize=+document.getElementById('inv-size').value;
+  let html=`<div class="mat-input-grid" style="grid-template-columns:repeat(${invSize},1fr)">`;
+  for(let i=0;i<invSize;i++) for(let j=0;j<invSize;j++)
+    html+=`<input type="number" id="inv_${i}_${j}" value="${i===j?1:0}" step="any">`;
+  html+='</div>';
+  document.getElementById('inv-input-wrap').innerHTML=html;
+}
+
+function invLoad(idx){
+  const preset=INV_PRESETS[idx];
+  invSize=preset.length;
+  document.getElementById('inv-size').value=invSize;
+  invBuildInputs();
+  for(let i=0;i<invSize;i++) for(let j=0;j<invSize;j++){
+    const el=document.getElementById(`inv_${i}_${j}`);
+    if(el) el.value=preset[i][j];
+  }
+}
+
+function invStart(){
+  invMatrix=[];
+  for(let i=0;i<invSize;i++){
+    const row=[];
+    for(let j=0;j<invSize;j++) row.push(parseFloat(document.getElementById(`inv_${i}_${j}`).value)||0);
+    invMatrix.push(row);
+  }
+  invIdentity=Array.from({length:invSize},(_,i)=>Array.from({length:invSize},(_,j)=>i===j?1:0));
+  invHistory=[];
+  invDone=false;
+  invAutoSteps=computeInvSteps([...invMatrix.map(r=>[...r])],[...invIdentity.map(r=>[...r])]);
+  invAutoIdx=0;
+  document.getElementById('inv-board').style.display='block';
+  document.getElementById('inv-next-btn').disabled=false;
+  invRender();
+  addExp(10);
+}
+
+function computeInvSteps(mat, id){
+  const n=mat.length;
+  const steps=[]; // each step: {mat, id, op}
+  // Forward elimination
+  for(let col=0;col<n;col++){
+    // find pivot row
+    let pivRow=-1;
+    for(let r=col;r<n;r++) if(Math.abs(mat[r][col])>0.0001){ pivRow=r; break; }
+    if(pivRow===-1){ steps.push({mat:mat.map(r=>[...r]),id:id.map(r=>[...r]),op:'⚠️ No hay pivote en columna '+(col+1)+' — matriz no inversible',done:true,fail:true}); return steps; }
+    if(pivRow!==col){
+      [mat[col],mat[pivRow]]=[mat[pivRow],mat[col]];
+      [id[col],id[pivRow]]=[id[pivRow],id[col]];
+      steps.push({mat:mat.map(r=>[...r]),id:id.map(r=>[...r]),op:`F${col+1} ↔ F${pivRow+1} (intercambio de filas)`});
+    }
+    const piv=mat[col][col];
+    if(Math.abs(piv-1)>0.0001){
+      for(let j=0;j<n;j++){ mat[col][j]/=piv; id[col][j]/=piv; }
+      steps.push({mat:mat.map(r=>[...r]),id:id.map(r=>[...r]),op:`F${col+1} → F${col+1} / ${piv.toFixed(2)} (normalizar pivote)`});
+    }
+    for(let row=0;row<n;row++){
+      if(row===col || Math.abs(mat[row][col])<0.0001) continue;
+      const factor=mat[row][col];
+      for(let j=0;j<n;j++){ mat[row][j]-=factor*mat[col][j]; id[row][j]-=factor*id[col][j]; }
+      steps.push({mat:mat.map(r=>[...r]),id:id.map(r=>[...r]),op:`F${row+1} → F${row+1} − (${factor.toFixed(2)})·F${col+1}`});
+    }
+  }
+  steps.push({mat:mat.map(r=>[...r]),id:id.map(r=>[...r]),op:'✅ Forma identidad alcanzada. La parte derecha es A⁻¹.',done:true});
+  return steps;
+}
+
+function invStep(){
+  if(invAutoIdx>=invAutoSteps.length){ document.getElementById('inv-next-btn').disabled=true; return; }
+  const step=invAutoSteps[invAutoIdx++];
+  invMatrix=step.mat; invIdentity=step.id;
+  document.getElementById('inv-info').className='result-box'+(step.fail?' no':step.done?' ok':'');
+  document.getElementById('inv-info').textContent=step.op;
+  invRender(step.done, step.fail);
+  if(step.done){ document.getElementById('inv-next-btn').disabled=true; if(!step.fail && invSize===3){ unlockBadge('inversa'); addExp(150); } if(!step.fail) addExp(50); }
+}
+
+function invRender(done, fail){
+  const n=invSize;
+  let html='<div style="overflow-x:auto"><table class="gauss-table" style="width:auto">';
+  html+='<tr><td colspan="'+n+'" style="background:#dbeafe;font-weight:700;font-size:.8rem;text-align:center">A → Iₙ</td><td class="bar" colspan="'+n+'" style="background:#dcfce7;font-weight:700;font-size:.8rem;text-align:center">Iₙ → A⁻¹</td></tr>';
+  for(let i=0;i<n;i++){
+    html+='<tr>';
+    for(let j=0;j<n;j++){
+      const v=invMatrix[i][j];
+      html+=`<td>${fractionStr(v)}</td>`;
+    }
+    for(let j=0;j<n;j++){
+      const v=invIdentity[i][j];
+      html+=`<td class="${j===0?'bar':''}">${fractionStr(v)}</td>`;
+    }
+    html+='</tr>';
+  }
+  html+='</table></div>';
+
+  if(done && !fail){
+    html+=`<div class="result-box ok" style="margin-top:.7rem"><strong>Verificación A·A⁻¹ = I:</strong><br>`;
+    // verify
+    const orig=invAutoSteps[0]?invAutoSteps[0].mat:invMatrix;
+    const ainv=invIdentity;
+    const n2=invSize;
+    let ok=true;
+    for(let i=0;i<n2;i++) for(let j=0;j<n2;j++){
+      const sum=orig[i].reduce((s,v,k)=>s+v*ainv[k][j],0);
+      if(Math.abs(sum-(i===j?1:0))>0.01) ok=false;
+    }
+    html+=ok?'✅ Verificado correctamente.':'⚠️ Revisar cálculo.';
+    html+='</div>';
+  }
+
+  document.getElementById('inv-display').innerHTML=html;
+}
+
+function invReset(){ document.getElementById('inv-board').style.display='none'; invAutoIdx=0; }
+
+function fractionStr(v){
+  if(Math.abs(v)<0.0001) return '0';
+  if(Math.abs(v-Math.round(v))<0.0001) return Math.round(v).toString();
+  return v.toFixed(3).replace(/\.?0+$/,'');
+}
+
+// ═══════════════════════════════════════════════════
+// SIMULADOR 5 — DETERMINANTES
+// ═══════════════════════════════════════════════════
+let detMode=2;
+function detSetMode(m){
+  detMode=m;
+  ['2x2','3s','3c','cramer'].forEach(id=>{
+    document.getElementById('det-'+id).style.display='none';
+    document.getElementById('det-mode-'+(id==='3s'?'3s':id==='3c'?'3c':id==='cramer'?'cramer':'2')).className='sim-btn ghost';
+  });
+  const key=m===2?'2x2':m==='3s'?'3s':m==='3c'?'3c':'cramer';
+  const btnKey=m===2?'2':m==='3s'?'3s':m==='3c'?'3c':'cramer';
+  document.getElementById('det-'+key).style.display='block';
+  document.getElementById('det-mode-'+btnKey).className='sim-btn';
+}
+
+function det2x2Calc(){
+  const a=+document.getElementById('d2a').value,b=+document.getElementById('d2b').value,
+        c=+document.getElementById('d2c').value,d=+document.getElementById('d2d').value;
+  const det=a*d-b*c;
+  const rb=document.getElementById('det2-result');
+  rb.style.display='block';
+  rb.className='result-box '+(Math.abs(det)<0.0001?'warn':'ok');
+  rb.innerHTML=`$\\det(A) = (${a})(${d}) - (${b})(${c}) = ${a*d} - ${b*c} = \\mathbf{${det}}$<br>` +
+    (Math.abs(det)<0.0001?'⚠️ det = 0 → A <strong>no</strong> es inversible':'✅ det ≠ 0 → A es inversible');
+  addExp(10);
+  if(window.MathJax) MathJax.typesetPromise([rb]);
+}
+
+function get3x3(prefix){
+  const m=[];
+  for(let i=0;i<3;i++){ const r=[]; for(let j=0;j<3;j++) r.push(+document.getElementById(prefix+i+'_0'+j.toString().replace('_0','_').replace('prefix',''))?.value||+document.getElementById(`${prefix}${i}${j}`)?.value||0); m.push(r); }
+  return m;
+}
+
+function getMatrix3(pref){
+  const m=[];
+  for(let i=0;i<3;i++){ const r=[]; for(let j=0;j<3;j++) r.push(parseFloat(document.getElementById(`${pref}_${i}${j}`).value)||0); m.push(r); }
+  return m;
+}
+
+function det3(m){ 
+  return m[0][0]*(m[1][1]*m[2][2]-m[1][2]*m[2][1])
+        -m[0][1]*(m[1][0]*m[2][2]-m[1][2]*m[2][0])
+        +m[0][2]*(m[1][0]*m[2][1]-m[1][1]*m[2][0]);
+}
+
+function sarrusCalc(){
+  const m=getMatrix3('s3');
+  const d=det3(m);
+  const pos=[ [0,0,0],[0,1,1],[0,2,2] ].map(([r1,r2,r3])=>m[0][r1]*m[1][(r1+1)%3]*m[2][(r1+2)%3]);
+  // Sarrus positives: a00*a11*a22, a01*a12*a20, a02*a10*a21
+  const p1=m[0][0]*m[1][1]*m[2][2], p2=m[0][1]*m[1][2]*m[2][0], p3=m[0][2]*m[1][0]*m[2][1];
+  const n1=m[0][2]*m[1][1]*m[2][0], n2=m[0][0]*m[1][2]*m[2][1], n3=m[0][1]*m[1][0]*m[2][2];
+  const rb=document.getElementById('det3s-result');
+  rb.style.display='block';
+  rb.className='result-box '+(Math.abs(d)<0.0001?'warn':'ok');
+  rb.innerHTML=`<strong>Regla de Sarrus:</strong><br>
+    Positivas: (${m[0][0]})(${m[1][1]})(${m[2][2]}) + (${m[0][1]})(${m[1][2]})(${m[2][0]}) + (${m[0][2]})(${m[1][0]})(${m[2][1]})<br>
+    = ${p1} + ${p2} + ${p3} = ${p1+p2+p3}<br>
+    Negativas: (${m[0][2]})(${m[1][1]})(${m[2][0]}) + (${m[0][0]})(${m[1][2]})(${m[2][1]}) + (${m[0][1]})(${m[1][0]})(${m[2][2]})<br>
+    = ${n1} + ${n2} + ${n3} = ${n1+n2+n3}<br>
+    <strong>det(A) = ${p1+p2+p3} − ${n1+n2+n3} = ${d}</strong><br>
+    ${Math.abs(d)<0.0001?'⚠️ det = 0 → no inversible':'✅ det ≠ 0 → inversible'}`;
+  addExp(15);
+}
+
+function cofactorCalc(){
+  const m=getMatrix3('c3');
+  const expand=document.getElementById('cofactor-expand').value;
+  const isRow=expand.startsWith('r');
+  const idx=parseInt(expand[1]);
+  let html='<strong>Expansión por cofactores';
+  const d=det3(m);
+  let terms=[];
+  for(let k=0;k<3;k++){
+    let r,c;
+    if(isRow){ r=idx; c=k; } else { r=k; c=idx; }
+    const sign=(r+c)%2===0?1:-1;
+    // minor
+    const minor=m.filter((_,ri)=>ri!==r).map(row=>row.filter((_,ci)=>ci!==c));
+    const mdet=minor[0][0]*minor[1][1]-minor[0][1]*minor[1][0];
+    terms.push(`${sign>=0?'+':'-'}(${m[r][c]})(${mdet})`);
+  }
+  const rb=document.getElementById('det3c-result');
+  rb.style.display='block';
+  rb.className='result-box '+(Math.abs(d)<0.0001?'warn':'ok');
+  rb.innerHTML=`${html}:</strong><br>${terms.join(' ')}<br><strong>det(A) = ${d}</strong>`;
+  addExp(15);
+}
+
+function cramerCalc(){
+  const A=getMatrix3('cr_a');
+  const b=[0,1,2].map(i=>parseFloat(document.getElementById(`cr_b${i}`).value)||0);
+  const dA=det3(A);
+  const rb=document.getElementById('cramer-result');
+  rb.style.display='block';
+  if(Math.abs(dA)<0.0001){
+    rb.className='result-box no';
+    rb.innerHTML='❌ det(A) = 0 → No se puede aplicar Cramer (sistema no tiene solución única).';
+    return;
+  }
+  const sols=[];
+  for(let i=0;i<3;i++){
+    const Ai=A.map((row,ri)=>row.map((v,ci)=>ci===i?b[ri]:v));
+    sols.push(det3(Ai)/dA);
+  }
+  rb.className='result-box ok';
+  rb.innerHTML=`<strong>det(A) = ${dA.toFixed(4)}</strong><br>` +
+    sols.map((s,i)=>`x${i+1} = det(A${i+1})/det(A) = <strong>${s.toFixed(4)}</strong>`).join('<br>');
+  unlockBadge('det'); addExp(100);
+}
+
+// ═══════════════════════════════════════════════════
+// PRÁCTICA GUIADA
+// ═══════════════════════════════════════════════════
+const EJERCICIOS=[
+  {
+    num:'Ej. 1(c)',
+    enunciado:'Dadas $A=\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$ y $B=\\begin{pmatrix}0&1\\\\2&-1\\end{pmatrix}$, calculá $B\\cdot A$ y verificá que $A\\cdot B \\neq B\\cdot A$.',
+    hints:['El producto BA: cada elemento $c_{ij}$ = fila $i$ de B · columna $j$ de A.','$BA_{11} = 0\\cdot1 + 1\\cdot3 = 3$; $BA_{12} = 0\\cdot2 + 1\\cdot4 = 4$','$BA=\\begin{pmatrix}3&4\\\\-1&0\\end{pmatrix}$; $AB=\\begin{pmatrix}4&-1\\\\8&-1\\end{pmatrix}$ → distintas ✓'],
+    solucion:'$B\\cdot A=\\begin{pmatrix}3&4\\\\-1&0\\end{pmatrix}$<br>$A\\cdot B=\\begin{pmatrix}4&-1\\\\8&-1\\end{pmatrix}$<br>Como $BA \\neq AB$, queda demostrada la no conmutatividad.'
+  },
+  {
+    num:'Ej. 1(f)',
+    enunciado:'Con $C=\\begin{pmatrix}1&-1\\\\2&3\\end{pmatrix}$ y $D=\\begin{pmatrix}0&2\\\\1&-1\\end{pmatrix}$, calculá $3C - D^t$.',
+    hints:['Primero traspone D: $D^t=\\begin{pmatrix}0&1\\\\2&-1\\end{pmatrix}$','Luego $3C=\\begin{pmatrix}3&-3\\\\6&9\\end{pmatrix}$','$3C - D^t = \\begin{pmatrix}3-0&-3-1\\\\6-2&9-(-1)\\end{pmatrix}$'],
+    solucion:'$D^t=\\begin{pmatrix}0&1\\\\2&-1\\end{pmatrix}$<br>$3C=\\begin{pmatrix}3&-3\\\\6&9\\end{pmatrix}$<br>$3C-D^t=\\begin{pmatrix}3&-4\\\\4&10\\end{pmatrix}$'
+  },
+  {
+    num:'Ej. 2',
+    enunciado:'Con $A=\\begin{pmatrix}0&1\\\\0&0\\end{pmatrix}$, calculá $A^2$, $A^3$ y deducí $A^n$ para todo $n \\geq 2$.',
+    hints:['$A^2 = A\\cdot A$. Calculá elemento a elemento.','$A^2=\\begin{pmatrix}0&0\\\\0&0\\end{pmatrix}=O$ (la nula). Entonces...','$A^2=O \\Rightarrow A^n = O$ para todo $n\\geq 2$. Este tipo de matriz se llama nilpotente.'],
+    solucion:'$A^2=A\\cdot A=\\begin{pmatrix}0&0\\\\0&0\\end{pmatrix}$<br>$A^3=A^2\\cdot A=O\\cdot A=O$<br>Para $n\\geq 2$: $A^n=O$ (matriz nilpotente de índice 2).'
+  },
+  {
+    num:'Ej. 3(A)',
+    enunciado:'Calculá la inversa de $A=\\begin{pmatrix}1&2\\\\-3&1\\end{pmatrix}$ usando el método de Gauss.',
+    hints:['Formá la matriz ampliada $(A|I_2)$: $\\begin{pmatrix}1&2&|&1&0\\\\-3&1&|&0&1\\end{pmatrix}$','$F_2 \\to F_2 + 3F_1$: $\\begin{pmatrix}1&2&|&1&0\\\\0&7&|&3&1\\end{pmatrix}$','$F_2 \\to F_2/7$, luego $F_1 \\to F_1 - 2F_2$'],
+    solucion:'$(A|I) \\to (I|A^{-1})$<br>$F_2 \\to F_2+3F_1$: $\\begin{pmatrix}1&2\\\\0&7\\end{pmatrix}$<br>$F_2 \\to F_2/7$: $\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$<br>$F_1 \\to F_1-2F_2$: $\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}$<br>$A^{-1}=\\begin{pmatrix}1/7&-2/7\\\\3/7&1/7\\end{pmatrix}$'
+  },
+  {
+    num:'Ej. 3(E)',
+    enunciado:'Calculá $E^{-1}$ para $E=\\begin{pmatrix}2&1&1\\\\0&1&1\\\\3&1&-1\\end{pmatrix}$.',
+    hints:['Formá $(E|I_3)$ y aplicá Gauss-Jordan. Primera operación: $F_3 \\to F_3 - \\frac{3}{2}F_1$','Después de la eliminación hacia adelante: chequeá que el pivote de la fila 3 sea no nulo para saber si es inversible.','$\\det(E) = 2(1\\cdot(-1)-1\\cdot1) - 1(0\\cdot(-1)-1\\cdot3) + 1(0\\cdot1-1\\cdot3) = -4+3-3=-4 \\neq 0$, sí inversible.'],
+    solucion:'$\\det(E)=-4 \\neq 0$ → inversible.<br>Aplicando Gauss-Jordan en $(E|I_3)$:<br>$E^{-1}=\\begin{pmatrix}-1&1&0\\\\3/4&-5/4&1/2\\\\-3/4&1/4&1/2\\end{pmatrix}$<br>(Verificá: $E\\cdot E^{-1}=I_3$)'
+  },
+  {
+    num:'Ej. 5(a)',
+    enunciado:'Calculá $\\det\\begin{pmatrix}3&-2\\\\5&4\\end{pmatrix}$.',
+    hints:['Fórmula 2×2: $ad - bc$.','$a=3, b=-2, c=5, d=4$.','$\\det = 3\\cdot4 - (-2)\\cdot5$'],
+    solucion:'$\\det = 3\\cdot4 - (-2)\\cdot5 = 12 + 10 = 22$'
+  },
+  {
+    num:'Ej. 5(c)',
+    enunciado:'Calculá $\\det\\begin{pmatrix}1&2&3\\\\4&5&6\\\\7&8&9\\end{pmatrix}$.',
+    hints:['Usá Sarrus o cofactores. Notá que la tercera fila = segunda fila + primera fila (¡casi!).','Sarrus: positivas = (1·5·9)+(2·6·7)+(3·4·8) = 45+84+96 = 225','Negativas = (3·5·7)+(1·6·8)+(2·4·9) = 105+48+72 = 225'],
+    solucion:'Positivas: $1\\cdot5\\cdot9 + 2\\cdot6\\cdot7 + 3\\cdot4\\cdot8 = 45+84+96=225$<br>Negativas: $3\\cdot5\\cdot7 + 1\\cdot6\\cdot8 + 2\\cdot4\\cdot9 = 105+48+72=225$<br>$\\det = 225-225 = 0$<br>(Las filas son linealmente dependientes: $F_3 = F_1 + F_2 - \\text{algo}$... de hecho $F_3-F_2 = F_2-F_1$, progresión aritmética.)'
+  },
+  {
+    num:'Ej. 5(e)',
+    enunciado:'Calculá el determinante de la matriz que tiene una fila completa de ceros.',
+    hints:['Si una fila (o columna) es de ceros, el determinante es directamente...','Por la propiedad de multilinealidad: $\\det(A)=0$ si alguna fila/col es nula.','No hace falta calcular nada más.'],
+    solucion:'$\\det = 0$ inmediatamente.<br>Propiedad: si alguna fila o columna de $A$ es el vector nulo, entonces $\\det(A) = 0$, lo que implica que $A$ no es inversible.'
+  },
+  {
+    num:'Ej. 6',
+    enunciado:'Dados $\\det(A)=3$ y $\\det(B)=2$, calculá $\\det(AB)$ y $\\det(A^{10})$.',
+    hints:['$\\det(AB) = \\det(A)\\cdot\\det(B)$','$\\det(A^{10}) = (\\det A)^{10}$','Aplicá directamente con los valores dados.'],
+    solucion:'$\\det(AB) = \\det(A)\\cdot\\det(B) = 3\\cdot2 = 6$<br>$\\det(A^{10}) = (\\det A)^{10} = 3^{10} = 59049$'
+  },
+  {
+    num:'Ej. 7',
+    enunciado:'Si $\\det(A)=15$ y $A\\in\\mathbb{R}^{3\\times 3}$, calculá $\\det(2A)$, $\\det((4A)^{-1})$ y $\\det(2A^{-1})$.',
+    hints:['$\\det(kA) = k^n\\cdot\\det(A)$ para $A$ de $n\\times n$.','$\\det(M^{-1}) = 1/\\det(M)$','Combiná las propiedades paso a paso.'],
+    solucion:'$\\det(2A) = 2^3\\cdot\\det(A) = 8\\cdot15 = 120$<br>$\\det(4A) = 4^3\\cdot15 = 960$<br>$\\det((4A)^{-1}) = 1/960$<br>$\\det(2A^{-1}) = 2^3\\cdot\\det(A^{-1}) = 8\\cdot(1/15) = 8/15$'
+  }
+];
+
+let pracSolved=new Set();
+
+function buildPractica(){
+  const container=document.getElementById('practica-list');
+  container.innerHTML=EJERCICIOS.map((ej,idx)=>`
+    <div class="ex-card" id="ex-card-${idx}">
+      <div class="ex-head">
+        <div>
+          <div class="ex-num">${ej.num}</div>
+          <div class="ex-statement">${ej.enunciado}</div>
+        </div>
+        <span class="ex-check" id="ex-check-${idx}" style="display:none">✅ Resuelto</span>
+      </div>
+      <div class="ex-btns">
+        <button class="sim-btn ghost" onclick="exHint(${idx},0)">💡 Pista 1</button>
+        <button class="sim-btn ghost" onclick="exHint(${idx},1)">💡 Pista 2</button>
+        <button class="sim-btn ghost" onclick="exHint(${idx},2)">💡 Pista 3</button>
+        <button class="sim-btn" onclick="exSol(${idx})">📋 Ver solución</button>
+        <button class="sim-btn green" onclick="exDone(${idx})">✔ Marcar resuelto</button>
+      </div>
+      <div class="ex-hint" id="ex-hint-${idx}"></div>
+      <div class="ex-sol" id="ex-sol-${idx}">${ej.solucion}</div>
+    </div>`).join('');
+  // render math in hints lazily
+}
+
+function exHint(idx, level){
+  const h=document.getElementById(`ex-hint-${idx}`);
+  h.innerHTML=EJERCICIOS[idx].hints[level];
+  h.classList.add('show');
+  if(window.MathJax) MathJax.typesetPromise([h]);
+}
+
+function exSol(idx){
+  const s=document.getElementById(`ex-sol-${idx}`);
+  s.classList.add('show');
+  if(window.MathJax) MathJax.typesetPromise([s]);
+}
+
+function exDone(idx){
+  pracSolved.add(idx);
+  document.getElementById(`ex-card-${idx}`).classList.add('solved');
+  document.getElementById(`ex-check-${idx}`).style.display='inline';
+  document.getElementById('prac-done-count').textContent=pracSolved.size;
+  addExp(20);
+  if(pracSolved.size>=6){ unlockBadge('practica'); }
+}
+
+// ═══════════════════════════════════════════════════
+// QUIZ
+// ═══════════════════════════════════════════════════
+const PREGUNTAS=[
+  // Básico (5)
+  {q:'¿Cómo se clasifica un sistema con infinitas soluciones?',opts:['Compatible indeterminado','Incompatible','Compatible determinado','Sistema homogéneo'],correct:0,
+   fb:'Un sistema con infinitas soluciones es Compatible Indeterminado (SCI). Ocurre cuando ρ(A)=ρ(A|b)<n.'},
+  {q:'¿Cuál de estas matrices es simétrica?',
+   opts:['$\\begin{pmatrix}1&2\\\\2&3\\end{pmatrix}$','$\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$','$\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$','$\\begin{pmatrix}1&0\\\\0&0\\end{pmatrix}$ con a₁₂≠a₂₁'],
+   correct:0,fb:'Simétrica: A=Aᵗ, es decir aᵢⱼ=aⱼᵢ. La primera opción cumple eso.'},
+  {q:'Para calcular el elemento $c_{12}$ del producto $C=A\\cdot B$, ¿qué se calcula?',
+   opts:['Fila 1 de A · Columna 2 de B','Columna 1 de A · Fila 2 de B','Fila 2 de A · Columna 1 de B','Fila 1 de B · Columna 2 de A'],
+   correct:0,fb:'$c_{ij}$ es el producto interno de la fila i de A con la columna j de B.'},
+  {q:'¿Cuándo existe $A^{-1}$?',
+   opts:['Cuando det(A)≠0 y A es cuadrada','Siempre que A sea cuadrada','Cuando A es triangular','Cuando A es simétrica'],
+   correct:0,fb:'La inversa existe si y solo si A es cuadrada Y det(A)≠0 (equivalente a ρ(A)=n).'},
+  {q:'¿Cuánto vale $\\det\\begin{pmatrix}5&3\\\\2&4\\end{pmatrix}$?',
+   opts:['14','−14','20−6=14','26'],correct:0,fb:'det = 5·4 − 3·2 = 20 − 6 = 14.'},
+
+  // Medio (5)
+  {q:'Un sistema triangulado tiene 3 ecuaciones, 3 incógnitas, y la última fila es (0 0 0 | 5). ¿Cómo se clasifica?',
+   opts:['Incompatible','Compatible determinado','Compatible indeterminado','No se puede saber'],
+   correct:0,fb:'La ecuación 0x+0y+0z=5 es inconsistente (0≠5), por lo que el sistema es INCOMPATIBLE.'},
+  {q:'Sea $A\\begin{pmatrix}1&2&3\\\\0&1&0\\end{pmatrix}$ y $B\\begin{pmatrix}1&0\\\\0&1\\\\2&0\\end{pmatrix}$. ¿Cuál es el orden de $C=A\\cdot B$?',
+   opts:['2×2','2×3','3×2','No se puede multiplicar'],correct:0,fb:'A es 2×3, B es 3×2. Dimensiones compatibles → C es 2×2.'},
+  {q:'Si $A\\in\\mathbb{R}^{3\\times3}$ y $k=2$, ¿cuánto vale $\\det(kA)$?',
+   opts:['$8\\det(A)$','$2\\det(A)$','$4\\det(A)$','$6\\det(A)$'],correct:0,fb:'det(kA)=kⁿ·det(A). Con n=3 y k=2: det(2A)=2³·det(A)=8·det(A).'},
+  {q:'El sistema $Ax=b$ en forma matricial con $A=\\begin{pmatrix}2&1\\\\1&3\\end{pmatrix}$ y $b=\\begin{pmatrix}5\\\\10\\end{pmatrix}$ equivale a:',
+   opts:['$2x_1+x_2=5$ y $x_1+3x_2=10$','$2x_1+x_2=10$ y $x_1+3x_2=5$','$x_1+2x_2=5$ y $3x_1+x_2=10$','No es correcto'],
+   correct:0,fb:'La fila i de A multiplica el vector x y da bᵢ: fila 1: 2x₁+1x₂=5; fila 2: 1x₁+3x₂=10.'},
+  {q:'¿Cuál matriz NO es inversible?',
+   opts:['$A$ con $\\det(A)=0$','$A$ con $\\det(A)=1$','$A$ con $\\det(A)=-3$','$A$ con $\\det(A)=0.001$'],
+   correct:0,fb:'A es inversible si y solo si det(A)≠0. Solo la opción con det(A)=0 no es inversible.'},
+
+  // Difícil (5)
+  {q:'Si $\\det(A)=4$ y $A\\in\\mathbb{R}^{3\\times3}$, ¿cuánto vale $\\det(A^{-1}\\cdot A^t \\cdot 2A)$?',
+   opts:['$32$','$4$','$8$','$16$'],correct:0,
+   fb:'det(A⁻¹)=1/4; det(Aᵗ)=4; det(2A)=8·4=32. Producto: (1/4)·4·32=32.'},
+  {q:'Para qué valor de $k$ el sistema $\\begin{pmatrix}k&2\\\\3&6\\end{pmatrix}X=b$ tiene solución única?',
+   opts:['Cualquier $k\\neq 1$','$k=0$','$k=3$','$k=1$'],correct:0,
+   fb:'det = 6k−6. Para solución única: 6k−6≠0 → k≠1.'},
+  {q:'¿Cuál es la inversa de $A=\\begin{pmatrix}2&1\\\\5&3\\end{pmatrix}$?',
+   opts:['$\\begin{pmatrix}3&-1\\\\-5&2\\end{pmatrix}$','$\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}$','$\\begin{pmatrix}-3&1\\\\5&-2\\end{pmatrix}$','$\\begin{pmatrix}1/2&-1/5\\\\0&1/3\\end{pmatrix}$'],
+   correct:0,fb:'det=6−5=1. A⁻¹=(1/det)·adj(A). adj=[[3,-1],[-5,2]] (intercambiar diagonal, negar antidiagonal).'},
+  {q:'Sistema compatible indeterminado triangulado: $x_1+2x_2-x_3=1$ y $x_2+x_3=2$. ¿Cuál es la solución paramétrica con $x_3=t$?',
+   opts:['$x_3=t,\\; x_2=2-t,\\; x_1=1-2(2-t)+t=t·3-3$','$x_3=t,\\; x_2=2+t,\\; x_1=1$','$x_3=0,\\; x_2=2,\\; x_1=-3$','Ninguna de las anteriores'],
+   correct:0,fb:'De la ec.2: x₂=2−t. En ec.1: x₁=1−2x₂+x₃=1−2(2−t)+t=1−4+2t+t=3t−3.'},
+  {q:'El triángulo con vértices $P_1=(0,0)$, $P_2=(4,0)$, $P_3=(0,3)$ tiene área:',
+   opts:['$6$','$12$','$3$','$7$'],correct:0,
+   fb:'Área = |det([[4,0],[0,3]])|/2 = |12|/2 = 6.'}
+];
+
+let quizCur=0, quizScore=0, quizAnswered=false;
+
+function buildQuiz(){
+  const container=document.getElementById('quiz-container');
+  container.innerHTML=`
+    <div class="quiz-header">
+      <div class="quiz-score-display">Puntaje: <span id="q-score">0</span>/15</div>
+      <div style="font-size:.85rem;color:var(--gray-lt)">Mínimo 10/15 para insignia</div>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="q-pbar" style="width:0%"></div></div>
+    <div id="q-card"></div>`;
+  renderQuestion(0);
+}
+
+function renderQuestion(idx){
+  if(idx>=PREGUNTAS.length){ showQuizResult(); return; }
+  const p=PREGUNTAS[idx];
+  const levelLabel=idx<5?'🟢 Básico':idx<10?'🟡 Medio':'🔴 Difícil';
+  let html=`<div class="quiz-card">
+    <div class="q-num">Pregunta ${idx+1}/15 · ${levelLabel}</div>
+    <div class="q-text">${p.q}</div>
+    <div class="options">`;
+  p.opts.forEach((o,i)=>{ html+=`<button class="opt-btn" id="opt-${i}" onclick="quizAnswer(${i})">${o}</button>`; });
+  html+=`</div>
+    <div class="feedback-box" id="q-fb"></div>
+    <div class="quiz-nav"><button class="btn-next" id="q-next" onclick="quizNext()" disabled>Siguiente →</button></div>
+  </div>`;
+  document.getElementById('q-card').innerHTML=html;
+  document.getElementById('q-pbar').style.width=(idx/15*100)+'%';
+  quizAnswered=false;
+  if(window.MathJax) MathJax.typesetPromise([document.getElementById('q-card')]);
+}
+
+function quizAnswer(optIdx){
+  if(quizAnswered) return;
+  quizAnswered=true;
+  const p=PREGUNTAS[quizCur];
+  const isCorrect=optIdx===p.correct;
+  if(isCorrect) quizScore++;
+  document.getElementById('q-score').textContent=quizScore;
+  document.querySelectorAll('.opt-btn').forEach((b,i)=>{
+    b.disabled=true;
+    if(i===p.correct) b.classList.add('correct');
+    if(i===optIdx && !isCorrect) b.classList.add('wrong');
+  });
+  const fb=document.getElementById('q-fb');
+  fb.className='feedback-box show '+(isCorrect?'ok':'ko');
+  fb.textContent=(isCorrect?'✅ Correcto! ':'❌ Incorrecto. ')+p.fb;
+  document.getElementById('q-next').disabled=false;
+}
+
+function quizNext(){
+  quizCur++;
+  if(quizCur>=PREGUNTAS.length){ showQuizResult(); return; }
+  renderQuestion(quizCur);
+}
+
+function showQuizResult(){
+  const best=Math.max(quizScore,parseInt(localStorage.getItem(LS_QUIZ)||'0',10));
+  localStorage.setItem(LS_QUIZ,best);
+  const pct=Math.round(quizScore/15*100);
+  const emoji=quizScore>=14?'🏆':quizScore>=10?'🎉':quizScore>=7?'😅':'😢';
+  const container=document.getElementById('quiz-container');
+  container.innerHTML=`<div class="result-card">
+    <span class="emoji">${emoji}</span>
+    <h2>Quiz completado</h2>
+    <span class="score-big">${quizScore}/15</span>
+    <div class="result-detail">
+      <div class="rstat ok">✅ Correctas: ${quizScore}</div>
+      <div class="rstat ko">❌ Incorrectas: ${15-quizScore}</div>
+    </div>
+    <p>Mejor puntaje histórico: ${best}/15</p>
+    <button class="btn-retry" onclick="quizRetry()">Intentar de nuevo</button>
+  </div>`;
+  document.getElementById('q-pbar') && (document.getElementById('q-pbar').style.width='100%');
+  if(quizScore>=10){ unlockBadge('quiz'); addExp(200); }
+  if(quizScore>=15){ unlockBadge('master'); addExp(200); confetti(); }
+}
+
+function quizRetry(){ quizCur=0; quizScore=0; buildQuiz(); }
+
+function confetti(){
+  const colors=['#6d28d9','#8b5cf6','#facc15','#34d399','#f472b6'];
+  for(let i=0;i<60;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.cssText=`left:${Math.random()*100}vw;top:${-10}px;background:${colors[i%5]};animation-duration:${1+Math.random()*2}s;animation-delay:${Math.random()*.5}s;width:${6+Math.random()*10}px;height:${6+Math.random()*10}px`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),3000);
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  refreshUI();
+  refreshExp();
+  gaussBuildInputs();
+  gaussLoad(0);
+  matBuildInputs();
+  invBuildInputs();
+  s1Update();
+  buildPractica();
+  buildQuiz();
+  if(window.MathJax) MathJax.typesetPromise();
+});
+</script>
+</body>
+</html>

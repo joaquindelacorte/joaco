@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Taller Sociocomunitario — Apuntes</title>
+<meta name="description" content="Apuntes de Taller de Formulación y Desarrollo de Proyectos Sociocomunitarios — Automatización y Control, UNaP 2026"/>
+<style>
+:root{
+  --main:#0d9488;--main-lt:#14b8a6;--main-bg:#ccfbf1;
+  --amber:#b45309;--amber-bg:#fef9c3;
+  --teal:#0d9488;--teal-bg:#ccfbf1;
+  --orange:#c2410c;--orange-bg:#ffedd5;
+  --red:#b91c1c;--red-bg:#fee2e2;
+  --green:#15803d;--green-bg:#dcfce7;
+  --blue:#1d4ed8;--blue-bg:#dbeafe;
+  --gray:#374151;--gray-lt:#6b7280;
+  --bg:#f5f6fb;--card:#fff;--border:#e2e8f0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65;overflow-x:hidden;-webkit-tap-highlight-color:rgba(13,148,136,.15);-webkit-font-smoothing:antialiased}
+img,svg,video{max-width:100%;height:auto}
+table{max-width:100%}
+button,select{min-height:44px}
+.tab-btn{min-height:44px}
+@media(hover:none){.card:hover{box-shadow:0 1px 4px rgba(0,0,0,.05);transform:none}}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:var(--main);display:flex;align-items:center;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.brand{color:#fff;font-size:1.05rem;font-weight:800;padding:.8rem 1.2rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.2)}
+.tabs{display:flex;overflow-x:auto;flex:1}
+.tab-btn{padding:.75rem 1rem;border:none;background:transparent;color:rgba(255,255,255,.75);font-size:.83rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s;font-family:inherit}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tab-btn.active{color:#fff;border-bottom-color:#99f6e4;background:rgba(255,255,255,.08)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#0f3d38 0%,var(--main-lt) 100%);color:#fff;text-align:center;padding:2.5rem 1rem 2rem}
+.hero h1{font-size:2.1rem;font-weight:900;letter-spacing:-.5px}
+.hero p{opacity:.88;margin-top:.4rem;max-width:640px;margin-left:auto;margin-right:auto}
+.badges-sum{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.badge-chip{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.25rem .85rem;font-size:.78rem;font-weight:700}
+
+/* LAYOUT */
+.page{display:none}.page.active{display:block}
+.container{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+.stitle{display:flex;align-items:center;gap:.6rem;font-size:1.3rem;font-weight:800;color:var(--main);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid var(--main-bg)}
+.stitle:first-child{margin-top:0}
+.stitle .ico{font-size:1.3rem}
+.sub{font-size:1.05rem;font-weight:700;color:var(--main-lt);margin:1.4rem 0 .7rem}
+.lead{font-size:.95rem;color:var(--gray);margin-bottom:1rem}
+.lead b{color:var(--main)}
+.src-tag{display:inline-block;font-size:.7rem;font-weight:700;color:var(--main-lt);background:var(--main-bg);border-radius:2rem;padding:.15rem .6rem;margin-bottom:.8rem}
+
+/* CARDS */
+.grid{display:grid;gap:1.1rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;box-shadow:0 1px 4px rgba(0,0,0,.05);transition:.2s}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.card h3{font-size:1rem;font-weight:700;margin-bottom:.5rem;color:var(--main)}
+.card p,.card li{font-size:.9rem;color:var(--gray)}
+.card ul,.card ol{margin-left:1.2rem;margin-top:.4rem}
+.card.bl{border-left:4px solid var(--main-lt);background:var(--main-bg)}
+.card.gr{border-left:4px solid var(--green);background:var(--green-bg)}
+.card.or{border-left:4px solid var(--orange);background:var(--orange-bg)}
+.card.re{border-left:4px solid var(--red);background:var(--red-bg)}
+.card.te{border-left:4px solid var(--teal);background:var(--teal-bg)}
+.card.am{border-left:4px solid var(--amber);background:var(--amber-bg)}
+.card.bu{border-left:4px solid var(--blue);background:var(--blue-bg)}
+
+/* TABLE */
+.twrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);margin:.6rem 0}
+table{width:100%;border-collapse:collapse;font-size:.87rem;background:#fff}
+th{background:var(--main);color:#fff;padding:.65rem .9rem;text-align:left;font-weight:600}
+td{padding:.6rem .9rem;border-bottom:1px solid var(--border)}
+tr:last-child td{border:none}
+tr:nth-child(even) td{background:var(--main-bg)}
+
+/* CALLOUTS */
+.note{background:var(--main-bg);border-left:4px solid var(--main-lt);border-radius:0 8px 8px 0;padding:.8rem 1rem;font-size:.92rem;margin:.9rem 0;color:#134e4a}
+.warn{background:var(--red-bg);border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:.8rem 1rem;font-size:.92rem;margin:.9rem 0;color:#7f1d1d}
+.tip{display:flex;gap:.7rem;align-items:flex-start;background:#fffbeb;border:1px solid #fbbf24;border-radius:10px;padding:.85rem 1.1rem;margin:.9rem 0;font-size:.9rem}
+.tip-i{flex-shrink:0;font-size:1.05rem}
+
+/* DIAGRAM */
+.diagram{background:#f0fdfa;border:1px solid var(--border);border-radius:10px;padding:1.2rem;margin:.9rem 0;text-align:center}
+.dcap{font-size:.82rem;color:var(--gray-lt);margin-top:.6rem;font-style:italic}
+
+/* FLOW */
+.flow{display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
+.flow-box{background:var(--main);color:#fff;border-radius:8px;padding:.5rem 1.1rem;font-weight:700;font-size:.9rem}
+.flow-arr{font-size:1.2rem;color:var(--main)}
+
+/* FODA GRID */
+.foda-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+@media(max-width:600px){.foda-grid{grid-template-columns:1fr}}
+.foda-cell{border-radius:12px;padding:1.2rem;border:2px solid transparent}
+.foda-f{background:#dcfce7;border-color:#16a34a}
+.foda-d{background:#fee2e2;border-color:#dc2626}
+.foda-o{background:#dbeafe;border-color:#2563eb}
+.foda-a{background:#fef9c3;border-color:#ca8a04}
+.foda-cell h3{font-size:1rem;font-weight:800;margin-bottom:.7rem}
+.foda-cell ul{margin-left:1.1rem;font-size:.88rem;line-height:1.8}
+.foda-f h3{color:#15803d}
+.foda-d h3{color:#b91c1c}
+.foda-o h3{color:#1d4ed8}
+.foda-a h3{color:#92400e}
+
+/* CRUCE */
+.cruce-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin:1rem 0}
+.cruce-card{border-radius:12px;padding:1.2rem;border-left:5px solid transparent}
+.cruce-fo{background:#dcfce7;border-color:#15803d}
+.cruce-do{background:#dbeafe;border-color:#1d4ed8}
+.cruce-fa{background:#fef9c3;border-color:#92400e}
+.cruce-da{background:#fee2e2;border-color:#b91c1c}
+.cruce-card h3{font-size:.95rem;font-weight:800;margin-bottom:.5rem}
+.cruce-card p{font-size:.88rem;line-height:1.6}
+.cruce-fo h3{color:#14532d}
+.cruce-do h3{color:#1e3a8a}
+.cruce-fa h3{color:#78350f}
+.cruce-da h3{color:#7f1d1d}
+
+/* ISHIKAWA SVG */
+.ishikawa-wrap{overflow-x:auto;margin:.9rem 0}
+
+/* STAKEHOLDER MATRIX */
+.matrix-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.8rem 0;max-width:480px}
+.matrix-q{border-radius:8px;padding:.8rem 1rem;font-size:.85rem;font-weight:700;text-align:center}
+.mq-ga{background:#dcfce7;color:#14532d}
+.mq-mi{background:#dbeafe;color:#1e3a8a}
+.mq-ms{background:#fef9c3;color:#78350f}
+.mq-mo{background:#f3f4f6;color:#374151}
+.matrix-label{font-size:.75rem;font-weight:600;color:var(--gray-lt);text-align:center;margin-bottom:.3rem}
+
+footer{text-align:center;padding:2rem 1rem 3rem;font-size:.8rem;color:var(--gray-lt)}
+footer a{color:var(--main)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">🏘️ Taller Sociocomunitario</div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('c1')">📖 Clase 1</button>
+    <button class="tab-btn" onclick="showTab('c2')">🔍 Clase 2</button>
+    <button class="tab-btn" onclick="showTab('comp')">⚙️ Complemento</button>
+    <button class="tab-btn" onclick="showTab('c3')">🗺️ Clase 3</button>
+    <button class="tab-btn" onclick="showTab('c5')">🐟 Clase 5</button>
+    <button class="tab-btn" onclick="showTab('foda')">📊 FODA</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>Taller de Formulación y Desarrollo de Proyectos Sociocomunitarios</h1>
+  <p>Automatización y Control — UNaP · 2026</p>
+  <div class="badges-sum">
+    <span class="badge-chip">📋 Proyectos</span>
+    <span class="badge-chip">🔬 Diagnóstico</span>
+    <span class="badge-chip">🐟 Análisis de Causas</span>
+    <span class="badge-chip">📊 FODA</span>
+    <span class="badge-chip">🌿 Ishikawa</span>
+  </div>
+</div>
+
+
+<!-- ================= CLASE 1 ================= -->
+<div class="page active" id="page-c1">
+  <div class="container">
+
+    <span class="src-tag">📎 Clase 1 · 14/08/2026 · Introducción a los Proyectos</span>
+
+    <div class="stitle"><span class="ico">🎯</span>¿Qué es un proyecto?</div>
+    <p class="lead">Un proyecto es una <b>intervención planificada</b> que transforma una situación problemática o una oportunidad en un resultado concreto.</p>
+
+    <div class="stitle"><span class="ico">✅</span>Características de los proyectos</div>
+    <div class="grid g3">
+      <div class="card bl"><h3>🎯 Objetivo definido</h3><p>Todo proyecto tiene un fin claro y medible.</p></div>
+      <div class="card bl"><h3>📅 Inicio y fin</h3><p>Son temporales — no operan de forma permanente.</p></div>
+      <div class="card bl"><h3>💰 Recursos limitados</h3><p>Tiempo, presupuesto y personas son finitos.</p></div>
+      <div class="card bl"><h3>⚠️ Incertidumbre</h3><p>Involucran riesgos que deben gestionarse.</p></div>
+      <div class="card bl"><h3>🔄 Cambio</h3><p>Buscan generar una transformación real.</p></div>
+      <div class="card bl"><h3>🌟 Resultado único</h3><p>Cada proyecto crea algo que antes no existía.</p></div>
+    </div>
+
+    <div class="stitle"><span class="ico">💡</span>¿Por qué hacemos proyectos?</div>
+    <p class="lead">Los proyectos no son un fin en sí mismos.</p>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>No hacemos proyectos para…</th><th>Hacemos proyectos para…</th></tr></thead>
+        <tbody>
+          <tr><td>Comprar tecnología</td><td>Resolver problemas</td></tr>
+          <tr><td>Instalar sensores</td><td>Aprovechar oportunidades</td></tr>
+          <tr><td>Construir algo</td><td>Mejorar procesos</td></tr>
+          <tr><td>Implementar un software</td><td>Reducir costos / Aumentar seguridad / Generar valor</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stitle"><span class="ico">🔄</span>Problema vs. Solución</div>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Problema</th><th>Solución</th></tr></thead>
+        <tbody>
+          <tr><td>No existe información confiable</td><td>Instalar sensores</td></tr>
+          <tr><td>El proceso es lento y manual</td><td>Crear una aplicación</td></tr>
+          <tr><td>Existen errores frecuentes</td><td>Automatizar una línea</td></tr>
+          <tr><td>La productividad es insuficiente</td><td>Comprar equipamiento</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">💡 <strong>Antes de diseñar una solución, debemos comprender correctamente el problema que buscamos resolver.</strong></div>
+
+    <div class="stitle"><span class="ico">🌱</span>¿De dónde nacen los proyectos?</div>
+    <div class="grid g3">
+      <div class="card te"><h3>🔴 Problemas existentes</h3><p>Situaciones que afectan negativamente a personas u organizaciones.</p></div>
+      <div class="card te"><h3>🟡 Oportunidades</h3><p>Ventanas de mejora identificadas en el entorno.</p></div>
+      <div class="card te"><h3>🔵 Necesidades de mejora</h3><p>Procesos que funcionan pero pueden optimizarse.</p></div>
+      <div class="card te"><h3>💻 Cambios tecnológicos</h3><p>Nuevas herramientas que habilitan soluciones antes imposibles.</p></div>
+      <div class="card te"><h3>📜 Requisitos normativos</h3><p>Obligaciones legales o reglamentarias que deben cumplirse.</p></div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ================= CLASE 2 ================= -->
+<div class="page" id="page-c2">
+  <div class="container">
+
+    <span class="src-tag">📎 Clase 2 · 21/08/2026 · Identificación de Problemas</span>
+
+    <div class="note">📌 <strong>Problema = Diferencia entre situación actual y situación deseada.</strong></div>
+
+    <div class="stitle"><span class="ico">⚠️</span>Reglas fundamentales</div>
+    <div class="warn">
+      <ul style="margin-left:1.2rem;line-height:2">
+        <li>No existe proyecto sin problema</li>
+        <li>No existe problema sin una situación actual</li>
+        <li>No existe proyecto si no sabemos cuál es la situación deseada</li>
+      </ul>
+    </div>
+
+    <div class="stitle"><span class="ico">📋</span>Tipos de problemas</div>
+    <div class="grid g3">
+      <div class="card bl"><h3>⚙️ Procesos</h3><p>Ineficiencias, cuellos de botella, errores repetitivos.</p></div>
+      <div class="card bl"><h3>💻 Tecnológicos</h3><p>Obsolescencia, falta de sistemas, incompatibilidades.</p></div>
+      <div class="card bl"><h3>🏢 Organizacionales</h3><p>Comunicación, roles indefinidos, procedimientos obsoletos.</p></div>
+      <div class="card bl"><h3>🌿 Ambientales</h3><p>Contaminación, residuos, impacto ecológico.</p></div>
+      <div class="card bl"><h3>🏘️ Sociocomunitarios</h3><p>Acceso a servicios, integración, participación ciudadana.</p></div>
+      <div class="card bl"><h3>🛎️ Servicios</h3><p>Calidad de atención, cobertura, tiempos de respuesta.</p></div>
+    </div>
+
+    <div class="stitle"><span class="ico">🛠️</span>Herramientas para definir un problema</div>
+
+    <div class="sub">① Observación directa</div>
+    <p class="lead">Relevamiento presencial de la situación en su contexto real.</p>
+
+    <div class="sub">② Entrevistas y relevamiento</div>
+    <p class="lead">Fuentes: operadores, vecinos, usuarios, personal de mantenimiento, docentes.</p>
+
+    <div class="sub">③ Recolección de datos</div>
+    <p class="lead">Ejemplos: tiempos, cantidades, costos, reclamos, frecuencia, indicadores.</p>
+    <div class="warn">⚠️ Nunca trabajar sobre opiniones — buscar evidencia.</div>
+
+    <div class="sub">④ Metodología 5W + 2H</div>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Sigla</th><th>Pregunta</th><th>Qué responde</th></tr></thead>
+        <tbody>
+          <tr><td><strong>What</strong></td><td>¿Qué?</td><td>El problema identificado</td></tr>
+          <tr><td><strong>Why</strong></td><td>¿Por qué?</td><td>La razón del problema</td></tr>
+          <tr><td><strong>Who</strong></td><td>¿Quién?</td><td>Los afectados o responsables</td></tr>
+          <tr><td><strong>Where</strong></td><td>¿Dónde?</td><td>El lugar donde ocurre</td></tr>
+          <tr><td><strong>When</strong></td><td>¿Cuándo?</td><td>La frecuencia o momento</td></tr>
+          <tr><td><strong>How</strong></td><td>¿Cómo?</td><td>La forma en que ocurre</td></tr>
+          <tr><td><strong>How much</strong></td><td>¿Cuánto?</td><td>La magnitud o impacto</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub">⑤ Análisis de Gap</div>
+    <p class="lead">Comparación sistemática entre la situación actual y la situación deseada. La brecha entre ambas es lo que el proyecto debe cerrar.</p>
+    <div class="diagram">
+      <div style="display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap">
+        <div style="background:#fee2e2;border:2px solid #dc2626;border-radius:8px;padding:.8rem 1.4rem;font-weight:700;color:#b91c1c">Situación Actual</div>
+        <div style="font-size:1.5rem;color:var(--main)">→ GAP →</div>
+        <div style="background:#dcfce7;border:2px solid #16a34a;border-radius:8px;padding:.8rem 1.4rem;font-weight:700;color:#15803d">Situación Deseada</div>
+      </div>
+      <div class="dcap">La brecha (GAP) define el alcance del proyecto</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ================= COMPLEMENTO ================= -->
+<div class="page" id="page-comp">
+  <div class="container">
+
+    <span class="src-tag">📎 Complemento · 21/08/2026 · Conceptos de Procesos</span>
+
+    <div class="stitle"><span class="ico">🔄</span>Proyecto vs. Proceso</div>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Proyecto</th><th>Proceso</th></tr></thead>
+        <tbody>
+          <tr><td>Temporal, único</td><td>Continuo, repetitivo</td></tr>
+          <tr><td>Tiene inicio y fin</td><td>Opera de forma permanente</td></tr>
+          <tr><td>Genera un resultado nuevo</td><td>Transforma inputs en outputs</td></tr>
+          <tr><td>Involucra incertidumbre</td><td>Busca estabilidad y predictibilidad</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stitle"><span class="ico">📐</span>Propiedades de un proceso</div>
+
+    <div class="grid g2">
+      <div class="card bl">
+        <h3>💪 Capacidad de Trabajo</h3>
+        <p>Carga máxima sostenible bajo condiciones especificadas. Los límites vienen de la instalación (hornos, llenadoras, tanques) o las personas.</p>
+        <p style="margin-top:.6rem;font-size:.85rem;color:var(--gray-lt)">En proceso equilibrado: <strong>capacidad = demanda máxima</strong></p>
+      </div>
+      <div class="card bl">
+        <h3>📈 Productividad</h3>
+        <p>Relación entre recursos entrantes (inputs) y productos salientes (outputs).</p>
+        <p style="margin-top:.6rem;font-size:.85rem;color:var(--gray-lt)">Se mide como cantidad de producto por unidad de tiempo.</p>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">⚖️</span>Eficacia, Eficiencia y Efectividad</div>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Concepto</th><th>Definición</th><th>Pregunta clave</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Eficacia</strong></td><td>¿Cumple el objetivo?</td><td>¿Entregó en tiempo, cantidad y condición?</td></tr>
+          <tr><td><strong>Eficiencia</strong></td><td>¿Aprovecha bien los recursos?</td><td>¿Hay desperdicios (mudas)?</td></tr>
+          <tr><td><strong>Efectividad</strong></td><td>¿Produce lo que el cliente necesita?</td><td>¿Da en el clavo con el problema real?</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">⚠️ Un proceso puede ser eficaz y eficiente pero <strong>inefectivo</strong> si el producto no resuelve el problema del cliente.</div>
+
+    <div class="stitle"><span class="ico">🔀</span>Flexibilidad</div>
+    <p class="lead">Adaptabilidad ante cambios imprevistos. Incluye velocidad de respuesta y diseño modular que independice etapas críticas.</p>
+
+    <div class="stitle"><span class="ico">🗑️</span>Desperdicios (Mudas)</div>
+    <p class="lead">Cualquier actividad que consume recursos sin generar valor. Identificarlos y eliminarlos es el objetivo de la mejora continua.</p>
+    <div class="grid g3">
+      <div class="card re"><h3>📦 Sobreproducción</h3><p>Producir más de lo demandado.</p></div>
+      <div class="card re"><h3>⏳ Espera</h3><p>Tiempo sin actividad productiva.</p></div>
+      <div class="card re"><h3>🚚 Transporte innecesario</h3><p>Mover materiales sin agregar valor.</p></div>
+      <div class="card re"><h3>🔧 Sobreprocesamiento</h3><p>Más trabajo del que el cliente requiere.</p></div>
+      <div class="card re"><h3>📁 Inventario excesivo</h3><p>Stock mayor al necesario.</p></div>
+      <div class="card re"><h3>🚶 Movimientos innecesarios</h3><p>Desplazamientos sin propósito.</p></div>
+      <div class="card re"><h3>❌ Defectos</h3><p>Errores que requieren retrabajo o descarte.</p></div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ================= CLASE 3 ================= -->
+<div class="page" id="page-c3">
+  <div class="container">
+
+    <span class="src-tag">📎 Clase 3 · 28/08/2026 · Diagnóstico y Análisis de Contexto</span>
+
+    <div class="note">📖 <strong>Diagnóstico:</strong> forma de ordenar los datos e información sobre cómo es y qué problemas tiene una determinada realidad.</div>
+
+    <div class="flow">
+      <div class="flow-box">🔴 Problema</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box">🔬 Diagnóstico</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box">✅ Proyecto</div>
+    </div>
+
+    <div class="stitle"><span class="ico">📡</span>Recolección de Información</div>
+    <div class="grid g2">
+      <div class="card gr">
+        <h3>🟢 Fuentes Primarias</h3>
+        <p style="margin-bottom:.5rem">Información obtenida directamente:</p>
+        <ul>
+          <li>Observación directa</li>
+          <li>Entrevistas</li>
+          <li>Encuestas</li>
+          <li>Relevamientos</li>
+          <li>Mediciones</li>
+        </ul>
+      </div>
+      <div class="card bu">
+        <h3>🔵 Fuentes Secundarias</h3>
+        <p style="margin-bottom:.5rem">Información generada por otros:</p>
+        <ul>
+          <li>Informes técnicos</li>
+          <li>Normativas</li>
+          <li>Estadísticas oficiales</li>
+          <li>Artículos académicos</li>
+          <li>Estudios previos</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note">💡 La combinación de fuentes primarias y secundarias genera diagnósticos más sólidos y confiables.</div>
+
+    <div class="sub">Ejemplo real — Plaza sin iluminación</div>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Tipo de fuente</th><th>Dato obtenido</th></tr></thead>
+        <tbody>
+          <tr><td>Primaria (encuesta vecinal)</td><td>75% de vecinos evita la plaza luego de las 20hs</td></tr>
+          <tr><td>Secundaria (Min. de Seguridad)</td><td>Robos aumentaron 18% en el área durante el último año</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stitle"><span class="ico">🌐</span>Pensamiento Sistémico</div>
+    <p class="lead">Un problema rara vez tiene una única causa. Surge de la <b>interacción entre múltiples factores</b> de un mismo sistema. Permite identificar causas y consecuencias más allá de los síntomas visibles.</p>
+
+    <div class="stitle"><span class="ico">🗺️</span>Comprensión Territorial — Mapeo</div>
+    <p class="lead">Los problemas ocurren dentro de un territorio. El mapeo territorial identifica:</p>
+    <div class="grid g3">
+      <div class="card te"><h3>💎 Recursos disponibles</h3><p>Infraestructura, servicios, capacidades locales.</p></div>
+      <div class="card te"><h3>🏛️ Instituciones presentes</h3><p>Municipios, hospitales, escuelas, organismos.</p></div>
+      <div class="card te"><h3>🤝 Organizaciones activas</h3><p>ONG, cooperativas, clubes, asociaciones vecinales.</p></div>
+      <div class="card te"><h3>🔗 Relaciones entre actores</h3><p>Alianzas, tensiones, dependencias.</p></div>
+      <div class="card te"><h3>🚧 Restricciones y oportunidades</h3><p>Obstáculos y ventanas de acción territorial.</p></div>
+    </div>
+
+    <div class="stitle"><span class="ico">👥</span>Actores Territoriales</div>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Actores Públicos</th><th>Actores Privados</th><th>Actores Comunitarios</th></tr></thead>
+        <tbody>
+          <tr><td>Municipios</td><td>Empresas</td><td>ONG</td></tr>
+          <tr><td>Hospitales</td><td>Comercios</td><td>Cooperativas</td></tr>
+          <tr><td>Escuelas</td><td>Cámaras empresariales</td><td>Clubes</td></tr>
+          <tr><td>Organismos gubernamentales</td><td>—</td><td>Asociaciones vecinales, vecinos, usuarios</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stitle"><span class="ico">🎯</span>Interesados (Stakeholders)</div>
+    <p class="lead">Quienes pueden afectar o ser afectados por el proyecto. Se analizan por:</p>
+    <div class="grid g2">
+      <div class="card bl"><h3>💪 Poder</h3><p>Capacidad de influir sobre decisiones, recursos o resultados del proyecto.</p></div>
+      <div class="card bl"><h3>❤️ Interés</h3><p>Grado de involucramiento respecto a la situación o resultado.</p></div>
+    </div>
+
+    <div class="sub">Matriz Poder / Interés</div>
+    <div class="diagram" style="max-width:480px;margin:.9rem auto">
+      <div style="margin-bottom:.5rem;font-size:.8rem;font-weight:700;color:var(--gray-lt)">↑ PODER</div>
+      <div class="matrix-grid">
+        <div class="matrix-q mq-ms">🔒 Mantener satisfecho<br><span style="font-weight:400;font-size:.78rem">Alto poder, bajo interés</span></div>
+        <div class="matrix-q mq-ga">⭐ Gestionar activamente<br><span style="font-weight:400;font-size:.78rem">Alto poder, alto interés</span></div>
+        <div class="matrix-q mq-mo">👁️ Monitorear<br><span style="font-weight:400;font-size:.78rem">Bajo poder, bajo interés</span></div>
+        <div class="matrix-q mq-mi">📢 Mantener informado<br><span style="font-weight:400;font-size:.78rem">Bajo poder, alto interés</span></div>
+      </div>
+      <div style="margin-top:.5rem;font-size:.8rem;font-weight:700;color:var(--gray-lt)">INTERÉS →</div>
+    </div>
+
+    <div class="stitle"><span class="ico">🔬</span>Factores Endógenos y Exógenos</div>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Factores Endógenos (internos)</th><th>Factores Exógenos (externos)</th></tr></thead>
+        <tbody>
+          <tr><td>Controlables por la organización</td><td>Fuera del control directo</td></tr>
+          <tr><td>Recursos humanos, infraestructura, equipamiento</td><td>Economía, legislación, políticas públicas</td></tr>
+          <tr><td>Conocimientos técnicos, cultura organizacional</td><td>Tendencias tecnológicas, condiciones ambientales</td></tr>
+          <tr><td>Representan <strong>fortalezas y debilidades</strong></td><td>Representan <strong>oportunidades y amenazas</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stitle"><span class="ico">🧰</span>Herramientas de Análisis</div>
+    <div class="grid g2">
+      <div class="card gr">
+        <h3>📊 FODA</h3>
+        <p>Integra fortalezas, debilidades, oportunidades y amenazas. Usado para diagnóstico integral de la situación.</p>
+      </div>
+      <div class="card bu">
+        <h3>🌍 PESTEL</h3>
+        <p>Identifica factores exógenos: <strong>P</strong>olítico, <strong>E</strong>conómico, <strong>S</strong>ocial, <strong>T</strong>ecnológico, <strong>E</strong>cológico, <strong>L</strong>egal.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ================= CLASE 5 ================= -->
+<div class="page" id="page-c5">
+  <div class="container">
+
+    <span class="src-tag">📎 Clase 5 · 11/09/2026 · Análisis de Problemas y Causas</span>
+
+    <div class="warn">⚠️ Muchas organizaciones actúan sobre los síntomas y no sobre las causas. Las mejoras basadas únicamente en síntomas suelen ser <strong>temporales</strong>.</div>
+
+    <div class="stitle"><span class="ico">🔗</span>Síntoma, Problema y Causa</div>
+    <div class="diagram">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:.6rem">
+        <div style="background:#fee2e2;border:2px solid #dc2626;border-radius:8px;padding:.6rem 2rem;font-weight:700;color:#b91c1c;font-size:.9rem">⚙️ Causa: Falta de mantenimiento preventivo</div>
+        <div style="font-size:1.5rem;color:var(--main)">↓</div>
+        <div style="background:var(--main-bg);border:2px solid var(--main);border-radius:8px;padding:.6rem 2rem;font-weight:700;color:#134e4a;font-size:.9rem">🔴 Problema: Baja disponibilidad de equipos</div>
+        <div style="font-size:1.5rem;color:var(--main)">↓</div>
+        <div style="background:#fef9c3;border:2px solid #ca8a04;border-radius:8px;padding:.6rem 2rem;font-weight:700;color:#78350f;font-size:.9rem">👁️ Síntoma: Retrasos en la producción</div>
+      </div>
+    </div>
+
+    <div class="sub">Tipos de causas</div>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Categoría</th><th>Ejemplos</th></tr></thead>
+        <tbody>
+          <tr><td>Técnicas</td><td>Equipos, tecnología</td></tr>
+          <tr><td>Organizacionales</td><td>Procedimientos, gestión</td></tr>
+          <tr><td>Humanas</td><td>Capacitación, habilidades</td></tr>
+          <tr><td>Sociales</td><td>Hábitos, comportamientos</td></tr>
+          <tr><td>Económicas</td><td>Recursos, financiamiento</td></tr>
+          <tr><td>Regulatorias</td><td>Normativa, legislación</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stitle"><span class="ico">💭</span>Hipótesis</div>
+    <div class="note">🧠 <strong>Hipótesis:</strong> interpretación preliminar que busca responder <em>¿Qué podría estar generando esta situación?</em></div>
+
+    <div class="sub">Características de una buena hipótesis</div>
+    <div class="grid g2">
+      <div class="card gr"><h3>✅ Clara y comprensible</h3><p>Formulada en lenguaje accesible, sin ambigüedades.</p></div>
+      <div class="card gr"><h3>✅ Coherente con los datos</h3><p>Consistente con la información relevada.</p></div>
+      <div class="card gr"><h3>✅ Verificable</h3><p>Puede ser confirmada o refutada mediante evidencia.</p></div>
+      <div class="card gr"><h3>✅ Específica</h3><p>Apunta a una causa concreta, no general.</p></div>
+      <div class="card gr"><h3>✅ Relacionada al problema</h3><p>Directamente vinculada con la situación analizada.</p></div>
+    </div>
+
+    <div class="sub">Hipótesis vs. Solución</div>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>❌ Solución (no es hipótesis)</th><th>✅ Hipótesis</th></tr></thead>
+        <tbody>
+          <tr><td>«Necesitamos instalar sensores»</td><td>«La falta de información en tiempo real podría estar generando errores operativos»</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stitle"><span class="ico">🔎</span>Validación de Hipótesis</div>
+    <p class="lead">Reunir evidencia para determinar si la explicación propuesta es consistente con la realidad. Usar fuentes primarias y secundarias (ver Clase 2 y Clase 3).</p>
+
+    <div class="stitle"><span class="ico">5️⃣</span>Análisis de Causa Raíz — Los 5 Por Qué</div>
+    <p class="lead">Técnica iterativa: preguntar <strong>«¿Por qué?»</strong> 5 veces sucesivas hasta llegar a la causa raíz. Evita quedarse en síntomas superficiales.</p>
+    <div class="diagram">
+      <div style="display:flex;flex-direction:column;gap:.4rem;align-items:flex-start;max-width:560px;margin:auto">
+        <div style="padding:.5rem 1rem;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:.88rem"><strong>¿Por qué?</strong> — Los retrasos en producción → los equipos fallan</div>
+        <div style="padding:.5rem 1rem;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:.88rem;margin-left:1.5rem"><strong>¿Por qué?</strong> — Los equipos fallan → no tienen mantenimiento</div>
+        <div style="padding:.5rem 1rem;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:.88rem;margin-left:3rem"><strong>¿Por qué?</strong> — No tienen mantenimiento → no hay plan preventivo</div>
+        <div style="padding:.5rem 1rem;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:.88rem;margin-left:4.5rem"><strong>¿Por qué?</strong> — No hay plan → nadie fue designado responsable</div>
+        <div style="padding:.5rem 1rem;background:var(--main-bg);border:2px solid var(--main);border-radius:8px;font-size:.88rem;margin-left:6rem"><strong>¿Por qué?</strong> → <strong style="color:var(--main)">Causa raíz: la gestión no priorizó el mantenimiento</strong></div>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">🐟</span>Diagrama de Ishikawa (Espina de Pescado)</div>
+    <p class="lead">Organiza visualmente las causas de un problema en categorías. En proyectos sociocomunitarios las categorías se adaptan a dimensiones PESTEL.</p>
+    <div class="ishikawa-wrap">
+      <svg viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:800px;display:block;margin:auto;background:#f0fdfa;border-radius:12px;padding:8px">
+        <!-- Espina central -->
+        <line x1="60" y1="170" x2="680" y2="170" stroke="#0d9488" stroke-width="4"/>
+        <!-- Cabeza (problema) -->
+        <rect x="680" y="140" width="110" height="60" rx="8" fill="#0d9488"/>
+        <text x="735" y="165" text-anchor="middle" fill="white" font-size="11" font-weight="bold">Microbasurales</text>
+        <text x="735" y="182" text-anchor="middle" fill="white" font-size="11">en Pilar</text>
+        <!-- Flecha -->
+        <polygon points="780,170 760,158 760,182" fill="#0d9488"/>
+
+        <!-- Rama superior izquierda: Político -->
+        <line x1="150" y1="170" x2="110" y2="90" stroke="#1d4ed8" stroke-width="2.5"/>
+        <rect x="50" y="60" width="100" height="36" rx="6" fill="#dbeafe"/>
+        <text x="100" y="82" text-anchor="middle" fill="#1e3a8a" font-size="12" font-weight="bold">Político</text>
+        <text x="100" y="50" text-anchor="middle" fill="#374151" font-size="9">Falta política</text>
+        <text x="100" y="61" text-anchor="middle" fill="#374151" font-size="9">de residuos</text>
+
+        <!-- Rama superior central: Económico -->
+        <line x1="320" y1="170" x2="280" y2="90" stroke="#b45309" stroke-width="2.5"/>
+        <rect x="220" y="60" width="110" height="36" rx="6" fill="#fef9c3"/>
+        <text x="275" y="82" text-anchor="middle" fill="#92400e" font-size="12" font-weight="bold">Económico</text>
+        <text x="275" y="50" text-anchor="middle" fill="#374151" font-size="9">Sin presupuesto</text>
+        <text x="275" y="61" text-anchor="middle" fill="#374151" font-size="9">para contenedores</text>
+
+        <!-- Rama superior derecha: Social -->
+        <line x1="490" y1="170" x2="450" y2="90" stroke="#15803d" stroke-width="2.5"/>
+        <rect x="390" y="60" width="110" height="36" rx="6" fill="#dcfce7"/>
+        <text x="445" y="82" text-anchor="middle" fill="#14532d" font-size="12" font-weight="bold">Social</text>
+        <text x="445" y="50" text-anchor="middle" fill="#374151" font-size="9">Hábitos de</text>
+        <text x="445" y="61" text-anchor="middle" fill="#374151" font-size="9">disposición inadecuada</text>
+
+        <!-- Rama inferior izquierda: Tecnológico -->
+        <line x1="200" y1="170" x2="160" y2="250" stroke="#0d9488" stroke-width="2.5"/>
+        <rect x="90" y="244" width="110" height="36" rx="6" fill="#ccfbf1"/>
+        <text x="145" y="266" text-anchor="middle" fill="#134e4a" font-size="12" font-weight="bold">Tecnológico</text>
+        <text x="145" y="295" text-anchor="middle" fill="#374151" font-size="9">Sin sistema de</text>
+        <text x="145" y="306" text-anchor="middle" fill="#374151" font-size="9">monitoreo</text>
+
+        <!-- Rama inferior central: Ecológico -->
+        <line x1="380" y1="170" x2="340" y2="250" stroke="#b91c1c" stroke-width="2.5"/>
+        <rect x="270" y="244" width="110" height="36" rx="6" fill="#fee2e2"/>
+        <text x="325" y="266" text-anchor="middle" fill="#7f1d1d" font-size="12" font-weight="bold">Ecológico</text>
+        <text x="325" y="295" text-anchor="middle" fill="#374151" font-size="9">Terrenos</text>
+        <text x="325" y="306" text-anchor="middle" fill="#374151" font-size="9">abandonados</text>
+
+        <!-- Rama inferior derecha: Legal -->
+        <line x1="560" y1="170" x2="520" y2="250" stroke="#7c3aed" stroke-width="2.5"/>
+        <rect x="450" y="244" width="110" height="36" rx="6" fill="#ede9fe"/>
+        <text x="505" y="266" text-anchor="middle" fill="#4c1d95" font-size="12" font-weight="bold">Legal</text>
+        <text x="505" y="295" text-anchor="middle" fill="#374151" font-size="9">Falta control</text>
+        <text x="505" y="306" text-anchor="middle" fill="#374151" font-size="9">e infracción</text>
+      </svg>
+    </div>
+
+    <div class="stitle"><span class="ico">📊</span>Priorización de Causas — Principio de Pareto</div>
+    <div class="grid g4">
+      <div class="card bl"><h3>💥 Impacto</h3><p>¿Qué nivel de influencia tiene sobre el problema?</p></div>
+      <div class="card bl"><h3>🔁 Frecuencia</h3><p>¿Con qué frecuencia aparece?</p></div>
+      <div class="card bl"><h3>📋 Evidencia</h3><p>¿Qué datos respaldan su existencia?</p></div>
+      <div class="card bl"><h3>🛠️ Intervención</h3><p>¿Existe capacidad real para actuar?</p></div>
+    </div>
+    <div class="note">📈 <strong>Principio de Pareto (80/20):</strong> aproximadamente el 20% de las causas genera el 80% de los problemas. Concentrar los esfuerzos en las causas de mayor impacto.</div>
+
+    <div class="stitle"><span class="ico">🏘️</span>Aplicación al Proyecto Microbasurales</div>
+    <div class="grid g2">
+      <div class="card am"><h3>H1</h3><p>Los microbasurales aparecen porque <strong>no existen contenedores cercanos</strong></p></div>
+      <div class="card am"><h3>H2</h3><p>Los microbasurales aparecen porque la <strong>frecuencia de recolección es insuficiente</strong></p></div>
+      <div class="card am"><h3>H3</h3><p>Los microbasurales aparecen por <strong>falta de educación ambiental</strong></p></div>
+      <div class="card am"><h3>H4</h3><p>Los microbasurales aparecen porque existen <strong>terrenos abandonados y sin control</strong></p></div>
+    </div>
+
+    <div class="note" style="margin-top:1.5rem">🎯 <strong>Solo cuando las causas han sido identificadas y validadas es posible avanzar:</strong> Diseñar y seleccionar soluciones capaces de generar mejoras reales y sostenibles.</div>
+
+  </div>
+</div>
+
+
+<!-- ================= FODA ================= -->
+<div class="page" id="page-foda">
+  <div class="container">
+
+    <span class="src-tag">📎 FODA Preliminar · Proyecto Microbasurales de Pilar · 2026</span>
+    <div class="note">🗺️ <strong>Análisis FODA Preliminar — Proyecto Microbasurales de Pilar</strong><br>Taller de Formulación y Desarrollo de Proyectos Sociocomunitarios · 2026</div>
+
+    <div class="foda-grid">
+      <div class="foda-cell foda-f">
+        <h3>💪 Fortalezas</h3>
+        <ul>
+          <li>Metodología estructurada 5W+2H</li>
+          <li>Protocolo de seguridad en campo</li>
+          <li>Privacidad por diseño</li>
+          <li>Bajo costo inicial ($0 licencias)</li>
+          <li>Control de calidad con criterios claros</li>
+        </ul>
+      </div>
+      <div class="foda-cell foda-d">
+        <h3>⚠️ Debilidades</h3>
+        <ul>
+          <li>Roles clave vacantes (Responsable de Datos)</li>
+          <li>Presupuesto sin cerrar</li>
+          <li>Punto piloto no consolidado</li>
+          <li>Muestra inicial reducida (1 punto / 2-3 testimonios)</li>
+        </ul>
+      </div>
+      <div class="foda-cell foda-o">
+        <h3>🚀 Oportunidades</h3>
+        <ul>
+          <li>Respaldo legal — Leyes 25.916 y 13.592</li>
+          <li>Predisposición social de vecinos</li>
+          <li>Datos contrastables con fuentes municipales</li>
+          <li>Asistencia académica docente</li>
+        </ul>
+      </div>
+      <div class="foda-cell foda-a">
+        <h3>🔴 Amenazas</h3>
+        <ul>
+          <li>Falta de respuesta municipal</li>
+          <li>Riesgos en territorio (seguridad, clima)</li>
+          <li>Retiro de consentimiento vecinal</li>
+          <li>Condicionantes sistémicos (recolección, hábitos, infraestructura)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">🔀</span>Matriz de Cruce Estratégico</div>
+    <div class="cruce-grid">
+      <div class="cruce-card cruce-fo">
+        <h3>FO — Maximizar 🚀</h3>
+        <p>Usar <strong>5W+2H + marco legal</strong> para presentar hallazgos al Municipio como reclamo técnico formalizado</p>
+      </div>
+      <div class="cruce-card cruce-do">
+        <h3>DO — Compensar 🔧</h3>
+        <p>Aprovechar <strong>supervisión docente</strong> para validar cuestionarios antes del trabajo de campo</p>
+      </div>
+      <div class="cruce-card cruce-fa">
+        <h3>FA — Proteger 🛡️</h3>
+        <p>Ante posible falta de respuesta municipal, calcular de forma independiente la <strong>tasa de reincidencia</strong> con observaciones propias</p>
+      </div>
+      <div class="cruce-card cruce-da">
+        <h3>DA — Evitar ⚠️</h3>
+        <p>Asignar de inmediato un <strong>Responsable de Datos</strong> para mitigar riesgos de privacidad y asegurar respaldo legal de consentimientos</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<footer>
+  <p>Taller de Formulación y Desarrollo de Proyectos Sociocomunitarios · UNaP 2026 · <a href="../index.html">← Volver al inicio</a></p>
+</footer>
+
+<script>
+function showTab(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

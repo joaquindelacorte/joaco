@@ -355,6 +355,232 @@ footer a{color:var(--main)}
 
   </div><!-- end grid -->
 
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECCIÓN: EJERCICIOS RESUELTOS (basados en el parcial tipo)
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="stitle" style="margin-top:3rem"><span>📝</span> Ejercicios resueltos — Parcial tipo</div>
+  <p style="font-size:.9rem;color:var(--gray-lt);margin-bottom:1.5rem">Ejercicios del parcial tipo (Ing. Tirabasso). Cada problema incluye la resolución analítica y el vínculo con lo que podés ver en el simulador de arriba.</p>
+
+  <!-- ─── SECCIÓN B.1 ─── -->
+  <div class="card" style="margin-bottom:1.2rem">
+    <h3>📌 Problema B.1 — Dos circuitos RC (12 pts)</h3>
+    <p style="margin-bottom:.8rem">Se tienen dos circuitos RC excitados con un escalón de 5 V:</p>
+    <ul style="margin-left:1.2rem;font-size:.9rem;margin-bottom:.8rem">
+      <li><b>Circuito 1:</b> R = 1 kΩ, C = 1000 µF → τ₁ = ?</li>
+      <li><b>Circuito 2:</b> R = 10 kΩ, C = 1000 µF → τ₂ = ?</li>
+    </ul>
+
+    <div class="card bl" style="margin-bottom:1rem">
+      <h3>a) Constante de tiempo τ = R · C</h3>
+      <div class="fbox">
+        <span class="big">τ = R · C</span>
+        <span class="sub-f">τ₁ = 1×10³ Ω · 1×10⁻³ F = <b>1 s</b></span>
+        <span class="unit">τ₂ = 10×10³ Ω · 1×10⁻³ F = <b>10 s</b></span>
+      </div>
+      <p><b>→ Cómo verlo en el simulador:</b> ponele R = 1000 Ω y C = 1000000 nF. El osciloscopio muestra la curva de carga exponencial. Después aumentá R a 10000 Ω — la curva se "aplana" (tarda más en subir).</p>
+    </div>
+
+    <div class="card gr" style="margin-bottom:1rem">
+      <h3>b) ¿Cuál se carga más rápido?</h3>
+      <p><b>El Circuito 1</b> (τ₁ = 1 s &lt; τ₂ = 10 s). Justificación física: con la misma carga (C), una resistencia más pequeña deja pasar más corriente → el capacitor se carga más rápido. La resistencia "frena" la corriente de carga.</p>
+      <p style="margin-top:.5rem">Regla: el capacitor llega al <b>63%</b> de la tensión final en exactamente 1τ, y al <b>95%</b> en 3τ.</p>
+    </div>
+
+    <div class="card te">
+      <h3>c) Tensión del capacitor en función del tiempo</h3>
+      <div class="fbox">
+        <span class="big">v_C(t) = V_max · (1 − e^(−t/τ))</span>
+        <span class="sub-f">Circuito 1: v_C(t) = 5 · (1 − e^(−t/1))   [V]</span>
+        <span class="unit">Circuito 2: v_C(t) = 5 · (1 − e^(−t/10))  [V]</span>
+      </div>
+      <p>En el gráfico: la curva del Circuito 1 sube más empinada y llega a 5 V antes. La del Circuito 2 es más "perezosa". Ambas convergen a 5 V en estado estacionario.</p>
+    </div>
+  </div>
+
+  <!-- ─── SECCIÓN B.2 ─── -->
+  <div class="card" style="margin-bottom:1.2rem">
+    <h3>📌 Problema B.2 — Termómetro digital de primer orden (13 pts)</h3>
+    <p style="margin-bottom:.8rem">Al sumergir el termómetro: T₀ = 20 °C → T∞ = 80 °C. A los 5 s la lectura es 58 °C.</p>
+
+    <div class="card bl" style="margin-bottom:1rem">
+      <h3>a) Calcular τ (constante de tiempo)</h3>
+      <div class="fbox">
+        <span class="big">T(t) = T∞ + (T₀ − T∞) · e^(−t/τ)</span>
+        <span class="sub-f">58 = 80 + (20 − 80) · e^(−5/τ)</span>
+        <span class="sub-f">58 − 80 = −60 · e^(−5/τ)  →  −22 = −60 · e^(−5/τ)</span>
+        <span class="sub-f">e^(−5/τ) = 22/60 = 0.3667</span>
+        <span class="sub-f">−5/τ = ln(0.3667) = −1.003  →  <b>τ ≈ 5 s</b></span>
+        <span class="unit">(Coincide con la definición: al tiempo τ el sistema alcanzó el 63.2% del cambio total)</span>
+      </div>
+      <p>Verificación: 20 + (80−20)·(1−e^(−5/5)) = 20 + 60·0.632 = <b>57.9 °C ≈ 58 °C</b> ✓</p>
+    </div>
+
+    <div class="card gr" style="margin-bottom:1rem">
+      <h3>b) ¿Cuánto tarda en llegar a 79 °C?</h3>
+      <div class="fbox">
+        <span class="big">79 = 80 − 60 · e^(−t/5)</span>
+        <span class="sub-f">e^(−t/5) = 1/60 = 0.01667</span>
+        <span class="sub-f">−t/5 = ln(0.01667) = −4.094</span>
+        <span class="big">t ≈ 20.5 s  (≈ 4τ)</span>
+        <span class="unit">Regla práctica: 4τ ≈ 98% del valor final</span>
+      </div>
+    </div>
+
+    <div class="card or">
+      <h3>c) ¿Qué pasa con τ si la punta es más gruesa?</h3>
+      <p><b>τ aumenta.</b> La analogía térmica-eléctrica es: masa térmica ↔ capacitor (C), resistencia térmica ↔ resistor (R). Mayor masa = más "capacitor" = más τ = respuesta más lenta. El termómetro tarda más en registrar el cambio real de temperatura.</p>
+      <p style="margin-top:.5rem"><b>→ Conexión con el encoder:</b> en el simulador, el capacitor parásito C cumple el mismo rol — a mayor C, mayor τ, y la señal tarda más en cargarse a V_max.</p>
+    </div>
+  </div>
+
+  <!-- ─── SECCIÓN A.2 ─── -->
+  <div class="card" style="margin-bottom:1.2rem">
+    <h3>📌 Problema A.2 — Función de transferencia G(s) = 3/(2s+1) (10 pts)</h3>
+
+    <div class="card bl" style="margin-bottom:1rem">
+      <h3>a) Salida en estado estacionario — escalón de amplitud 2</h3>
+      <div class="fbox">
+        <span class="big">y_ss = K · A = (ganancia DC) · (amplitud escalón)</span>
+        <span class="sub-f">Ganancia DC = G(0) = 3/(2·0+1) = 3</span>
+        <span class="sub-f">y_ss = 3 · 2 = <b>6</b></span>
+        <span class="unit">Regla: en estado estacionario s→0, así que G(s)|_{s=0} es la ganancia DC</span>
+      </div>
+    </div>
+
+    <div class="card gr" style="margin-bottom:1rem">
+      <h3>b) Tiempo para alcanzar el 63% del valor final</h3>
+      <div class="fbox">
+        <span class="big">τ = 2 s</span>
+        <span class="sub-f">G(s) = 3/(2s+1) → forma estándar K/(τs+1) con τ = 2 s</span>
+        <span class="unit">Al tiempo t = τ = 2 s, la salida vale ≈ 63% de 6 = 3.78</span>
+      </div>
+      <p><b>→ Esto es exactamente el τ del encoder:</b> en el simulador, τ = R·C. Si τ = 2 s, configurá R = 2 MΩ, C = 1 µF para ver la misma curva.</p>
+    </div>
+
+    <div class="card or">
+      <h3>c) Si se duplica el coeficiente de s → ¿más rápido o más lento?</h3>
+      <p>Si G(s) = 3/(4s+1), ahora τ = <b>4 s</b> (antes era 2 s). El sistema se vuelve <b>más lento</b> — tarda más en llegar al 63% de la salida final. El coeficiente de s en el denominador es directamente la constante de tiempo τ.</p>
+    </div>
+  </div>
+
+  <!-- ─── SECCIÓN C.1 ─── -->
+  <div class="card" style="margin-bottom:1.2rem">
+    <h3>📌 Problema C.1 — Polos y estabilidad (10 pts)</h3>
+    <div class="fbox" style="margin-bottom:1rem">
+      <span class="big">G1 = 1/(s+2) · G2 = 1/(s−2) · G3 = 1/(s²+2s+5)</span>
+      <span class="sub-f">Regla: sistema estable ↔ todos los polos con parte real &lt; 0 (plano izquierdo)</span>
+    </div>
+
+    <div class="grid g2" style="margin-bottom:1rem">
+      <div class="card gr">
+        <h3>✅ G1 — Estable</h3>
+        <p>Polo en s = −2 (parte real negativa). La respuesta decae exponencialmente.</p>
+      </div>
+      <div class="card re">
+        <h3>❌ G2 — INESTABLE</h3>
+        <p>Polo en s = <b>+2</b> (parte real positiva → plano derecho). La respuesta crece exponencialmente sin límite.</p>
+      </div>
+    </div>
+
+    <div class="card te" style="margin-bottom:1rem">
+      <h3>G3 — ¿Oscila? Polo complejo conjugado</h3>
+      <div class="fbox">
+        <span class="big">s² + 2s + 5 = 0</span>
+        <span class="sub-f">s = (−2 ± √(4−20)) / 2 = −1 ± 2j</span>
+        <span class="unit">Parte real = −1 &lt; 0: ESTABLE. Parte imaginaria ≠ 0: OSCILA amortiguado</span>
+      </div>
+      <p>La respuesta es una senoide amortiguada — oscila pero con amplitud decreciente hasta estabilizarse. <b>Conexión con el encoder:</b> el semáforo del simulador detecta cuándo la señal no alcanza los umbrales; si el sistema tuviera polos complejos como G3, la señal oscilaría antes de estabilizarse.</p>
+    </div>
+
+    <div class="card bl">
+      <h3>c) G1 con Kp = 10 en lazo cerrado — ¿sigue estable?</h3>
+      <div class="fbox">
+        <span class="big">G_LC(s) = Kp·G1 / (1 + Kp·G1)</span>
+        <span class="sub-f">= 10/(s+2) / (1 + 10/(s+2)) = 10 / (s+2+10) = 10/(s+12)</span>
+        <span class="unit">Polo en s = −12 → parte real negativa → ESTABLE ✓</span>
+      </div>
+      <p>La ganancia proporcional solo desplaza el polo más a la izquierda — hace el sistema <b>más rápido</b>, no inestable. τ_LC = 1/12 s (antes era 1/2 s).</p>
+    </div>
+  </div>
+
+  <!-- ─── SECCIÓN D.1 ─── -->
+  <div class="card" style="margin-bottom:1.2rem">
+    <h3>📌 Problema D.1 — Control On-Off y Proporcional (10 pts)</h3>
+    <p style="margin-bottom:.8rem">Planta: G(s) = 1/(s+1). Bomba: encendida u = 2 L/s, apagada u = 0.</p>
+
+    <div class="card or" style="margin-bottom:1rem">
+      <h3>a) Control On-Off con histéresis — ¿el nivel se estabiliza?</h3>
+      <p><b>No se estabiliza exactamente</b> — oscila dentro de la banda de histéresis. Cuando el nivel baja del límite inferior, la bomba enciende; cuando sube al límite superior, apaga. El nivel "rebota" permanentemente entre esos dos valores. <b>Ventaja:</b> simple. <b>Desventaja:</b> nunca llega al setpoint exacto.</p>
+    </div>
+
+    <div class="card am" style="margin-bottom:1rem">
+      <h3>b) Control Proporcional Kp = 3 — ¿llega al setpoint?</h3>
+      <div class="fbox">
+        <span class="big">G_LC = Kp·G / (1 + Kp·G)</span>
+        <span class="sub-f">= 3/(s+1) / (1 + 3/(s+1)) = 3 / (s+1+3) = 3/(s+4)</span>
+        <span class="sub-f">Valor final (escalón unitario): G_LC(0) = 3/4 = 0.75 ≠ 1</span>
+        <span class="unit">Offset = 1 − 0.75 = 0.25 (25% de error permanente)</span>
+      </div>
+      <p>El control P <b>no elimina el offset</b>. El error permanente es e_ss = 1/(1+Kp) = 1/(1+3) = 0.25.</p>
+    </div>
+
+    <div class="card gr">
+      <h3>c) ¿Qué agregar para eliminar el offset?</h3>
+      <p>Una <b>acción Integral (I)</b>. El controlador PI acumula el error en el tiempo y lo corrige hasta que el error sea cero. La acción I elimina el error en estado estacionario para referencias de tipo escalón.</p>
+      <ul>
+        <li><b>Solo P:</b> rápido, pero con offset</li>
+        <li><b>PI:</b> sin offset, algo más lento</li>
+        <li><b>PID:</b> sin offset, con derivativa para mejorar la respuesta transitoria</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ─── SECCIÓN E.1 ─── -->
+  <div class="card" style="margin-bottom:1.5rem">
+    <h3>📌 Problema E.1 — Simulación en Octave (15 pts)</h3>
+    <p style="margin-bottom:.8rem">Planta: G(s) = 1/(s+1), controlador Kp, escalón unitario. Objetivo: ver el efecto del Kp sobre el offset.</p>
+
+    <div class="card bl" style="margin-bottom:1rem">
+      <h3>Solución analítica del offset en función de Kp</h3>
+      <div class="fbox">
+        <span class="big">y_ss = Kp / (1 + Kp)</span>
+        <span class="sub-f">Kp = 2 → y_ss = 2/3 ≈ 0.667 → offset = 0.333</span>
+        <span class="sub-f">Kp = 5 → y_ss = 5/6 ≈ 0.833 → offset = 0.167</span>
+        <span class="sub-f">Kp = 10 → y_ss = 10/11 ≈ 0.909 → offset = 0.091</span>
+        <span class="unit">Conclusión: a mayor Kp, menor offset (pero nunca = 0 con solo control P)</span>
+      </div>
+    </div>
+
+    <div class="card te" style="margin-bottom:1rem">
+      <h3>Código Octave</h3>
+      <div style="background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1rem 1.2rem;font-family:'Consolas','Courier New',monospace;font-size:.8rem;line-height:1.6;overflow-x:auto;margin:.5rem 0;white-space:pre">G = tf([1],[1 1]);          % Planta G(s) = 1/(s+1)
+t = 0:0.01:10;             % Vector tiempo 10 seg
+
+figure; hold on;
+Kps = [2, 5, 10];
+colors = {'b','r','g'};
+for i = 1:length(Kps)
+  Kp = Kps(i);
+  C  = tf([Kp],[1]);         % Controlador P
+  LC = feedback(C*G, 1);     % Lazo cerrado
+  [y,t] = step(LC, t);
+  plot(t, y, colors{i}, 'LineWidth', 1.5);
+end
+plot(t, ones(size(t)), 'k--');  % Setpoint
+legend('Kp=2','Kp=5','Kp=10','Setpoint');
+xlabel('Tiempo [s]'); ylabel('Salida y(t)');
+title('Respuesta al escalon - Control Proporcional');</div>
+      <p style="font-size:.82rem;color:var(--gray-lt);margin-top:.4rem">Las tres curvas convergen a su respectivo y_ss. Ninguna llega a 1.0 exactamente — eso es el offset del control proporcional.</p>
+    </div>
+
+    <div class="card or">
+      <h3>d) Conclusión: relación Kp ↔ offset</h3>
+      <p><b>A mayor Kp, menor offset</b> — pero el offset nunca desaparece con control P puro. La fórmula e_ss = 1/(1+Kp) muestra que necesitaríamos Kp → ∞ para anularlo, lo que haría el sistema inestable o con oscilaciones.</p>
+      <p style="margin-top:.5rem"><b>La solución real es agregar acción integral (PI o PID)</b>, que integra el error y lo corrige hasta hacerlo exactamente cero.</p>
+    </div>
+  </div>
+
+
 </div><!-- end container -->
 
 <footer>

@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Octave IDE — Sistemas de Control</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.3/ace.js" crossorigin="anonymous"></script>
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js" crossorigin="anonymous"></script>
+<style>
+:root{
+  --main:#3730a3;--main-lt:#4f46e5;--main-bg:#e0e7ff;
+  --green:#15803d;--green-bg:#dcfce7;
+  --red:#b91c1c;--red-bg:#fee2e2;
+  --orange:#c2410c;--orange-bg:#ffedd5;
+  --gray:#374151;--gray-lt:#6b7280;
+  --bg:#f0f1f8;--card:#fff;--border:#e2e8f0;
+  --editor-bg:#1e1e2e;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--editor-bg);color:#cdd6f4;display:flex;flex-direction:column}
+
+/* TOP BAR */
+.topbar{background:#181825;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:0;padding:0;height:40px;flex-shrink:0;z-index:100}
+.topbar-brand{color:#cba6f7;font-weight:800;font-size:.9rem;padding:0 1.1rem;border-right:1px solid rgba(255,255,255,.07);height:100%;display:flex;align-items:center;white-space:nowrap}
+.topbar-links{display:flex;align-items:center;height:100%}
+.topbar-links a{color:#6c7086;text-decoration:none;padding:0 .75rem;font-size:.8rem;height:100%;display:flex;align-items:center;border-right:1px solid rgba(255,255,255,.04);transition:.15s}
+.topbar-links a:hover{color:#cdd6f4;background:rgba(255,255,255,.04)}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:0;height:100%}
+.run-btn{background:#a6e3a1;color:#1e1e2e;font-weight:800;font-size:.82rem;border:none;padding:0 1.4rem;height:100%;cursor:pointer;display:flex;align-items:center;gap:.45rem;transition:.15s}
+.run-btn:hover{background:#94e2d8}
+.run-btn:active{background:#89dceb}
+.clear-btn{background:rgba(255,255,255,.06);color:#6c7086;font-size:.8rem;font-weight:600;border:none;padding:0 .9rem;height:100%;cursor:pointer;border-left:1px solid rgba(255,255,255,.07);transition:.15s}
+.clear-btn:hover{color:#cdd6f4;background:rgba(255,255,255,.09)}
+
+/* MAIN LAYOUT */
+.ide-layout{display:grid;grid-template-columns:1fr 1fr;flex:1;overflow:hidden;gap:0}
+@media(max-width:900px){.ide-layout{grid-template-columns:1fr;grid-template-rows:45vh 1fr}}
+
+/* EDITOR SIDE */
+.editor-side{display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,.07);overflow:hidden}
+.editor-tabs{display:flex;background:#181825;border-bottom:1px solid rgba(255,255,255,.06)}
+.etab{padding:.45rem 1rem;font-size:.78rem;color:#6c7086;cursor:pointer;border-right:1px solid rgba(255,255,255,.04)}
+.etab.active{color:#cba6f7;background:var(--editor-bg);border-bottom:2px solid #cba6f7}
+.etab:hover{color:#cdd6f4}
+#editor{flex:1;font-size:13px;line-height:1.6}
+
+/* OUTPUT SIDE */
+.output-side{display:flex;flex-direction:column;overflow:hidden;background:#1e1e2e}
+.output-tabs{display:flex;background:#181825;border-bottom:1px solid rgba(255,255,255,.06)}
+.otab{padding:.45rem 1rem;font-size:.78rem;color:#6c7086;cursor:pointer;border-right:1px solid rgba(255,255,255,.04)}
+.otab.active{color:#89b4fa;background:var(--editor-bg);border-bottom:2px solid #89b4fa}
+.figures-area{flex:1;overflow-y:auto;padding:.8rem;display:flex;flex-direction:column;gap:1rem}
+.fig-card{background:#181825;border:1px solid rgba(255,255,255,.07);border-radius:8px;overflow:hidden}
+.fig-card .fig-title{padding:.4rem .8rem;font-size:.75rem;color:#6c7086;border-bottom:1px solid rgba(255,255,255,.05)}
+.console-area{flex:1;overflow-y:auto;padding:.75rem 1rem;font-family:'Consolas','Courier New',monospace;font-size:.82rem;line-height:1.7;display:none}
+.console-area.active{display:block}
+.cl{display:flex;gap:.6rem;align-items:flex-start;margin:.1rem 0}
+.cl-prompt{color:#89b4fa;flex-shrink:0}
+.cl-out{color:#cdd6f4}
+.cl-err{color:#f38ba8}
+.cl-warn{color:#fab387}
+.cl-info{color:#a6e3a1}
+
+/* EXAMPLES PANEL */
+.examples-panel{position:absolute;left:0;top:40px;bottom:0;width:220px;background:#181825;border-right:1px solid rgba(255,255,255,.08);transform:translateX(-100%);transition:transform .2s;z-index:50;overflow-y:auto;display:flex;flex-direction:column}
+.examples-panel.open{transform:translateX(0)}
+.ex-header{padding:.7rem .9rem;font-size:.75rem;font-weight:800;color:#cba6f7;text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid rgba(255,255,255,.06)}
+.ex-item{padding:.55rem .9rem;font-size:.8rem;color:#a6adc8;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.03);transition:.1s}
+.ex-item:hover{background:rgba(255,255,255,.05);color:#cdd6f4}
+.ex-item .ex-title{font-weight:600;color:#cdd6f4;display:block;margin-bottom:.15rem}
+.ex-item .ex-desc{font-size:.73rem;color:#6c7086}
+.topbar-links .menu-btn{background:transparent;border:none;cursor:pointer}
+
+/* STATUS */
+.status-bar{background:#181825;border-top:1px solid rgba(255,255,255,.06);padding:.2rem .8rem;font-size:.72rem;color:#6c7086;display:flex;gap:1.2rem;flex-shrink:0}
+.status-ok{color:#a6e3a1}.status-err{color:#f38ba8}.status-run{color:#fab387}
+
+/* No figures placeholder */
+.no-output{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;color:#45475a}
+.no-output .ico{font-size:2.5rem}
+.no-output p{font-size:.85rem;text-align:center;max-width:240px;line-height:1.6}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#45475a;border-radius:3px}
+
+@media(max-width:900px){
+  .editor-side{height:45vh;border-right:none;border-bottom:1px solid rgba(255,255,255,.07)}
+  .ide-layout{display:flex;flex-direction:column}
+  .output-side{flex:1}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-brand">🔬 Octave IDE</div>
+  <div class="topbar-links">
+    <a href="teoria.html">← Teoría</a>
+    <a href="ejercicios-parcial.html">📝 Parcial</a>
+    <a href="simulador-octave.html">🎛️ Simulador</a>
+    <a href="#" onclick="toggleExamples(event)" title="Ejemplos">📂 Ejemplos</a>
+  </div>
+  <div class="topbar-right">
+    <button class="clear-btn" onclick="clearOutput()">✕ Limpiar</button>
+    <button class="run-btn" onclick="runCode()" title="Ctrl+Enter">▶ Ejecutar</button>
+  </div>
+</div>
+
+<!-- EXAMPLES PANEL -->
+<div class="examples-panel" id="examples-panel">
+  <div class="ex-header">Ejemplos</div>
+  <div id="examples-list"></div>
+</div>
+
+<!-- IDE LAYOUT -->
+<div class="ide-layout">
+
+  <!-- EDITOR -->
+  <div class="editor-side">
+    <div class="editor-tabs">
+      <div class="etab active">script.m</div>
+    </div>
+    <div id="editor"></div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="output-side">
+    <div class="output-tabs">
+      <div class="otab active" onclick="switchOutput('figures',this)">📊 Gráficos</div>
+      <div class="otab" onclick="switchOutput('console',this)">🖥️ Consola</div>
+    </div>
+    <div class="figures-area" id="figures-area">
+      <div class="no-output" id="no-output">
+        <div class="ico">📈</div>
+        <p>Escribí código Octave y presioná <b>▶ Ejecutar</b> o <b>Ctrl+Enter</b></p>
+      </div>
+    </div>
+    <div class="console-area" id="console-area"></div>
+  </div>
+
+</div>
+
+<!-- STATUS BAR -->
+<div class="status-bar">
+  <span id="status-txt">Listo</span>
+  <span>Ctrl+Enter: Ejecutar</span>
+  <span>Ctrl+L: Limpiar</span>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   POLY MATH
+══════════════════════════════════════════════════════════ */
+function polyMul(a,b){
+  const r=new Array(a.length+b.length-1).fill(0);
+  for(let i=0;i<a.length;i++)for(let j=0;j<b.length;j++)r[i+j]+=a[i]*b[j];
+  return r;
+}
+function polyAdd(a,b){
+  const L=Math.max(a.length,b.length);
+  const A=[...new Array(L-a.length).fill(0),...a];
+  const B=[...new Array(L-b.length).fill(0),...b];
+  return A.map((v,i)=>v+B[i]);
+}
+function polyNorm(p){while(p.length>1&&Math.abs(p[0])<1e-12)p=p.slice(1);return p}
+function normPoly(p){const a=p[0];return p.map(x=>x/a)}
+
+function polyRoots(coeffs){
+  const p=normPoly([...coeffs]);
+  const n=p.length-1;
+  if(n<=0)return[];
+  if(n===1)return[{re:-p[1],im:0}];
+  if(n===2){
+    const disc=p[1]*p[1]-4*p[2];
+    if(disc>=0)return[{re:(-p[1]+Math.sqrt(disc))/2,im:0},{re:(-p[1]-Math.sqrt(disc))/2,im:0}];
+    return[{re:-p[1]/2,im:Math.sqrt(-disc)/2},{re:-p[1]/2,im:-Math.sqrt(-disc)/2}];
+  }
+  // Durand-Kerner
+  let roots=[];
+  for(let k=0;k<n;k++){const a=2*Math.PI*k/n;roots.push({re:(0.4+0.05*k)*Math.cos(a),im:(0.4+0.05*k)*Math.sin(a)});}
+  const cAbs=r=>Math.sqrt(r.re*r.re+r.im*r.im);
+  const cMul=(a,b)=>({re:a.re*b.re-a.im*b.im,im:a.re*b.im+a.im*b.re});
+  const cDiv=(a,b)=>{const d=b.re*b.re+b.im*b.im;return{re:(a.re*b.re+a.im*b.im)/d,im:(a.im*b.re-a.re*b.im)/d}};
+  function evalP(cs,z){let r={re:0,im:0};let pw={re:1,im:0};for(let i=cs.length-1;i>=0;i--){r={re:r.re+cs[i]*pw.re,im:r.im+cs[i]*pw.im};pw=cMul(pw,z);}return r;}
+  // Actually use Horner
+  function horner(cs,z){let r={re:cs[0],im:0};for(let i=1;i<cs.length;i++)r={re:r.re*z.re-r.im*z.im+cs[i],im:r.re*z.im+r.im*z.re};return r;}
+  for(let iter=0;iter<300;iter++){
+    let maxD=0;
+    for(let i=0;i<n;i++){
+      let den={re:1,im:0};
+      for(let j=0;j<n;j++)if(j!==i)den=cMul(den,{re:roots[i].re-roots[j].re,im:roots[i].im-roots[j].im});
+      if(cAbs(den)<1e-20)continue;
+      const pv=horner(p,roots[i]);
+      const d=cDiv(pv,den);
+      roots[i]={re:roots[i].re-d.re,im:roots[i].im-d.im};
+      maxD=Math.max(maxD,cAbs(d));
+    }
+    if(maxD<1e-12)break;
+  }
+  return roots.map(r=>({re:r.re,im:Math.abs(r.im)<1e-8?0:r.im}));
+}
+
+function evalPolyComplex(c,jw){
+  // eval at s=jw (purely imaginary)
+  let re=0,im=0;
+  const n=c.length-1;
+  for(let i=0;i<=n;i++){
+    const pw=n-i;
+    // (jw)^pw
+    const pwr=pw%4;
+    const mag=Math.pow(jw,pw);
+    if(pwr===0){re+=c[i]*mag;}
+    else if(pwr===1){im+=c[i]*mag;}
+    else if(pwr===2){re-=c[i]*mag;}
+    else{im-=c[i]*mag;}
+  }
+  return{re,im};
+}
+
+/* ══════════════════════════════════════════════════════════
+   TF CLASS
+══════════════════════════════════════════════════════════ */
+class TF{
+  constructor(num,den){
+    this._tf=true;
+    this.num=polyNorm([...num]);
+    this.den=polyNorm([...den]);
+  }
+  add(o){
+    if(typeof o==='number')o=new TF([o],[1]);
+    return new TF(polyAdd(polyMul(this.num,o.den),polyMul(o.num,this.den)),polyMul(this.den,o.den));
+  }
+  sub(o){
+    if(typeof o==='number')o=new TF([o],[1]);
+    return new TF(polyAdd(polyMul(this.num,o.den),polyMul(o.num.map(x=>-x),this.den)),polyMul(this.den,o.den));
+  }
+  mul(o){
+    if(typeof o==='number')return new TF(this.num.map(x=>x*o),this.den);
+    return new TF(polyMul(this.num,o.num),polyMul(this.den,o.den));
+  }
+  div(o){
+    if(typeof o==='number')return new TF(this.num.map(x=>x/o),this.den);
+    return new TF(polyMul(this.num,o.den),polyMul(this.den,o.num));
+  }
+  neg(){return new TF(this.num.map(x=>-x),this.den);}
+  get poles(){return polyRoots(this.den);}
+  get zeros(){return this.num.length>1?polyRoots(this.num):[];}
+  get dcgain(){const n=this.num[this.num.length-1],d=this.den[this.den.length-1];return n/d;}
+  freqResp(w){
+    const N=evalPolyComplex(this.num,w);
+    const D=evalPolyComplex(this.den,w);
+    const d2=D.re*D.re+D.im*D.im;
+    if(d2<1e-30)return{re:1e15,im:0};
+    return{re:(N.re*D.re+N.im*D.im)/d2,im:(N.im*D.re-N.re*D.im)/d2};
+  }
+  toString(){
+    const pStr=p=>p.map((c,i)=>{
+      const pw=p.length-1-i;
+      if(Math.abs(c)<1e-10)return'';
+      const cs=Math.abs(c)===1&&pw>0?'':Math.abs(c).toFixed(3);
+      const sg=c<0?'-':i>0?'+':'';
+      const xp=pw===0?'':(pw===1?'s':`s^${pw}`);
+      return`${sg}${cs}${xp}`;
+    }).filter(Boolean).join('')||'0';
+    return`TF: (${pStr(this.num)}) / (${pStr(this.den)})`;
+  }
+}
+
+function tfFeedback(G,H){
+  if(typeof H==='number')H=new TF([H],[1]);
+  return new TF(polyMul(G.num,H.den),polyAdd(polyMul(G.den,H.den),polyMul(G.num,H.num)));
+}
+
+/* ══════════════════════════════════════════════════════════
+   EULER SIMULATION
+══════════════════════════════════════════════════════════ */
+function tf2ss(num,den){
+  const a0=den[0];
+  const d=den.map(x=>x/a0),n=num.map(x=>x/a0);
+  const order=d.length-1;
+  const b=[...new Array(d.length-n.length).fill(0),...n];
+  const D0=b[0];
+  const bc=b.slice(1).map((v,i)=>v-D0*d[i+1]);
+  const A=[];
+  for(let i=0;i<order;i++){
+    const row=new Array(order).fill(0);
+    if(i<order-1)row[i+1]=1;
+    else for(let j=0;j<order;j++)row[j]=-d[order-j];
+    A.push(row);
+  }
+  const B=new Array(order).fill(0);B[order-1]=1;
+  return{A,B,C:bc,D:D0,order};
+}
+
+function simulate(tf,ufn,tEnd,dt=0.005){
+  const ss=tf2ss(tf.num,tf.den);
+  const{A,B,C,D,order}=ss;
+  const steps=Math.floor(tEnd/dt)+1;
+  const t=[],y=[],u=[];
+  let x=new Array(order).fill(0);
+  const skip=Math.max(1,Math.floor(steps/2000));
+  for(let k=0;k<steps;k++){
+    const tk=k*dt,uk=ufn(tk);
+    let yk=D*uk;
+    for(let i=0;i<order;i++)yk+=C[i]*x[i];
+    if(k%skip===0){t.push(tk);y.push(yk);u.push(uk);}
+    const Ax=new Array(order).fill(0);
+    for(let i=0;i<order;i++)for(let j=0;j<order;j++)Ax[i]+=A[i][j]*x[j];
+    x=x.map((v,i)=>v+dt*(Ax[i]+B[i]*uk));
+  }
+  return{t,y,u};
+}
+
+/* ══════════════════════════════════════════════════════════
+   TOKENIZER
+══════════════════════════════════════════════════════════ */
+function tokenize(code){
+  const toks=[];let i=0;
+  while(i<code.length){
+    const c=code[i];
+    if(c===' '||c==='\t'||c==='\r'){i++;continue;}
+    // Comments
+    if(c==='%'||c==='#'){while(i<code.length&&code[i]!=='\n')i++;continue;}
+    // Line continuation
+    if(c==='.'&&code[i+1]==='.'&&code[i+2]==='.'){while(i<code.length&&code[i]!=='\n')i++;i++;continue;}
+    if(c==='\n'){toks.push({t:'NL'});i++;continue;}
+    // Numbers
+    if(c>='0'&&c<='9'||(c==='.'&&i+1<code.length&&code[i+1]>='0'&&code[i+1]<='9')){
+      let s='';
+      while(i<code.length&&/[0-9.]/.test(code[i]))s+=code[i++];
+      if(i<code.length&&(code[i]==='e'||code[i]==='E')){
+        s+=code[i++];
+        if(code[i]==='+'||code[i]==='-')s+=code[i++];
+        while(i<code.length&&/[0-9]/.test(code[i]))s+=code[i++];
+      }
+      toks.push({t:'N',v:parseFloat(s)});continue;
+    }
+    // Strings "..."
+    if(c==='"'){let s='';i++;while(i<code.length&&code[i]!=='"')s+=code[i++];i++;toks.push({t:'S',v:s});continue;}
+    // Strings '...' or transpose
+    if(c==="'"){
+      const prev=toks[toks.length-1];
+      const isTrans=prev&&(prev.t==='N'||prev.t==='ID'||prev.t===')'||prev.t===']'||prev.t==="'T");
+      if(isTrans){toks.push({t:"'T"});i++;continue;}
+      let s='';i++;
+      while(i<code.length&&!(code[i]==="'"&&code[i+1]!=="'"))s+=code[i++];
+      if(code[i]==="'")i++;
+      toks.push({t:'S',v:s});continue;
+    }
+    // Identifiers
+    if(/[a-zA-Z_]/.test(c)){
+      let s='';while(i<code.length&&/[a-zA-Z0-9_]/.test(code[i]))s+=code[i++];
+      toks.push({t:'ID',v:s});continue;
+    }
+    // Two-char ops
+    const two=code[i]+code[i+1];
+    if(['.*','./','.**','.^','==','~=','!=','<=','>=','&&','||','**'].includes(two)){
+      toks.push({t:two});i+=2;continue;
+    }
+    // One-char
+    toks.push({t:c});i++;
+  }
+  toks.push({t:'EOF'});
+  return toks;
+}
+
+/* ══════════════════════════════════════════════════════════
+   INTERPRETER
+══════════════════════════════════════════════════════════ */
+class Octave{
+  constructor(figCb,printCb){
+    this.ws={pi:Math.PI,e:Math.E,eps:2.22e-16,Inf:Infinity,inf:Infinity,NaN:NaN,nan:NaN,true:1,false:0};
+    this.figCb=figCb;   // figCb({title,traces,layout,type})
+    this.printCb=printCb; // printCb(str,level)
+    this.curFigTraces=null;
+    this.curFigLayout=null;
+    this.curFigTitle='Figure';
+    this.holdOn=false;
+    this.curFigNum=0;
+  }
+
+  run(code){
+    this.toks=tokenize(code);
+    this.pos=0;
+    try{
+      while(this._peek().t!=='EOF'){
+        this._skipSep();
+        if(this._peek().t==='EOF')break;
+        this._stmt();
+      }
+      this._flushFig();
+    }catch(e){
+      this._flushFig();
+      throw e;
+    }
+  }
+
+  _peek(off=0){return this.toks[this.pos+off]||{t:'EOF'};}
+  _adv(){return this.toks[this.pos++]||{t:'EOF'};}
+  _eat(type){const t=this._adv();if(t.t!==type)throw new Error(`Expected '${type}' got '${t.t}'`);return t;}
+  _skipSep(){while(['NL',';'].includes(this._peek().t))this._adv();}
+  _skipLine(){while(!['NL',';','EOF'].includes(this._peek().t))this._adv();if(this._peek().t!=='EOF')this._adv();}
+  _skipToEnd(){
+    let depth=0;
+    while(this._peek().t!=='EOF'){
+      const t=this._peek();
+      if(t.t==='ID'&&['for','while','if','function','switch'].includes(t.v))depth++;
+      if(t.t==='ID'&&t.v==='end'){if(depth===0){this._adv();return;}depth--;}
+      this._adv();
+    }
+  }
+
+  _stmt(){
+    const t=this._peek();
+
+    // Keywords
+    if(t.t==='ID'){
+      if(t.v==='pkg'||t.v==='clc'||t.v==='clear'||t.v==='clf'){this._skipLine();return;}
+      if(t.v==='function'){this._skipLine();this._skipToEnd();return;}
+      if(t.v==='end'){this._adv();return;}
+      if(t.v==='return'){this._adv();return;}
+
+      if(t.v==='for'){this._for();return;}
+      if(t.v==='while'){this._while();return;}
+      if(t.v==='if'){this._if();return;}
+
+      if(t.v==='hold'){
+        this._adv();
+        const next=this._peek();
+        if(next.t==='ID'){const v=this._adv().v;this.holdOn=(v==='on');}
+        this._skipLine();return;
+      }
+      if(t.v==='figure'){
+        this._adv();
+        let num=++this.curFigNum;
+        if(this._peek().t==='('){this._adv();num=this._expr();this._eat(')');}
+        this._newFig(`Figure ${num}`);
+        this._skipLine();return;
+      }
+      if(t.v==='subplot'){this._adv();this._skipLine();return;}
+      if(t.v==='close'){this._adv();this._skipLine();return;}
+    }
+
+    // Multi-assignment: [a,b,...] = expr
+    if(t.t==='['){
+      this._adv();
+      const vars=[];
+      while(this._peek().t!==']'){
+        if(this._peek().t===',')this._adv();
+        if(this._peek().t===';')this._adv();
+        if(this._peek().t==='ID')vars.push(this._adv().v);
+      }
+      this._eat(']');
+      if(this._peek().t==='='){
+        this._adv();
+        const val=this._expr();
+        if(Array.isArray(val)){
+          vars.forEach((v,i)=>{if(i<val.length)this.ws[v]=val[i];});
+        } else {
+          if(vars.length>0)this.ws[vars[0]]=val;
+        }
+        this._eol();return;
+      }
+      // otherwise restore... complicated, just skip
+      this._skipLine();return;
+    }
+
+    // Assignment: ident = expr (but not ==)
+    if(t.t==='ID'&&this._peek(1).t==='='&&this._peek(2).t!=='='){
+      const name=this._adv().v;
+      this._adv(); // =
+      const val=this._expr();
+      this.ws[name]=val;
+      // Print if no semicolon
+      const hassc=this._peek().t===';';
+      this._eol();
+      if(!hassc&&val!==undefined){
+        if(val instanceof TF)this.printCb(val.toString(),'info');
+        else if(Array.isArray(val)){
+          if(val.length<=20)this.printCb(`${name} = [${val.map(x=>x.toFixed?x.toFixed(4):x).join(', ')}]`,'out');
+          else this.printCb(`${name} = [1×${val.length} double]`,'out');
+        }
+        else if(typeof val==='number')this.printCb(`${name} = ${val}`,'out');
+        else if(typeof val==='string')this.printCb(`${name} = '${val}'`,'out');
+      }
+      return;
+    }
+
+    // Expression statement (function call)
+    const suppress=false;
+    const val=this._expr();
+    this._eol();
+    // expressions like disp/printf already have side effects; if not suppressed show result
+    if(val!==undefined&&val!==null){
+      if(val instanceof TF)this.printCb(val.toString(),'info');
+    }
+  }
+
+  _eol(){
+    if(this._peek().t===';')this._adv();
+    if(this._peek().t==='NL')this._adv();
+  }
+
+  _for(){
+    this._eat('ID'); // for
+    const varname=this._eat('ID').v;
+    this._eat('=');
+    const range=this._expr();
+    this._eol();
+    // collect body tokens until 'end'
+    const bodyStart=this.pos;
+    this._skipToEnd(); // advances past 'end'
+    const bodyEnd=this.pos;
+
+    const arr=Array.isArray(range)?range:[range];
+    for(const val of arr){
+      this.ws[varname]=val;
+      const savedPos=this.pos;
+      this.pos=bodyStart;
+      while(this.pos<bodyEnd-1){
+        this._skipSep();
+        if(this.pos>=bodyEnd-1)break;
+        const tt=this._peek();
+        if(tt.t==='ID'&&tt.v==='end')break;
+        this._stmt();
+      }
+      this.pos=bodyEnd;
+    }
+  }
+
+  _while(){
+    this._eat('ID');
+    const condStart=this.pos;
+    // parse condition
+    const cond=this._expr();
+    this._eol();
+    const bodyStart=this.pos;
+    this._skipToEnd();
+    const bodyEnd=this.pos;
+
+    let iters=0;
+    this.pos=condStart;
+    let c=this._expr();this._eol();
+    while(c&&iters<10000){
+      iters++;
+      this.pos=bodyStart;
+      while(this.pos<bodyEnd-1){
+        this._skipSep();
+        if(this.pos>=bodyEnd-1)break;
+        if(this._peek().t==='ID'&&this._peek().v==='end')break;
+        this._stmt();
+      }
+      this.pos=condStart;
+      c=this._expr();this._eol();
+    }
+    this.pos=bodyEnd;
+  }
+
+  _if(){
+    this._eat('ID');
+    const cond=this._expr();this._eol();
+    const bodyStart=this.pos;
+    // Find matching end/else/elseif
+    let depth=0;
+    while(this._peek().t!=='EOF'){
+      const tt=this._peek();
+      if(tt.t==='ID'&&['for','while','if','function','switch'].includes(tt.v))depth++;
+      if(tt.t==='ID'&&(tt.v==='end'||tt.v==='else'||tt.v==='elseif')&&depth===0)break;
+      if(tt.t==='ID'&&tt.v==='end')depth--;
+      this._adv();
+    }
+    const bodyEnd=this.pos;
+
+    if(cond){
+      const savedEnd=this.pos;
+      this.pos=bodyStart;
+      while(this.pos<bodyEnd){
+        this._skipSep();
+        if(this.pos>=bodyEnd)break;
+        this._stmt();
+      }
+      this.pos=bodyEnd;
+    }
+    // Skip to 'end'
+    if(this._peek().t==='ID'&&(this._peek().v==='else'||this._peek().v==='elseif')){
+      this._skipToEnd();
+    } else if(this._peek().t==='ID'&&this._peek().v==='end'){
+      this._adv();
+    }
+  }
+
+  // Expression parser (recursive descent with TF arithmetic)
+  _expr(){return this._range();}
+
+  _range(){
+    let v=this._or();
+    if(this._peek().t===':'){
+      this._adv();
+      const b=this._or();
+      if(this._peek().t===':'){
+        this._adv();
+        const c=this._or();
+        return makeRange(v,b,c);
+      }
+      return makeRange(v,1,b);
+    }
+    return v;
+  }
+
+  _or(){
+    let v=this._and();
+    while(this._peek().t==='||'){this._adv();const r=this._and();v=v||r?1:0;}
+    return v;
+  }
+  _and(){
+    let v=this._cmp();
+    while(this._peek().t==='&&'){this._adv();const r=this._cmp();v=v&&r?1:0;}
+    return v;
+  }
+  _cmp(){
+    let v=this._add();
+    const cmpOps=['==','~=','!=','<','>','<=','>='];
+    while(cmpOps.includes(this._peek().t)){
+      const op=this._adv().t;const r=this._add();
+      if(op==='==')v=v==r?1:0;
+      else if(op==='~='||op==='!=')v=v!=r?1:0;
+      else if(op==='<')v=v<r?1:0;
+      else if(op==='>')v=v>r?1:0;
+      else if(op==='<=')v=v<=r?1:0;
+      else if(op==='>=')v=v>=r?1:0;
+    }
+    return v;
+  }
+  _add(){
+    let v=this._mul();
+    while(this._peek().t==='+'||this._peek().t==='-'){
+      const op=this._adv().t;const r=this._mul();
+      v=op==='+'?tfOp('+',v,r):tfOp('-',v,r);
+    }
+    return v;
+  }
+  _mul(){
+    let v=this._pow();
+    while(['*','.*','/','./'].includes(this._peek().t)){
+      const op=this._adv().t;const r=this._pow();
+      v=(op==='*'||op==='.*')?tfOp('*',v,r):tfOp('/',v,r);
+    }
+    return v;
+  }
+  _pow(){
+    let v=this._unary();
+    while(this._peek().t==='^'||this._peek().t==='.^'||this._peek().t==='**'){
+      this._adv();const r=this._unary();
+      if(Array.isArray(v))v=v.map(x=>Math.pow(x,r));
+      else v=Math.pow(v,r);
+    }
+    return v;
+  }
+  _unary(){
+    if(this._peek().t==='-'){this._adv();const v=this._post();return typeof v==='number'?-v:Array.isArray(v)?v.map(x=>-x):v instanceof TF?v.neg():v;}
+    if(this._peek().t==='+'){this._adv();}
+    if(this._peek().t==='~'||this._peek().t==='!'){this._adv();return this._post()?0:1;}
+    return this._post();
+  }
+  _post(){
+    let v=this._primary();
+    // Transpose
+    while(this._peek().t==="'T"){this._adv();if(Array.isArray(v))v=[...v];} // transpose is identity for vectors
+    // Indexing
+    while(this._peek().t==='('){
+      this._adv();
+      const idx=this._argList(')');
+      this._eat(')');
+      if(Array.isArray(v)){
+        if(idx.length===1){
+          const i=Array.isArray(idx[0])?idx[0].map(x=>v[Math.round(x)-1]):v[Math.round(idx[0])-1];
+          v=i;
+        }
+      }
+    }
+    return v;
+  }
+  _primary(){
+    const t=this._peek();
+    if(t.t==='N'){this._adv();return t.v;}
+    if(t.t==='S'){this._adv();return t.v;}
+    if(t.t==='('){this._adv();const v=this._expr();this._eat(')');return v;}
+    if(t.t==='['){return this._matrix();}
+    if(t.t==='{'){this._adv();while(this._peek().t!=='}')this._adv();this._adv();return[];}
+    if(t.t==='ID'){
+      const name=this._adv().v;
+      // Function call
+      if(this._peek().t==='('){
+        this._adv();
+        const args=this._argList(')');
+        this._eat(')');
+        return this._call(name,args);
+      }
+      // Workspace
+      if(name in this.ws)return this.ws[name];
+      // Check if it's a builtin being passed as reference (e.g., not called)
+      if(name==='pi')return Math.PI;
+      if(name==='e')return Math.E;
+      if(name==='inf'||name==='Inf')return Infinity;
+      throw new Error(`Undefined variable or function: '${name}'`);
+    }
+    throw new Error(`Unexpected token: '${t.t}' (${t.v||''})`);
+  }
+  _matrix(){
+    this._eat('[');
+    const rows=[];let cur=[];
+    while(this._peek().t!==']'){
+      const t=this._peek();
+      if(t.t===';'||t.t==='NL'){if(cur.length)rows.push(cur);cur=[];this._adv();continue;}
+      if(t.t===','){this._adv();continue;}
+      cur.push(this._expr());
+    }
+    if(cur.length)rows.push(cur);
+    this._eat(']');
+    if(rows.length===0)return[];
+    if(rows.length===1)return rows[0];
+    return rows;
+  }
+  _argList(closeChar){
+    const args=[];
+    while(this._peek().t!==closeChar&&this._peek().t!=='EOF'){
+      if(this._peek().t===','){this._adv();continue;}
+      if(this._peek().t===';'){this._adv();continue;}
+      args.push(this._expr());
+    }
+    return args;
+  }
+
+  // ── Built-in function calls ──
+  _call(name,args){
+    const ws=this.ws;
+    // Math
+    const mathFns={
+      abs:x=>vecMap(x,Math.abs),sqrt:x=>vecMap(x,Math.sqrt),
+      sin:x=>vecMap(x,Math.sin),cos:x=>vecMap(x,Math.cos),tan:x=>vecMap(x,Math.tan),
+      exp:x=>vecMap(x,Math.exp),log:x=>vecMap(x,Math.log),log2:x=>vecMap(x,Math.log2),
+      log10:x=>vecMap(x,Math.log10),floor:x=>vecMap(x,Math.floor),
+      ceil:x=>vecMap(x,Math.ceil),round:x=>vecMap(x,Math.round),
+      sign:x=>vecMap(x,Math.sign),
+      real:x=>x instanceof TF?x:Array.isArray(x)?x:x,
+      imag:x=>Array.isArray(x)?x.map(()=>0):0,
+      mod:(a,b)=>a%b,rem:(a,b)=>a%b,
+      max:(...a)=>{const v=a.length===1&&Array.isArray(a[0])?a[0]:a;return Math.max(...v.map(x=>Array.isArray(x)?Math.max(...x):x));},
+      min:(...a)=>{const v=a.length===1&&Array.isArray(a[0])?a[0]:a;return Math.min(...v.map(x=>Array.isArray(x)?Math.min(...x):x));},
+      sum:x=>Array.isArray(x)?x.reduce((a,b)=>a+b,0):x,
+      prod:x=>Array.isArray(x)?x.reduce((a,b)=>a*b,1):x,
+      mean:x=>Array.isArray(x)?x.reduce((a,b)=>a+b,0)/x.length:x,
+      norm:x=>Array.isArray(x)?Math.sqrt(x.reduce((a,v)=>a+v*v,0)):Math.abs(x),
+      cumsum:x=>{let s=0;return Array.isArray(x)?x.map(v=>(s+=v)):x;},
+      diff:x=>Array.isArray(x)?x.slice(1).map((v,i)=>v-x[i]):0,
+      fliplr:x=>Array.isArray(x)?[...x].reverse():x,
+      flipud:x=>Array.isArray(x)?[...x].reverse():x,
+      sort:x=>Array.isArray(x)?[...x].sort((a,b)=>a-b):x,
+      length:x=>Array.isArray(x)?x.length:1,
+      numel:x=>Array.isArray(x)?x.length:1,
+      size:(x,d)=>Array.isArray(x)?[1,x.length]:[1,1],
+      isempty:x=>Array.isArray(x)?x.length===0:false,
+      find:x=>Array.isArray(x)?x.map((v,i)=>v?i+1:0).filter(Boolean):[],
+      any:x=>Array.isArray(x)?x.some(v=>v):!!x,
+      all:x=>Array.isArray(x)?x.every(v=>v):!!x,
+      conv:(a,b)=>polyMul(a,b),
+      // array builders
+      zeros:(m,n)=>n===undefined?new Array(Math.round(m)).fill(0):Array.from({length:m},()=>new Array(n).fill(0)),
+      ones:(m,n)=>n===undefined?new Array(Math.round(m)).fill(1):Array.from({length:m},()=>new Array(n).fill(1)),
+      eye:n=>Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?1:0)),
+      linspace:(a,b,n=100)=>{n=Math.round(n);if(n<=1)return[a];return Array.from({length:n},(_,i)=>a+(b-a)*i/(n-1));},
+      logspace:(a,b,n=50)=>{n=Math.round(n);return Array.from({length:n},(_,i)=>Math.pow(10,a+(b-a)*i/(n-1)));},
+      // string
+      num2str:x=>String(typeof x==='number'?x.toFixed(4):x),
+      sprintf:(fmt,...a)=>formatStr(fmt,...a),
+      printf:(fmt,...a)=>{this.printCb(formatStr(fmt,...a),'out');return undefined;},
+      fprintf:(fmt,...a)=>{this.printCb(formatStr(fmt,...a),'out');return undefined;},
+      disp:x=>{this.printCb(dispVal(x),'out');return undefined;},
+      display:x=>{this.printCb(dispVal(x),'out');return undefined;},
+    };
+    if(name in mathFns)return mathFns[name](...args);
+
+    // Control toolbox
+    if(name==='tf'){
+      if(args[0]==='s')return new TF([1,0],[1]);
+      const num=Array.isArray(args[0])?args[0]:[args[0]];
+      const den=Array.isArray(args[1])?args[1]:[args[1]];
+      return new TF(num,den);
+    }
+    if(name==='zpk'){
+      // zpk(zeros, poles, gain) → convert to tf
+      const z=args[0]||[],p=args[1]||[],k=args[2]||1;
+      let num=[k];let den=[1];
+      for(const zi of(Array.isArray(z)?z:[z])){if(zi!==undefined)num=polyMul(num,[1,-zi]);}
+      for(const pi of(Array.isArray(p)?p:[p])){if(pi!==undefined)den=polyMul(den,[1,-pi]);}
+      return new TF(num,den);
+    }
+    if(name==='feedback'){
+      const G=args[0];const H=args[1]!==undefined?args[1]:1;
+      return tfFeedback(G, typeof H==='number'?new TF([H],[1]):H);
+    }
+    if(name==='series')return args[0].mul(args[1]);
+    if(name==='parallel')return args[0].add(args[1]);
+    if(name==='minreal')return args[0]; // simplified: no cancellation
+
+    if(name==='pole')return args[0].poles.map(p=>p.re); // return real parts for simple display
+    if(name==='zero')return args[0].zeros.map(p=>p.re);
+    if(name==='dcgain')return args[0].dcgain;
+    if(name==='isstable')return args[0].poles.every(p=>p.re<0)?1:0;
+
+    if(name==='step'){return this._step(args[0],args[1]);}
+    if(name==='impulse'){return this._impulse(args[0],args[1]);}
+    if(name==='lsim'){return this._lsim(args[0],args[1],args[2]);}
+    if(name==='bode'){return this._bode(args[0]);}
+    if(name==='pzmap'){return this._pzmap(args[0]);}
+    if(name==='margin'){return this._marginFn(args[0]);}
+    if(name==='rlocus'){this.printCb('rlocus: not fully implemented — use pzmap instead','warn');return undefined;}
+
+    // Plotting
+    if(name==='plot'){return this._plot(args);}
+    if(name==='semilogx'){return this._plot(args,{xtype:'log'});}
+    if(name==='semilogy'){return this._plot(args,{ytype:'log'});}
+    if(name==='loglog'){return this._plot(args,{xtype:'log',ytype:'log'});}
+    if(name==='stem'){return this._plot(args,{mode:'markers+lines',marker:{symbol:'circle',size:6}});}
+    if(name==='bar'){return this._plotBar(args);}
+    if(name==='hist'||name==='histogram'){return this._plotHist(args);}
+    if(name==='scatter'){return this._plot([args[0],args[1]],{mode:'markers'});}
+
+    if(name==='xlabel'){this._ensureFig();this.curFigLayout.xaxis.title=args[0]||'';return undefined;}
+    if(name==='ylabel'){this._ensureFig();this.curFigLayout.yaxis.title=args[0]||'';return undefined;}
+    if(name==='title'){this._ensureFig();this.curFigLayout.title.text=args[0]||'';return undefined;}
+    if(name==='legend'){return undefined;} // skip
+    if(name==='grid'){return undefined;}
+    if(name==='axis'){return undefined;}
+    if(name==='xlim'){this._ensureFig();this.curFigLayout.xaxis.range=args;return undefined;}
+    if(name==='ylim'){this._ensureFig();this.curFigLayout.yaxis.range=args;return undefined;}
+    if(name==='hold'){this.holdOn=(args[0]==='on'||args[0]===1);return undefined;}
+    if(name==='figure'){this._newFig(`Figure ${args[0]||++this.curFigNum}`);return undefined;}
+    if(name==='clf'){this._newFig(this.curFigTitle||'Figure');return undefined;}
+    if(name==='close'){return undefined;}
+    if(name==='subplot'){return undefined;}
+    if(name==='text'){return undefined;}
+    if(name==='annotation'){return undefined;}
+    if(name==='set'){return undefined;}
+    if(name==='get'){return undefined;}
+    if(name==='shg'){return undefined;}
+    if(name==='drawnow'){return undefined;}
+
+    // User-defined function in workspace
+    if(name in this.ws&&typeof this.ws[name]==='function')return this.ws[name](...args);
+
+    throw new Error(`Unknown function: '${name}'`);
+  }
+
+  // ── Figure management ──
+  _newFig(title='Figure'){
+    this._flushFig();
+    this.curFigTraces=[];
+    this.curFigTitle=title;
+    this.curFigLayout={
+      title:{text:title,font:{color:'#cdd6f4',size:13}},
+      paper_bgcolor:'#181825',plot_bgcolor:'#1e1e2e',
+      font:{color:'#cdd6f4',family:'Segoe UI, sans-serif',size:11},
+      xaxis:{gridcolor:'#313244',zerolinecolor:'#45475a',title:''},
+      yaxis:{gridcolor:'#313244',zerolinecolor:'#45475a',title:''},
+      margin:{t:40,r:20,b:50,l:60},
+      showlegend:true,
+      legend:{bgcolor:'rgba(30,30,46,0.8)',bordercolor:'#313244',borderwidth:1},
+    };
+    this.holdOn=false;
+  }
+  _ensureFig(){if(!this.curFigTraces)this._newFig(`Figure ${++this.curFigNum}`);}
+  _flushFig(){
+    if(this.curFigTraces&&this.curFigTraces.length>0){
+      this.figCb({traces:this.curFigTraces,layout:this.curFigLayout,title:this.curFigTitle});
+      this.curFigTraces=null;this.curFigLayout=null;
+    }
+  }
+
+  // ── Plot functions ──
+  _plot(args,extra={}){
+    this._ensureFig();
+    // Parse args: x,y,'style',x2,y2,'style2',...
+    let i=0;
+    while(i<args.length){
+      let x=args[i],y=args[i+1],style='b-';
+      if(Array.isArray(x)&&Array.isArray(y)){
+        i+=2;
+        if(typeof args[i]==='string'){style=args[i];i++;}
+      } else if(Array.isArray(x)&&!(Array.isArray(y))){
+        y=x;x=Array.from({length:y.length},(_,j)=>j);i++;
+        if(typeof args[i]==='string'){style=args[i];i++;}
+      } else {i++;continue;}
+      const {color,dash,mode}=parseStyle(style);
+      this.curFigTraces.push({
+        x,y,type:'scatter',mode:extra.mode||mode,
+        line:{color,dash,...(extra.line||{})},
+        marker:{color,...(extra.marker||{})},
+      });
+    }
+    return undefined;
+  }
+  _plotBar(args){
+    this._ensureFig();
+    const x=args[0],y=args[1]||(Array.isArray(args[0])?args[0]:null);
+    if(Array.isArray(y)){
+      this.curFigTraces.push({x:Array.isArray(x)&&args[1]?x:y.map((_,i)=>i+1),y:Array.isArray(args[1])?y:x,type:'bar',marker:{color:'#89b4fa'}});
+    }
+    return undefined;
+  }
+  _plotHist(args){
+    this._ensureFig();
+    this.curFigTraces.push({x:args[0],type:'histogram',marker:{color:'#cba6f7'}});
+    return undefined;
+  }
+
+  // ── Control plots ──
+  _step(G,tArg){
+    this._ensureFig();
+    const tEnd=Array.isArray(tArg)?tArg[tArg.length-1]:10;
+    const sim=simulate(G,()=>1,tEnd);
+    const yss=sim.y[sim.y.length-1];
+    this.curFigTraces.push({x:sim.t,y:sim.y,type:'scatter',mode:'lines',name:'y(t)',line:{color:'#89b4fa',width:2.5}});
+    this.curFigTraces.push({x:[0,tEnd],y:[1,1],type:'scatter',mode:'lines',name:'Setpoint',line:{color:'#6c7086',dash:'dash',width:1.5}});
+    if(!this.curFigLayout.xaxis.title)this.curFigLayout.xaxis.title='Tiempo (s)';
+    if(!this.curFigLayout.yaxis.title)this.curFigLayout.yaxis.title='Amplitud';
+    if(!this.curFigLayout.title.text||this.curFigLayout.title.text.startsWith('Figure'))this.curFigLayout.title.text='Respuesta al Escalón';
+    // metrics annotation
+    const os=yss>0.001?Math.max(0,(Math.max(...sim.y)-yss)/yss*100):0;
+    const annText=`y_ss = ${yss.toFixed(3)} | OS = ${os.toFixed(1)}%`;
+    this.curFigLayout.annotations=[{x:tEnd*0.98,y:yss,text:annText,showarrow:false,xanchor:'right',font:{size:10,color:'#a6adc8'},bgcolor:'rgba(24,24,37,0.8)'}];
+    if(Array.isArray(tArg))return[sim.y,sim.t];
+    return undefined;
+  }
+  _impulse(G,tArg){
+    this._ensureFig();
+    const tEnd=Array.isArray(tArg)?tArg[tArg.length-1]:10;
+    const dt=0.005;
+    const sim=simulate(G,(t)=>t<dt?1/dt:0,tEnd);
+    this.curFigTraces.push({x:sim.t,y:sim.y,type:'scatter',mode:'lines',name:'h(t)',line:{color:'#cba6f7',width:2.5}});
+    if(!this.curFigLayout.title.text||this.curFigLayout.title.text.startsWith('Figure'))this.curFigLayout.title.text='Respuesta al Impulso';
+    if(Array.isArray(tArg))return[sim.y,sim.t];
+    return undefined;
+  }
+  _lsim(G,u,t){
+    if(!Array.isArray(t)||!Array.isArray(u))throw new Error('lsim: t and u must be arrays');
+    this._ensureFig();
+    const dt=t.length>1?t[1]-t[0]:0.005;
+    const sim=simulate(G,(tk)=>{const i=Math.round(tk/dt);return u[Math.min(i,u.length-1)]||0;},t[t.length-1],dt);
+    this.curFigTraces.push({x:sim.t,y:sim.y,type:'scatter',mode:'lines',name:'y(t)',line:{color:'#89b4fa',width:2.5}});
+    this.curFigTraces.push({x:t,y:u,type:'scatter',mode:'lines',name:'u(t)',line:{color:'#fab387',dash:'dot',width:1.5}});
+    if(!this.curFigLayout.title.text||this.curFigLayout.title.text.startsWith('Figure'))this.curFigLayout.title.text='Simulación lsim';
+    return[sim.y,sim.t];
+  }
+  _bode(G){
+    this._flushFig();
+    const N=300;
+    const freqs=Array.from({length:N},(_,i)=>Math.pow(10,-2+5*i/(N-1)));
+    const mags=[],phases=[];
+    for(const w of freqs){
+      const H=G.freqResp(w);
+      const mag=Math.sqrt(H.re*H.re+H.im*H.im);
+      mags.push(20*Math.log10(mag+1e-15));
+      phases.push(Math.atan2(H.im,H.re)*180/Math.PI);
+    }
+    // Figure 1: magnitude
+    const lay1={title:{text:'Bode — Magnitud',font:{color:'#cdd6f4',size:13}},
+      paper_bgcolor:'#181825',plot_bgcolor:'#1e1e2e',
+      font:{color:'#cdd6f4',size:11},
+      xaxis:{type:'log',title:'ω (rad/s)',gridcolor:'#313244',zerolinecolor:'#45475a'},
+      yaxis:{title:'|H(jω)| (dB)',gridcolor:'#313244',zerolinecolor:'#45475a'},
+      margin:{t:40,r:20,b:50,l:60},shapes:[{type:'line',x0:freqs[0],x1:freqs[N-1],y0:0,y1:0,line:{color:'#6c7086',dash:'dash',width:1}}]};
+    this.figCb({traces:[{x:freqs,y:mags,type:'scatter',mode:'lines',name:'|H|',line:{color:'#89b4fa',width:2.5}}],layout:lay1,title:'Bode Magnitud'});
+    // Figure 2: phase
+    const lay2={title:{text:'Bode — Fase',font:{color:'#cdd6f4',size:13}},
+      paper_bgcolor:'#181825',plot_bgcolor:'#1e1e2e',
+      font:{color:'#cdd6f4',size:11},
+      xaxis:{type:'log',title:'ω (rad/s)',gridcolor:'#313244',zerolinecolor:'#45475a'},
+      yaxis:{title:'∠H(jω) (°)',gridcolor:'#313244',zerolinecolor:'#45475a'},
+      margin:{t:40,r:20,b:50,l:60},shapes:[{type:'line',x0:freqs[0],x1:freqs[N-1],y0:-180,y1:-180,line:{color:'#6c7086',dash:'dash',width:1}}]};
+    this.figCb({traces:[{x:freqs,y:phases,type:'scatter',mode:'lines',name:'∠H',line:{color:'#fab387',width:2.5}}],layout:lay2,title:'Bode Fase'});
+    return undefined;
+  }
+  _pzmap(G){
+    this._ensureFig();
+    const poles=G.poles,zeros=G.zeros;
+    const allRe=[...poles,...zeros].map(p=>Math.abs(p.re));
+    const allIm=[...poles,...zeros].map(p=>Math.abs(p.im));
+    const range=Math.max(...allRe,...allIm,1)*1.4;
+    // Stable/unstable regions as shapes
+    const shapes=[
+      {type:'rect',x0:-range,x1:0,y0:-range,y1:range,fillcolor:'rgba(166,227,161,0.06)',line:{width:0}},
+      {type:'rect',x0:0,x1:range,y0:-range,y1:range,fillcolor:'rgba(243,139,168,0.06)',line:{width:0}},
+      {type:'line',x0:0,x1:0,y0:-range,y1:range,line:{color:'#6c7086',dash:'dot',width:1}},
+    ];
+    this.curFigTraces=[];
+    if(poles.length)this.curFigTraces.push({x:poles.map(p=>p.re),y:poles.map(p=>p.im),type:'scatter',mode:'markers',name:'Polos',marker:{symbol:'x',size:14,color:'#f38ba8',line:{width:2,color:'#f38ba8'}}});
+    if(zeros.length)this.curFigTraces.push({x:zeros.map(p=>p.re),y:zeros.map(p=>p.im),type:'scatter',mode:'markers',name:'Ceros',marker:{symbol:'circle-open',size:12,color:'#89b4fa',line:{width:2,color:'#89b4fa'}}});
+    const stable=poles.every(p=>p.re<0);
+    this.curFigLayout={
+      title:{text:`Mapa Polos/Ceros — ${stable?'✅ Estable':'⚠️ Inestable'}`,font:{color:'#cdd6f4',size:13}},
+      paper_bgcolor:'#181825',plot_bgcolor:'#1e1e2e',
+      font:{color:'#cdd6f4',size:11},
+      xaxis:{title:'Re(s)',gridcolor:'#313244',zerolinecolor:'#45475a',range:[-range,range]},
+      yaxis:{title:'Im(s)',gridcolor:'#313244',zerolinecolor:'#45475a',range:[-range,range],scaleanchor:'x'},
+      margin:{t:40,r:20,b:50,l:60},
+      shapes,showlegend:true,
+      legend:{bgcolor:'rgba(24,24,37,0.8)',bordercolor:'#313244'},
+    };
+    this.printCb(`Polos: ${poles.map(p=>p.im===0?p.re.toFixed(4):`${p.re.toFixed(3)}${p.im>=0?'+':''}${p.im.toFixed(3)}j`).join(', ')}`,'info');
+    if(zeros.length)this.printCb(`Ceros: ${zeros.map(z=>z.im===0?z.re.toFixed(4):`${z.re.toFixed(3)}${z.im>=0?'+':''}${z.im.toFixed(3)}j`).join(', ')}`,'info');
+    this.printCb(stable?'Sistema: ESTABLE ✅':'Sistema: INESTABLE ⚠️',stable?'info':'warn');
+    return undefined;
+  }
+  _marginFn(G){
+    const N=300;
+    const freqs=Array.from({length:N},(_,i)=>Math.pow(10,-2+5*i/(N-1)));
+    const mags=[],phases=[];
+    for(const w of freqs){
+      const H=G.freqResp(w);
+      const mag=Math.sqrt(H.re*H.re+H.im*H.im);
+      mags.push(20*Math.log10(mag+1e-15));
+      phases.push(Math.atan2(H.im,H.re)*180/Math.PI);
+    }
+    let wc=null,pm=null,wp=null,gm=null;
+    for(let i=0;i<N-1;i++){if(mags[i]*mags[i+1]<=0&&mags[i]>mags[i+1]){wc=freqs[i];pm=180+phases[i];break;}}
+    for(let i=0;i<N-1;i++){if((phases[i]+180)*(phases[i+1]+180)<=0&&phases[i]>phases[i+1]){wp=freqs[i];gm=-mags[i];break;}}
+    this.printCb(`Margen de Ganancia: ${gm!==null?gm.toFixed(3)+' dB':'Inf'}`,'info');
+    this.printCb(`Margen de Fase: ${pm!==null?pm.toFixed(2)+'°':'N/A'}`,'info');
+    this.printCb(`ωc (corte de ganancia): ${wc!==null?wc.toFixed(4)+' rad/s':'N/A'}`,'info');
+    this.printCb(`ωp (cruce de fase): ${wp!==null?wp.toFixed(4)+' rad/s':'N/A'}`,'info');
+    return[gm||Infinity,pm||0,wc||0,wp||0];
+  }
+}
+
+/* ── Helpers ── */
+function makeRange(start,step,stop){
+  if(step===undefined){stop=step;step=1;}
+  const n=Math.round((stop-start)/step);
+  return Array.from({length:n+1},(_,i)=>start+i*step);
+}
+function vecMap(x,fn){return Array.isArray(x)?x.map(fn):fn(x);}
+function tfOp(op,a,b){
+  const isT=x=>x instanceof TF;
+  if(isT(a)||isT(b)){
+    const A=isT(a)?a:new TF([a],[1]);
+    const B=isT(b)?b:new TF([b],[1]);
+    if(op==='+')return A.add(B);
+    if(op==='-')return A.sub(B);
+    if(op==='*')return A.mul(B);
+    if(op==='/')return A.div(B);
+  }
+  if(Array.isArray(a)&&Array.isArray(b)){
+    if(op==='+')return a.map((v,i)=>v+(b[i]||0));
+    if(op==='-')return a.map((v,i)=>v-(b[i]||0));
+    if(op==='*')return a.map((v,i)=>v*(b[i]||1));
+    if(op==='/')return a.map((v,i)=>v/(b[i]||1));
+  }
+  if(Array.isArray(a)){
+    if(op==='+')return a.map(v=>v+b);
+    if(op==='-')return a.map(v=>v-b);
+    if(op==='*')return a.map(v=>v*b);
+    if(op==='/')return a.map(v=>v/b);
+  }
+  if(Array.isArray(b)){
+    if(op==='+')return b.map(v=>a+v);
+    if(op==='-')return b.map(v=>a-v);
+    if(op==='*')return b.map(v=>a*v);
+    if(op==='/')return b.map(v=>a/v);
+  }
+  if(op==='+')return a+b;
+  if(op==='-')return a-b;
+  if(op==='*')return a*b;
+  if(op==='/')return a/b;
+}
+function parseStyle(s){
+  const colors={'b':'#89b4fa','r':'#f38ba8','g':'#a6e3a1','k':'#cdd6f4','m':'#cba6f7','c':'#94e2d8','y':'#f9e2af','w':'#cdd6f4'};
+  let color='#89b4fa',dash='solid',mode='lines';
+  for(const [k,v] of Object.entries(colors)){if(s.includes(k)){color=v;break;}}
+  if(s.includes('--'))dash='dash';
+  else if(s.includes('-.')||s.includes(':'))dash='dot';
+  if(s.includes('o')||s.includes('*')||s.includes('+')||s.includes('x'))mode='markers';
+  if((s.includes('-')&&(s.includes('o')||s.includes('+')||s.includes('x'))))mode='lines+markers';
+  return{color,dash,mode};
+}
+function formatStr(fmt,...args){
+  let i=0;
+  return String(fmt).replace(/%[0-9.]*[diouxXeEfgGs]/g,m=>{
+    const v=args[i++];
+    if(m.endsWith('d')||m.endsWith('i'))return Math.round(Number(v));
+    if(m.endsWith('f'))return Number(v).toFixed(parseInt(m.match(/\.(\d+)/)?.[1]||'4'));
+    if(m.endsWith('e'))return Number(v).toExponential(parseInt(m.match(/\.(\d+)/)?.[1]||'4'));
+    if(m.endsWith('s'))return String(v);
+    return Number(v);
+  }).replace(/\\n/g,'\n').replace(/\\t/g,'\t');
+}
+function dispVal(x){
+  if(x instanceof TF)return x.toString();
+  if(Array.isArray(x)){if(x.length<=20)return`[${x.map(v=>typeof v==='number'?v.toFixed(4):v).join('  ')}]`;return`[1×${x.length} double]`;}
+  if(typeof x==='number')return x.toString();
+  return String(x);
+}
+
+/* ══════════════════════════════════════════════════════════
+   EXAMPLES
+══════════════════════════════════════════════════════════ */
+const EXAMPLES=[
+  {title:'Respuesta al escalón',desc:'1er orden G(s)=3/(2s+1)',code:`% Primer orden simple
+pkg load control;
+G = tf([3], [2 1]);
+figure;
+step(G);
+title('Respuesta al escalón — G(s)=3/(2s+1)');
+xlabel('Tiempo (s)'); ylabel('Amplitud');
+grid on;
+printf('y_ss = %.4f\\n', dcgain(G));
+printf('tau  = %.4f s\\n', 2/3);
+`},
+  {title:'Control P vs PI',desc:'G=1/(s+1), comparar offset',code:`% Control P vs PI — comparar offset en estado estacionario
+pkg load control;
+s = tf('s');
+G = 1/(s+1);
+
+Kp = 3;
+T_P = feedback(Kp*G, 1);
+T_PI = feedback((Kp + 1/s)*G, 1);
+
+t = 0:0.01:12;
+[yP, t1] = step(T_P, t);
+[yPI, t2] = step(T_PI, t);
+
+figure;
+plot(t1, yP, 'b-');
+hold on;
+plot(t2, yPI, 'g-');
+plot(t, ones(size(t)), 'k--');
+xlabel('Tiempo (s)'); ylabel('y(t)');
+title('Control P (azul) vs PI (verde)');
+grid on;
+
+printf('Offset P:  %.4f\\n', 1 - yP(end));
+printf('Offset PI: %.4f\\n', 1 - yPI(end));
+`},
+  {title:'Diagrama de Bode',desc:'Bode de segundo orden',code:`% Bode de sistema de segundo orden
+pkg load control;
+G = tf([1], [1 0.5 4]);  % wn=2, zeta=0.125
+bode(G);
+margin(G);
+`},
+  {title:'Mapa de Polos/Ceros',desc:'Tres sistemas distintos',code:`% Comparar estabilidad por polos
+pkg load control;
+G1 = tf([1], [1 2]);          % polo en -2 (estable)
+G2 = tf([1], [1 -2]);         % polo en +2 (INESTABLE)
+G3 = tf([1], [1 0.5 5]);      % polos complejos
+
+figure;
+pzmap(G1);
+title('G1 - polo en -2 (ESTABLE)');
+
+figure;
+pzmap(G2);
+title('G2 - polo en +2 (INESTABLE)');
+
+figure;
+pzmap(G3);
+title('G3 - 2do orden subamortiguado');
+`},
+  {title:'Ejercicio E.1 (Parcial)',desc:'G=1/(s+1), Kp=2,5,10',code:`% Ejercicio E.1 — Parcial Sistemas de Control
+% G(s) = 1/(s+1), control P, distintos Kp
+pkg load control;
+s = tf('s');
+G = 1/(s+1);
+t = 0:0.01:10;
+
+T2  = feedback(2*G, 1);
+T5  = feedback(5*G, 1);
+T10 = feedback(10*G, 1);
+
+[y2,  t_] = step(T2,  t);
+[y5,  t_] = step(T5,  t);
+[y10, t_] = step(T10, t);
+
+figure;
+plot(t_, y2,  'b-');
+hold on;
+plot(t_, y5,  'r-');
+plot(t_, y10, 'g-');
+plot(t,  ones(size(t)), 'k--');
+xlabel('Tiempo (s)'); ylabel('y(t)');
+title('Control P — G(s)=1/(s+1)');
+grid on;
+
+printf('Kp=2:  y_ss=%.4f  offset=%.4f\\n', dcgain(T2),  1-dcgain(T2));
+printf('Kp=5:  y_ss=%.4f  offset=%.4f\\n', dcgain(T5),  1-dcgain(T5));
+printf('Kp=10: y_ss=%.4f  offset=%.4f\\n', dcgain(T10), 1-dcgain(T10));
+`},
+  {title:'Respuesta senoidal',desc:'lsim con entrada sinusoidal',code:`% Respuesta a entrada sinusoidal
+pkg load control;
+G = tf([1], [1 1 1]);  % 2do orden
+t = 0:0.005:20;
+u = sin(t);            % entrada sinusoidal
+[y, t_] = lsim(G, u, t);
+figure;
+plot(t_, y, 'b-');
+hold on;
+plot(t, u, 'r--');
+xlabel('Tiempo (s)'); ylabel('Amplitud');
+title('Respuesta a entrada sinusoidal');
+grid on;
+`},
+  {title:'Lazo cerrado PID',desc:'PID sobre planta 1/(s²+2s)',code:`% Controlador PID
+pkg load control;
+s = tf('s');
+G = 1/(s^2 + 2*s);  % planta doble integrador amortiguado
+
+% C(s) = Kp + Ki/s + Kd*s
+Kp = 5; Ki = 2; Kd = 1;
+C = Kp + Ki/s + Kd*s;
+
+T = feedback(C*G, 1);
+figure;
+step(T);
+title('PID — Kp=5, Ki=2, Kd=1');
+grid on;
+
+figure;
+pzmap(T);
+title('Polos del sistema con PID');
+`},
+  {title:'Lugar de raíces manual',desc:'Polos LC vs Kp (loop)',code:`% Lugar de raíces manual variando Kp
+pkg load control;
+G = tf([1], [1 3 2]);  % G = 1/((s+1)(s+2))
+Kp_vals = 0.1:0.5:20;
+re_p = [];
+im_p = [];
+
+for i = 1:length(Kp_vals)
+  T = feedback(Kp_vals(i)*G, 1);
+  p = pole(T);
+  re_p = [re_p, p];
+  im_p = [im_p, zeros(size(p))];
+end
+
+figure;
+plot(re_p, zeros(size(re_p)), 'b.');
+xlabel('Re(s)'); ylabel('Im(s)');
+title('Lugar de raíces (Kp: 0.1 → 20)');
+grid on;
+`},
+];
+
+/* ══════════════════════════════════════════════════════════
+   UI
+══════════════════════════════════════════════════════════ */
+let aceEditor;
+
+window.addEventListener('load',()=>{
+  // Init Ace
+  aceEditor=ace.edit('editor');
+  aceEditor.setTheme('ace/theme/catppuccin_mocha');
+  aceEditor.session.setMode('ace/mode/matlab');
+  aceEditor.setFontSize(13);
+  aceEditor.setOptions({tabSize:2,useSoftTabs:true,showPrintMargin:false,wrap:false,enableBasicAutocompletion:true,enableLiveAutocompletion:false});
+  aceEditor.setValue(EXAMPLES[4].code,-1); // start with E.1
+  aceEditor.focus();
+
+  // Ctrl+Enter to run
+  aceEditor.commands.addCommand({name:'run',bindKey:{win:'Ctrl-Enter',mac:'Command-Enter'},exec:runCode});
+  document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='l'){e.preventDefault();clearOutput();}});
+
+  // Build examples list
+  const list=document.getElementById('examples-list');
+  EXAMPLES.forEach((ex,i)=>{
+    const div=document.createElement('div');
+    div.className='ex-item';
+    div.innerHTML=`<span class="ex-title">${ex.title}</span><span class="ex-desc">${ex.desc}</span>`;
+    div.onclick=()=>{aceEditor.setValue(ex.code,-1);aceEditor.focus();toggleExamples({preventDefault:()=>{}});};
+    list.appendChild(div);
+  });
+
+  // Try loading Catppuccin theme for Ace (fallback to monokai)
+  aceEditor.setTheme('ace/theme/monokai');
+});
+
+function runCode(){
+  const code=aceEditor.getValue();
+  if(!code.trim())return;
+  setStatus('Ejecutando...','run');
+
+  // Clear previous output
+  const fa=document.getElementById('figures-area');
+  fa.innerHTML='';
+  document.getElementById('console-area').innerHTML='';
+  document.getElementById('no-output').style.display='none';
+
+  const figures=[];
+  const consoleLines=[];
+
+  const interp=new Octave(
+    (fig)=>figures.push(fig),
+    (text,level)=>consoleLines.push({text,level})
+  );
+
+  try{
+    interp.run(code);
+    setStatus(`OK — ${figures.length} gráfico(s)`,'ok');
+  }catch(e){
+    consoleLines.push({text:e.message,level:'err'});
+    setStatus('Error: '+e.message,'err');
+  }
+
+  // Render figures
+  if(figures.length===0){
+    fa.innerHTML='<div class="no-output"><div class="ico">📊</div><p>El código se ejecutó pero no generó gráficos.<br>Usá <code>figure; step(G)</code> o <code>plot(t,y)</code>.</p></div>';
+  }
+  figures.forEach((fig,idx)=>{
+    const card=document.createElement('div');card.className='fig-card';
+    const hdr=document.createElement('div');hdr.className='fig-title';hdr.textContent=fig.title||`Figure ${idx+1}`;
+    const div=document.createElement('div');div.id=`fig-${idx}`;div.style.minHeight='320px';
+    card.appendChild(hdr);card.appendChild(div);fa.appendChild(card);
+    Plotly.newPlot(`fig-${idx}`,fig.traces,fig.layout,{responsive:true,displaylogo:false,modeBarButtonsToRemove:['sendDataToCloud','autoScale2d']});
+  });
+
+  // Render console
+  const ca=document.getElementById('console-area');
+  consoleLines.forEach(({text,level})=>{
+    const line=document.createElement('div');line.className='cl';
+    line.innerHTML=`<span class="cl-prompt">${level==='err'?'✗':level==='warn'?'⚠':level==='info'?'ℹ':'»'}</span><span class="cl-${level==='err'?'err':level==='warn'?'warn':level==='info'?'info':'out'}">${escHtml(text)}</span>`;
+    ca.appendChild(line);
+  });
+
+  // Auto-switch to console if there's output and no figures
+  if(figures.length===0&&consoleLines.length>0){
+    switchOutput('console',document.querySelector('.otab:nth-child(2)'));
+  }
+}
+
+function clearOutput(){
+  const fa=document.getElementById('figures-area');
+  fa.innerHTML='<div class="no-output" id="no-output"><div class="ico">📈</div><p>Escribí código Octave y presioná <b>▶ Ejecutar</b> o <b>Ctrl+Enter</b></p></div>';
+  document.getElementById('console-area').innerHTML='';
+  setStatus('Listo','');
+}
+
+function switchOutput(tab,el){
+  document.querySelectorAll('.otab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('figures-area').style.display=tab==='figures'?'flex':'none';
+  const ca=document.getElementById('console-area');
+  ca.style.display=tab==='console'?'block':'none';
+  ca.classList.toggle('active',tab==='console');
+}
+
+function toggleExamples(e){
+  e.preventDefault();
+  document.getElementById('examples-panel').classList.toggle('open');
+}
+
+function setStatus(msg,state){
+  const el=document.getElementById('status-txt');
+  el.textContent=msg;
+  el.className=state==='ok'?'status-ok':state==='err'?'status-err':state==='run'?'status-run':'';
+}
+
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+</script>
+</body>
+</html>

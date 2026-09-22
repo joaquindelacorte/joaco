@@ -11,19 +11,15 @@
   --green:#15803d;--green-bg:#dcfce7;
   --orange:#c05c00;--orange-bg:#fff3e0;
   --purple:#7c3aed;--purple-bg:#ede9fe;
+  --red:#b91c1c;--red-bg:#fee2e2;
   --gray:#374151;--gray-lt:#6b7280;
   --bg:#f0f9ff;--card:#fff;--border:#e2e8f0;
+  --dark:#12141a;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{
-  font-family:'Segoe UI',system-ui,sans-serif;
-  background:var(--bg);
-  color:var(--gray);
-  line-height:1.65;
-  -webkit-font-smoothing:antialiased;
-}
-.container{max-width:860px;margin:0 auto;padding:2.5rem 1.2rem 5rem}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65;-webkit-font-smoothing:antialiased;}
+.container{max-width:900px;margin:0 auto;padding:2.5rem 1.2rem 5rem}
 header{text-align:center;margin-bottom:2rem}
 .eyebrow{display:inline-block;font-size:.78rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--blue);background:var(--blue-bg);padding:.35rem .9rem;border-radius:999px;margin-bottom:.9rem}
 h1{font-size:1.7rem;font-weight:800;color:#0c1a2e;margin-bottom:.5rem}
@@ -31,11 +27,11 @@ header p{color:var(--gray-lt);font-size:.95rem;max-width:600px;margin:0 auto}
 a.back{display:inline-block;margin-bottom:1.5rem;font-size:.85rem;color:var(--blue);text-decoration:none;font-weight:600}
 a.back:hover{text-decoration:underline}
 
-.section-nav{display:flex;justify-content:center;gap:.6rem;flex-wrap:wrap;margin-bottom:2.5rem}
-.section-nav a{font-size:.83rem;font-weight:700;color:var(--blue);background:var(--blue-bg);padding:.5rem 1.1rem;border-radius:999px;text-decoration:none;transition:.15s}
+.section-nav{display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap;margin-bottom:2.5rem;padding:1rem;background:var(--card);border-radius:16px;border:1px solid var(--border);}
+.section-nav a{font-size:.78rem;font-weight:700;color:var(--blue);background:var(--blue-bg);padding:.4rem .9rem;border-radius:999px;text-decoration:none;transition:.15s}
 .section-nav a:hover{background:var(--blue);color:#fff}
 
-h2.section-title{font-size:1.3rem;font-weight:800;color:#0c1a2e;margin:3rem 0 .5rem;text-align:center}
+h2.section-title{font-size:1.25rem;font-weight:800;color:#0c1a2e;margin:3rem 0 .5rem;text-align:center}
 .section-sub{text-align:center;color:var(--gray-lt);font-size:.9rem;max-width:600px;margin:0 auto 1.8rem}
 
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.4rem 1.5rem;margin-bottom:1.3rem;box-shadow:0 1px 6px rgba(0,0,0,.05)}
@@ -44,39 +40,32 @@ h2.section-title{font-size:1.3rem;font-weight:800;color:#0c1a2e;margin:3rem 0 .5
 .card .tip{background:#f8fafc;border-left:4px solid var(--blue);border-radius:8px;padding:.7rem 1rem;font-size:.88rem;margin-top:.6rem}
 .card .tip strong{color:var(--blue)}
 .card .ej{font-family:'Courier New',monospace;background:linear-gradient(90deg,#0c1a2e,#1e3a5f);color:#7dd3fc;border-radius:10px;padding:.75rem 1rem;margin-top:.6rem;font-size:.95rem;font-weight:700;text-align:center}
+.c-bin{border-left:4px solid var(--blue)}.c-bin h2{color:var(--blue)}
+.c-hex{border-left:4px solid var(--purple)}.c-hex h2{color:var(--purple)}
+.c-dec{border-left:4px solid var(--teal)}.c-dec h2{color:var(--teal)}
+.c-bcd{border-left:4px solid var(--orange)}.c-bcd h2{color:var(--orange)}
 
-.c-bin{border-left:4px solid var(--blue)}
-.c-hex{border-left:4px solid var(--purple)}
-.c-dec{border-left:4px solid var(--teal)}
-.c-bin h2{color:var(--blue)}
-.c-hex h2{color:var(--purple)}
-.c-dec h2{color:var(--teal)}
-
+/* Calculadora */
 .calc{background:var(--card);border:2px solid var(--blue);border-radius:16px;padding:1.6rem 1.6rem 1.8rem;margin:2.5rem 0;box-shadow:0 4px 20px rgba(3,105,161,.1)}
 .calc h2{color:var(--blue);font-size:1.15rem;font-weight:800;text-align:center;margin-bottom:1.2rem}
-.calc-input-row{display:flex;gap:.7rem;flex-wrap:wrap;margin-bottom:1.3rem}
+.calc-input-row{display:flex;gap:.7rem;flex-wrap:wrap;margin-bottom:1rem}
 .calc-input-row input{flex:1;min-width:160px;border:2px solid var(--border);border-radius:10px;padding:.7rem 1rem;font-size:1.1rem;font-family:'Courier New',monospace;text-align:center;color:var(--gray)}
 .calc-input-row input:focus{outline:none;border-color:var(--blue-lt)}
-.base-select{display:flex;gap:.5rem}
+.base-select{display:flex;gap:.5rem;margin-bottom:1rem}
 .base-btn{flex:1;padding:.7rem .5rem;border:2px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;font-weight:700;font-size:.85rem;transition:.15s;color:var(--gray-lt)}
 .base-btn.active{border-color:var(--blue);background:var(--blue-bg);color:var(--blue)}
 .base-btn:hover{border-color:var(--blue-lt)}
 .calc-results{display:grid;gap:.8rem}
 .res-row{display:flex;align-items:center;gap:1rem;background:#f8fafc;border-radius:10px;padding:.8rem 1.1rem}
-.res-label{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;width:80px;flex-shrink:0}
+.res-label{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;width:90px;flex-shrink:0}
 .res-row.r-bin .res-label{color:var(--blue)}
 .res-row.r-dec .res-label{color:var(--teal)}
 .res-row.r-hex .res-label{color:var(--purple)}
-.res-value{font-family:'Courier New',monospace;font-size:1.15rem;font-weight:700;color:#0c1a2e;word-break:break-all}
+.res-row.r-bcd .res-label{color:var(--orange)}
+.res-value{font-family:'Courier New',monospace;font-size:1.1rem;font-weight:700;color:#0c1a2e;word-break:break-all}
 .calc-error{color:#b91c1c;font-size:.85rem;text-align:center;margin-top:.5rem;min-height:1.1rem}
 
-/* ══════ Compuertas lógicas ══════ */
-.gate-intro{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.4rem 1.5rem;margin-bottom:1.6rem;box-shadow:0 1px 6px rgba(0,0,0,.05)}
-.gate-intro p{font-size:.92rem;line-height:1.75;margin-bottom:.6rem}
-.gate-intro table{width:100%;border-collapse:collapse;margin-top:.8rem;font-size:.85rem}
-.gate-intro th,.gate-intro td{border:1px solid var(--border);padding:.5rem .7rem;text-align:center}
-.gate-intro th{background:#f8fafc;font-weight:700;color:var(--gray-lt)}
-
+/* Compuertas */
 .gate-board{background:#12141a;border-radius:18px;padding:1.6rem 1.2rem;box-shadow:0 6px 28px rgba(0,0,0,.25)}
 .gate-board-title{display:flex;align-items:center;justify-content:center;gap:.5rem;color:#f2a340;font-weight:800;letter-spacing:1px;font-size:.9rem;text-transform:uppercase;margin-bottom:1.3rem}
 .gate-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
@@ -94,6 +83,139 @@ h2.section-title{font-size:1.3rem;font-weight:800;color:#0c1a2e;margin:3rem 0 .5
 .led{width:34px;height:34px;border-radius:50%;background:#2a2e38;border:2px solid #3a3f4d;box-shadow:inset 0 2px 4px rgba(0,0,0,.4);transition:.15s;margin:0 auto}
 .led.on{background:#ff9d2e;border-color:#ffb454;box-shadow:0 0 14px 3px rgba(255,157,46,.7),inset 0 1px 2px rgba(255,255,255,.4)}
 .gate-out-lbl{font-size:.72rem;color:#8b93a7;font-weight:700}
+.gate-intro{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.4rem 1.5rem;margin-bottom:1.6rem;box-shadow:0 1px 6px rgba(0,0,0,.05)}
+.gate-intro p{font-size:.92rem;line-height:1.75;margin-bottom:.6rem}
+.gate-intro table{width:100%;border-collapse:collapse;margin-top:.8rem;font-size:.85rem}
+.gate-intro th,.gate-intro td{border:1px solid var(--border);padding:.5rem .7rem;text-align:center}
+.gate-intro th{background:#f8fafc;font-weight:700;color:var(--gray-lt)}
+
+/* Pirámide CIM */
+.cim-pyramid{display:flex;flex-direction:column;align-items:center;gap:6px;margin:1.5rem 0}
+.cim-level{display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:700;font-size:.85rem;color:#fff;transition:.2s;cursor:default}
+.cim-level:hover{filter:brightness(1.1);transform:scale(1.01)}
+.cim-level span{font-size:.78rem;font-weight:400;opacity:.85;margin-left:.5rem}
+.cim-l0{background:#b91c1c;width:98%;padding:.9rem}
+.cim-l1{background:#d97706;width:86%;padding:.8rem}
+.cim-l2{background:#15803d;width:72%;padding:.8rem}
+.cim-l3{background:#0369a1;width:58%;padding:.8rem}
+.cim-l4{background:#7c3aed;width:44%;padding:.8rem}
+
+/* Álgebra de Boole */
+.bool-table-wrap{overflow-x:auto;margin:1rem 0}
+.bool-table{width:100%;border-collapse:collapse;font-size:.88rem}
+.bool-table th,.bool-table td{border:1px solid var(--border);padding:.55rem .8rem;text-align:center}
+.bool-table th{background:#f8fafc;font-weight:700;color:var(--gray-lt)}
+.bool-table td.one{background:#dcfce7;color:#15803d;font-weight:700}
+.bool-table td.zero{background:#fee2e2;color:#b91c1c;font-weight:700}
+.theorem-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin:1rem 0}
+.theorem-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.9rem 1rem}
+.theorem-card .th-name{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-lt);margin-bottom:.3rem}
+.theorem-card .th-eq{font-family:'Courier New',monospace;font-size:.95rem;font-weight:700;color:#0c1a2e}
+
+/* Karnaugh */
+.kmap-wrap{overflow-x:auto;margin:1rem 0;text-align:center}
+.kmap-table{border-collapse:collapse;margin:0 auto;font-family:'Courier New',monospace}
+.kmap-table th,.kmap-table td{border:2px solid var(--border);width:54px;height:50px;text-align:center;vertical-align:middle;font-size:1rem}
+.kmap-table th{background:#f8fafc;font-size:.75rem;font-weight:700;color:var(--gray-lt)}
+.kmap-table td.cell-1{background:#dbeafe;color:var(--blue);font-weight:800;font-size:1.15rem;cursor:pointer}
+.kmap-table td.cell-0{background:#fff;color:var(--gray-lt);cursor:pointer}
+.kmap-table td.cell-1:hover{background:#bfdbfe}
+.kmap-table td.cell-0:hover{background:#f1f5f9}
+.kmap-table td.group-a{background:#d1fae5;color:var(--green)}
+.kmap-table td.group-b{background:#fce7f3;color:#be185d}
+.kmap-table td.group-ab{background:linear-gradient(135deg,#d1fae5 50%,#fce7f3 50%)}
+
+/* ISA 5.1 */
+.isa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.8rem;margin:1rem 0}
+.isa-card{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:1rem;text-align:center;transition:.15s}
+.isa-card:hover{border-color:var(--blue-lt)}
+.isa-tag{font-family:'Courier New',monospace;font-size:1.15rem;font-weight:800;color:#0c1a2e;margin-bottom:.3rem}
+.isa-var{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--blue);margin-bottom:.15rem}
+.isa-fn{font-size:.8rem;color:var(--gray-lt)}
+
+/* Circuitos */
+.bornes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin:1rem 0}
+.borne-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem}
+.borne-card .bc-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-lt);margin-bottom:.3rem}
+.borne-card .bc-val{font-family:'Courier New',monospace;font-size:1.1rem;font-weight:800;color:#0c1a2e}
+
+/* Quiz */
+.quiz-wrap{background:var(--card);border:2px solid var(--blue);border-radius:18px;padding:2rem;box-shadow:0 4px 20px rgba(3,105,161,.1)}
+.quiz-progress{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
+.quiz-progress .qp-bar{flex:1;height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.quiz-progress .qp-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--teal));border-radius:999px;transition:.4s}
+.quiz-progress .qp-label{font-size:.8rem;font-weight:700;color:var(--gray-lt);white-space:nowrap}
+.quiz-q-num{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--blue);margin-bottom:.5rem}
+.quiz-q-text{font-size:1rem;font-weight:700;color:#0c1a2e;line-height:1.55;margin-bottom:1.2rem}
+.quiz-options{display:grid;gap:.6rem}
+.quiz-opt{width:100%;text-align:left;padding:.8rem 1.1rem;border:2px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;font-size:.9rem;color:var(--gray);transition:.15s;font-family:inherit}
+.quiz-opt:hover:not(:disabled){border-color:var(--blue-lt);background:var(--blue-bg)}
+.quiz-opt.correct{border-color:#15803d;background:#dcfce7;color:#14532d;font-weight:700}
+.quiz-opt.wrong{border-color:#b91c1c;background:#fee2e2;color:#7f1d1d;font-weight:700}
+.quiz-opt:disabled{cursor:default}
+.quiz-feedback{margin-top:1rem;padding:.9rem 1.1rem;border-radius:10px;font-size:.88rem;line-height:1.6;display:none}
+.quiz-feedback.show{display:block}
+.quiz-feedback.ok{background:#dcfce7;color:#14532d;border-left:4px solid #15803d}
+.quiz-feedback.fail{background:#fee2e2;color:#7f1d1d;border-left:4px solid #b91c1c}
+.quiz-next{margin-top:1.2rem;padding:.75rem 1.8rem;background:var(--blue);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:.95rem;cursor:pointer;transition:.15s;display:none}
+.quiz-next.show{display:inline-block}
+.quiz-next:hover{background:var(--blue-lt)}
+.quiz-score{text-align:center;display:none;padding:1rem 0}
+.quiz-score.show{display:block}
+.quiz-score .score-big{font-size:3.5rem;font-weight:900;color:var(--blue);line-height:1}
+.quiz-score .score-label{font-size:1rem;color:var(--gray-lt);margin-bottom:1.5rem}
+.quiz-restart{padding:.75rem 2rem;background:var(--blue);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:.95rem;cursor:pointer}
+.quiz-restart:hover{background:var(--blue-lt)}
+
+/* Juegos */
+.game-card{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:1.8rem;margin-bottom:2rem;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.game-title{font-size:1.1rem;font-weight:800;color:#0c1a2e;margin-bottom:.3rem;display:flex;align-items:center;gap:.5rem}
+.game-desc{font-size:.88rem;color:var(--gray-lt);margin-bottom:1.3rem}
+.game-status{display:flex;align-items:center;gap:1.2rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.game-status .gs-item{background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:.45rem .9rem;font-size:.82rem;font-weight:700;color:var(--gray)}
+.game-status .gs-item span{color:var(--blue);font-size:1.05rem}
+
+/* Juego conversión */
+.conv-game-area{text-align:center}
+.conv-challenge{font-size:1rem;color:var(--gray-lt);margin-bottom:.5rem}
+.conv-number{font-size:2.8rem;font-weight:900;color:#0c1a2e;font-family:'Courier New',monospace;margin-bottom:.5rem}
+.conv-target{font-size:.9rem;color:var(--blue);font-weight:700;margin-bottom:1.2rem}
+.conv-input{font-family:'Courier New',monospace;font-size:1.3rem;padding:.7rem 1.2rem;border:2px solid var(--border);border-radius:10px;text-align:center;width:240px;color:var(--gray);outline:none}
+.conv-input:focus{border-color:var(--blue-lt)}
+.conv-input.ok{border-color:#15803d;background:#dcfce7}
+.conv-input.fail{border-color:#b91c1c;background:#fee2e2}
+.conv-btn{margin-top:.9rem;padding:.7rem 1.8rem;background:var(--blue);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:.95rem;cursor:pointer;transition:.15s;display:block;margin:1rem auto 0}
+.conv-btn:hover{background:var(--blue-lt)}
+.conv-result{font-size:.85rem;margin-top:.7rem;min-height:1.2rem;font-weight:700}
+.conv-result.ok{color:#15803d}
+.conv-result.fail{color:#b91c1c}
+
+/* Juego ISA */
+.isa-game-area{}
+.isa-game-q{font-size:1.5rem;font-weight:900;font-family:'Courier New',monospace;color:#0c1a2e;text-align:center;margin-bottom:1.2rem;padding:.8rem;background:#f8fafc;border-radius:10px}
+.isa-opts{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+.isa-opt{padding:.8rem .9rem;border:2px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;font-size:.85rem;text-align:left;color:var(--gray);transition:.15s;font-family:inherit;line-height:1.45}
+.isa-opt:hover:not(:disabled){border-color:var(--blue-lt);background:var(--blue-bg)}
+.isa-opt.correct{border-color:#15803d;background:#dcfce7;color:#14532d;font-weight:700}
+.isa-opt.wrong{border-color:#b91c1c;background:#fee2e2;color:#7f1d1d}
+.isa-opt:disabled{cursor:default}
+.isa-next{margin-top:1rem;padding:.65rem 1.5rem;background:var(--teal);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;display:none}
+.isa-next.show{display:inline-block}
+
+/* Juego tablas de verdad */
+.tv-game-area{}
+.tv-fn{font-size:1.1rem;font-weight:800;font-family:'Courier New',monospace;color:var(--blue);text-align:center;margin-bottom:1rem;padding:.7rem;background:var(--blue-bg);border-radius:10px}
+.tv-table{border-collapse:collapse;width:100%;max-width:420px;margin:0 auto;font-size:.9rem}
+.tv-table th,.tv-table td{border:1px solid var(--border);padding:.5rem .7rem;text-align:center}
+.tv-table th{background:#f8fafc;font-weight:700;color:var(--gray-lt);font-family:'Courier New',monospace}
+.tv-cell-btn{width:44px;height:32px;border:2px solid var(--border);border-radius:6px;background:#f8fafc;cursor:pointer;font-weight:800;font-family:'Courier New',monospace;color:var(--gray-lt);transition:.15s;font-size:.95rem}
+.tv-cell-btn:hover{border-color:var(--blue-lt)}
+.tv-cell-btn.set-1{background:#dbeafe;border-color:var(--blue);color:var(--blue)}
+.tv-cell-btn.correct{background:#dcfce7;border-color:#15803d;color:#15803d}
+.tv-cell-btn.wrong{background:#fee2e2;border-color:#b91c1c;color:#b91c1c}
+.tv-check{margin-top:1rem;padding:.65rem 1.5rem;background:var(--purple);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;display:block;margin:1rem auto 0;font-family:inherit}
+.tv-check:hover{background:#6d28d9}
+.tv-feedback{text-align:center;margin-top:.7rem;font-size:.88rem;font-weight:700;min-height:1.2rem}
 
 footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)}
 </style>
@@ -104,49 +226,72 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
   <header>
     <span class="eyebrow">Automatización Industrial</span>
     <h1>Lógica Digital</h1>
-    <p>Conversión de bases numéricas y compuertas lógicas: reglas, explicación y simuladores interactivos.</p>
+    <p>Sesiones 01–05 · Pirámide CIM, conversiones, Álgebra de Boole, K-maps, ISA 5.1 y circuitos de fuerza.</p>
   </header>
 
   <div class="section-nav">
-    <a href="#bases">🔢 Conversión de bases</a>
-    <a href="#compuertas">🔌 Compuertas lógicas</a>
+    <a href="#cim">🏭 CIM</a>
+    <a href="#bases">🔢 Bases</a>
+    <a href="#compuertas">🔌 Compuertas</a>
+    <a href="#boole">🔣 Boole</a>
+    <a href="#karnaugh">🗺️ Karnaugh</a>
+    <a href="#isa">📊 ISA 5.1</a>
+    <a href="#circuitos">⚡ Circuitos</a>
+    <a href="#quiz">🧠 Quiz</a>
+    <a href="#juegos">🎮 Juegos</a>
   </div>
 
-  <h2 class="section-title" id="bases">🔢 Conversión de Bases Numéricas</h2>
-  <p class="section-sub">Reglas mnemotécnicas para convertir entre binario, decimal y hexadecimal, más una calculadora para probarlo al toque.</p>
+  <!-- ═══════════════ PIRÁMIDE CIM ═══════════════ -->
+  <h2 class="section-title" id="cim">🏭 Pirámide CIM — Automatización Industrial</h2>
+  <p class="section-sub">El modelo CIM (Computer Integrated Manufacturing) organiza los sistemas de automatización en 5 niveles jerárquicos, de lo físico al negocio.</p>
+
+  <div class="cim-pyramid">
+    <div class="cim-level cim-l4">Nivel 4 — Gestión / ERP <span>Planificación, costos, logística</span></div>
+    <div class="cim-level cim-l3">Nivel 3 — MES / Supervisión <span>SCADA, MES, optimización</span></div>
+    <div class="cim-level cim-l2">Nivel 2 — Control Supervisorio <span>DCS, HMI, recetas</span></div>
+    <div class="cim-level cim-l1">Nivel 1 — Control (PLC) <span>Algoritmos en tiempo real, Ladder/FBD</span></div>
+    <div class="cim-level cim-l0">Nivel 0 — Campo (sensores/actuadores) <span>Interfaz física directa con el proceso</span></div>
+  </div>
+
+  <div class="card" style="border-left:4px solid #b91c1c;margin-top:1rem">
+    <h2 style="color:#b91c1c">📍 Nivel 0 — Campo / Proceso</h2>
+    <p>Es la <strong>interfaz física directa</strong> con la máquina. Los <strong>sensores</strong> transforman magnitudes físicas (temperatura, presión, nivel) en señales eléctricas. Los <strong>actuadores</strong> transforman señales de control en acciones físicas (arrancar motor, abrir válvula).</p>
+  </div>
+  <div class="card" style="border-left:4px solid #d97706">
+    <h2 style="color:#d97706">📍 Nivel 1 — Control (PLC)</h2>
+    <p>Ejecuta <strong>algoritmos de control determinísticos en tiempo real</strong> (ciclo de scan). Recibe entradas del campo, procesa la lógica programada (Ladder, FBD, ST) y envía órdenes automáticas a los actuadores.</p>
+    <div class="tip"><strong>Clave del parcial:</strong> PLC = Nivel 1. Sensores/actuadores = Nivel 0.</div>
+  </div>
+
+  <!-- ═══════════════ BASES NUMÉRICAS ═══════════════ -->
+  <h2 class="section-title" id="bases">🔢 Sistemas de Numeración Digital</h2>
+  <p class="section-sub">Binario, hexadecimal y BCD Natural (8421). Con la calculadora podés probar cualquier conversión al toque.</p>
 
   <div class="card c-bin">
-    <h2>🔵 Binario → Decimal</h2>
-    <p><strong>Regla:</strong> multiplicá cada bit por 2 elevado a su posición, empezando de derecha a cero, y sumá.</p>
-    <div class="tip"><strong>Truco:</strong> escribí debajo de cada bit (de derecha a izquierda) las potencias de 2: 1, 2, 4, 8, 16, 32... Sumá solo donde hay un 1.</div>
-    <div class="ej">1011 → 8+0+2+1 = 11</div>
+    <h2>🔵 Decimal → Binario Natural</h2>
+    <p><strong>Método:</strong> dividís por 2 sucesivamente y anotás los restos. Leés de abajo hacia arriba. Para 8 bits, completás con ceros a la izquierda.</p>
+    <div class="tip"><strong>Suma de potencias:</strong> 53 = 32 + 16 + 4 + 1 = 2⁵ + 2⁴ + 2² + 2⁰</div>
+    <div class="ej">53₁₀ → [128|64|32|16|8|4|2|1] → [0|0|1|1|0|1|0|1] = 00110101₂</div>
   </div>
 
   <div class="card c-hex">
-    <h2>🟣 Binario → Hexadecimal</h2>
-    <p><strong>Regla:</strong> agrupá el binario de a 4 bits, de derecha a izquierda (rellenando con ceros a la izquierda si falta). Cada bloque de 4 bits es directamente 1 dígito hex (0-F).</p>
-    <div class="tip"><strong>Truco:</strong> "cada 4 bits es una letra o número del 0 al F" — no hace falta pasar por decimal.</div>
-    <div class="ej">1011 0110 → B 6 = B6</div>
+    <h2>🟣 Decimal → Hexadecimal</h2>
+    <p><strong>Método rápido:</strong> convertís a binario → agrupás de a 4 bits → cada cuarteto es un dígito hex. O dividís por 16 y anotás restos.</p>
+    <div class="tip"><strong>Nibbles de 53₁₀ = 00110101₂:</strong> 0011 → 3 | 0101 → 5 → <strong>0x35</strong>. Verificación: (3×16)+5 = 53 ✓</div>
+    <div class="ej">53₁₀ = 35₁₆ (0x35)</div>
   </div>
 
-  <div class="card c-dec">
-    <h2>🟢 Hexadecimal → Decimal</h2>
-    <p><strong>Regla:</strong> cada dígito hex vale su número por 16 elevado a su posición (igual que binario→decimal pero con potencias de 16: 1, 16, 256, 4096...).</p>
-    <div class="tip"><strong>Truco:</strong> para recordar A-F, la frase <em>"A Bebé Come Dulces En Fiestas"</em> te da el orden A=10, B=11, C=12, D=13, E=14, F=15.</div>
-    <div class="ej">2F → (2×16) + (15×1) = 47</div>
-  </div>
-
-  <div class="card c-bin">
-    <h2>🔵 Decimal → Binario</h2>
-    <p><strong>Regla:</strong> dividí el número por 2 sucesivamente y anotá cada resto (0 o 1). Cuando llegás a 0, leé los restos de abajo hacia arriba.</p>
-    <div class="tip"><strong>Truco:</strong> "divido por 2 y anoto el resto, de abajo hacia arriba".</div>
-    <div class="ej">13 → 1101</div>
+  <div class="card c-bcd">
+    <h2>🟠 Decimal → BCD Natural (8421)</h2>
+    <p>En BCD, <strong>cada dígito decimal se codifica por separado en 4 bits</strong>. No es lo mismo que binario directo — cada grupo de 4 bits solo usa los valores 0000–1001.</p>
+    <div class="tip"><strong>Ojo:</strong> 53 en binario = 00110101. En BCD = 0101 0011. ¡Son distintos!</div>
+    <div class="ej">5 → 0101 | 3 → 0011 | → BCD: 0101 0011</div>
   </div>
 
   <div class="calc">
-    <h2>🧮 Calculadora de bases</h2>
+    <h2>🧮 Calculadora de bases (Bin / Hex / BCD)</h2>
     <div class="calc-input-row">
-      <input type="text" id="calcInput" placeholder="Escribí un número..." value="13" autocomplete="off" spellcheck="false">
+      <input type="text" id="calcInput" placeholder="Escribí un número..." value="53" autocomplete="off" spellcheck="false">
     </div>
     <div class="base-select">
       <button class="base-btn" data-base="2">Binario</button>
@@ -155,28 +300,30 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
     </div>
     <div class="calc-error" id="calcError"></div>
     <div class="calc-results">
-      <div class="res-row r-bin"><span class="res-label">Binario</span><span class="res-value" id="resBin">—</span></div>
+      <div class="res-row r-bin"><span class="res-label">Binario 8b</span><span class="res-value" id="resBin">—</span></div>
       <div class="res-row r-dec"><span class="res-label">Decimal</span><span class="res-value" id="resDec">—</span></div>
       <div class="res-row r-hex"><span class="res-label">Hex</span><span class="res-value" id="resHex">—</span></div>
+      <div class="res-row r-bcd"><span class="res-label">BCD 8421</span><span class="res-value" id="resBcd">—</span></div>
     </div>
   </div>
 
-  <h2 class="section-title" id="compuertas">🔌 Compuertas Lógicas</h2>
-  <p class="section-sub">Una compuerta lógica es un circuito que combina una o más entradas binarias (0/1) y devuelve una salida binaria según una regla fija. Son la base de todo circuito digital.</p>
+  <!-- ═══════════════ COMPUERTAS ═══════════════ -->
+  <h2 class="section-title" id="compuertas">🔌 Compuertas Lógicas Elementales</h2>
+  <p class="section-sub">Una compuerta transforma una o más entradas binarias en una salida según una regla fija. Son el hardware del Álgebra de Boole.</p>
 
   <div class="gate-intro">
-    <p><strong>Cómo leerlas:</strong> A y B son las entradas (podés "prenderlas" o "apagarlas", como una llave). Q es la salida. Tocá los círculos de A/B del simulador de abajo y mirá cómo cambia el LED de salida.</p>
+    <p><strong>Cómo leerlas:</strong> A y B son entradas (0 = apagado, 1 = encendido). Q es la salida. Tocá los botones del simulador de abajo y mirá cómo cambia el LED.</p>
     <table>
-      <thead><tr><th>Compuerta</th><th>Regla</th></tr></thead>
+      <thead><tr><th>Compuerta</th><th>Notación</th><th>Regla</th></tr></thead>
       <tbody>
-        <tr><td><strong>BUF</strong></td><td>Repite la entrada: Q = A</td></tr>
-        <tr><td><strong>NOT</strong></td><td>Invierte la entrada: Q = ¬A</td></tr>
-        <tr><td><strong>AND</strong></td><td>Q = 1 solo si A y B son 1</td></tr>
-        <tr><td><strong>NAND</strong></td><td>Lo opuesto a AND: Q = 0 solo si A y B son 1</td></tr>
-        <tr><td><strong>OR</strong></td><td>Q = 1 si A o B (o ambos) son 1</td></tr>
-        <tr><td><strong>NOR</strong></td><td>Lo opuesto a OR: Q = 1 solo si A y B son 0</td></tr>
-        <tr><td><strong>XOR</strong></td><td>Q = 1 si A y B son distintos</td></tr>
-        <tr><td><strong>XNOR</strong></td><td>Q = 1 si A y B son iguales</td></tr>
+        <tr><td><strong>BUF</strong></td><td>Q = A</td><td>Repite la entrada</td></tr>
+        <tr><td><strong>NOT</strong></td><td>Q = Ā</td><td>Invierte: 0→1, 1→0</td></tr>
+        <tr><td><strong>AND</strong></td><td>Q = A · B</td><td>Q=1 solo si A y B son 1</td></tr>
+        <tr><td><strong>NAND</strong></td><td>Q = ¬(A·B)</td><td>Opuesto a AND</td></tr>
+        <tr><td><strong>OR</strong></td><td>Q = A + B</td><td>Q=1 si A o B (o ambos) son 1</td></tr>
+        <tr><td><strong>NOR</strong></td><td>Q = ¬(A+B)</td><td>Q=1 solo si ambos son 0</td></tr>
+        <tr><td><strong>XOR</strong></td><td>Q = A ⊕ B</td><td>Q=1 si A y B son distintos</td></tr>
+        <tr><td><strong>XNOR</strong></td><td>Q = ¬(A⊕B)</td><td>Q=1 si A y B son iguales</td></tr>
       </tbody>
     </table>
   </div>
@@ -186,190 +333,697 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
     <div class="gate-grid" id="gateGrid"></div>
   </div>
 
-  <footer>Automatización y Control · Universidad de Pilar</footer>
+  <!-- ═══════════════ ÁLGEBRA DE BOOLE ═══════════════ -->
+  <h2 class="section-title" id="boole">🔣 Álgebra de Boole y Simplificación</h2>
+  <p class="section-sub">Postulados y teoremas para simplificar expresiones lógicas. El objetivo: encontrar la expresión mínima equivalente.</p>
+
+  <div class="theorem-grid">
+    <div class="theorem-card"><div class="th-name">Elemento neutro AND</div><div class="th-eq">A · 1 = A</div></div>
+    <div class="theorem-card"><div class="th-name">Elemento nulo AND</div><div class="th-eq">A · 0 = 0</div></div>
+    <div class="theorem-card"><div class="th-name">Elemento neutro OR</div><div class="th-eq">A + 0 = A</div></div>
+    <div class="theorem-card"><div class="th-name">Elemento nulo OR</div><div class="th-eq">A + 1 = 1</div></div>
+    <div class="theorem-card"><div class="th-name">Complementario AND</div><div class="th-eq">A · Ā = 0</div></div>
+    <div class="theorem-card"><div class="th-name">Complementario OR</div><div class="th-eq">A + Ā = 1 ← ¡clave!</div></div>
+    <div class="theorem-card"><div class="th-name">Idempotencia AND</div><div class="th-eq">A · A = A</div></div>
+    <div class="theorem-card"><div class="th-name">Idempotencia OR</div><div class="th-eq">A + A = A</div></div>
+    <div class="theorem-card"><div class="th-name">Absorción</div><div class="th-eq">A + A·B = A</div></div>
+    <div class="theorem-card"><div class="th-name">Absorción variante</div><div class="th-eq">A + Ā·B = A + B</div></div>
+    <div class="theorem-card"><div class="th-name">De Morgan 1</div><div class="th-eq">¬(A·B) = Ā + B̄</div></div>
+    <div class="theorem-card"><div class="th-name">De Morgan 2</div><div class="th-eq">¬(A+B) = Ā · B̄</div></div>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--purple)">
+    <h2 style="color:var(--purple)">📝 Ejemplo del parcial — F(A,B,C) = A·B̄ + Ā·B̄ + A·B·C</h2>
+    <p><strong>Paso 1:</strong> factor común B̄ en los dos primeros términos:<br>
+    <code>A·B̄ + Ā·B̄ = (A + Ā)·B̄</code></p>
+    <p><strong>Paso 2:</strong> A + Ā = 1 (complementario OR):<br>
+    <code>= 1·B̄ = B̄</code></p>
+    <p><strong>Paso 3:</strong> la expresión queda: F = B̄ + A·B·C</p>
+    <p><strong>Paso 4:</strong> absorción variante (X + X̄·Y = X + Y, con X=B̄, Y=A·C):<br>
+    <code>B̄ + B·(A·C) = B̄ + A·C</code></p>
+    <div class="tip"><strong>Resultado mínimo:</strong> F(A,B,C) = B̄ + A·C</div>
+  </div>
+
+  <div class="card">
+    <h2>📋 Tabla de Verdad de F = B̄ + A·C</h2>
+    <p>Minitérminos activos: F = Σm(0, 1, 4, 5, 7)</p>
+    <div class="bool-table-wrap">
+      <table class="bool-table">
+        <thead><tr><th>A</th><th>B</th><th>C</th><th>B̄</th><th>A·C</th><th>F</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td class="one">1</td></tr>
+          <tr><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td class="one">1</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td class="zero">0</td></tr>
+          <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td class="zero">0</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td class="one">1</td></tr>
+          <tr><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td class="one">1</td></tr>
+          <tr><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td class="zero">0</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td class="one">1</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════ KARNAUGH ═══════════════ -->
+  <h2 class="section-title" id="karnaugh">🗺️ Mapas de Karnaugh (3 variables)</h2>
+  <p class="section-sub">Herramienta gráfica para minimizar funciones booleanas. Las columnas van en código Gray (01 → 11 → adyacentes).</p>
+
+  <div class="card">
+    <h2>📐 Reglas de los grupos (lazos)</h2>
+    <p>• Los grupos deben ser de tamaño <strong>potencia de 2</strong>: 1, 2, 4, 8... <br>
+    • Los grupos deben ser lo más grandes posible. <br>
+    • Cada 1 debe estar cubierto (puede estar en más de un grupo). <br>
+    • El mapa "se envuelve" — la primera y última columna son adyacentes.</p>
+    <p><strong>Columnas en 3 variables:</strong> A es la fila (0/1) y BC va en código Gray: 00 | 01 | 11 | 10</p>
+    <div class="tip"><strong>Clave:</strong> código Gray garantiza que columnas vecinas difieran solo en 1 bit, que es la condición de adyacencia para poder eliminar variables.</div>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--teal)">
+    <h2 style="color:var(--teal)">📝 Ejemplo del parcial — F = Σm(1, 3, 4, 5, 7)</h2>
+    <div class="kmap-wrap">
+      <table class="kmap-table">
+        <thead>
+          <tr><th>A \ BC</th><th>00</th><th>01</th><th>11</th><th>10</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="background:#f8fafc;font-size:.75rem;font-weight:700;color:var(--gray-lt)">A=0</td>
+            <td class="cell-0">0</td>
+            <td class="cell-1 group-a">1</td>
+            <td class="cell-1 group-a">1</td>
+            <td class="cell-0">0</td>
+          </tr>
+          <tr>
+            <td style="background:#f8fafc;font-size:.75rem;font-weight:700;color:var(--gray-lt)">A=1</td>
+            <td class="cell-1 group-b">1</td>
+            <td class="cell-1 group-ab">1</td>
+            <td class="cell-1 group-a">1</td>
+            <td class="cell-0">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:.8rem;font-size:.85rem">
+      <span style="background:#d1fae5;padding:.2rem .7rem;border-radius:6px;color:#14532d;font-weight:700">🟢 Grupo C (cuarteto m1,m3,m5,m7): C = 1 → término: C</span>
+      <span style="background:#fce7f3;padding:.2rem .7rem;border-radius:6px;color:#be185d;font-weight:700">🔴 Grupo A·B̄ (dupla m4,m5): A=1, B=0 → término: A·B̄</span>
+    </div>
+    <div class="tip"><strong>Expresión mínima SOP:</strong> F(A,B,C) = C + A·B̄</div>
+  </div>
+
+  <div class="card">
+    <h2>🔄 Combinacional vs. Secuencial</h2>
+    <p><strong>Combinacional:</strong> la salida depende <em>únicamente</em> de las entradas actuales. Sin memoria, sin realimentación. Ejemplos: MUX, decodificador, sumador, compuertas AND/OR.</p>
+    <p><strong>Secuencial:</strong> la salida depende de las entradas actuales <em>y del estado anterior</em>. Contiene elementos de memoria (flip-flops) y realimentación. Ejemplos: Flip-Flop RS/D/JK, contadores, registros de desplazamiento.</p>
+  </div>
+
+  <!-- ═══════════════ ISA 5.1 ═══════════════ -->
+  <h2 class="section-title" id="isa">📊 Normativa ISA 5.1 — Diagramas P&ID</h2>
+  <p class="section-sub">Los tags ISA identifican cada instrumento: primera letra = variable, letras siguientes = función. Lazo = número de circuito.</p>
+
+  <div class="card">
+    <h2>🔤 Variables de proceso (primera letra)</h2>
+    <div class="isa-grid">
+      <div class="isa-card"><div class="isa-tag">T</div><div class="isa-fn">Temperatura</div></div>
+      <div class="isa-card"><div class="isa-tag">P</div><div class="isa-fn">Presión</div></div>
+      <div class="isa-card"><div class="isa-tag">F</div><div class="isa-fn">Caudal / Flujo</div></div>
+      <div class="isa-card"><div class="isa-tag">L</div><div class="isa-fn">Nivel (Level)</div></div>
+      <div class="isa-card"><div class="isa-tag">A</div><div class="isa-fn">Análisis</div></div>
+      <div class="isa-card"><div class="isa-tag">S</div><div class="isa-fn">Velocidad (Speed)</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>⚙️ Funciones (letras siguientes)</h2>
+    <div class="isa-grid">
+      <div class="isa-card"><div class="isa-tag">T</div><div class="isa-fn">Transmisor</div></div>
+      <div class="isa-card"><div class="isa-tag">I</div><div class="isa-fn">Indicador</div></div>
+      <div class="isa-card"><div class="isa-tag">C</div><div class="isa-fn">Controlador</div></div>
+      <div class="isa-card"><div class="isa-tag">CV</div><div class="isa-fn">Válvula de Control</div></div>
+      <div class="isa-card"><div class="isa-tag">SH</div><div class="isa-fn">Switch High (alto)</div></div>
+      <div class="isa-card"><div class="isa-tag">SL</div><div class="isa-fn">Switch Low (bajo)</div></div>
+    </div>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--orange)">
+    <h2 style="color:var(--orange)">📝 Tags del parcial decodificados</h2>
+    <div class="isa-grid">
+      <div class="isa-card" style="border-color:var(--orange)">
+        <div class="isa-tag">TT-101</div>
+        <div class="isa-var">Temperatura</div>
+        <div class="isa-fn">Transmisor — lazo 101</div>
+      </div>
+      <div class="isa-card" style="border-color:var(--blue)">
+        <div class="isa-tag">PIC-204</div>
+        <div class="isa-var">Presión</div>
+        <div class="isa-fn">Indicador + Controlador — lazo 204</div>
+      </div>
+      <div class="isa-card" style="border-color:var(--teal)">
+        <div class="isa-tag">FCV-302</div>
+        <div class="isa-var">Caudal</div>
+        <div class="isa-fn">Válvula de Control — lazo 302</div>
+      </div>
+      <div class="isa-card" style="border-color:var(--red)">
+        <div class="isa-tag">LSH-105</div>
+        <div class="isa-var">Nivel</div>
+        <div class="isa-fn">Interruptor de Nivel Alto — lazo 105</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>〰️ Tipos de líneas en P&ID</h2>
+    <div class="bool-table-wrap">
+      <table class="bool-table">
+        <thead><tr><th>Trazo</th><th>Tipo</th><th>Qué representa</th></tr></thead>
+        <tbody>
+          <tr><td>――――――――</td><td>Línea continua gruesa</td><td>Tubería de proceso principal</td></tr>
+          <tr><td>- - - - - - -</td><td>Línea discontinua guiones</td><td>Señal eléctrica (4–20 mA, 24 Vcc)</td></tr>
+          <tr><td>―― // ―― //</td><td>Barra doble oblicua</td><td>Señal neumática (3–15 psi)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tip" style="margin-top:.8rem"><strong>Símbolos de burbuja:</strong> círculo limpio = instrumento en campo (local). Círculo con línea horizontal al centro = instrumento en panel de control (sala centralizada).</div>
+  </div>
+
+  <!-- ═══════════════ CIRCUITOS ═══════════════ -->
+  <h2 class="section-title" id="circuitos">⚡ Circuitos de Fuerza y Mando — IEC 60947</h2>
+  <p class="section-sub">Arranque directo de motor trifásico con contactor KM1 y relé térmico. Sesión 05.</p>
+
+  <div class="card" style="border-left:4px solid var(--teal)">
+    <h2 style="color:var(--teal)">🔒 Auto-retención (contacto 13-14)</h2>
+    <p>El contacto auxiliar <strong>NA 13-14</strong> del contactor KM1 se conecta <strong>en paralelo</strong> con el pulsador de marcha S1.</p>
+    <p>Al pulsar S1 → la bobina KM1 se energiza → 13-14 se cierra → cuando soltás S1 la bobina <strong>sigue alimentada</strong> por el camino alternativo del 13-14.</p>
+    <div class="tip"><strong>Sin 13-14:</strong> el motor funcionaría solo mientras mantenés S1 apretado (modo "jogging" o "impulso"). Al soltar S1, el motor se detiene inmediatamente.</div>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--red)">
+    <h2 style="color:var(--red)">🌡️ Protección térmica — Relé bimetálico</h2>
+    <p><strong>Contacto 95-96 (NC):</strong> se conecta <em>en serie</em> con la botonera de comando. En condición normal está cerrado. Si el motor se sobrecalienta, las láminas bimetálicas abren 95-96 → se corta la alimentación de la bobina KM1 → el motor se detiene.</p>
+    <p><strong>Contacto 97-98 (NA):</strong> al disparar el térmico se cierra → alimenta una lámpara piloto de avería (color ámbar) o envía alarma al SCADA/PLC.</p>
+  </div>
+
+  <div class="card">
+    <h2>🔢 Marcado de Bornes Normalizado IEC 60947</h2>
+    <div class="bornes-grid">
+      <div class="borne-card"><div class="bc-label">Bobina electromagnética KM1</div><div class="bc-val">A1 (+) — A2 (−)</div></div>
+      <div class="borne-card"><div class="bc-label">Contactos de potencia entrada</div><div class="bc-val">1 — 3 — 5 (L1/L2/L3)</div></div>
+      <div class="borne-card"><div class="bc-label">Contactos de potencia salida</div><div class="bc-val">2 — 4 — 6 (T1/T2/T3)</div></div>
+      <div class="borne-card"><div class="bc-label">Auxiliar NA (auto-retención)</div><div class="bc-val">13 — 14</div></div>
+      <div class="borne-card"><div class="bc-label">Auxiliar NC</div><div class="bc-val">21 — 22</div></div>
+      <div class="borne-card"><div class="bc-label">Relé térmico (NC corte)</div><div class="bc-val">95 — 96</div></div>
+      <div class="borne-card"><div class="bc-label">Relé térmico (NA alarma)</div><div class="bc-val">97 — 98</div></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ QUIZ ═══════════════ -->
+  <h2 class="section-title" id="quiz">🧠 Quiz — Modelo de parcial</h2>
+  <p class="section-sub">15 preguntas tipo examen sobre los 5 temas. Ves el feedback y la explicación después de cada respuesta.</p>
+
+  <div class="quiz-wrap">
+    <div id="quizContent">
+      <div class="quiz-progress">
+        <div class="qp-bar"><div class="qp-fill" id="qpFill" style="width:0%"></div></div>
+        <span class="qp-label" id="qpLabel">1 / 15</span>
+      </div>
+      <div class="quiz-q-num" id="qNum">Pregunta 1</div>
+      <div class="quiz-q-text" id="qText"></div>
+      <div class="quiz-options" id="qOptions"></div>
+      <div class="quiz-feedback" id="qFeedback"></div>
+      <button class="quiz-next" id="qNext" onclick="quizNext()">Siguiente →</button>
+    </div>
+    <div class="quiz-score" id="quizScore">
+      <div class="score-big" id="scoreBig">0/15</div>
+      <div class="score-label" id="scoreLabel">Puntos obtenidos</div>
+      <button class="quiz-restart" onclick="quizStart()">🔄 Volver a intentar</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ JUEGOS ═══════════════ -->
+  <h2 class="section-title" id="juegos">🎮 Juegos para aprender</h2>
+  <p class="section-sub">Tres juegos para practicar hasta que los temas entren solos.</p>
+
+  <!-- Juego 1: Conversión rápida -->
+  <div class="game-card">
+    <div class="game-title">⚡ Juego 1 — Conversión de bases</div>
+    <div class="game-desc">Convertí el número mostrado a la base pedida antes de que se acabe el tiempo. Cada respuesta correcta suma 10 puntos.</div>
+    <div class="game-status">
+      <div class="gs-item">Puntos: <span id="convScore">0</span></div>
+      <div class="gs-item">Ronda: <span id="convRound">1</span>/10</div>
+      <div class="gs-item">Tiempo: <span id="convTimer">15</span>s</div>
+    </div>
+    <div class="conv-game-area" id="convArea">
+      <div class="conv-challenge">Convertir a:</div>
+      <div class="conv-number" id="convNum">—</div>
+      <div class="conv-target" id="convTarget">— base —</div>
+      <input class="conv-input" type="text" id="convInput" placeholder="Escribe la respuesta..." autocomplete="off" spellcheck="false" oninput="convInputChange()">
+      <button class="conv-btn" onclick="convCheck()">✓ Verificar</button>
+      <div class="conv-result" id="convResult"></div>
+    </div>
+    <button style="padding:.6rem 1.4rem;background:var(--teal);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;margin-top:.5rem;font-family:inherit" onclick="convStart()">▶ Iniciar juego</button>
+  </div>
+
+  <!-- Juego 2: Identificá el tag ISA -->
+  <div class="game-card">
+    <div class="game-title">🏷️ Juego 2 — ¿Qué significa el tag?</div>
+    <div class="game-desc">Se muestra un tag ISA 5.1 y cuatro opciones. Elegí la descripción correcta.</div>
+    <div class="game-status">
+      <div class="gs-item">Puntos: <span id="isaScore">0</span></div>
+      <div class="gs-item">Ronda: <span id="isaRound">1</span>/10</div>
+    </div>
+    <div class="isa-game-q" id="isaTag">—</div>
+    <div class="isa-opts" id="isaOpts"></div>
+    <button class="isa-next" id="isaNext" onclick="isaNextQ()">Siguiente →</button>
+    <div style="margin-top:1rem">
+      <button style="padding:.6rem 1.4rem;background:var(--purple);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit" onclick="isaStart()">▶ Iniciar juego</button>
+    </div>
+  </div>
+
+  <!-- Juego 3: Tabla de verdad -->
+  <div class="game-card">
+    <div class="game-title">📋 Juego 3 — Completá la tabla de verdad</div>
+    <div class="game-desc">Se te da una función F(A,B,C). Hacé clic en las celdas de la columna F para poner 0 o 1. Cuando terminás, verificás.</div>
+    <div class="game-status">
+      <div class="gs-item">Puntos: <span id="tvScore">0</span></div>
+      <div class="gs-item">Ronda: <span id="tvRound">1</span>/5</div>
+    </div>
+    <div class="tv-fn" id="tvFn">—</div>
+    <div class="bool-table-wrap">
+      <table class="tv-table" id="tvTable"></table>
+    </div>
+    <button class="tv-check" onclick="tvCheck()">✓ Verificar tabla</button>
+    <div class="tv-feedback" id="tvFeedback"></div>
+    <div style="margin-top:.8rem">
+      <button style="padding:.6rem 1.4rem;background:var(--orange);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit" onclick="tvStart()">▶ Iniciar juego</button>
+    </div>
+  </div>
+
+  <footer>Automatización y Control · Universidad Nacional de Pilar · Sesiones 01–05</footer>
 </div>
 
 <script>
-/* ---- Calculadora de bases ---- */
-const input = document.getElementById('calcInput');
-const buttons = document.querySelectorAll('.base-btn');
-const errBox = document.getElementById('calcError');
-const resBin = document.getElementById('resBin');
-const resDec = document.getElementById('resDec');
-const resHex = document.getElementById('resHex');
+/* ══════════════════════════════════════════════
+   CALCULADORA DE BASES
+══════════════════════════════════════════════ */
+const calcIn   = document.getElementById('calcInput');
+const calcBtns = document.querySelectorAll('.base-btn');
+const calcErr  = document.getElementById('calcError');
+const resBin   = document.getElementById('resBin');
+const resDec   = document.getElementById('resDec');
+const resHex   = document.getElementById('resHex');
+const resBcd   = document.getElementById('resBcd');
+let calcBase   = 10;
 
-let currentBase = 10;
-
-function validPattern(base){
-  if(base === 2) return /^[01]+$/;
-  if(base === 16) return /^[0-9a-fA-F]+$/;
-  return /^[0-9]+$/;
+function toBCD(n){
+  if(n < 0 || n > 9999) return '—';
+  const s = n.toString();
+  return s.split('').map(d=>{
+    return parseInt(d).toString(2).padStart(4,'0');
+  }).join(' ');
 }
 
-function convert(){
-  const raw = input.value.trim();
-  errBox.textContent = '';
-  if(!raw){
-    resBin.textContent = '—'; resDec.textContent = '—'; resHex.textContent = '—';
-    return;
-  }
-  if(!validPattern(currentBase).test(raw)){
-    errBox.textContent = 'Ese valor no es válido para la base seleccionada.';
-    resBin.textContent = '—'; resDec.textContent = '—'; resHex.textContent = '—';
-    return;
-  }
-  const value = parseInt(raw, currentBase);
-  if(Number.isNaN(value)){
-    errBox.textContent = 'No se pudo convertir ese número.';
-    return;
-  }
-  resBin.textContent = value.toString(2);
-  resDec.textContent = value.toString(10);
-  resHex.textContent = value.toString(16).toUpperCase();
+function calcConvert(){
+  const raw = calcIn.value.trim();
+  calcErr.textContent = '';
+  if(!raw){ resBin.textContent=resDec.textContent=resHex.textContent=resBcd.textContent='—'; return; }
+  const pat = calcBase===2 ? /^[01]+$/ : calcBase===16 ? /^[0-9a-fA-F]+$/ : /^[0-9]+$/;
+  if(!pat.test(raw)){ calcErr.textContent='Valor inválido para la base seleccionada.'; return; }
+  const v = parseInt(raw, calcBase);
+  if(isNaN(v)){ calcErr.textContent='No se pudo convertir.'; return; }
+  resBin.textContent = v.toString(2).padStart(8,'0');
+  resDec.textContent = v.toString(10);
+  resHex.textContent = '0x' + v.toString(16).toUpperCase();
+  resBcd.textContent = v <= 9999 ? toBCD(v) : '> 4 dígitos';
 }
 
-buttons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    buttons.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentBase = parseInt(btn.dataset.base, 10);
-    convert();
-  });
-});
+calcBtns.forEach(b => b.addEventListener('click', ()=>{
+  calcBtns.forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  calcBase = parseInt(b.dataset.base, 10);
+  calcConvert();
+}));
+calcIn.addEventListener('input', calcConvert);
+calcConvert();
 
-input.addEventListener('input', convert);
-convert();
-
-/* ---- Simulador de compuertas lógicas ---- */
+/* ══════════════════════════════════════════════
+   SIMULADOR DE COMPUERTAS
+══════════════════════════════════════════════ */
 const GATES = [
-  { name: 'BUF',  formula: 'Q = A',        inputs: 1, shape: 'triangle', inv: false, fn: (a,b) => a },
-  { name: 'NOT',  formula: 'Q = ¬A',       inputs: 1, shape: 'triangle', inv: true,  fn: (a,b) => a ? 0 : 1 },
-  { name: 'AND',  formula: 'Q = A · B',    inputs: 2, shape: 'and',      inv: false, fn: (a,b) => (a && b) ? 1 : 0 },
-  { name: 'NAND', formula: 'Q = ¬(A · B)', inputs: 2, shape: 'and',      inv: true,  fn: (a,b) => (a && b) ? 0 : 1 },
-  { name: 'OR',   formula: 'Q = A + B',    inputs: 2, shape: 'or',       inv: false, fn: (a,b) => (a || b) ? 1 : 0 },
-  { name: 'NOR',  formula: 'Q = ¬(A + B)', inputs: 2, shape: 'or',       inv: true,  fn: (a,b) => (a || b) ? 0 : 1 },
-  { name: 'XOR',  formula: 'Q = A ⊕ B',    inputs: 2, shape: 'xor',      inv: false, fn: (a,b) => (a !== b) ? 1 : 0 },
-  { name: 'XNOR', formula: 'Q = ¬(A ⊕ B)', inputs: 2, shape: 'xor',      inv: true,  fn: (a,b) => (a === b) ? 1 : 0 },
+  { name:'BUF',  formula:'Q = A',        inputs:1, shape:'triangle', inv:false, fn:(a)=>a },
+  { name:'NOT',  formula:'Q = Ā',        inputs:1, shape:'triangle', inv:true,  fn:(a)=>a?0:1 },
+  { name:'AND',  formula:'Q = A · B',    inputs:2, shape:'and',      inv:false, fn:(a,b)=>(a&&b)?1:0 },
+  { name:'NAND', formula:'Q = ¬(A · B)', inputs:2, shape:'and',      inv:true,  fn:(a,b)=>(a&&b)?0:1 },
+  { name:'OR',   formula:'Q = A + B',    inputs:2, shape:'or',       inv:false, fn:(a,b)=>(a||b)?1:0 },
+  { name:'NOR',  formula:'Q = ¬(A + B)', inputs:2, shape:'or',       inv:true,  fn:(a,b)=>(a||b)?0:1 },
+  { name:'XOR',  formula:'Q = A ⊕ B',    inputs:2, shape:'xor',      inv:false, fn:(a,b)=>(a!==b)?1:0 },
+  { name:'XNOR', formula:'Q = ¬(A ⊕ B)',inputs:2, shape:'xor',      inv:true,  fn:(a,b)=>(a===b)?1:0 },
 ];
 
-/* Dibuja el símbolo estándar de cada compuerta en SVG (viewBox 0 0 90 44) */
 function gateSvg(gate){
-  const S = '#f2a340'; // stroke color
-  const inputs = gate.inputs;
-  const bodyStartX = 22; // donde arranca el cuerpo de la compuerta
-  let bodyPath = '';
-  let extraCurve = '';
-  let tipX = 60; // punta / salida del cuerpo antes del burbujita
-
-  if(gate.shape === 'triangle'){
-    bodyPath = `M${bodyStartX},6 L${bodyStartX},38 L60,22 Z`;
-    tipX = 60;
-  } else if(gate.shape === 'and'){
-    bodyPath = `M${bodyStartX},6 L${bodyStartX},38 L42,38 A16,16 0 0 0 42,6 Z`;
-    tipX = 58;
-  } else if(gate.shape === 'or' || gate.shape === 'xor'){
-    bodyPath = `M${bodyStartX},6 Q40,6 60,22 Q40,38 ${bodyStartX},38 Q30,22 ${bodyStartX},6 Z`;
-    tipX = 60;
-    if(gate.shape === 'xor'){
-      extraCurve = `<path d="M${bodyStartX-5},6 Q${bodyStartX+5},22 ${bodyStartX-5},38" fill="none" stroke="${S}" stroke-width="2"/>`;
-    }
+  const S='#f2a340', bx=22;
+  let bp='', ec='', tipX=60;
+  if(gate.shape==='triangle'){ bp=`M${bx},6 L${bx},38 L60,22 Z`; tipX=60; }
+  else if(gate.shape==='and'){ bp=`M${bx},6 L${bx},38 L42,38 A16,16 0 0 0 42,6 Z`; tipX=58; }
+  else if(gate.shape==='or'||gate.shape==='xor'){
+    bp=`M${bx},6 Q40,6 60,22 Q40,38 ${bx},38 Q30,22 ${bx},6 Z`; tipX=60;
+    if(gate.shape==='xor') ec=`<path d="M${bx-5},6 Q${bx+5},22 ${bx-5},38" fill="none" stroke="${S}" stroke-width="2"/>`;
   }
-
-  // Líneas de entrada
-  const inLines = inputs === 1
-    ? `<line x1="4" y1="22" x2="${bodyStartX}" y2="22" stroke="${S}" stroke-width="2"/>
-       <text x="2" y="14" font-size="9" fill="#8b93a7" font-family="monospace">A</text>`
-    : `<line x1="4" y1="12" x2="${bodyStartX}" y2="12" stroke="${S}" stroke-width="2"/>
-       <line x1="4" y1="32" x2="${bodyStartX}" y2="32" stroke="${S}" stroke-width="2"/>
-       <text x="2" y="9" font-size="9" fill="#8b93a7" font-family="monospace">A</text>
-       <text x="2" y="41" font-size="9" fill="#8b93a7" font-family="monospace">B</text>`;
-
-  // Salida: burbuja si es compuerta inversora
-  const outLine = gate.inv
-    ? `<circle cx="${tipX+4}" cy="22" r="3.2" fill="#12141a" stroke="${S}" stroke-width="2"/>
-       <line x1="${tipX+7.2}" y1="22" x2="86" y2="22" stroke="${S}" stroke-width="2"/>`
-    : `<line x1="${tipX}" y1="22" x2="86" y2="22" stroke="${S}" stroke-width="2"/>`;
-
-  return `<svg viewBox="0 0 90 44" class="gate-svg">
-    ${inLines}
-    ${extraCurve}
-    <path d="${bodyPath}" fill="none" stroke="${S}" stroke-width="2" stroke-linejoin="round"/>
-    ${outLine}
-    <text x="87" y="19" font-size="9" fill="#8b93a7" font-family="monospace" text-anchor="end">Q</text>
-  </svg>`;
+  const inL=gate.inputs===1
+    ?`<line x1="4" y1="22" x2="${bx}" y2="22" stroke="${S}" stroke-width="2"/><text x="2" y="14" font-size="9" fill="#8b93a7" font-family="monospace">A</text>`
+    :`<line x1="4" y1="12" x2="${bx}" y2="12" stroke="${S}" stroke-width="2"/><line x1="4" y1="32" x2="${bx}" y2="32" stroke="${S}" stroke-width="2"/><text x="2" y="9" font-size="9" fill="#8b93a7" font-family="monospace">A</text><text x="2" y="41" font-size="9" fill="#8b93a7" font-family="monospace">B</text>`;
+  const outL=gate.inv
+    ?`<circle cx="${tipX+4}" cy="22" r="3.2" fill="#12141a" stroke="${S}" stroke-width="2"/><line x1="${tipX+7.2}" y1="22" x2="86" y2="22" stroke="${S}" stroke-width="2"/>`
+    :`<line x1="${tipX}" y1="22" x2="86" y2="22" stroke="${S}" stroke-width="2"/>`;
+  return `<svg viewBox="0 0 90 44" class="gate-svg">${inL}${ec}<path d="${bp}" fill="none" stroke="${S}" stroke-width="2" stroke-linejoin="round"/>${outL}<text x="87" y="19" font-size="9" fill="#8b93a7" font-family="monospace" text-anchor="end">Q</text></svg>`;
 }
 
-const grid = document.getElementById('gateGrid');
-
-GATES.forEach(gate => {
-  const state = { a: 0, b: 0 };
-
-  const card = document.createElement('div');
-  card.className = 'gate-card';
-
-  const title = document.createElement('h3');
-  title.textContent = gate.name;
-  card.appendChild(title);
-
-  const formula = document.createElement('div');
-  formula.className = 'gate-formula';
-  formula.textContent = gate.formula;
-  card.appendChild(formula);
-
-  const svgWrap = document.createElement('div');
-  svgWrap.className = 'gate-svg-wrap';
-  svgWrap.innerHTML = gateSvg(gate);
-  card.appendChild(svgWrap);
-
-  const toggles = document.createElement('div');
-  toggles.className = 'gate-toggles';
-
-  function makeToggle(labelText, key){
-    const wrap = document.createElement('div');
-    wrap.className = 'toggle-wrap';
-    const lbl = document.createElement('span');
-    lbl.className = 'toggle-lbl';
-    lbl.textContent = labelText;
-    const btn = document.createElement('button');
-    btn.className = 'toggle-btn';
-    btn.textContent = state[key];
-    btn.addEventListener('click', () => {
-      state[key] = state[key] ? 0 : 1;
-      btn.textContent = state[key];
-      btn.classList.toggle('on', !!state[key]);
-      update();
-    });
-    wrap.appendChild(lbl);
-    wrap.appendChild(btn);
-    return wrap;
+const gateGrid = document.getElementById('gateGrid');
+GATES.forEach(gate=>{
+  const st={a:0,b:0};
+  const card=document.createElement('div'); card.className='gate-card';
+  card.innerHTML=`<h3>${gate.name}</h3><div class="gate-formula">${gate.formula}</div><div class="gate-svg-wrap">${gateSvg(gate)}</div>`;
+  const togs=document.createElement('div'); togs.className='gate-toggles';
+  function mkTog(lbl,key){
+    const w=document.createElement('div'); w.className='toggle-wrap';
+    const l=document.createElement('span'); l.className='toggle-lbl'; l.textContent=lbl;
+    const b=document.createElement('button'); b.className='toggle-btn'; b.textContent=st[key];
+    b.addEventListener('click',()=>{ st[key]=st[key]?0:1; b.textContent=st[key]; b.classList.toggle('on',!!st[key]); upd(); });
+    w.appendChild(l); w.appendChild(b); return w;
   }
-
-  toggles.appendChild(makeToggle('A', 'a'));
-  if(gate.inputs === 2){
-    toggles.appendChild(makeToggle('B', 'b'));
-  }
-  card.appendChild(toggles);
-
-  const output = document.createElement('div');
-  output.className = 'gate-output';
-  const led = document.createElement('div');
-  led.className = 'led';
-  const outLbl = document.createElement('span');
-  outLbl.className = 'gate-out-lbl';
-  outLbl.textContent = 'Q = 0';
-  output.appendChild(led);
-  output.appendChild(outLbl);
-  card.appendChild(output);
-
-  function update(){
-    const q = gate.fn(state.a, state.b);
-    led.classList.toggle('on', !!q);
-    outLbl.textContent = 'Q = ' + q;
-  }
-
-  update();
-  grid.appendChild(card);
+  togs.appendChild(mkTog('A','a'));
+  if(gate.inputs===2) togs.appendChild(mkTog('B','b'));
+  card.appendChild(togs);
+  const out=document.createElement('div'); out.className='gate-output';
+  const led=document.createElement('div'); led.className='led';
+  const lbl=document.createElement('span'); lbl.className='gate-out-lbl'; lbl.textContent='Q = 0';
+  out.appendChild(led); out.appendChild(lbl); card.appendChild(out);
+  function upd(){ const q=gate.fn(st.a,st.b); led.classList.toggle('on',!!q); lbl.textContent='Q = '+q; }
+  upd();
+  gateGrid.appendChild(card);
 });
+
+/* ══════════════════════════════════════════════
+   QUIZ
+══════════════════════════════════════════════ */
+const QUIZ_DATA = [
+  { q:"¿En qué nivel de la Pirámide CIM se ubica el PLC (Controlador Lógico Programable)?",
+    opts:["Nivel 1 — Control","Nivel 0 — Campo","Nivel 2 — Supervisión","Nivel 3 — MES"],
+    ans:0, exp:"El PLC pertenece al Nivel 1 (Control). Ejecuta algoritmos en tiempo real, recibe señales del campo y controla los actuadores." },
+  { q:"¿En qué nivel de la Pirámide CIM se ubican los sensores y actuadores?",
+    opts:["Nivel 0 — Campo / Proceso","Nivel 1 — Control","Nivel 2 — Supervisión","Nivel 4 — ERP"],
+    ans:0, exp:"El Nivel 0 es la interfaz física directa con el proceso. Los sensores miden magnitudes físicas y los actuadores ejecutan acciones mecánicas." },
+  { q:"¿Cuál es la representación correcta de 53₁₀ en binario natural de 8 bits?",
+    opts:["00110101","00110100","01010011","00101101"],
+    ans:0, exp:"53 = 32+16+4+1 = 2⁵+2⁴+2²+2⁰ → posiciones 5,4,2,0 activas → 00110101." },
+  { q:"¿Cuánto es 53₁₀ en hexadecimal?",
+    opts:["0x35","0x53","0x3A","0x25"],
+    ans:0, exp:"00110101 en nibbles: 0011→3 y 0101→5 → 0x35. Verificación: (3×16)+5=53 ✓" },
+  { q:"¿Cuál es la representación de 53₁₀ en código BCD Natural (8421)?",
+    opts:["0101 0011","0011 0101","0100 0011","0101 0110"],
+    ans:0, exp:"BCD codifica cada dígito decimal por separado: 5→0101, 3→0011 → 0101 0011. No es lo mismo que binario directo." },
+  { q:"Simplificando F(A,B,C) = A·B̄ + Ā·B̄ + A·B·C, la forma mínima es:",
+    opts:["F = B̄ + A·C","F = B̄ + A","F = Ā + B·C","F = A + B̄·C"],
+    ans:0, exp:"Paso 1: (A+Ā)·B̄ = B̄. Paso 2: B̄ + A·B·C → absorción variante → B̄ + A·C." },
+  { q:"En la tabla de verdad de F = B̄ + A·C, ¿cuál es el valor de F para (A=1, B=1, C=1)?",
+    opts:["1","0","depende de la entrada","indeterminado"],
+    ans:0, exp:"B̄=0, A·C=1·1=1 → F=0+1=1. Este es el minitérmino m7, que sí activa F." },
+  { q:"En un Mapa de Karnaugh de 3 variables, ¿por qué las columnas BC van en orden 00, 01, 11, 10 (código Gray)?",
+    opts:["Para que columnas adyacentes difieran solo en 1 bit, garantizando adyacencia lógica","Para facilitar el conteo en orden numérico","Es solo una convención arbitraria","Para que el mapa sea más compacto"],
+    ans:0, exp:"El código Gray asegura adyacencia: celdas vecinas cambian un solo bit. Eso es la condición para poder agrupar minitérminos y eliminar variables." },
+  { q:"¿Cuál es la expresión mínima SOP de F(A,B,C) = Σm(1,3,4,5,7)?",
+    opts:["F = C + A·B̄","F = A + C","F = B + A·C","F = C · (A + B̄)"],
+    ans:0, exp:"Grupo 1 (cuarteto m1,m3,m5,m7): C=1 en todos → término C. Grupo 2 (dupla m4,m5): A=1, B=0 → término A·B̄. SOP: C + A·B̄." },
+  { q:"¿Cuál es la diferencia fundamental entre un circuito combinacional y uno secuencial?",
+    opts:["El secuencial tiene memoria (depende del estado anterior); el combinacional no","El combinacional usa flip-flops; el secuencial usa compuertas","El secuencial es más rápido que el combinacional","No hay diferencia, es solo una cuestión de nomenclatura"],
+    ans:0, exp:"Combinacional: salida depende solo de entradas actuales. Secuencial: salida depende de entradas actuales Y del estado anterior (tiene memoria interna)." },
+  { q:"Según ISA 5.1, ¿qué representa el tag PIC-204?",
+    opts:["Controlador Indicador de Presión, lazo 204","Indicador de Presión de Caudal, lazo 204","Controlador de Temperatura, lazo 204","Controlador de Nivel, lazo 204"],
+    ans:0, exp:"P=Presión, I=Indicador, C=Controlador → PIC = Controlador Indicador de Presión. El número 204 es el lazo al que pertenece." },
+  { q:"¿Qué tipo de línea representa una señal eléctrica (4-20 mA) en un diagrama P&ID según ISA 5.1?",
+    opts:["Línea discontinua a guiones (- - - - -)","Línea continua gruesa","Línea con barra doble oblicua (── // ──)","Línea doble continua"],
+    ans:0, exp:"La línea de trazos discontinuos representa señal eléctrica. La continua gruesa es tubería de proceso. La de barras oblicuas es señal neumática." },
+  { q:"¿Qué función cumple el contacto auxiliar NA 13-14 del contactor KM1 conectado en paralelo con S1?",
+    opts:["Auto-retención: mantiene la bobina energizada después de soltar S1","Protección contra sobrecarga térmica","Indica el estado de la bobina","Bloquea el arranque del motor"],
+    ans:0, exp:"Es la función de memoria eléctrica. Al energizarse KM1, el 13-14 se cierra y crea un camino paralelo a S1 para mantener la bobina energizada indefinidamente." },
+  { q:"¿Qué contacto del relé térmico se conecta en serie en el circuito de mando?",
+    opts:["95-96 (Normalmente Cerrado, NC)","97-98 (Normalmente Abierto, NA)","13-14 (NA del contactor)","A1-A2 (bobina)"],
+    ans:0, exp:"El 95-96 es NC y va en serie antes de la botonera. En caso de sobrecarga se abre, cortando la bobina de KM1. El 97-98 (NA) se usa para alarma." },
+  { q:"Según IEC 60947, ¿cuáles son los bornes de la bobina electromagnética del contactor KM1?",
+    opts:["A1 y A2","1 y 2","13 y 14","95 y 96"],
+    ans:0, exp:"Los bornes A1 (+) y A2 (−) son específicos de la bobina electromagnética de cualquier contactor según IEC 60947. Los bornes 1-3-5 son los de potencia entrada." },
+];
+
+let qIdx=0, qScore=0, qShuffled=[];
+
+function shuffle(arr){ return arr.slice().sort(()=>Math.random()-.5); }
+
+function quizStart(){
+  qIdx=0; qScore=0;
+  qShuffled=shuffle(QUIZ_DATA);
+  document.getElementById('quizScore').classList.remove('show');
+  document.getElementById('quizContent').style.display='block';
+  quizRender();
+}
+
+function quizRender(){
+  const q=qShuffled[qIdx];
+  document.getElementById('qNum').textContent=`Pregunta ${qIdx+1}`;
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('qpLabel').textContent=`${qIdx+1} / ${qShuffled.length}`;
+  document.getElementById('qpFill').style.width=`${(qIdx/qShuffled.length)*100}%`;
+  const fb=document.getElementById('qFeedback'); fb.className='quiz-feedback'; fb.textContent='';
+  const nxt=document.getElementById('qNext'); nxt.className='quiz-next';
+  const optsEl=document.getElementById('qOptions'); optsEl.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const b=document.createElement('button'); b.className='quiz-opt'; b.textContent=opt;
+    b.addEventListener('click',()=>quizAnswer(i, b));
+    optsEl.appendChild(b);
+  });
+}
+
+function quizAnswer(chosen, btn){
+  const q=qShuffled[qIdx];
+  document.querySelectorAll('.quiz-opt').forEach(b=>b.disabled=true);
+  const correct=chosen===q.ans;
+  if(correct){ qScore++; btn.classList.add('correct'); }
+  else{
+    btn.classList.add('wrong');
+    document.querySelectorAll('.quiz-opt')[q.ans].classList.add('correct');
+  }
+  const fb=document.getElementById('qFeedback');
+  fb.className='quiz-feedback show '+(correct?'ok':'fail');
+  fb.innerHTML=(correct?'✅ ':'❌ ')+q.exp;
+  document.getElementById('qNext').className='quiz-next show';
+}
+
+function quizNext(){
+  qIdx++;
+  if(qIdx>=qShuffled.length){
+    document.getElementById('quizContent').style.display='none';
+    const sc=document.getElementById('quizScore'); sc.classList.add('show');
+    document.getElementById('scoreBig').textContent=`${qScore}/${qShuffled.length}`;
+    const pct=Math.round(qScore/qShuffled.length*100);
+    const msg=pct>=80?'🎉 Excelente — aprobado con holgura!':pct>=60?'👍 Bien — repasá los que fallaste':pct>=40?'📚 Regular — a repasar la teoría':'💪 Seguí estudiando — podés mejorarlo';
+    document.getElementById('scoreLabel').textContent=`${pct}% — ${msg}`;
+  } else quizRender();
+}
+
+quizStart();
+
+/* ══════════════════════════════════════════════
+   JUEGO 1: CONVERSIÓN DE BASES
+══════════════════════════════════════════════ */
+let convInterval=null, convTimeLeft=15, convRoundN=1, convScoreN=0, convCorrectAns='', convActive=false;
+
+const CONV_CHALLENGES=[
+  {type:'dec2bin', label:'a Binario (sin espacios)', gen:()=>{const n=Math.floor(Math.random()*128)+1; return {num:n+'₁₀', ans:n.toString(2).padStart(8,'0'), hint:n+' en decimal'};} },
+  {type:'dec2hex', label:'a Hexadecimal (sin 0x)', gen:()=>{const n=Math.floor(Math.random()*256)+1; return {num:n+'₁₀', ans:n.toString(16).toUpperCase(), hint:n+' en decimal'};} },
+  {type:'bin2dec', label:'a Decimal', gen:()=>{const n=Math.floor(Math.random()*128)+1; const b=n.toString(2).padStart(8,'0'); return {num:b+'₂', ans:n.toString(), hint:'binario '+b};} },
+  {type:'hex2dec', label:'a Decimal', gen:()=>{const n=Math.floor(Math.random()*256)+1; return {num:'0x'+n.toString(16).toUpperCase(), ans:n.toString(), hint:n.toString(16).toUpperCase()+' en hex'};} },
+];
+
+function convStart(){
+  convRoundN=1; convScoreN=0; convActive=false;
+  convNextRound();
+}
+
+function convNextRound(){
+  if(convRoundN>10){ convEnd(); return; }
+  if(convInterval) clearInterval(convInterval);
+  const ch=CONV_CHALLENGES[Math.floor(Math.random()*CONV_CHALLENGES.length)];
+  const data=ch.gen();
+  convCorrectAns=data.ans;
+  convActive=true;
+  document.getElementById('convNum').textContent=data.num;
+  document.getElementById('convTarget').textContent='Convertir '+(ch.label);
+  document.getElementById('convInput').value='';
+  document.getElementById('convInput').className='conv-input';
+  document.getElementById('convResult').textContent='';
+  document.getElementById('convResult').className='conv-result';
+  document.getElementById('convScore').textContent=convScoreN;
+  document.getElementById('convRound').textContent=convRoundN;
+  convTimeLeft=15;
+  document.getElementById('convTimer').textContent=convTimeLeft;
+  convInterval=setInterval(()=>{
+    convTimeLeft--;
+    document.getElementById('convTimer').textContent=convTimeLeft;
+    if(convTimeLeft<=0){ clearInterval(convInterval); convTimeout(data.ans); }
+  },1000);
+}
+
+function convInputChange(){
+  document.getElementById('convInput').className='conv-input';
+}
+
+function convCheck(){
+  if(!convActive) return;
+  clearInterval(convInterval);
+  convActive=false;
+  const val=document.getElementById('convInput').value.trim().replace(/\s/g,'').toUpperCase();
+  const correct=val===convCorrectAns.replace(/\s/g,'').toUpperCase();
+  if(correct){
+    convScoreN+=10;
+    document.getElementById('convInput').className='conv-input ok';
+    document.getElementById('convResult').textContent='✅ ¡Correcto! +10 pts';
+    document.getElementById('convResult').className='conv-result ok';
+  } else {
+    document.getElementById('convInput').className='conv-input fail';
+    document.getElementById('convResult').textContent='❌ Era: '+convCorrectAns;
+    document.getElementById('convResult').className='conv-result fail';
+  }
+  document.getElementById('convScore').textContent=convScoreN;
+  convRoundN++;
+  setTimeout(convNextRound, 1800);
+}
+
+function convTimeout(ans){
+  convActive=false;
+  document.getElementById('convInput').className='conv-input fail';
+  document.getElementById('convResult').textContent='⏰ Tiempo! Era: '+ans;
+  document.getElementById('convResult').className='conv-result fail';
+  convRoundN++;
+  setTimeout(convNextRound, 2000);
+}
+
+function convEnd(){
+  document.getElementById('convNum').textContent='🏁 Fin!';
+  document.getElementById('convTarget').textContent=`Puntaje final: ${convScoreN}/100`;
+  document.getElementById('convInput').style.display='none';
+  document.getElementById('convResult').textContent='';
+}
+
+/* ══════════════════════════════════════════════
+   JUEGO 2: TAGS ISA 5.1
+══════════════════════════════════════════════ */
+const ISA_BANK = [
+  { tag:'TT-101', correct:'Transmisor de Temperatura — lazo 101', wrongs:['Indicador de Temperatura — lazo 101','Controlador de Presión — lazo 101','Válvula de Temperatura — lazo 101'] },
+  { tag:'PIC-204', correct:'Controlador Indicador de Presión — lazo 204', wrongs:['Transmisor de Presión — lazo 204','Switch de Presión Alta — lazo 204','Indicador de Caudal — lazo 204'] },
+  { tag:'FCV-302', correct:'Válvula de Control de Caudal — lazo 302', wrongs:['Transmisor de Flujo — lazo 302','Controlador de Caudal — lazo 302','Switch de Caudal Bajo — lazo 302'] },
+  { tag:'LSH-105', correct:'Switch de Nivel Alto — lazo 105', wrongs:['Transmisor de Nivel — lazo 105','Controlador de Nivel — lazo 105','Switch de Nivel Bajo — lazo 105'] },
+  { tag:'FT-211', correct:'Transmisor de Caudal — lazo 211', wrongs:['Indicador de Flujo — lazo 211','Controlador de Caudal — lazo 211','Switch de Flujo — lazo 211'] },
+  { tag:'TIC-305', correct:'Controlador Indicador de Temperatura — lazo 305', wrongs:['Transmisor de Temperatura — lazo 305','Switch de Temperatura Alta — lazo 305','Indicador de Temperatura — lazo 305'] },
+  { tag:'LT-401', correct:'Transmisor de Nivel — lazo 401', wrongs:['Indicador de Nivel — lazo 401','Switch de Nivel — lazo 401','Controlador de Nivel — lazo 401'] },
+  { tag:'PCV-503', correct:'Válvula de Control de Presión — lazo 503', wrongs:['Controlador de Presión — lazo 503','Transmisor de Presión — lazo 503','Indicador de Presión — lazo 503'] },
+  { tag:'TSH-102', correct:'Switch de Temperatura Alta — lazo 102', wrongs:['Transmisor de Temperatura Alta — lazo 102','Switch de Temperatura Baja — lazo 102','Controlador de Temperatura Alta — lazo 102'] },
+  { tag:'FIC-601', correct:'Controlador Indicador de Caudal — lazo 601', wrongs:['Transmisor de Flujo — lazo 601','Switch de Caudal — lazo 601','Indicador de Flujo — lazo 601'] },
+];
+
+let isaIdx=0, isaScoreN=0, isaRoundN=1, isaUsed=[], isaShuf=[];
+
+function isaStart(){
+  isaRoundN=1; isaScoreN=0; isaUsed=[];
+  isaShuf=shuffle(ISA_BANK);
+  isaNextQ(true);
+}
+
+function isaNextQ(first){
+  document.getElementById('isaNext').className='isa-next';
+  if(!first && isaRoundN>10){ document.getElementById('isaTag').textContent='🏁 Fin: '+isaScoreN+'/100'; document.getElementById('isaOpts').innerHTML=''; return; }
+  const item=isaShuf[((isaRoundN-1)%isaShuf.length)];
+  document.getElementById('isaTag').textContent=item.tag;
+  document.getElementById('isaScore').textContent=isaScoreN;
+  document.getElementById('isaRound').textContent=isaRoundN;
+  const opts=shuffle([item.correct,...item.wrongs.slice(0,3)]);
+  const optsEl=document.getElementById('isaOpts'); optsEl.innerHTML='';
+  opts.forEach(opt=>{
+    const b=document.createElement('button'); b.className='isa-opt'; b.textContent=opt;
+    b.addEventListener('click',()=>{
+      document.querySelectorAll('.isa-opt').forEach(x=>x.disabled=true);
+      if(opt===item.correct){ b.classList.add('correct'); isaScoreN+=10; document.getElementById('isaScore').textContent=isaScoreN; }
+      else{
+        b.classList.add('wrong');
+        document.querySelectorAll('.isa-opt').forEach(x=>{ if(x.textContent===item.correct) x.classList.add('correct'); });
+      }
+      document.getElementById('isaNext').className='isa-next show';
+      isaRoundN++;
+    });
+    optsEl.appendChild(b);
+  });
+}
+
+isaStart();
+
+/* ══════════════════════════════════════════════
+   JUEGO 3: TABLA DE VERDAD
+══════════════════════════════════════════════ */
+const TV_FUNS=[
+  { label:'F = B̄ + A·C', fn:(a,b,c)=> (!b || (a&&c)) ?1:0 },
+  { label:'F = A·B + C', fn:(a,b,c)=> ((a&&b)||c) ?1:0 },
+  { label:'F = Ā·B + A·B̄', fn:(a,b,c)=> ((!a&&b)||(a&&!b)) ?1:0 },
+  { label:'F = C + A·B̄', fn:(a,b,c)=> (c||(a&&!b)) ?1:0 },
+  { label:'F = A + B·C', fn:(a,b,c)=> (a||(b&&c)) ?1:0 },
+];
+
+let tvFunIdx=0, tvScoreN=0, tvRoundN=1, tvCorrect=[], tvCells=[];
+
+function tvStart(){
+  tvScoreN=0; tvRoundN=1;
+  tvLoadRound();
+}
+
+function tvLoadRound(){
+  if(tvRoundN>5){ document.getElementById('tvFn').textContent='🏁 Fin: '+tvScoreN+'/40'; document.getElementById('tvTable').innerHTML=''; return; }
+  const fun=TV_FUNS[(tvRoundN-1)%TV_FUNS.length];
+  document.getElementById('tvFn').textContent=fun.label;
+  document.getElementById('tvScore').textContent=tvScoreN;
+  document.getElementById('tvRound').textContent=tvRoundN;
+  document.getElementById('tvFeedback').textContent='';
+  document.getElementById('tvFeedback').className='tv-feedback';
+  tvCorrect=[];
+  const combos=[[0,0,0],[0,0,1],[0,1,0],[0,1,1],[1,0,0],[1,0,1],[1,1,0],[1,1,1]];
+  combos.forEach(([a,b,c])=>tvCorrect.push(fun.fn(a,b,c)));
+
+  const tbl=document.getElementById('tvTable');
+  tbl.innerHTML=`<thead><tr><th>A</th><th>B</th><th>C</th><th>F</th></tr></thead><tbody>${combos.map(([a,b,c],i)=>`<tr><td>${a}</td><td>${b}</td><td>${c}</td><td><button class="tv-cell-btn" data-idx="${i}" onclick="tvToggle(this)">0</button></td></tr>`).join('')}</tbody>`;
+  tvCells=Array.from(tbl.querySelectorAll('.tv-cell-btn')).map(b=>({el:b,val:0}));
+}
+
+function tvToggle(btn){
+  const idx=parseInt(btn.dataset.idx);
+  tvCells[idx].val=tvCells[idx].val?0:1;
+  btn.textContent=tvCells[idx].val;
+  btn.className='tv-cell-btn'+(tvCells[idx].val?' set-1':'');
+}
+
+function tvCheck(){
+  let ok=0;
+  tvCells.forEach((c,i)=>{
+    const correct=c.val===tvCorrect[i];
+    c.el.disabled=true;
+    c.el.className='tv-cell-btn '+(correct?'correct':'wrong');
+    if(correct) ok++;
+  });
+  const pts=ok*5;
+  tvScoreN+=pts;
+  document.getElementById('tvScore').textContent=tvScoreN;
+  const fb=document.getElementById('tvFeedback');
+  fb.className='tv-feedback';
+  fb.style.color=ok===8?'#15803d':'#b91c1c';
+  fb.textContent=ok===8?`✅ ¡Perfecto! +${pts} pts`:`❌ ${ok}/8 correctas (+${pts} pts). Los rojos son los errores.`;
+  tvRoundN++;
+  setTimeout(tvLoadRound, 2500);
+}
+
+tvStart();
 </script>
 </body>
 </html>

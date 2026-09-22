@@ -38,16 +38,6 @@ nav{position:sticky;top:0;z-index:200;background:var(--main);display:flex;align-
 .tab-btn{padding:.75rem 1rem;border:none;background:transparent;color:rgba(255,255,255,.75);font-size:.83rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s;font-family:inherit}
 .tab-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
 .tab-btn.active{color:#fff;border-bottom-color:#a5b4fc;background:rgba(255,255,255,.08)}
-/* HAMBURGER */
-.hamburger{display:none;margin-left:auto;padding:.7rem 1rem;background:transparent;border:none;cursor:pointer;color:#fff;font-size:1.35rem;line-height:1;flex-shrink:0}
-@media(max-width:640px){
-  nav{flex-wrap:wrap;position:sticky}
-  .hamburger{display:flex;align-items:center}
-  .tabs{display:none;width:100%;flex-direction:column;border-top:1px solid rgba(255,255,255,.12);overflow:hidden}
-  .tabs.open{display:flex}
-  .tab-btn{border-bottom:none;border-left:3px solid transparent;text-align:left;padding:.8rem 1.2rem;font-size:.9rem}
-  .tab-btn.active{border-left-color:#a5b4fc;border-bottom:none}
-}
 /* hamburger */
 .burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;padding:8px;background:transparent;border:none;cursor:pointer;margin-left:auto}
 .burger span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:.25s}

@@ -38,6 +38,30 @@ nav{position:sticky;top:0;z-index:200;background:var(--main);display:flex;align-
 .tab-btn{padding:.75rem 1rem;border:none;background:transparent;color:rgba(255,255,255,.75);font-size:.83rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s;font-family:inherit}
 .tab-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
 .tab-btn.active{color:#fff;border-bottom-color:#a5b4fc;background:rgba(255,255,255,.08)}
+/* HAMBURGER */
+.hamburger{display:none;margin-left:auto;padding:.7rem 1rem;background:transparent;border:none;cursor:pointer;color:#fff;font-size:1.35rem;line-height:1;flex-shrink:0}
+@media(max-width:640px){
+  nav{flex-wrap:wrap;position:sticky}
+  .hamburger{display:flex;align-items:center}
+  .tabs{display:none;width:100%;flex-direction:column;border-top:1px solid rgba(255,255,255,.12);overflow:hidden}
+  .tabs.open{display:flex}
+  .tab-btn{border-bottom:none;border-left:3px solid transparent;text-align:left;padding:.8rem 1.2rem;font-size:.9rem}
+  .tab-btn.active{border-left-color:#a5b4fc;border-bottom:none}
+}
+/* hamburger */
+.burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;padding:8px;background:transparent;border:none;cursor:pointer;margin-left:auto}
+.burger span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:.25s}
+.burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+@media(max-width:700px){
+  .tabs{display:none;flex-direction:column;width:100%;order:3;background:var(--main);border-top:1px solid rgba(255,255,255,.15)}
+  .tabs.open{display:flex}
+  .tab-btn{border-bottom:none;border-left:3px solid transparent;text-align:left;padding:.7rem 1.2rem}
+  .tab-btn.active{border-left-color:#a5b4fc;border-bottom:none}
+  .burger{display:flex}
+  .brand{border-right:none}
+}
 
 /* HERO */
 .hero{background:linear-gradient(135deg,#1e1b4b 0%,var(--main-lt) 100%);color:#fff;text-align:center;padding:2.5rem 1rem 2rem}
@@ -240,7 +264,10 @@ footer a{color:var(--main)}
 
 <nav>
   <div class="brand">🎛️ Sistemas de Control</div>
-  <div class="tabs">
+  <button class="burger" id="burger-btn" aria-label="Menú" onclick="toggleBurger()">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="tabs" id="main-tabs">
     <button class="tab-btn active" id="tab-c1" onclick="showTab('c1')">📖 Clase 1</button>
     <button class="tab-btn" onclick="showTab('c2')">🧮 Clase 2</button>
     <button class="tab-btn" onclick="showTab('c3')">🔁 Clase 3</button>
@@ -251,6 +278,7 @@ footer a{color:var(--main)}
     <button class="tab-btn" onclick="showTab('quiz')">🏅 Insignias · Quiz</button>
     <button class="tab-btn" onclick="goToEulerExample()">⚡ RC + Euler</button>
     <a class="tab-btn" href="simulador-encoder.html" style="text-decoration:none">⚙️ Encoder</a>
+    <a class="tab-btn" href="ejercicios-parcial.html" style="text-decoration:none">📝 Parcial</a>
   </div>
 </nav>
 
@@ -1546,10 +1574,21 @@ pause();</div>
 
 <script>
 /* ===================== NAV ===================== */
+function toggleBurger(){
+  var btn=document.getElementById('burger-btn');
+  var tabs=document.getElementById('main-tabs');
+  btn.classList.toggle('open');
+  tabs.classList.toggle('open');
+}
 function showTab(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
+  // cerrar menú mobile si está abierto
+  var btn=document.getElementById('burger-btn');
+  var tabs=document.getElementById('main-tabs');
+  if(btn&&tabs){btn.classList.remove('open');tabs.classList.remove('open');}
+
   var trigger=arguments[1]||(typeof event!=='undefined'?event.target:null);
   if(trigger) trigger.classList.add('active');
   if(id==='quiz'){ renderBadges(); }

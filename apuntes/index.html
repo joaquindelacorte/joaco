@@ -15,10 +15,11 @@
     --surface-2: #1e1e2e;
     --ink: #e2e8f0;
     --ink-2: #94a3b8;
-    --amber: #f59e0b;
     --teal: #14b8a6;
-    --indigo: #6366f1;
     --border: rgba(255,255,255,.08);
+    --disabled-bg: #0f0f17;
+    --disabled-border: rgba(255,255,255,.04);
+    --disabled-text: #2d3748;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -95,25 +96,63 @@
     max-width: 540px;
   }
 
-  /* ── MATERIAS SECTION ── */
-  .materias {
+  /* ── CUATRIMESTRES ── */
+  .cuatrimestres {
     padding: 0 1.5rem 5rem;
     max-width: 1100px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
   }
+
+  /* ── CUATRIMESTRE BLOCK ── */
+  .cuatrimestre__header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: .6rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .cuatrimestre__label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    background: rgba(255,255,255,.05);
+    padding: .2rem .6rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .cuatrimestre__año {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--ink);
+  }
+  .cuatrimestre__count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .72rem;
+    color: var(--teal);
+    margin-left: auto;
+  }
+
+  /* ── GRID ── */
   .materias-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: .75rem;
   }
-  @media (min-width: 640px) {
+  @media (min-width: 600px) {
     .materias-grid { grid-template-columns: repeat(2, 1fr); }
   }
-  @media (min-width: 1024px) {
+  @media (min-width: 900px) {
     .materias-grid { grid-template-columns: repeat(3, 1fr); }
   }
 
-  /* ── CARD ── */
+  /* ── CARD ACTIVA ── */
   .materia-card {
     border-left: 3px solid var(--acento);
     background: var(--surface);
@@ -128,7 +167,7 @@
   .materia-card h3 {
     font-family: 'Archivo', sans-serif;
     font-weight: 600;
-    font-size: 1rem;
+    font-size: .95rem;
     color: var(--acento);
     margin-bottom: .25rem;
   }
@@ -157,6 +196,28 @@
     background: color-mix(in srgb, var(--acento) 26%, transparent);
   }
 
+  /* ── CARD DESACTIVADA ── */
+  .materia-card--disabled {
+    border-left: 3px solid rgba(255,255,255,.06);
+    background: var(--disabled-bg);
+    border-radius: 10px;
+    padding: 1.1rem 1.25rem 1.25rem;
+    opacity: .5;
+  }
+  .materia-card--disabled h3 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 600;
+    font-size: .95rem;
+    color: #374151;
+    margin-bottom: .25rem;
+  }
+  .materia-card--disabled .count {
+    font-size: .72rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: #1f2937;
+    margin-bottom: 0;
+  }
+
   /* ── FOOTER ── */
   .site-footer {
     text-align: center;
@@ -181,111 +242,228 @@
 <section class="hero">
   <div class="chip chip--teal">Carrera</div>
   <h1>Cuaderno de la facultad</h1>
-  <p>Automatización y Control · Universidad de Pilar. Teoría, ejercicios y simuladores por materia.</p>
+  <p>Automatización y Control · Universidad Nacional de Pilar. 5 cuatrimestres · 2 años y medio.</p>
 </section>
 
-<!-- MATERIAS GRID -->
-<section class="materias">
-  <div class="materias-grid">
+<!-- CUATRIMESTRES -->
+<section class="cuatrimestres">
 
-    <!-- Análisis Matemático -->
-    <div class="materia-card" style="--acento: #7c3aed">
-      <h3>Análisis Matemático</h3>
-      <p class="count">8 apuntes</p>
-      <div class="materia-links">
-        <a href="../analisis-matematico/teoria-1.html">Teoría 1</a>
-        <a href="../analisis-matematico/teoria-2.html">Teoría 2</a>
-        <a href="../analisis-matematico/teoria-3.html">Teoría 3</a>
-        <a href="../analisis-matematico/regla-de-la-cadena.html">Regla de la cadena</a>
-        <a href="../analisis-matematico/parcial2.html">Parcial 2</a>
-        <a href="../analisis-matematico/parcial2-modelo.html">Modelo P2</a>
-        <a href="../analisis-matematico/parcial2-express.html">Express P2</a>
-        <a href="../analisis-matematico/parcial2-autoevaluacion.html">Autoevaluación</a>
+  <!-- ═══ 1° CUATRIMESTRE ═══ -->
+  <div class="cuatrimestre">
+    <div class="cuatrimestre__header">
+      <span class="cuatrimestre__label">1° Cuatrimestre</span>
+      <span class="cuatrimestre__año">1° Año</span>
+      <span class="cuatrimestre__count">sin apuntes aún</span>
+    </div>
+    <div class="materias-grid">
+      <div class="materia-card--disabled">
+        <h3>Introducción a la automatización</h3>
+        <p class="count">sin apuntes</p>
+      </div>
+      <div class="materia-card--disabled">
+        <h3>Elementos de matemática</h3>
+        <p class="count">sin apuntes</p>
+      </div>
+      <div class="materia-card--disabled">
+        <h3>Fundamentos de la programación</h3>
+        <p class="count">sin apuntes</p>
+      </div>
+      <div class="materia-card--disabled">
+        <h3>Lengua extranjera</h3>
+        <p class="count">sin apuntes</p>
+      </div>
+      <div class="materia-card--disabled">
+        <h3>Introducción a la cultura digital</h3>
+        <p class="count">sin apuntes</p>
       </div>
     </div>
-
-    <!-- Álgebra Lineal -->
-    <div class="materia-card" style="--acento: #2563eb">
-      <h3>Álgebra Lineal</h3>
-      <p class="count">2 apuntes</p>
-      <div class="materia-links">
-        <a href="../algebra-lineal/teoria.html">Teoría</a>
-        <a href="../algebra-lineal/teoria-unidad2.html">Unidad 2</a>
-      </div>
-    </div>
-
-    <!-- Electrotecnia -->
-    <div class="materia-card" style="--acento: #d97706">
-      <h3>Electrotecnia</h3>
-      <p class="count">1 apunte</p>
-      <div class="materia-links">
-        <a href="../electrotecnia/teoria.html">Teoría</a>
-      </div>
-    </div>
-
-    <!-- Estadística -->
-    <div class="materia-card" style="--acento: #059669">
-      <h3>Estadística</h3>
-      <p class="count">6 apuntes</p>
-      <div class="materia-links">
-        <a href="../estadistica/teoria.html">Teoría</a>
-        <a href="../estadistica/resumen.html">Resumen</a>
-        <a href="../estadistica/parcial1.html">Parcial 1</a>
-        <a href="../estadistica/parcial2.html">Parcial 2</a>
-        <a href="../estadistica/repaso-parcial2.html">Repaso P2</a>
-        <a href="../estadistica/simulacro-parcial2-explicado.html">Simulacro P2</a>
-      </div>
-    </div>
-
-    <!-- Hidráulica -->
-    <div class="materia-card" style="--acento: #0891b2">
-      <h3>Hidráulica</h3>
-      <p class="count">2 apuntes</p>
-      <div class="materia-links">
-        <a href="../hidraulica/teoria.html">Teoría</a>
-        <a href="../hidraulica/parcial2.html">Parcial 2</a>
-      </div>
-    </div>
-
-    <!-- Robótica I -->
-    <div class="materia-card" style="--acento: #dc2626">
-      <h3>Robótica I</h3>
-      <p class="count">1 apunte</p>
-      <div class="materia-links">
-        <a href="../robotica/teoria.html">Teoría</a>
-      </div>
-    </div>
-
-    <!-- Sistemas de Control -->
-    <div class="materia-card" style="--acento: #3730a3">
-      <h3>Sistemas de Control</h3>
-      <p class="count">3 apuntes</p>
-      <div class="materia-links">
-        <a href="../sistemas-control/teoria.html">Teoría</a>
-        <a href="../sistemas-control/simulador-encoder.html">Simulador Encoder</a>
-        <a href="../sistemas-control/pid-horno.html">PID Horno</a>
-      </div>
-    </div>
-
-    <!-- Automatización Industrial -->
-    <div class="materia-card" style="--acento: #16a34a">
-      <h3>Automatización Industrial</h3>
-      <p class="count">1 apunte</p>
-      <div class="materia-links">
-        <a href="../automatizacion-industrial/logica-digital.html">Lógica Digital</a>
-      </div>
-    </div>
-
-    <!-- Taller Sociocomunitario -->
-    <div class="materia-card" style="--acento: #0d9488">
-      <h3>Taller Sociocomunitario</h3>
-      <p class="count">1 apunte</p>
-      <div class="materia-links">
-        <a href="../taller-sociocomunitario/teoria.html">Teoría</a>
-      </div>
-    </div>
-
   </div>
+
+  <!-- ═══ 2° CUATRIMESTRE ═══ -->
+  <div class="cuatrimestre">
+    <div class="cuatrimestre__header">
+      <span class="cuatrimestre__label">2° Cuatrimestre</span>
+      <span class="cuatrimestre__año">1° Año</span>
+      <span class="cuatrimestre__count">sin apuntes aún</span>
+    </div>
+    <div class="materias-grid">
+      <div class="materia-card--disabled">
+        <h3>Mecánica de la robótica</h3>
+        <p class="count">sin apuntes</p>
+      </div>
+      <div class="materia-card--disabled">
+        <h3>Programación estructurada</h3>
+        <p class="count">sin apuntes</p>
+      </div>
+      <div class="materia-card--disabled">
+        <h3>Neumática</h3>
+        <p class="count">sin apuntes</p>
+      </div>
+      <div class="materia-card--disabled">
+        <h3>Sistemas de representación</h3>
+        <p class="count">sin apuntes</p>
+      </div>
+      <div class="materia-card--disabled">
+        <h3>Taller de escritura académica</h3>
+        <p class="count">sin apuntes</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 3° CUATRIMESTRE ═══ -->
+  <div class="cuatrimestre">
+    <div class="cuatrimestre__header">
+      <span class="cuatrimestre__label">3° Cuatrimestre</span>
+      <span class="cuatrimestre__año">2° Año</span>
+      <span class="cuatrimestre__count">5 materias con apuntes</span>
+    </div>
+    <div class="materias-grid">
+
+      <!-- Robótica I ✅ -->
+      <div class="materia-card" style="--acento: #dc2626">
+        <h3>Robótica I</h3>
+        <p class="count">1 apunte</p>
+        <div class="materia-links">
+          <a href="../robotica/teoria.html">Teoría</a>
+        </div>
+      </div>
+
+      <!-- Análisis Matemático I ✅ -->
+      <div class="materia-card" style="--acento: #7c3aed">
+        <h3>Análisis Matemático I</h3>
+        <p class="count">8 apuntes</p>
+        <div class="materia-links">
+          <a href="../analisis-matematico/teoria-1.html">Teoría 1</a>
+          <a href="../analisis-matematico/teoria-2.html">Teoría 2</a>
+          <a href="../analisis-matematico/teoria-3.html">Teoría 3</a>
+          <a href="../analisis-matematico/regla-de-la-cadena.html">Regla cadena</a>
+          <a href="../analisis-matematico/parcial2.html">Parcial 2</a>
+          <a href="../analisis-matematico/parcial2-modelo.html">Modelo P2</a>
+          <a href="../analisis-matematico/parcial2-express.html">Express P2</a>
+          <a href="../analisis-matematico/parcial2-autoevaluacion.html">Autoevaluación</a>
+        </div>
+      </div>
+
+      <!-- Electrotecnia ✅ -->
+      <div class="materia-card" style="--acento: #d97706">
+        <h3>Electrotecnia</h3>
+        <p class="count">1 apunte</p>
+        <div class="materia-links">
+          <a href="../electrotecnia/teoria.html">Teoría</a>
+        </div>
+      </div>
+
+      <!-- Estadística ✅ -->
+      <div class="materia-card" style="--acento: #059669">
+        <h3>Estadística</h3>
+        <p class="count">6 apuntes</p>
+        <div class="materia-links">
+          <a href="../estadistica/teoria.html">Teoría</a>
+          <a href="../estadistica/resumen.html">Resumen</a>
+          <a href="../estadistica/parcial1.html">Parcial 1</a>
+          <a href="../estadistica/parcial2.html">Parcial 2</a>
+          <a href="../estadistica/repaso-parcial2.html">Repaso P2</a>
+          <a href="../estadistica/simulacro-parcial2-explicado.html">Simulacro P2</a>
+        </div>
+      </div>
+
+      <!-- Hidráulica ✅ -->
+      <div class="materia-card" style="--acento: #0891b2">
+        <h3>Hidráulica</h3>
+        <p class="count">2 apuntes</p>
+        <div class="materia-links">
+          <a href="../hidraulica/teoria.html">Teoría</a>
+          <a href="../hidraulica/parcial2.html">Parcial 2</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ 4° CUATRIMESTRE ═══ -->
+  <div class="cuatrimestre">
+    <div class="cuatrimestre__header">
+      <span class="cuatrimestre__label">4° Cuatrimestre</span>
+      <span class="cuatrimestre__año">2° Año</span>
+      <span class="cuatrimestre__count">4 materias con apuntes</span>
+    </div>
+    <div class="materias-grid">
+
+      <!-- Automatización Industrial ✅ -->
+      <div class="materia-card" style="--acento: #16a34a">
+        <h3>Automatización Industrial</h3>
+        <p class="count">1 apunte</p>
+        <div class="materia-links">
+          <a href="../automatizacion-industrial/logica-digital.html">Lógica Digital</a>
+        </div>
+      </div>
+
+      <!-- Sistemas de Control ✅ -->
+      <div class="materia-card" style="--acento: #3730a3">
+        <h3>Sistemas de Control</h3>
+        <p class="count">3 apuntes</p>
+        <div class="materia-links">
+          <a href="../sistemas-control/teoria.html">Teoría</a>
+          <a href="../sistemas-control/simulador-encoder.html">Simulador Encoder</a>
+          <a href="../sistemas-control/pid-horno.html">PID Horno</a>
+        </div>
+      </div>
+
+      <!-- Álgebra Lineal ✅ -->
+      <div class="materia-card" style="--acento: #2563eb">
+        <h3>Álgebra</h3>
+        <p class="count">2 apuntes</p>
+        <div class="materia-links">
+          <a href="../algebra-lineal/teoria.html">Teoría</a>
+          <a href="../algebra-lineal/teoria-unidad2.html">Unidad 2</a>
+        </div>
+      </div>
+
+      <!-- Taller Sociocomunitario ✅ -->
+      <div class="materia-card" style="--acento: #0d9488">
+        <h3>Taller Sociocomunitario</h3>
+        <p class="count">1 apunte</p>
+        <div class="materia-links">
+          <a href="../taller-sociocomunitario/teoria.html">Teoría</a>
+        </div>
+      </div>
+
+      <!-- CLP sin apuntes -->
+      <div class="materia-card--disabled">
+        <h3>Controladores Lógicos Programables</h3>
+        <p class="count">sin apuntes</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ 5° CUATRIMESTRE ═══ -->
+  <div class="cuatrimestre">
+    <div class="cuatrimestre__header">
+      <span class="cuatrimestre__label">5° Cuatrimestre</span>
+      <span class="cuatrimestre__año">3° Año</span>
+      <span class="cuatrimestre__count">sin apuntes aún</span>
+    </div>
+    <div class="materias-grid">
+      <div class="materia-card--disabled">
+        <h3>Robótica II</h3>
+        <p class="count">sin apuntes</p>
+      </div>
+      <div class="materia-card--disabled">
+        <h3>Inteligencia computacional</h3>
+        <p class="count">sin apuntes</p>
+      </div>
+      <div class="materia-card--disabled">
+        <h3>Análisis matemático II</h3>
+        <p class="count">sin apuntes</p>
+      </div>
+      <div class="materia-card--disabled">
+        <h3>Seminario a elección I</h3>
+        <p class="count">sin apuntes</p>
+      </div>
+    </div>
+  </div>
+
 </section>
 
 <!-- FOOTER -->

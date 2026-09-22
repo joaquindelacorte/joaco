@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Ejercicios Tipo Parcial — Sistemas de Control</title>
+<meta name="description" content="Ejercicios tipo parcial resueltos de Sistemas de Control — conceptos, primer orden, polos, control P/On-Off, simulación Octave"/>
+<style>
+:root{
+  --main:#3730a3;--main-lt:#4f46e5;--main-bg:#e0e7ff;
+  --amber:#b45309;--amber-bg:#fef9c3;
+  --teal:#0d9488;--teal-bg:#ccfbf1;
+  --orange:#c2410c;--orange-bg:#ffedd5;
+  --red:#b91c1c;--red-bg:#fee2e2;
+  --green:#15803d;--green-bg:#dcfce7;
+  --gray:#374151;--gray-lt:#6b7280;
+  --bg:#f5f6fb;--card:#fff;--border:#e2e8f0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img,svg{max-width:100%;height:auto}
+button,input[type=range]{min-height:44px}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer;width:100%}
+input[type=range]::-webkit-slider-runnable-track{height:6px;background:var(--border);border-radius:3px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--main-lt);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);margin-top:-8px;cursor:pointer}
+input[type=range]::-moz-range-track{height:6px;background:var(--border);border-radius:3px}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--main-lt);border:2px solid #fff;cursor:pointer}
+
+/* NAV */
+nav.topnav{position:sticky;top:0;z-index:200;background:var(--main);display:flex;align-items:center;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.brand{color:#fff;font-size:1.05rem;font-weight:800;padding:.8rem 1.2rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.2)}
+.tabs{display:flex;overflow-x:auto;flex:1}
+.tab-btn{padding:.75rem 1rem;border:none;background:transparent;color:rgba(255,255,255,.75);font-size:.83rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s;font-family:inherit}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tab-btn.active{color:#fff;border-bottom-color:#a5b4fc;background:rgba(255,255,255,.08)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1e1b4b 0%,var(--main-lt) 100%);color:#fff;text-align:center;padding:2.5rem 1rem 2rem}
+.hero h1{font-size:2.1rem;font-weight:900;letter-spacing:-.5px}
+.hero p{opacity:.88;margin-top:.4rem;max-width:640px;margin-left:auto;margin-right:auto}
+.badges-sum{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.badge-chip{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.25rem .85rem;font-size:.78rem;font-weight:700}
+
+/* LAYOUT */
+.page{display:none}.page.active{display:block}
+.container{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+.stitle{display:flex;align-items:center;gap:.6rem;font-size:1.3rem;font-weight:800;color:var(--main);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid var(--main-bg)}
+.stitle:first-child{margin-top:0}
+.sub{font-size:1.05rem;font-weight:700;color:var(--main-lt);margin:1.4rem 0 .7rem}
+.lead{font-size:.95rem;color:var(--gray);margin-bottom:1rem}
+.lead b{color:var(--main)}
+
+/* CARDS */
+.grid{display:grid;gap:1.1rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;box-shadow:0 1px 4px rgba(0,0,0,.05);transition:.2s}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.card h3{font-size:1rem;font-weight:700;margin-bottom:.5rem;color:var(--main)}
+.card p,.card li{font-size:.9rem;color:var(--gray)}
+.card ul,.card ol{margin-left:1.2rem;margin-top:.4rem}
+.card.bl{border-left:4px solid var(--main-lt);background:var(--main-bg)}
+.card.gr{border-left:4px solid var(--green);background:var(--green-bg)}
+.card.or{border-left:4px solid var(--orange);background:var(--orange-bg)}
+.card.re{border-left:4px solid var(--red);background:var(--red-bg)}
+.card.te{border-left:4px solid var(--teal);background:var(--teal-bg)}
+.card.am{border-left:4px solid var(--amber);background:var(--amber-bg)}
+
+/* FORMULA */
+.fbox{background:#181633;color:#e8e6ff;border-radius:10px;padding:1.1rem 1.3rem;font-family:'Courier New',monospace;text-align:center;margin:.8rem 0;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.fbox .big{font-size:1.2rem;font-weight:700;color:#a5b4fc;display:block;margin-bottom:.3rem}
+.fbox .sub-f{font-size:.85rem;color:#c7c5e8;display:block;margin-top:.25rem}
+
+/* CODE */
+.code{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1rem 1.2rem;font-family:'Consolas','Courier New',monospace;font-size:.8rem;line-height:1.6;overflow-x:auto;margin:.8rem 0;white-space:pre}
+
+/* TABLE */
+.twrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);margin:.6rem 0}
+table{width:100%;border-collapse:collapse;font-size:.87rem;background:#fff}
+th{background:var(--main);color:#fff;padding:.65rem .9rem;text-align:left;font-weight:600}
+td{padding:.6rem .9rem;border-bottom:1px solid var(--border)}
+tr:last-child td{border:none}
+tr:nth-child(even) td{background:var(--main-bg)}
+
+/* NOTE / WARN / TIP */
+.note{background:var(--main-bg);border-left:4px solid var(--main-lt);border-radius:0 8px 8px 0;padding:.8rem 1rem;font-size:.92rem;margin:.9rem 0;color:#312e81}
+.warn{background:var(--red-bg);border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:.8rem 1rem;font-size:.92rem;margin:.9rem 0;color:#7f1d1d}
+.tip{display:flex;gap:.7rem;align-items:flex-start;background:#fffbeb;border:1px solid #fbbf24;border-radius:10px;padding:.85rem 1.1rem;margin:.9rem 0;font-size:.9rem}
+
+/* PROBLEM HEADER */
+.prob-hdr{display:flex;align-items:center;gap:.75rem;margin:2rem 0 .8rem}
+.prob-hdr .num{background:var(--main);color:#fff;border-radius:50%;width:2rem;height:2rem;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.88rem;flex-shrink:0}
+.prob-hdr h3{font-size:1.08rem;font-weight:800;color:var(--main)}
+
+/* SIM PANEL */
+.sim-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;margin-bottom:1.3rem}
+.sim-flex{display:grid;grid-template-columns:220px 1fr;gap:1.2rem}
+@media(max-width:700px){.sim-flex{grid-template-columns:1fr}}
+.slider-row{margin-bottom:1rem}
+.slider-row label{display:flex;justify-content:space-between;font-size:.85rem;font-weight:600;color:var(--gray);margin-bottom:.35rem}
+.slider-row label .val{color:var(--main);font-family:'Courier New',monospace;font-weight:700}
+canvas.chart{width:100%;height:240px;background:#fbfbff;border-radius:8px;border:1px solid var(--border)}
+.chart-legend{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.7rem;font-size:.78rem}
+.chart-legend .leg-sw{width:14px;height:4px;border-radius:2px;display:inline-block;margin-right:.35rem;vertical-align:middle}
+.anim-btn{padding:.45rem .9rem;border:2px solid var(--main-lt);border-radius:8px;background:#fff;color:var(--main);font:700 .82rem inherit;cursor:pointer;transition:.15s;min-height:36px}
+.anim-btn:hover{background:var(--main-bg)}
+
+/* POLE CANVAS */
+.pole-wrap{display:flex;flex-direction:column;align-items:center;gap:.6rem}
+
+/* FOOTER NAV */
+.apuntes-footer-nav{margin-top:3rem;padding:1rem 1.25rem;background:var(--main);border-top:1px solid rgba(255,255,255,.08);display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;font-size:.83rem}
+.apuntes-footer-nav__label{color:#94a3b8;margin-right:.25rem}
+.apuntes-footer-nav a{color:#c7d2fe;text-decoration:none;padding:.2rem .6rem;border-radius:4px;background:rgba(255,255,255,.08)}
+.apuntes-footer-nav a:hover{background:rgba(255,255,255,.16);color:#fff}
+
+@media(max-width:600px){.hero h1{font-size:1.5rem}.container{padding:1.25rem 1rem}}
+@media(hover:none){.card:hover{box-shadow:0 1px 4px rgba(0,0,0,.05);transform:none}}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV / TABS -->
+<nav class="topnav" role="navigation" aria-label="Secciones del parcial">
+  <div class="brand">📐 Parcial SC</div>
+  <div class="tabs" role="tablist">
+    <button class="tab-btn active" role="tab" aria-selected="true"  onclick="showPage('page-a',this)">📐 A — Conceptos</button>
+    <button class="tab-btn"        role="tab" aria-selected="false" onclick="showPage('page-b',this)">🔋 B — 1er Orden</button>
+    <button class="tab-btn"        role="tab" aria-selected="false" onclick="showPage('page-c',this)">📍 C — Polos</button>
+    <button class="tab-btn"        role="tab" aria-selected="false" onclick="showPage('page-d',this)">🎛️ D — Control</button>
+    <button class="tab-btn"        role="tab" aria-selected="false" onclick="showPage('page-e',this)">💻 E — Octave</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Ejercicios Tipo Parcial</h1>
+  <p>Sistemas de Control — Ing. Tirabasso</p>
+  <div class="badges-sum">
+    <span class="badge-chip">20 pts · Conceptos</span>
+    <span class="badge-chip">25 pts · 1er Orden</span>
+    <span class="badge-chip">20 pts · Polos</span>
+    <span class="badge-chip">20 pts · Control</span>
+    <span class="badge-chip">15 pts · Octave</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECCIÓN A ═══════════════════ -->
+<div id="page-a" class="page active" role="tabpanel">
+<div class="container">
+
+  <div class="stitle"><span class="ico">📐</span> Sección A — Conceptos Básicos <span style="font-size:.8rem;color:var(--gray-lt);font-weight:500">(20 pts)</span></div>
+
+  <!-- A.1 -->
+  <div class="prob-hdr">
+    <div class="num">A1</div>
+    <h3>Control de temperatura con termostato</h3>
+  </div>
+  <p class="lead">Un termostato enciende la calefacción cuando la temperatura baja de 18 °C y la apaga cuando supera 22 °C.</p>
+
+  <div class="sub">a) ¿Lazo abierto o cerrado?</div>
+  <div class="card gr">
+    <h3>✅ Lazo cerrado</h3>
+    <p>El termostato <b>mide continuamente</b> la temperatura (retroalimentación) y decide si actuar. La salida (temperatura) influye sobre la decisión de encender/apagar → existe un <b>lazo de realimentación</b>.</p>
+  </div>
+
+  <div class="sub">b) Identificación de elementos</div>
+  <div class="grid g3">
+    <div class="card bl">
+      <h3>🌡️ Sensor</h3>
+      <p>Termistor o sensor de temperatura del termostato — mide la variable controlada (temperatura ambiente).</p>
+    </div>
+    <div class="card bl">
+      <h3>🧠 Controlador</h3>
+      <p>Lógica del termostato — compara con el rango (18–22 °C) y decide encender o apagar.</p>
+    </div>
+    <div class="card bl">
+      <h3>⚡ Actuador</h3>
+      <p>Resistencia calefactora / unidad de calefacción — modifica la temperatura del ambiente.</p>
+    </div>
+  </div>
+
+  <div class="sub">c) Sin histéresis (conmuta exactamente en 20 °C)</div>
+  <div class="card re">
+    <h3>⚠️ Chattering (ciclo límite)</h3>
+    <p>El sistema entraría en <b>chattering</b>: cualquier mínima variación alrededor de 20 °C dispara la acción de encendido/apagado en ciclos muy cortos. Esto:</p>
+    <ul>
+      <li>Degrada el actuador mecánicamente (desgaste de contactos)</li>
+      <li>Genera oscilaciones permanentes sin estabilización real</li>
+      <li>Consume energía innecesariamente</li>
+    </ul>
+    <p style="margin-top:.6rem">La histéresis (banda 18–22 °C) existe exactamente para evitar este problema.</p>
+  </div>
+
+  <!-- A.2 -->
+  <div class="prob-hdr" style="margin-top:2.5rem">
+    <div class="num">A2</div>
+    <h3>Sistema de primer orden G(s) = 3 / (2s + 1)</h3>
+  </div>
+
+  <div class="sub">a) Estado estacionario con escalón de amplitud 2</div>
+  <div class="fbox">
+    <span class="big">y_ss = lim[s→0] s · G(s) · (2/s) = G(0) · 2 = (3/1) · 2 = 6</span>
+    <span class="sub-f">Teorema del valor final: lim[t→∞] y(t) = lim[s→0] s·Y(s)</span>
+  </div>
+  <div class="card gr"><h3>✅ y_ss = 6</h3></div>
+
+  <div class="sub">b) Tiempo para alcanzar el 63 % del valor final</div>
+  <div class="card bl">
+    <h3>τ = 2 segundos</h3>
+    <p>La constante de tiempo es el coeficiente de <i>s</i> en el denominador: <b>τ = 2 s</b>. Por definición, el 63,2 % del valor final se alcanza exactamente en <b>t = τ = 2 s</b>.</p>
+  </div>
+
+  <div class="sub">c) Si se duplica el coeficiente de s → G(s) = 3/(4s+1)</div>
+  <div class="card am">
+    <h3>⏳ Sistema más lento (τ pasa de 2 a 4 s)</h3>
+    <p>Mayor τ → la exponencial decae más despacio → el sistema tarda más en alcanzar el estado estacionario. El valor final <i>no cambia</i> (y_ss sigue siendo 6), solo cambia la velocidad de respuesta.</p>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════ SECCIÓN B ═══════════════════ -->
+<div id="page-b" class="page" role="tabpanel">
+<div class="container">
+
+  <div class="stitle"><span class="ico">🔋</span> Sección B — Sistemas de 1er Orden <span style="font-size:.8rem;color:var(--gray-lt);font-weight:500">(25 pts)</span></div>
+
+  <!-- B.1 -->
+  <div class="prob-hdr">
+    <div class="num">B1</div>
+    <h3>Circuitos RC — constante de tiempo</h3>
+  </div>
+
+  <div class="sub">a) Constante de tiempo τ = R·C</div>
+  <div class="grid g2">
+    <div class="card bl">
+      <h3>Circuito 1: τ₁ = 1 s</h3>
+      <p>R₁ = 1 kΩ, C = 1000 µF</p>
+      <div class="fbox" style="margin:.6rem 0"><span class="big">τ₁ = 1000 Ω × 0,001 F = 1 s</span></div>
+    </div>
+    <div class="card or">
+      <h3>Circuito 2: τ₂ = 10 s</h3>
+      <p>R₂ = 10 kΩ, C = 1000 µF</p>
+      <div class="fbox" style="margin:.6rem 0"><span class="big">τ₂ = 10 000 Ω × 0,001 F = 10 s</span></div>
+    </div>
+  </div>
+
+  <div class="sub">b) ¿Cuál se carga más rápido?</div>
+  <div class="card gr">
+    <h3>✅ Circuito 1 (τ₁ = 1 s)</h3>
+    <p>Con menor resistencia, el capacitor puede recibir <b>más corriente</b> en el mismo tiempo → se carga más rápido. La resistencia limita la velocidad de carga: <i>i(t) = V/R · e^(-t/τ)</i>.</p>
+  </div>
+
+  <div class="sub">c) Gráficos de carga — Circuito RC interactivo</div>
+  <div class="sim-panel">
+    <div style="display:flex;gap:.7rem;align-items:center;margin-bottom:.9rem;flex-wrap:wrap">
+      <button class="anim-btn" onclick="animarRC()">▶ Animar</button>
+      <button class="anim-btn" onclick="resetRC()">↺ Reset</button>
+      <span style="font-size:.82rem;color:var(--gray-lt)">Escalón de entrada: 5 V</span>
+    </div>
+    <canvas id="canvasRC" class="chart" width="800" height="300" aria-label="Curvas de carga RC"></canvas>
+    <div class="chart-legend">
+      <span><span class="leg-sw" style="background:#3730a3"></span>Circuito 1 (τ=1 s)</span>
+      <span><span class="leg-sw" style="background:#c2410c"></span>Circuito 2 (τ=10 s)</span>
+      <span><span class="leg-sw" style="background:#64748b;border-top:2px dashed #64748b"></span>Setpoint 5 V</span>
+    </div>
+    <div class="note" style="margin-top:.8rem">
+      <b>Lectura clave:</b> A t = 1τ el C1 ya llegó al 63 % (3,15 V), mientras que C2 apenas alcanzó el 10 % (0,48 V). A t = 5τ = 5 s, C1 está al 99 %; C2 recién está en el 39 %.
+    </div>
+  </div>
+
+  <!-- B.2 -->
+  <div class="prob-hdr" style="margin-top:2.5rem">
+    <div class="num">B2</div>
+    <h3>Termómetro digital — sistema de primer orden térmico</h3>
+  </div>
+  <p class="lead">Datos: sube de 20 °C a 80 °C (ΔT_total = 60 °C). A t = 5 s, lectura = 58 °C → subió 38 °C.</p>
+
+  <div class="sub">a) Constante de tiempo τ</div>
+  <div class="code">y(t) = ΔT_total · (1 - e^(-t/τ))
+38 = 60 · (1 - e^(-5/τ))
+e^(-5/τ) = 1 - 38/60 = 0,3667
+-5/τ = ln(0,3667) = -1,003
+τ ≈ 5 / 1,003 ≈ 5 s</div>
+  <div class="card gr"><h3>✅ τ ≈ 5 segundos</h3></div>
+
+  <div class="sub">b) Tiempo para llegar a 79 °C (↑ 59 °C)</div>
+  <div class="code">59 = 60 · (1 - e^(-t/5))
+e^(-t/5) = 1/60
+t = 5 · ln(60) ≈ 5 × 4,094 ≈ 20,5 s</div>
+  <div class="card gr"><h3>✅ t ≈ 20,5 s</h3><p>Equivale a ~4τ (98,2 % del valor final). Regla práctica: a 4τ el sistema está al 98 %.</p></div>
+
+  <div class="sub">c) Punta más gruesa (mayor capacidad térmica)</div>
+  <div class="card am">
+    <h3>⏳ τ aumenta → respuesta más lenta</h3>
+    <p>τ_térmico = R_térmica × C_térmica. Al aumentar la masa/capacidad térmica de la punta (C), τ aumenta → el termómetro tardará más en reflejar cambios de temperatura. La lectura tendrá mayor retardo.</p>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════ SECCIÓN C ═══════════════════ -->
+<div id="page-c" class="page" role="tabpanel">
+<div class="container">
+
+  <div class="stitle"><span class="ico">📍</span> Sección C — Polos y Estabilidad <span style="font-size:.8rem;color:var(--gray-lt);font-weight:500">(20 pts)</span></div>
+
+  <!-- C.1 -->
+  <div class="prob-hdr">
+    <div class="num">C1</div>
+    <h3>Tres funciones de transferencia</h3>
+  </div>
+
+  <div class="code">G₁(s) = 1/(s+2)     → polo: s = -2   (Re < 0) → ESTABLE
+G₂(s) = 1/(s-2)     → polo: s = +2   (Re > 0) → INESTABLE  ⚠️
+G₃(s) = 1/(s²+2s+5) → polos: s = (-2 ± √(4-20))/2 = -1 ± 2j  (Re < 0) → ESTABLE</div>
+
+  <div class="grid g3" style="margin-top:1rem">
+    <div class="card gr">
+      <h3>G₁ — Estable</h3>
+      <p>Polo en <b>s = −2</b>. Parte real negativa → respuesta exponencial decreciente → converge.</p>
+    </div>
+    <div class="card re">
+      <h3>G₂ — Inestable ⚠️</h3>
+      <p>Polo en <b>s = +2</b>. Parte real positiva → la respuesta <i>crece exponencialmente</i> sin límite.</p>
+    </div>
+    <div class="card te">
+      <h3>G₃ — Estable, oscilatorio</h3>
+      <p>Polos complejos <b>−1 ± 2j</b>. Parte real negativa → oscilación amortiguada → converge.</p>
+    </div>
+  </div>
+
+  <div class="sub">b) ¿G₃ oscila?</div>
+  <div class="card bl">
+    <p><b>Sí, oscila con amortiguamiento.</b> La parte imaginaria (±2j) genera oscilación; la parte real negativa (−1) provoca que esa oscilación <i>decaiga</i> → sistema <b>subamortiguado estable</b>.</p>
+  </div>
+
+  <div class="sub">c) G₁ con Kp = 10 en lazo cerrado</div>
+  <div class="code">T(s) = (Kp · G₁) / (1 + Kp · G₁)
+     = (10/(s+2)) / (1 + 10/(s+2))
+     = 10 / (s + 2 + 10)
+     = 10 / (s + 12)</div>
+  <div class="card gr">
+    <h3>✅ Polo LC en s = −12 — más rápido y sigue estable</h3>
+    <p>La realimentación corrió el polo de −2 a −12: más negativo → exponencial que decae <i>6× más rápido</i>. La estabilidad se mantiene.</p>
+  </div>
+
+  <!-- C.2 -->
+  <div class="prob-hdr" style="margin-top:2.5rem">
+    <div class="num">C2</div>
+    <h3>Sistema con polos en s = −1 ± 2j</h3>
+  </div>
+
+  <div class="grid g2">
+    <div>
+      <div class="sub">a) Estabilidad</div>
+      <div class="card gr"><h3>✅ Estable</h3><p>Parte real = −1 &lt; 0 → ambos polos en el semiplano izquierdo.</p></div>
+
+      <div class="sub">b) ¿Habrá sobrepaso?</div>
+      <div class="card or">
+        <h3>Sí — sistema subamortiguado</h3>
+        <p>Polos complejos con parte imaginaria ≠ 0 → respuesta subamortiguada → la salida <b>supera el setpoint</b> antes de estabilizarse.</p>
+        <p style="margin-top:.5rem">ζ = Re/|polo| = 1/√(1²+2²) = 1/√5 ≈ <b>0,45</b></p>
+      </div>
+
+      <div class="sub">c) Polos en −3 ± 2j</div>
+      <div class="card te">
+        <h3>Más rápida y menos sobrepaso</h3>
+        <ul style="margin-top:.5rem">
+          <li>Re más negativa → decaimiento más veloz → <b>respuesta más rápida</b></li>
+          <li>ζ_nuevo = 3/√13 ≈ 0,83 (vs 0,45) → <b>mayor amortiguamiento → menos sobrepaso</b></li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <div class="sub">d) Mapa de polos en el plano complejo</div>
+      <div class="pole-wrap">
+        <canvas id="canvasPoles" width="400" height="300" style="border-radius:10px;border:1px solid var(--border);background:#fbfbff" aria-label="Mapa de polos en plano complejo"></canvas>
+        <div style="font-size:.78rem;color:var(--gray-lt);text-align:center">Plano complejo s = σ + jω · Eje horizontal: σ (Re), eje vertical: jω (Im)</div>
+        <div class="chart-legend" style="justify-content:center">
+          <span><span class="leg-sw" style="background:#3730a3;height:10px;width:10px;border-radius:50%"></span>Polos −1 ± 2j</span>
+          <span><span class="leg-sw" style="background:rgba(200,30,30,.15);height:10px"></span>Zona inestable (Re > 0)</span>
+          <span><span class="leg-sw" style="background:rgba(21,128,61,.15);height:10px"></span>Zona estable (Re < 0)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════ SECCIÓN D ═══════════════════ -->
+<div id="page-d" class="page" role="tabpanel">
+<div class="container">
+
+  <div class="stitle"><span class="ico">🎛️</span> Sección D — Control On-Off y Proporcional <span style="font-size:.8rem;color:var(--gray-lt);font-weight:500">(20 pts)</span></div>
+
+  <!-- D.1 -->
+  <div class="prob-hdr">
+    <div class="num">D1</div>
+    <h3>Control de nivel — G(s) = 1/(s+1)</h3>
+  </div>
+
+  <div class="sub">a) Control On-Off con histéresis — ¿se estabiliza en el setpoint?</div>
+  <div class="card am">
+    <h3>⚡ No se estabiliza — ciclo límite</h3>
+    <p>El nivel <b>oscila dentro de la banda de histéresis</b>. La bomba enciende cuando el nivel baja del umbral inferior y apaga cuando supera el superior → genera una oscilación sostenida pero acotada (ciclo límite).</p>
+    <p style="margin-top:.5rem">Es aceptable operativamente pero <i>no es un punto de equilibrio exacto</i>. El error nunca es cero.</p>
+  </div>
+
+  <div class="sub">b) Control Proporcional Kp = 3 — ¿llega al setpoint?</div>
+  <div class="code">T(s) = Kp·G(s) / (1 + Kp·G(s))
+     = (3/(s+1)) / (1 + 3/(s+1))
+     = 3 / (s + 1 + 3)
+     = 3 / (s + 4)
+
+y_ss = T(0) · 1 = 3/4 = 0,75
+Offset = 1 - 0,75 = 0,25  →  25%</div>
+  <div class="card re">
+    <h3>⚠️ Error en estado estacionario = 25 %</h3>
+    <p>El control proporcional puro <b>siempre deja offset</b>: necesita error para generar señal de control. A mayor Kp, menor offset — pero nunca cero.</p>
+  </div>
+
+  <div class="sub">c) ¿Qué agregar para eliminar el offset?</div>
+  <div class="card gr">
+    <h3>✅ Acción Integral → Controlador PI o PID</h3>
+    <p>La integral acumula el error en el tiempo y genera señal de control <i>incluso cuando el error instantáneo es pequeño</i> → elimina el offset en régimen permanente.</p>
+    <p style="margin-top:.5rem">C_PI(s) = Kp · (1 + 1/(Ti·s)) — el polo en s=0 garantiza error cero ante escalón.</p>
+  </div>
+
+  <!-- D.2 -->
+  <div class="prob-hdr" style="margin-top:2.5rem">
+    <div class="num">D2</div>
+    <h3>Respuesta con sobrepaso — G(s) = 1/(s+1)</h3>
+  </div>
+  <p class="lead">La gráfica muestra una respuesta que supera el setpoint y luego se estabiliza en 1 (sin offset).</p>
+
+  <div class="grid g3">
+    <div class="card bl">
+      <h3>a) Tipo de controlador</h3>
+      <p>Sin offset → hay acción integral. Con sobrepaso → ganancia proporcional alta.<br><b>Controlador PI o PID.</b></p>
+    </div>
+    <div class="card or">
+      <h3>b) ¿Por qué hay sobrepaso?</h3>
+      <p>La ganancia proporcional alta hace que el sistema reaccione con inercia: cuando la salida se acerca al setpoint, la señal acumulada aún lleva al sistema más allá del objetivo.</p>
+    </div>
+    <div class="card te">
+      <h3>c) Si se reduce Kp</h3>
+      <ul>
+        <li>Sobrepaso <b>disminuye</b> (más amortiguada)</li>
+        <li>Tiempo de establecimiento <b>aumenta</b> (más lenta)</li>
+        <li>Trade-off: menos sobrepaso ↔ más tiempo</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════ SECCIÓN E ═══════════════════ -->
+<div id="page-e" class="page" role="tabpanel">
+<div class="container">
+
+  <div class="stitle"><span class="ico">💻</span> Sección E — Simulación Octave <span style="font-size:.8rem;color:var(--gray-lt);font-weight:500">(15 pts)</span></div>
+
+  <div class="prob-hdr">
+    <div class="num">E1</div>
+    <h3>Control proporcional G(s) = 1/(s+1), Kp = 2, 5, 10</h3>
+  </div>
+
+  <p class="lead">Función de transferencia de lazo cerrado: <b>T(s) = Kp / (s + 1 + Kp)</b></p>
+
+  <!-- TABLA -->
+  <div class="twrap">
+    <table>
+      <thead>
+        <tr><th>Kp</th><th>Polo LC</th><th>y_ss = Kp/(1+Kp)</th><th>Offset = 1/(1+Kp)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>2</td><td>s = −3</td><td>0,667 (66,7 %)</td><td>0,333 (33,3 %)</td></tr>
+        <tr><td>5</td><td>s = −6</td><td>0,833 (83,3 %)</td><td>0,167 (16,7 %)</td></tr>
+        <tr><td>10</td><td>s = −11</td><td>0,909 (90,9 %)</td><td>0,091 (9,1 %)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SIMULADOR Kp interactivo -->
+  <div class="sim-panel" style="margin-top:1.3rem">
+    <div class="sim-flex">
+      <div>
+        <div class="slider-row">
+          <label>Kp <span class="val" id="kpVal">5</span></label>
+          <input type="range" id="kpSlider" min="1" max="20" value="5" oninput="updateKpSim(this.value)">
+        </div>
+        <div style="font-size:.83rem;color:var(--gray);line-height:1.7;margin-top:.5rem">
+          <div>Polo LC: <b id="kpPole">s = −6</b></div>
+          <div>y_ss: <b id="kpYss">0,833</b></div>
+          <div>Offset: <b id="kpOffset" style="color:var(--red)">16,7 %</b></div>
+        </div>
+        <div style="margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap">
+          <button class="anim-btn" onclick="setKp(2)">Kp = 2</button>
+          <button class="anim-btn" onclick="setKp(5)">Kp = 5</button>
+          <button class="anim-btn" onclick="setKp(10)">Kp = 10</button>
+        </div>
+      </div>
+      <div>
+        <canvas id="canvasKp" class="chart" width="700" height="300" aria-label="Respuesta al escalón con Kp variable"></canvas>
+        <div class="chart-legend">
+          <span><span class="leg-sw" style="background:#3730a3"></span>Respuesta y(t)</span>
+          <span><span class="leg-sw" style="background:#64748b;border-top:2px dashed #64748b"></span>Setpoint = 1</span>
+          <span><span class="leg-sw" style="background:#dc2626"></span>y_ss (asíntota)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CÓDIGO OCTAVE -->
+  <div class="sub" style="margin-top:1.5rem">Código Octave completo</div>
+  <div class="code">pkg load control;
+s = tf('s');
+G = 1/(s+1);
+Kp_vals = [2 5 10];
+t = 0:0.01:10;
+figure; hold on;
+colors = {'b', 'r', 'g'};
+for i = 1:length(Kp_vals)
+  Kp = Kp_vals(i);
+  T = feedback(Kp*G, 1);
+  [y, t_out] = step(T, t);
+  plot(t_out, y, colors{i}, 'LineWidth', 2, ...
+       'DisplayName', sprintf('Kp=%d (offset=%.3f)', Kp, 1-dcgain(T)));
+  printf('Kp=%d: y_final=%.4f, offset=%.4f\n', Kp, dcgain(T), 1-dcgain(T));
+end
+plot(t, ones(size(t)), 'k--', 'LineWidth', 1.5, 'DisplayName', 'Setpoint');
+legend('Location', 'southeast');
+xlabel('Tiempo (s)'); ylabel('Salida y(t)');
+title('Respuesta LC — G(s)=1/(s+1), distintos Kp');
+grid on;</div>
+
+  <!-- CONCLUSIÓN -->
+  <div class="sub">Conclusión</div>
+  <div class="card bl">
+    <h3>Offset = 1 / (1 + Kp)</h3>
+    <p>A mayor Kp → menor offset, pero el offset <b>nunca es cero</b> con control proporcional puro. Para eliminarlo completamente se necesita <b>acción integral</b> (PI o PID). A Kp → ∞ el offset → 0 pero el sistema se vuelve menos robusto.</p>
+  </div>
+
+</div>
+</div>
+
+<!-- FOOTER NAV -->
+<nav class="apuntes-footer-nav" role="navigation" aria-label="Más de esta materia">
+  <span class="apuntes-footer-nav__label">Más de esta materia:</span>
+  <a href="teoria.html">📖 Teoría</a>
+  <a href="simulador-encoder.html">Simulador Encoder</a>
+  <a href="pid-horno.html">PID Horno</a>
+</nav>
+
+<script>
+/* ─── TAB NAVIGATION ─── */
+function showPage(id, btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-selected','false')});
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  btn.setAttribute('aria-selected','true');
+  // re-draw canvases when tab becomes visible
+  if(id==='page-b') setTimeout(()=>drawRC(1),50);
+  if(id==='page-c') setTimeout(drawPoles,50);
+  if(id==='page-e') setTimeout(()=>drawKpSim(+document.getElementById('kpSlider').value),50);
+}
+
+/* ─── CANVAS RC ─── */
+let rcAnimFrame=null, rcProgress=0;
+
+function drawRC(progress){
+  const canvas=document.getElementById('canvasRC');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width, H=canvas.height;
+  const padL=55,padR=20,padT=20,padB=45;
+  const cW=W-padL-padR, cH=H-padT-padB;
+  const tMax=30, vMax=5;
+  const tx=t=>padL+t/tMax*cW;
+  const ty=v=>padT+cH-(v/vMax*cH);
+
+  ctx.clearRect(0,0,W,H);
+
+  // BG
+  ctx.fillStyle='#f8f9ff';
+  ctx.fillRect(padL,padT,cW,cH);
+
+  // Grid
+  ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;
+  for(let t=0;t<=30;t+=5){ctx.beginPath();ctx.moveTo(tx(t),padT);ctx.lineTo(tx(t),padT+cH);ctx.stroke()}
+  for(let v=0;v<=5;v+=1){ctx.beginPath();ctx.moveTo(padL,ty(v));ctx.lineTo(padL+cW,ty(v));ctx.stroke()}
+
+  // Axes
+  ctx.strokeStyle='#475569';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(padL,padT);ctx.lineTo(padL,padT+cH);ctx.lineTo(padL+cW,padT+cH);ctx.stroke();
+
+  // Labels
+  ctx.fillStyle='#475569';ctx.font='11px Segoe UI';ctx.textAlign='center';
+  for(let t=0;t<=30;t+=5){ctx.fillText(t+'s',tx(t),padT+cH+18)}
+  ctx.textAlign='right';ctx.font='11px Courier New';
+  for(let v=0;v<=5;v+=1){ctx.fillText(v+'V',padL-6,ty(v)+4)}
+  ctx.save();ctx.translate(14,padT+cH/2);ctx.rotate(-Math.PI/2);ctx.textAlign='center';ctx.font='12px Segoe UI';ctx.fillText('Tensión (V)',0,0);ctx.restore();
+  ctx.textAlign='center';ctx.font='12px Segoe UI';ctx.fillText('Tiempo (s)',padL+cW/2,H-5);
+
+  // Setpoint dashed
+  ctx.strokeStyle='#94a3b8';ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
+  ctx.beginPath();ctx.moveTo(tx(0),ty(5));ctx.lineTo(tx(30),ty(5));ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Curve C1 τ=1
+  const pts=Math.round(progress*300);
+  ctx.strokeStyle='#3730a3';ctx.lineWidth=2.5;
+  ctx.beginPath();
+  for(let i=0;i<=pts;i++){const t=i/10;const v=5*(1-Math.exp(-t/1));if(i===0)ctx.moveTo(tx(t),ty(v));else ctx.lineTo(tx(t),ty(v))}
+  ctx.stroke();
+
+  // Curve C2 τ=10
+  ctx.strokeStyle='#c2410c';ctx.lineWidth=2.5;
+  ctx.beginPath();
+  for(let i=0;i<=pts;i++){const t=i/10;const v=5*(1-Math.exp(-t/10));if(i===0)ctx.moveTo(tx(t),ty(v));else ctx.lineTo(tx(t),ty(v))}
+  ctx.stroke();
+
+  // Dot markers at tau
+  if(progress>=1){
+    [[1,5*(1-Math.exp(-1)),'#3730a3'],[10,5*(1-Math.exp(-1)),'#c2410c']].forEach(([t,v,c])=>{
+      ctx.fillStyle=c;ctx.beginPath();ctx.arc(tx(t),ty(v),5,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#374151';ctx.font='10px Segoe UI';ctx.textAlign='left';ctx.fillText('63%',tx(t)+7,ty(v)+4);
+    });
+  }
+}
+
+function animarRC(){
+  if(rcAnimFrame) cancelAnimationFrame(rcAnimFrame);
+  rcProgress=0;
+  (function loop(){
+    rcProgress=Math.min(rcProgress+0.015,1);
+    drawRC(rcProgress);
+    if(rcProgress<1) rcAnimFrame=requestAnimationFrame(loop);
+  })();
+}
+function resetRC(){if(rcAnimFrame)cancelAnimationFrame(rcAnimFrame);rcProgress=0;drawRC(0)}
+
+/* ─── CANVAS POLES ─── */
+function drawPoles(){
+  const canvas=document.getElementById('canvasPoles');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  const cx=W/2,cy=H/2;
+  const scale=60; // px per unit
+
+  ctx.clearRect(0,0,W,H);
+
+  // Unstable region (right half plane)
+  ctx.fillStyle='rgba(220,38,38,0.08)';
+  ctx.fillRect(cx,0,W-cx,H);
+  ctx.fillStyle='rgba(21,128,61,0.07)';
+  ctx.fillRect(0,0,cx,H);
+
+  // Grid
+  ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;
+  for(let x=cx%scale;x<W;x+=scale){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
+  for(let y=cy%scale;y<H;y+=scale){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+
+  // Axes
+  ctx.strokeStyle='#475569';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(W,cy);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(cx,0);ctx.lineTo(cx,H);ctx.stroke();
+
+  // Axis labels
+  ctx.fillStyle='#475569';ctx.font='bold 11px Segoe UI';ctx.textAlign='center';
+  ctx.fillText('Re(s)',W-20,cy-8);
+  ctx.fillText('Im(s)',cx+5,12);
+
+  // Unit ticks
+  ctx.font='10px Courier New';ctx.fillStyle='#94a3b8';ctx.textAlign='center';
+  [-3,-2,-1,1,2,3].forEach(v=>{
+    ctx.fillText(v,cx+v*scale,cy+12);
+    if(v!==0) ctx.fillText(v+'j',cx-15,cy-v*scale+4);
+  });
+
+  // Stability region labels
+  ctx.font='bold 12px Segoe UI';
+  ctx.fillStyle='rgba(21,128,61,0.6)';ctx.textAlign='center';
+  ctx.fillText('Estable',cx/2,18);
+  ctx.fillStyle='rgba(220,38,38,0.6)';
+  ctx.fillText('Inestable',cx+(W-cx)/2,18);
+
+  // Imaginary axis label
+  ctx.fillStyle='rgba(220,38,38,0.5)';ctx.font='bold 11px Segoe UI';ctx.textAlign='center';
+  ctx.fillText('eje jω (frontera)',cx,H-8);
+
+  // Plot poles s1 = -1+2j, s2 = -1-2j
+  const poles=[{re:-1,im:2,label:'s₁ = −1+2j'},{re:-1,im:-2,label:'s₂ = −1−2j'}];
+  poles.forEach(({re,im,label})=>{
+    const px=cx+re*scale, py=cy-im*scale;
+    // glow
+    const grad=ctx.createRadialGradient(px,py,2,px,py,12);
+    grad.addColorStop(0,'rgba(55,48,163,0.6)');grad.addColorStop(1,'rgba(55,48,163,0)');
+    ctx.fillStyle=grad;ctx.beginPath();ctx.arc(px,py,12,0,Math.PI*2);ctx.fill();
+    // dot
+    ctx.fillStyle='#3730a3';ctx.beginPath();ctx.arc(px,py,7,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(px,py,3,0,Math.PI*2);ctx.fill();
+    // label
+    ctx.fillStyle='#1e1b4b';ctx.font='bold 11px Segoe UI';ctx.textAlign=re<0?'right':'left';
+    ctx.fillText(label,px+(re<0?-10:10),py+(im>0?-10:16));
+    // dashed lines to axes
+    ctx.strokeStyle='rgba(55,48,163,0.3)';ctx.lineWidth=1;ctx.setLineDash([4,3]);
+    ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(cx,py);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px,cy);ctx.stroke();
+    ctx.setLineDash([]);
+  });
+}
+
+/* ─── CANVAS Kp SIMULATION ─── */
+function drawKpSim(Kp){
+  const canvas=document.getElementById('canvasKp');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  const padL=50,padR=20,padT=20,padB=45;
+  const cW=W-padL-padR,cH=H-padT-padB;
+  const tMax=10,yMax=1.15;
+  const tx=t=>padL+t/tMax*cW;
+  const ty=v=>padT+cH-(v/yMax*cH);
+  const yss=Kp/(1+Kp);
+  const tau=1/(1+Kp);
+
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#f8f9ff';ctx.fillRect(padL,padT,cW,cH);
+
+  // Grid
+  ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;
+  for(let t=0;t<=10;t+=2){ctx.beginPath();ctx.moveTo(tx(t),padT);ctx.lineTo(tx(t),padT+cH);ctx.stroke()}
+  [0,0.2,0.4,0.6,0.8,1.0].forEach(v=>{ctx.beginPath();ctx.moveTo(padL,ty(v));ctx.lineTo(padL+cW,ty(v));ctx.stroke()});
+
+  // Axes
+  ctx.strokeStyle='#475569';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(padL,padT);ctx.lineTo(padL,padT+cH);ctx.lineTo(padL+cW,padT+cH);ctx.stroke();
+
+  // Labels
+  ctx.fillStyle='#475569';ctx.font='11px Segoe UI';ctx.textAlign='center';
+  for(let t=0;t<=10;t+=2) ctx.fillText(t+'s',tx(t),padT+cH+18);
+  ctx.textAlign='right';ctx.font='11px Courier New';
+  [0,0.2,0.4,0.6,0.8,1.0].forEach(v=>ctx.fillText(v.toFixed(1),padL-6,ty(v)+4));
+  ctx.save();ctx.translate(14,padT+cH/2);ctx.rotate(-Math.PI/2);ctx.textAlign='center';ctx.font='12px Segoe UI';ctx.fillStyle='#475569';ctx.fillText('Salida y(t)',0,0);ctx.restore();
+  ctx.textAlign='center';ctx.fillStyle='#475569';ctx.font='12px Segoe UI';ctx.fillText('Tiempo (s)',padL+cW/2,H-5);
+
+  // Setpoint dashed
+  ctx.strokeStyle='#94a3b8';ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
+  ctx.beginPath();ctx.moveTo(tx(0),ty(1));ctx.lineTo(tx(10),ty(1));ctx.stroke();
+  ctx.setLineDash([]);
+
+  // y_ss line
+  ctx.strokeStyle='rgba(220,38,38,0.5)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+  ctx.beginPath();ctx.moveTo(tx(0),ty(yss));ctx.lineTo(tx(10),ty(yss));ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='rgba(220,38,38,0.7)';ctx.font='10px Segoe UI';ctx.textAlign='left';
+  ctx.fillText('y_ss='+yss.toFixed(3),tx(10)+2,ty(yss)+4);
+
+  // Response curve y(t) = yss*(1 - e^(-t/tau)) ... actually T(s)=Kp/(s+1+Kp), tau_LC=1/(1+Kp)
+  ctx.strokeStyle='#3730a3';ctx.lineWidth=2.5;
+  ctx.beginPath();
+  for(let i=0;i<=500;i++){
+    const t=i/50;
+    const v=yss*(1-Math.exp(-t/tau));
+    if(i===0) ctx.moveTo(tx(t),ty(v)); else ctx.lineTo(tx(t),ty(v));
+  }
+  ctx.stroke();
+
+  // tau marker
+  const tauY=yss*(1-Math.exp(-1));
+  ctx.fillStyle='#3730a3';ctx.beginPath();ctx.arc(tx(tau),ty(tauY),5,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#1e1b4b';ctx.font='10px Segoe UI';ctx.textAlign='left';
+  ctx.fillText('63% @ τ='+tau.toFixed(2)+'s',tx(tau)+8,ty(tauY)-4);
+}
+
+function updateKpSim(val){
+  const Kp=+val;
+  document.getElementById('kpVal').textContent=Kp;
+  document.getElementById('kpPole').textContent='s = −'+(1+Kp);
+  const yss=Kp/(1+Kp);
+  document.getElementById('kpYss').textContent=yss.toFixed(3);
+  document.getElementById('kpOffset').textContent=((1-yss)*100).toFixed(1)+' %';
+  drawKpSim(Kp);
+}
+function setKp(v){document.getElementById('kpSlider').value=v;updateKpSim(v)}
+
+/* ─── INIT ─── */
+window.addEventListener('load',()=>{
+  drawRC(1);
+  drawPoles();
+  drawKpSim(5);
+});
+window.addEventListener('resize',()=>{
+  const active=document.querySelector('.page.active');
+  if(!active) return;
+  if(active.id==='page-b') drawRC(rcProgress>0?rcProgress:1);
+  if(active.id==='page-c') drawPoles();
+  if(active.id==='page-e') drawKpSim(+document.getElementById('kpSlider').value);
+});
+</script>
+</body>
+</html>

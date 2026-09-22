@@ -9,21 +9,19 @@
 :root{
   --main:#0d9488;--main-lt:#14b8a6;--main-bg:#ccfbf1;
   --amber:#b45309;--amber-bg:#fef9c3;
-  --teal:#0d9488;--teal-bg:#ccfbf1;
   --orange:#c2410c;--orange-bg:#ffedd5;
   --red:#b91c1c;--red-bg:#fee2e2;
   --green:#15803d;--green-bg:#dcfce7;
   --blue:#1d4ed8;--blue-bg:#dbeafe;
+  --purple:#7c3aed;--purple-bg:#ede9fe;
   --gray:#374151;--gray-lt:#6b7280;
   --bg:#f5f6fb;--card:#fff;--border:#e2e8f0;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65;overflow-x:hidden;-webkit-tap-highlight-color:rgba(13,148,136,.15);-webkit-font-smoothing:antialiased}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 img,svg,video{max-width:100%;height:auto}
-table{max-width:100%}
 button,select{min-height:44px}
-.tab-btn{min-height:44px}
 @media(hover:none){.card:hover{box-shadow:0 1px 4px rgba(0,0,0,.05);transform:none}}
 
 /* NAV */
@@ -37,7 +35,7 @@ nav{position:sticky;top:0;z-index:200;background:var(--main);display:flex;align-
 /* HERO */
 .hero{background:linear-gradient(135deg,#0f3d38 0%,var(--main-lt) 100%);color:#fff;text-align:center;padding:2.5rem 1rem 2rem}
 .hero h1{font-size:2.1rem;font-weight:900;letter-spacing:-.5px}
-.hero p{opacity:.88;margin-top:.4rem;max-width:640px;margin-left:auto;margin-right:auto}
+.hero p{opacity:.88;margin-top:.4rem;max-width:660px;margin-left:auto;margin-right:auto}
 .badges-sum{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
 .badge-chip{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.25rem .85rem;font-size:.78rem;font-weight:700}
 
@@ -48,7 +46,7 @@ nav{position:sticky;top:0;z-index:200;background:var(--main);display:flex;align-
 .stitle:first-child{margin-top:0}
 .stitle .ico{font-size:1.3rem}
 .sub{font-size:1.05rem;font-weight:700;color:var(--main-lt);margin:1.4rem 0 .7rem}
-.lead{font-size:.95rem;color:var(--gray);margin-bottom:1rem}
+.lead{font-size:.95rem;color:var(--gray);margin-bottom:1rem;line-height:1.75}
 .lead b{color:var(--main)}
 .src-tag{display:inline-block;font-size:.7rem;font-weight:700;color:var(--main-lt);background:var(--main-bg);border-radius:2rem;padding:.15rem .6rem;margin-bottom:.8rem}
 
@@ -62,27 +60,30 @@ nav{position:sticky;top:0;z-index:200;background:var(--main);display:flex;align-
 .card h3{font-size:1rem;font-weight:700;margin-bottom:.5rem;color:var(--main)}
 .card p,.card li{font-size:.9rem;color:var(--gray)}
 .card ul,.card ol{margin-left:1.2rem;margin-top:.4rem}
+.card li{margin-bottom:.2rem}
 .card.bl{border-left:4px solid var(--main-lt);background:var(--main-bg)}
 .card.gr{border-left:4px solid var(--green);background:var(--green-bg)}
 .card.or{border-left:4px solid var(--orange);background:var(--orange-bg)}
 .card.re{border-left:4px solid var(--red);background:var(--red-bg)}
-.card.te{border-left:4px solid var(--teal);background:var(--teal-bg)}
 .card.am{border-left:4px solid var(--amber);background:var(--amber-bg)}
 .card.bu{border-left:4px solid var(--blue);background:var(--blue-bg)}
+.card.pu{border-left:4px solid var(--purple);background:var(--purple-bg)}
 
 /* TABLE */
 .twrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);margin:.6rem 0}
 table{width:100%;border-collapse:collapse;font-size:.87rem;background:#fff}
 th{background:var(--main);color:#fff;padding:.65rem .9rem;text-align:left;font-weight:600}
-td{padding:.6rem .9rem;border-bottom:1px solid var(--border)}
+td{padding:.6rem .9rem;border-bottom:1px solid var(--border);vertical-align:top}
 tr:last-child td{border:none}
 tr:nth-child(even) td{background:var(--main-bg)}
 
 /* CALLOUTS */
-.note{background:var(--main-bg);border-left:4px solid var(--main-lt);border-radius:0 8px 8px 0;padding:.8rem 1rem;font-size:.92rem;margin:.9rem 0;color:#134e4a}
-.warn{background:var(--red-bg);border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:.8rem 1rem;font-size:.92rem;margin:.9rem 0;color:#7f1d1d}
-.tip{display:flex;gap:.7rem;align-items:flex-start;background:#fffbeb;border:1px solid #fbbf24;border-radius:10px;padding:.85rem 1.1rem;margin:.9rem 0;font-size:.9rem}
+.note{background:var(--main-bg);border-left:4px solid var(--main-lt);border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:.92rem;margin:.9rem 0;color:#134e4a;line-height:1.65}
+.warn{background:var(--red-bg);border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:.92rem;margin:.9rem 0;color:#7f1d1d;line-height:1.65}
+.tip{display:flex;gap:.7rem;align-items:flex-start;background:#fffbeb;border:1px solid #fbbf24;border-radius:10px;padding:.85rem 1.1rem;margin:.9rem 0;font-size:.9rem;line-height:1.65}
 .tip-i{flex-shrink:0;font-size:1.05rem}
+.example-box{background:#f8faff;border:1px solid var(--blue);border-radius:10px;padding:1.1rem 1.3rem;margin:.9rem 0}
+.example-box .ex-tag{font-size:.72rem;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.5rem}
 
 /* DIAGRAM */
 .diagram{background:#f0fdfa;border:1px solid var(--border);border-radius:10px;padding:1.2rem;margin:.9rem 0;text-align:center}
@@ -91,9 +92,23 @@ tr:nth-child(even) td{background:var(--main-bg)}
 /* FLOW */
 .flow{display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
 .flow-box{background:var(--main);color:#fff;border-radius:8px;padding:.5rem 1.1rem;font-weight:700;font-size:.9rem}
-.flow-arr{font-size:1.2rem;color:var(--main)}
+.flow-arr{font-size:1.2rem;color:var(--main);font-weight:700}
 
-/* FODA GRID */
+/* ACCORDION */
+details{border:1px solid var(--border);border-radius:10px;margin-bottom:.7rem;overflow:hidden}
+details summary{padding:.9rem 1.1rem;cursor:pointer;font-weight:600;font-size:.92rem;background:var(--card);list-style:none;display:flex;justify-content:space-between;align-items:center;user-select:none}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:'＋';color:var(--main-lt)}
+details[open] summary::after{content:'－'}
+details[open] summary{background:var(--main-bg);color:var(--main)}
+.dbody{padding:1.1rem;background:var(--card);border-top:1px solid var(--border);font-size:.9rem;line-height:1.75}
+.dbody ul{margin-left:1.2rem}
+.dbody li{margin-bottom:.3rem}
+
+/* ISHIKAWA */
+.ishikawa-wrap{overflow-x:auto;margin:.9rem 0}
+
+/* FODA */
 .foda-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
 @media(max-width:600px){.foda-grid{grid-template-columns:1fr}}
 .foda-cell{border-radius:12px;padding:1.2rem;border:2px solid transparent}
@@ -102,7 +117,7 @@ tr:nth-child(even) td{background:var(--main-bg)}
 .foda-o{background:#dbeafe;border-color:#2563eb}
 .foda-a{background:#fef9c3;border-color:#ca8a04}
 .foda-cell h3{font-size:1rem;font-weight:800;margin-bottom:.7rem}
-.foda-cell ul{margin-left:1.1rem;font-size:.88rem;line-height:1.8}
+.foda-cell ul{margin-left:1.1rem;font-size:.88rem;line-height:1.9}
 .foda-f h3{color:#15803d}
 .foda-d h3{color:#b91c1c}
 .foda-o h3{color:#1d4ed8}
@@ -116,614 +131,1282 @@ tr:nth-child(even) td{background:var(--main-bg)}
 .cruce-fa{background:#fef9c3;border-color:#92400e}
 .cruce-da{background:#fee2e2;border-color:#b91c1c}
 .cruce-card h3{font-size:.95rem;font-weight:800;margin-bottom:.5rem}
-.cruce-card p{font-size:.88rem;line-height:1.6}
+.cruce-card p{font-size:.88rem;line-height:1.65}
 .cruce-fo h3{color:#14532d}
 .cruce-do h3{color:#1e3a8a}
 .cruce-fa h3{color:#78350f}
 .cruce-da h3{color:#7f1d1d}
 
-/* ISHIKAWA SVG */
-.ishikawa-wrap{overflow-x:auto;margin:.9rem 0}
-
 /* STAKEHOLDER MATRIX */
-.matrix-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.8rem 0;max-width:480px}
+.matrix-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.8rem 0;max-width:500px}
 .matrix-q{border-radius:8px;padding:.8rem 1rem;font-size:.85rem;font-weight:700;text-align:center}
 .mq-ga{background:#dcfce7;color:#14532d}
 .mq-mi{background:#dbeafe;color:#1e3a8a}
 .mq-ms{background:#fef9c3;color:#78350f}
 .mq-mo{background:#f3f4f6;color:#374151}
-.matrix-label{font-size:.75rem;font-weight:600;color:var(--gray-lt);text-align:center;margin-bottom:.3rem}
+
+/* QUIZ */
+.quiz-wrap{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.6rem;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;flex-wrap:wrap;gap:.5rem}
+.quiz-progress-bar{height:6px;background:var(--border);border-radius:3px;margin-bottom:1.2rem;overflow:hidden}
+.quiz-progress-fill{height:100%;background:var(--main);border-radius:3px;transition:.3s}
+.quiz-num{font-size:.8rem;font-weight:700;color:var(--gray-lt)}
+.quiz-score-live{font-size:.8rem;font-weight:700;color:var(--main);background:var(--main-bg);padding:.2rem .7rem;border-radius:2rem}
+.quiz-q{font-size:1.05rem;font-weight:700;color:var(--gray);margin-bottom:1.1rem;line-height:1.6}
+.quiz-opts{display:flex;flex-direction:column;gap:.6rem}
+.opt-btn{text-align:left;border:2px solid var(--border);background:#fff;border-radius:10px;padding:.8rem 1.1rem;font-size:.9rem;cursor:pointer;color:var(--gray);font-family:inherit;transition:.15s;line-height:1.4}
+.opt-btn:hover:not(.disabled){border-color:var(--main-lt);background:var(--main-bg)}
+.opt-btn.correct{border-color:var(--green);background:var(--green-bg);color:#14532d;font-weight:700}
+.opt-btn.wrong{border-color:var(--red);background:var(--red-bg);color:#7f1d1d;font-weight:700}
+.opt-btn.disabled{pointer-events:none}
+.quiz-expl{margin-top:1rem;padding:1rem 1.1rem;border-radius:8px;background:var(--main-bg);color:#134e4a;font-size:.88rem;display:none;line-height:1.65}
+.quiz-expl.show{display:block}
+.next-q-btn{margin-top:1.1rem;border:none;background:var(--main);color:#fff;font-weight:700;padding:.7rem 1.5rem;border-radius:8px;cursor:pointer;font-family:inherit;font-size:.92rem;display:none}
+.next-q-btn.show{display:inline-block}
+.quiz-result{text-align:center;padding:1rem 0}
+.quiz-result .score{font-size:3rem;font-weight:900;color:var(--main);margin:.6rem 0}
+.quiz-result .score-label{font-size:.88rem;color:var(--gray-lt);font-weight:600}
+.quiz-result .result-msg{font-size:1.1rem;font-weight:700;margin:1rem 0 .5rem;color:var(--gray)}
+.retry-btn{border:none;background:var(--main);color:#fff;font-weight:700;padding:.7rem 1.8rem;border-radius:8px;cursor:pointer;font-family:inherit;font-size:.95rem;margin-top:1rem}
+.result-breakdown{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin:1rem 0}
+.rb-chip{padding:.4rem 1rem;border-radius:2rem;font-size:.85rem;font-weight:700}
+.rb-ok{background:var(--green-bg);color:var(--green)}
+.rb-err{background:var(--red-bg);color:var(--red)}
 
 footer{text-align:center;padding:2rem 1rem 3rem;font-size:.8rem;color:var(--gray-lt)}
 footer a{color:var(--main)}
 </style>
+
+<style>
+.apuntes-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .5rem 1rem;
+  background: rgba(10,10,18,.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  font-family: 'Inter', sans-serif;
+  font-size: .82rem;
+}
+.apuntes-nav a {
+  color: #94a3b8;
+  text-decoration: none;
+  padding: .2rem .5rem;
+  border-radius: 4px;
+  transition: background .15s;
+}
+.apuntes-nav a:hover { background: rgba(255,255,255,.07); color: #e2e8f0; }
+.apuntes-nav__hub { color: #38bdf8 !important; }
+.apuntes-nav__current {
+  margin-left: auto;
+  color: #64748b;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .75rem;
+}
+@media (max-width: 480px) { .apuntes-nav__current { display: none; } }
+.apuntes-footer-nav {
+  margin-top: 3rem;
+  padding: 1rem 1.25rem;
+  background: rgba(255,255,255,.04);
+  border-top: 1px solid rgba(255,255,255,.08);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  font-family: 'Inter', sans-serif;
+  font-size: .83rem;
+}
+.apuntes-footer-nav__label { color: #64748b; margin-right: .25rem; }
+.apuntes-footer-nav a {
+  color: #94a3b8;
+  text-decoration: none;
+  padding: .2rem .6rem;
+  border-radius: 4px;
+  background: rgba(255,255,255,.06);
+}
+.apuntes-footer-nav a:hover { background: rgba(255,255,255,.12); color: #e2e8f0; }
+</style>
 </head>
 <body>
+<div class="apuntes-nav">
+  <a href="https://joacodelacorte.netlify.app/#apuntes" class="apuntes-nav__back">← Portafolio</a>
+  <a href="../apuntes/" class="apuntes-nav__hub">Hub Apuntes</a>
+  <span class="apuntes-nav__current">Taller Sociocomunitario</span>
+</div>
 
 <nav>
   <div class="brand">🏘️ Taller Sociocomunitario</div>
   <div class="tabs">
-    <button class="tab-btn active" onclick="showTab('c1')">📖 Clase 1</button>
-    <button class="tab-btn" onclick="showTab('c2')">🔍 Clase 2</button>
-    <button class="tab-btn" onclick="showTab('comp')">⚙️ Complemento</button>
-    <button class="tab-btn" onclick="showTab('c3')">🗺️ Clase 3</button>
-    <button class="tab-btn" onclick="showTab('c5')">🐟 Clase 5</button>
-    <button class="tab-btn" onclick="showTab('foda')">📊 FODA</button>
+    <button class="tab-btn active" onclick="showTab('c1',this)">📖 Clase 1</button>
+    <button class="tab-btn" onclick="showTab('c2',this)">🔍 Clase 2</button>
+    <button class="tab-btn" onclick="showTab('comp',this)">⚙️ Complemento</button>
+    <button class="tab-btn" onclick="showTab('c3',this)">🗺️ Clase 3</button>
+    <button class="tab-btn" onclick="showTab('c5',this)">🐟 Clase 5</button>
+    <button class="tab-btn" onclick="showTab('foda',this)">📊 FODA</button>
+    <button class="tab-btn" onclick="showTab('quiz',this)">🏅 Quiz</button>
   </div>
 </nav>
 
 <div class="hero">
   <h1>Taller de Formulación y Desarrollo de Proyectos Sociocomunitarios</h1>
-  <p>Automatización y Control — UNaP · 2026</p>
+  <p>Automatización y Control — UNaP · 2026 · Apuntes clase a clase con contenido expandido y quiz de autoevaluación</p>
   <div class="badges-sum">
     <span class="badge-chip">📋 Proyectos</span>
     <span class="badge-chip">🔬 Diagnóstico</span>
     <span class="badge-chip">🐟 Análisis de Causas</span>
-    <span class="badge-chip">📊 FODA</span>
-    <span class="badge-chip">🌿 Ishikawa</span>
+    <span class="badge-chip">📊 FODA · PESTEL</span>
+    <span class="badge-chip">🏅 30 preguntas</span>
   </div>
 </div>
 
 
-<!-- ================= CLASE 1 ================= -->
+<!-- ==================== CLASE 1 ==================== -->
 <div class="page active" id="page-c1">
-  <div class="container">
+<div class="container">
 
-    <span class="src-tag">📎 Clase 1 · 14/08/2026 · Introducción a los Proyectos</span>
+<span class="src-tag">📎 Clase 1 · 14/08/2026 · Introducción a los Proyectos</span>
 
-    <div class="stitle"><span class="ico">🎯</span>¿Qué es un proyecto?</div>
-    <p class="lead">Un proyecto es una <b>intervención planificada</b> que transforma una situación problemática o una oportunidad en un resultado concreto.</p>
+<div class="stitle"><span class="ico">🎯</span>¿Qué es un proyecto?</div>
+<p class="lead">Un proyecto es una <b>intervención planificada, temporal y orientada a resultados</b> que transforma una situación problemática o una oportunidad en un cambio concreto y verificable. No es simplemente «hacer algo» — es hacerlo con método, propósito y límites claros.</p>
+<p class="lead">La palabra clave es <b>transformación</b>: un proyecto parte de un estado actual insatisfactorio y apunta a un estado deseado. Todo lo que ocurre entre medio — diagnóstico, planificación, ejecución, evaluación — constituye el ciclo del proyecto.</p>
 
-    <div class="stitle"><span class="ico">✅</span>Características de los proyectos</div>
-    <div class="grid g3">
-      <div class="card bl"><h3>🎯 Objetivo definido</h3><p>Todo proyecto tiene un fin claro y medible.</p></div>
-      <div class="card bl"><h3>📅 Inicio y fin</h3><p>Son temporales — no operan de forma permanente.</p></div>
-      <div class="card bl"><h3>💰 Recursos limitados</h3><p>Tiempo, presupuesto y personas son finitos.</p></div>
-      <div class="card bl"><h3>⚠️ Incertidumbre</h3><p>Involucran riesgos que deben gestionarse.</p></div>
-      <div class="card bl"><h3>🔄 Cambio</h3><p>Buscan generar una transformación real.</p></div>
-      <div class="card bl"><h3>🌟 Resultado único</h3><p>Cada proyecto crea algo que antes no existía.</p></div>
-    </div>
+<div class="stitle"><span class="ico">✅</span>Características esenciales</div>
+<div class="grid g3">
+  <div class="card bl"><h3>🎯 Objetivo definido</h3><p>Todo proyecto tiene un fin claro, medible y acordado entre los involucrados. Sin objetivo, no hay proyecto — hay actividad.</p></div>
+  <div class="card bl"><h3>📅 Inicio y fin</h3><p>Son temporales. Tienen un comienzo y un cierre. Cuando terminan, ceden paso a la operación o a un nuevo proyecto.</p></div>
+  <div class="card bl"><h3>💰 Recursos limitados</h3><p>Tiempo, presupuesto, personas y equipos son finitos. Gestionarlos bien es parte central del trabajo del proyectista.</p></div>
+  <div class="card bl"><h3>⚠️ Incertidumbre y riesgo</h3><p>Todo proyecto enfrenta variables desconocidas. Identificar, evaluar y mitigar riesgos es una tarea permanente.</p></div>
+  <div class="card bl"><h3>🔄 Genera cambio</h3><p>Un proyecto que no cambia nada no cumplió su propósito. El cambio es su razón de ser.</p></div>
+  <div class="card bl"><h3>🌟 Resultado único</h3><p>Aunque el tipo de proyecto sea conocido, cada implementación crea algo que antes no existía en ese contexto.</p></div>
+</div>
 
-    <div class="stitle"><span class="ico">💡</span>¿Por qué hacemos proyectos?</div>
-    <p class="lead">Los proyectos no son un fin en sí mismos.</p>
-    <div class="twrap">
-      <table>
-        <thead><tr><th>No hacemos proyectos para…</th><th>Hacemos proyectos para…</th></tr></thead>
-        <tbody>
-          <tr><td>Comprar tecnología</td><td>Resolver problemas</td></tr>
-          <tr><td>Instalar sensores</td><td>Aprovechar oportunidades</td></tr>
-          <tr><td>Construir algo</td><td>Mejorar procesos</td></tr>
-          <tr><td>Implementar un software</td><td>Reducir costos / Aumentar seguridad / Generar valor</td></tr>
-        </tbody>
-      </table>
-    </div>
+<div class="stitle"><span class="ico">💡</span>¿Por qué hacemos proyectos?</div>
+<p class="lead">Los proyectos no son un fin en sí mismos. Son el <b>vehículo para resolver problemas o aprovechar oportunidades</b>. Un error frecuente es confundir el medio con el fin: instalar sensores no es el objetivo, reducir errores operativos sí lo es.</p>
+<div class="twrap">
+  <table>
+    <thead><tr><th>❌ No hacemos proyectos para…</th><th>✅ Hacemos proyectos para…</th></tr></thead>
+    <tbody>
+      <tr><td>Comprar tecnología</td><td>Resolver un problema concreto de personas u organizaciones</td></tr>
+      <tr><td>Instalar sensores</td><td>Aprovechar una oportunidad de mejora identificada</td></tr>
+      <tr><td>Construir infraestructura</td><td>Mejorar un proceso o condición de vida</td></tr>
+      <tr><td>Implementar un software</td><td>Reducir costos, aumentar seguridad o generar valor sostenible</td></tr>
+      <tr><td>Cumplir con una tarea académica</td><td>Desarrollar capacidad de intervención planificada sobre la realidad</td></tr>
+    </tbody>
+  </table>
+</div>
 
-    <div class="stitle"><span class="ico">🔄</span>Problema vs. Solución</div>
-    <div class="twrap">
-      <table>
-        <thead><tr><th>Problema</th><th>Solución</th></tr></thead>
-        <tbody>
-          <tr><td>No existe información confiable</td><td>Instalar sensores</td></tr>
-          <tr><td>El proceso es lento y manual</td><td>Crear una aplicación</td></tr>
-          <tr><td>Existen errores frecuentes</td><td>Automatizar una línea</td></tr>
-          <tr><td>La productividad es insuficiente</td><td>Comprar equipamiento</td></tr>
-        </tbody>
-      </table>
-    </div>
+<div class="stitle"><span class="ico">🔄</span>Problema vs. Solución: no confundir</div>
+<p class="lead">Uno de los errores más comunes al formular proyectos es plantear <b>una solución como si fuera un problema</b>. El problema describe la brecha entre lo que hay y lo que debería haber. La solución es una respuesta posible a esa brecha — y puede haber varias.</p>
+<div class="twrap">
+  <table>
+    <thead><tr><th>❌ Formulado como solución (error)</th><th>✅ Formulado como problema (correcto)</th></tr></thead>
+    <tbody>
+      <tr><td>«Necesitamos instalar sensores»</td><td>«No existe información confiable sobre el estado del proceso en tiempo real»</td></tr>
+      <tr><td>«Hay que crear una aplicación»</td><td>«El proceso de registro es lento y genera errores por ser manual»</td></tr>
+      <tr><td>«Debemos comprar equipamiento»</td><td>«La productividad es insuficiente para cubrir la demanda actual»</td></tr>
+      <tr><td>«Vamos a automatizar la línea»</td><td>«Los errores frecuentes generan retrabajos y pérdidas del 12% en producción»</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="note">💡 <strong>Regla de oro:</strong> el problema debe poder describirse sin mencionar ninguna tecnología ni solución. Si tu enunciado contiene «instalar», «crear» o «automatizar», estás describiendo una solución, no un problema.</div>
 
-    <div class="note">💡 <strong>Antes de diseñar una solución, debemos comprender correctamente el problema que buscamos resolver.</strong></div>
+<div class="stitle"><span class="ico">🌱</span>¿De dónde nacen los proyectos?</div>
+<p class="lead">Los proyectos emergen de distintas fuentes. Reconocerlas ayuda a justificar su existencia y a diseñar intervenciones más pertinentes.</p>
+<div class="grid g3">
+  <div class="card te"><h3>🔴 Problemas existentes</h3><p>Situaciones que afectan negativamente a personas u organizaciones. Son la fuente más frecuente: algo no funciona y hay que corregirlo.</p></div>
+  <div class="card te"><h3>🟡 Oportunidades identificadas</h3><p>Ventanas de mejora que aún no se explotan. No hay un problema urgente, pero existe un potencial de valor que vale la pena capturar.</p></div>
+  <div class="card te"><h3>🔵 Necesidades de mejora</h3><p>Procesos que funcionan pero de forma ineficiente. La mejora continua impulsa proyectos incrementales de optimización.</p></div>
+  <div class="card te"><h3>💻 Cambios tecnológicos</h3><p>Nuevas herramientas que habilitan soluciones antes imposibles o demasiado costosas. La tecnología abre el campo de lo posible.</p></div>
+  <div class="card te"><h3>📜 Requisitos normativos o legales</h3><p>Obligaciones externas que obligan a actuar: nuevas leyes, auditorías, certificaciones. El proyecto nace de la necesidad de cumplir.</p></div>
+  <div class="card te"><h3>🌍 Demandas sociales o comunitarias</h3><p>Necesidades de grupos o comunidades que no están siendo atendidas por las estructuras existentes. Especialmente relevante en proyectos sociocomunitarios.</p></div>
+</div>
 
-    <div class="stitle"><span class="ico">🌱</span>¿De dónde nacen los proyectos?</div>
-    <div class="grid g3">
-      <div class="card te"><h3>🔴 Problemas existentes</h3><p>Situaciones que afectan negativamente a personas u organizaciones.</p></div>
-      <div class="card te"><h3>🟡 Oportunidades</h3><p>Ventanas de mejora identificadas en el entorno.</p></div>
-      <div class="card te"><h3>🔵 Necesidades de mejora</h3><p>Procesos que funcionan pero pueden optimizarse.</p></div>
-      <div class="card te"><h3>💻 Cambios tecnológicos</h3><p>Nuevas herramientas que habilitan soluciones antes imposibles.</p></div>
-      <div class="card te"><h3>📜 Requisitos normativos</h3><p>Obligaciones legales o reglamentarias que deben cumplirse.</p></div>
-    </div>
-
+<div class="stitle"><span class="ico">📐</span>Ciclo de vida de un proyecto</div>
+<p class="lead">Todo proyecto transita por fases. Conocerlas permite anticipar qué se hace en cada momento y qué decisiones son reversibles y cuáles no.</p>
+<div class="diagram">
+  <div style="display:flex;align-items:center;justify-content:center;gap:.3rem;flex-wrap:wrap">
+    <div style="background:#0d9488;color:#fff;border-radius:8px;padding:.6rem 1rem;font-weight:700;font-size:.85rem;text-align:center">1️⃣<br>Identificación</div>
+    <div style="color:var(--main);font-size:1.3rem;font-weight:700">→</div>
+    <div style="background:#14b8a6;color:#fff;border-radius:8px;padding:.6rem 1rem;font-weight:700;font-size:.85rem;text-align:center">2️⃣<br>Formulación</div>
+    <div style="color:var(--main);font-size:1.3rem;font-weight:700">→</div>
+    <div style="background:#0d9488;color:#fff;border-radius:8px;padding:.6rem 1rem;font-weight:700;font-size:.85rem;text-align:center">3️⃣<br>Planificación</div>
+    <div style="color:var(--main);font-size:1.3rem;font-weight:700">→</div>
+    <div style="background:#14b8a6;color:#fff;border-radius:8px;padding:.6rem 1rem;font-weight:700;font-size:.85rem;text-align:center">4️⃣<br>Ejecución</div>
+    <div style="color:var(--main);font-size:1.3rem;font-weight:700">→</div>
+    <div style="background:#0d9488;color:#fff;border-radius:8px;padding:.6rem 1rem;font-weight:700;font-size:.85rem;text-align:center">5️⃣<br>Evaluación</div>
   </div>
+  <p class="dcap">A mayor avance, mayor costo de cambio — las decisiones tempranas tienen el mayor impacto</p>
+</div>
+
+</div>
 </div>
 
 
-<!-- ================= CLASE 2 ================= -->
+<!-- ==================== CLASE 2 ==================== -->
 <div class="page" id="page-c2">
-  <div class="container">
+<div class="container">
 
-    <span class="src-tag">📎 Clase 2 · 21/08/2026 · Identificación de Problemas</span>
+<span class="src-tag">📎 Clase 2 · 21/08/2026 · Identificación de Problemas</span>
 
-    <div class="note">📌 <strong>Problema = Diferencia entre situación actual y situación deseada.</strong></div>
+<div class="note">📌 <strong>Problema = Diferencia entre la situación actual (lo que hay) y la situación deseada (lo que debería haber).</strong> Sin esa brecha verificada, no hay proyecto posible.</div>
 
-    <div class="stitle"><span class="ico">⚠️</span>Reglas fundamentales</div>
-    <div class="warn">
-      <ul style="margin-left:1.2rem;line-height:2">
-        <li>No existe proyecto sin problema</li>
-        <li>No existe problema sin una situación actual</li>
-        <li>No existe proyecto si no sabemos cuál es la situación deseada</li>
-      </ul>
+<div class="stitle"><span class="ico">⚠️</span>Las tres reglas fundamentales</div>
+<p class="lead">Antes de diseñar cualquier solución, estas tres reglas deben estar cumplidas sin excepción:</p>
+<div class="warn">
+  <strong>Regla 1:</strong> No existe proyecto sin problema.<br>
+  <strong>Regla 2:</strong> No existe problema sin una situación actual documentada.<br>
+  <strong>Regla 3:</strong> No existe proyecto si no sabemos con precisión cuál es la situación deseada.
+</div>
+<p class="lead">Estas reglas parecen obvias pero son violadas constantemente. Un proyecto que comienza con «vamos a instalar X» nunca pasó por la validación del problema real.</p>
+
+<div class="stitle"><span class="ico">📋</span>Tipos de problemas</div>
+<p class="lead">Los problemas no son todos iguales. Clasificarlos ayuda a elegir las herramientas de análisis correctas y a identificar a los actores relevantes.</p>
+<div class="grid g3">
+  <div class="card bl"><h3>⚙️ De procesos</h3><p>Ineficiencias, cuellos de botella, errores repetitivos en flujos de trabajo. Se detectan midiendo tiempos, tasas de error y costos de retrabajo.</p></div>
+  <div class="card bl"><h3>💻 Tecnológicos</h3><p>Obsolescencia de sistemas, falta de automatización, incompatibilidades entre plataformas. Requieren diagnóstico técnico.</p></div>
+  <div class="card bl"><h3>🏢 Organizacionales</h3><p>Comunicación deficiente, roles sin definir, procedimientos obsoletos, resistencia al cambio. Involucran factores humanos.</p></div>
+  <div class="card bl"><h3>🌿 Ambientales</h3><p>Contaminación, residuos, impacto ecológico. Tienen dimensión legal y social además de técnica.</p></div>
+  <div class="card bl"><h3>🏘️ Sociocomunitarios</h3><p>Acceso a servicios, integración, participación ciudadana, convivencia. Requieren metodologías participativas.</p></div>
+  <div class="card bl"><h3>🛎️ De servicios</h3><p>Baja calidad de atención, cobertura insuficiente, tiempos de respuesta inadecuados. Se miden con indicadores de satisfacción.</p></div>
+</div>
+
+<div class="stitle"><span class="ico">🛠️</span>Herramientas para definir un problema</div>
+<p class="lead">Ninguna herramienta es suficiente por sí sola. La combinación de varias fuentes y métodos produce un diagnóstico sólido.</p>
+
+<div class="sub">① Observación directa</div>
+<p class="lead">Relevamiento presencial de la situación en su contexto real. La observación directa permite captar lo que los documentos no muestran: dinámicas informales, condiciones físicas, comportamientos reales vs. procedimientos declarados.</p>
+<div class="tip"><span class="tip-i">💡</span><div>No hay sustituto para ir al lugar del problema. Un diagnóstico hecho solo desde la oficina siempre estará incompleto.</div></div>
+
+<div class="sub">② Entrevistas y relevamiento</div>
+<p class="lead">Conversaciones estructuradas o semiestructuradas con actores clave. Las fuentes más valiosas son: operadores directos, vecinos afectados, usuarios del servicio, personal de mantenimiento, docentes o referentes comunitarios.</p>
+<p class="lead">Las entrevistas capturan percepciones, experiencias y conocimiento tácito que los datos cuantitativos no pueden revelar.</p>
+
+<div class="sub">③ Recolección de datos cuantitativos</div>
+<p class="lead">Evidencia numérica que dimensiona el problema. Ejemplos: tiempos de proceso, cantidades producidas, costos incurridos, reclamos registrados, frecuencia de fallas, indicadores de desempeño histórico.</p>
+<div class="warn">⚠️ <strong>Nunca trabajar sobre opiniones sin respaldo.</strong> «Parece que hay muchos microbasurales» no es evidencia. «Se relevaron 47 puntos activos en el radio de 3 km» sí lo es.</div>
+
+<div class="sub">④ Metodología 5W + 2H</div>
+<p class="lead">Framework estructurado para caracterizar un problema de forma exhaustiva. Responder las 7 preguntas garantiza que no quede ninguna dimensión relevante sin explorar.</p>
+<div class="twrap">
+  <table>
+    <thead><tr><th>Sigla</th><th>Pregunta</th><th>Qué responde</th><th>Ejemplo aplicado</th></tr></thead>
+    <tbody>
+      <tr><td><strong>What</strong></td><td>¿Qué?</td><td>El problema identificado</td><td>Acumulación de residuos en espacios públicos</td></tr>
+      <tr><td><strong>Why</strong></td><td>¿Por qué?</td><td>La razón del problema</td><td>Falta de contenedores y baja frecuencia de recolección</td></tr>
+      <tr><td><strong>Who</strong></td><td>¿Quién?</td><td>Los afectados o responsables</td><td>Vecinos del barrio, Municipalidad, empresa recolectora</td></tr>
+      <tr><td><strong>Where</strong></td><td>¿Dónde?</td><td>El lugar donde ocurre</td><td>Zona norte de Pilar, en terrenos baldíos y esquinas</td></tr>
+      <tr><td><strong>When</strong></td><td>¿Cuándo?</td><td>La frecuencia o momento</td><td>Permanente, con picos los fines de semana</td></tr>
+      <tr><td><strong>How</strong></td><td>¿Cómo?</td><td>La forma en que ocurre</td><td>Arrojan residuos domiciliarios fuera de los días de recolección</td></tr>
+      <tr><td><strong>How much</strong></td><td>¿Cuánto?</td><td>La magnitud o impacto</td><td>47 puntos activos, ~2 toneladas estimadas de residuos</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="sub">⑤ Análisis de Gap (Brecha)</div>
+<p class="lead">Comparación sistemática y explícita entre la situación actual y la situación deseada. La brecha entre ambas define el <b>alcance mínimo</b> que el proyecto debe cubrir para ser exitoso.</p>
+<div class="diagram">
+  <div style="display:flex;align-items:stretch;justify-content:center;gap:1rem;flex-wrap:wrap">
+    <div style="background:#fee2e2;border:2px solid #dc2626;border-radius:10px;padding:1rem 1.4rem;font-size:.88rem;max-width:200px">
+      <strong style="color:#b91c1c;display:block;margin-bottom:.4rem">Situación Actual</strong>
+      47 microbasurales activos, sin mapeo, sin datos oficiales, vecinos afectados
     </div>
-
-    <div class="stitle"><span class="ico">📋</span>Tipos de problemas</div>
-    <div class="grid g3">
-      <div class="card bl"><h3>⚙️ Procesos</h3><p>Ineficiencias, cuellos de botella, errores repetitivos.</p></div>
-      <div class="card bl"><h3>💻 Tecnológicos</h3><p>Obsolescencia, falta de sistemas, incompatibilidades.</p></div>
-      <div class="card bl"><h3>🏢 Organizacionales</h3><p>Comunicación, roles indefinidos, procedimientos obsoletos.</p></div>
-      <div class="card bl"><h3>🌿 Ambientales</h3><p>Contaminación, residuos, impacto ecológico.</p></div>
-      <div class="card bl"><h3>🏘️ Sociocomunitarios</h3><p>Acceso a servicios, integración, participación ciudadana.</p></div>
-      <div class="card bl"><h3>🛎️ Servicios</h3><p>Calidad de atención, cobertura, tiempos de respuesta.</p></div>
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:1.5rem;color:var(--main);font-weight:900">⇒<br><small style="font-size:.7rem;color:var(--gray-lt)">GAP</small></div>
+    <div style="background:#dcfce7;border:2px solid #16a34a;border-radius:10px;padding:1rem 1.4rem;font-size:.88rem;max-width:200px">
+      <strong style="color:#15803d;display:block;margin-bottom:.4rem">Situación Deseada</strong>
+      Microbasurales eliminados, vecinos informados, gestión municipal activa
     </div>
-
-    <div class="stitle"><span class="ico">🛠️</span>Herramientas para definir un problema</div>
-
-    <div class="sub">① Observación directa</div>
-    <p class="lead">Relevamiento presencial de la situación en su contexto real.</p>
-
-    <div class="sub">② Entrevistas y relevamiento</div>
-    <p class="lead">Fuentes: operadores, vecinos, usuarios, personal de mantenimiento, docentes.</p>
-
-    <div class="sub">③ Recolección de datos</div>
-    <p class="lead">Ejemplos: tiempos, cantidades, costos, reclamos, frecuencia, indicadores.</p>
-    <div class="warn">⚠️ Nunca trabajar sobre opiniones — buscar evidencia.</div>
-
-    <div class="sub">④ Metodología 5W + 2H</div>
-    <div class="twrap">
-      <table>
-        <thead><tr><th>Sigla</th><th>Pregunta</th><th>Qué responde</th></tr></thead>
-        <tbody>
-          <tr><td><strong>What</strong></td><td>¿Qué?</td><td>El problema identificado</td></tr>
-          <tr><td><strong>Why</strong></td><td>¿Por qué?</td><td>La razón del problema</td></tr>
-          <tr><td><strong>Who</strong></td><td>¿Quién?</td><td>Los afectados o responsables</td></tr>
-          <tr><td><strong>Where</strong></td><td>¿Dónde?</td><td>El lugar donde ocurre</td></tr>
-          <tr><td><strong>When</strong></td><td>¿Cuándo?</td><td>La frecuencia o momento</td></tr>
-          <tr><td><strong>How</strong></td><td>¿Cómo?</td><td>La forma en que ocurre</td></tr>
-          <tr><td><strong>How much</strong></td><td>¿Cuánto?</td><td>La magnitud o impacto</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="sub">⑤ Análisis de Gap</div>
-    <p class="lead">Comparación sistemática entre la situación actual y la situación deseada. La brecha entre ambas es lo que el proyecto debe cerrar.</p>
-    <div class="diagram">
-      <div style="display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap">
-        <div style="background:#fee2e2;border:2px solid #dc2626;border-radius:8px;padding:.8rem 1.4rem;font-weight:700;color:#b91c1c">Situación Actual</div>
-        <div style="font-size:1.5rem;color:var(--main)">→ GAP →</div>
-        <div style="background:#dcfce7;border:2px solid #16a34a;border-radius:8px;padding:.8rem 1.4rem;font-weight:700;color:#15803d">Situación Deseada</div>
-      </div>
-      <div class="dcap">La brecha (GAP) define el alcance del proyecto</div>
-    </div>
-
   </div>
+  <p class="dcap">El GAP cuantificado define el objetivo y los indicadores del proyecto</p>
+</div>
+
+<div class="stitle"><span class="ico">📏</span>Indicadores para medir un problema</div>
+<p class="lead">Un problema bien definido puede medirse. Los indicadores permiten comparar la situación antes y después del proyecto.</p>
+<div class="grid g3">
+  <div class="card gr"><h3>📊 Cuantitativos</h3><p>Números que describen magnitud: cantidad de puntos, toneladas, porcentaje de afectados, tiempo promedio de resolución.</p></div>
+  <div class="card gr"><h3>🎯 Cualitativos</h3><p>Descripciones de estado o condición: nivel de satisfacción, percepción de seguridad, calidad del servicio.</p></div>
+  <div class="card gr"><h3>📅 Temporales</h3><p>Frecuencia o duración: número de episodios por mes, tiempo promedio de espera, días sin incidentes.</p></div>
+</div>
+
+</div>
 </div>
 
 
-<!-- ================= COMPLEMENTO ================= -->
+<!-- ==================== COMPLEMENTO ==================== -->
 <div class="page" id="page-comp">
-  <div class="container">
+<div class="container">
 
-    <span class="src-tag">📎 Complemento · 21/08/2026 · Conceptos de Procesos</span>
+<span class="src-tag">📎 Complemento · 21/08/2026 · Conceptos de Procesos</span>
 
-    <div class="stitle"><span class="ico">🔄</span>Proyecto vs. Proceso</div>
-    <div class="twrap">
-      <table>
-        <thead><tr><th>Proyecto</th><th>Proceso</th></tr></thead>
-        <tbody>
-          <tr><td>Temporal, único</td><td>Continuo, repetitivo</td></tr>
-          <tr><td>Tiene inicio y fin</td><td>Opera de forma permanente</td></tr>
-          <tr><td>Genera un resultado nuevo</td><td>Transforma inputs en outputs</td></tr>
-          <tr><td>Involucra incertidumbre</td><td>Busca estabilidad y predictibilidad</td></tr>
-        </tbody>
-      </table>
-    </div>
+<div class="stitle"><span class="ico">🔄</span>Proyecto vs. Proceso: la diferencia clave</div>
+<p class="lead">Confundir proyecto con proceso es un error frecuente. Un proceso es una operación <b>continua y repetitiva</b> que transforma entradas en salidas. Un proyecto es una intervención <b>temporal y única</b> diseñada para generar un cambio.</p>
+<div class="twrap">
+  <table>
+    <thead><tr><th>Dimensión</th><th>Proyecto</th><th>Proceso</th></tr></thead>
+    <tbody>
+      <tr><td>Duración</td><td>Temporal, tiene inicio y fin</td><td>Continuo, opera de forma permanente</td></tr>
+      <tr><td>Resultado</td><td>Único, genera algo nuevo</td><td>Repetitivo, transforma inputs en outputs estándar</td></tr>
+      <tr><td>Incertidumbre</td><td>Alta — involucra variables desconocidas</td><td>Baja — busca estabilidad y predictibilidad</td></tr>
+      <tr><td>Objetivo</td><td>Producir un cambio</td><td>Mantener o mejorar un estado existente</td></tr>
+      <tr><td>Equipo</td><td>Temporal, se disuelve al finalizar</td><td>Estable, opera de forma permanente</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="example-box">
+  <div class="ex-tag">Ejemplo</div>
+  <p style="font-size:.9rem">Instalar un sistema de monitoreo de microbasurales es un <strong>proyecto</strong> (temporal, único, con entregables definidos). Operar ese sistema una vez instalado es un <strong>proceso</strong> (continuo, repetitivo, con métricas de desempeño estables).</p>
+</div>
 
-    <div class="stitle"><span class="ico">📐</span>Propiedades de un proceso</div>
+<div class="stitle"><span class="ico">📐</span>Propiedades de un proceso</div>
 
-    <div class="grid g2">
-      <div class="card bl">
-        <h3>💪 Capacidad de Trabajo</h3>
-        <p>Carga máxima sostenible bajo condiciones especificadas. Los límites vienen de la instalación (hornos, llenadoras, tanques) o las personas.</p>
-        <p style="margin-top:.6rem;font-size:.85rem;color:var(--gray-lt)">En proceso equilibrado: <strong>capacidad = demanda máxima</strong></p>
-      </div>
-      <div class="card bl">
-        <h3>📈 Productividad</h3>
-        <p>Relación entre recursos entrantes (inputs) y productos salientes (outputs).</p>
-        <p style="margin-top:.6rem;font-size:.85rem;color:var(--gray-lt)">Se mide como cantidad de producto por unidad de tiempo.</p>
-      </div>
-    </div>
-
-    <div class="stitle"><span class="ico">⚖️</span>Eficacia, Eficiencia y Efectividad</div>
-    <div class="twrap">
-      <table>
-        <thead><tr><th>Concepto</th><th>Definición</th><th>Pregunta clave</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Eficacia</strong></td><td>¿Cumple el objetivo?</td><td>¿Entregó en tiempo, cantidad y condición?</td></tr>
-          <tr><td><strong>Eficiencia</strong></td><td>¿Aprovecha bien los recursos?</td><td>¿Hay desperdicios (mudas)?</td></tr>
-          <tr><td><strong>Efectividad</strong></td><td>¿Produce lo que el cliente necesita?</td><td>¿Da en el clavo con el problema real?</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="note">⚠️ Un proceso puede ser eficaz y eficiente pero <strong>inefectivo</strong> si el producto no resuelve el problema del cliente.</div>
-
-    <div class="stitle"><span class="ico">🔀</span>Flexibilidad</div>
-    <p class="lead">Adaptabilidad ante cambios imprevistos. Incluye velocidad de respuesta y diseño modular que independice etapas críticas.</p>
-
-    <div class="stitle"><span class="ico">🗑️</span>Desperdicios (Mudas)</div>
-    <p class="lead">Cualquier actividad que consume recursos sin generar valor. Identificarlos y eliminarlos es el objetivo de la mejora continua.</p>
-    <div class="grid g3">
-      <div class="card re"><h3>📦 Sobreproducción</h3><p>Producir más de lo demandado.</p></div>
-      <div class="card re"><h3>⏳ Espera</h3><p>Tiempo sin actividad productiva.</p></div>
-      <div class="card re"><h3>🚚 Transporte innecesario</h3><p>Mover materiales sin agregar valor.</p></div>
-      <div class="card re"><h3>🔧 Sobreprocesamiento</h3><p>Más trabajo del que el cliente requiere.</p></div>
-      <div class="card re"><h3>📁 Inventario excesivo</h3><p>Stock mayor al necesario.</p></div>
-      <div class="card re"><h3>🚶 Movimientos innecesarios</h3><p>Desplazamientos sin propósito.</p></div>
-      <div class="card re"><h3>❌ Defectos</h3><p>Errores que requieren retrabajo o descarte.</p></div>
-    </div>
-
+<details>
+  <summary>💪 Capacidad de trabajo</summary>
+  <div class="dbody">
+    <p>La <strong>capacidad</strong> es la carga máxima sostenible que un proceso puede manejar bajo condiciones especificadas sin deterioro en la calidad del output.</p>
+    <p>Los límites de capacidad pueden venir de:</p>
+    <ul>
+      <li>La instalación física (hornos, llenadoras, tanques, ancho de banda)</li>
+      <li>Las personas (tiempo disponible, habilidades, energía cognitiva)</li>
+      <li>La información disponible (datos, señales, conocimiento)</li>
+    </ul>
+    <p style="margin-top:.7rem"><strong>En un proceso equilibrado:</strong> capacidad = demanda máxima. Cuando la demanda supera la capacidad, el proceso colapsa o degrada su calidad.</p>
   </div>
+</details>
+
+<details>
+  <summary>📈 Productividad</summary>
+  <div class="dbody">
+    <p>La <strong>productividad</strong> es la relación entre los recursos consumidos (inputs) y los resultados obtenidos (outputs).</p>
+    <p>Fórmula general: <code>Productividad = Output / Input</code></p>
+    <p>Se mide habitualmente como cantidad de producto por unidad de tiempo (ej: 50 unidades/hora, 10 expedientes procesados/día).</p>
+    <p style="margin-top:.7rem">Aumentar la productividad puede lograrse de dos formas:</p>
+    <ul>
+      <li>Aumentar el output con los mismos inputs</li>
+      <li>Mantener el output reduciendo los inputs</li>
+    </ul>
+  </div>
+</details>
+
+<details>
+  <summary>⚖️ Eficacia, Eficiencia y Efectividad</summary>
+  <div class="dbody">
+    <div class="twrap" style="margin-top:.3rem">
+      <table>
+        <thead><tr><th>Concepto</th><th>Definición</th><th>Pregunta clave</th><th>Ejemplo</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Eficacia</strong></td><td>Cumplir el objetivo propuesto</td><td>¿Entregó en tiempo, cantidad y condición acordados?</td><td>El informe fue entregado en la fecha pactada</td></tr>
+          <tr><td><strong>Eficiencia</strong></td><td>Aprovechar bien los recursos</td><td>¿Hay desperdicios (mudas)?</td><td>El informe se hizo en 2 horas en vez de 8</td></tr>
+          <tr><td><strong>Efectividad</strong></td><td>Producir el impacto que el cliente realmente necesita</td><td>¿Da en el clavo con el problema real?</td><td>El informe resolvió la decisión que bloqueaba al equipo</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="warn" style="margin-top:.9rem">⚠️ Un proceso puede ser <strong>eficaz y eficiente pero inefectivo</strong>: cumplió en tiempo, usó pocos recursos, pero no resolvió el problema real del cliente. La efectividad requiere haber comprendido correctamente la necesidad.</div>
+  </div>
+</details>
+
+<details>
+  <summary>🔀 Flexibilidad</summary>
+  <div class="dbody">
+    <p>La <strong>flexibilidad</strong> es la capacidad de un proceso de adaptarse ante cambios imprevistos sin perder desempeño de forma significativa.</p>
+    <ul>
+      <li><strong>Velocidad de respuesta:</strong> qué tan rápido puede el proceso adaptarse a un cambio de condiciones</li>
+      <li><strong>Diseño modular:</strong> independizar etapas críticas para que un fallo parcial no detenga todo el sistema</li>
+      <li><strong>Redundancia planificada:</strong> tener alternativas disponibles para los cuellos de botella más críticos</li>
+    </ul>
+    <p style="margin-top:.7rem">En proyectos sociocomunitarios, la flexibilidad se traduce en diseñar intervenciones que puedan ajustarse cuando las condiciones del territorio cambian (rotación de referentes, cambios climáticos, respuesta municipal variable).</p>
+  </div>
+</details>
+
+<details>
+  <summary>🗑️ Desperdicios (Mudas) — Los 7 tipos</summary>
+  <div class="dbody">
+    <p>Cualquier actividad que consume recursos sin generar valor para el cliente es un <strong>desperdicio (muda)</strong>. Identificarlos y eliminarlos es el objetivo central de la mejora continua (Lean).</p>
+    <div class="grid g3" style="margin-top:.7rem">
+      <div class="card re"><h3>📦 Sobreproducción</h3><p>Producir más de lo demandado. Genera inventario innecesario y oculta problemas reales.</p></div>
+      <div class="card re"><h3>⏳ Espera</h3><p>Tiempo sin actividad productiva. Personas o máquinas esperando input, aprobación o recursos.</p></div>
+      <div class="card re"><h3>🚚 Transporte innecesario</h3><p>Mover materiales o información sin agregar valor. Aumenta riesgo de daño y tiempo de ciclo.</p></div>
+      <div class="card re"><h3>🔧 Sobreprocesamiento</h3><p>Más trabajo del que el cliente requiere. Reportes con datos que nadie usa, validaciones redundantes.</p></div>
+      <div class="card re"><h3>📁 Inventario excesivo</h3><p>Stock mayor al necesario. Oculta problemas de calidad y consume espacio y capital.</p></div>
+      <div class="card re"><h3>🚶 Movimientos innecesarios</h3><p>Desplazamientos de personas sin propósito productivo. Búsqueda de herramientas, acceso a información dispersa.</p></div>
+      <div class="card re"><h3>❌ Defectos</h3><p>Errores que requieren retrabajo, corrección o descarte. El desperdicio más costoso porque consume recursos dos veces.</p></div>
+    </div>
+  </div>
+</details>
+
+</div>
 </div>
 
 
-<!-- ================= CLASE 3 ================= -->
+<!-- ==================== CLASE 3 ==================== -->
 <div class="page" id="page-c3">
-  <div class="container">
+<div class="container">
 
-    <span class="src-tag">📎 Clase 3 · 28/08/2026 · Diagnóstico y Análisis de Contexto</span>
+<span class="src-tag">📎 Clase 3 · 28/08/2026 · Diagnóstico y Análisis de Contexto</span>
 
-    <div class="note">📖 <strong>Diagnóstico:</strong> forma de ordenar los datos e información sobre cómo es y qué problemas tiene una determinada realidad.</div>
+<div class="note">📖 <strong>Diagnóstico:</strong> «forma de ordenar los datos e información sobre cómo es y qué problemas tiene una determinada realidad.» Un diagnóstico no opina — describe, evidencia y estructura.</div>
 
-    <div class="flow">
-      <div class="flow-box">🔴 Problema</div>
-      <div class="flow-arr">→</div>
-      <div class="flow-box">🔬 Diagnóstico</div>
-      <div class="flow-arr">→</div>
-      <div class="flow-box">✅ Proyecto</div>
-    </div>
+<div class="flow">
+  <div class="flow-box">🔴 Problema detectado</div>
+  <div class="flow-arr">→</div>
+  <div class="flow-box">🔬 Diagnóstico</div>
+  <div class="flow-arr">→</div>
+  <div class="flow-box">✅ Proyecto formulado</div>
+</div>
 
-    <div class="stitle"><span class="ico">📡</span>Recolección de Información</div>
-    <div class="grid g2">
-      <div class="card gr">
-        <h3>🟢 Fuentes Primarias</h3>
-        <p style="margin-bottom:.5rem">Información obtenida directamente:</p>
-        <ul>
-          <li>Observación directa</li>
-          <li>Entrevistas</li>
-          <li>Encuestas</li>
-          <li>Relevamientos</li>
-          <li>Mediciones</li>
-        </ul>
-      </div>
-      <div class="card bu">
-        <h3>🔵 Fuentes Secundarias</h3>
-        <p style="margin-bottom:.5rem">Información generada por otros:</p>
-        <ul>
-          <li>Informes técnicos</li>
-          <li>Normativas</li>
-          <li>Estadísticas oficiales</li>
-          <li>Artículos académicos</li>
-          <li>Estudios previos</li>
-        </ul>
-      </div>
-    </div>
-    <div class="note">💡 La combinación de fuentes primarias y secundarias genera diagnósticos más sólidos y confiables.</div>
+<p class="lead">Sin diagnóstico, el proyecto se basa en suposiciones. Con diagnóstico, se basa en evidencia. La diferencia determina si la intervención resuelve el problema real o el problema imaginado.</p>
 
-    <div class="sub">Ejemplo real — Plaza sin iluminación</div>
-    <div class="twrap">
-      <table>
-        <thead><tr><th>Tipo de fuente</th><th>Dato obtenido</th></tr></thead>
-        <tbody>
-          <tr><td>Primaria (encuesta vecinal)</td><td>75% de vecinos evita la plaza luego de las 20hs</td></tr>
-          <tr><td>Secundaria (Min. de Seguridad)</td><td>Robos aumentaron 18% en el área durante el último año</td></tr>
-        </tbody>
-      </table>
-    </div>
+<div class="stitle"><span class="ico">📡</span>Recolección de información: fuentes primarias y secundarias</div>
+<p class="lead">Todo diagnóstico requiere información. Las fuentes se clasifican según quién la genera y cómo se accede a ella.</p>
+<div class="grid g2">
+  <div class="card gr">
+    <h3>🟢 Fuentes Primarias</h3>
+    <p style="margin-bottom:.5rem">Información obtenida <strong>directamente por el equipo</strong> del proyecto:</p>
+    <ul>
+      <li>Observación directa en campo</li>
+      <li>Entrevistas con actores clave</li>
+      <li>Encuestas a usuarios o vecinos</li>
+      <li>Relevamientos fotográficos o cartográficos</li>
+      <li>Mediciones propias (sensores, conteos, registros)</li>
+      <li>Grupos focales y talleres participativos</li>
+    </ul>
+    <p style="margin-top:.7rem;font-size:.83rem;color:var(--gray-lt)"><em>Ventaja: datos específicos del contexto. Desventaja: costo de recolección.</em></p>
+  </div>
+  <div class="card bu">
+    <h3>🔵 Fuentes Secundarias</h3>
+    <p style="margin-bottom:.5rem">Información <strong>generada por terceros</strong>, ya existente:</p>
+    <ul>
+      <li>Informes técnicos y auditorías previas</li>
+      <li>Normativas y marcos legales vigentes</li>
+      <li>Estadísticas oficiales (INDEC, Municipio, Provincia)</li>
+      <li>Artículos académicos y papers</li>
+      <li>Estudios de caso similares</li>
+      <li>Datos históricos de la organización</li>
+    </ul>
+    <p style="margin-top:.7rem;font-size:.83rem;color:var(--gray-lt)"><em>Ventaja: bajo costo de acceso. Desventaja: puede no adaptarse exactamente al contexto.</em></p>
+  </div>
+</div>
+<div class="note">💡 La combinación de fuentes primarias y secundarias genera diagnósticos más sólidos y difíciles de cuestionar. Una sola fuente siempre puede ser cuestionada; la convergencia de múltiples fuentes construye evidencia robusta.</div>
 
-    <div class="stitle"><span class="ico">🌐</span>Pensamiento Sistémico</div>
-    <p class="lead">Un problema rara vez tiene una única causa. Surge de la <b>interacción entre múltiples factores</b> de un mismo sistema. Permite identificar causas y consecuencias más allá de los síntomas visibles.</p>
-
-    <div class="stitle"><span class="ico">🗺️</span>Comprensión Territorial — Mapeo</div>
-    <p class="lead">Los problemas ocurren dentro de un territorio. El mapeo territorial identifica:</p>
-    <div class="grid g3">
-      <div class="card te"><h3>💎 Recursos disponibles</h3><p>Infraestructura, servicios, capacidades locales.</p></div>
-      <div class="card te"><h3>🏛️ Instituciones presentes</h3><p>Municipios, hospitales, escuelas, organismos.</p></div>
-      <div class="card te"><h3>🤝 Organizaciones activas</h3><p>ONG, cooperativas, clubes, asociaciones vecinales.</p></div>
-      <div class="card te"><h3>🔗 Relaciones entre actores</h3><p>Alianzas, tensiones, dependencias.</p></div>
-      <div class="card te"><h3>🚧 Restricciones y oportunidades</h3><p>Obstáculos y ventanas de acción territorial.</p></div>
-    </div>
-
-    <div class="stitle"><span class="ico">👥</span>Actores Territoriales</div>
-    <div class="twrap">
-      <table>
-        <thead><tr><th>Actores Públicos</th><th>Actores Privados</th><th>Actores Comunitarios</th></tr></thead>
-        <tbody>
-          <tr><td>Municipios</td><td>Empresas</td><td>ONG</td></tr>
-          <tr><td>Hospitales</td><td>Comercios</td><td>Cooperativas</td></tr>
-          <tr><td>Escuelas</td><td>Cámaras empresariales</td><td>Clubes</td></tr>
-          <tr><td>Organismos gubernamentales</td><td>—</td><td>Asociaciones vecinales, vecinos, usuarios</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="stitle"><span class="ico">🎯</span>Interesados (Stakeholders)</div>
-    <p class="lead">Quienes pueden afectar o ser afectados por el proyecto. Se analizan por:</p>
-    <div class="grid g2">
-      <div class="card bl"><h3>💪 Poder</h3><p>Capacidad de influir sobre decisiones, recursos o resultados del proyecto.</p></div>
-      <div class="card bl"><h3>❤️ Interés</h3><p>Grado de involucramiento respecto a la situación o resultado.</p></div>
-    </div>
-
-    <div class="sub">Matriz Poder / Interés</div>
-    <div class="diagram" style="max-width:480px;margin:.9rem auto">
-      <div style="margin-bottom:.5rem;font-size:.8rem;font-weight:700;color:var(--gray-lt)">↑ PODER</div>
-      <div class="matrix-grid">
-        <div class="matrix-q mq-ms">🔒 Mantener satisfecho<br><span style="font-weight:400;font-size:.78rem">Alto poder, bajo interés</span></div>
-        <div class="matrix-q mq-ga">⭐ Gestionar activamente<br><span style="font-weight:400;font-size:.78rem">Alto poder, alto interés</span></div>
-        <div class="matrix-q mq-mo">👁️ Monitorear<br><span style="font-weight:400;font-size:.78rem">Bajo poder, bajo interés</span></div>
-        <div class="matrix-q mq-mi">📢 Mantener informado<br><span style="font-weight:400;font-size:.78rem">Bajo poder, alto interés</span></div>
-      </div>
-      <div style="margin-top:.5rem;font-size:.8rem;font-weight:700;color:var(--gray-lt)">INTERÉS →</div>
-    </div>
-
-    <div class="stitle"><span class="ico">🔬</span>Factores Endógenos y Exógenos</div>
-    <div class="twrap">
-      <table>
-        <thead><tr><th>Factores Endógenos (internos)</th><th>Factores Exógenos (externos)</th></tr></thead>
-        <tbody>
-          <tr><td>Controlables por la organización</td><td>Fuera del control directo</td></tr>
-          <tr><td>Recursos humanos, infraestructura, equipamiento</td><td>Economía, legislación, políticas públicas</td></tr>
-          <tr><td>Conocimientos técnicos, cultura organizacional</td><td>Tendencias tecnológicas, condiciones ambientales</td></tr>
-          <tr><td>Representan <strong>fortalezas y debilidades</strong></td><td>Representan <strong>oportunidades y amenazas</strong></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="stitle"><span class="ico">🧰</span>Herramientas de Análisis</div>
-    <div class="grid g2">
-      <div class="card gr">
-        <h3>📊 FODA</h3>
-        <p>Integra fortalezas, debilidades, oportunidades y amenazas. Usado para diagnóstico integral de la situación.</p>
-      </div>
-      <div class="card bu">
-        <h3>🌍 PESTEL</h3>
-        <p>Identifica factores exógenos: <strong>P</strong>olítico, <strong>E</strong>conómico, <strong>S</strong>ocial, <strong>T</strong>ecnológico, <strong>E</strong>cológico, <strong>L</strong>egal.</p>
-      </div>
-    </div>
-
+<div class="example-box">
+  <div class="ex-tag">Ejemplo aplicado — Plaza sin iluminación en barrio</div>
+  <div class="twrap" style="margin-top:.4rem">
+    <table>
+      <thead><tr><th>Tipo</th><th>Fuente</th><th>Dato relevado</th></tr></thead>
+      <tbody>
+        <tr><td>Primaria</td><td>Encuesta vecinal (n=120)</td><td>75% de vecinos evita la plaza luego de las 20hs por inseguridad</td></tr>
+        <tr><td>Primaria</td><td>Observación directa nocturna</td><td>8 de 12 luminarias inoperativas, visibilidad nula en sector sur</td></tr>
+        <tr><td>Secundaria</td><td>Min. de Seguridad (informe anual)</td><td>Robos en el área aumentaron 18% respecto al año anterior</td></tr>
+        <tr><td>Secundaria</td><td>Municipalidad — Plan de alumbrado</td><td>Sector no incluido en plan de mantenimiento 2026</td></tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
+<div class="stitle"><span class="ico">🌐</span>Pensamiento Sistémico</div>
+<p class="lead">El pensamiento sistémico parte de una premisa fundamental: <b>un problema rara vez tiene una única causa</b>. Surge de la interacción entre múltiples factores que operan dentro de un mismo sistema.</p>
+<p class="lead">Adoptar una perspectiva sistémica significa:</p>
+<div class="grid g3">
+  <div class="card bl"><h3>🔗 Ver conexiones</h3><p>Identificar cómo los elementos del sistema se afectan mutuamente, no solo las relaciones lineales causa-efecto.</p></div>
+  <div class="card bl"><h3>🔄 Reconocer ciclos</h3><p>Muchos problemas son auto-reforzantes: el problema A genera el problema B, que a su vez agrava el problema A.</p></div>
+  <div class="card bl"><h3>⏳ Pensar en el tiempo</h3><p>Los efectos de una intervención pueden tardar en aparecer. Algunas «soluciones» generan problemas secundarios meses después.</p></div>
+</div>
 
-<!-- ================= CLASE 5 ================= -->
+<div class="stitle"><span class="ico">🗺️</span>Comprensión Territorial — Mapeo</div>
+<p class="lead">Los problemas ocurren dentro de un territorio que tiene su propia dinámica. El mapeo territorial es la herramienta para entender ese contexto antes de intervenir.</p>
+<p class="lead">El mapa territorial identifica:</p>
+<div class="grid g3">
+  <div class="card te"><h3>💎 Recursos disponibles</h3><p>Infraestructura, servicios públicos, capacidades locales, tecnología existente.</p></div>
+  <div class="card te"><h3>🏛️ Instituciones presentes</h3><p>Municipios, hospitales, escuelas, organismos gubernamentales activos en el área.</p></div>
+  <div class="card te"><h3>🤝 Organizaciones de la sociedad civil</h3><p>ONG, cooperativas, clubes, asociaciones vecinales, grupos informales.</p></div>
+  <div class="card te"><h3>🔗 Relaciones entre actores</h3><p>Alianzas establecidas, tensiones existentes, dependencias y flujos de recursos.</p></div>
+  <div class="card te"><h3>🚧 Restricciones operativas</h3><p>Obstáculos geográficos, legales, culturales o institucionales que condicionan la intervención.</p></div>
+  <div class="card te"><h3>🌟 Ventanas de oportunidad</h3><p>Momentos o condiciones favorables que pueden potenciar el impacto del proyecto.</p></div>
+</div>
+
+<div class="stitle"><span class="ico">👥</span>Actores Territoriales</div>
+<p class="lead">Todo territorio tiene actores con distintos roles, intereses y recursos. Conocerlos es indispensable para diseñar una intervención viable.</p>
+<div class="twrap">
+  <table>
+    <thead><tr><th>Actores Públicos</th><th>Actores Privados</th><th>Actores Comunitarios</th></tr></thead>
+    <tbody>
+      <tr><td>Municipios y secretarías</td><td>Empresas e industrias</td><td>ONG y fundaciones</td></tr>
+      <tr><td>Hospitales y centros de salud</td><td>Comercios y PYMES</td><td>Cooperativas de trabajo</td></tr>
+      <tr><td>Escuelas y universidades</td><td>Cámaras empresariales</td><td>Clubes y centros culturales</td></tr>
+      <tr><td>Organismos gubernamentales</td><td>Medios de comunicación</td><td>Asociaciones vecinales y juntas</td></tr>
+      <tr><td>Fuerzas de seguridad</td><td>Proveedores de servicios</td><td>Grupos informales de vecinos</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="stitle"><span class="ico">🎯</span>Análisis de Stakeholders</div>
+<p class="lead">Los stakeholders son todas las personas u organizaciones que <b>pueden afectar o ser afectadas</b> por el proyecto. No todos tienen el mismo peso. El análisis de stakeholders cruza dos variables para definir estrategias de involucramiento:</p>
+<div class="grid g2">
+  <div class="card bl"><h3>💪 Poder</h3><p>Capacidad de influir sobre las decisiones, los recursos o los resultados del proyecto. Puede ejercerse como apoyo o como bloqueo.</p></div>
+  <div class="card bl"><h3>❤️ Interés</h3><p>Grado de involucramiento, preocupación o afectación respecto a la situación o resultado del proyecto.</p></div>
+</div>
+
+<div class="sub">Matriz Poder / Interés</div>
+<div class="diagram" style="max-width:520px;margin:.9rem auto">
+  <div style="margin-bottom:.5rem;font-size:.8rem;font-weight:700;color:var(--gray-lt);text-align:left;padding-left:60px">↑ PODER</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;max-width:400px;margin:auto">
+    <div style="background:#fef9c3;border:2px solid #ca8a04;border-radius:8px;padding:.9rem;text-align:center;font-size:.84rem"><strong style="color:#78350f">🔒 Mantener satisfecho</strong><br><span style="font-weight:400;color:#374151">Alto poder<br>Bajo interés</span></div>
+    <div style="background:#dcfce7;border:2px solid #16a34a;border-radius:8px;padding:.9rem;text-align:center;font-size:.84rem"><strong style="color:#14532d">⭐ Gestionar activamente</strong><br><span style="font-weight:400;color:#374151">Alto poder<br>Alto interés</span></div>
+    <div style="background:#f3f4f6;border:2px solid #9ca3af;border-radius:8px;padding:.9rem;text-align:center;font-size:.84rem"><strong style="color:#374151">👁️ Monitorear</strong><br><span style="font-weight:400;color:#6b7280">Bajo poder<br>Bajo interés</span></div>
+    <div style="background:#dbeafe;border:2px solid #2563eb;border-radius:8px;padding:.9rem;text-align:center;font-size:.84rem"><strong style="color:#1e3a8a">📢 Mantener informado</strong><br><span style="font-weight:400;color:#374151">Bajo poder<br>Alto interés</span></div>
+  </div>
+  <div style="margin-top:.5rem;font-size:.8rem;font-weight:700;color:var(--gray-lt);text-align:right;padding-right:60px">INTERÉS →</div>
+</div>
+
+<div class="stitle"><span class="ico">🔬</span>Factores Endógenos y Exógenos</div>
+<div class="twrap">
+  <table>
+    <thead><tr><th>Dimensión</th><th>Factores Endógenos (internos)</th><th>Factores Exógenos (externos)</th></tr></thead>
+    <tbody>
+      <tr><td>Control</td><td>Controlables directamente por el equipo/organización</td><td>Fuera del control — solo se puede adaptarse a ellos</td></tr>
+      <tr><td>Ejemplos</td><td>RRHH, infraestructura, presupuesto, metodología, liderazgo</td><td>Economía, legislación, clima, decisiones municipales, opinión pública</td></tr>
+      <tr><td>En FODA</td><td>Representan <strong>Fortalezas</strong> (positivos) y <strong>Debilidades</strong> (negativos)</td><td>Representan <strong>Oportunidades</strong> (favorables) y <strong>Amenazas</strong> (desfavorables)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="stitle"><span class="ico">🧰</span>Herramientas integradoras de diagnóstico</div>
+<div class="grid g2">
+  <div class="card gr">
+    <h3>📊 FODA</h3>
+    <p>Integra la dimensión interna (fortalezas y debilidades) con la externa (oportunidades y amenazas). Es la herramienta de diagnóstico más completa para evaluar la viabilidad de una intervención.</p>
+    <p style="margin-top:.6rem;font-size:.83rem;color:var(--gray-lt)">Más detalle en la tab FODA →</p>
+  </div>
+  <div class="card bu">
+    <h3>🌍 PESTEL</h3>
+    <p>Análisis de contexto externo que examina seis dimensiones: <strong>P</strong>olítico, <strong>E</strong>conómico, <strong>S</strong>ocial, <strong>T</strong>ecnológico, <strong>E</strong>cológico, <strong>L</strong>egal. Complementa al FODA en el análisis de factores exógenos.</p>
+    <p style="margin-top:.6rem;font-size:.83rem;color:var(--gray-lt)">Ver aplicación en Clase 5 (dimensiones del Ishikawa) →</p>
+  </div>
+</div>
+
+</div>
+</div>
+
+
+<!-- ==================== CLASE 5 ==================== -->
 <div class="page" id="page-c5">
-  <div class="container">
+<div class="container">
 
-    <span class="src-tag">📎 Clase 5 · 11/09/2026 · Análisis de Problemas y Causas</span>
+<span class="src-tag">📎 Clase 5 · 11/09/2026 · Análisis de Problemas y Causas</span>
 
-    <div class="warn">⚠️ Muchas organizaciones actúan sobre los síntomas y no sobre las causas. Las mejoras basadas únicamente en síntomas suelen ser <strong>temporales</strong>.</div>
+<div class="warn">⚠️ <strong>El error más frecuente en gestión de proyectos:</strong> actuar sobre los síntomas y no sobre las causas. Las mejoras basadas únicamente en síntomas generan alivio temporal — el problema vuelve a aparecer porque su origen no fue resuelto.</div>
 
-    <div class="stitle"><span class="ico">🔗</span>Síntoma, Problema y Causa</div>
-    <div class="diagram">
-      <div style="display:flex;flex-direction:column;align-items:center;gap:.6rem">
-        <div style="background:#fee2e2;border:2px solid #dc2626;border-radius:8px;padding:.6rem 2rem;font-weight:700;color:#b91c1c;font-size:.9rem">⚙️ Causa: Falta de mantenimiento preventivo</div>
-        <div style="font-size:1.5rem;color:var(--main)">↓</div>
-        <div style="background:var(--main-bg);border:2px solid var(--main);border-radius:8px;padding:.6rem 2rem;font-weight:700;color:#134e4a;font-size:.9rem">🔴 Problema: Baja disponibilidad de equipos</div>
-        <div style="font-size:1.5rem;color:var(--main)">↓</div>
-        <div style="background:#fef9c3;border:2px solid #ca8a04;border-radius:8px;padding:.6rem 2rem;font-weight:700;color:#78350f;font-size:.9rem">👁️ Síntoma: Retrasos en la producción</div>
-      </div>
-    </div>
+<div class="stitle"><span class="ico">🔗</span>La cadena Síntoma → Problema → Causa</div>
+<p class="lead">Antes de actuar, hay que navegar esta cadena hacia atrás: el síntoma es lo visible, el problema es la brecha, la causa es el origen. Intervenir en el síntoma no resuelve nada de forma duradera.</p>
+<div class="diagram">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:.7rem">
+    <div style="background:#fee2e2;border:2px solid #dc2626;border-radius:10px;padding:.7rem 2rem;font-weight:700;color:#b91c1c;font-size:.9rem;max-width:380px;text-align:center">⚙️ Causa raíz: Falta de mantenimiento preventivo sistemático</div>
+    <div style="font-size:1.5rem;color:var(--main);font-weight:700">↓</div>
+    <div style="background:var(--main-bg);border:2px solid var(--main);border-radius:10px;padding:.7rem 2rem;font-weight:700;color:#134e4a;font-size:.9rem;max-width:380px;text-align:center">🔴 Problema: Baja disponibilidad de equipos (fallas frecuentes)</div>
+    <div style="font-size:1.5rem;color:var(--main);font-weight:700">↓</div>
+    <div style="background:#fef9c3;border:2px solid #ca8a04;border-radius:10px;padding:.7rem 2rem;font-weight:700;color:#78350f;font-size:.9rem;max-width:380px;text-align:center">👁️ Síntoma visible: Retrasos en la producción</div>
+  </div>
+  <p class="dcap">Si solo atacamos el síntoma (urgenciar órdenes retrasadas), el problema persiste y los síntomas vuelven.</p>
+</div>
 
-    <div class="sub">Tipos de causas</div>
-    <div class="twrap">
-      <table>
-        <thead><tr><th>Categoría</th><th>Ejemplos</th></tr></thead>
-        <tbody>
-          <tr><td>Técnicas</td><td>Equipos, tecnología</td></tr>
-          <tr><td>Organizacionales</td><td>Procedimientos, gestión</td></tr>
-          <tr><td>Humanas</td><td>Capacitación, habilidades</td></tr>
-          <tr><td>Sociales</td><td>Hábitos, comportamientos</td></tr>
-          <tr><td>Económicas</td><td>Recursos, financiamiento</td></tr>
-          <tr><td>Regulatorias</td><td>Normativa, legislación</td></tr>
-        </tbody>
-      </table>
-    </div>
+<div class="sub">Tipos de causas</div>
+<div class="twrap">
+  <table>
+    <thead><tr><th>Categoría</th><th>Descripción</th><th>Ejemplos</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Técnicas</strong></td><td>Relacionadas con equipos, sistemas o tecnología</td><td>Sensores descalibrados, software desactualizado, falta de automatización</td></tr>
+      <tr><td><strong>Organizacionales</strong></td><td>Relacionadas con la gestión y los procesos</td><td>Sin procedimientos documentados, roles no definidos, falta de supervisión</td></tr>
+      <tr><td><strong>Humanas</strong></td><td>Relacionadas con las personas</td><td>Capacitación insuficiente, motivación baja, alta rotación de personal</td></tr>
+      <tr><td><strong>Sociales</strong></td><td>Relacionadas con comportamientos y cultura</td><td>Hábitos arraigados, resistencia al cambio, normas informales</td></tr>
+      <tr><td><strong>Económicas</strong></td><td>Relacionadas con recursos y financiamiento</td><td>Presupuesto insuficiente, falta de inversión, desequilibrios de costo</td></tr>
+      <tr><td><strong>Regulatorias</strong></td><td>Relacionadas con normas y legislación</td><td>Marco legal desactualizado, falta de cumplimiento, vacíos normativos</td></tr>
+    </tbody>
+  </table>
+</div>
 
-    <div class="stitle"><span class="ico">💭</span>Hipótesis</div>
-    <div class="note">🧠 <strong>Hipótesis:</strong> interpretación preliminar que busca responder <em>¿Qué podría estar generando esta situación?</em></div>
+<div class="stitle"><span class="ico">💭</span>Hipótesis causal</div>
+<div class="note">🧠 <strong>Hipótesis:</strong> interpretación preliminar que busca responder <em>«¿Qué podría estar generando esta situación?»</em>. No es una solución — es una explicación tentativa que será verificada con evidencia.</div>
 
-    <div class="sub">Características de una buena hipótesis</div>
-    <div class="grid g2">
-      <div class="card gr"><h3>✅ Clara y comprensible</h3><p>Formulada en lenguaje accesible, sin ambigüedades.</p></div>
-      <div class="card gr"><h3>✅ Coherente con los datos</h3><p>Consistente con la información relevada.</p></div>
-      <div class="card gr"><h3>✅ Verificable</h3><p>Puede ser confirmada o refutada mediante evidencia.</p></div>
-      <div class="card gr"><h3>✅ Específica</h3><p>Apunta a una causa concreta, no general.</p></div>
-      <div class="card gr"><h3>✅ Relacionada al problema</h3><p>Directamente vinculada con la situación analizada.</p></div>
-    </div>
+<p class="lead">La hipótesis es el puente entre la observación del problema y el análisis de causas. Sin hipótesis, el análisis es caótico. Con hipótesis, el análisis es dirigido.</p>
 
-    <div class="sub">Hipótesis vs. Solución</div>
-    <div class="twrap">
-      <table>
-        <thead><tr><th>❌ Solución (no es hipótesis)</th><th>✅ Hipótesis</th></tr></thead>
-        <tbody>
-          <tr><td>«Necesitamos instalar sensores»</td><td>«La falta de información en tiempo real podría estar generando errores operativos»</td></tr>
-        </tbody>
-      </table>
-    </div>
+<div class="sub">Características de una hipótesis válida</div>
+<div class="grid g3">
+  <div class="card gr"><h3>✅ Clara</h3><p>Formulada en lenguaje concreto, sin ambigüedades ni jerga innecesaria.</p></div>
+  <div class="card gr"><h3>✅ Coherente</h3><p>Consistente con la información disponible sobre el contexto.</p></div>
+  <div class="card gr"><h3>✅ Verificable</h3><p>Puede ser confirmada o refutada mediante evidencia recolectable.</p></div>
+  <div class="card gr"><h3>✅ Específica</h3><p>Apunta a una causa concreta, no a una explicación vaga y general.</p></div>
+  <div class="card gr"><h3>✅ Vinculada</h3><p>Directamente relacionada con el problema analizado.</p></div>
+</div>
 
-    <div class="stitle"><span class="ico">🔎</span>Validación de Hipótesis</div>
-    <p class="lead">Reunir evidencia para determinar si la explicación propuesta es consistente con la realidad. Usar fuentes primarias y secundarias (ver Clase 2 y Clase 3).</p>
+<div class="twrap" style="margin-top:1rem">
+  <table>
+    <thead><tr><th>❌ Error: solución disfrazada de hipótesis</th><th>✅ Correcto: hipótesis causal</th></tr></thead>
+    <tbody>
+      <tr><td>«Necesitamos instalar sensores IoT»</td><td>«La falta de datos en tiempo real podría generar decisiones operativas basadas en información desactualizada»</td></tr>
+      <tr><td>«Hay que hacer campañas de concientización»</td><td>«La ausencia de educación ambiental sostenida podría explicar que los vecinos descarten residuos fuera de los puntos habilitados»</td></tr>
+    </tbody>
+  </table>
+</div>
 
-    <div class="stitle"><span class="ico">5️⃣</span>Análisis de Causa Raíz — Los 5 Por Qué</div>
-    <p class="lead">Técnica iterativa: preguntar <strong>«¿Por qué?»</strong> 5 veces sucesivas hasta llegar a la causa raíz. Evita quedarse en síntomas superficiales.</p>
-    <div class="diagram">
-      <div style="display:flex;flex-direction:column;gap:.4rem;align-items:flex-start;max-width:560px;margin:auto">
-        <div style="padding:.5rem 1rem;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:.88rem"><strong>¿Por qué?</strong> — Los retrasos en producción → los equipos fallan</div>
-        <div style="padding:.5rem 1rem;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:.88rem;margin-left:1.5rem"><strong>¿Por qué?</strong> — Los equipos fallan → no tienen mantenimiento</div>
-        <div style="padding:.5rem 1rem;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:.88rem;margin-left:3rem"><strong>¿Por qué?</strong> — No tienen mantenimiento → no hay plan preventivo</div>
-        <div style="padding:.5rem 1rem;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:.88rem;margin-left:4.5rem"><strong>¿Por qué?</strong> — No hay plan → nadie fue designado responsable</div>
-        <div style="padding:.5rem 1rem;background:var(--main-bg);border:2px solid var(--main);border-radius:8px;font-size:.88rem;margin-left:6rem"><strong>¿Por qué?</strong> → <strong style="color:var(--main)">Causa raíz: la gestión no priorizó el mantenimiento</strong></div>
-      </div>
-    </div>
+<div class="stitle"><span class="ico">🔎</span>Validación de hipótesis</div>
+<p class="lead">Una hipótesis no validada es solo una suposición. La validación consiste en reunir evidencia suficiente para determinar si la explicación propuesta es consistente con la realidad observada.</p>
+<div class="flow">
+  <div class="flow-box">💭 Hipótesis</div>
+  <div class="flow-arr">→</div>
+  <div class="flow-box">📋 Diseño de validación</div>
+  <div class="flow-arr">→</div>
+  <div class="flow-box">🔬 Recolección de evidencia</div>
+  <div class="flow-arr">→</div>
+  <div class="flow-box">✅ o ❌ Decisión</div>
+</div>
 
-    <div class="stitle"><span class="ico">🐟</span>Diagrama de Ishikawa (Espina de Pescado)</div>
-    <p class="lead">Organiza visualmente las causas de un problema en categorías. En proyectos sociocomunitarios las categorías se adaptan a dimensiones PESTEL.</p>
-    <div class="ishikawa-wrap">
-      <svg viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:800px;display:block;margin:auto;background:#f0fdfa;border-radius:12px;padding:8px">
-        <!-- Espina central -->
-        <line x1="60" y1="170" x2="680" y2="170" stroke="#0d9488" stroke-width="4"/>
-        <!-- Cabeza (problema) -->
-        <rect x="680" y="140" width="110" height="60" rx="8" fill="#0d9488"/>
-        <text x="735" y="165" text-anchor="middle" fill="white" font-size="11" font-weight="bold">Microbasurales</text>
-        <text x="735" y="182" text-anchor="middle" fill="white" font-size="11">en Pilar</text>
-        <!-- Flecha -->
-        <polygon points="780,170 760,158 760,182" fill="#0d9488"/>
-
-        <!-- Rama superior izquierda: Político -->
-        <line x1="150" y1="170" x2="110" y2="90" stroke="#1d4ed8" stroke-width="2.5"/>
-        <rect x="50" y="60" width="100" height="36" rx="6" fill="#dbeafe"/>
-        <text x="100" y="82" text-anchor="middle" fill="#1e3a8a" font-size="12" font-weight="bold">Político</text>
-        <text x="100" y="50" text-anchor="middle" fill="#374151" font-size="9">Falta política</text>
-        <text x="100" y="61" text-anchor="middle" fill="#374151" font-size="9">de residuos</text>
-
-        <!-- Rama superior central: Económico -->
-        <line x1="320" y1="170" x2="280" y2="90" stroke="#b45309" stroke-width="2.5"/>
-        <rect x="220" y="60" width="110" height="36" rx="6" fill="#fef9c3"/>
-        <text x="275" y="82" text-anchor="middle" fill="#92400e" font-size="12" font-weight="bold">Económico</text>
-        <text x="275" y="50" text-anchor="middle" fill="#374151" font-size="9">Sin presupuesto</text>
-        <text x="275" y="61" text-anchor="middle" fill="#374151" font-size="9">para contenedores</text>
-
-        <!-- Rama superior derecha: Social -->
-        <line x1="490" y1="170" x2="450" y2="90" stroke="#15803d" stroke-width="2.5"/>
-        <rect x="390" y="60" width="110" height="36" rx="6" fill="#dcfce7"/>
-        <text x="445" y="82" text-anchor="middle" fill="#14532d" font-size="12" font-weight="bold">Social</text>
-        <text x="445" y="50" text-anchor="middle" fill="#374151" font-size="9">Hábitos de</text>
-        <text x="445" y="61" text-anchor="middle" fill="#374151" font-size="9">disposición inadecuada</text>
-
-        <!-- Rama inferior izquierda: Tecnológico -->
-        <line x1="200" y1="170" x2="160" y2="250" stroke="#0d9488" stroke-width="2.5"/>
-        <rect x="90" y="244" width="110" height="36" rx="6" fill="#ccfbf1"/>
-        <text x="145" y="266" text-anchor="middle" fill="#134e4a" font-size="12" font-weight="bold">Tecnológico</text>
-        <text x="145" y="295" text-anchor="middle" fill="#374151" font-size="9">Sin sistema de</text>
-        <text x="145" y="306" text-anchor="middle" fill="#374151" font-size="9">monitoreo</text>
-
-        <!-- Rama inferior central: Ecológico -->
-        <line x1="380" y1="170" x2="340" y2="250" stroke="#b91c1c" stroke-width="2.5"/>
-        <rect x="270" y="244" width="110" height="36" rx="6" fill="#fee2e2"/>
-        <text x="325" y="266" text-anchor="middle" fill="#7f1d1d" font-size="12" font-weight="bold">Ecológico</text>
-        <text x="325" y="295" text-anchor="middle" fill="#374151" font-size="9">Terrenos</text>
-        <text x="325" y="306" text-anchor="middle" fill="#374151" font-size="9">abandonados</text>
-
-        <!-- Rama inferior derecha: Legal -->
-        <line x1="560" y1="170" x2="520" y2="250" stroke="#7c3aed" stroke-width="2.5"/>
-        <rect x="450" y="244" width="110" height="36" rx="6" fill="#ede9fe"/>
-        <text x="505" y="266" text-anchor="middle" fill="#4c1d95" font-size="12" font-weight="bold">Legal</text>
-        <text x="505" y="295" text-anchor="middle" fill="#374151" font-size="9">Falta control</text>
-        <text x="505" y="306" text-anchor="middle" fill="#374151" font-size="9">e infracción</text>
-      </svg>
-    </div>
-
-    <div class="stitle"><span class="ico">📊</span>Priorización de Causas — Principio de Pareto</div>
-    <div class="grid g4">
-      <div class="card bl"><h3>💥 Impacto</h3><p>¿Qué nivel de influencia tiene sobre el problema?</p></div>
-      <div class="card bl"><h3>🔁 Frecuencia</h3><p>¿Con qué frecuencia aparece?</p></div>
-      <div class="card bl"><h3>📋 Evidencia</h3><p>¿Qué datos respaldan su existencia?</p></div>
-      <div class="card bl"><h3>🛠️ Intervención</h3><p>¿Existe capacidad real para actuar?</p></div>
-    </div>
-    <div class="note">📈 <strong>Principio de Pareto (80/20):</strong> aproximadamente el 20% de las causas genera el 80% de los problemas. Concentrar los esfuerzos en las causas de mayor impacto.</div>
-
-    <div class="stitle"><span class="ico">🏘️</span>Aplicación al Proyecto Microbasurales</div>
-    <div class="grid g2">
-      <div class="card am"><h3>H1</h3><p>Los microbasurales aparecen porque <strong>no existen contenedores cercanos</strong></p></div>
-      <div class="card am"><h3>H2</h3><p>Los microbasurales aparecen porque la <strong>frecuencia de recolección es insuficiente</strong></p></div>
-      <div class="card am"><h3>H3</h3><p>Los microbasurales aparecen por <strong>falta de educación ambiental</strong></p></div>
-      <div class="card am"><h3>H4</h3><p>Los microbasurales aparecen porque existen <strong>terrenos abandonados y sin control</strong></p></div>
-    </div>
-
-    <div class="note" style="margin-top:1.5rem">🎯 <strong>Solo cuando las causas han sido identificadas y validadas es posible avanzar:</strong> Diseñar y seleccionar soluciones capaces de generar mejoras reales y sostenibles.</div>
-
+<div class="stitle"><span class="ico">5️⃣</span>Los 5 Por Qué</div>
+<p class="lead">Técnica iterativa para llegar a la causa raíz preguntando «¿Por qué?» de forma sucesiva. Cada respuesta se convierte en el nuevo punto de partida. Se detiene cuando la respuesta revela algo que el equipo puede controlar.</p>
+<div class="diagram">
+  <div style="display:flex;flex-direction:column;gap:.4rem;align-items:flex-start;max-width:600px;margin:auto">
+    <div style="padding:.55rem 1rem;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:.87rem;width:100%"><strong style="color:var(--main)">Problema:</strong> Hay microbasurales en el barrio</div>
+    <div style="padding:.55rem 1rem;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:.87rem;width:100%;margin-left:1.5rem"><strong>¿Por qué?</strong> Porque los vecinos arrojan residuos en la calle</div>
+    <div style="padding:.55rem 1rem;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:.87rem;width:100%;margin-left:3rem"><strong>¿Por qué?</strong> Porque no hay contenedores cerca de sus casas</div>
+    <div style="padding:.55rem 1rem;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:.87rem;width:100%;margin-left:4.5rem"><strong>¿Por qué?</strong> Porque el Municipio no proveyó la infraestructura necesaria</div>
+    <div style="padding:.55rem 1rem;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:.87rem;width:100%;margin-left:6rem"><strong>¿Por qué?</strong> Porque no existe un relevamiento de puntos críticos que informe la planificación municipal</div>
+    <div style="padding:.6rem 1rem;background:var(--main-bg);border:2px solid var(--main);border-radius:8px;font-size:.87rem;width:100%;margin-left:7.5rem"><strong style="color:var(--main)">Causa raíz:</strong> Ausencia de datos georreferenciados que permitan planificar la infraestructura de recolección → esto sí es intervenible con el proyecto.</div>
   </div>
 </div>
 
+<div class="stitle"><span class="ico">🐟</span>Diagrama de Ishikawa</div>
+<p class="lead">El diagrama de causa-efecto (espina de pescado o Ishikawa) organiza visualmente todas las causas posibles de un problema en categorías. Evita quedarse con la primera causa que aparece y fuerza al equipo a pensar en múltiples dimensiones.</p>
+<p class="lead">En proyectos sociocomunitarios, las categorías se adaptan a las dimensiones <strong>PESTEL</strong>, reemplazando las 6M industriales (Máquina, Mano de obra, Método, Material, Medio ambiente, Medición).</p>
+<div class="ishikawa-wrap">
+  <svg viewBox="0 0 820 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:820px;display:block;margin:auto;background:#f0fdfa;border-radius:12px">
+    <!-- Espina central -->
+    <line x1="50" y1="180" x2="680" y2="180" stroke="#0d9488" stroke-width="4.5"/>
+    <!-- Flecha -->
+    <polygon points="700,180 678,168 678,192" fill="#0d9488"/>
+    <!-- Problema central -->
+    <rect x="698" y="148" width="115" height="64" rx="9" fill="#0d9488"/>
+    <text x="755" y="172" text-anchor="middle" fill="white" font-size="11" font-weight="bold">Microbasurales</text>
+    <text x="755" y="188" text-anchor="middle" fill="white" font-size="11">en Pilar</text>
+    <text x="755" y="204" text-anchor="middle" fill="white" font-size="10">↑ EFECTO</text>
 
-<!-- ================= FODA ================= -->
+    <!-- RAMA SUPERIOR 1: Político -->
+    <line x1="140" y1="180" x2="100" y2="95" stroke="#1d4ed8" stroke-width="2.5"/>
+    <rect x="18" y="60" width="115" height="38" rx="7" fill="#dbeafe"/>
+    <text x="75" y="83" text-anchor="middle" fill="#1e3a8a" font-size="12" font-weight="bold">🏛️ Político</text>
+    <!-- sub-causas -->
+    <line x1="100" y1="95" x2="80" y2="128" stroke="#1d4ed8" stroke-width="1.5"/>
+    <text x="78" y="125" text-anchor="end" fill="#374151" font-size="9">Sin política de residuos</text>
+    <line x1="100" y1="95" x2="130" y2="130" stroke="#1d4ed8" stroke-width="1.5"/>
+    <text x="132" y="127" text-anchor="start" fill="#374151" font-size="9">Baja prioridad municipal</text>
+
+    <!-- RAMA SUPERIOR 2: Económico -->
+    <line x1="300" y1="180" x2="265" y2="95" stroke="#b45309" stroke-width="2.5"/>
+    <rect x="185" y="60" width="120" height="38" rx="7" fill="#fef9c3"/>
+    <text x="245" y="83" text-anchor="middle" fill="#92400e" font-size="12" font-weight="bold">💰 Económico</text>
+    <line x1="265" y1="95" x2="245" y2="128" stroke="#b45309" stroke-width="1.5"/>
+    <text x="243" y="125" text-anchor="end" fill="#374151" font-size="9">Sin presupuesto contenedores</text>
+    <line x1="265" y1="95" x2="290" y2="130" stroke="#b45309" stroke-width="1.5"/>
+    <text x="292" y="127" text-anchor="start" fill="#374151" font-size="9">Costo de recolección alto</text>
+
+    <!-- RAMA SUPERIOR 3: Social -->
+    <line x1="470" y1="180" x2="430" y2="95" stroke="#15803d" stroke-width="2.5"/>
+    <rect x="350" y="60" width="115" height="38" rx="7" fill="#dcfce7"/>
+    <text x="407" y="83" text-anchor="middle" fill="#14532d" font-size="12" font-weight="bold">👥 Social</text>
+    <line x1="430" y1="95" x2="410" y2="128" stroke="#15803d" stroke-width="1.5"/>
+    <text x="408" y="125" text-anchor="end" fill="#374151" font-size="9">Hábitos inadecuados</text>
+    <line x1="430" y1="95" x2="455" y2="130" stroke="#15803d" stroke-width="1.5"/>
+    <text x="457" y="127" text-anchor="start" fill="#374151" font-size="9">Sin educación ambiental</text>
+
+    <!-- RAMA INFERIOR 1: Tecnológico -->
+    <line x1="180" y1="180" x2="145" y2="265" stroke="#0d9488" stroke-width="2.5"/>
+    <rect x="60" y="262" width="120" height="38" rx="7" fill="#ccfbf1"/>
+    <text x="120" y="285" text-anchor="middle" fill="#134e4a" font-size="12" font-weight="bold">💻 Tecnológico</text>
+    <line x1="145" y1="265" x2="130" y2="232" stroke="#0d9488" stroke-width="1.5"/>
+    <text x="128" y="229" text-anchor="end" fill="#374151" font-size="9">Sin sistema de monitoreo</text>
+    <line x1="145" y1="265" x2="170" y2="230" stroke="#0d9488" stroke-width="1.5"/>
+    <text x="172" y="227" text-anchor="start" fill="#374151" font-size="9">Sin datos georreferenciados</text>
+
+    <!-- RAMA INFERIOR 2: Ecológico -->
+    <line x1="370" y1="180" x2="335" y2="265" stroke="#b91c1c" stroke-width="2.5"/>
+    <rect x="250" y="262" width="115" height="38" rx="7" fill="#fee2e2"/>
+    <text x="307" y="285" text-anchor="middle" fill="#7f1d1d" font-size="12" font-weight="bold">🌿 Ecológico</text>
+    <line x1="335" y1="265" x2="315" y2="230" stroke="#b91c1c" stroke-width="1.5"/>
+    <text x="313" y="227" text-anchor="end" fill="#374151" font-size="9">Terrenos abandonados</text>
+    <line x1="335" y1="265" x2="360" y2="230" stroke="#b91c1c" stroke-width="1.5"/>
+    <text x="362" y="227" text-anchor="start" fill="#374151" font-size="9">Zonas sin mantenimiento</text>
+
+    <!-- RAMA INFERIOR 3: Legal -->
+    <line x1="550" y1="180" x2="510" y2="265" stroke="#7c3aed" stroke-width="2.5"/>
+    <rect x="430" y="262" width="115" height="38" rx="7" fill="#ede9fe"/>
+    <text x="487" y="285" text-anchor="middle" fill="#4c1d95" font-size="12" font-weight="bold">⚖️ Legal</text>
+    <line x1="510" y1="265" x2="490" y2="230" stroke="#7c3aed" stroke-width="1.5"/>
+    <text x="488" y="227" text-anchor="end" fill="#374151" font-size="9">Falta control e infracción</text>
+    <line x1="510" y1="265" x2="535" y2="230" stroke="#7c3aed" stroke-width="1.5"/>
+    <text x="537" y="227" text-anchor="start" fill="#374151" font-size="9">Ordenanza no aplicada</text>
+  </svg>
+</div>
+
+<div class="stitle"><span class="ico">📊</span>Priorización de causas — Principio de Pareto</div>
+<p class="lead">No todas las causas tienen el mismo impacto. El <b>principio de Pareto (80/20)</b> sostiene que aproximadamente el 20% de las causas genera el 80% de los efectos. El foco debe estar en ese 20%.</p>
+<div class="grid g4">
+  <div class="card bl"><h3>💥 Impacto</h3><p>¿Qué nivel de influencia tiene sobre el problema? ¿Si se resuelve, cuánto mejora el indicador central?</p></div>
+  <div class="card bl"><h3>🔁 Frecuencia</h3><p>¿Con qué frecuencia aparece esta causa? ¿Es estructural o episódica?</p></div>
+  <div class="card bl"><h3>📋 Evidencia</h3><p>¿Qué datos concretos respaldan que esta causa existe y es relevante?</p></div>
+  <div class="card bl"><h3>🛠️ Posibilidad de intervención</h3><p>¿Existe capacidad real — técnica, económica y política — para actuar sobre esta causa?</p></div>
+</div>
+<div class="note">📈 La priorización de causas define el <strong>foco estratégico</strong> del proyecto. Intentar atacar todas las causas simultáneamente dispersa los recursos y reduce el impacto. Concentrar el esfuerzo en las causas de mayor impacto que son intervenibles con los recursos disponibles.</div>
+
+<div class="stitle"><span class="ico">🏘️</span>Aplicación: Hipótesis causales del Proyecto Microbasurales</div>
+<div class="grid g2">
+  <div class="card am"><h3>H1 — Infraestructura</h3><p>Los microbasurales aparecen porque <strong>no existen contenedores en puntos estratégicos</strong> del barrio, obligando a los vecinos a buscar alternativas informales.</p></div>
+  <div class="card am"><h3>H2 — Frecuencia</h3><p>Los microbasurales persisten porque la <strong>frecuencia de recolección municipal es insuficiente</strong> para la generación real de residuos del área.</p></div>
+  <div class="card am"><h3>H3 — Educación</h3><p>Los microbasurales se regeneran porque existe <strong>falta de educación ambiental sostenida</strong> que permita modificar hábitos de disposición.</p></div>
+  <div class="card am"><h3>H4 — Control territorial</h3><p>Los microbasurales se consolidan porque existen <strong>terrenos abandonados sin control ni mantenimiento</strong> que facilitan la acumulación.</p></div>
+</div>
+
+<div class="note" style="margin-top:1.5rem">🎯 <strong>Conclusión de la clase:</strong> Solo cuando las causas han sido identificadas, jerarquizadas y validadas con evidencia es posible avanzar hacia el diseño de soluciones capaces de generar mejoras reales y sostenibles. Diseñar sin este análisis previo es desperdiciar recursos.</div>
+
+</div>
+</div>
+
+
+<!-- ==================== FODA ==================== -->
 <div class="page" id="page-foda">
-  <div class="container">
+<div class="container">
 
-    <span class="src-tag">📎 FODA Preliminar · Proyecto Microbasurales de Pilar · 2026</span>
-    <div class="note">🗺️ <strong>Análisis FODA Preliminar — Proyecto Microbasurales de Pilar</strong><br>Taller de Formulación y Desarrollo de Proyectos Sociocomunitarios · 2026</div>
+<span class="src-tag">📎 FODA Preliminar · Proyecto Microbasurales de Pilar · 2026</span>
 
-    <div class="foda-grid">
-      <div class="foda-cell foda-f">
-        <h3>💪 Fortalezas</h3>
-        <ul>
-          <li>Metodología estructurada 5W+2H</li>
-          <li>Protocolo de seguridad en campo</li>
-          <li>Privacidad por diseño</li>
-          <li>Bajo costo inicial ($0 licencias)</li>
-          <li>Control de calidad con criterios claros</li>
-        </ul>
-      </div>
-      <div class="foda-cell foda-d">
-        <h3>⚠️ Debilidades</h3>
-        <ul>
-          <li>Roles clave vacantes (Responsable de Datos)</li>
-          <li>Presupuesto sin cerrar</li>
-          <li>Punto piloto no consolidado</li>
-          <li>Muestra inicial reducida (1 punto / 2-3 testimonios)</li>
-        </ul>
-      </div>
-      <div class="foda-cell foda-o">
-        <h3>🚀 Oportunidades</h3>
-        <ul>
-          <li>Respaldo legal — Leyes 25.916 y 13.592</li>
-          <li>Predisposición social de vecinos</li>
-          <li>Datos contrastables con fuentes municipales</li>
-          <li>Asistencia académica docente</li>
-        </ul>
-      </div>
-      <div class="foda-cell foda-a">
-        <h3>🔴 Amenazas</h3>
-        <ul>
-          <li>Falta de respuesta municipal</li>
-          <li>Riesgos en territorio (seguridad, clima)</li>
-          <li>Retiro de consentimiento vecinal</li>
-          <li>Condicionantes sistémicos (recolección, hábitos, infraestructura)</li>
-        </ul>
-      </div>
-    </div>
+<div class="note">📊 <strong>FODA (o DAFO):</strong> herramienta de diagnóstico estratégico que integra el análisis interno (Fortalezas y Debilidades) con el análisis externo (Oportunidades y Amenazas). La potencia del FODA no está en llenarlo — está en <strong>cruzar las variables</strong> para generar estrategias concretas.</div>
 
-    <div class="stitle"><span class="ico">🔀</span>Matriz de Cruce Estratégico</div>
-    <div class="cruce-grid">
-      <div class="cruce-card cruce-fo">
-        <h3>FO — Maximizar 🚀</h3>
-        <p>Usar <strong>5W+2H + marco legal</strong> para presentar hallazgos al Municipio como reclamo técnico formalizado</p>
-      </div>
-      <div class="cruce-card cruce-do">
-        <h3>DO — Compensar 🔧</h3>
-        <p>Aprovechar <strong>supervisión docente</strong> para validar cuestionarios antes del trabajo de campo</p>
-      </div>
-      <div class="cruce-card cruce-fa">
-        <h3>FA — Proteger 🛡️</h3>
-        <p>Ante posible falta de respuesta municipal, calcular de forma independiente la <strong>tasa de reincidencia</strong> con observaciones propias</p>
-      </div>
-      <div class="cruce-card cruce-da">
-        <h3>DA — Evitar ⚠️</h3>
-        <p>Asignar de inmediato un <strong>Responsable de Datos</strong> para mitigar riesgos de privacidad y asegurar respaldo legal de consentimientos</p>
-      </div>
-    </div>
-
+<div class="stitle"><span class="ico">📋</span>Matriz FODA — Proyecto Microbasurales</div>
+<div class="foda-grid">
+  <div class="foda-cell foda-f">
+    <h3>💪 Fortalezas (internas / positivas)</h3>
+    <ul>
+      <li>Metodología estructurada 5W+2H aplicada al diagnóstico</li>
+      <li>Protocolo de seguridad en campo definido y acordado</li>
+      <li>Privacidad por diseño (consentimiento informado desde el inicio)</li>
+      <li>Costo inicial cero en licencias de software</li>
+      <li>Criterios de calidad de datos claros y documentados</li>
+      <li>Equipo con formación técnica en automatización y análisis de datos</li>
+    </ul>
+  </div>
+  <div class="foda-cell foda-d">
+    <h3>⚠️ Debilidades (internas / negativas)</h3>
+    <ul>
+      <li>Rol de Responsable de Datos vacante — riesgo de cumplimiento legal</li>
+      <li>Presupuesto operativo sin cerrar al inicio del proyecto</li>
+      <li>Punto piloto de campo no consolidado aún</li>
+      <li>Muestra inicial reducida (1 punto / 2-3 testimonios únicamente)</li>
+      <li>Dependencia de disponibilidad voluntaria del equipo</li>
+      <li>Sin experiencia previa del equipo en relevamientos sociocomunitarios</li>
+    </ul>
+  </div>
+  <div class="foda-cell foda-o">
+    <h3>🚀 Oportunidades (externas / favorables)</h3>
+    <ul>
+      <li>Respaldo legal sólido: Leyes 25.916 (residuos sólidos) y 13.592 (Prov. Bs As)</li>
+      <li>Alta predisposición social: vecinos afectados dispuestos a participar</li>
+      <li>Datos propios contrastables con fuentes municipales y provinciales</li>
+      <li>Asistencia académica activa de docentes de la materia</li>
+      <li>Herramientas digitales gratuitas disponibles (formularios, mapas, repositorios)</li>
+      <li>Interés creciente en gestión ambiental a nivel municipal y provincial</li>
+    </ul>
+  </div>
+  <div class="foda-cell foda-a">
+    <h3>🔴 Amenazas (externas / desfavorables)</h3>
+    <ul>
+      <li>Falta de respuesta o desinterés por parte del Municipio</li>
+      <li>Riesgos en territorio: condiciones de seguridad variables y clima</li>
+      <li>Retiro de consentimiento vecinal durante el proceso</li>
+      <li>Condicionantes sistémicos externos: frecuencia de recolección, hábitos estructurales</li>
+      <li>Cambios políticos que afecten la receptividad institucional</li>
+      <li>Alta rotación de referentes comunitarios que afecte la continuidad</li>
+    </ul>
   </div>
 </div>
 
+<div class="stitle"><span class="ico">🔀</span>Matriz de Cruce Estratégico</div>
+<p class="lead">El verdadero valor del FODA está en cruzar sus cuadrantes para generar <b>estrategias concretas</b>. Los cuatro tipos de estrategia que emergen:</p>
+<div class="cruce-grid">
+  <div class="cruce-card cruce-fo">
+    <h3>FO — Maximizar 🚀</h3>
+    <p><em>Usar fortalezas para aprovechar oportunidades.</em></p>
+    <p style="margin-top:.6rem">Usar la metodología 5W+2H y el marco legal (Leyes 25.916 y 13.592) para presentar los hallazgos del relevamiento al Municipio como un <strong>reclamo técnico formalizado</strong>, no como una queja vecinal.</p>
+  </div>
+  <div class="cruce-card cruce-do">
+    <h3>DO — Compensar 🔧</h3>
+    <p><em>Superar debilidades aprovechando oportunidades.</em></p>
+    <p style="margin-top:.6rem">Aprovechar la <strong>supervisión académica docente</strong> para validar los cuestionarios y el protocolo de campo antes de salir al territorio, compensando la falta de experiencia previa del equipo.</p>
+  </div>
+  <div class="cruce-card cruce-fa">
+    <h3>FA — Proteger 🛡️</h3>
+    <p><em>Usar fortalezas para neutralizar amenazas.</em></p>
+    <p style="margin-top:.6rem">Ante la posible falta de respuesta municipal, calcular de forma <strong>independiente la tasa de reincidencia</strong> con observaciones propias longitudinales, para que los resultados sean válidos sin depender de datos oficiales.</p>
+  </div>
+  <div class="cruce-card cruce-da">
+    <h3>DA — Evitar ⚠️</h3>
+    <p><em>Reducir debilidades y evitar amenazas.</em></p>
+    <p style="margin-top:.6rem">Asignar de inmediato un <strong>Responsable de Datos</strong> con protocolo de consentimiento documentado para mitigar riesgos legales de privacidad y garantizar que el proyecto pueda continuar incluso si algún vecino retira su participación.</p>
+  </div>
+</div>
+
+<div class="stitle"><span class="ico">🌍</span>Análisis PESTEL del contexto</div>
+<p class="lead">Complementa el FODA profundizando en los factores externos del entorno del proyecto Microbasurales:</p>
+<div class="grid g3">
+  <div class="card bu"><h3>🏛️ Político</h3><p>Voluntad del gobierno municipal para gestionar residuos. Ciclo electoral puede cambiar prioridades. Existencia de secretarías de medio ambiente activas.</p></div>
+  <div class="card am"><h3>💰 Económico</h3><p>Costo del servicio de recolección. Disponibilidad presupuestaria municipal. Posibilidad de cofinanciamiento provincial o nacional.</p></div>
+  <div class="card gr"><h3>👥 Social</h3><p>Cultura de disposición de residuos. Nivel de organización vecinal. Conciencia ambiental. Participación en relevamientos.</p></div>
+  <div class="card bl"><h3>💻 Tecnológico</h3><p>Disponibilidad de herramientas de mapeo. Penetración de smartphones para formularios digitales. Sistemas de información municipal.</p></div>
+  <div class="card or"><h3>🌿 Ecológico</h3><p>Impacto de los microbasurales en napas y agua. Presencia de vectores. Ordenanzas de limpieza. Estacionalidad (lluvia activa los puntos).</p></div>
+  <div class="card pu"><h3>⚖️ Legal</h3><p>Ley 25.916 (residuos sólidos urbanos). Ley 13.592 (Pcia. Bs As). Ordenanzas locales de higiene. Ley de protección de datos personales.</p></div>
+</div>
+
+</div>
+</div>
+
+
+<!-- ==================== QUIZ ==================== -->
+<div class="page" id="page-quiz">
+<div class="container">
+
+<div class="stitle"><span class="ico">🏅</span>Quiz de autoevaluación — 30 preguntas</div>
+<p class="lead">Preguntas sobre todos los temas de la materia. Cada respuesta incluye explicación. Podés hacer el quiz tantas veces como quieras.</p>
+
+<div class="quiz-wrap">
+  <div class="quiz-header">
+    <span class="quiz-num" id="qnum">Pregunta 1 de 30</span>
+    <span class="quiz-score-live" id="qlive">✅ 0 | ❌ 0</span>
+  </div>
+  <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="qprog" style="width:0%"></div></div>
+  <div id="qbody"></div>
+</div>
+
+</div>
+</div>
 
 <footer>
   <p>Taller de Formulación y Desarrollo de Proyectos Sociocomunitarios · UNaP 2026 · <a href="../index.html">← Volver al inicio</a></p>
 </footer>
 
 <script>
-function showTab(id){
+// ---- TAB NAVIGATION ----
+function showTab(id, btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
-  event.currentTarget.classList.add('active');
+  if(btn) btn.classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
 }
+
+// ---- QUIZ DATA ----
+var QUESTIONS = [
+  {
+    q: "¿Cuál es la definición más precisa de un proyecto?",
+    opts: [
+      "Una intervención planificada, temporal y orientada a transformar una situación problemática en un resultado concreto",
+      "Cualquier actividad organizada que realiza un equipo de trabajo",
+      "Un proceso continuo de mejora de un servicio o producto existente",
+      "La compra de tecnología para resolver un problema operativo"
+    ],
+    a: 0,
+    expl: "Un proyecto es temporal (tiene inicio y fin), planificado y orientado a generar un cambio específico. Lo que lo distingue de un proceso es precisamente su temporalidad y unicidad."
+  },
+  {
+    q: "Según las reglas fundamentales de la identificación de problemas, ¿cuál de estas afirmaciones es CORRECTA?",
+    opts: [
+      "No existe proyecto sin un problema claramente definido y documentado",
+      "Un proyecto puede comenzar sin conocer exactamente la situación actual",
+      "La situación deseada puede definirse después de diseñar la solución",
+      "Es válido iniciar un proyecto sobre una opinión si el equipo la comparte"
+    ],
+    a: 0,
+    expl: "Las tres reglas son: no existe proyecto sin problema, no existe problema sin situación actual documentada, y no existe proyecto si no sabemos cuál es la situación deseada. Todas deben cumplirse antes de comenzar."
+  },
+  {
+    q: "Enunciado: «Necesitamos instalar contenedores inteligentes en el barrio». ¿Qué tipo de formulación es esta?",
+    opts: [
+      "Una solución disfrazada de problema",
+      "Un problema correctamente formulado",
+      "Una hipótesis causal válida",
+      "Un objetivo de proyecto bien definido"
+    ],
+    a: 0,
+    expl: "Contiene la palabra 'instalar', lo que indica que ya saltó a la solución. El problema correcto sería algo como: 'Los vecinos desconocen los puntos de disposición y acumulan residuos en espacios no habilitados'."
+  },
+  {
+    q: "¿Qué mide el 'Análisis de Gap' en la formulación de proyectos?",
+    opts: [
+      "La diferencia entre la situación actual y la situación deseada",
+      "La brecha presupuestaria entre lo estimado y lo real",
+      "El porcentaje de causas que generan el mayor impacto",
+      "La distancia entre las hipótesis y la evidencia recolectada"
+    ],
+    a: 0,
+    expl: "El GAP es la brecha entre lo que hay (situación actual) y lo que debería haber (situación deseada). El proyecto existe para cerrar esa brecha. Cuantificarlo permite definir los indicadores de éxito."
+  },
+  {
+    q: "En la metodología 5W+2H, ¿cuál es el propósito de la pregunta 'How much'?",
+    opts: [
+      "Dimensionar la magnitud o impacto del problema con datos cuantificables",
+      "Describir el procedimiento exacto de la solución propuesta",
+      "Identificar quiénes son los responsables de resolver el problema",
+      "Establecer el presupuesto necesario para el proyecto"
+    ],
+    a: 0,
+    expl: "'How much' busca cuantificar el problema: cuántos puntos activos, cuántas toneladas, qué porcentaje de afectados, cuántas quejas mensuales. Sin esta dimensión el problema queda como percepción subjetiva."
+  },
+  {
+    q: "¿Cuál es la diferencia principal entre un proyecto y un proceso?",
+    opts: [
+      "El proyecto es temporal y genera algo único; el proceso es continuo y repetitivo",
+      "El proyecto tiene más presupuesto que un proceso habitual",
+      "El proceso siempre involucra tecnología y el proyecto no necesariamente",
+      "No hay diferencia real — ambos términos se usan indistintamente"
+    ],
+    a: 0,
+    expl: "La distinción es fundamental: el proyecto tiene inicio y fin definidos, genera un resultado único y enfrenta incertidumbre. El proceso es estable, repetitivo y busca predictibilidad. Un proyecto puede crear un proceso nuevo como resultado."
+  },
+  {
+    q: "¿Qué significa 'efectividad' en el contexto de los procesos?",
+    opts: [
+      "Que el proceso produce el output que el cliente realmente necesita para resolver su problema",
+      "Que el proceso utiliza la menor cantidad de recursos posible",
+      "Que el proceso cumple con los plazos acordados",
+      "Que el proceso tiene el menor número de pasos posible"
+    ],
+    a: 0,
+    expl: "La efectividad va más allá de cumplir con los parámetros pactados (eficacia) o usar bien los recursos (eficiencia): pregunta si lo que se produce realmente resuelve el problema del cliente. Un proceso puede ser eficaz y eficiente pero inefectivo."
+  },
+  {
+    q: "¿Cuál de los siguientes es un ejemplo de desperdicio (muda) del tipo 'sobreprocesamiento'?",
+    opts: [
+      "Incluir en un informe 15 gráficos que el receptor nunca va a leer",
+      "Producir 100 unidades cuando solo se necesitan 80",
+      "Que un operario espere 20 minutos a que llegue el material",
+      "Mover el producto terminado de un depósito a otro sin necesidad"
+    ],
+    a: 0,
+    expl: "El sobreprocesamiento es hacer más trabajo del que el cliente requiere. Generar información que nadie usa es el ejemplo clásico en trabajo de conocimiento. Las otras opciones corresponden a sobreproducción, espera y transporte innecesario respectivamente."
+  },
+  {
+    q: "¿Para qué sirve el diagnóstico en el ciclo de un proyecto?",
+    opts: [
+      "Para ordenar y evidenciar los datos sobre la realidad antes de formular la intervención",
+      "Para presentar ante el financiador un documento de justificación",
+      "Para listar las soluciones posibles que el equipo evaluará",
+      "Para definir el cronograma y el presupuesto del proyecto"
+    ],
+    a: 0,
+    expl: "El diagnóstico no es un trámite burocrático — es la base de todo. Sin diagnóstico, el proyecto se basa en suposiciones. Con diagnóstico, se basa en evidencia y puede justificarse ante cualquier cuestionamiento."
+  },
+  {
+    q: "¿Qué son las fuentes primarias en el contexto del diagnóstico?",
+    opts: [
+      "Información obtenida directamente por el equipo mediante observación, entrevistas o mediciones propias",
+      "Documentos oficiales del gobierno o de organismos internacionales",
+      "Estudios académicos publicados en revistas científicas",
+      "La primera fuente consultada, independientemente de su origen"
+    ],
+    a: 0,
+    expl: "Fuentes primarias son las que el equipo genera directamente: sale al campo, entrevista, mide, observa. Fuentes secundarias son las que ya existen: estadísticas, informes, leyes. La combinación de ambas fortalece el diagnóstico."
+  },
+  {
+    q: "El pensamiento sistémico aplicado al diagnóstico implica:",
+    opts: [
+      "Reconocer que un problema surge de la interacción de múltiples factores, no de una única causa lineal",
+      "Aplicar una metodología paso a paso con resultados predecibles",
+      "Centrarse en el síntoma más visible para maximizar el impacto de la intervención",
+      "Dividir el problema en partes independientes para analizarlas por separado"
+    ],
+    a: 0,
+    expl: "El pensamiento sistémico ve relaciones y ciclos, no causas lineales aisladas. Un microbasural no es solo falta de contenedores — es la interacción de factores económicos, sociales, legales y territoriales que se refuerzan mutuamente."
+  },
+  {
+    q: "En la Matriz Poder/Interés de stakeholders, ¿qué estrategia corresponde a un actor con ALTO poder y BAJO interés?",
+    opts: [
+      "Mantener satisfecho",
+      "Gestionar activamente",
+      "Mantener informado",
+      "Monitorear"
+    ],
+    a: 0,
+    expl: "Un actor con mucho poder pero poco interés puede bloquear el proyecto si se siente ignorado o afectado. La estrategia es mantenerlo satisfecho: consultarlo en decisiones clave, evitar que tenga razones para oponerse, sin saturarlo de información."
+  },
+  {
+    q: "¿Qué diferencia hay entre factores endógenos y exógenos en el diagnóstico?",
+    opts: [
+      "Los endógenos son internos y controlables; los exógenos son externos y solo se puede adaptarse a ellos",
+      "Los endógenos son positivos y los exógenos son negativos para el proyecto",
+      "Los endógenos son cuantificables y los exógenos son cualitativos",
+      "Los endógenos pertenecen al presente y los exógenos al futuro del proyecto"
+    ],
+    a: 0,
+    expl: "En FODA: endógenos → Fortalezas (positivos) y Debilidades (negativos), controlables. Exógenos → Oportunidades (favorables) y Amenazas (desfavorables), no controlables pero sí anticipables."
+  },
+  {
+    q: "¿Qué representa PESTEL en el análisis de contexto?",
+    opts: [
+      "Político, Económico, Social, Tecnológico, Ecológico, Legal — factores externos que condicionan el proyecto",
+      "Proceso, Estructura, Sistema, Tiempo, Evaluación, Logística",
+      "Un acrónimo para categorizar los tipos de stakeholders del proyecto",
+      "Las fases del ciclo de vida de un proyecto sociocomunitario"
+    ],
+    a: 0,
+    expl: "PESTEL es el marco para analizar el entorno externo del proyecto. Complementa al FODA identificando específicamente los factores exógenos (Oportunidades y Amenazas) en seis dimensiones del contexto."
+  },
+  {
+    q: "¿Qué distingue a una hipótesis causal de una solución en el análisis de problemas?",
+    opts: [
+      "La hipótesis explica una posible causa del problema; la solución propone una acción para resolverlo",
+      "La hipótesis es más precisa que la solución porque usa datos cuantitativos",
+      "La solución viene antes que la hipótesis en el ciclo del proyecto",
+      "No hay diferencia práctica — ambas expresan lo mismo de forma diferente"
+    ],
+    a: 0,
+    expl: "La hipótesis responde '¿qué podría estar causando esto?'. La solución responde '¿qué hacemos al respecto?'. Formular soluciones antes de validar hipótesis causales es uno de los errores más costosos en gestión de proyectos."
+  },
+  {
+    q: "Según la técnica de los 5 Por Qué, ¿cuándo se debe detener el análisis?",
+    opts: [
+      "Cuando la respuesta revela algo que el equipo puede controlar e intervenir",
+      "Siempre exactamente después de 5 preguntas, ni más ni menos",
+      "Cuando el equipo llegue a una causa técnica, ya que estas son las raíces reales",
+      "Cuando la causa identificada está fuera del alcance del proyecto"
+    ],
+    a: 0,
+    expl: "El número 5 es orientativo, no prescriptivo. El criterio de parada es llegar a algo accionable: una causa que el equipo puede modificar con los recursos disponibles. A veces son 3 preguntas; a veces 7."
+  },
+  {
+    q: "¿Para qué sirve el Diagrama de Ishikawa?",
+    opts: [
+      "Para organizar visualmente todas las causas posibles de un problema en categorías, evitando centrarse solo en las más obvias",
+      "Para establecer el cronograma de actividades del proyecto",
+      "Para representar el flujo de materiales o información en un proceso",
+      "Para comparar el desempeño actual con el histórico de la organización"
+    ],
+    a: 0,
+    expl: "El Ishikawa (espina de pescado) fuerza al equipo a explorar sistemáticamente todas las dimensiones causales. En proyectos sociocomunitarios se adapta usando las categorías PESTEL (Político, Económico, Social, Tecnológico, Ecológico, Legal)."
+  },
+  {
+    q: "El Principio de Pareto aplicado a la priorización de causas sostiene que:",
+    opts: [
+      "Aproximadamente el 20% de las causas genera el 80% de los problemas, por lo que hay que concentrarse en ese 20%",
+      "Se deben resolver todas las causas con igual prioridad para garantizar un impacto total",
+      "Las causas económicas siempre son más importantes que las sociales o tecnológicas",
+      "El 80% de los recursos debe destinarse a resolver el 20% de los problemas más urgentes"
+    ],
+    a: 0,
+    expl: "La regla 80/20 de Pareto implica que los recursos son limitados y el foco estratégico importa. Intentar resolver todas las causas simultáneamente dispersa el esfuerzo y reduce el impacto. La pregunta clave es: ¿cuál es el 20% de causas que genera el 80% del problema?"
+  },
+  {
+    q: "En el FODA, ¿qué representa una 'Fortaleza'?",
+    opts: [
+      "Un factor interno positivo que el equipo/organización controla y puede aprovechar",
+      "Una condición externa favorable que el proyecto puede capitalizar",
+      "Una condición interna negativa que limita el desempeño del proyecto",
+      "Un riesgo externo que puede perjudicar los resultados del proyecto"
+    ],
+    a: 0,
+    expl: "Las cuatro celdas del FODA: Fortalezas (interno/positivo), Debilidades (interno/negativo), Oportunidades (externo/favorable), Amenazas (externo/desfavorable). La dimensión interna/externa y positiva/negativa es fundamental para no confundir los cuadrantes."
+  },
+  {
+    q: "¿Qué tipo de estrategia surge del cruce FA en la Matriz FODA?",
+    opts: [
+      "Usar las fortalezas del proyecto para neutralizar o minimizar las amenazas externas",
+      "Aprovechar las fortalezas para capitalizar las oportunidades disponibles",
+      "Superar las debilidades aprovechando las oportunidades del entorno",
+      "Reducir las debilidades para evitar que las amenazas tengan impacto"
+    ],
+    a: 0,
+    expl: "FA = Fortalezas + Amenazas → estrategia de protección. FO = maximizar (Fortalezas + Oportunidades). DO = compensar (Debilidades + Oportunidades). DA = evitar (Debilidades + Amenazas). Cada cruce produce un tipo distinto de estrategia."
+  },
+  {
+    q: "¿Cuál de las siguientes es una característica válida de una hipótesis causal?",
+    opts: [
+      "Es verificable mediante evidencia concreta que puede recolectarse",
+      "Propone directamente una acción técnica de solución",
+      "Es suficientemente vaga para cubrir múltiples explicaciones posibles",
+      "No requiere vinculación explícita con el problema analizado"
+    ],
+    a: 0,
+    expl: "Una hipótesis válida es: clara, coherente con los datos disponibles, verificable, específica y directamente relacionada con el problema. La verificabilidad es esencial — si no puede probarse ni refutarse, no es una hipótesis científica."
+  },
+  {
+    q: "¿Qué ley nacional regula la gestión de residuos sólidos urbanos en Argentina y constituye un respaldo legal para el Proyecto Microbasurales?",
+    opts: [
+      "Ley 25.916",
+      "Ley 13.592",
+      "Ley 24.051",
+      "Ley 27.520"
+    ],
+    a: 0,
+    expl: "La Ley 25.916 (nacional) regula la gestión integral de residuos sólidos urbanos. La Ley 13.592 es provincial (Provincia de Buenos Aires) y complementa el marco nacional. Ambas son oportunidades del FODA del proyecto."
+  },
+  {
+    q: "¿Cuál es la diferencia entre 'eficacia' y 'eficiencia'?",
+    opts: [
+      "Eficacia es lograr el objetivo; eficiencia es lograrlo usando bien los recursos (sin desperdicios)",
+      "Eficacia mide la velocidad del proceso; eficiencia mide la calidad del resultado",
+      "Eficiencia es lograr el objetivo; eficacia es hacerlo con los recursos correctos",
+      "Ambos términos son sinónimos en la gestión de procesos modernos"
+    ],
+    a: 0,
+    expl: "Eficacia: ¿se logró el objetivo? Eficiencia: ¿se logró bien, sin desperdiciar recursos? Un proceso puede ser eficaz (cumplió) pero ineficiente (usó el doble de lo necesario). O eficiente (bajo costo) pero ineficaz (no cumplió). La efectividad agrega: ¿era lo que el cliente realmente necesitaba?"
+  },
+  {
+    q: "En el análisis de actores territoriales, ¿cuál de los siguientes sería un 'actor comunitario'?",
+    opts: [
+      "Una asociación vecinal que organiza jornadas de limpieza en el barrio",
+      "La empresa municipal de recolección de residuos",
+      "La Secretaría de Medio Ambiente del Municipio",
+      "Una empresa constructora privada que opera en el área"
+    ],
+    a: 0,
+    expl: "Los actores comunitarios son organizaciones de la sociedad civil: ONG, cooperativas, clubes, asociaciones vecinales, grupos informales de vecinos. La empresa de recolección y la Secretaría Municipal son actores públicos o privados según el caso."
+  },
+  {
+    q: "¿Por qué es importante documentar la situación actual antes de intervenir con un proyecto?",
+    opts: [
+      "Porque sin línea de base no se puede medir si el proyecto tuvo impacto real",
+      "Porque es un requisito formal de los financiadores de proyectos",
+      "Porque permite reducir el presupuesto al conocer los recursos existentes",
+      "Porque facilita la asignación de responsabilidades al equipo"
+    ],
+    a: 0,
+    expl: "La documentación de la situación actual es la línea de base (baseline). Sin ella, al finalizar el proyecto no hay forma de demostrar que algo cambió. Es la diferencia entre 'creemos que mejoró' y 'mejoró un 35% según estos indicadores'."
+  },
+  {
+    q: "¿Qué significa que un actor territorial tiene 'bajo poder y alto interés' en la Matriz Poder/Interés?",
+    opts: [
+      "Es muy afectado por el proyecto pero tiene poca capacidad de influir en sus decisiones — conviene mantenerlo informado",
+      "Puede bloquear el proyecto fácilmente y no le importa el resultado",
+      "Es el actor central que debe gestionarse activamente durante todo el proyecto",
+      "Puede ignorarse porque no tiene impacto significativo sobre el proyecto"
+    ],
+    a: 0,
+    expl: "Bajo poder + alto interés = mantener informado. Típicamente son los usuarios o afectados directos (vecinos del barrio, en el caso Microbasurales): sienten mucho el impacto pero tienen poca capacidad de decisión institucional. Ignorarlos genera fricción y puede sabotear la implementación."
+  },
+  {
+    q: "¿Cuál es la función del mapeo territorial en el diagnóstico?",
+    opts: [
+      "Entender el contexto donde ocurre el problema identificando recursos, actores, relaciones y restricciones",
+      "Crear un mapa geográfico con los puntos de intervención del proyecto",
+      "Registrar la distribución de tareas dentro del equipo de trabajo",
+      "Establecer los límites administrativos del área de impacto del proyecto"
+    ],
+    a: 0,
+    expl: "El mapeo territorial va mucho más allá de un mapa geográfico: identifica qué recursos existen, qué instituciones operan, qué organizaciones están activas, cómo se relacionan los actores y qué ventanas de oportunidad o restricciones condicionan la intervención."
+  },
+  {
+    q: "¿Por qué los proyectos sociocomunitarios adaptan el Diagrama de Ishikawa usando dimensiones PESTEL en lugar de las 6M industriales?",
+    opts: [
+      "Porque los problemas sociales tienen causas en dimensiones políticas, económicas, sociales y legales que las 6M industriales no cubren",
+      "Porque las 6M (Máquina, Material, etc.) son más complejas y no aplican a contextos simples",
+      "Porque PESTEL es más moderno y ha reemplazado globalmente a las 6M en todos los contextos",
+      "Porque la normativa académica universitaria exige usar PESTEL en proyectos comunitarios"
+    ],
+    a: 0,
+    expl: "Las 6M (Máquina, Mano de obra, Método, Material, Medio ambiente, Medición) sirven para problemas industriales de producción. Los problemas sociocomunitarios tienen causas en el sistema político, económico, cultural y legal del territorio — dimensiones que PESTEL captura y las 6M ignoran."
+  },
+  {
+    q: "¿Cuál de las siguientes hipótesis causales para el Proyecto Microbasurales está correctamente formulada?",
+    opts: [
+      "«La ausencia de contenedores en puntos estratégicos podría estar generando que los vecinos arrojen residuos en espacios no habilitados»",
+      "«Hay que colocar contenedores cada 200 metros en el barrio norte»",
+      "«Los vecinos son irresponsables con la gestión de sus residuos»",
+      "«El problema de los microbasurales se debe a la falta de voluntad municipal»"
+    ],
+    a: 0,
+    expl: "La opción A es una hipótesis causal válida: explica una causa posible (ausencia de infraestructura), vincula causalmente con el efecto (arrojar en lugares no habilitados) y puede verificarse. La B es una solución, la C es un juicio de valor sin evidencia, la D es imprecisa y no verificable."
+  },
+  {
+    q: "¿Cuál es el criterio correcto para priorizar qué causas atacar con el proyecto?",
+    opts: [
+      "Alto impacto sobre el problema + evidencia que la respalde + posibilidad real de intervención con los recursos disponibles",
+      "Las causas que aparecen primero en el diagrama de Ishikawa",
+      "Las causas que el equipo puede resolver más rápidamente",
+      "Las causas que generan mayor visibilidad mediática para el proyecto"
+    ],
+    a: 0,
+    expl: "Los cuatro criterios de priorización son: impacto (cuánto contribuye al problema), frecuencia (qué tan recurrente es), evidencia (qué datos la respaldan) y posibilidad de intervención (¿tenemos los recursos para actuar?). La velocidad de resolución o la visibilidad mediática no son criterios de priorización técnica."
+  }
+];
+
+// ---- QUIZ ENGINE ----
+var qi = 0, ok = 0, err = 0;
+var order = [];
+
+function shuffle(arr){
+  var a = arr.slice();
+  for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}
+  return a;
+}
+
+function initQuiz(){
+  qi = 0; ok = 0; err = 0;
+  order = shuffle(QUESTIONS.map((_,i)=>i));
+  renderQ();
+}
+
+function renderQ(){
+  var wrap = document.getElementById('qbody');
+  if(qi >= order.length){
+    var pct = Math.round(ok/order.length*100);
+    var msg = pct>=90 ? '🏆 Excelente dominio del material!' : pct>=70 ? '📚 Buen nivel, repasá los temas fallidos.' : pct>=50 ? '💪 Vas por buen camino, necesitás más repaso.' : '🔄 Volvé a leer los apuntes y reintentá.';
+    wrap.innerHTML = '<div class="quiz-result">'
+      + '<div class="score">'+ok+'/'+order.length+'</div>'
+      + '<div class="score-label">'+pct+'% correcto</div>'
+      + '<div class="result-breakdown">'
+      + '<span class="rb-chip rb-ok">✅ Correctas: '+ok+'</span>'
+      + '<span class="rb-chip rb-err">❌ Incorrectas: '+err+'</span>'
+      + '</div>'
+      + '<div class="result-msg">'+msg+'</div>'
+      + '<button class="retry-btn" onclick="initQuiz()">🔄 Repetir quiz</button>'
+      + '</div>';
+    document.getElementById('qnum').textContent = 'Quiz completado';
+    document.getElementById('qlive').textContent = '✅ '+ok+' | ❌ '+err;
+    document.getElementById('qprog').style.width = '100%';
+    return;
+  }
+  var q = QUESTIONS[order[qi]];
+  document.getElementById('qnum').textContent = 'Pregunta '+(qi+1)+' de '+order.length;
+  document.getElementById('qlive').textContent = '✅ '+ok+' | ❌ '+err;
+  document.getElementById('qprog').style.width = (qi/order.length*100)+'%';
+
+  var opts = q.opts.map(function(o,i){
+    return '<button class="opt-btn" onclick="answer(this,'+i+','+q.a+')">'+o+'</button>';
+  }).join('');
+
+  wrap.innerHTML = '<div class="quiz-q">'+q.q+'</div>'
+    + '<div class="quiz-opts">'+opts+'</div>'
+    + '<div class="quiz-expl" id="qexpl">💡 '+q.expl+'</div>'
+    + '<button class="next-q-btn" id="qnext" onclick="nextQ()">'+(qi+1<order.length ? 'Siguiente →' : 'Ver resultado')+'</button>';
+}
+
+function answer(btn, chosen, correct){
+  var btns = btn.parentNode.querySelectorAll('.opt-btn');
+  btns.forEach(function(b){ b.classList.add('disabled'); });
+  if(chosen === correct){
+    btn.classList.add('correct');
+    ok++;
+  } else {
+    btn.classList.add('wrong');
+    btns[correct].classList.add('correct');
+    err++;
+  }
+  document.getElementById('qexpl').classList.add('show');
+  document.getElementById('qnext').classList.add('show');
+  document.getElementById('qlive').textContent = '✅ '+ok+' | ❌ '+err;
+}
+
+function nextQ(){
+  qi++;
+  renderQ();
+}
+
+initQuiz();
 </script>
 </body>
 </html>

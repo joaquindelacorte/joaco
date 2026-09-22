@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Simulador Octave — Sistemas de Control</title>
+<meta name="description" content="Simulador de funciones de transferencia: respuesta temporal, Bode, mapa de polos/ceros y código Octave generado automáticamente"/>
+<style>
+:root{
+  --main:#3730a3;--main-lt:#4f46e5;--main-bg:#e0e7ff;
+  --amber:#b45309;--amber-bg:#fef9c3;
+  --teal:#0d9488;--teal-bg:#ccfbf1;
+  --orange:#c2410c;--orange-bg:#ffedd5;
+  --red:#b91c1c;--red-bg:#fee2e2;
+  --green:#15803d;--green-bg:#dcfce7;
+  --gray:#374151;--gray-lt:#6b7280;
+  --bg:#f5f6fb;--card:#fff;--border:#e2e8f0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img,svg{max-width:100%;height:auto}
+button,input,select,textarea{font-family:inherit}
+button,input[type=range]{min-height:40px}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer;width:100%}
+input[type=range]::-webkit-slider-runnable-track{height:6px;background:var(--border);border-radius:3px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--main-lt);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);margin-top:-7px;cursor:pointer}
+input[type=range]::-moz-range-track{height:6px;background:var(--border);border-radius:3px}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--main-lt);border:2px solid #fff;cursor:pointer}
+
+/* TOP BAR */
+.top-bar{background:rgba(10,10,18,.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:.6rem;padding:.45rem 1rem;font-size:.82rem;position:sticky;top:0;z-index:300}
+.top-bar a{color:#94a3b8;text-decoration:none;padding:.2rem .5rem;border-radius:4px;transition:background .15s}
+.top-bar a:hover{background:rgba(255,255,255,.07);color:#e2e8f0}
+.top-bar .hub{color:#38bdf8!important}
+
+/* MAIN NAV / TABS */
+nav.mainnav{position:sticky;top:36px;z-index:200;background:var(--main);display:flex;align-items:center;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.brand{color:#fff;font-size:1rem;font-weight:800;padding:.75rem 1.1rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.2)}
+.tabs{display:flex;overflow-x:auto;flex:1}
+.tab-btn{padding:.7rem .95rem;border:none;background:transparent;color:rgba(255,255,255,.75);font-size:.82rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s;font-family:inherit}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tab-btn.active{color:#fff;border-bottom-color:#a5b4fc;background:rgba(255,255,255,.08)}
+/* hamburger mobile */
+.burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;padding:8px;background:transparent;border:none;cursor:pointer;margin-left:auto;flex-shrink:0}
+.burger span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:.25s}
+.burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+@media(max-width:700px){
+  nav.mainnav{top:34px}
+  .burger{display:flex}
+  .tabs{display:none;width:100%;flex-direction:column;border-top:1px solid rgba(255,255,255,.15)}
+  .tabs.open{display:flex}
+  .tab-btn{border-bottom:none;border-left:3px solid transparent;text-align:left;padding:.8rem 1.2rem;font-size:.9rem}
+  .tab-btn.active{border-left-color:#a5b4fc;border-bottom:none}
+}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1e1b4b 0%,var(--main-lt) 100%);color:#fff;text-align:center;padding:2rem 1rem 1.6rem}
+.hero h1{font-size:1.9rem;font-weight:900;letter-spacing:-.5px}
+.hero p{opacity:.88;margin-top:.35rem;font-size:.92rem;max-width:600px;margin-left:auto;margin-right:auto}
+.badges-sum{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:.85rem}
+.badge-chip{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.22rem .8rem;font-size:.76rem;font-weight:700}
+
+/* PAGE LAYOUT */
+.page{display:none}.page.active{display:block}
+.container{max-width:1150px;margin:0 auto;padding:1.8rem 1.5rem}
+
+/* SIM LAYOUT */
+.sim-layout{display:grid;grid-template-columns:280px 1fr;gap:1.4rem;align-items:start}
+@media(max-width:800px){.sim-layout{grid-template-columns:1fr}}
+
+/* PANEL */
+.panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem}
+.panel-title{font-size:.85rem;font-weight:800;color:var(--main);text-transform:uppercase;letter-spacing:.06em;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--main-bg)}
+
+/* FORM */
+.form-row{margin-bottom:.9rem}
+.form-row label{display:block;font-size:.8rem;font-weight:700;color:var(--gray);margin-bottom:.35rem}
+.form-row label .val{color:var(--main);font-family:'Courier New',monospace}
+.form-row input[type=text],.form-row select{width:100%;padding:.45rem .65rem;border:1px solid var(--border);border-radius:7px;font-size:.87rem;color:var(--gray);background:#fff;transition:border-color .15s}
+.form-row input[type=text]:focus,.form-row select:focus{outline:none;border-color:var(--main-lt);box-shadow:0 0 0 3px rgba(79,70,229,.12)}
+.radio-group{display:flex;flex-direction:column;gap:.35rem}
+.radio-group label{font-size:.85rem;font-weight:400;color:var(--gray);display:flex;align-items:center;gap:.5rem;cursor:pointer}
+.radio-group input[type=radio]{accent-color:var(--main)}
+.ctrl-box{background:#f8f7ff;border:1px solid var(--main-bg);border-radius:9px;padding:.8rem;margin-top:.5rem}
+.ctrl-box label{font-size:.8rem;color:var(--gray-lt);font-weight:600}
+.check-row{display:flex;align-items:center;gap:.5rem;font-size:.86rem;font-weight:600;color:var(--gray);cursor:pointer;margin-bottom:.6rem}
+.check-row input{accent-color:var(--main);width:16px;height:16px}
+
+/* BUTTONS */
+.btn-primary{width:100%;padding:.6rem 1rem;border:none;background:var(--main);color:#fff;font-weight:700;font-size:.9rem;border-radius:9px;cursor:pointer;transition:.15s;margin-top:.4rem}
+.btn-primary:hover{background:var(--main-lt)}
+.btn-sm{padding:.35rem .8rem;border:1px solid var(--border);background:#fff;border-radius:7px;font-size:.8rem;font-weight:700;color:var(--gray);cursor:pointer;transition:.15s}
+.btn-sm:hover{border-color:var(--main-lt);color:var(--main)}
+.btn-sm.active{background:var(--main);color:#fff;border-color:var(--main)}
+.preset-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.4rem}
+
+/* CANVAS */
+canvas.chart{width:100%;background:#fbfbff;border-radius:10px;border:1px solid var(--border);display:block}
+.chart-legend{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.6rem;font-size:.77rem}
+.leg-sw{width:14px;height:4px;border-radius:2px;display:inline-block;margin-right:.3rem;vertical-align:middle}
+
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:.7rem;margin-top:1rem}
+.metric-chip{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:.65rem .8rem;text-align:center}
+.metric-chip .mval{font-size:1.05rem;font-weight:800;color:var(--main);font-family:'Courier New',monospace;display:block}
+.metric-chip .mlbl{font-size:.72rem;color:var(--gray-lt);margin-top:.15rem;display:block}
+
+/* BODE */
+.bode-stack{display:flex;flex-direction:column;gap:1rem}
+.bode-metrics{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:.8rem}
+.bm-chip{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.5rem .85rem;font-size:.82rem}
+.bm-chip b{color:var(--main);font-family:'Courier New',monospace}
+
+/* PZMAP */
+.pz-layout{display:grid;grid-template-columns:1fr 320px;gap:1.2rem;align-items:start}
+@media(max-width:800px){.pz-layout{grid-template-columns:1fr}}
+.pz-table{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.pz-table table{width:100%;border-collapse:collapse;font-size:.82rem}
+.pz-table th{background:var(--main);color:#fff;padding:.5rem .7rem;font-weight:600;text-align:left}
+.pz-table td{padding:.5rem .7rem;border-bottom:1px solid var(--border)}
+.pz-table tr:last-child td{border:none}
+.pz-table tr:nth-child(even) td{background:var(--main-bg)}
+.stability-badge{display:inline-block;padding:.3rem .9rem;border-radius:2rem;font-size:.82rem;font-weight:800;margin-bottom:1rem}
+.stable{background:var(--green-bg);color:var(--green)}
+.unstable{background:var(--red-bg);color:var(--red)}
+
+/* CODE */
+.code-panel{background:#0f172a;color:#e2e8f0;border-radius:12px;padding:1.2rem;font-family:'Consolas','Courier New',monospace;font-size:.78rem;line-height:1.65;overflow-x:auto;white-space:pre;position:relative;min-height:200px}
+.code-kw{color:#93c5fd}
+.code-cm{color:#4ade80}
+.code-str{color:#fbbf24}
+.copy-btn{position:absolute;top:.8rem;right:.8rem;padding:.35rem .8rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:7px;color:#e2e8f0;font-size:.78rem;font-weight:700;cursor:pointer;transition:.15s;font-family:inherit}
+.copy-btn:hover{background:rgba(255,255,255,.2)}
+
+/* REF TABLE */
+.ref-table{border-radius:10px;border:1px solid var(--border);overflow:hidden;margin-top:1.2rem}
+.ref-table table{width:100%;border-collapse:collapse;font-size:.84rem;background:#fff}
+.ref-table th{background:var(--main);color:#fff;padding:.55rem .8rem;text-align:left;font-weight:600}
+.ref-table td{padding:.5rem .8rem;border-bottom:1px solid var(--border);font-family:'Consolas',monospace}
+.ref-table tr:nth-child(even) td{background:var(--main-bg)}
+.ref-table tr:last-child td{border:none}
+.ref-table td:last-child{font-family:'Segoe UI',sans-serif;color:var(--gray-lt)}
+
+/* STITLE */
+.stitle{font-size:1.15rem;font-weight:800;color:var(--main);margin:0 0 1rem;padding-bottom:.5rem;border-bottom:2px solid var(--main-bg);display:flex;align-items:center;gap:.5rem}
+.note{background:var(--main-bg);border-left:4px solid var(--main-lt);border-radius:0 8px 8px 0;padding:.7rem .95rem;font-size:.88rem;color:#312e81;margin:.8rem 0}
+
+/* FOOTER NAV */
+.footer-nav{padding:1rem 1.25rem;background:var(--main);display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;font-size:.83rem;margin-top:2rem}
+.footer-nav__lbl{color:#94a3b8;margin-right:.25rem}
+.footer-nav a{color:#c7d2fe;text-decoration:none;padding:.2rem .6rem;border-radius:4px;background:rgba(255,255,255,.08)}
+.footer-nav a:hover{background:rgba(255,255,255,.16);color:#fff}
+
+@media(max-width:600px){.hero h1{font-size:1.45rem}.container{padding:1.2rem .9rem}.metrics{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <a href="https://joacodelacorte.netlify.app/#apuntes">← Portafolio</a>
+  <a href="../apuntes/" class="hub">Hub Apuntes</a>
+  <span style="margin-left:auto;color:#64748b;font-family:'Courier New',monospace;font-size:.75rem">Sistemas de Control</span>
+</div>
+
+<!-- MAIN NAV -->
+<nav class="mainnav">
+  <div class="brand">🔬 Simulador Octave</div>
+  <button class="burger" id="burger-btn" aria-label="Menú" onclick="toggleBurger()">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="tabs" id="main-tabs">
+    <button class="tab-btn active" onclick="showPage('page-resp',this)">📐 Respuesta Temporal</button>
+    <button class="tab-btn" onclick="showPage('page-bode',this)">📊 Diagrama de Bode</button>
+    <button class="tab-btn" onclick="showPage('page-pzmap',this)">🗺️ Mapa Polos/Ceros</button>
+    <button class="tab-btn" onclick="showPage('page-octave',this)">💻 Código Octave</button>
+    <a class="tab-btn" href="teoria.html" style="text-decoration:none">← Teoría</a>
+    <a class="tab-btn" href="ejercicios-parcial.html" style="text-decoration:none">📝 Parcial</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>🔬 Simulador de Funciones de Transferencia</h1>
+  <p>Ingresá una FT, elegí el controlador y tipo de entrada — la respuesta, el Bode y el mapa de polos se calculan en tiempo real. El código Octave equivalente se genera automáticamente.</p>
+  <div class="badges-sum">
+    <span class="badge-chip">📐 Respuesta Temporal</span>
+    <span class="badge-chip">📊 Bode</span>
+    <span class="badge-chip">🗺️ Polos/Ceros</span>
+    <span class="badge-chip">💻 Código Octave</span>
+    <span class="badge-chip">6 ejemplos</span>
+  </div>
+</div>
+
+<!-- ═══════════════ RESPUESTA TEMPORAL ═══════════════ -->
+<div id="page-resp" class="page active">
+<div class="container">
+  <div class="sim-layout">
+
+    <!-- LEFT PANEL -->
+    <div>
+      <div class="panel">
+        <div class="panel-title">Función de Transferencia</div>
+
+        <!-- Ejemplos -->
+        <div class="form-row">
+          <label>Cargar ejemplo</label>
+          <select id="presetSel" onchange="loadPreset(this.value)">
+            <option value="">— Seleccioná —</option>
+            <option value="p1">Primer orden simple</option>
+            <option value="p2">2° orden subamortiguado</option>
+            <option value="p3">Integrador puro</option>
+            <option value="p4">Control P con offset</option>
+            <option value="p5">Control PI sin offset</option>
+            <option value="p6">Ejercicio E.1 (Parcial)</option>
+          </select>
+        </div>
+        <!-- Kp presets for E.1 -->
+        <div id="e1-btns" style="display:none;margin-bottom:.9rem">
+          <div style="font-size:.78rem;font-weight:700;color:var(--gray-lt);margin-bottom:.4rem">Kp rápido (E.1):</div>
+          <div class="preset-row">
+            <button class="btn-sm" onclick="setKpE1(2)">Kp = 2</button>
+            <button class="btn-sm" onclick="setKpE1(5)">Kp = 5</button>
+            <button class="btn-sm" onclick="setKpE1(10)">Kp = 10</button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label>Numerador <span style="font-weight:400;color:var(--gray-lt)">(coefs separados por espacio)</span></label>
+          <input type="text" id="numInput" value="1" placeholder="ej: 1  o  2 3"/>
+        </div>
+        <div class="form-row">
+          <label>Denominador</label>
+          <input type="text" id="denInput" value="1 1" placeholder="ej: 1 2 1"/>
+        </div>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin:.9rem 0"/>
+
+        <div class="panel-title" style="margin-top:.2rem">Tipo de Entrada</div>
+        <div class="form-row">
+          <div class="radio-group">
+            <label><input type="radio" name="inpType" value="step" checked onchange="onInputTypeChange()"/> Escalón unitario</label>
+            <label><input type="radio" name="inpType" value="stepA" onchange="onInputTypeChange()"/> Escalón (amplitud)</label>
+            <label><input type="radio" name="inpType" value="ramp" onchange="onInputTypeChange()"/> Rampa</label>
+            <label><input type="radio" name="inpType" value="sine" onchange="onInputTypeChange()"/> Senoidal</label>
+          </div>
+        </div>
+        <div id="stepA-row" class="form-row" style="display:none">
+          <label>Amplitud: <span class="val" id="stepAVal">2</span></label>
+          <input type="range" id="stepASlider" min="0.1" max="10" step="0.1" value="2" oninput="stepAVal.textContent=parseFloat(this.value).toFixed(1);runSim()"/>
+        </div>
+        <div id="sine-rows" style="display:none">
+          <div class="form-row">
+            <label>Frecuencia: <span class="val" id="sineFreqVal">1.0</span> rad/s</label>
+            <input type="range" id="sineFreqSlider" min="0.1" max="10" step="0.1" value="1" oninput="sineFreqVal.textContent=parseFloat(this.value).toFixed(1);runSim()"/>
+          </div>
+          <div class="form-row">
+            <label>Amplitud: <span class="val" id="sineAmpVal">1.0</span></label>
+            <input type="range" id="sineAmpSlider" min="0.5" max="5" step="0.5" value="1" oninput="sineAmpVal.textContent=parseFloat(this.value).toFixed(1);runSim()"/>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label>Tiempo de simulación: <span class="val" id="tEndVal">10</span> s</label>
+          <input type="range" id="tEndSlider" min="2" max="30" step="1" value="10" oninput="tEndVal.textContent=this.value;runSim()"/>
+        </div>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin:.9rem 0"/>
+
+        <div class="ctrl-box">
+          <label class="check-row">
+            <input type="checkbox" id="ctrlCheck" onchange="toggleCtrl()"/>
+            Agregar controlador (lazo cerrado)
+          </label>
+          <div id="ctrl-fields" style="display:none">
+            <div class="form-row">
+              <label>Tipo</label>
+              <select id="ctrlType" onchange="onCtrlTypeChange()">
+                <option value="P">Proporcional (P)</option>
+                <option value="PI">PI</option>
+                <option value="PID">PID</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>Kp: <span class="val" id="kpVal">1.0</span></label>
+              <input type="range" id="kpSlider" min="0.1" max="20" step="0.1" value="1" oninput="kpVal.textContent=parseFloat(this.value).toFixed(1);runSim()"/>
+            </div>
+            <div id="ki-row" class="form-row" style="display:none">
+              <label>Ki: <span class="val" id="kiVal">0.5</span></label>
+              <input type="range" id="kiSlider" min="0" max="5" step="0.1" value="0.5" oninput="kiVal.textContent=parseFloat(this.value).toFixed(1);runSim()"/>
+            </div>
+            <div id="kd-row" class="form-row" style="display:none">
+              <label>Kd: <span class="val" id="kdVal">0.1</span></label>
+              <input type="range" id="kdSlider" min="0" max="5" step="0.1" value="0.1" oninput="kdVal.textContent=parseFloat(this.value).toFixed(1);runSim()"/>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-primary" onclick="runSim()">▶ Simular</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: CANVAS + METRICS -->
+    <div>
+      <div class="panel">
+        <div class="panel-title">Respuesta Temporal</div>
+        <canvas id="canvasResp" class="chart" width="700" height="280" aria-label="Respuesta temporal"></canvas>
+        <div class="chart-legend">
+          <span><span class="leg-sw" style="background:#6366f1"></span>y(t) — salida</span>
+          <span><span class="leg-sw" style="background:#9ca3af;border-top:2px dashed #9ca3af"></span>Setpoint</span>
+          <span id="ut-legend" style="display:none"><span class="leg-sw" style="background:#f97316"></span>u(t) — control</span>
+        </div>
+        <div id="sim-error" class="note" style="display:none;color:#7f1d1d;background:var(--red-bg);border-color:var(--red)">⚠️ <span id="sim-error-msg"></span></div>
+      </div>
+
+      <div class="metrics" id="metrics-box">
+        <div class="metric-chip"><span class="mval" id="m-yss">—</span><span class="mlbl">y_ss</span></div>
+        <div class="metric-chip"><span class="mval" id="m-offset">—</span><span class="mlbl">Offset</span></div>
+        <div class="metric-chip"><span class="mval" id="m-trise">—</span><span class="mlbl">t_rise (s)</span></div>
+        <div class="metric-chip"><span class="mval" id="m-tsettle">—</span><span class="mlbl">t_settle (s)</span></div>
+        <div class="metric-chip"><span class="mval" id="m-overshoot">—</span><span class="mlbl">Overshoot %</span></div>
+        <div class="metric-chip"><span class="mval" id="m-poles" style="font-size:.72rem">—</span><span class="mlbl">Polos</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ BODE ═══════════════ -->
+<div id="page-bode" class="page">
+<div class="container">
+  <div class="stitle">📊 Diagrama de Bode</div>
+  <div class="note">Los gráficos usan la FT configurada en la pestaña <b>Respuesta Temporal</b>. Cambiá los parámetros allí y volvé acá.</div>
+  <div class="panel bode-stack">
+    <div>
+      <div style="font-size:.8rem;font-weight:700;color:var(--gray-lt);margin-bottom:.4rem">MAGNITUD (dB)</div>
+      <canvas id="canvasBodeMag" class="chart" width="900" height="220" aria-label="Bode magnitud"></canvas>
+    </div>
+    <div>
+      <div style="font-size:.8rem;font-weight:700;color:var(--gray-lt);margin-bottom:.4rem">FASE (°)</div>
+      <canvas id="canvasBodePh" class="chart" width="900" height="200" aria-label="Bode fase"></canvas>
+    </div>
+  </div>
+  <div class="bode-metrics" id="bode-metrics">
+    <div class="bm-chip">ωc: <b id="bm-wc">—</b> rad/s</div>
+    <div class="bm-chip">Margen de Fase: <b id="bm-pm">—</b></div>
+    <div class="bm-chip">ωp: <b id="bm-wp">—</b> rad/s</div>
+    <div class="bm-chip">Margen de Ganancia: <b id="bm-gm">—</b></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ PZMAP ═══════════════ -->
+<div id="page-pzmap" class="page">
+<div class="container">
+  <div class="stitle">🗺️ Mapa de Polos y Ceros</div>
+  <div class="pz-layout">
+    <div class="panel">
+      <canvas id="canvasPZ" class="chart" width="520" height="400" aria-label="Mapa de polos y ceros"></canvas>
+      <div class="chart-legend" style="margin-top:.7rem;justify-content:center">
+        <span style="font-size:.8rem">× <span style="color:#dc2626;font-weight:700">Polos</span></span>
+        <span style="font-size:.8rem">○ <span style="color:#3730a3;font-weight:700">Ceros</span></span>
+        <span style="font-size:.8rem">× <span style="color:#f97316;font-weight:700">Polos LC</span></span>
+      </div>
+    </div>
+    <div>
+      <div id="stab-badge" class="stability-badge stable">✅ Sistema ESTABLE</div>
+      <div class="pz-table">
+        <table>
+          <thead><tr><th>Polo / Cero</th><th>Tipo</th><th>Re</th><th>Estable</th></tr></thead>
+          <tbody id="pz-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ CÓDIGO OCTAVE ═══════════════ -->
+<div id="page-octave" class="page">
+<div class="container">
+  <div class="stitle">💻 Código Octave Generado</div>
+  <div class="note">El código se genera automáticamente según la configuración actual. Copialo y pegalo en Octave.</div>
+  <div style="position:relative">
+    <div class="code-panel" id="octave-code">% Configurá la FT en la pestaña Respuesta Temporal para generar el código.</div>
+    <button class="copy-btn" onclick="copyOctave()">📋 Copiar</button>
+  </div>
+
+  <div class="stitle" style="margin-top:2rem">📖 Referencia rápida de comandos</div>
+  <div class="ref-table">
+    <table>
+      <thead><tr><th>Función Octave</th><th>Descripción</th></tr></thead>
+      <tbody>
+        <tr><td>tf(num, den)</td><td>Crear función de transferencia</td></tr>
+        <tr><td>feedback(G, H)</td><td>Lazo cerrado: G/(1+G·H). H=1 para feedback unitario</td></tr>
+        <tr><td>step(G, t)</td><td>Respuesta al escalón. Retorna [y, t_out]</td></tr>
+        <tr><td>bode(G)</td><td>Diagrama de Bode (magnitud y fase)</td></tr>
+        <tr><td>pzmap(G)</td><td>Mapa de polos y ceros en el plano complejo</td></tr>
+        <tr><td>pole(G)</td><td>Calcular polos de la FT</td></tr>
+        <tr><td>zero(G)</td><td>Calcular ceros de la FT</td></tr>
+        <tr><td>dcgain(G)</td><td>Ganancia DC = valor en estado estacionario (escalón)</td></tr>
+        <tr><td>lsim(G, u, t)</td><td>Respuesta a entrada arbitraria u(t)</td></tr>
+        <tr><td>margin(G)</td><td>Márgenes de ganancia y fase</td></tr>
+        <tr><td>rlocus(G)</td><td>Lugar de raíces vs ganancia K</td></tr>
+        <tr><td>isstable(G)</td><td>Retorna true si el sistema es estable</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- FOOTER NAV -->
+<nav class="footer-nav">
+  <span class="footer-nav__lbl">Más de esta materia:</span>
+  <a href="teoria.html">📖 Teoría</a>
+  <a href="ejercicios-parcial.html">📝 Ejercicios Parcial</a>
+  <a href="simulador-encoder.html">⚙️ Encoder</a>
+  <a href="pid-horno.html">🌡️ PID Horno</a>
+</nav>
+
+<script>
+/* ══════════════════════════════════════════════
+   MATH UTILITIES
+══════════════════════════════════════════════ */
+function parseCoeffs(str){
+  return str.trim().split(/[\s,]+/).map(Number).filter(x=>!isNaN(x));
+}
+
+// Complex number ops
+const C = {
+  add:(a,b)=>({re:a.re+b.re,im:a.im+b.im}),
+  mul:(a,b)=>({re:a.re*b.re-a.im*b.im,im:a.re*b.im+a.im*b.re}),
+  abs:(a)=>Math.sqrt(a.re*a.re+a.im*a.im),
+  arg:(a)=>Math.atan2(a.im,a.re),
+  fromPolar:(r,t)=>({re:r*Math.cos(t),im:r*Math.sin(t)})
+};
+
+// Evaluate polynomial p(s) at complex s
+function evalPoly(coeffs, s){
+  // coeffs: [a0,a1,...,an] → a0*s^n + a1*s^(n-1) + ... + an
+  let result={re:0,im:0};
+  const n=coeffs.length-1;
+  for(let i=0;i<=n;i++){
+    const power=n-i;
+    // s^power
+    let sp={re:1,im:0};
+    for(let j=0;j<power;j++) sp=C.mul(sp,s);
+    result=C.add(result,{re:coeffs[i]*sp.re,im:coeffs[i]*sp.im});
+  }
+  return result;
+}
+
+// Polynomial multiplication (convolution)
+function polyMul(a,b){
+  const out=new Array(a.length+b.length-1).fill(0);
+  for(let i=0;i<a.length;i++) for(let j=0;j<b.length;j++) out[i+j]+=a[i]*b[j];
+  return out;
+}
+
+// Polynomial addition (align by right/degree)
+function polyAdd(a,b){
+  const len=Math.max(a.length,b.length);
+  const A=[...new Array(len-a.length).fill(0),...a];
+  const B=[...new Array(len-b.length).fill(0),...b];
+  return A.map((v,i)=>v+B[i]);
+}
+
+// Normalize polynomial (divide by leading coeff)
+function polyNorm(p){const a=p[0];return p.map(x=>x/a)}
+
+/* ── Roots (Durand-Kerner) ── */
+function polyRoots(coeffs){
+  const p=polyNorm([...coeffs]);
+  const n=p.length-1;
+  if(n===0) return [];
+  if(n===1) return [{re:-p[1]/p[0]||0,im:0}]; // but p is normed
+  if(n===1) return [{re:-p[1],im:0}];
+  if(n===2){
+    const disc=p[1]*p[1]-4*p[2];
+    if(disc>=0) return [{re:(-p[1]+Math.sqrt(disc))/2,im:0},{re:(-p[1]-Math.sqrt(disc))/2,im:0}];
+    const re=-p[1]/2, im=Math.sqrt(-disc)/2;
+    return [{re,im},{re,im:-im}];
+  }
+  // Durand-Kerner for order >= 3
+  let roots=[];
+  for(let k=0;k<n;k++){
+    const angle=2*Math.PI*k/n;
+    roots.push(C.fromPolar(0.4+0.1*k,angle));
+  }
+  for(let iter=0;iter<200;iter++){
+    let maxDelta=0;
+    for(let i=0;i<n;i++){
+      let denom={re:1,im:0};
+      for(let j=0;j<n;j++) if(j!==i) denom=C.mul(denom,{re:roots[i].re-roots[j].re,im:roots[i].im-roots[j].im});
+      if(C.abs(denom)<1e-15) continue;
+      const pval=evalPoly(p,roots[i]);
+      const delta={re:pval.re/denom.re-pval.im*denom.im/(denom.re*denom.re+denom.im*denom.im),
+                   im:-(pval.re*denom.im+pval.im*denom.re)/(denom.re*denom.re+denom.im*denom.im)};
+      // corrected div
+      const dabs2=denom.re*denom.re+denom.im*denom.im;
+      const d={re:(pval.re*denom.re+pval.im*denom.im)/dabs2, im:(pval.im*denom.re-pval.re*denom.im)/dabs2};
+      roots[i]={re:roots[i].re-d.re,im:roots[i].im-d.im};
+      maxDelta=Math.max(maxDelta,C.abs(d));
+    }
+    if(maxDelta<1e-10) break;
+  }
+  // clean near-zero imaginaries
+  return roots.map(r=>({re:r.re,im:Math.abs(r.im)<1e-8?0:r.im}));
+}
+
+/* ── TF to State-Space (controllable canonical form) ── */
+function tf2ss(num, den){
+  const a0=den[0];
+  const d=den.map(x=>x/a0);
+  const n=num.map(x=>x/a0);
+  const order=d.length-1;
+  // Pad num to same length as den
+  const b=[...new Array(d.length-n.length).fill(0),...n];
+  const D0=b[0]; // direct term
+  const bc=b.slice(1).map((v,i)=>v-D0*d[i+1]); // adjusted b
+
+  // A matrix (companion)
+  const A=[];
+  for(let i=0;i<order;i++){
+    const row=new Array(order).fill(0);
+    if(i<order-1) row[i+1]=1;
+    else for(let j=0;j<order;j++) row[j]=-d[order-j];
+    A.push(row);
+  }
+  const B=new Array(order).fill(0); B[order-1]=1;
+  return {A,B,C:bc,D:D0,order};
+}
+
+/* ── Euler simulation ── */
+function simulateEuler(ss, u_fn, tEnd, dt=0.005){
+  const {A,B,C,D,order}=ss;
+  const steps=Math.floor(tEnd/dt)+1;
+  const t=[], y=[], u=[];
+  let x=new Array(order).fill(0);
+
+  for(let k=0;k<steps;k++){
+    const tk=k*dt;
+    const uk=u_fn(tk);
+    // y = C·x + D·u
+    let yk=D*uk;
+    for(let i=0;i<order;i++) yk+=C[i]*x[i];
+    t.push(tk); y.push(yk); u.push(uk);
+    // x[k+1] = x[k] + dt*(A·x[k] + B·u[k])
+    const Ax=new Array(order).fill(0);
+    for(let i=0;i<order;i++) for(let j=0;j<order;j++) Ax[i]+=A[i][j]*x[j];
+    x=x.map((v,i)=>v+dt*(Ax[i]+B[i]*uk));
+  }
+  return {t,y,u};
+}
+
+/* ══════════════════════════════════════════════
+   GLOBAL STATE
+══════════════════════════════════════════════ */
+let lastNum=[1], lastDen=[1,1], lastSim=null, lastPolesOL=[], lastPolesLC=[], lastZeros=[];
+
+/* ══════════════════════════════════════════════
+   SIMULATE
+══════════════════════════════════════════════ */
+function runSim(){
+  const simErr=document.getElementById('sim-error');
+  simErr.style.display='none';
+  try{
+    let num=parseCoeffs(document.getElementById('numInput').value);
+    let den=parseCoeffs(document.getElementById('denInput').value);
+    if(!num.length||!den.length||den.length<2) throw new Error('Denominador debe ser al menos de orden 1');
+    if(num[0]===0) num=num.filter((v,i)=>i>0||v!==0);
+    if(!num.length) num=[0];
+
+    lastNum=[...num]; lastDen=[...den];
+    lastZeros=num.length>1?polyRoots(num):[];
+    lastPolesOL=polyRoots(den);
+
+    // Controlador
+    const useCtrl=document.getElementById('ctrlCheck').checked;
+    let simNum=num, simDen=den;
+    let ctrlNum=[1], ctrlDen=[1]; // C(s)=1 by default
+
+    if(useCtrl){
+      const Kp=parseFloat(document.getElementById('kpSlider').value);
+      const ctype=document.getElementById('ctrlType').value;
+      if(ctype==='P'){
+        ctrlNum=[Kp]; ctrlDen=[1];
+      } else if(ctype==='PI'){
+        const Ki=parseFloat(document.getElementById('kiSlider').value);
+        // C(s) = Kp + Ki/s = (Kp*s + Ki) / s
+        ctrlNum=[Kp,Ki]; ctrlDen=[1,0];
+      } else { // PID
+        const Ki=parseFloat(document.getElementById('kiSlider').value);
+        const Kd=parseFloat(document.getElementById('kdSlider').value);
+        // C(s) = Kp + Ki/s + Kd*s = (Kd*s² + Kp*s + Ki) / s
+        ctrlNum=[Kd,Kp,Ki]; ctrlDen=[1,0];
+      }
+      // Open loop: L(s) = C(s)·G(s)
+      const olNum=polyMul(ctrlNum,num);
+      const olDen=polyMul(ctrlDen,den);
+      // Closed loop: T(s) = L / (1 + L) → num=olNum, den=olDen+olNum (padded)
+      const clDen=polyAdd(olDen,olNum);
+      simNum=olNum; simDen=clDen;
+      lastPolesLC=polyRoots(clDen);
+    } else {
+      lastPolesLC=[];
+    }
+
+    const order=simDen.length-1;
+    if(order>6) throw new Error('Orden máximo soportado: 6');
+
+    const ss=tf2ss(simNum,simDen);
+    const tEnd=parseInt(document.getElementById('tEndSlider').value);
+    const inpType=document.querySelector('input[name=inpType]:checked').value;
+
+    let u_fn;
+    if(inpType==='step'||inpType==='stepA'){
+      const amp=inpType==='stepA'?parseFloat(document.getElementById('stepASlider').value):1;
+      u_fn=()=>amp;
+    } else if(inpType==='ramp'){
+      u_fn=(t)=>t;
+    } else {
+      const freq=parseFloat(document.getElementById('sineFreqSlider').value);
+      const amp=parseFloat(document.getElementById('sineAmpSlider').value);
+      u_fn=(t)=>amp*Math.sin(freq*t);
+    }
+
+    const dt=tEnd>15?0.01:0.005;
+    const sim=simulateEuler(ss,u_fn,tEnd,dt);
+    lastSim=sim;
+
+    drawResp(sim,inpType,u_fn,useCtrl);
+    calcMetrics(sim,inpType,simNum,simDen,useCtrl);
+    updateOctaveCode(num,den,useCtrl,inpType,tEnd);
+    // Redraw other tabs if visible
+    drawBode(lastNum,lastDen,useCtrl?{ctrlNum,ctrlDen}:null);
+    drawPZMap();
+    updatePZTable();
+  } catch(e){
+    simErr.style.display='block';
+    document.getElementById('sim-error-msg').textContent=e.message;
+  }
+}
+
+/* ══════════════════════════════════════════════
+   DRAW RESPONSE
+══════════════════════════════════════════════ */
+function drawResp(sim,inpType,u_fn,showU){
+  const canvas=document.getElementById('canvasResp');
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  const pL=52,pR=20,pT=20,pB=42;
+  const cW=W-pL-pR,cH=H-pT-pB;
+
+  const {t,y,u}=sim;
+  const yMin=Math.min(0,...y,...(showU?u:[]));
+  const yMax=Math.max(...y,...(showU?u:[]),1.05);
+  const yRange=yMax-yMin||1;
+  const tMax=t[t.length-1];
+
+  const tx=tv=>pL+tv/tMax*cW;
+  const ty=yv=>pT+cH-(yv-yMin)/yRange*cH;
+
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#f8f9ff';ctx.fillRect(pL,pT,cW,cH);
+
+  // Grid
+  ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;
+  const nGridX=Math.min(10,Math.floor(tMax));
+  for(let i=0;i<=nGridX;i++){const x=tx(i*tMax/nGridX);ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,pT+cH);ctx.stroke()}
+  const nGridY=6;
+  for(let i=0;i<=nGridY;i++){const yy=pT+i*cH/nGridY;ctx.beginPath();ctx.moveTo(pL,yy);ctx.lineTo(pL+cW,yy);ctx.stroke()}
+
+  // Axes
+  ctx.strokeStyle='#475569';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,pT+cH);ctx.lineTo(pL+cW,pT+cH);ctx.stroke();
+
+  // Labels
+  ctx.fillStyle='#475569';ctx.font='10px Segoe UI';ctx.textAlign='center';
+  for(let i=0;i<=nGridX;i++) ctx.fillText((i*tMax/nGridX).toFixed(1),tx(i*tMax/nGridX),pT+cH+14);
+  ctx.textAlign='right';ctx.font='10px Courier New';
+  for(let i=0;i<=nGridY;i++){
+    const yv=yMin+(nGridY-i)*yRange/nGridY;
+    ctx.fillText(yv.toFixed(2),pL-5,pT+i*cH/nGridY+4);
+  }
+  ctx.save();ctx.translate(13,pT+cH/2);ctx.rotate(-Math.PI/2);ctx.textAlign='center';ctx.font='11px Segoe UI';ctx.fillStyle='#475569';ctx.fillText('Amplitud',0,0);ctx.restore();
+  ctx.textAlign='center';ctx.fillStyle='#475569';ctx.font='11px Segoe UI';ctx.fillText('Tiempo (s)',pL+cW/2,H-4);
+
+  // Setpoint (step inputs)
+  if(inpType==='step'||inpType==='stepA'){
+    const amp=inpType==='stepA'?parseFloat(document.getElementById('stepASlider').value):1;
+    ctx.strokeStyle='#9ca3af';ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
+    ctx.beginPath();ctx.moveTo(tx(0),ty(amp));ctx.lineTo(tx(tMax),ty(amp));ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // u(t) signal
+  if(showU){
+    document.getElementById('ut-legend').style.display='';
+    ctx.strokeStyle='#f97316';ctx.lineWidth=1.5;ctx.globalAlpha=0.55;
+    ctx.beginPath();
+    for(let i=0;i<u.length;i+=2){
+      if(i===0) ctx.moveTo(tx(t[i]),ty(u[i]));
+      else ctx.lineTo(tx(t[i]),ty(u[i]));
+    }
+    ctx.stroke();ctx.globalAlpha=1;
+  } else {
+    document.getElementById('ut-legend').style.display='none';
+  }
+
+  // y(t)
+  ctx.strokeStyle='#6366f1';ctx.lineWidth=2.5;
+  ctx.beginPath();
+  const step=Math.max(1,Math.floor(y.length/600));
+  for(let i=0;i<y.length;i+=step){
+    if(i===0) ctx.moveTo(tx(t[i]),ty(y[i]));
+    else ctx.lineTo(tx(t[i]),ty(y[i]));
+  }
+  ctx.stroke();
+}
+
+/* ══════════════════════════════════════════════
+   METRICS
+══════════════════════════════════════════════ */
+function calcMetrics(sim,inpType,num,den,useCtrl){
+  const {t,y}=sim;
+  const yss=y[y.length-1];
+  const yMax=Math.max(...y);
+  document.getElementById('m-yss').textContent=yss.toFixed(4);
+
+  if(inpType==='step'||inpType==='stepA'){
+    const amp=inpType==='stepA'?parseFloat(document.getElementById('stepASlider').value):1;
+    const offset=amp-yss;
+    document.getElementById('m-offset').textContent=offset.toFixed(4);
+    // t_rise: 10%→90% of yss
+    const y10=0.1*yss,y90=0.9*yss;
+    let t10=null,t90=null;
+    for(let i=0;i<y.length;i++){
+      if(t10===null&&y[i]>=y10) t10=t[i];
+      if(t90===null&&y[i]>=y90){t90=t[i];break;}
+    }
+    document.getElementById('m-trise').textContent=t10!==null&&t90!==null?(t90-t10).toFixed(3):'—';
+    // t_settle: ±2% of yss
+    const band=0.02*Math.abs(yss);
+    let tSettle=t[t.length-1];
+    for(let i=y.length-1;i>=0;i--){if(Math.abs(y[i]-yss)>band){tSettle=t[i+1]||t[i];break;}}
+    document.getElementById('m-tsettle').textContent=tSettle.toFixed(3);
+    // overshoot
+    const os=yss>0.001?Math.max(0,(yMax-yss)/yss*100):0;
+    document.getElementById('m-overshoot').textContent=os.toFixed(1)+'%';
+  } else {
+    document.getElementById('m-offset').textContent='N/A';
+    document.getElementById('m-trise').textContent='N/A';
+    document.getElementById('m-tsettle').textContent='N/A';
+    document.getElementById('m-overshoot').textContent='N/A';
+  }
+
+  // Poles
+  const poles=useCtrl?lastPolesLC:lastPolesOL;
+  const pStr=poles.map(p=>p.im===0?p.re.toFixed(3):`${p.re.toFixed(2)}${p.im>=0?'+':''}${p.im.toFixed(2)}j`).join(', ');
+  document.getElementById('m-poles').textContent=pStr||'—';
+}
+
+/* ══════════════════════════════════════════════
+   BODE
+══════════════════════════════════════════════ */
+function drawBode(num,den,ctrl){
+  let bNum=num,bDen=den;
+  if(ctrl){
+    bNum=polyMul(ctrl.ctrlNum,num);
+    bDen=polyMul(ctrl.ctrlDen,den);
+  }
+
+  const freqs=[];
+  const N=250;
+  for(let i=0;i<N;i++) freqs.push(Math.pow(10,-2+5*i/(N-1)));
+
+  const mags=[],phases=[];
+  for(const w of freqs){
+    const s={re:0,im:w};
+    const H=evalPoly(bNum,s),dP=evalPoly(bDen,s);
+    const dabs2=dP.re*dP.re+dP.im*dP.im;
+    if(dabs2<1e-30){mags.push(200);phases.push(0);continue;}
+    const Gre=(H.re*dP.re+H.im*dP.im)/dabs2;
+    const Gim=(H.im*dP.re-H.re*dP.im)/dabs2;
+    const mag=Math.sqrt(Gre*Gre+Gim*Gim);
+    mags.push(20*Math.log10(mag+1e-15));
+    phases.push(Math.atan2(Gim,Gre)*180/Math.PI);
+  }
+
+  // Find margins
+  let wc=null,pm=null,wp=null,gm=null;
+  for(let i=0;i<N-1;i++){
+    if(mags[i]*mags[i+1]<=0&&mags[i]>mags[i+1]){wc=freqs[i];pm=180+phases[i];break;}
+  }
+  for(let i=0;i<N-1;i++){
+    if((phases[i]+180)*(phases[i+1]+180)<=0&&phases[i]>phases[i+1]){
+      wp=freqs[i];gm=-mags[i];break;
+    }
+  }
+  document.getElementById('bm-wc').textContent=wc?wc.toFixed(3):'—';
+  document.getElementById('bm-pm').textContent=pm?(pm.toFixed(1)+'°'):'—';
+  document.getElementById('bm-wp').textContent=wp?wp.toFixed(3):'—';
+  document.getElementById('bm-gm').textContent=gm?(gm.toFixed(1)+' dB'):'—';
+
+  _drawBodeCanvas('canvasBodeMag',freqs,mags,'dB','#4f46e5',wc,wp,'mag');
+  _drawBodeCanvas('canvasBodePh',freqs,phases,'°','#f97316',wc,wp,'ph');
+}
+
+function _drawBodeCanvas(id,freqs,vals,unit,color,wc,wp,mode){
+  const canvas=document.getElementById(id);if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  const pL=58,pR=20,pT=18,pB=38;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const logMin=Math.log10(freqs[0]),logMax=Math.log10(freqs[freqs.length-1]);
+  const vMin=Math.min(...vals.filter(isFinite))-5,vMax=Math.max(...vals.filter(isFinite))+5;
+  const vRange=vMax-vMin||1;
+  const fx=w=>pL+(Math.log10(w)-logMin)/(logMax-logMin)*cW;
+  const fy=v=>pT+cH-(v-vMin)/vRange*cH;
+
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#f8f9ff';ctx.fillRect(pL,pT,cW,cH);
+
+  // Grid (decades)
+  ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;
+  for(let d=-2;d<=3;d++){
+    const x=fx(Math.pow(10,d));if(x<pL||x>pL+cW)continue;
+    ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,pT+cH);ctx.stroke();
+  }
+  const nY=6;
+  for(let i=0;i<=nY;i++){const yy=pT+i*cH/nY;ctx.beginPath();ctx.moveTo(pL,yy);ctx.lineTo(pL+cW,yy);ctx.stroke()}
+
+  // Zero line for Bode mag
+  if(mode==='mag'){
+    ctx.strokeStyle='rgba(100,116,139,0.5)';ctx.lineWidth=1;ctx.setLineDash([4,3]);
+    ctx.beginPath();ctx.moveTo(pL,fy(0));ctx.lineTo(pL+cW,fy(0));ctx.stroke();ctx.setLineDash([]);
+  }
+  if(mode==='ph'){
+    ctx.strokeStyle='rgba(100,116,139,0.5)';ctx.lineWidth=1;ctx.setLineDash([4,3]);
+    ctx.beginPath();ctx.moveTo(pL,fy(-180));ctx.lineTo(pL+cW,fy(-180));ctx.stroke();ctx.setLineDash([]);
+  }
+
+  // Margin markers
+  if(wc){
+    ctx.strokeStyle='rgba(21,128,61,0.6)';ctx.lineWidth=1.5;ctx.setLineDash([5,3]);
+    const x=fx(wc);ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,pT+cH);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle='rgba(21,128,61,0.8)';ctx.font='10px Segoe UI';
+    ctx.textAlign='left';ctx.fillText('ωc',x+3,pT+12);
+  }
+  if(wp){
+    ctx.strokeStyle='rgba(220,38,38,0.6)';ctx.lineWidth=1.5;ctx.setLineDash([5,3]);
+    const x=fx(wp);ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,pT+cH);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle='rgba(220,38,38,0.8)';ctx.font='10px Segoe UI';
+    ctx.textAlign='left';ctx.fillText('ωp',x+3,pT+24);
+  }
+
+  // Axes
+  ctx.strokeStyle='#475569';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,pT+cH);ctx.lineTo(pL+cW,pT+cH);ctx.stroke();
+
+  // X labels
+  ctx.fillStyle='#475569';ctx.font='10px Segoe UI';ctx.textAlign='center';
+  [0.01,0.1,1,10,100,1000].forEach(v=>{
+    const x=fx(v);if(x<pL||x>pL+cW)return;
+    ctx.fillText(v<1?v:v>=100?v:v,x,pT+cH+14);
+  });
+  ctx.font='10px Segoe UI';ctx.fillText('ω (rad/s)',pL+cW/2,H-4);
+  // Y labels
+  ctx.textAlign='right';ctx.font='10px Courier New';
+  for(let i=0;i<=nY;i++){
+    const vv=vMin+(nY-i)*vRange/nY;
+    ctx.fillText(vv.toFixed(0),pL-5,pT+i*cH/nY+4);
+  }
+  ctx.save();ctx.translate(14,pT+cH/2);ctx.rotate(-Math.PI/2);ctx.textAlign='center';ctx.font='11px Segoe UI';ctx.fillStyle='#475569';ctx.fillText(unit==='dB'?'|H| (dB)':'∠H (°)',0,0);ctx.restore();
+
+  // Curve
+  ctx.strokeStyle=color;ctx.lineWidth=2.5;
+  ctx.beginPath();let first=true;
+  for(let i=0;i<freqs.length;i++){
+    if(!isFinite(vals[i])||vals[i]>vMax+30||vals[i]<vMin-30){first=true;continue;}
+    const x=fx(freqs[i]),y=fy(vals[i]);
+    if(first){ctx.moveTo(x,y);first=false;}else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+}
+
+/* ══════════════════════════════════════════════
+   PZ MAP
+══════════════════════════════════════════════ */
+function drawPZMap(){
+  const canvas=document.getElementById('canvasPZ');if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  const cx=W*0.45,cy=H/2;
+
+  // Determine scale
+  const allRe=[...lastPolesOL,...lastPolesLC,...lastZeros].map(p=>Math.abs(p.re));
+  const allIm=[...lastPolesOL,...lastPolesLC,...lastZeros].map(p=>Math.abs(p.im));
+  const maxCoord=Math.max(...allRe,...allIm,1)*1.4;
+  const scale=Math.min(cx-30,cy-30)/maxCoord;
+
+  const px=r=>cx+r*scale;
+  const py=i=>cy-i*scale;
+
+  ctx.clearRect(0,0,W,H);
+
+  // Regions
+  ctx.fillStyle='rgba(21,128,61,0.06)';ctx.fillRect(0,0,cx,H);
+  ctx.fillStyle='rgba(239,68,68,0.06)';ctx.fillRect(cx,0,W-cx,H);
+
+  // Grid
+  ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;
+  const gridStep=Math.pow(10,Math.floor(Math.log10(maxCoord)));
+  for(let v=-Math.ceil(maxCoord/gridStep)*gridStep;v<=maxCoord*1.1;v+=gridStep){
+    const x=px(v);if(x>10&&x<W-5){ctx.beginPath();ctx.moveTo(x,5);ctx.lineTo(x,H-5);ctx.stroke()}
+    const yy=py(v);if(yy>5&&yy<H-5){ctx.beginPath();ctx.moveTo(5,yy);ctx.lineTo(W-5,yy);ctx.stroke()}
+  }
+
+  // Axes
+  ctx.strokeStyle='#475569';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(W,cy);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(cx,0);ctx.lineTo(cx,H);ctx.stroke();
+
+  // Axis labels
+  ctx.fillStyle='#475569';ctx.font='bold 11px Segoe UI';ctx.textAlign='center';
+  ctx.fillText('Re(s)',W-22,cy-8);ctx.fillText('Im(s)',cx+6,14);
+
+  // Tick labels
+  ctx.font='10px Courier New';ctx.fillStyle='#94a3b8';ctx.textAlign='center';
+  for(let v=-Math.ceil(maxCoord/gridStep)*gridStep;v<=maxCoord*1.1;v+=gridStep){
+    if(Math.abs(v)<gridStep*0.1) continue;
+    const x=px(v);if(x>15&&x<W-10) ctx.fillText(v.toFixed(v<1&&v>-1?2:1),x,cy+14);
+    const yy=py(v);if(yy>15&&yy<H-10){ctx.textAlign='right';ctx.fillText(v.toFixed(v<1&&v>-1?2:1),cx-5,yy+4);ctx.textAlign='center';}
+  }
+
+  // Region labels
+  ctx.font='bold 11px Segoe UI';ctx.fillStyle='rgba(21,128,61,0.5)';ctx.textAlign='center';
+  ctx.fillText('Estable',cx/2,16);
+  ctx.fillStyle='rgba(239,68,68,0.5)';ctx.fillText('Inestable',cx+(W-cx)/2,16);
+
+  // Plot zeros ○
+  lastZeros.forEach(z=>{
+    const x=px(z.re),y=py(z.im);
+    ctx.strokeStyle='#3730a3';ctx.lineWidth=2.5;
+    ctx.beginPath();ctx.arc(x,y,7,0,2*Math.PI);ctx.stroke();
+    ctx.fillStyle='#3730a3';ctx.font='10px Segoe UI';ctx.textAlign='left';
+    ctx.fillText(`○ (${z.re.toFixed(2)},${z.im.toFixed(2)}j)`,x+10,y-6);
+  });
+
+  // Plot OL poles ×
+  lastPolesOL.forEach(p=>{
+    const x=px(p.re),y=py(p.im);
+    const c='#dc2626';ctx.strokeStyle=c;ctx.lineWidth=2.5;
+    ctx.beginPath();ctx.moveTo(x-8,y-8);ctx.lineTo(x+8,y+8);ctx.moveTo(x+8,y-8);ctx.lineTo(x-8,y+8);ctx.stroke();
+    ctx.fillStyle=c;ctx.font='10px Segoe UI';ctx.textAlign='left';
+    ctx.fillText(`(${p.re.toFixed(2)},${p.im.toFixed(2)}j)`,x+10,y+4);
+  });
+
+  // Plot LC poles ×
+  lastPolesLC.forEach(p=>{
+    const x=px(p.re),y=py(p.im);
+    const c='#f97316';ctx.strokeStyle=c;ctx.lineWidth=2.5;
+    ctx.beginPath();ctx.moveTo(x-8,y-8);ctx.lineTo(x+8,y+8);ctx.moveTo(x+8,y-8);ctx.lineTo(x-8,y+8);ctx.stroke();
+    ctx.fillStyle=c;ctx.font='10px Segoe UI';ctx.textAlign='left';
+    ctx.fillText(`LC(${p.re.toFixed(2)},${p.im.toFixed(2)}j)`,x+10,y+4);
+  });
+}
+
+function updatePZTable(){
+  const poles=lastPolesLC.length?lastPolesLC:lastPolesOL;
+  const stable=poles.every(p=>p.re<0);
+  const badge=document.getElementById('stab-badge');
+  badge.textContent=stable?'✅ Sistema ESTABLE':'⚠️ Sistema INESTABLE';
+  badge.className='stability-badge '+(stable?'stable':'unstable');
+
+  const tbody=document.getElementById('pz-tbody');
+  tbody.innerHTML='';
+  poles.forEach(p=>{
+    const isStable=p.re<0;
+    const tipo=Math.abs(p.im)<1e-6?'Real':'Complejo';
+    const valStr=Math.abs(p.im)<1e-6?p.re.toFixed(4):`${p.re.toFixed(3)} ± ${Math.abs(p.im).toFixed(3)}j`;
+    tbody.innerHTML+=`<tr>
+      <td style="font-family:Courier New">${valStr}</td>
+      <td>${tipo}</td>
+      <td style="font-family:Courier New">${p.re.toFixed(4)}</td>
+      <td>${isStable?'✅':'❌'}</td>
+    </tr>`;
+  });
+  lastZeros.forEach(z=>{
+    tbody.innerHTML+=`<tr style="color:#3730a3">
+      <td style="font-family:Courier New">Cero: ${z.re.toFixed(3)}${Math.abs(z.im)>1e-6?(z.im>0?'+':'')+z.im.toFixed(3)+'j':''}</td>
+      <td>—</td><td>—</td><td>—</td>
+    </tr>`;
+  });
+}
+
+/* ══════════════════════════════════════════════
+   OCTAVE CODE GENERATOR
+══════════════════════════════════════════════ */
+function updateOctaveCode(num,den,useCtrl,inpType,tEnd){
+  const numStr=num.join(' ');
+  const denStr=den.join(' ');
+  const Kp=parseFloat(document.getElementById('kpSlider').value);
+  const ctype=document.getElementById('ctrlType').value;
+  const Ki=parseFloat(document.getElementById('kiSlider').value);
+  const Kd=parseFloat(document.getElementById('kdSlider').value);
+
+  let lines=[];
+  lines.push(`% === Simulación generada — Simulador Octave SC ===`);
+  lines.push(`pkg load control;\n`);
+  lines.push(`% Función de transferencia`);
+  lines.push(`num = [${numStr}];`);
+  lines.push(`den = [${denStr}];`);
+  lines.push(`G = tf(num, den);\n`);
+
+  if(useCtrl){
+    if(ctype==='P'){
+      lines.push(`% Controlador Proporcional`);
+      lines.push(`Kp = ${Kp};`);
+      lines.push(`C = tf(Kp, 1);`);
+    } else if(ctype==='PI'){
+      lines.push(`% Controlador PI`);
+      lines.push(`Kp = ${Kp}; Ki = ${Ki};`);
+      lines.push(`C = tf([Kp Ki], [1 0]);  % Kp + Ki/s`);
+    } else {
+      lines.push(`% Controlador PID`);
+      lines.push(`Kp = ${Kp}; Ki = ${Ki}; Kd = ${Kd};`);
+      lines.push(`C = tf([Kd Kp Ki], [1 0]);  % Kd*s² + Kp*s + Ki / s`);
+    }
+    lines.push(`T = feedback(C*G, 1);  % Lazo cerrado\n`);
+  } else {
+    lines.push(`T = G;  % Lazo abierto\n`);
+  }
+
+  lines.push(`% Simulación`);
+  lines.push(`t = 0:0.01:${tEnd};`);
+
+  if(inpType==='step'||inpType==='stepA'){
+    const amp=inpType==='stepA'?parseFloat(document.getElementById('stepASlider').value):1;
+    if(amp===1){
+      lines.push(`[y, t_out] = step(T, t);`);
+    } else {
+      lines.push(`[y0, t_out] = step(T, t);`);
+      lines.push(`y = ${amp} * y0;  % escalar por amplitud`);
+    }
+  } else if(inpType==='ramp'){
+    lines.push(`u = t;  % rampa`);
+    lines.push(`y = lsim(T, u, t);`);
+  } else {
+    const freq=parseFloat(document.getElementById('sineFreqSlider').value);
+    const amp=parseFloat(document.getElementById('sineAmpSlider').value);
+    lines.push(`u = ${amp}*sin(${freq}*t);  % senoidal`);
+    lines.push(`y = lsim(T, u, t);`);
+  }
+
+  lines.push(``);
+  lines.push(`% Graficar`);
+  lines.push(`figure;`);
+  lines.push(`plot(t_out, y, 'b-', 'LineWidth', 2);`);
+  lines.push(`hold on;`);
+  if(inpType==='step'||inpType==='stepA'){
+    lines.push(`plot(t_out, ones(size(t_out)), 'k--', 'LineWidth', 1.5);`);
+    lines.push(`legend('y(t)', 'Setpoint');`);
+  } else if(inpType==='sine'){
+    const freq=parseFloat(document.getElementById('sineFreqSlider').value);
+    const amp2=parseFloat(document.getElementById('sineAmpSlider').value);
+    lines.push(`plot(t, ${amp2}*sin(${freq}*t), 'r--', 'LineWidth', 1);`);
+    lines.push(`legend('y(t)', 'u(t) senoidal');`);
+  }
+  lines.push(`xlabel('Tiempo (s)'); ylabel('Salida y(t)');`);
+  lines.push(`title('Respuesta al ${inpType.startsWith('step')?'escalón':inpType}');`);
+  lines.push(`grid on;\n`);
+  lines.push(`% Métricas`);
+  lines.push(`printf('Valor final: %.4f\\n', y(end));`);
+  if(useCtrl||inpType==='step'||inpType==='stepA'){
+    lines.push(`printf('Offset: %.4f\\n', 1 - y(end));`);
+  }
+  lines.push(`printf('Polos: ');`);
+  lines.push(`disp(pole(T));`);
+  lines.push(``);
+  lines.push(`% Análisis frecuencial`);
+  lines.push(`figure; bode(T); grid on; title('Bode');`);
+  lines.push(`figure; pzmap(T); grid on; title('Mapa Polos/Ceros');`);
+  lines.push(`[Gm, Pm, Wcg, Wcp] = margin(T);`);
+  lines.push(`printf('Margen Ganancia: %.2f dB, Margen Fase: %.2f°\\n', 20*log10(Gm), Pm);`);
+
+  document.getElementById('octave-code').textContent=lines.join('\n');
+}
+
+function copyOctave(){
+  const code=document.getElementById('octave-code').textContent;
+  navigator.clipboard.writeText(code).then(()=>{
+    const btn=document.querySelector('.copy-btn');
+    btn.textContent='✅ Copiado';
+    setTimeout(()=>btn.textContent='📋 Copiar',2000);
+  });
+}
+
+/* ══════════════════════════════════════════════
+   PRESETS
+══════════════════════════════════════════════ */
+const PRESETS={
+  p1:{num:'3',den:'2 1',ctrl:false,inp:'step',label:'Primer orden simple'},
+  p2:{num:'1',den:'1 0.4 4',ctrl:false,inp:'step',label:'2° orden subamortiguado'},
+  p3:{num:'1',den:'1 0',ctrl:false,inp:'ramp',label:'Integrador puro'},
+  p4:{num:'1',den:'1 1',ctrl:true,ctype:'P',Kp:2,Ki:0,Kd:0,inp:'step',label:'Control P con offset'},
+  p5:{num:'1',den:'1 1',ctrl:true,ctype:'PI',Kp:2,Ki:1,Kd:0,inp:'step',label:'Control PI sin offset'},
+  p6:{num:'1',den:'1 1',ctrl:true,ctype:'P',Kp:2,Ki:0,Kd:0,inp:'step',label:'Ejercicio E.1 (Parcial)'},
+};
+
+function loadPreset(key){
+  if(!key) return;
+  const p=PRESETS[key];
+  document.getElementById('numInput').value=p.num;
+  document.getElementById('denInput').value=p.den;
+  document.querySelector(`input[name=inpType][value=${p.inp}]`).checked=true;
+  onInputTypeChange();
+  document.getElementById('ctrlCheck').checked=p.ctrl;
+  toggleCtrl();
+  if(p.ctrl){
+    document.getElementById('ctrlType').value=p.ctype;
+    onCtrlTypeChange();
+    document.getElementById('kpSlider').value=p.Kp;
+    document.getElementById('kpVal').textContent=p.Kp.toFixed(1);
+    document.getElementById('kiSlider').value=p.Ki;
+    document.getElementById('kiVal').textContent=p.Ki.toFixed(1);
+    document.getElementById('kdSlider').value=p.Kd;
+    document.getElementById('kdVal').textContent=p.Kd.toFixed(1);
+  }
+  document.getElementById('e1-btns').style.display=key==='p6'?'':'none';
+  runSim();
+}
+
+function setKpE1(kp){
+  document.getElementById('kpSlider').value=kp;
+  document.getElementById('kpVal').textContent=kp.toFixed(1);
+  runSim();
+}
+
+/* ══════════════════════════════════════════════
+   UI HELPERS
+══════════════════════════════════════════════ */
+function onInputTypeChange(){
+  const t=document.querySelector('input[name=inpType]:checked').value;
+  document.getElementById('stepA-row').style.display=t==='stepA'?'':'none';
+  document.getElementById('sine-rows').style.display=t==='sine'?'':'none';
+}
+function toggleCtrl(){
+  const on=document.getElementById('ctrlCheck').checked;
+  document.getElementById('ctrl-fields').style.display=on?'':'none';
+}
+function onCtrlTypeChange(){
+  const t=document.getElementById('ctrlType').value;
+  document.getElementById('ki-row').style.display=t!=='P'?'':'none';
+  document.getElementById('kd-row').style.display=t==='PID'?'':'none';
+}
+
+/* ══════════════════════════════════════════════
+   NAV
+══════════════════════════════════════════════ */
+function toggleBurger(){
+  document.getElementById('burger-btn').classList.toggle('open');
+  document.getElementById('main-tabs').classList.toggle('open');
+}
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  document.getElementById('burger-btn').classList.remove('open');
+  document.getElementById('main-tabs').classList.remove('open');
+  // redraw when tab becomes visible
+  const useCtrl=document.getElementById('ctrlCheck').checked;
+  if(id==='page-bode') setTimeout(()=>drawBode(lastNum,lastDen,useCtrl?getCtrlPoly():null),50);
+  if(id==='page-pzmap'){setTimeout(()=>{drawPZMap();updatePZTable();},50);}
+  if(id==='page-octave'){
+    const inp=document.querySelector('input[name=inpType]:checked').value;
+    const tEnd=parseInt(document.getElementById('tEndSlider').value);
+    setTimeout(()=>updateOctaveCode(lastNum,lastDen,useCtrl,inp,tEnd),50);
+  }
+}
+function getCtrlPoly(){
+  const ctype=document.getElementById('ctrlType').value;
+  const Kp=parseFloat(document.getElementById('kpSlider').value);
+  const Ki=parseFloat(document.getElementById('kiSlider').value);
+  const Kd=parseFloat(document.getElementById('kdSlider').value);
+  if(ctype==='P') return {ctrlNum:[Kp],ctrlDen:[1]};
+  if(ctype==='PI') return {ctrlNum:[Kp,Ki],ctrlDen:[1,0]};
+  return {ctrlNum:[Kd,Kp,Ki],ctrlDen:[1,0]};
+}
+
+/* ══════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════ */
+window.addEventListener('load',()=>{
+  runSim();
+});
+</script>
+</body>
+</html>

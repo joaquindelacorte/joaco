@@ -137,6 +137,10 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#1e1e2e;color:#cdd6f
 
 <script>
 'use strict';
+/* ── HTML entity decoder (for code pasted from Slack/web) ── */
+function decodeEntities(s){
+  return s.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&nbsp;/g,' ');
+}
 /* ═══════════════════════════════════════════════════════
    POLY MATH
 ═══════════════════════════════════════════════════════ */
@@ -301,6 +305,8 @@ function simulate(tf,ufn,tEnd,dt){
    TOKENIZER
 ═══════════════════════════════════════════════════════ */
 function tokenize(src){
+  // Decode HTML entities first (happens when code is copy-pasted from browser)
+  src = decodeEntities(src);
   const toks=[];let i=0;
   const peek=()=>src[i]||'';
   while(i<src.length){
@@ -420,7 +426,7 @@ class OctaveInterp{
         this._skipLine();return;
       }
 
-      // Assignment: name = expr  (but not ==)
+      // Assignment: name = expr  OR  name(idx) = expr  OR  name(r1:r2) = expr
       if(this._pk(1).k==='='&&this._pk(2).k!=='='){
         const name=this._adv().v;
         this._adv(); // =
@@ -429,6 +435,52 @@ class OctaveInterp{
         const sup=this._pk().k===';';
         this._skipSep();if(!sup)this._printVal(name,val);
         return;
+      }
+      // Indexed assignment: name(idx) = expr  or  name(a:b) = scalar
+      if(this._pk(1).k==='('&&this._pk().k==='ID'){
+        // Peek ahead past the (...)  to see if next token is '='
+        let depth=0,scan=1;
+        while(scan<this._toks.length-this._pos){
+          const tk=this._pk(scan);
+          if(tk.k==='(')depth++;
+          else if(tk.k===')'){depth--;if(depth===0){scan++;break;}}
+          else if(tk.k==='EOF')break;
+          scan++;
+        }
+        if(this._pk(scan)&&this._pk(scan).k==='='&&this._pk(scan+1)&&this._pk(scan+1).k!=='='){
+          const name=this._adv().v;
+          this._eat('(');
+          // parse index: may be a:b or a:h:b or single expr
+          const idx1=this._pk().k==='ID'&&this._pk().v==='end'?(this._adv(),'__end__'):this._expr();
+          let idx2=null;
+          if(this._pk().k===':'){
+            this._adv();
+            idx2=this._pk().k==='ID'&&this._pk().v==='end'?(this._adv(),'__end__'):this._expr();
+          }
+          this._eat(')');
+          this._eat('=');
+          const val=this._expr();
+          const sup=this._pk().k===';';
+          this._skipSep();
+          // Apply assignment
+          if(!Array.isArray(this._ws[name]))this._ws[name]=[];
+          const arr=this._ws[name];
+          const resolve=(v)=>v==='__end__'?arr.length:(typeof v==='number'?Math.round(v):v);
+          if(idx2===null){
+            // single index (1-based)
+            const i=resolve(idx1)-1;
+            while(arr.length<=i)arr.push(0);
+            arr[i]=val;
+          } else {
+            // range a:b (1-based)
+            const a=resolve(idx1),b=resolve(idx2);
+            for(let i=a;i<=b;i++){
+              while(arr.length<i)arr.push(0);
+              arr[i-1]=Array.isArray(val)?val[i-a]:val;
+            }
+          }
+          return;
+        }
       }
     }
 
@@ -569,10 +621,27 @@ class OctaveInterp{
     const ops=['==','~=','!=','<','>','<=','>='];
     while(ops.includes(this._pk().k)){
       const op=this._adv().k;const r=this._add();
-      if(op==='==')v=numEq(v,r)?1:0;
-      else if(op==='~='||op==='!=')v=numEq(v,r)?0:1;
-      else if(op==='<')v=v<r?1:0;else if(op==='>') v=v>r?1:0;
-      else if(op==='<=')v=v<=r?1:0;else if(op==='>=')v=v>=r?1:0;
+      // Element-wise when either side is array
+      if(Array.isArray(v)||Array.isArray(r)){
+        const va=Array.isArray(v)?v:(Array.isArray(r)?r.map(()=>v):[v]);
+        const ra=Array.isArray(r)?r:(Array.isArray(v)?v.map(()=>r):[r]);
+        const len=Math.max(va.length,ra.length);
+        v=Array.from({length:len},(_,i)=>{
+          const a=va[i]??va[va.length-1],b=ra[i]??ra[ra.length-1];
+          if(op==='==')return a===b?1:0;
+          if(op==='~='||op==='!=')return a!==b?1:0;
+          if(op==='<')return a<b?1:0;
+          if(op==='>') return a>b?1:0;
+          if(op==='<=')return a<=b?1:0;
+          if(op==='>=')return a>=b?1:0;
+          return 0;
+        });
+      } else {
+        if(op==='==')v=v===r?1:0;
+        else if(op==='~='||op==='!=')v=v!==r?1:0;
+        else if(op==='<')v=v<r?1:0;else if(op==='>') v=v>r?1:0;
+        else if(op==='<=')v=v<=r?1:0;else if(op==='>=')v=v>=r?1:0;
+      }
     }
     return v;
   }
@@ -634,17 +703,25 @@ class OctaveInterp{
     if(t.k==='{'){this._adv();while(this._pk().k!=='}')this._adv();this._adv();return[];}
     if(t.k==='ID'){
       const name=this._adv().v;
-      if(this._pk().k==='('){
-        this._adv();const args=this._argList(')');this._eat(')');
-        return this._call(name,args);
-      }
+      // keyword values
       if(name==='pi')return Math.PI;
       if(name==='e')return Math.E;
       if(name==='inf'||name==='Inf')return Infinity;
       if(name==='true')return 1;
       if(name==='false')return 0;
+      // 'end' inside indexing → length of last-indexed array (stored in _curArrLen)
+      if(name==='end')return this._curArrLen||0;
+      if(this._pk().k==='('){
+        this._adv();
+        // Pass current array length for 'end' resolution
+        const savedLen=this._curArrLen;
+        if(name in this._ws&&Array.isArray(this._ws[name]))this._curArrLen=this._ws[name].length;
+        const args=this._argList(')');
+        this._eat(')');
+        this._curArrLen=savedLen;
+        return this._call(name,args);
+      }
       if(name in this._ws)return this._ws[name];
-      // Might be a function called without parens
       return this._call(name,[]);
     }
     throw new Error(`Unexpected token: '${t.k}' ('${t.v||''}')`);
@@ -707,6 +784,11 @@ class OctaveInterp{
       sum:x=>toArr(x).reduce((a,b)=>a+b,0),
       prod:x=>toArr(x).reduce((a,b)=>a*b,1),
       mean:x=>{const a=toArr(x);return a.reduce((s,v)=>s+v,0)/a.length;},
+      std:x=>{const a=toArr(x);const m=a.reduce((s,v)=>s+v,0)/a.length;return Math.sqrt(a.reduce((s,v)=>s+(v-m)**2,0)/(a.length-1||1));},
+      var:x=>{const a=toArr(x);const m=a.reduce((s,v)=>s+v,0)/a.length;return a.reduce((s,v)=>s+(v-m)**2,0)/(a.length-1||1);},
+      num2str:(x,fmt)=>Array.isArray(x)?x.map(v=>v.toFixed(4)).join(' '):typeof x==='number'?x.toFixed(fmt||4):String(x),
+      int2str:x=>Math.round(x).toString(),
+      sprintf:(fmt,...a)=>{let i=0;return fmt.replace(/%[\d.]*[diouxXeEfgGs]/g,m=>{const v=a[i++];return m.endsWith('d')||m.endsWith('i')?Math.round(v||0).toString():(Number(v||0)).toPrecision?Number(v||0).toFixed(parseInt((m.match(/\.(\d+)/)||[,'4'])[1])):String(v||0);});},
       norm:x=>{const a=toArr(x);return Math.sqrt(a.reduce((s,v)=>s+v*v,0));},
       cumsum:x=>{let s=0;return toArr(x).map(v=>(s+=v));},
       diff:x=>{const a=toArr(x);return a.slice(1).map((v,i)=>v-a[i]);},
@@ -818,8 +900,48 @@ class OctaveInterp{
     if(name==='bar')    return this._cmdBar(args);
     if(name==='hist'||name==='histogram')return this._cmdHist(args);
 
+    // subplot — create new figure panel (simplified: each subplot = new figure)
+    if(name==='subplot'){
+      const[r,c,n2]=args;
+      this._newFig(`Subplot ${n2||1}`);
+      return undefined;
+    }
+
+    // patch — filled polygon on current figure
+    if(name==='patch'){
+      this._ensureFig();
+      const xp=toArr(args[0]),yp=toArr(args[1]);
+      const col=Array.isArray(args[2])?`rgb(${args[2].map(v=>Math.round(v*255)).join(',')})`:(typeof args[2]==='string'?args[2]:'rgba(200,100,100,0.4)');
+      // Extract FaceAlpha if present
+      let alpha=0.4;
+      for(let i=3;i<args.length-1;i+=2){
+        if(typeof args[i]==='string'&&args[i].toLowerCase()==='facealpha'&&typeof args[i+1]==='number')alpha=args[i+1];
+      }
+      // Convert RGB to rgba
+      const fill=Array.isArray(args[2])?`rgba(${args[2].map(v=>Math.round(v*255)).join(',')},${alpha})`:col;
+      const xClosed=[...xp,xp[0]],yClosed=[...yp,yp[0]];
+      this._curTraces.push({x:xClosed,y:yClosed,type:'scatter',mode:'lines',fill:'toself',fillcolor:fill,line:{color:'rgba(0,0,0,0)',width:0},showlegend:false,hoverinfo:'skip'});
+      return undefined;
+    }
+
+    // pause — ignore
+    if(name==='pause'){return undefined;}
+
     // user-defined in workspace
     if(name in ws&&typeof ws[name]==='function')return ws[name](...args);
+
+    // Array indexing: var(idx) — Octave uses () for indexing
+    if(name in ws){
+      const arr=ws[name];
+      if(Array.isArray(arr)){
+        const resolve=(v,len)=>v==='__end__'?len:(typeof v==='number'?Math.round(v):len);
+        if(args.length===1){
+          const idx=resolve(args[0],arr.length);
+          return arr[idx-1];
+        }
+      }
+      if(typeof arr==='number'||arr instanceof TF)return arr;
+    }
 
     // unknown but non-fatal: warn
     this._print(`Función desconocida: '${name}' (ignorada)`,'warn');

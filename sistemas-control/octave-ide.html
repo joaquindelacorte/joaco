@@ -450,34 +450,31 @@ class OctaveInterp{
         if(this._pk(scan)&&this._pk(scan).k==='='&&this._pk(scan+1)&&this._pk(scan+1).k!=='='){
           const name=this._adv().v;
           this._eat('(');
-          // parse index: may be a:b or a:h:b or single expr
-          const idx1=this._pk().k==='ID'&&this._pk().v==='end'?(this._adv(),'__end__'):this._expr();
-          let idx2=null;
-          if(this._pk().k===':'){
-            this._adv();
-            idx2=this._pk().k==='ID'&&this._pk().v==='end'?(this._adv(),'__end__'):this._expr();
-          }
+          // Set _curArrLen so 'end' resolves correctly inside the index
+          if(!Array.isArray(this._ws[name]))this._ws[name]=[];
+          const arr=this._ws[name];
+          const savedLen=this._curArrLen;
+          this._curArrLen=arr.length;
+          // Parse the index expression (handles a:b, a:h:b via _range())
+          const idx=this._expr();
+          this._curArrLen=savedLen;
           this._eat(')');
           this._eat('=');
           const val=this._expr();
-          const sup=this._pk().k===';';
           this._skipSep();
           // Apply assignment
-          if(!Array.isArray(this._ws[name]))this._ws[name]=[];
-          const arr=this._ws[name];
-          const resolve=(v)=>v==='__end__'?arr.length:(typeof v==='number'?Math.round(v):v);
-          if(idx2===null){
-            // single index (1-based)
-            const i=resolve(idx1)-1;
+          if(Array.isArray(idx)){
+            // idx is an array of 1-based indices
+            idx.forEach((ii,pos)=>{
+              const i=Math.round(ii)-1;
+              while(arr.length<=i)arr.push(0);
+              arr[i]=Array.isArray(val)?val[pos]:val;
+            });
+          } else {
+            // single 1-based index
+            const i=Math.round(idx)-1;
             while(arr.length<=i)arr.push(0);
             arr[i]=val;
-          } else {
-            // range a:b (1-based)
-            const a=resolve(idx1),b=resolve(idx2);
-            for(let i=a;i<=b;i++){
-              while(arr.length<i)arr.push(0);
-              arr[i-1]=Array.isArray(val)?val[i-a]:val;
-            }
           }
           return;
         }
@@ -679,7 +676,11 @@ class OctaveInterp{
       if(this._pk().k==="'"){this._adv();}  // transpose (identity for vectors)
       else if(this._pk().k==='('){
         this._adv();
+        // Set _curArrLen before parsing args so 'end' resolves correctly
+        const savedLen=this._curArrLen;
+        if(Array.isArray(v))this._curArrLen=v.length;
         const idx=this._argList(')');
+        this._curArrLen=savedLen;
         this._eat(')');
         if(Array.isArray(v)&&idx.length===1){
           const i=idx[0];
@@ -742,17 +743,21 @@ class OctaveInterp{
     this._eat(']');
     if(cur.length)rows.push(cur);
     if(rows.length===0)return[];
-    // Flatten: [a, b] where a,b may be arrays → concatenate
+    // Flatten each row (horizontal concat within row)
     const flat=rows.map(row=>{
       const r=[];
       for(const v of row){
-        if(Array.isArray(v))r.push(...v);
+        if(Array.isArray(v))r.push(...v.flat());
         else r.push(v);
       }
       return r;
     });
+    // Single row → 1D array
     if(flat.length===1)return flat[0];
-    return flat; // 2D matrix (not fully supported, return as-is)
+    // Multiple rows → vertical concat (flatten all, treat as 1D column vector)
+    const out=[];
+    for(const row of flat)out.push(...row);
+    return out;
   }
   _argList(close){
     const args=[];
@@ -846,6 +851,9 @@ class OctaveInterp{
       clf:()=>{this._newFig(this._curTitle||'Figure');return undefined;},
       subplot:()=>undefined,text:()=>undefined,set:()=>undefined,get:()=>undefined,
       annotation:()=>undefined,patch:()=>undefined,fill:()=>undefined,
+      pause:()=>undefined,input:()=>undefined,keyboard:()=>undefined,
+      colormap:()=>undefined,colorbar:()=>undefined,shading:()=>undefined,
+      print:()=>undefined,saveas:()=>undefined,
     };
     if(name in M)return M[name](...args);
 

@@ -730,6 +730,8 @@ class Octave{
     while(this._peek().t!==closeChar&&this._peek().t!=='EOF'){
       if(this._peek().t===','){this._adv();continue;}
       if(this._peek().t===';'){this._adv();continue;}
+      // 'end' inside index context → sentinel string
+      if(this._peek().t==='ID'&&this._peek().v==='end'){this._adv();args.push('__end__');continue;}
       args.push(this._expr());
     }
     return args;
@@ -770,7 +772,7 @@ class Octave{
       conv:(a,b)=>polyMul(a,b),
       // array builders
       zeros:(m,n)=>n===undefined?new Array(Math.round(m)).fill(0):Array.from({length:m},()=>new Array(n).fill(0)),
-      ones:(m,n)=>n===undefined?new Array(Math.round(m)).fill(1):Array.from({length:m},()=>new Array(n).fill(1)),
+      ones:(m,n)=>{if(Array.isArray(m))n=m[1],m=m[0];return n===undefined?new Array(Math.round(m)).fill(1):Array.from({length:Math.round(n)},()=>1);},
       eye:n=>Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?1:0)),
       linspace:(a,b,n=100)=>{n=Math.round(n);if(n<=1)return[a];return Array.from({length:n},(_,i)=>a+(b-a)*i/(n-1));},
       logspace:(a,b,n=50)=>{n=Math.round(n);return Array.from({length:n},(_,i)=>Math.pow(10,a+(b-a)*i/(n-1)));},
@@ -853,7 +855,32 @@ class Octave{
     // User-defined function in workspace
     if(name in this.ws&&typeof this.ws[name]==='function')return this.ws[name](...args);
 
-    throw new Error(`Unknown function: '${name}'`);
+    // Array indexing: var(idx) or var(idx1,idx2) — Octave uses () for indexing
+    if(name in this.ws){
+      const arr=this.ws[name];
+      if(Array.isArray(arr)){
+        // Resolve 'end' keyword inside index context
+        const resolveIdx=(v)=>{
+          if(v==='__end__')return arr.length;
+          if(typeof v==='number')return Math.round(v);
+          return v;
+        };
+        if(args.length===1){
+          const idx=resolveIdx(args[0]);
+          // 1-based indexing (Octave style)
+          if(typeof idx==='number'){
+            if(idx<0)return arr[arr.length+idx]; // negative = from end
+            return arr[idx-1];
+          }
+          // colon → return whole array
+          return arr;
+        }
+      }
+      // Scalar or TF treated as "function call" syntax — just return it
+      if(typeof arr==='number'||arr instanceof TF)return arr;
+    }
+
+    throw new Error(`Unknown function or variable: '${name}'`);
   }
 
   // ── Figure management ──
@@ -1261,7 +1288,7 @@ let aceEditor;
 window.addEventListener('load',()=>{
   // Init Ace
   aceEditor=ace.edit('editor');
-  aceEditor.setTheme('ace/theme/catppuccin_mocha');
+  aceEditor.setTheme('ace/theme/monokai');
   aceEditor.session.setMode('ace/mode/matlab');
   aceEditor.setFontSize(13);
   aceEditor.setOptions({tabSize:2,useSoftTabs:true,showPrintMargin:false,wrap:false,enableBasicAutocompletion:true,enableLiveAutocompletion:false});

@@ -229,6 +229,18 @@ footer a{color:var(--main)}
   background: rgba(255,255,255,.06);
 }
 .apuntes-footer-nav a:hover { background: rgba(255,255,255,.12); color: #e2e8f0; }
+
+/* PROGRESS TRACKING */
+.tab-btn.visited::after{content:' ✓';font-size:.7rem;opacity:.8}
+/* RESUMEN PARA EXAMEN */
+.resumen-box{background:linear-gradient(135deg,#f0fdfa 0%,#e0f2fe 100%);border:1.5px solid var(--main-lt);border-radius:12px;padding:1.3rem 1.5rem;margin:2.5rem 0 0}
+.resumen-box h4{font-size:.95rem;font-weight:800;color:var(--main);margin-bottom:.9rem;letter-spacing:.02em}
+.resumen-list{font-size:.88rem;line-height:1.9;color:var(--gray);padding-left:0;list-style:none}
+.resumen-list li::before{content:'▸ ';color:var(--main-lt);font-weight:700}
+.resumen-list li b{color:var(--main)}
+.resumen-err{background:var(--red-bg);border-left:3px solid var(--red);border-radius:0 6px 6px 0;padding:.5rem .9rem;font-size:.86rem;color:#7f1d1d;margin:.7rem 0}
+.mark-read-btn{border:none;background:var(--main);color:#fff;font-weight:700;padding:.45rem 1.1rem;border-radius:7px;cursor:pointer;font-family:inherit;font-size:.82rem;margin-top:.9rem;transition:.2s}
+.mark-read-btn.done{background:var(--green)}
 </style>
 </head>
 <body>
@@ -247,6 +259,7 @@ footer a{color:var(--main)}
     <button class="tab-btn" onclick="showTab('c3',this)">🗺️ Clase 3</button>
     <button class="tab-btn" onclick="showTab('c5',this)">🐟 Clase 5</button>
     <button class="tab-btn" onclick="showTab('foda',this)">📊 FODA</button>
+    <button class="tab-btn" onclick="showTab('c6',this)">🔗 Formulación</button>
     <button class="tab-btn" onclick="showTab('quiz',this)">🏅 Quiz</button>
   </div>
 </nav>
@@ -259,7 +272,7 @@ footer a{color:var(--main)}
     <span class="badge-chip">🔬 Diagnóstico</span>
     <span class="badge-chip">🐟 Análisis de Causas</span>
     <span class="badge-chip">📊 FODA · PESTEL</span>
-    <span class="badge-chip">🏅 30 preguntas</span>
+    <span class="badge-chip">🏅 34 preguntas</span>
   </div>
 </div>
 
@@ -340,6 +353,20 @@ footer a{color:var(--main)}
     <div style="background:#0d9488;color:#fff;border-radius:8px;padding:.6rem 1rem;font-weight:700;font-size:.85rem;text-align:center">5️⃣<br>Evaluación</div>
   </div>
   <p class="dcap">A mayor avance, mayor costo de cambio — las decisiones tempranas tienen el mayor impacto</p>
+</div>
+
+
+<div class="resumen-box" id="resumen-c1">
+  <h4>📝 Resumen para examen — Clase 1: ¿Qué es un proyecto?</h4>
+  <ul class="resumen-list">
+    <li><b>Proyecto:</b> intervención planificada, temporal y orientada a transformar una situación problemática en un resultado concreto y verificable.</li>
+    <li><b>6 características esenciales:</b> objetivo definido, inicio y fin, recursos limitados, incertidumbre/riesgo, genera cambio, resultado único.</li>
+    <li><b>Hacemos proyectos para</b> resolver problemas concretos o aprovechar oportunidades — no para instalar tecnología o cumplir tareas.</li>
+    <li><b>Regla de oro:</b> el enunciado del problema no puede contener «instalar», «crear» ni «automatizar» — esos son soluciones, no problemas.</li>
+    <li><b>Ciclo de vida:</b> Identificación → Formulación → Planificación → Ejecución → Evaluación. A mayor avance, mayor costo de cambio.</li>
+  </ul>
+  <div class="resumen-err">⚠️ Error típico: confundir el medio (instalar sensores) con el fin (reducir errores operativos).</div>
+  <button class="mark-read-btn" onclick="markRead('c1',this)" id="mark-c1">📌 Marcar como leído</button>
 </div>
 
 </div>
@@ -429,6 +456,20 @@ footer a{color:var(--main)}
   <div class="card gr"><h3>📊 Cuantitativos</h3><p>Números que describen magnitud: cantidad de puntos, toneladas, porcentaje de afectados, tiempo promedio de resolución.</p></div>
   <div class="card gr"><h3>🎯 Cualitativos</h3><p>Descripciones de estado o condición: nivel de satisfacción, percepción de seguridad, calidad del servicio.</p></div>
   <div class="card gr"><h3>📅 Temporales</h3><p>Frecuencia o duración: número de episodios por mes, tiempo promedio de espera, días sin incidentes.</p></div>
+</div>
+
+
+<div class="resumen-box" id="resumen-c2">
+  <h4>📝 Resumen para examen — Clase 2: Identificación de problemas</h4>
+  <ul class="resumen-list">
+    <li><b>Problema = brecha</b> entre situación actual (lo que hay) y situación deseada (lo que debería haber).</li>
+    <li><b>3 reglas:</b> no existe proyecto sin problema; no existe problema sin situación actual documentada; no existe proyecto sin situación deseada clara.</li>
+    <li><b>5W+2H:</b> What, Why, Who, Where, When, How, How much — las 7 preguntas para caracterizar exhaustivamente un problema.</li>
+    <li><b>Análisis de Gap:</b> la brecha cuantificada define el objetivo y los indicadores del proyecto.</li>
+    <li><b>Indicadores:</b> cuantitativos (números), cualitativos (estado/condición), temporales (frecuencia/duración).</li>
+  </ul>
+  <div class="resumen-err">⚠️ Error típico: trabajar sobre opiniones sin respaldo — «parece que hay muchos microbasurales» no es evidencia; «47 puntos activos relevados» sí.</div>
+  <button class="mark-read-btn" onclick="markRead('c2',this)" id="mark-c2">📌 Marcar como leído</button>
 </div>
 
 </div>
@@ -535,6 +576,20 @@ footer a{color:var(--main)}
     </div>
   </div>
 </details>
+
+
+<div class="resumen-box" id="resumen-comp">
+  <h4>📝 Resumen para examen — Complemento: Proyecto vs. Proceso</h4>
+  <ul class="resumen-list">
+    <li><b>Proyecto:</b> temporal, único, alta incertidumbre, genera cambio. <b>Proceso:</b> continuo, repetitivo, busca estabilidad.</li>
+    <li><b>Eficacia:</b> ¿logró el objetivo? <b>Eficiencia:</b> ¿usó bien los recursos? <b>Efectividad:</b> ¿resolvió el problema real del cliente?</li>
+    <li><b>7 mudas (desperdicios):</b> sobreproducción, espera, transporte innecesario, sobreprocesamiento, inventario excesivo, movimientos innecesarios, defectos.</li>
+    <li><b>Capacidad:</b> carga máxima sostenible sin deterioro de calidad. Cuando la demanda supera la capacidad, el proceso colapsa.</li>
+    <li><b>Flexibilidad:</b> capacidad de adaptarse a cambios sin perder desempeño. En lo sociocomunitario: diseñar para que el proyecto resista rotación de referentes y cambios territoriales.</li>
+  </ul>
+  <div class="resumen-err">⚠️ Error típico: un proceso puede ser eficaz y eficiente pero inefectivo — cumplió en tiempo y recursos, pero no resolvió el problema real del cliente.</div>
+  <button class="mark-read-btn" onclick="markRead('comp',this)" id="mark-comp">📌 Marcar como leído</button>
+</div>
 
 </div>
 </div>
@@ -684,6 +739,21 @@ footer a{color:var(--main)}
     <p>Análisis de contexto externo que examina seis dimensiones: <strong>P</strong>olítico, <strong>E</strong>conómico, <strong>S</strong>ocial, <strong>T</strong>ecnológico, <strong>E</strong>cológico, <strong>L</strong>egal. Complementa al FODA en el análisis de factores exógenos.</p>
     <p style="margin-top:.6rem;font-size:.83rem;color:var(--gray-lt)">Ver aplicación en Clase 5 (dimensiones del Ishikawa) →</p>
   </div>
+</div>
+
+
+<div class="resumen-box" id="resumen-c3">
+  <h4>📝 Resumen para examen — Clase 3: Diagnóstico y contexto</h4>
+  <ul class="resumen-list">
+    <li><b>Diagnóstico:</b> ordena datos sobre la realidad — no opina, describe, evidencia y estructura. Sin diagnóstico = proyecto basado en suposiciones.</li>
+    <li><b>Fuentes primarias:</b> el equipo las genera directamente (observación, entrevistas, mediciones). <b>Secundarias:</b> ya existen (estadísticas, informes, leyes).</li>
+    <li><b>Pensamiento sistémico:</b> un problema rara vez tiene una única causa. Ver conexiones, reconocer ciclos, pensar en el tiempo.</li>
+    <li><b>Actores territoriales:</b> públicos, privados y comunitarios. El mapeo identifica recursos, instituciones, relaciones y restricciones.</li>
+    <li><b>Matriz Poder/Interés:</b> Alto poder + Alto interés → gestionar activamente. Alto poder + Bajo interés → mantener satisfecho. Bajo poder + Alto interés → mantener informado. Bajo poder + Bajo interés → monitorear.</li>
+    <li><b>Endógenos = internos (controlables)</b> → Fortalezas y Debilidades. <b>Exógenos = externos</b> → Oportunidades y Amenazas.</li>
+  </ul>
+  <div class="resumen-err">⚠️ Error típico: ignorar actores de bajo poder / alto interés (como vecinos afectados). Si se sienten ignorados pueden sabotear la implementación.</div>
+  <button class="mark-read-btn" onclick="markRead('c3',this)" id="mark-c3">📌 Marcar como leído</button>
 </div>
 
 </div>
@@ -867,6 +937,21 @@ footer a{color:var(--main)}
 
 <div class="note" style="margin-top:1.5rem">🎯 <strong>Conclusión de la clase:</strong> Solo cuando las causas han sido identificadas, jerarquizadas y validadas con evidencia es posible avanzar hacia el diseño de soluciones capaces de generar mejoras reales y sostenibles. Diseñar sin este análisis previo es desperdiciar recursos.</div>
 
+
+<div class="resumen-box" id="resumen-c5">
+  <h4>📝 Resumen para examen — Clase 5: Análisis de causas</h4>
+  <ul class="resumen-list">
+    <li><b>Cadena:</b> síntoma (visible) → problema (brecha) → causa (origen). Intervenir solo en el síntoma genera alivio temporal — el problema vuelve.</li>
+    <li><b>Hipótesis causal:</b> explicación tentativa que responde «¿qué podría estar generando esta situación?». Debe ser clara, coherente, verificable, específica y vinculada al problema.</li>
+    <li><b>5 Por Qué:</b> pregunta «¿por qué?» de forma iterativa hasta llegar a algo que el equipo puede controlar. El número 5 es orientativo, no prescriptivo.</li>
+    <li><b>Ishikawa (espina de pescado):</b> organiza causas en categorías. En proyectos sociocomunitarios se usan categorías PESTEL en vez de las 6M industriales.</li>
+    <li><b>Pareto (80/20):</b> el 20% de las causas genera el 80% de los problemas. Concentrar el esfuerzo en las causas de mayor impacto que son intervenibles.</li>
+    <li><b>Criterios de priorización:</b> impacto, frecuencia, evidencia disponible, posibilidad real de intervención.</li>
+  </ul>
+  <div class="resumen-err">⚠️ Error típico: formular una solución como hipótesis («hay que instalar contenedores» no es una hipótesis causal — es una solución disfrazada).</div>
+  <button class="mark-read-btn" onclick="markRead('c5',this)" id="mark-c5">📌 Marcar como leído</button>
+</div>
+
 </div>
 </div>
 
@@ -963,15 +1048,214 @@ footer a{color:var(--main)}
   <div class="card pu"><h3>⚖️ Legal</h3><p>Ley 25.916 (residuos sólidos urbanos). Ley 13.592 (Pcia. Bs As). Ordenanzas locales de higiene. Ley de protección de datos personales.</p></div>
 </div>
 
+
+<div class="resumen-box" id="resumen-foda">
+  <h4>📝 Resumen para examen — FODA + PESTEL</h4>
+  <ul class="resumen-list">
+    <li><b>FODA:</b> Fortalezas (interno+positivo), Debilidades (interno-negativo), Oportunidades (externo+favorable), Amenazas (externo-desfavorable).</li>
+    <li><b>Cruces estratégicos:</b> FO = maximizar (usar fortalezas para aprovechar oportunidades). DO = compensar. FA = proteger (usar fortalezas para neutralizar amenazas). DA = evitar.</li>
+    <li><b>PESTEL:</b> Político, Económico, Social, Tecnológico, Ecológico, Legal — marco para analizar el entorno externo en 6 dimensiones.</li>
+    <li><b>Leyes clave:</b> Ley 25.916 (nacional, residuos sólidos urbanos) + Ley 13.592 (Provincia de Buenos Aires).</li>
+    <li><b>El valor del FODA no está en llenarlo</b> — está en cruzar las variables para generar estrategias concretas y accionables.</li>
+  </ul>
+  <div class="resumen-err">⚠️ Error típico: poner oportunidades en el cuadrante de fortalezas (confundir externo con interno). Recordar: si el equipo lo controla → interno; si viene del entorno → externo.</div>
+  <button class="mark-read-btn" onclick="markRead('foda',this)" id="mark-foda">📌 Marcar como leído</button>
+</div>
+
 </div>
 </div>
+
+
+<!-- ==================== CLASE 6 — DEL DIAGNÓSTICO AL PROYECTO ==================== -->
+<div class="page" id="page-c6">
+<div class="container">
+
+<span class="src-tag">📎 Unidad puente · Del diagnóstico a la formulación del proyecto</span>
+
+<div class="note">🎯 <strong>El salto más importante del curso:</strong> tenés el diagnóstico, identificaste las causas, las priorizaste. ¿Y ahora? Esta unidad muestra cómo convertir ese diagnóstico en un proyecto formulado, con objetivos verificables, resultados concretos y actividades planificadas.</div>
+
+<div class="stitle"><span class="ico">🔗</span>La cadena completa de formulación</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:.35rem;margin:1.2rem 0">
+  <div class="flow-box" style="background:#b91c1c">🔴 Problema validado</div>
+  <div class="flow-arr">↓</div>
+  <div class="flow-box" style="background:#b45309">🔍 Causas priorizadas</div>
+  <div class="flow-arr">↓</div>
+  <div class="flow-box">🎯 Objetivo general</div>
+  <div class="flow-arr">↓</div>
+  <div class="flow-box" style="background:#1d4ed8">📌 Objetivos específicos</div>
+  <div class="flow-arr">↓</div>
+  <div class="flow-box" style="background:#15803d">📦 Resultados</div>
+  <div class="flow-arr">↓</div>
+  <div class="flow-box" style="background:#7c3aed">⚙️ Actividades</div>
+  <div class="flow-arr">↓</div>
+  <div class="flow-box" style="background:#374151">📏 Indicadores · Medios de verificación · Supuestos</div>
+</div>
+
+<div class="stitle"><span class="ico">🌳</span>Árbol de problemas → Árbol de objetivos</div>
+<p class="lead">La herramienta más poderosa para hacer este salto es convertir el <b>árbol de problemas</b> (formulado en negativo: causas y efectos) en un <b>árbol de objetivos</b> (formulado en positivo: medios y fines). Cada causa negativa se transforma directamente en un medio positivo.</p>
+
+<div style="display:flex;gap:.7rem;justify-content:center;margin:1rem 0;flex-wrap:wrap">
+  <button onclick="showArbol('problemas',this)" class="arbol-btn" id="btn-prob" style="border:2px solid #b91c1c;background:#fee2e2;color:#b91c1c;font-weight:700;padding:.5rem 1.3rem;border-radius:8px;cursor:pointer;font-family:inherit;font-size:.88rem;transition:.2s">🔴 Árbol de problemas</button>
+  <button onclick="showArbol('objetivos',this)" class="arbol-btn" id="btn-obj" style="border:2px solid #15803d;background:#f0fdf4;color:#15803d;font-weight:700;padding:.5rem 1.3rem;border-radius:8px;cursor:pointer;font-family:inherit;font-size:.88rem;transition:.2s;opacity:.55">🟢 Árbol de objetivos</button>
+</div>
+
+<div id="arbol-problemas" style="background:#fff;border:2px solid #fca5a5;border-radius:12px;padding:1.2rem;margin-bottom:.5rem">
+  <p style="font-size:.76rem;font-weight:700;color:#b91c1c;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.9rem">Árbol de problemas — formulación negativa</p>
+  <div style="background:#fee2e2;border:2px solid #dc2626;border-radius:10px;padding:.8rem 1.2rem;text-align:center;max-width:420px;margin:0 auto 1rem">
+    <strong style="color:#b91c1c;display:block;margin-bottom:.3rem">PROBLEMA CENTRAL</strong>
+    <span style="font-size:.9rem">Acumulación recurrente de residuos en espacios públicos sin datos para planificar intervención</span>
+  </div>
+  <div class="grid g3" style="margin-bottom:.9rem">
+    <div style="background:#fff7f7;border:1px solid #fca5a5;border-radius:8px;padding:.7rem;font-size:.84rem">⚙️ <strong>Causa 1:</strong> Ausencia de datos georreferenciados de puntos críticos</div>
+    <div style="background:#fff7f7;border:1px solid #fca5a5;border-radius:8px;padding:.7rem;font-size:.84rem">🏛️ <strong>Causa 2:</strong> Infraestructura de recolección sin planificación territorial</div>
+    <div style="background:#fff7f7;border:1px solid #fca5a5;border-radius:8px;padding:.7rem;font-size:.84rem">👥 <strong>Causa 3:</strong> Vecinos sin información sobre puntos y horarios de disposición</div>
+  </div>
+  <div style="border-top:1px solid #fca5a5;padding-top:.7rem">
+    <p style="font-size:.8rem;color:#7f1d1d;font-weight:600;margin-bottom:.4rem">Efectos negativos:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:.4rem">
+      <span style="background:#fee2e2;border-radius:6px;padding:.25rem .65rem;font-size:.8rem;color:#7f1d1d">Riesgo sanitario</span>
+      <span style="background:#fee2e2;border-radius:6px;padding:.25rem .65rem;font-size:.8rem;color:#7f1d1d">Deterioro del espacio público</span>
+      <span style="background:#fee2e2;border-radius:6px;padding:.25rem .65rem;font-size:.8rem;color:#7f1d1d">Gestión municipal ineficiente</span>
+    </div>
+  </div>
+</div>
+
+<div id="arbol-objetivos" style="display:none;background:#fff;border:2px solid #86efac;border-radius:12px;padding:1.2rem;margin-bottom:.5rem">
+  <p style="font-size:.76rem;font-weight:700;color:#15803d;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.9rem">Árbol de objetivos — cada negativo se invierte en positivo</p>
+  <div style="background:#dcfce7;border:2px solid #16a34a;border-radius:10px;padding:.8rem 1.2rem;text-align:center;max-width:420px;margin:0 auto 1rem">
+    <strong style="color:#15803d;display:block;margin-bottom:.3rem">OBJETIVO CENTRAL (FIN)</strong>
+    <span style="font-size:.9rem">Generar información territorial verificable sobre microbasurales para priorizar intervenciones municipales</span>
+  </div>
+  <div class="grid g3" style="margin-bottom:.9rem">
+    <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:.7rem;font-size:.84rem">⚙️ <strong>Medio 1:</strong> Relevamiento georreferenciado de puntos críticos disponible</div>
+    <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:.7rem;font-size:.84rem">🏛️ <strong>Medio 2:</strong> Datos que informan la planificación territorial de infraestructura</div>
+    <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:.7rem;font-size:.84rem">👥 <strong>Medio 3:</strong> Vecinos y municipio con acceso a información validada sobre puntos y cobertura</div>
+  </div>
+  <div style="border-top:1px solid #86efac;padding-top:.7rem">
+    <p style="font-size:.8rem;color:#14532d;font-weight:600;margin-bottom:.4rem">Fines positivos:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:.4rem">
+      <span style="background:#dcfce7;border-radius:6px;padding:.25rem .65rem;font-size:.8rem;color:#14532d">Reducción de riesgo sanitario</span>
+      <span style="background:#dcfce7;border-radius:6px;padding:.25rem .65rem;font-size:.8rem;color:#14532d">Recuperación del espacio público</span>
+      <span style="background:#dcfce7;border-radius:6px;padding:.25rem .65rem;font-size:.8rem;color:#14532d">Gestión municipal basada en datos</span>
+    </div>
+  </div>
+</div>
+
+<div class="note">💡 <strong>Regla de la inversión:</strong> cada causa del árbol de problemas se transforma directamente en un medio del árbol de objetivos. Si no podés hacer esa inversión, la causa/efecto estaba mal formulado.</div>
+
+<div class="stitle"><span class="ico">✍️</span>Cómo redactar un objetivo verificable</div>
+<p class="lead">Un objetivo bien formulado tiene tres partes: <b>verbo de acción concreto + qué se produce + en qué condiciones / para qué</b>. Los verbos deben ser medibles — evitar "promover", "sensibilizar" o "mejorar" sin especificar cómo se verifica.</p>
+<div class="twrap">
+  <table>
+    <thead><tr><th>❌ Objetivo débil (no verificable)</th><th>✅ Objetivo fuerte (verificable)</th></tr></thead>
+    <tbody>
+      <tr><td>Mejorar la situación de los microbasurales</td><td>Relevar y georreferenciar el 100% de los puntos activos en el radio de intervención antes del 31 de octubre</td></tr>
+      <tr><td>Sensibilizar a los vecinos sobre el problema</td><td>Informar a actores municipales clave sobre la distribución de puntos críticos mediante un informe técnico validado</td></tr>
+      <tr><td>Contribuir a la gestión ambiental del barrio</td><td>Generar una base de datos que permita al Municipio priorizar la colocación de contenedores en los 5 puntos de mayor incidencia</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="tip"><span class="tip-i">🧪</span><div><strong>Test del objetivo:</strong> si no podés responder «¿cómo sabré que lo logré?» con un número, fecha o evidencia concreta, necesita más especificidad.</div></div>
+
+<div class="stitle"><span class="ico">🗂️</span>Objetivo · Resultado · Actividad · Indicador</div>
+<p class="lead">Este es el punto donde más se confunden los proyectos. La jerarquía es clara: el <b>objetivo</b> es el cambio final buscado; el <b>resultado</b> es el producto concreto que genera el cambio; la <b>actividad</b> es lo que hacemos para producir el resultado; el <b>indicador</b> mide si lo logramos.</p>
+<div class="twrap">
+  <table>
+    <thead><tr><th>Nivel</th><th>Pregunta que responde</th><th>Ejemplo Microbasurales</th></tr></thead>
+    <tbody>
+      <tr><td><strong style="color:var(--main)">Objetivo general</strong></td><td>¿Qué cambio queremos generar en la realidad?</td><td>Generar información territorial verificable sobre microbasurales para apoyar decisiones municipales</td></tr>
+      <tr><td><strong style="color:var(--blue)">Objetivo específico</strong></td><td>¿Cuáles son los cambios parciales necesarios?</td><td>1) Mapear todos los puntos activos; 2) Caracterizarlos con datos validados; 3) Presentar resultados a actores clave</td></tr>
+      <tr><td><strong style="color:var(--green)">Resultado</strong></td><td>¿Qué producto concreto generamos?</td><td>Mapa validado con geolocalización, foto y ficha técnica de cada punto activo</td></tr>
+      <tr><td><strong style="color:var(--orange)">Actividad</strong></td><td>¿Qué acciones concretas realizamos?</td><td>Relevamiento de campo, encuesta vecinal, carga de datos, validación con docentes, presentación</td></tr>
+      <tr><td><strong style="color:var(--purple)">Indicador</strong></td><td>¿Cómo medimos si lo logramos?</td><td>% de puntos relevados y georreferenciados sobre el total estimado (meta: 100%)</td></tr>
+      <tr><td><strong>Medio de verificación</strong></td><td>¿Qué evidencia demuestra que el indicador se cumplió?</td><td>Planilla GPS + foto por punto; mapa publicado; acta de presentación municipal firmada</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="stitle"><span class="ico">👥</span>Alcance · Beneficiarios · Actores responsables</div>
+<div class="grid g3">
+  <div class="card bl"><h3>🎯 Alcance</h3><p>El límite geográfico, temporal y temático de lo que el proyecto hace y <em>no hace</em>. Delimita expectativas y evita compromisos imposibles.</p><p style="margin-top:.6rem;font-size:.83rem"><strong>Ejemplo:</strong> Radio de 3 km del centro de Pilar, período agosto-octubre 2026, enfocado en residuos sólidos urbanos.</p></div>
+  <div class="card gr"><h3>🏘️ Beneficiarios</h3><p>Distinguir entre <em>beneficiarios directos</em> (reciben el producto inmediatamente) e <em>indirectos</em> (mejoran por efecto del proyecto).</p><p style="margin-top:.6rem;font-size:.83rem"><strong>Ejemplo:</strong> Directos: Secretaría Municipal. Indirectos: 15.000 vecinos del radio de intervención.</p></div>
+  <div class="card pu"><h3>👤 Actores responsables</h3><p>Cada actividad debe tener un responsable identificado. La difusión de responsabilidad es la causa más frecuente de actividades sin ejecutar.</p><p style="margin-top:.6rem;font-size:.83rem"><strong>Ejemplo:</strong> Relevamiento campo: Joaquín y Valentina. Carga de datos: Matías. Presentación: equipo.</p></div>
+</div>
+
+<div class="stitle"><span class="ico">⚖️</span>Criterios para elegir entre alternativas de solución</div>
+<p class="lead">Cuando hay más de una alternativa posible, la elección debe basarse en criterios explícitos y comparables, no en preferencias implícitas del equipo.</p>
+<div class="twrap">
+  <table>
+    <thead><tr><th>Criterio</th><th>Pregunta que responde</th></tr></thead>
+    <tbody>
+      <tr><td><strong>💥 Impacto potencial</strong></td><td>¿Cuánto resuelve del problema si se implementa bien?</td></tr>
+      <tr><td><strong>💰 Costo / Recursos</strong></td><td>¿Tenemos o podemos conseguir lo que requiere?</td></tr>
+      <tr><td><strong>⏱️ Tiempo de implementación</strong></td><td>¿Puede ejecutarse dentro del plazo disponible?</td></tr>
+      <tr><td><strong>🔧 Factibilidad técnica</strong></td><td>¿El equipo tiene capacidad para ejecutarla?</td></tr>
+      <tr><td><strong>⚠️ Riesgo</strong></td><td>¿Qué tan probable es que falle? ¿Cuál sería el impacto?</td></tr>
+      <tr><td><strong>🤝 Aceptación de actores</strong></td><td>¿El municipio y los vecinos aceptarán esta alternativa?</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="stitle"><span class="ico">🏘️</span>Ejemplo completo — Proyecto Microbasurales</div>
+<div class="example-box">
+  <div class="ex-tag">Transformación completa: del diagnóstico al proyecto formulado</div>
+  <div class="twrap" style="margin-top:.7rem">
+    <table>
+      <thead><tr><th>Elemento</th><th>Contenido</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Problema</strong></td><td>Puntos de acumulación de residuos recurrentes y no mapeados, sin datos para planificar intervención municipal</td></tr>
+        <tr><td><strong>Causa priorizada</strong></td><td>Ausencia de información georreferenciada sobre distribución y características de los puntos críticos</td></tr>
+        <tr><td><strong>Objetivo general</strong></td><td>Generar información territorial verificable sobre microbasurales que permita a la Municipalidad priorizar sus intervenciones</td></tr>
+        <tr><td><strong>Resultado</strong></td><td>Mapa validado con geolocalización, foto y caracterización de todos los puntos activos en el radio de intervención</td></tr>
+        <tr><td><strong>Actividades</strong></td><td>1. Relevamiento de campo; 2. Encuesta vecinal; 3. Carga y georreferenciación de datos; 4. Validación con docentes; 5. Presentación a actores municipales</td></tr>
+        <tr><td><strong>Indicador</strong></td><td>% de puntos relevados y georreferenciados sobre el total estimado en el área (meta: 100%)</td></tr>
+        <tr><td><strong>Medio de verificación</strong></td><td>Planilla con coordenadas GPS + foto de cada punto; mapa publicado; acta de presentación municipal</td></tr>
+        <tr><td><strong>Supuestos</strong></td><td>La municipalidad mantiene disponibilidad para recibir los resultados; los vecinos permiten el relevamiento en campo</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="stitle"><span class="ico">🎯</span>Mini-reto de aplicación</div>
+<div class="card or" style="margin-top:.5rem">
+  <h3>🏥 Reto: Demoras en turnos de un centro de salud</h3>
+  <p style="margin-bottom:.8rem"><strong>Situación:</strong> Los vecinos esperan en promedio 45 minutos para ser atendidos en el centro de salud del barrio, y el 30% se va sin ser atendido.</p>
+  <p style="font-size:.9rem"><strong>Tu tarea:</strong> formulá (1) un objetivo general verificable, (2) un resultado concreto, (3) dos actividades, y (4) un indicador con su medio de verificación.</p>
+  <details style="margin-top:1rem">
+    <summary style="font-size:.88rem;color:var(--orange)">Ver respuesta modelo →</summary>
+    <div class="dbody">
+      <p><strong>Objetivo:</strong> Identificar las causas principales de demora en atención y proponer ajustes operativos que reduzcan el tiempo promedio de espera a menos de 20 minutos en el centro de salud.</p>
+      <p style="margin-top:.5rem"><strong>Resultado:</strong> Informe técnico con mapeo del flujo de atención actual, cuellos de botella identificados y propuesta de mejora priorizada y viable.</p>
+      <p style="margin-top:.5rem"><strong>Actividades:</strong> (1) Observación directa del flujo de atención durante 3 días hábiles registrando tiempos en cada etapa; (2) Entrevistas con médicos, enfermeros y administrativos sobre los puntos de demora percibidos.</p>
+      <p style="margin-top:.5rem"><strong>Indicador:</strong> Tiempo promedio de espera (desde registro hasta atención). <strong>Medio:</strong> Planilla con hora de llegada y hora de atención por paciente durante el período de observación.</p>
+    </div>
+  </details>
+</div>
+
+<div class="resumen-box" id="resumen-c6">
+  <h4>📝 Resumen para examen — Del diagnóstico al proyecto</h4>
+  <ul class="resumen-list">
+    <li><b>Árbol de problemas → árbol de objetivos:</b> cada causa negativa se invierte en un medio positivo; cada efecto negativo en un fin positivo.</li>
+    <li><b>Objetivo bien formulado:</b> verbo verificable + qué se produce + en qué condiciones. Test: ¿cómo sabré que lo logré?</li>
+    <li><b>Jerarquía:</b> objetivo → resultado → actividad → indicador → medio de verificación.</li>
+    <li><b>Diferencia clave:</b> el objetivo es el cambio buscado; el resultado es el producto concreto; la actividad es lo que hacemos.</li>
+    <li><b>Supuesto:</b> condición externa que debe mantenerse para que el proyecto funcione. Si falla, el resultado se ve comprometido.</li>
+    <li><b>Criterios de elección entre alternativas:</b> impacto, costo, tiempo, factibilidad técnica, riesgo, aceptación de actores.</li>
+  </ul>
+  <div class="resumen-err">⚠️ Error típico: confundir resultado con actividad («hacer entrevistas» es actividad; «informe técnico validado» es resultado).</div>
+  <button class="mark-read-btn" onclick="markRead('c6',this)" id="mark-c6">📌 Marcar como leído</button>
+</div>
+
+</div>
+</div>
+
 
 
 <!-- ==================== QUIZ ==================== -->
 <div class="page" id="page-quiz">
 <div class="container">
 
-<div class="stitle"><span class="ico">🏅</span>Quiz de autoevaluación — 30 preguntas</div>
+<div class="stitle"><span class="ico">🏅</span>Quiz de autoevaluación — 34 preguntas</div>
 <p class="lead">Preguntas sobre todos los temas de la materia. Cada respuesta incluye explicación. Podés hacer el quiz tantas veces como quieras.</p>
 
 <div class="quiz-wrap">
@@ -1331,6 +1615,51 @@ var QUESTIONS = [
     ],
     a: 0,
     expl: "Los cuatro criterios de priorización son: impacto (cuánto contribuye al problema), frecuencia (qué tan recurrente es), evidencia (qué datos la respaldan) y posibilidad de intervención (¿tenemos los recursos para actuar?). La velocidad de resolución o la visibilidad mediática no son criterios de priorización técnica."
+  },
+
+  {
+    q: "¿Cuál es la diferencia principal entre un 'resultado' y una 'actividad' en la formulación de proyectos?",
+    opts: [
+      "El resultado es el producto concreto que genera el cambio; la actividad es lo que hacemos para producir ese resultado",
+      "El resultado es más importante que la actividad y se define primero",
+      "La actividad es observable y el resultado es abstracto",
+      "No hay diferencia práctica — ambos términos describen lo mismo"
+    ],
+    a: 0,
+    expl: "La jerarquía es: objetivo → resultado → actividad → indicador. Hacer entrevistas es una actividad; el informe técnico validado es el resultado. Confundirlos genera marcos lógicos incoherentes donde las actividades suenan a resultados o viceversa."
+  },
+  {
+    q: "Al convertir un árbol de problemas en un árbol de objetivos, ¿qué ocurre con las causas negativas?",
+    opts: [
+      "Se invierten: cada causa negativa se transforma en un medio positivo",
+      "Se eliminan porque en el árbol de objetivos solo aparecen los fines",
+      "Se mantienen igual pero se marcan como resueltas",
+      "Se convierten en actividades directamente"
+    ],
+    a: 0,
+    expl: "La regla de la inversión: cada causa del árbol de problemas se transforma en un medio del árbol de objetivos. Cada efecto negativo se convierte en un fin positivo. Si no se puede hacer esa inversión directamente, la causa/efecto estaba mal formulado."
+  },
+  {
+    q: "¿Qué es un 'supuesto' en el marco lógico de un proyecto?",
+    opts: [
+      "Una condición externa que debe mantenerse para que el proyecto funcione y logre sus resultados",
+      "Una hipótesis sobre el problema que todavía no fue verificada",
+      "Un objetivo que el equipo asume como alcanzable sin demostrarlo",
+      "El presupuesto estimado que se asume suficiente para la ejecución"
+    ],
+    a: 0,
+    expl: "Los supuestos son condiciones del entorno que están fuera del control del equipo pero que deben cumplirse para que el resultado se sostenga. Si un supuesto falla, el resultado se ve comprometido aunque las actividades se hayan ejecutado bien."
+  },
+  {
+    q: "¿Cuál de los siguientes es un objetivo correctamente formulado?",
+    opts: [
+      "Relevar y georreferenciar el 100% de los puntos activos de acumulación de residuos en el radio de intervención antes del 31 de octubre",
+      "Mejorar la situación ambiental del barrio mediante acciones concretas",
+      "Sensibilizar a los vecinos sobre la importancia del manejo adecuado de residuos",
+      "Contribuir a la gestión municipal de residuos sólidos urbanos en Pilar"
+    ],
+    a: 0,
+    expl: "Un objetivo bien formulado tiene: verbo de acción concreto + qué se produce + en qué condiciones. La opción A tiene todos los elementos: verbo (relevar y georreferenciar), qué (100% de puntos activos), cuándo (antes del 31 de octubre). Las otras son vagas e inverificables."
   }
 ];
 
@@ -1412,6 +1741,39 @@ function nextQ(){
 }
 
 initQuiz();
+
+// ---- ÁRBOL TOGGLE ----
+function showArbol(type, btn) {
+  document.getElementById('arbol-problemas').style.display = type === 'problemas' ? 'block' : 'none';
+  document.getElementById('arbol-objetivos').style.display = type === 'objetivos' ? 'block' : 'none';
+  document.querySelectorAll('.arbol-btn').forEach(function(b) { b.style.opacity = '.55'; });
+  btn.style.opacity = '1';
+}
+
+// ---- PROGRESS TRACKING ----
+function markRead(tabId, btn) {
+  var visited = JSON.parse(localStorage.getItem('tsc_visited') || '[]');
+  if (!visited.includes(tabId)) visited.push(tabId);
+  localStorage.setItem('tsc_visited', JSON.stringify(visited));
+  btn.textContent = '✅ Leído';
+  btn.classList.add('done');
+  updateVisited();
+}
+function updateVisited() {
+  var visited = JSON.parse(localStorage.getItem('tsc_visited') || '[]');
+  var map = {c1:'c1',c2:'c2',comp:'comp',c3:'c3',c5:'c5',foda:'foda',c6:'c6',quiz:'quiz'};
+  document.querySelectorAll('.tab-btn').forEach(function(b) {
+    var m = b.getAttribute('onclick').match(/'([^']+)'/);
+    if (m && visited.includes(m[1])) b.classList.add('visited');
+  });
+  // Restore mark buttons state
+  visited.forEach(function(id) {
+    var btn = document.getElementById('mark-' + id);
+    if (btn) { btn.textContent = '✅ Leído'; btn.classList.add('done'); }
+  });
+}
+document.addEventListener('DOMContentLoaded', updateVisited);
+
 </script>
 </body>
 </html>

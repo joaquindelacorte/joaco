@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
 <title>Taller Sociocomunitario — Apuntes</title>
 <meta name="description" content="Apuntes de Taller de Formulación y Desarrollo de Proyectos Sociocomunitarios — Automatización y Control, UNaP 2026"/>
 <style>
@@ -21,7 +21,7 @@
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 img,svg,video{max-width:100%;height:auto}
-button,select{min-height:44px}
+button,select{min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 @media(hover:none){.card:hover{box-shadow:0 1px 4px rgba(0,0,0,.05);transform:none}}
 
 /* NAV */
@@ -276,6 +276,7 @@ footer a{color:var(--main)}
 .game-progress-fill{height:100%;background:var(--main);border-radius:3px;transition:.4s}
 /* Chain game */
 .chain-items{display:flex;flex-direction:column;gap:.5rem;margin:1rem 0}
+.chain-grid-inner{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
 .chain-item{background:#fff;border:2px solid var(--border);border-radius:10px;padding:.75rem 1.1rem;font-size:.9rem;cursor:pointer;font-family:inherit;text-align:left;display:flex;align-items:center;gap:.7rem;transition:.2s;user-select:none}
 .chain-item:hover:not(.used){border-color:var(--main-lt);background:var(--main-bg)}
 .chain-item.used{opacity:.4;pointer-events:none}
@@ -308,6 +309,137 @@ footer a{color:var(--main)}
 .repaso-modal h3{font-size:1.05rem;font-weight:800;color:var(--main);margin-bottom:.3rem}
 .repaso-modal .repaso-sub{font-size:.8rem;color:var(--gray-lt);margin-bottom:1.2rem}
 .repaso-close-btn{border:none;background:var(--main-bg);color:var(--main);font-weight:700;padding:.5rem 1.2rem;border-radius:8px;cursor:pointer;font-family:inherit;font-size:.88rem}
+
+
+/* ==================== MOBILE RESPONSIVE ==================== */
+@media (max-width: 640px) {
+
+  /* NAV: make brand smaller, tabs still scrollable */
+  .brand { font-size: .88rem; padding: .65rem .85rem; }
+  .tab-btn { padding: .6rem .75rem; font-size: .76rem; }
+
+  /* HERO */
+  .hero h1 { font-size: 1.4rem; }
+  .hero p { font-size: .88rem; }
+  .badge-chip { font-size: .72rem; padding: .2rem .65rem; }
+
+  /* CONTAINER padding */
+  .container { padding: 1.25rem 1rem; }
+
+  /* SECTION TITLES */
+  .stitle { font-size: 1.1rem; }
+
+  /* FLOW: stack vertically */
+  .flow { flex-direction: column; align-items: center; gap: .35rem; }
+  .flow-arr { transform: rotate(90deg); }
+
+  /* TABLES: horizontal scroll */
+  .twrap { -webkit-overflow-scrolling: touch; }
+
+  /* GRIDS: force single column on small screens */
+  .g2, .g3, .g4 { grid-template-columns: 1fr; }
+  .foda-grid { grid-template-columns: 1fr; }
+  .cruce-grid { grid-template-columns: 1fr; }
+  .matrix-grid { grid-template-columns: 1fr 1fr; }
+
+  /* QUIZ */
+  .quiz-wrap { padding: 1.1rem; }
+  .quiz-q { font-size: .95rem; }
+  .opt-btn { font-size: .85rem; padding: .75rem .95rem; }
+
+  /* RESUMEN BOX */
+  .resumen-box { padding: 1rem 1.1rem; }
+  .resumen-list li { font-size: .84rem; }
+
+  /* DETAILS accordion */
+  details summary { font-size: .87rem; }
+  .dbody { font-size: .86rem; }
+
+  /* GAMES */
+  .games-nav { gap: .35rem; }
+  .game-nav-btn { font-size: .76rem; padding: .45rem .7rem; border-radius: 8px; }
+  .game-nav-btn span:first-child { display: none; } /* hide emoji label, keep text */
+  .game-card { padding: 1rem; }
+  .game-title { font-size: .95rem; }
+
+  /* Classifier */
+  .stmt-box { font-size: .9rem; padding: .9rem 1rem; }
+  .classify-btns { gap: .4rem; }
+  .cls-btn { padding: .55rem .8rem; font-size: .82rem; }
+
+  /* Chain causal: stack columns */
+  #g2-body > div > div:first-child,
+  #g2-body > div > div:last-child { display: block !important; }
+
+  /* Indicator opts */
+  .ind-opt { font-size: .85rem; padding: .7rem .9rem; }
+
+  /* Alternativas: stack criteria */
+  .alt-criterion-row { flex-direction: column; align-items: flex-start; gap: .3rem; }
+  .alt-criterion-label { min-width: unset; font-size: .8rem; }
+  .alt-r-btn { font-size: .76rem; padding: .3rem .55rem; }
+
+  /* Mark read button */
+  .mark-read-btn { font-size: .79rem; padding: .4rem .9rem; }
+
+  /* Apuntes nav */
+  .apuntes-nav { padding: .4rem .75rem; gap: .5rem; font-size: .78rem; }
+
+  /* Example box */
+  .example-box { padding: .9rem 1rem; }
+  .ex-tag { font-size: .67rem; }
+
+  /* Diagram */
+  .diagram { padding: .9rem .7rem; }
+  .diagram > div { gap: .3rem !important; }
+
+  /* Cards */
+  .card { padding: 1rem; }
+  .card h3 { font-size: .92rem; }
+  .card p, .card li { font-size: .86rem; }
+
+  /* Ishikawa SVG: keep scroll */
+  .ishikawa-wrap { -webkit-overflow-scrolling: touch; }
+
+  /* Arbol toggle */
+  #arbol-problemas, #arbol-objetivos { padding: .9rem; }
+
+  /* Footer */
+  footer { padding: 1.5rem 1rem 2.5rem; }
+
+  /* Hero flow chain in Formulación */
+  .page .container > div[style*="flex-direction:column"] .flow-box {
+    font-size: .82rem;
+    padding: .4rem .9rem;
+  }
+}
+
+/* Extra-small: phones < 380px */
+@media (max-width: 380px) {
+  .brand { font-size: .8rem; padding: .55rem .7rem; }
+  .tab-btn { font-size: .7rem; padding: .55rem .6rem; }
+  .container { padding: 1rem .75rem; }
+  .cls-btn { font-size: .78rem; padding: .5rem .65rem; }
+  .game-nav-btn { font-size: .72rem; padding: .4rem .55rem; }
+}
+
+/* Touch: remove hover transforms on mobile */
+@media (hover: none) {
+  .card:hover { box-shadow: 0 1px 4px rgba(0,0,0,.05); transform: none; }
+  .cls-btn:hover:not(.disabled) { transform: none; box-shadow: none; }
+  .chain-item:hover:not(.used) { border-color: var(--border); background: #fff; }
+  .opt-btn:hover:not(.disabled) { border-color: var(--border); background: #fff; }
+  .game-nav-btn:hover { border-color: var(--border); background: #fff; color: var(--gray); }
+  .ind-opt:hover:not(.disabled) { border-color: var(--border); background: #fff; }
+}
+
+/* Chain game grid: fix mobile */
+@media (max-width: 640px) {
+  .chain-grid-inner { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:1rem 0; }
+@media (max-width: 640px) {
+  .chain-grid-inner { grid-template-columns: 1fr !important; }
+}
+}
 
 </style>
 </head>

@@ -577,6 +577,49 @@ nav.topnav{position:sticky;top:0;z-index:200;background:var(--blue);display:flex
   .plan-step-practica{display:none}
 }
 footer{text-align:center;margin-top:3rem;padding:1.5rem;font-size:.82rem;color:var(--gray-lt);border-top:1px solid var(--border)}
+
+/* ════ Flash converter game ════ */
+.flash-game{background:#0f172a;border-radius:20px;padding:1.8rem;margin:1.5rem 0;color:#e2e8f0}
+.flash-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;margin-bottom:1.2rem}
+.flash-title{font-size:1rem;font-weight:800;color:#7dd3fc}
+.flash-meta{display:flex;gap:1rem;align-items:center}
+.flash-score{font-size:1.2rem;font-weight:900;color:#4ade80;font-family:'Courier New',monospace}
+.flash-streak{font-size:.82rem;font-weight:700;color:#fbbf24;padding:.2rem .6rem;border-radius:6px;background:rgba(251,191,36,.12)}
+.flash-timer-bar{height:6px;background:#1e293b;border-radius:999px;overflow:hidden;margin-bottom:1.2rem}
+.flash-timer-fill{height:100%;border-radius:999px;transition:width .1s linear;background:linear-gradient(90deg,#4ade80,#22d3ee)}
+.flash-timer-fill.danger{background:linear-gradient(90deg,#f87171,#ef4444)}
+.flash-q-type{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#94a3b8;margin-bottom:.5rem}
+.flash-q-num{font-size:2.2rem;font-weight:900;font-family:'Courier New',monospace;color:#f1f5f9;text-align:center;padding:.8rem;background:#1e293b;border-radius:12px;margin-bottom:.8rem;letter-spacing:.05em}
+.flash-q-ask{font-size:.85rem;font-weight:700;color:#38bdf8;text-align:center;margin-bottom:1rem}
+.flash-opts{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.8rem}
+.flash-opt{padding:.75rem .9rem;border:2px solid #334155;border-radius:12px;background:#1e293b;cursor:pointer;font-family:'Courier New',monospace;font-size:.92rem;font-weight:700;color:#94a3b8;transition:.15s;text-align:center}
+.flash-opt:hover:not(:disabled){border-color:#38bdf8;color:#f1f5f9;background:#0f2840}
+.flash-opt.correct{border-color:#4ade80;background:rgba(74,222,128,.12);color:#4ade80;animation:flash-pop .3s ease}
+.flash-opt.wrong{border-color:#f87171;background:rgba(248,113,113,.1);color:#f87171}
+.flash-opt:disabled{cursor:default}
+@keyframes flash-pop{0%{transform:scale(1)}40%{transform:scale(1.05)}100%{transform:scale(1)}}
+.flash-fb{font-size:.82rem;line-height:1.55;padding:.65rem .9rem;border-radius:9px;display:none;margin-bottom:.8rem;font-family:'Courier New',monospace}
+.flash-fb.show{display:block}
+.flash-fb.ok{background:rgba(74,222,128,.1);color:#4ade80;border-left:3px solid #4ade80}
+.flash-fb.fail{background:rgba(248,113,113,.08);color:#fca5a5;border-left:3px solid #f87171}
+.flash-end{text-align:center;display:none;padding:1rem 0}
+.flash-end.show{display:block}
+.flash-end-score{font-size:3rem;font-weight:900;color:#4ade80;line-height:1;font-family:'Courier New',monospace}
+.flash-end-label{font-size:.9rem;color:#64748b;margin:.4rem 0 .8rem}
+.flash-end-msg{font-size:.85rem;color:#94a3b8;margin-bottom:1.2rem;line-height:1.5}
+.flash-restart-btn{padding:.7rem 1.8rem;background:#0369a1;color:#fff;border:none;border-radius:10px;font-weight:700;font-size:.92rem;cursor:pointer;font-family:inherit}
+.flash-level-select{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.2rem}
+.flash-level-btn{padding:.4rem .9rem;border:1.5px solid #334155;border-radius:8px;background:#1e293b;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;color:#64748b}
+.flash-level-btn.active{background:#0369a1;border-color:#38bdf8;color:#fff}
+.flash-start-screen{text-align:center;padding:1rem 0}
+.flash-start-desc{font-size:.85rem;color:#64748b;line-height:1.6;margin-bottom:1.2rem}
+.flash-start-btn{padding:.8rem 2rem;background:#0369a1;color:#fff;border:none;border-radius:12px;font-weight:800;font-size:.98rem;cursor:pointer;font-family:inherit;transition:.15s}
+.flash-start-btn:hover{background:#0284c7}
+@media(max-width:480px){
+  .flash-opts{grid-template-columns:1fr}
+  .flash-q-num{font-size:1.7rem}
+}
+
 </style>
 </head>
 <body>
@@ -945,6 +988,50 @@ footer{text-align:center;margin-top:3rem;padding:1.5rem;font-size:.82rem;color:v
 </div>
 
 </div><!-- /container -->
+
+  <!-- Juego flash conversiones -->
+  <h2 class="stitle"><span class="stitle-icon">⚡</span>Flash Converter — Convertí rápido</h2>
+  <div class="flash-game" id="flashGame">
+    <div class="flash-header">
+      <div class="flash-title">⚡ Flash Converter</div>
+      <div class="flash-meta">
+        <div class="flash-score">Pts: <span id="flScore">0</span></div>
+        <div class="flash-streak" id="flStreak" style="display:none">🔥 <span id="flStreakN">0</span></div>
+      </div>
+    </div>
+    <!-- Start screen -->
+    <div class="flash-start-screen" id="flStartScreen">
+      <div style="font-size:2rem;margin-bottom:.5rem">⚡</div>
+      <div style="font-size:1rem;font-weight:800;color:#7dd3fc;margin-bottom:.5rem">Flash Converter</div>
+      <div class="flash-start-desc">
+        10 preguntas · 8 segundos cada una · 4 opciones múltiple<br>
+        Cubrimos: Decimal↔Binario, Decimal↔Hex, Decimal↔BCD
+      </div>
+      <div class="flash-level-select" style="justify-content:center">
+        <button class="flash-level-btn active" onclick="flSetLevel(this,'easy')">🟢 Fácil (núm. pequeños)</button>
+        <button class="flash-level-btn" onclick="flSetLevel(this,'medium')">🟡 Medio</button>
+        <button class="flash-level-btn" onclick="flSetLevel(this,'hard')">🔴 Difícil</button>
+      </div>
+      <button class="flash-start-btn" onclick="flStart()">▶ Arrancar</button>
+    </div>
+    <!-- Game screen -->
+    <div id="flGameScreen" style="display:none">
+      <div class="flash-timer-bar"><div class="flash-timer-fill" id="flTimerBar" style="width:100%"></div></div>
+      <div class="flash-q-type" id="flQType">—</div>
+      <div class="flash-q-num" id="flQNum">—</div>
+      <div class="flash-q-ask" id="flQAsk">—</div>
+      <div class="flash-opts" id="flOpts"></div>
+      <div class="flash-fb" id="flFb"></div>
+    </div>
+    <!-- End screen -->
+    <div class="flash-end" id="flEndScreen">
+      <div class="flash-end-score" id="flEndScore">—</div>
+      <div class="flash-end-label">sobre 10 preguntas</div>
+      <div class="flash-end-msg" id="flEndMsg"></div>
+      <button class="flash-restart-btn" onclick="flRestart()">🔄 Jugar de nuevo</button>
+    </div>
+  </div>
+
 </div><!-- /tab-b -->
 
 <!-- ════════════ TAB C: COMPUERTAS ════════════ -->
@@ -2520,6 +2607,211 @@ function mnemoNext() {
 }
 mnemoRender();
 
+
+
+/* ══ FLASH CONVERTER ══ */
+var flLevel = 'easy';
+var flQIdx = 0, flScore = 0, flStreak = 0, flTimer = null, flAnswered = false;
+var flQuestions = [];
+
+function flSetLevel(btn, lvl) {
+  document.querySelectorAll('.flash-level-btn').forEach(function(b){ b.className='flash-level-btn'; });
+  btn.className = 'flash-level-btn active';
+  flLevel = lvl;
+}
+
+function flRandNum() {
+  if(flLevel === 'easy')   return Math.floor(Math.random()*16)+1;
+  if(flLevel === 'medium') return Math.floor(Math.random()*100)+10;
+  return Math.floor(Math.random()*200)+20;
+}
+
+function flD2B(n){ return n.toString(2); }
+function flD2H(n){ return '0x'+n.toString(16).toUpperCase(); }
+function flD2BCD(n){
+  return String(n).split('').map(function(d){ return parseInt(d).toString(2).padStart(4,'0'); }).join(' ');
+}
+function flB2D(b){ return parseInt(b,2); }
+function flH2D(h){ return parseInt(h.replace('0x','').replace('0X',''),16); }
+
+function flGenWrong(correct, type, n) {
+  var pool = [];
+  for(var i=0;i<20;i++) {
+    var cand = flRandNum();
+    if(cand===n) continue;
+    var val;
+    if(type==='d2b') val = flD2B(cand);
+    else if(type==='b2d') val = flB2D(flD2B(cand)).toString();
+    else if(type==='d2h') val = flD2H(cand);
+    else if(type==='h2d') val = flH2D(flD2H(cand)).toString();
+    else val = flD2BCD(cand);
+    if(val!==correct && pool.indexOf(val)<0) pool.push(val);
+    if(pool.length>=3) break;
+  }
+  // Pad if needed
+  while(pool.length<3) pool.push(pool.length===0?'???':'??'+pool.length);
+  return pool.slice(0,3);
+}
+
+function flBuildQuestions() {
+  var types = ['d2b','d2h','d2bcd','b2d','h2d'];
+  flQuestions = [];
+  for(var i=0;i<10;i++) {
+    var type = types[i % types.length];
+    var n = flRandNum();
+    var correct, qtype, ask;
+    if(type==='d2b'){
+      correct = flD2B(n);
+      qtype = 'Decimal → Binario';
+      ask = '¿Cuál es ' + n + ' en binario?';
+    } else if(type==='d2h'){
+      correct = flD2H(n);
+      qtype = 'Decimal → Hexadecimal';
+      ask = '¿Cuál es ' + n + ' en hex?';
+    } else if(type==='d2bcd'){
+      correct = flD2BCD(n % 100 === 0 ? n-1 : (n > 99 ? n % 99 + 1 : n));
+      n = n > 99 ? n % 99 + 1 : n;
+      qtype = 'Decimal → BCD 8421';
+      ask = '¿Cuál es ' + n + ' en BCD 8421?';
+    } else if(type==='b2d'){
+      correct = n.toString();
+      var bin = flD2B(n);
+      qtype = 'Binario → Decimal';
+      ask = '¿Cuál es ' + bin + '₂ en decimal?';
+      n = parseInt(bin, 2);
+    } else {
+      var hex = n.toString(16).toUpperCase();
+      correct = n.toString();
+      qtype = 'Hexadecimal → Decimal';
+      ask = '¿Cuál es ' + hex + '₁₆ en decimal?';
+    }
+    var wrong = flGenWrong(correct, type, n);
+    var opts = [correct].concat(wrong).sort(function(){ return Math.random()-.5; });
+    flQuestions.push({ type:type, qtype:qtype, ask:ask, correct:correct, opts:opts, n:n });
+  }
+  // Shuffle
+  flQuestions.sort(function(){ return Math.random()-.5; });
+}
+
+function flStart() {
+  flBuildQuestions();
+  flQIdx = 0; flScore = 0; flStreak = 0;
+  document.getElementById('flStartScreen').style.display = 'none';
+  document.getElementById('flEndScreen').className = 'flash-end';
+  document.getElementById('flGameScreen').style.display = 'block';
+  flRenderQ();
+}
+
+function flRestart() {
+  document.getElementById('flEndScreen').className = 'flash-end';
+  document.getElementById('flStartScreen').style.display = 'block';
+  document.getElementById('flGameScreen').style.display = 'none';
+}
+
+var flTimeLeft = 8, flTick;
+function flRenderQ() {
+  if(flQIdx >= 10) { flShowEnd(); return; }
+  var q = flQuestions[flQIdx];
+  flAnswered = false;
+  document.getElementById('flQType').textContent = q.qtype;
+  document.getElementById('flQNum').textContent = q.type==='b2d' ? flD2B(q.n)+'₂' : q.type==='h2d' ? q.n.toString(16).toUpperCase()+'₁₆' : q.n.toString()+'₁₀';
+  document.getElementById('flQAsk').textContent = q.ask;
+  document.getElementById('flFb').className = 'flash-fb';
+  // Options
+  var flOptsEl = document.getElementById('flOpts');
+  flOptsEl.innerHTML = '';
+  q.opts.forEach(function(o) {
+    var b = document.createElement('button');
+    b.className = 'flash-opt';
+    b.textContent = o;
+    b.addEventListener('click', (function(val){ return function(){ flAnswer(this, val); }; })(o));
+    flOptsEl.appendChild(b);
+  });
+  // Timer
+  clearInterval(flTick);
+  flTimeLeft = 8;
+  var bar = document.getElementById('flTimerBar');
+  bar.className = 'flash-timer-fill';
+  bar.style.width = '100%';
+  flTick = setInterval(function() {
+    flTimeLeft -= 0.1;
+    var pct = Math.max(0, (flTimeLeft / 8) * 100);
+    bar.style.width = pct + '%';
+    if(flTimeLeft <= 2) bar.className = 'flash-timer-fill danger';
+    if(flTimeLeft <= 0) {
+      clearInterval(flTick);
+      if(!flAnswered) flTimeout();
+    }
+  }, 100);
+}
+
+function flAnswer(btn, chosen) {
+  if(flAnswered) return;
+  clearInterval(flTick);
+  flAnswered = true;
+  var q = flQuestions[flQIdx];
+  var isOk = chosen === q.correct;
+  document.querySelectorAll('.flash-opt').forEach(function(b){ b.disabled = true; });
+  btn.classList.add(isOk ? 'correct' : 'wrong');
+  if(!isOk) {
+    document.querySelectorAll('.flash-opt').forEach(function(b){
+      if(b.textContent.trim() === q.correct) b.classList.add('correct');
+    });
+  }
+  if(isOk) {
+    flScore++;
+    flStreak++;
+    document.getElementById('flScore').textContent = flScore;
+    var sEl = document.getElementById('flStreak');
+    sEl.style.display = '';
+    document.getElementById('flStreakN').textContent = flStreak;
+  } else {
+    flStreak = 0;
+    var sEl = document.getElementById('flStreak');
+    if(flStreak===0) sEl.style.display='none';
+  }
+  var fb = document.getElementById('flFb');
+  fb.className = 'flash-fb show ' + (isOk ? 'ok' : 'fail');
+  if(isOk) {
+    fb.textContent = '✅ ' + q.n + (q.type==='b2d'?'₂':q.type==='h2d'?'₁₆':'₁₀') + ' = ' + q.correct;
+  } else {
+    fb.textContent = '❌ Respuesta: ' + q.correct + (q.type==='d2bcd'?' (recordá: cada dígito decimal tiene su propia caja de 4 bits)':q.type.includes('d2b')?' (dividí por 2, restos al revés)':q.type==='b2d'?' (suma las potencias de 2 donde hay 1)':'');
+  }
+  setTimeout(function() { flQIdx++; flRenderQ(); }, isOk ? 900 : 1800);
+}
+
+function flTimeout() {
+  flAnswered = true;
+  flStreak = 0;
+  document.querySelectorAll('.flash-opt').forEach(function(b){ b.disabled=true; });
+  var q = flQuestions[flQIdx];
+  document.querySelectorAll('.flash-opt').forEach(function(b){
+    if(b.textContent.trim()===q.correct) b.classList.add('correct');
+  });
+  var fb = document.getElementById('flFb');
+  fb.className = 'flash-fb show fail';
+  fb.textContent = '⏱️ Tiempo! Respuesta: ' + q.correct;
+  document.getElementById('flStreak').style.display='none';
+  document.getElementById('flStreakN').textContent='0';
+  setTimeout(function() { flQIdx++; flRenderQ(); }, 1500);
+}
+
+function flShowEnd() {
+  clearInterval(flTick);
+  document.getElementById('flGameScreen').style.display='none';
+  var el = document.getElementById('flEndScreen');
+  el.className = 'flash-end show';
+  document.getElementById('flEndScore').textContent = flScore+'/10';
+  var msgs = [
+    'Seguí practicando — revisá los atajos de arriba.',
+    'Va bien. Repasá los tipos que fallaste.',
+    'Bien! Identificá cuál conversión costó más.',
+    'Muy bien. Un par de errores a corregir.',
+    'Excelente — dominás las conversiones 🏆',
+    'Perfecto! 10/10 🏆🏆',
+  ];
+  document.getElementById('flEndMsg').textContent = msgs[Math.min(flScore<=2?0:flScore<=4?1:flScore<=6?2:flScore<=7?3:flScore<=9?4:5, msgs.length-1)];
+}
 
 </script>
 </body>

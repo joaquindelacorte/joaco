@@ -14,137 +14,154 @@
   --red:#b91c1c;--red-bg:#fee2e2;
   --gray:#374151;--gray-lt:#6b7280;
   --bg:#f0f9ff;--card:#fff;--border:#e2e8f0;
-  --dark:#12141a;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65;-webkit-font-smoothing:antialiased;}
-.container{max-width:900px;margin:0 auto;padding:2.5rem 1.2rem 5rem}
-header{text-align:center;margin-bottom:2rem}
-.eyebrow{display:inline-block;font-size:.78rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--blue);background:var(--blue-bg);padding:.35rem .9rem;border-radius:999px;margin-bottom:.9rem}
-h1{font-size:1.7rem;font-weight:800;color:#0c1a2e;margin-bottom:.5rem}
-header p{color:var(--gray-lt);font-size:.95rem;max-width:600px;margin:0 auto}
-a.back{display:inline-block;margin-bottom:1.5rem;font-size:.85rem;color:var(--blue);text-decoration:none;font-weight:600}
-a.back:hover{text-decoration:underline}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img,svg{max-width:100%;height:auto}
+button,input{min-height:44px}
+code{font-family:'Courier New',monospace;background:#f1f5f9;border-radius:4px;padding:.1em .35em;font-size:.9em}
+pre{background:#1e293b;color:#e2e8f0;border-radius:10px;padding:1rem 1.2rem;overflow-x:auto;font-family:'Courier New',monospace;font-size:.85rem;line-height:1.6;margin:.8rem 0}
 
-.section-nav{display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap;margin-bottom:2.5rem;padding:1rem;background:var(--card);border-radius:16px;border:1px solid var(--border);}
-.section-nav a{font-size:.78rem;font-weight:700;color:var(--blue);background:var(--blue-bg);padding:.4rem .9rem;border-radius:999px;text-decoration:none;transition:.15s}
-.section-nav a:hover{background:var(--blue);color:#fff}
+/* ── NAV ── */
+nav.topnav{position:sticky;top:0;z-index:200;background:var(--blue);display:flex;align-items:center;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.brand{color:#fff;font-size:1rem;font-weight:800;padding:.75rem 1.2rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.2);text-decoration:none}
+.tabs{display:flex;overflow-x:auto;flex:1;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{padding:.7rem .95rem;border:none;background:transparent;color:rgba(255,255,255,.75);font-size:.8rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s;font-family:inherit}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tab-btn.active{color:#fff;border-bottom-color:#7dd3fc;background:rgba(255,255,255,.08)}
+@media(max-width:520px){.brand{font-size:.85rem;padding:.6rem .85rem}.tab-btn{padding:.6rem .7rem;font-size:.75rem}}
 
-h2.section-title{font-size:1.25rem;font-weight:800;color:#0c1a2e;margin:3rem 0 .5rem;text-align:center}
-.section-sub{text-align:center;color:var(--gray-lt);font-size:.9rem;max-width:600px;margin:0 auto 1.8rem}
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#0c2444 0%,#0369a1 100%);color:#fff;text-align:center;padding:2.5rem 1rem 2rem}
+.hero h1{font-size:2rem;font-weight:900;letter-spacing:-.5px}
+.hero p{opacity:.88;margin-top:.4rem;max-width:640px;margin-left:auto;margin-right:auto;font-size:.98rem}
+.hero-badges{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.hero-badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.25rem .85rem;font-size:.78rem;font-weight:700;cursor:pointer;transition:.15s;text-decoration:none;color:#fff}
+.hero-badge:hover{background:rgba(255,255,255,.25)}
 
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.4rem 1.5rem;margin-bottom:1.3rem;box-shadow:0 1px 6px rgba(0,0,0,.05)}
-.card h2{font-size:1.05rem;font-weight:800;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem}
-.card p{font-size:.92rem;line-height:1.75;margin-bottom:.5rem}
-.card .tip{background:#f8fafc;border-left:4px solid var(--blue);border-radius:8px;padding:.7rem 1rem;font-size:.88rem;margin-top:.6rem}
-.card .tip strong{color:var(--blue)}
-.card .ej{font-family:'Courier New',monospace;background:linear-gradient(90deg,#0c1a2e,#1e3a5f);color:#7dd3fc;border-radius:10px;padding:.75rem 1rem;margin-top:.6rem;font-size:.95rem;font-weight:700;text-align:center}
-.c-bin{border-left:4px solid var(--blue)}.c-bin h2{color:var(--blue)}
-.c-hex{border-left:4px solid var(--purple)}.c-hex h2{color:var(--purple)}
-.c-dec{border-left:4px solid var(--teal)}.c-dec h2{color:var(--teal)}
-.c-bcd{border-left:4px solid var(--orange)}.c-bcd h2{color:var(--orange)}
+/* ── PAGE / CONTAINER ── */
+.page{display:none}.page.active{display:block}
+.container{max-width:1000px;margin:0 auto;padding:2rem 1.25rem}
 
-/* Calculadora */
-.calc{background:var(--card);border:2px solid var(--blue);border-radius:16px;padding:1.6rem 1.6rem 1.8rem;margin:2.5rem 0;box-shadow:0 4px 20px rgba(3,105,161,.1)}
-.calc h2{color:var(--blue);font-size:1.15rem;font-weight:800;text-align:center;margin-bottom:1.2rem}
-.calc-input-row{display:flex;gap:.7rem;flex-wrap:wrap;margin-bottom:1rem}
-.calc-input-row input{flex:1;min-width:160px;border:2px solid var(--border);border-radius:10px;padding:.7rem 1rem;font-size:1.1rem;font-family:'Courier New',monospace;text-align:center;color:var(--gray)}
-.calc-input-row input:focus{outline:none;border-color:var(--blue-lt)}
-.base-select{display:flex;gap:.5rem;margin-bottom:1rem}
-.base-btn{flex:1;padding:.7rem .5rem;border:2px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;font-weight:700;font-size:.85rem;transition:.15s;color:var(--gray-lt)}
-.base-btn.active{border-color:var(--blue);background:var(--blue-bg);color:var(--blue)}
-.base-btn:hover{border-color:var(--blue-lt)}
-.calc-results{display:grid;gap:.8rem}
-.res-row{display:flex;align-items:center;gap:1rem;background:#f8fafc;border-radius:10px;padding:.8rem 1.1rem}
-.res-label{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;width:90px;flex-shrink:0}
-.res-row.r-bin .res-label{color:var(--blue)}
-.res-row.r-dec .res-label{color:var(--teal)}
-.res-row.r-hex .res-label{color:var(--purple)}
-.res-row.r-bcd .res-label{color:var(--orange)}
-.res-value{font-family:'Courier New',monospace;font-size:1.1rem;font-weight:700;color:#0c1a2e;word-break:break-all}
-.calc-error{color:#b91c1c;font-size:.85rem;text-align:center;margin-top:.5rem;min-height:1.1rem}
+/* ── SECTION TITLES ── */
+.stitle{display:flex;align-items:center;gap:.6rem;font-size:1.2rem;font-weight:800;color:var(--blue);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid var(--blue-bg)}
+.stitle:first-child{margin-top:0}
+.stitle-icon{font-size:1.3rem}
 
-/* Compuertas */
-.gate-board{background:#12141a;border-radius:18px;padding:1.6rem 1.2rem;box-shadow:0 6px 28px rgba(0,0,0,.25)}
-.gate-board-title{display:flex;align-items:center;justify-content:center;gap:.5rem;color:#f2a340;font-weight:800;letter-spacing:1px;font-size:.9rem;text-transform:uppercase;margin-bottom:1.3rem}
-.gate-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
-.gate-card{background:#1c1f28;border:1px solid #2e323e;border-radius:12px;padding:1rem 1rem 1.1rem;text-align:center}
-.gate-card h3{color:#f2a340;font-size:.95rem;font-weight:800;letter-spacing:.5px;margin-bottom:.15rem}
-.gate-card .gate-formula{color:#8b93a7;font-family:'Courier New',monospace;font-size:.78rem;margin-bottom:.8rem}
-.gate-svg-wrap{margin-bottom:.7rem}
-.gate-svg{width:100%;max-width:170px;height:auto;display:block;margin:0 auto}
-.gate-toggles{display:flex;justify-content:center;gap:.6rem;margin-bottom:.8rem}
-.toggle-wrap{display:flex;flex-direction:column;align-items:center;gap:.3rem}
-.toggle-lbl{font-size:.72rem;color:#8b93a7;font-weight:700}
-.toggle-btn{width:44px;height:44px;border-radius:50%;border:2px solid #3a3f4d;background:#20242f;color:#8b93a7;font-weight:800;font-size:.95rem;cursor:pointer;transition:.15s}
-.toggle-btn.on{background:#f2a340;border-color:#f2a340;color:#1c1f28}
-.gate-output{display:flex;flex-direction:column;align-items:center;gap:.3rem}
-.led{width:34px;height:34px;border-radius:50%;background:#2a2e38;border:2px solid #3a3f4d;box-shadow:inset 0 2px 4px rgba(0,0,0,.4);transition:.15s;margin:0 auto}
-.led.on{background:#ff9d2e;border-color:#ffb454;box-shadow:0 0 14px 3px rgba(255,157,46,.7),inset 0 1px 2px rgba(255,255,255,.4)}
-.gate-out-lbl{font-size:.72rem;color:#8b93a7;font-weight:700}
-.gate-intro{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.4rem 1.5rem;margin-bottom:1.6rem;box-shadow:0 1px 6px rgba(0,0,0,.05)}
-.gate-intro p{font-size:.92rem;line-height:1.75;margin-bottom:.6rem}
-.gate-intro table{width:100%;border-collapse:collapse;margin-top:.8rem;font-size:.85rem}
-.gate-intro th,.gate-intro td{border:1px solid var(--border);padding:.5rem .7rem;text-align:center}
-.gate-intro th{background:#f8fafc;font-weight:700;color:var(--gray-lt)}
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.3rem 1.4rem;margin-bottom:1.2rem;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.card-accent-blue{border-left:4px solid var(--blue)}
+.card-accent-teal{border-left:4px solid var(--teal)}
+.card-accent-green{border-left:4px solid var(--green)}
+.card-accent-orange{border-left:4px solid var(--orange)}
+.card-accent-purple{border-left:4px solid var(--purple)}
+.card-accent-red{border-left:4px solid var(--red)}
+.card h3{font-size:1rem;font-weight:800;color:#0c1a2e;margin-bottom:.5rem}
+.card p{font-size:.9rem;line-height:1.65;color:var(--gray)}
+.card p+p{margin-top:.6rem}
+.tip{background:var(--blue-bg);border-radius:9px;padding:.6rem .9rem;font-size:.85rem;font-weight:700;color:#0c4a6e;margin-top:.75rem}
+.warn{background:var(--orange-bg);border-radius:9px;padding:.6rem .9rem;font-size:.85rem;font-weight:700;color:#7c2d12;margin-top:.75rem}
 
-/* Pirámide CIM */
-.cim-pyramid{display:flex;flex-direction:column;align-items:center;gap:6px;margin:1.5rem 0}
-.cim-level{display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:700;font-size:.85rem;color:#fff;transition:.2s;cursor:default}
-.cim-level:hover{filter:brightness(1.1);transform:scale(1.01)}
-.cim-level span{font-size:.78rem;font-weight:400;opacity:.85;margin-left:.5rem}
-.cim-l0{background:#b91c1c;width:98%;padding:.9rem}
-.cim-l1{background:#d97706;width:86%;padding:.8rem}
-.cim-l2{background:#15803d;width:72%;padding:.8rem}
-.cim-l3{background:#0369a1;width:58%;padding:.8rem}
-.cim-l4{background:#7c3aed;width:44%;padding:.8rem}
+/* ── CONCEPT PROGRESSION (simple→complex) ── */
+.concept-chain{display:flex;flex-direction:column;gap:.5rem;margin:1rem 0}
+.concept-item{display:flex;align-items:flex-start;gap:.9rem;padding:.8rem 1rem;border:1.5px solid var(--border);border-radius:12px;background:#fff;transition:.15s}
+.concept-item:hover{border-color:var(--blue-lt);background:var(--blue-bg)}
+.concept-num{width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;font-weight:800;font-size:.82rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.15rem}
+.concept-text{flex:1}
+.concept-title{font-weight:700;font-size:.92rem;color:#0c1a2e;margin-bottom:.2rem}
+.concept-desc{font-size:.82rem;color:var(--gray-lt);line-height:1.45}
 
-/* Álgebra de Boole */
+/* ── CIM PYRAMID ── */
+.cim-pyramid{display:flex;flex-direction:column;align-items:center;gap:3px;margin:1rem 0}
+.cim-level{color:#fff;font-weight:700;font-size:.82rem;text-align:center;border-radius:6px;padding:.7rem 1rem;display:flex;justify-content:space-between;align-items:center;gap:.5rem;transition:.15s;cursor:default}
+.cim-level span{font-size:.72rem;opacity:.82;font-weight:400;text-align:right}
+.cim-l0{background:#dc2626;width:100%}.cim-l1{background:#ea580c;width:90%}
+.cim-l2{background:#0369a1;width:78%}.cim-l3{background:#0d9488;width:64%}
+.cim-l4{background:#7c3aed;width:50%}
+
+/* ── TRUTH TABLE ── */
 .bool-table-wrap{overflow-x:auto;margin:1rem 0}
-.bool-table{width:100%;border-collapse:collapse;font-size:.88rem}
-.bool-table th,.bool-table td{border:1px solid var(--border);padding:.55rem .8rem;text-align:center}
+.bool-table{width:100%;border-collapse:collapse;font-size:.88rem;font-family:'Courier New',monospace}
+.bool-table th,.bool-table td{border:1px solid var(--border);padding:.5rem .8rem;text-align:center}
 .bool-table th{background:#f8fafc;font-weight:700;color:var(--gray-lt)}
-.bool-table td.one{background:#dcfce7;color:#15803d;font-weight:700}
-.bool-table td.zero{background:#fee2e2;color:#b91c1c;font-weight:700}
-.theorem-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin:1rem 0}
-.theorem-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.9rem 1rem}
-.theorem-card .th-name{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-lt);margin-bottom:.3rem}
-.theorem-card .th-eq{font-family:'Courier New',monospace;font-size:.95rem;font-weight:700;color:#0c1a2e}
+.bool-table td.one{background:var(--green-bg);color:var(--green);font-weight:700}
+.bool-table td.zero{background:var(--red-bg);color:var(--red);font-weight:700}
 
-/* Karnaugh */
+/* ── THEOREM GRID ── */
+.theorem-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.7rem;margin:1rem 0}
+.theorem-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.9rem 1rem}
+.th-name{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-lt);margin-bottom:.3rem}
+.th-eq{font-family:'Courier New',monospace;font-size:.95rem;font-weight:700;color:#0c1a2e}
+
+/* ── KMAP TABLE ── */
 .kmap-wrap{overflow-x:auto;margin:1rem 0;text-align:center}
 .kmap-table{border-collapse:collapse;margin:0 auto;font-family:'Courier New',monospace}
 .kmap-table th,.kmap-table td{border:2px solid var(--border);width:54px;height:50px;text-align:center;vertical-align:middle;font-size:1rem}
 .kmap-table th{background:#f8fafc;font-size:.75rem;font-weight:700;color:var(--gray-lt)}
-.kmap-table td.cell-1{background:#dbeafe;color:var(--blue);font-weight:800;font-size:1.15rem;cursor:pointer}
-.kmap-table td.cell-0{background:#fff;color:var(--gray-lt);cursor:pointer}
-.kmap-table td.cell-1:hover{background:#bfdbfe}
-.kmap-table td.cell-0:hover{background:#f1f5f9}
+.kmap-table td.cell-1{background:#dbeafe;color:var(--blue);font-weight:800;font-size:1.15rem}
+.kmap-table td.cell-0{background:#fff;color:var(--gray-lt)}
 .kmap-table td.group-a{background:#d1fae5;color:var(--green)}
 .kmap-table td.group-b{background:#fce7f3;color:#be185d}
 .kmap-table td.group-ab{background:linear-gradient(135deg,#d1fae5 50%,#fce7f3 50%)}
 
-/* ISA 5.1 */
-.isa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.8rem;margin:1rem 0}
-.isa-card{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:1rem;text-align:center;transition:.15s}
+/* ── ISA ── */
+.isa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.7rem;margin:1rem 0}
+.isa-card{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:.9rem;text-align:center;transition:.15s}
 .isa-card:hover{border-color:var(--blue-lt)}
-.isa-tag{font-family:'Courier New',monospace;font-size:1.15rem;font-weight:800;color:#0c1a2e;margin-bottom:.3rem}
-.isa-var{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--blue);margin-bottom:.15rem}
-.isa-fn{font-size:.8rem;color:var(--gray-lt)}
+.isa-tag{font-family:'Courier New',monospace;font-size:1.1rem;font-weight:800;color:#0c1a2e;margin-bottom:.3rem}
+.isa-var{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--blue);margin-bottom:.15rem}
+.isa-fn{font-size:.78rem;color:var(--gray-lt)}
 
-/* Circuitos */
-.bornes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin:1rem 0}
+/* ── BORNES ── */
+.bornes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.7rem;margin:1rem 0}
 .borne-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem}
-.borne-card .bc-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-lt);margin-bottom:.3rem}
-.borne-card .bc-val{font-family:'Courier New',monospace;font-size:1.1rem;font-weight:800;color:#0c1a2e}
+.bc-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-lt);margin-bottom:.3rem}
+.bc-val{font-family:'Courier New',monospace;font-size:1rem;font-weight:800;color:#0c1a2e}
 
-/* Quiz */
+/* ── GATE BOARD ── */
+.gate-board{background:#1e293b;border-radius:18px;padding:1.5rem;margin:1rem 0}
+.gate-board-title{color:#7dd3fc;font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem}
+.gate-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.9rem}
+.gate-card{background:#0f172a;border:2px solid #334155;border-radius:12px;padding:1rem;transition:.2s}
+.gate-card:hover{border-color:#7dd3fc}
+.gate-card h3{font-family:'Courier New',monospace;font-size:.95rem;font-weight:800;color:#e2e8f0;margin-bottom:.3rem}
+.gate-formula{font-size:.75rem;color:#94a3b8;font-family:'Courier New',monospace;margin-bottom:.6rem}
+.gate-svg-wrap{text-align:center;margin:.5rem 0}
+.gate-inputs,.gate-output{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.4rem}
+.gate-btn{flex:1;min-width:38px;padding:.3rem;border:1.5px solid #475569;border-radius:6px;background:#1e293b;color:#94a3b8;font-family:'Courier New',monospace;font-weight:700;font-size:.9rem;cursor:pointer;transition:.15s;text-align:center}
+.gate-btn:hover{border-color:#7dd3fc;color:#e2e8f0}
+.gate-btn.on{background:#0369a1;border-color:#38bdf8;color:#fff}
+.gate-out{flex:1;padding:.3rem;border:1.5px solid #475569;border-radius:6px;text-align:center;font-family:'Courier New',monospace;font-weight:800;font-size:1rem;color:#94a3b8;background:#0f172a}
+.gate-out.on{color:#4ade80;border-color:#4ade80}
+.gate-explain{font-size:.72rem;color:#64748b;margin-top:.4rem;min-height:1rem;line-height:1.4}
+
+/* ── CALC ── */
+.calc{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:1.5rem;margin:1.2rem 0}
+.calc h2{font-size:1rem;font-weight:800;color:#0c1a2e;margin-bottom:.8rem}
+.calc-input-row{margin-bottom:.7rem}
+.calc-input-row input{width:100%;padding:.6rem .9rem;border:2px solid var(--border);border-radius:10px;font-size:1rem;font-family:'Courier New',monospace;outline:none;color:#0c1a2e}
+.calc-input-row input:focus{border-color:var(--blue-lt)}
+.base-select{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.8rem}
+.base-btn{padding:.45rem 1rem;border:2px solid var(--border);border-radius:8px;background:#f8fafc;font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit;transition:.15s;color:var(--gray)}
+.base-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.calc-error{color:#b91c1c;font-size:.82rem;min-height:1rem;margin-bottom:.4rem}
+.calc-results{display:grid;gap:.5rem}
+.res-row{display:flex;align-items:center;gap:.8rem;padding:.6rem .9rem;border-radius:9px;background:#f8fafc}
+.r-bin{border-left:3px solid #3b82f6}
+.r-dec{border-left:3px solid #10b981}
+.r-hex{border-left:3px solid #8b5cf6}
+.r-bcd{border-left:3px solid #f59e0b}
+.res-label{font-size:.78rem;font-weight:700;color:var(--gray-lt);min-width:80px}
+.res-value{font-family:'Courier New',monospace;font-size:1rem;font-weight:800;color:#0c1a2e}
+
+/* ── QUIZ / GAMES ── */
 .quiz-wrap{background:var(--card);border:2px solid var(--blue);border-radius:18px;padding:2rem;box-shadow:0 4px 20px rgba(3,105,161,.1)}
 .quiz-progress{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
-.quiz-progress .qp-bar{flex:1;height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden}
-.quiz-progress .qp-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--teal));border-radius:999px;transition:.4s}
-.quiz-progress .qp-label{font-size:.8rem;font-weight:700;color:var(--gray-lt);white-space:nowrap}
+.qp-bar{flex:1;height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.qp-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--teal));border-radius:999px;transition:.4s}
+.qp-label{font-size:.8rem;font-weight:700;color:var(--gray-lt);white-space:nowrap}
 .quiz-q-num{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--blue);margin-bottom:.5rem}
 .quiz-q-text{font-size:1rem;font-weight:700;color:#0c1a2e;line-height:1.55;margin-bottom:1.2rem}
 .quiz-options{display:grid;gap:.6rem}
@@ -162,20 +179,17 @@ h2.section-title{font-size:1.25rem;font-weight:800;color:#0c1a2e;margin:3rem 0 .
 .quiz-next:hover{background:var(--blue-lt)}
 .quiz-score{text-align:center;display:none;padding:1rem 0}
 .quiz-score.show{display:block}
-.quiz-score .score-big{font-size:3.5rem;font-weight:900;color:var(--blue);line-height:1}
-.quiz-score .score-label{font-size:1rem;color:var(--gray-lt);margin-bottom:1.5rem}
+.score-big{font-size:3.5rem;font-weight:900;color:var(--blue);line-height:1}
+.score-label{font-size:1rem;color:var(--gray-lt);margin-bottom:1.5rem}
 .quiz-restart{padding:.75rem 2rem;background:var(--blue);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:.95rem;cursor:pointer}
-.quiz-restart:hover{background:var(--blue-lt)}
 
-/* Juegos */
+/* ── GAME CARDS ── */
 .game-card{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:1.8rem;margin-bottom:2rem;box-shadow:0 2px 12px rgba(0,0,0,.06)}
 .game-title{font-size:1.1rem;font-weight:800;color:#0c1a2e;margin-bottom:.3rem;display:flex;align-items:center;gap:.5rem}
 .game-desc{font-size:.88rem;color:var(--gray-lt);margin-bottom:1.3rem}
 .game-status{display:flex;align-items:center;gap:1.2rem;margin-bottom:1.2rem;flex-wrap:wrap}
-.game-status .gs-item{background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:.45rem .9rem;font-size:.82rem;font-weight:700;color:var(--gray)}
-.game-status .gs-item span{color:var(--blue);font-size:1.05rem}
-
-/* Juego conversión */
+.gs-item{background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:.45rem .9rem;font-size:.82rem;font-weight:700;color:var(--gray)}
+.gs-item span{color:var(--blue);font-size:1.05rem}
 .conv-game-area{text-align:center}
 .conv-challenge{font-size:1rem;color:var(--gray-lt);margin-bottom:.5rem}
 .conv-number{font-size:2.8rem;font-weight:900;color:#0c1a2e;font-family:'Courier New',monospace;margin-bottom:.5rem}
@@ -189,8 +203,6 @@ h2.section-title{font-size:1.25rem;font-weight:800;color:#0c1a2e;margin:3rem 0 .
 .conv-result{font-size:.85rem;margin-top:.7rem;min-height:1.2rem;font-weight:700}
 .conv-result.ok{color:#15803d}
 .conv-result.fail{color:#b91c1c}
-
-/* Juego ISA */
 .isa-game-area{}
 .isa-game-q{font-size:1.5rem;font-weight:900;font-family:'Courier New',monospace;color:#0c1a2e;text-align:center;margin-bottom:1.2rem;padding:.8rem;background:#f8fafc;border-radius:10px}
 .isa-opts{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
@@ -201,8 +213,6 @@ h2.section-title{font-size:1.25rem;font-weight:800;color:#0c1a2e;margin:3rem 0 .
 .isa-opt:disabled{cursor:default}
 .isa-next{margin-top:1rem;padding:.65rem 1.5rem;background:var(--teal);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;display:none}
 .isa-next.show{display:inline-block}
-
-/* Juego tablas de verdad */
 .tv-game-area{}
 .tv-fn{font-size:1.1rem;font-weight:800;font-family:'Courier New',monospace;color:var(--blue);text-align:center;margin-bottom:1rem;padding:.7rem;background:var(--blue-bg);border-radius:10px}
 .tv-table{border-collapse:collapse;width:100%;max-width:420px;margin:0 auto;font-size:.9rem}
@@ -217,141 +227,7 @@ h2.section-title{font-size:1.25rem;font-weight:800;color:#0c1a2e;margin:3rem 0 .
 .tv-check:hover{background:#6d28d9}
 .tv-feedback{text-align:center;margin-top:.7rem;font-size:.88rem;font-weight:700;min-height:1.2rem}
 
-footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)}
-</style>
-
-<style>
-.apuntes-nav {
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  gap: .75rem;
-  padding: .5rem 1rem;
-  background: rgba(10,10,18,.95);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255,255,255,.08);
-  font-family: 'Inter', sans-serif;
-  font-size: .82rem;
-  min-height: 48px;
-}
-.apuntes-nav a {
-  color: #94a3b8;
-  text-decoration: none;
-  padding: .2rem .5rem;
-  border-radius: 4px;
-  transition: background .15s;
-  white-space: nowrap;
-}
-.apuntes-nav a:hover { background: rgba(255,255,255,.07); color: #e2e8f0; }
-.apuntes-nav__hub { color: #38bdf8 !important; }
-.apuntes-nav__current {
-  margin-left: auto;
-  color: #64748b;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: .75rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 140px;
-}
-
-/* ── Hamburger ── */
-.burger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: .35rem;
-  margin-left: auto;
-  z-index: 201;
-}
-.burger span {
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: #94a3b8;
-  border-radius: 2px;
-  transition: transform .25s, opacity .25s;
-}
-.burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.burger.open span:nth-child(2) { opacity: 0; }
-.burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-/* ── Mobile section-nav drawer ── */
-.section-nav-drawer {
-  display: none;
-  position: fixed;
-  top: 48px;
-  left: 0;
-  right: 0;
-  z-index: 190;
-  background: rgba(10,10,18,.97);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255,255,255,.1);
-  padding: .75rem 1rem 1rem;
-  flex-direction: column;
-  gap: .35rem;
-  max-height: calc(100vh - 48px);
-  overflow-y: auto;
-}
-.section-nav-drawer.open { display: flex; }
-.section-nav-drawer a {
-  color: #94a3b8;
-  text-decoration: none;
-  padding: .7rem 1rem;
-  border-radius: 10px;
-  font-size: .92rem;
-  font-weight: 600;
-  transition: background .15s;
-  border: 1px solid rgba(255,255,255,.06);
-}
-.section-nav-drawer a:hover,
-.section-nav-drawer a:active { background: rgba(255,255,255,.08); color: #e2e8f0; }
-.section-nav-drawer__label {
-  font-size: .65rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  color: #475569;
-  padding: .5rem 1rem .25rem;
-}
-
-@media (max-width: 600px) {
-  .apuntes-nav__current { display: none; }
-  .burger { display: flex; }
-  .section-nav { display: none; }  /* hide pill nav on mobile; drawer replaces it */
-}
-@media (min-width: 601px) {
-  .section-nav-drawer { display: none !important; }
-  .burger { display: none !important; }
-}
-.apuntes-footer-nav {
-  margin-top: 3rem;
-  padding: 1rem 1.25rem;
-  background: rgba(255,255,255,.04);
-  border-top: 1px solid rgba(255,255,255,.08);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: .5rem;
-  font-family: 'Inter', sans-serif;
-  font-size: .83rem;
-}
-.apuntes-footer-nav__label { color: #64748b; margin-right: .25rem; }
-.apuntes-footer-nav a {
-  color: #94a3b8;
-  text-decoration: none;
-  padding: .2rem .6rem;
-  border-radius: 4px;
-  background: rgba(255,255,255,.06);
-}
-.apuntes-footer-nav a:hover { background: rgba(255,255,255,.12); color: #e2e8f0; }
-
-/* ──────────── Procedimiento Boole paso a paso ──────────── */
+/* ── BOOLE PROCEDURE ── */
 .boole-proc{border:2px solid var(--purple);border-radius:18px;overflow:hidden;margin:1.5rem 0}
 .boole-proc-header{background:var(--purple-bg);padding:1rem 1.4rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}
 .boole-proc-header h2{margin:0;font-size:1rem;font-weight:800;color:var(--purple)}
@@ -372,16 +248,38 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
 .bp-op{font-family:'Courier New',monospace;font-size:.95rem;color:#0c1a2e;background:#f1f5f9;border-radius:6px;padding:.3rem .7rem;display:inline-block;margin:.2rem 0}
 .bp-result{font-family:'Courier New',monospace;font-size:1rem;font-weight:800;color:var(--purple);background:var(--purple-bg);border-radius:6px;padding:.35rem .8rem;display:inline-block;margin-top:.3rem}
 .bp-verify-btn{margin-top:1.2rem;padding:.6rem 1.4rem;background:var(--teal);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:.88rem;cursor:pointer;font-family:inherit;transition:.15s}
-.bp-verify-btn:hover{background:#0f766e}
 
-/* ──────────── Ejercicio CIM autocorregible ──────────── */
+/* ── MNEMOTECNIAS ── */
+.mnemo-cards{display:grid;gap:.7rem;margin:1rem 0}
+.mnemo-card{border:2px solid var(--border);border-radius:14px;overflow:hidden;background:var(--card)}
+.mnemo-card.open{border-color:var(--purple)}
+.mnemo-card-head{display:flex;align-items:center;gap:.75rem;padding:.8rem 1rem;cursor:pointer;user-select:none;background:#fafbfc;transition:.15s}
+.mnemo-card.open .mnemo-card-head{background:var(--purple-bg)}
+.mnemo-card-icon{font-size:1.2rem;flex-shrink:0}
+.mnemo-card-label{font-weight:700;font-size:.9rem;color:#0c1a2e;flex:1}
+.mnemo-card.open .mnemo-card-label{color:var(--purple)}
+.mnemo-card-arrow{font-size:.85rem;color:var(--gray-lt);transition:transform .2s}
+.mnemo-card.open .mnemo-card-arrow{transform:rotate(180deg)}
+.mnemo-card-body{display:none;padding:1rem 1.1rem;border-top:1px solid var(--border)}
+.mnemo-card.open .mnemo-card-body{display:block}
+.mnemo-rule{font-size:1rem;font-weight:800;color:var(--purple);background:var(--purple-bg);border-radius:10px;padding:.65rem 1rem;margin-bottom:.9rem;line-height:1.4}
+.mnemo-steps li{font-size:.88rem;color:var(--gray);line-height:1.7;margin-left:1.1rem}
+.mnemo-example{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:.7rem .9rem;margin:.7rem 0;font-family:'Courier New',monospace;font-size:.86rem;color:#0c1a2e;white-space:pre-wrap;line-height:1.65}
+.mnemo-contrast{background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:.7rem .9rem;margin:.7rem 0;font-family:'Courier New',monospace;font-size:.83rem;line-height:1.65}
+.mnemo-contrast-title{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--orange);margin-bottom:.3rem}
+.mnemo-error{background:#fee2e2;border-left:3px solid #b91c1c;border-radius:8px;padding:.55rem .85rem;margin-top:.7rem;font-size:.82rem;color:#7f1d1d;line-height:1.5}
+.mnemo-error::before{content:"⚠️ Error típico: ";font-weight:700}
+.mnemo-hex-table{display:flex;flex-wrap:wrap;gap:.4rem;margin:.5rem 0}
+.mnemo-hex-cell{background:var(--purple-bg);color:var(--purple);font-family:'Courier New',monospace;font-weight:800;font-size:.85rem;padding:.3rem .6rem;border-radius:6px}
+
+/* ── CIM EXERCISE ── */
 .cim-exercise{background:var(--card);border:2px solid var(--blue);border-radius:18px;padding:1.8rem;margin:1.5rem 0}
 .cim-ex-title{font-size:1rem;font-weight:800;color:var(--blue);margin-bottom:.3rem}
 .cim-ex-subtitle{font-size:.83rem;color:var(--gray-lt);margin-bottom:1.3rem}
 .cim-ex-progress{display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem}
-.cim-ex-progress .cep-bar{flex:1;height:7px;background:#e2e8f0;border-radius:999px;overflow:hidden}
-.cim-ex-progress .cep-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--teal));border-radius:999px;transition:.4s}
-.cim-ex-progress .cep-label{font-size:.78rem;font-weight:700;color:var(--gray-lt);white-space:nowrap}
+.cep-bar{flex:1;height:7px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.cep-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--teal));border-radius:999px;transition:.4s}
+.cep-label{font-size:.78rem;font-weight:700;color:var(--gray-lt);white-space:nowrap}
 .cim-ex-q{font-size:.95rem;font-weight:700;color:#0c1a2e;line-height:1.55;margin-bottom:1rem;padding:.8rem 1rem;background:#f8fafc;border-radius:10px;border-left:4px solid var(--blue)}
 .cim-ex-opts{display:grid;gap:.55rem;margin-bottom:1rem}
 .cim-ex-opt{width:100%;text-align:left;padding:.75rem 1rem;border:2px solid var(--border);border-radius:10px;background:#fff;cursor:pointer;font-size:.88rem;color:var(--gray);transition:.15s;font-family:inherit;display:flex;align-items:center;gap:.7rem}
@@ -389,14 +287,13 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
 .cim-ex-opt.correct{border-color:#15803d;background:#dcfce7;color:#14532d;font-weight:700}
 .cim-ex-opt.wrong{border-color:#b91c1c;background:#fee2e2;color:#7f1d1d;font-weight:700}
 .cim-ex-opt:disabled{cursor:default}
-.cim-ex-opt .opt-level{font-family:'Courier New',monospace;font-weight:800;font-size:.85rem;min-width:54px}
+.opt-level{font-family:'Courier New',monospace;font-weight:800;font-size:.85rem;min-width:54px}
 .cim-fb{padding:.85rem 1rem;border-radius:10px;font-size:.86rem;line-height:1.6;display:none;margin-bottom:1rem}
 .cim-fb.show{display:block}
 .cim-fb.ok{background:#dcfce7;color:#14532d;border-left:4px solid #15803d}
 .cim-fb.fail{background:#fee2e2;color:#7f1d1d;border-left:4px solid #b91c1c}
 .cim-ex-next{padding:.65rem 1.6rem;background:var(--blue);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:.88rem;cursor:pointer;display:none;font-family:inherit;transition:.15s}
 .cim-ex-next.show{display:inline-block}
-.cim-ex-next:hover{background:var(--blue-lt)}
 .cim-ex-score{text-align:center;display:none}
 .cim-ex-score.show{display:block}
 .cim-score-big{font-size:3.2rem;font-weight:900;color:var(--blue);line-height:1}
@@ -404,29 +301,7 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
 .cim-score-msg{font-size:.88rem;line-height:1.55;color:var(--gray);margin-bottom:1.2rem;padding:.75rem 1rem;border-radius:8px;background:#f8fafc}
 .cim-restart{padding:.7rem 1.8rem;background:var(--blue);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:.9rem;cursor:pointer;font-family:inherit}
 
-/* ════ Ruta de estudio ════ */
-.ruta-wrap{background:var(--card);border:2px solid var(--blue);border-radius:20px;padding:1.8rem;margin:1.5rem 0 2.5rem}
-.ruta-title{font-size:1rem;font-weight:800;color:var(--blue);margin-bottom:.25rem}
-.ruta-sub{font-size:.82rem;color:var(--gray-lt);margin-bottom:1.3rem}
-.ruta-list{display:grid;gap:.7rem}
-.ruta-item{display:flex;align-items:center;gap:1rem;padding:.9rem 1.1rem;border:2px solid var(--border);border-radius:12px;background:#fafbfc;transition:.15s}
-.ruta-item.done{border-color:#15803d;background:#f0fdf4}
-.ruta-item.active{border-color:var(--blue);background:var(--blue-bg)}
-.ruta-num{width:28px;height:28px;border-radius:50%;background:var(--gray-lt);color:#fff;font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ruta-item.done .ruta-num{background:#15803d}
-.ruta-item.active .ruta-num{background:var(--blue)}
-.ruta-info{flex:1}
-.ruta-name{font-weight:700;font-size:.92rem;color:#0c1a2e;margin-bottom:.15rem}
-.ruta-obj{font-size:.78rem;color:var(--gray-lt);line-height:1.4}
-.ruta-badge{font-size:.72rem;font-weight:700;padding:.25rem .65rem;border-radius:6px;white-space:nowrap;flex-shrink:0}
-.ruta-badge.pending{background:#f1f5f9;color:var(--gray-lt)}
-.ruta-badge.active-st{background:var(--blue-bg);color:var(--blue)}
-.ruta-badge.done{background:#dcfce7;color:#15803d}
-.ruta-goto{font-size:.78rem;font-weight:700;padding:.25rem .7rem;border:none;border-radius:7px;background:var(--blue-bg);color:var(--blue);cursor:pointer;font-family:inherit;flex-shrink:0;transition:.15s}
-.ruta-goto:hover{background:var(--blue);color:#fff}
-.ruta-reset{margin-top:1rem;padding:.5rem 1.2rem;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:.78rem;font-weight:700;color:var(--gray-lt);cursor:pointer;font-family:inherit;transition:.15s}
-.ruta-reset:hover{border-color:#b91c1c;color:#b91c1c}
-/* ════ Conv practice ════ */
+/* ── CONV PRACTICE ── */
 .conv-practice{background:var(--card);border:2px solid var(--orange);border-radius:18px;padding:1.6rem;margin:1.5rem 0}
 .conv-prac-title{font-size:1rem;font-weight:800;color:var(--orange);margin-bottom:.25rem}
 .conv-prac-sub{font-size:.82rem;color:var(--gray-lt);margin-bottom:1.2rem}
@@ -440,9 +315,7 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
 .conv-prac-btns{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;margin-bottom:.8rem}
 .conv-prac-btn{padding:.6rem 1.4rem;border:none;border-radius:10px;font-weight:700;font-size:.88rem;cursor:pointer;font-family:inherit;transition:.15s}
 .conv-prac-btn.primary{background:var(--orange);color:#fff}
-.conv-prac-btn.primary:hover{background:#9a3f00}
 .conv-prac-btn.secondary{background:#f1f5f9;color:var(--gray);border:1.5px solid var(--border)}
-.conv-prac-btn.secondary:hover{background:#e2e8f0}
 .conv-prac-fb{font-size:.84rem;line-height:1.65;padding:.85rem 1rem;border-radius:10px;display:none;margin-bottom:.8rem}
 .conv-prac-fb.show{display:block}
 .conv-prac-fb.ok{background:#dcfce7;color:#14532d;border-left:4px solid #15803d}
@@ -451,8 +324,9 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
 .conv-prac-score.show{display:block}
 .cps-big{font-size:2.8rem;font-weight:900;color:var(--orange);line-height:1}
 .cps-label{font-size:.88rem;color:var(--gray-lt);margin:.3rem 0 .8rem}
-.cps-msg{font-size:.83rem;color:var(--gray);margin-bottom:1rem;line-height:1.5}
-/* ════ Predecí ════ */
+.cps-msg{font-size:.83rem;color:var(--gray);margin-bottom:1rem}
+
+/* ── PREDECÍ ── */
 .gate-predict{background:var(--card);border:2px solid var(--teal);border-radius:18px;padding:1.6rem;margin:1.5rem 0}
 .gate-predict-title{font-size:1rem;font-weight:800;color:var(--teal);margin-bottom:.25rem}
 .gate-predict-sub{font-size:.82rem;color:var(--gray-lt);margin-bottom:1.2rem}
@@ -473,7 +347,8 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
 .gp-fb.fail{background:#fee2e2;color:#7f1d1d;border-left:4px solid #b91c1c}
 .gp-next{margin-top:.9rem;padding:.6rem 1.5rem;background:var(--teal);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;display:none;font-family:inherit}
 .gp-next.show{display:inline-block}
-/* ════ K-map int ════ */
+
+/* ── K-MAP INTERACTIVE ── */
 .kmap-interactive{background:var(--card);border:2px solid var(--green);border-radius:18px;padding:1.6rem;margin:1.5rem 0}
 .kmap-int-title{font-size:1rem;font-weight:800;color:var(--green);margin-bottom:.25rem}
 .kmap-int-sub{font-size:.82rem;color:var(--gray-lt);margin-bottom:1.2rem}
@@ -492,13 +367,13 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
 .kmap-int-btns{display:flex;gap:.6rem;flex-wrap:wrap;margin:.8rem 0}
 .kmap-int-btn{padding:.55rem 1.2rem;border:none;border-radius:9px;font-weight:700;font-size:.83rem;cursor:pointer;font-family:inherit;transition:.15s}
 .kmap-int-btn.check{background:var(--green);color:#fff}
-.kmap-int-btn.check:hover{background:#14532d}
 .kmap-int-btn.reset{background:#f1f5f9;border:1.5px solid var(--border);color:var(--gray)}
 .kmap-int-fb{font-size:.84rem;line-height:1.6;padding:.8rem 1rem;border-radius:10px;display:none;margin-top:.6rem}
 .kmap-int-fb.show{display:block}
 .kmap-int-fb.ok{background:#dcfce7;color:#14532d;border-left:4px solid #15803d}
 .kmap-int-fb.fail{background:#fee2e2;color:#7f1d1d;border-left:4px solid #b91c1c}
-/* ════ ISA práctica ════ */
+
+/* ── ISA PRACTICE ── */
 .isa-practice{background:var(--card);border:2px solid var(--blue);border-radius:18px;padding:1.6rem;margin:1.5rem 0}
 .isa-prac-title{font-size:1rem;font-weight:800;color:var(--blue);margin-bottom:.25rem}
 .isa-prac-sub{font-size:.82rem;color:var(--gray-lt);margin-bottom:1.2rem}
@@ -516,7 +391,8 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
 .isa-prac-fb.fail{background:#fee2e2;color:#7f1d1d;border-left:4px solid #b91c1c}
 .isa-prac-next{padding:.6rem 1.5rem;background:var(--blue);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;display:none;font-family:inherit}
 .isa-prac-next.show{display:inline-block}
-/* ════ Circuito int ════ */
+
+/* ── CIRCUIT ── */
 .circuit-int{background:var(--card);border:2px solid var(--teal);border-radius:18px;padding:1.6rem;margin:1.5rem 0}
 .circuit-int-title{font-size:1rem;font-weight:800;color:var(--teal);margin-bottom:.25rem}
 .circuit-int-sub{font-size:.82rem;color:var(--gray-lt);margin-bottom:1.2rem}
@@ -543,15 +419,14 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
 .circuit-seq-fb.show{display:block}
 .circuit-seq-fb.ok{background:#dcfce7;color:#14532d;border-left:4px solid #15803d}
 .circuit-seq-fb.fail{background:#fee2e2;color:#7f1d1d;border-left:4px solid #b91c1c}
-/* ════ Simulacro ════ */
+
+/* ── SIMULACRO ── */
 .simulacro{background:var(--card);border:2px solid var(--blue);border-radius:20px;padding:1.8rem;margin:2rem 0}
 .simulacro-header{text-align:center;margin-bottom:1.5rem}
 .simulacro-title{font-size:1.15rem;font-weight:900;color:var(--blue);margin-bottom:.3rem}
 .simulacro-desc{font-size:.85rem;color:var(--gray-lt);line-height:1.5}
 .sim-start-btn{padding:.8rem 2rem;background:var(--blue);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit;transition:.15s;margin-top:1rem}
-.sim-start-btn:hover{background:var(--blue-lt)}
-.sim-body{display:none}
-.sim-body.show{display:block}
+.sim-body{display:none}.sim-body.show{display:block}
 .sim-progress{margin-bottom:1.2rem}
 .sim-progress-bar-wrap{height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-bottom:.4rem}
 .sim-progress-bar{height:100%;background:linear-gradient(90deg,var(--blue),var(--teal));border-radius:999px;transition:.4s}
@@ -579,9 +454,7 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
 .sim-results-btns{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;margin-top:1.2rem}
 .sim-results-btn{padding:.65rem 1.5rem;border:none;border-radius:10px;font-weight:700;font-size:.88rem;cursor:pointer;font-family:inherit;transition:.15s}
 .sim-results-btn.primary{background:var(--blue);color:#fff}
-.sim-results-btn.primary:hover{background:var(--blue-lt)}
 .sim-results-btn.secondary{background:#f1f5f9;border:1.5px solid var(--border);color:var(--gray)}
-.sim-results-btn.secondary:hover{background:#e2e8f0}
 .sim-review{margin-top:1.5rem;text-align:left;display:none}
 .sim-review.show{display:block}
 .sim-review-item{border:1px solid var(--border);border-radius:10px;padding:.8rem 1rem;margin-bottom:.6rem;font-size:.84rem;line-height:1.55}
@@ -591,39 +464,27 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
 .sim-review-yours{color:#7f1d1d;margin-bottom:.15rem}
 .sim-review-correct{color:#14532d;font-weight:700}
 
-.cim-restart:hover{background:var(--blue-lt)}
+/* ── RUTA DE ESTUDIO ── */
+.ruta-wrap{background:var(--card);border:2px solid var(--blue);border-radius:20px;padding:1.8rem;margin:1.5rem 0 2.5rem}
+.ruta-title{font-size:1rem;font-weight:800;color:var(--blue);margin-bottom:.25rem}
+.ruta-sub{font-size:.82rem;color:var(--gray-lt);margin-bottom:1.3rem}
+.ruta-list{display:grid;gap:.7rem}
+.ruta-item{display:flex;align-items:center;gap:1rem;padding:.9rem 1.1rem;border:2px solid var(--border);border-radius:12px;background:#fafbfc;transition:.15s}
+.ruta-item.done{border-color:#15803d;background:#f0fdf4}
+.ruta-num{width:28px;height:28px;border-radius:50%;background:var(--gray-lt);color:#fff;font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ruta-item.done .ruta-num{background:#15803d}
+.ruta-info{flex:1}
+.ruta-name{font-weight:700;font-size:.92rem;color:#0c1a2e;margin-bottom:.15rem}
+.ruta-obj{font-size:.78rem;color:var(--gray-lt);line-height:1.4}
+.ruta-badge{font-size:.72rem;font-weight:700;padding:.25rem .65rem;border-radius:6px;white-space:nowrap;flex-shrink:0}
+.ruta-badge.pending{background:#f1f5f9;color:var(--gray-lt)}
+.ruta-badge.done{background:#dcfce7;color:#15803d}
+.ruta-goto{font-size:.78rem;font-weight:700;padding:.25rem .7rem;border:none;border-radius:7px;background:var(--blue-bg);color:var(--blue);cursor:pointer;font-family:inherit;flex-shrink:0;transition:.15s}
+.ruta-goto:hover{background:var(--blue);color:#fff}
+.ruta-reset{margin-top:1rem;padding:.5rem 1.2rem;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:.78rem;font-weight:700;color:var(--gray-lt);cursor:pointer;font-family:inherit;transition:.15s}
+.ruta-reset:hover{border-color:#b91c1c;color:#b91c1c}
 
-
-
-/* ════ Plan primer parcial ════ */
-.plan-parcial{background:var(--card);border:2px solid var(--orange);border-radius:20px;padding:1.8rem;margin:2rem 0}
-.plan-parcial-title{font-size:1rem;font-weight:800;color:var(--orange);margin-bottom:.25rem}
-.plan-parcial-sub{font-size:.82rem;color:var(--gray-lt);margin-bottom:1.3rem}
-.plan-steps{display:grid;gap:.65rem}
-.plan-step{display:flex;align-items:center;gap:1rem;padding:.9rem 1.1rem;border:2px solid var(--border);border-radius:12px;background:#fafbfc;transition:.15s}
-.plan-step.done{border-color:#15803d;background:#f0fdf4}
-.plan-step.active{border-color:var(--orange);background:#fff7ed}
-.plan-step-num{width:32px;height:32px;border-radius:50%;background:var(--orange);color:#fff;font-weight:900;font-size:.82rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Courier New',monospace}
-.plan-step.done .plan-step-num{background:#15803d}
-.plan-step-info{flex:1}
-.plan-step-session{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--orange);margin-bottom:.15rem}
-.plan-step.done .plan-step-session{color:#15803d}
-.plan-step-name{font-weight:700;font-size:.9rem;color:#0c1a2e;margin-bottom:.15rem}
-.plan-step-practica{font-size:.75rem;color:var(--gray-lt);line-height:1.4}
-.plan-step-badge{font-size:.72rem;font-weight:700;padding:.25rem .65rem;border-radius:6px;white-space:nowrap;flex-shrink:0}
-.plan-step-badge.pendiente{background:#f1f5f9;color:var(--gray-lt)}
-.plan-step-badge.en-practica{background:#fff7ed;color:var(--orange)}
-.plan-step-badge.done{background:#dcfce7;color:#15803d}
-.plan-step-goto{font-size:.78rem;font-weight:700;padding:.25rem .7rem;border:none;border-radius:7px;background:var(--orange-bg);color:var(--orange);cursor:pointer;font-family:inherit;flex-shrink:0;text-decoration:none;transition:.15s}
-.plan-step-goto:hover{background:var(--orange);color:#fff}
-.plan-sim-lock{margin-top:1rem;padding:.8rem 1rem;border-radius:10px;background:#f8fafc;border:1px solid var(--border);font-size:.82rem;color:var(--gray-lt);text-align:center;line-height:1.5}
-.plan-sim-lock.unlocked{background:#dcfce7;color:#14532d;border-color:#15803d}
-@media(max-width:600px){
-  .plan-step{flex-wrap:wrap;gap:.5rem}
-  .plan-step-practica{display:none}
-}
-
-/* ════ Material de la cursada ════ */
+/* ── MATERIAL CHECKLIST ── */
 .material-wrap{background:var(--card);border:2px solid var(--blue);border-radius:20px;padding:1.8rem;margin:2rem 0}
 .material-header{margin-bottom:1.4rem}
 .material-title{font-size:1rem;font-weight:800;color:var(--blue);margin-bottom:.25rem}
@@ -652,42 +513,32 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
 .material-link.drive{background:var(--blue-bg);color:var(--blue);border-color:transparent}
 .material-link.drive:hover{background:var(--blue);color:#fff}
 .material-link.interno{background:var(--green-bg);color:var(--green);border-color:transparent}
-.material-link.interno:hover{background:var(--green);color:#fff}
-@media(max-width:600px){
-  .material-item{gap:.5rem}
-  .material-item-topic{display:none}
-  .material-stats{gap:1rem}
-}
 
-/* ════ Mnemotecnias ════ */
-.mnemo-wrap{margin:1.5rem 0}
-.mnemo-header{margin-bottom:1rem}
-.mnemo-title{font-size:1rem;font-weight:800;color:var(--purple);margin-bottom:.2rem}
-.mnemo-sub{font-size:.82rem;color:var(--gray-lt)}
-.mnemo-cards{display:grid;gap:.7rem}
-.mnemo-card{border:2px solid var(--border);border-radius:14px;overflow:hidden;background:var(--card)}
-.mnemo-card.open{border-color:var(--purple)}
-.mnemo-card-head{display:flex;align-items:center;gap:.75rem;padding:.8rem 1rem;cursor:pointer;user-select:none;background:#fafbfc;transition:.15s}
-.mnemo-card.open .mnemo-card-head{background:var(--purple-bg)}
-.mnemo-card-icon{font-size:1.2rem;flex-shrink:0}
-.mnemo-card-label{font-weight:700;font-size:.9rem;color:#0c1a2e;flex:1}
-.mnemo-card.open .mnemo-card-label{color:var(--purple)}
-.mnemo-card-arrow{font-size:.85rem;color:var(--gray-lt);transition:transform .2s}
-.mnemo-card.open .mnemo-card-arrow{transform:rotate(180deg)}
-.mnemo-card-body{display:none;padding:1rem 1.1rem;border-top:1px solid var(--border)}
-.mnemo-card.open .mnemo-card-body{display:block}
-.mnemo-rule{font-size:1rem;font-weight:800;color:var(--purple);background:var(--purple-bg);border-radius:10px;padding:.65rem 1rem;margin-bottom:.9rem;line-height:1.4}
-.mnemo-steps{margin:.6rem 0}
-.mnemo-steps li{font-size:.88rem;color:var(--gray);line-height:1.7;margin-left:1.1rem}
-.mnemo-example{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:.7rem .9rem;margin:.7rem 0;font-family:'Courier New',monospace;font-size:.88rem;color:#0c1a2e;white-space:pre-wrap;line-height:1.65}
-.mnemo-contrast{background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:.7rem .9rem;margin:.7rem 0;font-family:'Courier New',monospace;font-size:.85rem;line-height:1.65}
-.mnemo-contrast-title{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--orange);margin-bottom:.3rem}
-.mnemo-error{background:#fee2e2;border-left:3px solid #b91c1c;border-radius:8px;padding:.55rem .85rem;margin-top:.7rem;font-size:.82rem;color:#7f1d1d;line-height:1.5}
-.mnemo-error::before{content:"⚠️ Error típico: ";font-weight:700}
-.mnemo-hex-table{display:flex;flex-wrap:wrap;gap:.4rem;margin:.5rem 0}
-.mnemo-hex-cell{background:var(--purple-bg);color:var(--purple);font-family:'Courier New',monospace;font-weight:800;font-size:.85rem;padding:.3rem .6rem;border-radius:6px}
+/* ── PLAN PARCIAL ── */
+.plan-parcial{background:var(--card);border:2px solid var(--orange);border-radius:20px;padding:1.8rem;margin:2rem 0}
+.plan-parcial-title{font-size:1rem;font-weight:800;color:var(--orange);margin-bottom:.25rem}
+.plan-parcial-sub{font-size:.82rem;color:var(--gray-lt);margin-bottom:1.3rem}
+.plan-steps{display:grid;gap:.65rem}
+.plan-step{display:flex;align-items:center;gap:1rem;padding:.9rem 1.1rem;border:2px solid var(--border);border-radius:12px;background:#fafbfc;transition:.15s}
+.plan-step.done{border-color:#15803d;background:#f0fdf4}
+.plan-step.active{border-color:var(--orange);background:#fff7ed}
+.plan-step-num{width:32px;height:32px;border-radius:50%;background:var(--orange);color:#fff;font-weight:900;font-size:.82rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Courier New',monospace}
+.plan-step.done .plan-step-num{background:#15803d}
+.plan-step-info{flex:1}
+.plan-step-session{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--orange);margin-bottom:.15rem}
+.plan-step.done .plan-step-session{color:#15803d}
+.plan-step-name{font-weight:700;font-size:.9rem;color:#0c1a2e;margin-bottom:.15rem}
+.plan-step-practica{font-size:.75rem;color:var(--gray-lt);line-height:1.4}
+.plan-step-badge{font-size:.72rem;font-weight:700;padding:.25rem .65rem;border-radius:6px;white-space:nowrap;flex-shrink:0}
+.plan-step-badge.pendiente{background:#f1f5f9;color:var(--gray-lt)}
+.plan-step-badge.en-practica{background:#fff7ed;color:var(--orange)}
+.plan-step-badge.done{background:#dcfce7;color:#15803d}
+.plan-step-goto{font-size:.78rem;font-weight:700;padding:.25rem .7rem;border:none;border-radius:7px;background:var(--orange-bg);color:var(--orange);cursor:pointer;font-family:inherit;flex-shrink:0;text-decoration:none;transition:.15s}
+.plan-step-goto:hover{background:var(--orange);color:#fff}
+.plan-sim-lock{margin-top:1rem;padding:.8rem 1rem;border-radius:10px;background:#f8fafc;border:1px solid var(--border);font-size:.82rem;color:var(--gray-lt);text-align:center;line-height:1.5}
+.plan-sim-lock.unlocked{background:#dcfce7;color:#14532d;border-color:#15803d}
 
-/* ════ Microactividad reglas ════ */
+/* ── MNEMO QUIZ ── */
 .mnemo-quiz{background:var(--card);border:2px solid var(--purple);border-radius:16px;padding:1.4rem;margin-top:1.2rem}
 .mnemo-quiz-title{font-size:.9rem;font-weight:800;color:var(--purple);margin-bottom:.3rem}
 .mnemo-quiz-sub{font-size:.8rem;color:var(--gray-lt);margin-bottom:1rem}
@@ -705,868 +556,1023 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
 .mnemo-quiz-next{padding:.55rem 1.3rem;background:var(--purple);color:#fff;border:none;border-radius:9px;font-weight:700;cursor:pointer;display:none;font-family:inherit;font-size:.85rem}
 .mnemo-quiz-next.show{display:inline-block}
 .mnemo-quiz-progress{font-size:.75rem;font-weight:700;color:var(--gray-lt);text-align:right;margin-bottom:.5rem}
-@media(max-width:600px){
-  .mnemo-example,.mnemo-contrast{font-size:.78rem}
-  .mnemo-hex-table{gap:.3rem}
-}
 
-/* ════ RESPONSIVE GENERAL ════ */
-@media (max-width: 600px) {
-  .container { padding: 0 .9rem; }
-  header h1 { font-size: 1.6rem; }
-  h2.section-title { font-size: 1.1rem; }
-  .cim-pyramid { font-size: .82rem; }
-  .cim-level { padding: .6rem .8rem !important; font-size: .8rem; }
-  .theorem-grid { grid-template-columns: 1fr 1fr; }
-  .gate-grid { grid-template-columns: repeat(2,1fr); }
-  .kmap-int-table th, .kmap-int-table td { width: 44px; height: 42px; font-size: .85rem; }
-  .gp-opt { width: 60px; height: 50px; font-size: 1.2rem; }
-  .circuit-components { grid-template-columns: 1fr 1fr; }
-  .sim-module-scores { grid-template-columns: 1fr 1fr; }
-  .boole-proc-header h2 { font-size: .85rem; }
-  .bp-prop-badge { display: none; }
-  .sim-results-btns { flex-direction: column; align-items: stretch; }
-  .sim-results-btn { text-align: center; }
-  .conv-prac-btns { flex-direction: column; align-items: stretch; }
-  .conv-prac-btn { text-align: center; }
-  .isa-prac-tag { font-size: 1.5rem; }
-  .ruta-item { flex-wrap: wrap; gap: .5rem; }
-  .ruta-goto { margin-left: auto; }
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .hero h1{font-size:1.55rem}
+  .container{padding:1.5rem 1rem}
+  .theorem-grid{grid-template-columns:1fr 1fr}
+  .gate-grid{grid-template-columns:repeat(2,1fr)}
+  .kmap-int-table th,.kmap-int-table td{width:44px;height:42px;font-size:.85rem}
+  .gp-opt{width:60px;height:50px;font-size:1.2rem}
+  .circuit-components{grid-template-columns:1fr 1fr}
+  .sim-module-scores{grid-template-columns:1fr 1fr}
+  .bp-prop-badge{display:none}
+  .sim-results-btns{flex-direction:column;align-items:stretch}
+  .conv-prac-btns{flex-direction:column;align-items:stretch}
+  .isa-prac-tag{font-size:1.5rem}
+  .ruta-item{flex-wrap:wrap}
+  .material-item-topic{display:none}
+  .plan-step{flex-wrap:wrap;gap:.5rem}
+  .plan-step-practica{display:none}
 }
-@media (max-width: 380px) {
-  .gate-grid { grid-template-columns: 1fr; }
-  .kmap-int-table th, .kmap-int-table td { width: 38px; height: 38px; font-size: .78rem; }
-}
+footer{text-align:center;margin-top:3rem;padding:1.5rem;font-size:.82rem;color:var(--gray-lt);border-top:1px solid var(--border)}
 </style>
 </head>
 <body>
-<div class="apuntes-nav">
-  <a href="https://joacodelacorte.netlify.app/#apuntes" class="apuntes-nav__back">← Portafolio</a>
-  <a href="../apuntes/" class="apuntes-nav__hub">Hub Apuntes</a>
-  <span class="apuntes-nav__current">Lógica Digital</span>
-  <button class="burger" id="burgerBtn" onclick="toggleDrawer()" aria-label="Menú de secciones" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
+
+<!-- ── TOP NAV ── -->
+<nav class="topnav" role="navigation" aria-label="Secciones del apunte">
+  <a class="brand" href="../">🏭 Auto. Industrial</a>
+  <div class="tabs" role="tablist">
+    <button class="tab-btn active" role="tab" onclick="showTab('tab-a',this)">🏭 A — CIM</button>
+    <button class="tab-btn" role="tab" onclick="showTab('tab-b',this)">🔢 B — Numeración</button>
+    <button class="tab-btn" role="tab" onclick="showTab('tab-c',this)">🔌 C — Compuertas</button>
+    <button class="tab-btn" role="tab" onclick="showTab('tab-d',this)">🔣 D — Boole & K-map</button>
+    <button class="tab-btn" role="tab" onclick="showTab('tab-e',this)">📊 E — ISA & Circuitos</button>
+    <button class="tab-btn" role="tab" onclick="showTab('tab-f',this)">🧪 F — Simulacro</button>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <h1>Lógica Digital</h1>
+  <p>Sesiones 01–05 · Pirámide CIM, conversiones, Álgebra de Boole, K-maps, ISA 5.1 y circuitos de fuerza</p>
+  <div class="hero-badges">
+    <a class="hero-badge" href="#" onclick="showTab('tab-a',document.querySelector('.tab-btn'));return false">🏭 CIM</a>
+    <a class="hero-badge" href="#" onclick="showTabByIdx(1);return false">🔢 Numeración</a>
+    <a class="hero-badge" href="#" onclick="showTabByIdx(2);return false">🔌 Compuertas</a>
+    <a class="hero-badge" href="#" onclick="showTabByIdx(3);return false">🔣 Boole</a>
+    <a class="hero-badge" href="#" onclick="showTabByIdx(4);return false">📊 ISA</a>
+    <a class="hero-badge" href="#" onclick="showTabByIdx(5);return false">🧪 Parcial</a>
+  </div>
 </div>
 
-<!-- Drawer mobile con todas las secciones -->
-<nav class="section-nav-drawer" id="sectionDrawer" role="navigation" aria-label="Secciones del apunte">
-  <div class="section-nav-drawer__label">Secciones</div>
-  <a href="#ruta" onclick="closeDrawer()">📍 Ruta de estudio</a>
-  <a href="#cim" onclick="closeDrawer()">🏭 Pirámide CIM</a>
-  <a href="#bases" onclick="closeDrawer()">🔢 Sistemas de numeración</a>
-  <a href="#mnemotecnias-numeracion" onclick="closeDrawer()">🧠 Atajos de memoria</a>
-  <a href="#compuertas" onclick="closeDrawer()">🔌 Compuertas lógicas</a>
-  <a href="#boole" onclick="closeDrawer()">🔣 Álgebra de Boole</a>
-  <a href="#karnaugh" onclick="closeDrawer()">🗺️ Karnaugh</a>
-  <a href="#isa" onclick="closeDrawer()">📊 ISA 5.1</a>
-  <a href="#circuitos" onclick="closeDrawer()">⚡ Circuitos de fuerza</a>
-  <a href="#plan-parcial" onclick="closeDrawer()">📅 Plan del Parcial</a>
-  <a href="#material" onclick="closeDrawer()">📂 Material de la cursada</a>
-  <a href="#simulacro" onclick="closeDrawer()">🧪 Simulacro integrador</a>
-  <a href="#juegos" onclick="closeDrawer()">🎮 Juegos</a>
-</nav>
+<!-- ════════════ TAB A: CIM ════════════ -->
+<div class="page active" id="tab-a">
 <div class="container">
-  <a class="back" href="../index.html">← Volver al inicio</a>
-  <header>
-    <span class="eyebrow">Automatización Industrial</span>
-    <h1>Lógica Digital</h1>
-    <p>Sesiones 01–05 · Pirámide CIM, conversiones, Álgebra de Boole, K-maps, ISA 5.1 y circuitos de fuerza.</p>
-  </header>
 
-  <div class="section-nav">
-    <a href="#ruta">📍 Ruta</a>
-    <a href="#cim">🏭 CIM</a>
-    <a href="#bases">🔢 Bases</a>
-    <a href="#mnemotecnias-numeracion">🧠 Atajos</a>
-    <a href="#compuertas">🔌 Compuertas</a>
-    <a href="#boole">🔣 Boole</a>
-    <a href="#karnaugh">🗺️ Karnaugh</a>
-    <a href="#isa">📊 ISA 5.1</a>
-    <a href="#circuitos">⚡ Circuitos</a>
-    <a href="#plan-parcial">📅 Parcial</a>
-    <a href="#material">📂 Material</a>
-    <a href="#simulacro">🧪 Simulacro</a>
-  </div>
+<h2 class="stitle" id="cim"><span class="stitle-icon">🏭</span>Pirámide CIM — Automatización Industrial</h2>
 
-
-  <!-- ═══════════════ RUTA DE ESTUDIO ═══════════════ -->
-  <h2 class="section-title" id="ruta">📍 Ruta de estudio</h2>
-  <p class="section-sub">Seguí este orden. Tu avance se guarda en el navegador (no necesitás login).</p>
-  <div class="ruta-wrap">
-    <div class="ruta-title">📚 Módulos — Lógica Digital</div>
-    <div class="ruta-sub">Completá la actividad de cada módulo (≥80%) para marcarlo Completado.</div>
-    <div class="ruta-list" id="rutaList"></div>
-    <button class="ruta-reset" onclick="rutaReset()">🗑️ Reiniciar mi progreso</button>
-  </div>
-
-  <!-- ═══════════════ PIRÁMIDE CIM ═══════════════ -->
-  <h2 class="section-title" id="cim">🏭 Pirámide CIM — Automatización Industrial</h2>
-  <p class="section-sub">El modelo CIM (Computer Integrated Manufacturing) organiza los sistemas de automatización en 5 niveles jerárquicos, de lo físico al negocio.</p>
-
-  <div class="cim-pyramid">
-    <div class="cim-level cim-l4">Nivel 4 — Gestión / ERP <span>Planificación, costos, logística</span></div>
-    <div class="cim-level cim-l3">Nivel 3 — MES / Supervisión <span>SCADA, MES, optimización</span></div>
-    <div class="cim-level cim-l2">Nivel 2 — Control Supervisorio <span>DCS, HMI, recetas</span></div>
-    <div class="cim-level cim-l1">Nivel 1 — Control (PLC) <span>Algoritmos en tiempo real, Ladder/FBD</span></div>
-    <div class="cim-level cim-l0">Nivel 0 — Campo (sensores/actuadores) <span>Interfaz física directa con el proceso</span></div>
-  </div>
-
-  <div class="card" style="border-left:4px solid #b91c1c;margin-top:1rem">
-    <h2 style="color:#b91c1c">📍 Nivel 0 — Campo / Proceso</h2>
-    <p>Es la <strong>interfaz física directa</strong> con la máquina. Los <strong>sensores</strong> transforman magnitudes físicas (temperatura, presión, nivel) en señales eléctricas. Los <strong>actuadores</strong> transforman señales de control en acciones físicas (arrancar motor, abrir válvula).</p>
-  </div>
-  <div class="card" style="border-left:4px solid #d97706">
-    <h2 style="color:#d97706">📍 Nivel 1 — Control (PLC)</h2>
-    <p>Ejecuta <strong>algoritmos de control determinísticos en tiempo real</strong> (ciclo de scan). Recibe entradas del campo, procesa la lógica programada (Ladder, FBD, ST) y envía órdenes automáticas a los actuadores.</p>
-    <div class="tip"><strong>Clave del parcial:</strong> PLC = Nivel 1. Sensores/actuadores = Nivel 0.</div>
-  </div>
-
-
-  <!-- ═══════════════ EJERCICIO CIM ═══════════════ -->
-  <div class="cim-exercise" id="cim-exercise">
-    <div class="cim-ex-title">🏋️ Ejercicio — ¿En qué nivel CIM ocurre esto?</div>
-    <div class="cim-ex-subtitle">Leé cada situación y elegí el nivel correcto. 5 preguntas aleatorias, feedback inmediato.</div>
-    <div class="cim-ex-progress">
-      <div class="cep-bar"><div class="cep-fill" id="cimEpBar" style="width:0%"></div></div>
-      <div class="cep-label"><span id="cimEpNum">1</span>/5</div>
-    </div>
-    <div id="cimExBody">
-      <div class="cim-ex-q" id="cimExQ">Cargando...</div>
-      <div class="cim-ex-opts" id="cimExOpts"></div>
-      <div class="cim-fb" id="cimExFb"></div>
-      <button class="cim-ex-next" id="cimExNext" onclick="cimExNext()">Siguiente →</button>
-    </div>
-    <div class="cim-ex-score" id="cimExScore">
-      <div class="cim-score-big" id="cimScoreBig">—</div>
-      <div class="cim-score-label">sobre 5 preguntas</div>
-      <div class="cim-score-msg" id="cimScoreMsg"></div>
-      <button class="cim-restart" onclick="cimExRestart()">🔄 Repetir ejercicio</button>
+<!-- Progresión simple→complejo -->
+<div class="concept-chain">
+  <div class="concept-item">
+    <div class="concept-num">1</div>
+    <div class="concept-text">
+      <div class="concept-title">¿Qué es automatizar?</div>
+      <div class="concept-desc">Hacer que una máquina tome decisiones y ejecute acciones sin intervención humana continua. El operador define las reglas; el sistema las ejecuta.</div>
     </div>
   </div>
-
-  <!-- ═══════════════ BASES NUMÉRICAS ═══════════════ -->
-  <h2 class="section-title" id="bases">🔢 Sistemas de Numeración Digital</h2>
-  <p class="section-sub">Binario, hexadecimal y BCD Natural (8421). Con la calculadora podés probar cualquier conversión al toque.</p>
-
-  <div class="card c-bin">
-    <h2>🔵 Decimal → Binario Natural</h2>
-    <p><strong>Método:</strong> dividís por 2 sucesivamente y anotás los restos. Leés de abajo hacia arriba. Para 8 bits, completás con ceros a la izquierda.</p>
-    <div class="tip"><strong>Suma de potencias:</strong> 53 = 32 + 16 + 4 + 1 = 2⁵ + 2⁴ + 2² + 2⁰</div>
-    <div class="ej">53₁₀ → [128|64|32|16|8|4|2|1] → [0|0|1|1|0|1|0|1] = 00110101₂</div>
-  </div>
-
-  <div class="card c-hex">
-    <h2>🟣 Decimal → Hexadecimal</h2>
-    <p><strong>Método rápido:</strong> convertís a binario → agrupás de a 4 bits → cada cuarteto es un dígito hex. O dividís por 16 y anotás restos.</p>
-    <div class="tip"><strong>Nibbles de 53₁₀ = 00110101₂:</strong> 0011 → 3 | 0101 → 5 → <strong>0x35</strong>. Verificación: (3×16)+5 = 53 ✓</div>
-    <div class="ej">53₁₀ = 35₁₆ (0x35)</div>
-  </div>
-
-  <div class="card c-bcd">
-    <h2>🟠 Decimal → BCD Natural (8421)</h2>
-    <p>En BCD, <strong>cada dígito decimal se codifica por separado en 4 bits</strong>. No es lo mismo que binario directo — cada grupo de 4 bits solo usa los valores 0000–1001.</p>
-    <div class="tip"><strong>Ojo:</strong> 53 en binario = 00110101. En BCD = 0101 0011. ¡Son distintos!</div>
-    <div class="ej">5 → 0101 | 3 → 0011 | → BCD: 0101 0011</div>
-  </div>
-
-
-  <!-- ═══════════════ MNEMOTECNIAS ═══════════════ -->
-  <div id="mnemotecnias-numeracion" class="mnemo-wrap">
-    <div class="mnemo-header">
-      <div class="mnemo-title">🧠 Atajos de memoria — Conversiones sin perderse</div>
-      <div class="mnemo-sub">5 reglas breves para recordar cada procedimiento bajo presión de parcial. Expandí la que necesitás.</div>
+  <div class="concept-item">
+    <div class="concept-num">2</div>
+    <div class="concept-text">
+      <div class="concept-title">De la señal a la decisión</div>
+      <div class="concept-desc">Un sensor mide algo del proceso → envía una señal → un controlador decide → un actuador actúa. Ese ciclo es la base de todo sistema automatizado.</div>
     </div>
-    <div class="mnemo-cards">
+  </div>
+  <div class="concept-item">
+    <div class="concept-num">3</div>
+    <div class="concept-text">
+      <div class="concept-title">Modelo CIM — cinco niveles jerárquicos</div>
+      <div class="concept-desc">CIM (Computer Integrated Manufacturing) organiza los sistemas de automatización en capas: del hardware físico hasta la gestión empresarial.</div>
+    </div>
+  </div>
+</div>
 
-      <!-- Tarjeta 1 -->
-      <div class="mnemo-card open" id="mnemo1">
-        <div class="mnemo-card-head" onclick="document.getElementById('mnemo1').classList.toggle('open')">
-          <span class="mnemo-card-icon">🔢→🔵</span>
-          <span class="mnemo-card-label">Decimal → Binario</span>
-          <span class="mnemo-card-arrow">▼</span>
-        </div>
-        <div class="mnemo-card-body">
-          <div class="mnemo-rule">"Dividí por 2; los restos se leen al revés."</div>
-          <div style="font-size:.82rem;font-weight:700;color:var(--gray-lt);margin-bottom:.4rem">Atajo rápido para 8 bits — escala fija:</div>
-          <div class="mnemo-example">128 | 64 | 32 | 16 | 8 | 4 | 2 | 1</div>
-          <div style="font-size:.82rem;color:var(--gray);margin:.4rem 0">Marcá con 1 cada potencia que cabe en el número. Restá y continuá.</div>
-          <div class="mnemo-example">53 = 32 + 16 + 4 + 1
+<div class="card card-accent-blue">
+  <h3>🏭 Modelo CIM — de lo físico al negocio</h3>
+  <p>Cada nivel tiene una función específica y se comunica con los niveles adyacentes. No se puede saltar niveles.</p>
+</div>
+
+<div class="cim-pyramid">
+  <div class="cim-level cim-l4">Nivel 4 — Gestión / ERP <span>SAP, planificación, costos, logística, finanzas corporativas</span></div>
+  <div class="cim-level cim-l3">Nivel 3 — MES / SCADA <span>Gestión de producción en planta, órdenes de fabricación, reportes</span></div>
+  <div class="cim-level cim-l2">Nivel 2 — Control Supervisorio <span>DCS, HMI, recetas, supervisión y configuración de parámetros</span></div>
+  <div class="cim-level cim-l1">Nivel 1 — Control (PLC) <span>Algoritmos en tiempo real, Ladder, FBD — ciclo de scan determinístico</span></div>
+  <div class="cim-level cim-l0">Nivel 0 — Campo <span>Sensores y actuadores — interfaz física directa con el proceso</span></div>
+</div>
+
+<div class="card card-accent-red">
+  <h3>📍 Nivel 0 — Campo / Proceso</h3>
+  <p>Es la <strong>interfaz física directa</strong> con la máquina. Los <strong>sensores</strong> transforman magnitudes físicas (temperatura, presión, nivel) en señales eléctricas que el sistema puede procesar. Los <strong>actuadores</strong> hacen lo inverso: convierten señales de control en acciones físicas (arrancar un motor, abrir una válvula).</p>
+  <p><strong>Ejemplos:</strong> termocupla, sensor inductivo, presostato, válvula solenoide, variador de frecuencia.</p>
+  <div class="tip">Nivel 0 = hardware físico. No ejecuta lógica ni toma decisiones.</div>
+</div>
+
+<div class="card card-accent-orange">
+  <h3>📍 Nivel 1 — Control (PLC)</h3>
+  <p>Ejecuta <strong>algoritmos de control determinísticos en tiempo real</strong> mediante un ciclo de scan: leer entradas → procesar lógica → actualizar salidas. Los lenguajes estándar son Ladder (LD), Diagrama de Bloques (FBD) y Texto Estructurado (ST).</p>
+  <p>El PLC <em>decide</em> y <em>ordena</em>. Los sensores/actuadores del Nivel 0 solo obedecen o informan.</p>
+  <div class="tip"><strong>Clave del parcial:</strong> PLC = Nivel 1. Sensores/actuadores = Nivel 0. No confundir.</div>
+</div>
+
+<div class="card card-accent-blue">
+  <h3>📍 Nivel 2 — Control Supervisorio (SCADA / HMI)</h3>
+  <p>El operador interactúa con el sistema desde una <strong>HMI (Human-Machine Interface)</strong>. Puede visualizar alarmas, modificar setpoints y cambiar recetas de producción. No ejecuta lógica de control en tiempo real — eso lo hace el PLC.</p>
+  <p><strong>SCADA</strong> agrega supervisión remota, tendencias históricas y reportes.</p>
+</div>
+
+<div class="card card-accent-teal">
+  <h3>📍 Niveles 3 y 4 — MES y ERP</h3>
+  <p><strong>MES (Nivel 3):</strong> coordina la producción en planta. Genera órdenes de fabricación, registra la producción por turno y optimiza el uso de recursos en tiempo real.</p>
+  <p><strong>ERP (Nivel 4):</strong> gestiona el negocio. Planificación de compras, finanzas, logística y recursos humanos a nivel corporativo. SAP es el ejemplo más conocido.</p>
+  <div class="tip"><strong>Diferencia clave:</strong> MES gestiona la planta; ERP gestiona la empresa.</div>
+</div>
+
+<!-- Ejercicio CIM -->
+<h2 class="stitle" id="cim-exercise"><span class="stitle-icon">🏋️</span>Ejercicio — ¿En qué nivel CIM ocurre esto?</h2>
+<div class="cim-exercise">
+  <div class="cim-ex-title">🏋️ Ejercicio autocorregible — Pirámide CIM</div>
+  <div class="cim-ex-subtitle">Leé cada situación y elegí el nivel correcto. 5 preguntas aleatorias, feedback inmediato.</div>
+  <div class="cim-ex-progress">
+    <div class="cep-bar"><div class="cep-fill" id="cimEpBar" style="width:0%"></div></div>
+    <div class="cep-label"><span id="cimEpNum">1</span>/5</div>
+  </div>
+  <div id="cimExBody">
+    <div class="cim-ex-q" id="cimExQ">Cargando...</div>
+    <div class="cim-ex-opts" id="cimExOpts"></div>
+    <div class="cim-fb" id="cimExFb"></div>
+    <button class="cim-ex-next" id="cimExNext" onclick="cimExNext()">Siguiente →</button>
+  </div>
+  <div class="cim-ex-score" id="cimExScore">
+    <div class="cim-score-big" id="cimScoreBig">—</div>
+    <div class="cim-score-label">sobre 5 preguntas</div>
+    <div class="cim-score-msg" id="cimScoreMsg"></div>
+    <button class="cim-restart" onclick="cimExRestart()">🔄 Repetir ejercicio</button>
+  </div>
+</div>
+
+</div><!-- /container -->
+</div><!-- /tab-a -->
+
+<!-- ════════════ TAB B: NUMERACIÓN ════════════ -->
+<div class="page" id="tab-b">
+<div class="container">
+
+<h2 class="stitle" id="bases"><span class="stitle-icon">🔢</span>Sistemas de Numeración Digital</h2>
+
+<div class="concept-chain">
+  <div class="concept-item">
+    <div class="concept-num">1</div>
+    <div class="concept-text">
+      <div class="concept-title">¿Por qué binario?</div>
+      <div class="concept-desc">Los circuitos electrónicos tienen dos estados estables: tensión alta (1) o baja (0). El sistema binario usa exactamente esos dos estados. Cada dígito binario se llama <strong>bit</strong>; 8 bits forman un <strong>byte</strong>.</div>
+    </div>
+  </div>
+  <div class="concept-item">
+    <div class="concept-num">2</div>
+    <div class="concept-text">
+      <div class="concept-title">Decimal → Binario</div>
+      <div class="concept-desc">División sucesiva por 2 anotando restos. Los restos leídos de abajo hacia arriba forman el número binario.</div>
+    </div>
+  </div>
+  <div class="concept-item">
+    <div class="concept-num">3</div>
+    <div class="concept-text">
+      <div class="concept-title">Hexadecimal — compactar binario</div>
+      <div class="concept-desc">Cada 4 bits se representan con un dígito hex (0-9, A-F). 8 bits = 2 dígitos hex. Más compacto para leer direcciones y valores grandes.</div>
+    </div>
+  </div>
+  <div class="concept-item">
+    <div class="concept-num">4</div>
+    <div class="concept-text">
+      <div class="concept-title">BCD 8421 — codificar dígitos</div>
+      <div class="concept-desc">Cada dígito decimal se codifica <em>individualmente</em> en 4 bits. No es lo mismo que el binario del número completo. Usado en displays 7 segmentos.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Teoría Decimal→Binario -->
+<div class="card card-accent-blue">
+  <h3>🔵 Decimal → Binario Natural (8 bits)</h3>
+  <p><strong>Método:</strong> dividís por 2 sucesivamente y anotás los restos. Los leés de abajo hacia arriba. Para 8 bits, completás con ceros a la izquierda.</p>
+  <p><strong>Método rápido con potencias:</strong> identificás las potencias de 2 que suman el número y marcás 1 en esas posiciones.</p>
+  <div class="tip"><strong>Escala de 8 bits:</strong> 128 | 64 | 32 | 16 | 8 | 4 | 2 | 1<br>
+  <strong>Ejemplo:</strong> 53 = 32+16+4+1 → 0 0 1 1 0 1 0 1 → 00110101₂</div>
+</div>
+
+<div class="card card-accent-purple">
+  <h3>🟣 Decimal → Hexadecimal</h3>
+  <p><strong>Método rápido:</strong> convertís a binario → agrupás de a 4 bits desde la derecha → cada grupo es un dígito hex.</p>
+  <p><strong>Tabla:</strong> 10=A · 11=B · 12=C · 13=D · 14=E · 15=F</p>
+  <div class="tip">53₁₀ = 00110101₂ → 0011|0101 → 3|5 → <strong>35₁₆</strong><br>
+  Verificación: (3×16)+5 = 53 ✓</div>
+</div>
+
+<div class="card card-accent-orange">
+  <h3>🟠 Decimal → BCD Natural (8421)</h3>
+  <p>En BCD, <strong>cada dígito decimal se codifica por separado en 4 bits</strong>. No convertís el número completo a binario.</p>
+  <div class="warn"><strong>¡Error típico de parcial!</strong> 53 en binario = 00110101. 53 en BCD = 0101 0011. ¡Son distintos!</div>
+  <div class="tip">5 → 0101 · 3 → 0011 → BCD: <strong>0101 0011</strong></div>
+</div>
+
+<!-- Mnemotecnias -->
+<h2 class="stitle" id="mnemotecnias-numeracion"><span class="stitle-icon">🧠</span>Atajos de memoria — Conversiones</h2>
+<div class="mnemo-cards">
+
+  <div class="mnemo-card open" id="mnemo1">
+    <div class="mnemo-card-head" onclick="document.getElementById('mnemo1').classList.toggle('open')">
+      <span class="mnemo-card-icon">🔢→🔵</span>
+      <span class="mnemo-card-label">Decimal → Binario</span>
+      <span class="mnemo-card-arrow">▼</span>
+    </div>
+    <div class="mnemo-card-body">
+      <div class="mnemo-rule">"Dividí por 2; los restos se leen al revés."</div>
+      <div style="font-size:.82rem;font-weight:700;color:var(--gray-lt);margin-bottom:.4rem">Escala fija de 8 bits:</div>
+      <div class="mnemo-example">128 | 64 | 32 | 16 | 8 | 4 | 2 | 1</div>
+      <div class="mnemo-example">53 = 32 + 16 + 4 + 1
   0   0   1   1  0  1  0  1
 53₁₀ = 00110101₂</div>
-          <div class="mnemo-error">leer los restos de arriba hacia abajo — el primer resto es el bit menos significativo, va al final.</div>
-        </div>
-      </div>
+      <div class="mnemo-error">leer los restos de arriba hacia abajo — el primer resto es el bit menos significativo.</div>
+    </div>
+  </div>
 
-      <!-- Tarjeta 2 -->
-      <div class="mnemo-card" id="mnemo2">
-        <div class="mnemo-card-head" onclick="document.getElementById('mnemo2').classList.toggle('open')">
-          <span class="mnemo-card-icon">🔵→🔢</span>
-          <span class="mnemo-card-label">Binario → Decimal</span>
-          <span class="mnemo-card-arrow">▼</span>
-        </div>
-        <div class="mnemo-card-body">
-          <div class="mnemo-rule">"Cada 1 pesa; los 0 no suman."</div>
-          <ol class="mnemo-steps">
-            <li>Ubicar cada bit sobre su potencia de 2 (empezando desde la derecha: 2⁰=1, 2¹=2…)</li>
-            <li>Sumar solo las posiciones donde haya <strong>1</strong>.</li>
-          </ol>
-          <div class="mnemo-example">00110101₂
-  posiciones: 128·0 + 64·0 + 32·1 + 16·1 + 8·0 + 4·1 + 2·0 + 1·1
-  = 32 + 16 + 4 + 1 = 53₁₀</div>
-          <div class="mnemo-error">contar posiciones desde cero por izquierda — la posición 0 es siempre el bit de la DERECHA.</div>
-        </div>
-      </div>
+  <div class="mnemo-card" id="mnemo2">
+    <div class="mnemo-card-head" onclick="document.getElementById('mnemo2').classList.toggle('open')">
+      <span class="mnemo-card-icon">🔵→🔢</span>
+      <span class="mnemo-card-label">Binario → Decimal</span>
+      <span class="mnemo-card-arrow">▼</span>
+    </div>
+    <div class="mnemo-card-body">
+      <div class="mnemo-rule">"Cada 1 pesa; los 0 no suman."</div>
+      <ol class="mnemo-steps">
+        <li>Ubicar cada bit sobre su potencia de 2 (de derecha: 2⁰=1, 2¹=2, 2²=4…)</li>
+        <li>Sumar solo las posiciones donde haya <strong>1</strong>.</li>
+      </ol>
+      <div class="mnemo-example">00110101₂ = 32 + 16 + 4 + 1 = 53₁₀</div>
+      <div class="mnemo-error">contar posiciones desde cero por izquierda — la posición 0 es siempre el bit de la DERECHA.</div>
+    </div>
+  </div>
 
-      <!-- Tarjeta 3 -->
-      <div class="mnemo-card" id="mnemo3">
-        <div class="mnemo-card-head" onclick="document.getElementById('mnemo3').classList.toggle('open')">
-          <span class="mnemo-card-icon">🔵→🟣</span>
-          <span class="mnemo-card-label">Binario → Hexadecimal</span>
-          <span class="mnemo-card-arrow">▼</span>
-        </div>
-        <div class="mnemo-card-body">
-          <div class="mnemo-rule">"Hexa trabaja de a cuatro bits."</div>
-          <ol class="mnemo-steps">
-            <li>Completar con ceros a la izquierda hasta múltiplo de 4.</li>
-            <li>Agrupar en bloques de 4 bits desde la derecha.</li>
-            <li>Convertir cada grupo a su dígito hex.</li>
-          </ol>
-          <div class="mnemo-example">00110101₂  →  0011 | 0101
-                       ↓       ↓
-                       3       5
+  <div class="mnemo-card" id="mnemo3">
+    <div class="mnemo-card-head" onclick="document.getElementById('mnemo3').classList.toggle('open')">
+      <span class="mnemo-card-icon">🔵→🟣</span>
+      <span class="mnemo-card-label">Binario → Hexadecimal</span>
+      <span class="mnemo-card-arrow">▼</span>
+    </div>
+    <div class="mnemo-card-body">
+      <div class="mnemo-rule">"Hexa trabaja de a cuatro bits."</div>
+      <ol class="mnemo-steps">
+        <li>Completar con ceros a la izquierda hasta múltiplo de 4.</li>
+        <li>Agrupar en bloques de 4 bits desde la derecha.</li>
+        <li>Convertir cada grupo a su dígito hex.</li>
+      </ol>
+      <div class="mnemo-example">00110101₂  →  0011 | 0101
+                   ↓       ↓
+                   3       5
 00110101₂ = 35₁₆</div>
-          <div style="font-size:.82rem;font-weight:700;color:var(--gray);margin:.6rem 0 .3rem">Letras hexadecimales — correspondencia directa:</div>
-          <div class="mnemo-hex-table">
-            <span class="mnemo-hex-cell">10=A</span><span class="mnemo-hex-cell">11=B</span>
-            <span class="mnemo-hex-cell">12=C</span><span class="mnemo-hex-cell">13=D</span>
-            <span class="mnemo-hex-cell">14=E</span><span class="mnemo-hex-cell">15=F</span>
-          </div>
-          <div style="font-size:.8rem;color:var(--gray-lt);margin:.3rem 0">"A B C D E F → diez, once, doce, trece, catorce, quince."</div>
-          <div class="mnemo-error">agrupar de izquierda a derecha sin completar a múltiplo de 4 bits.</div>
-        </div>
+      <div class="mnemo-hex-table">
+        <span class="mnemo-hex-cell">10=A</span><span class="mnemo-hex-cell">11=B</span>
+        <span class="mnemo-hex-cell">12=C</span><span class="mnemo-hex-cell">13=D</span>
+        <span class="mnemo-hex-cell">14=E</span><span class="mnemo-hex-cell">15=F</span>
       </div>
+      <div class="mnemo-error">agrupar de izquierda a derecha sin completar a múltiplo de 4 bits.</div>
+    </div>
+  </div>
 
-      <!-- Tarjeta 4 -->
-      <div class="mnemo-card" id="mnemo4">
-        <div class="mnemo-card-head" onclick="document.getElementById('mnemo4').classList.toggle('open')">
-          <span class="mnemo-card-icon">🔢→🟠</span>
-          <span class="mnemo-card-label">Decimal → BCD 8421</span>
-          <span class="mnemo-card-arrow">▼</span>
-        </div>
-        <div class="mnemo-card-body">
-          <div class="mnemo-rule">"BCD: cada dígito tiene su propia caja de 4 bits."</div>
-          <ol class="mnemo-steps">
-            <li>Separar los dígitos decimales individualmente.</li>
-            <li>Convertir cada dígito por separado a 4 bits.</li>
-            <li><strong>No</strong> convertir el número completo a binario.</li>
-          </ol>
-          <div class="mnemo-example">53₁₀ → dígito 5 y dígito 3
+  <div class="mnemo-card" id="mnemo4">
+    <div class="mnemo-card-head" onclick="document.getElementById('mnemo4').classList.toggle('open')">
+      <span class="mnemo-card-icon">🔢→🟠</span>
+      <span class="mnemo-card-label">Decimal → BCD 8421</span>
+      <span class="mnemo-card-arrow">▼</span>
+    </div>
+    <div class="mnemo-card-body">
+      <div class="mnemo-rule">"BCD: cada dígito tiene su propia caja de 4 bits."</div>
+      <div class="mnemo-example">53₁₀ → dígito 5 y dígito 3
   5 → 0101
   3 → 0011
 53 en BCD = 0101 0011</div>
-          <div class="mnemo-contrast">
-            <div class="mnemo-contrast-title">⚠️ Diferencia clave — no confundir:</div>53 en binario natural:  00110101
+      <div class="mnemo-contrast">
+        <div class="mnemo-contrast-title">⚠️ Diferencia clave:</div>53 en binario natural:  00110101
 53 en BCD 8421:         0101 0011</div>
-          <div class="mnemo-error">responder 00110101 como BCD. Eso es binario natural, no BCD.</div>
-        </div>
-      </div>
+      <div class="mnemo-error">responder 00110101 como BCD — eso es binario natural.</div>
+    </div>
+  </div>
 
-      <!-- Tarjeta 5 -->
-      <div class="mnemo-card" id="mnemo5">
-        <div class="mnemo-card-head" onclick="document.getElementById('mnemo5').classList.toggle('open')">
-          <span class="mnemo-card-icon">🔢→🟣</span>
-          <span class="mnemo-card-label">Decimal → Hexadecimal (por divisiones)</span>
-          <span class="mnemo-card-arrow">▼</span>
-        </div>
-        <div class="mnemo-card-body">
-          <div class="mnemo-rule">"Dividí por 16; los restos se leen al revés."</div>
-          <div style="font-size:.82rem;color:var(--gray);margin-bottom:.5rem">Mismo patrón que binario, pero dividiendo por 16.</div>
-          <div class="mnemo-example">53 ÷ 16 = 3,  resto 5   ← segundo dígito
+  <div class="mnemo-card" id="mnemo5">
+    <div class="mnemo-card-head" onclick="document.getElementById('mnemo5').classList.toggle('open')">
+      <span class="mnemo-card-icon">🔢→🟣</span>
+      <span class="mnemo-card-label">Decimal → Hexadecimal (divisiones)</span>
+      <span class="mnemo-card-arrow">▼</span>
+    </div>
+    <div class="mnemo-card-body">
+      <div class="mnemo-rule">"Dividí por 16; los restos se leen al revés."</div>
+      <div class="mnemo-example">53 ÷ 16 = 3,  resto 5   ← segundo dígito
  3 ÷ 16 = 0,  resto 3   ← primer dígito
-Leer restos de abajo hacia arriba: 3, 5
 53₁₀ = 35₁₆</div>
-          <div class="mnemo-error">escribir 53₁₆ (copiar el número decimal sin convertir) o leer el primer resto como dígito más significativo.</div>
-        </div>
-      </div>
-
-    </div><!-- /.mnemo-cards -->
-
-    <!-- Microactividad -->
-    <div class="mnemo-quiz" id="mnemo-quiz-wrap">
-      <div class="mnemo-quiz-title">🎯 ¿Qué regla usarías?</div>
-      <div class="mnemo-quiz-sub">4 preguntas rápidas — elegí el procedimiento correcto. Explicación inmediata en cada respuesta.</div>
-      <div class="mnemo-quiz-progress"><span id="mnemoQNum">1</span>/4</div>
-      <div class="mnemo-quiz-q" id="mnemoQText">—</div>
-      <div class="mnemo-quiz-opts" id="mnemoQOpts"></div>
-      <div class="mnemo-quiz-fb" id="mnemoQFb"></div>
-      <button class="mnemo-quiz-next" id="mnemoQNext" onclick="mnemoNext()">Siguiente →</button>
-    </div>
-  </div><!-- /#mnemotecnias-numeracion -->
-
-  <div class="calc">
-    <h2>🧮 Calculadora de bases (Bin / Hex / BCD)</h2>
-    <div class="calc-input-row">
-      <input type="text" id="calcInput" placeholder="Escribí un número..." value="53" autocomplete="off" spellcheck="false">
-    </div>
-    <div class="base-select">
-      <button class="base-btn" data-base="2">Binario</button>
-      <button class="base-btn active" data-base="10">Decimal</button>
-      <button class="base-btn" data-base="16">Hexadecimal</button>
-    </div>
-    <div class="calc-error" id="calcError"></div>
-    <div class="calc-results">
-      <div class="res-row r-bin"><span class="res-label">Binario 8b</span><span class="res-value" id="resBin">—</span></div>
-      <div class="res-row r-dec"><span class="res-label">Decimal</span><span class="res-value" id="resDec">—</span></div>
-      <div class="res-row r-hex"><span class="res-label">Hex</span><span class="res-value" id="resHex">—</span></div>
-      <div class="res-row r-bcd"><span class="res-label">BCD 8421</span><span class="res-value" id="resBcd">—</span></div>
+      <div class="mnemo-error">leer el primer resto como dígito más significativo.</div>
     </div>
   </div>
 
+</div><!-- /.mnemo-cards -->
 
-  <!-- ════ PRÁCTICA CONVERSIONES ════ -->
-  <h2 class="section-title" style="margin-top:2rem">🏋️ Práctica — Conversiones y BCD</h2>
-  <p class="section-sub">6 ejercicios aleatorios: decimal↔binario y decimal→BCD. Procedimiento detallado si errás.</p>
-  <div class="conv-practice">
-    <div class="conv-prac-title">⚡ Convertí y verificá</div>
-    <div class="conv-prac-sub">BCD: podés separar los grupos con espacios: <code>0101 0011</code></div>
-    <div id="convPracBody">
-      <div class="conv-prac-counter"><span id="cpNum">1</span>/6</div>
-      <div class="conv-prac-q" id="cpQ">—</div>
-      <div class="conv-prac-hint" id="cpHint"></div>
-      <input class="conv-prac-input" type="text" id="cpInput" placeholder="Tu respuesta..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter')cpCheck()">
-      <div class="conv-prac-btns">
-        <button class="conv-prac-btn primary" onclick="cpCheck()">✓ Verificar</button>
-        <button class="conv-prac-btn secondary" id="cpNextBtn" onclick="cpNext()" style="display:none">Siguiente →</button>
-      </div>
-      <div class="conv-prac-fb" id="cpFb"></div>
+<!-- Calculadora -->
+<h2 class="stitle" id="calc"><span class="stitle-icon">🧮</span>Calculadora de bases</h2>
+<div class="calc">
+  <h2>🧮 Calculadora (Bin / Hex / BCD)</h2>
+  <div class="calc-input-row">
+    <input type="text" id="calcInput" placeholder="Escribí un número..." value="53" autocomplete="off" spellcheck="false">
+  </div>
+  <div class="base-select">
+    <button class="base-btn" data-base="2">Binario</button>
+    <button class="base-btn active" data-base="10">Decimal</button>
+    <button class="base-btn" data-base="16">Hexadecimal</button>
+  </div>
+  <div class="calc-error" id="calcError"></div>
+  <div class="calc-results">
+    <div class="res-row r-bin"><span class="res-label">Binario 8b</span><span class="res-value" id="resBin">—</span></div>
+    <div class="res-row r-dec"><span class="res-label">Decimal</span><span class="res-value" id="resDec">—</span></div>
+    <div class="res-row r-hex"><span class="res-label">Hex</span><span class="res-value" id="resHex">—</span></div>
+    <div class="res-row r-bcd"><span class="res-label">BCD 8421</span><span class="res-value" id="resBcd">—</span></div>
+  </div>
+</div>
+
+<!-- Práctica conversiones -->
+<h2 class="stitle"><span class="stitle-icon">🏋️</span>Práctica — Conversiones y BCD</h2>
+<div class="conv-practice">
+  <div class="conv-prac-title">⚡ Convertí y verificá</div>
+  <div class="conv-prac-sub">6 ejercicios aleatorios. En BCD podés separar grupos con espacios: <code>0101 0011</code></div>
+  <div id="convPracBody">
+    <div class="conv-prac-counter"><span id="cpNum">1</span>/6</div>
+    <div class="conv-prac-q" id="cpQ">—</div>
+    <div class="conv-prac-hint" id="cpHint"></div>
+    <input class="conv-prac-input" type="text" id="cpInput" placeholder="Tu respuesta..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter')cpCheck()">
+    <div class="conv-prac-btns">
+      <button class="conv-prac-btn primary" onclick="cpCheck()">✓ Verificar</button>
+      <button class="conv-prac-btn secondary" id="cpNextBtn" onclick="cpNext()" style="display:none">Siguiente →</button>
     </div>
-    <div class="conv-prac-score" id="cpScore">
-      <div class="cps-big" id="cpScoreBig">—</div>
-      <div class="cps-label">sobre 6 ejercicios</div>
-      <div class="cps-msg" id="cpScoreMsg"></div>
-      <button class="conv-prac-btn primary" style="margin:0 auto;display:block" onclick="cpRestart()">🔄 Repetir</button>
+    <div class="conv-prac-fb" id="cpFb"></div>
+  </div>
+  <div class="conv-prac-score" id="cpScore">
+    <div class="cps-big" id="cpScoreBig">—</div>
+    <div class="cps-label">sobre 6 ejercicios</div>
+    <div class="cps-msg" id="cpScoreMsg"></div>
+    <button class="conv-prac-btn primary" style="margin:0 auto;display:block" onclick="cpRestart()">🔄 Repetir</button>
+  </div>
+</div>
+
+<!-- Microactividad mnemotecnias -->
+<h2 class="stitle"><span class="stitle-icon">🎯</span>¿Qué regla usarías?</h2>
+<div class="mnemo-quiz" id="mnemo-quiz-wrap">
+  <div class="mnemo-quiz-title">🎯 Elegí el procedimiento correcto</div>
+  <div class="mnemo-quiz-sub">4 preguntas. Explicación en cada respuesta.</div>
+  <div class="mnemo-quiz-progress"><span id="mnemoQNum">1</span>/4</div>
+  <div class="mnemo-quiz-q" id="mnemoQText">—</div>
+  <div class="mnemo-quiz-opts" id="mnemoQOpts"></div>
+  <div class="mnemo-quiz-fb" id="mnemoQFb"></div>
+  <button class="mnemo-quiz-next" id="mnemoQNext" onclick="mnemoNext()">Siguiente →</button>
+</div>
+
+<!-- Juego conversión -->
+<h2 class="stitle"><span class="stitle-icon">🎮</span>Juego — Conversión rápida</h2>
+<div class="game-card">
+  <div class="game-title">⚡ Conversión de bases</div>
+  <div class="game-desc">Convertí el número a la base pedida antes de que se acabe el tiempo. 10 pts por acierto.</div>
+  <div class="game-status">
+    <div class="gs-item">Puntos: <span id="convScore">0</span></div>
+    <div class="gs-item">Ronda: <span id="convRound">1</span>/10</div>
+    <div class="gs-item">Tiempo: <span id="convTimer">15</span>s</div>
+  </div>
+  <div class="conv-game-area" id="convArea">
+    <div class="conv-challenge">Convertir a:</div>
+    <div class="conv-number" id="convNum">—</div>
+    <div class="conv-target" id="convTarget">— base —</div>
+    <input class="conv-input" type="text" id="convInput" placeholder="Escribe la respuesta..." autocomplete="off" spellcheck="false" oninput="convInputChange()">
+    <button class="conv-btn" onclick="convCheck()">✓ Verificar</button>
+    <div class="conv-result" id="convResult"></div>
+  </div>
+  <button style="padding:.6rem 1.4rem;background:var(--teal);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;margin-top:.5rem;font-family:inherit" onclick="convStart()">▶ Iniciar juego</button>
+</div>
+
+</div><!-- /container -->
+</div><!-- /tab-b -->
+
+<!-- ════════════ TAB C: COMPUERTAS ════════════ -->
+<div class="page" id="tab-c">
+<div class="container">
+
+<h2 class="stitle" id="compuertas"><span class="stitle-icon">🔌</span>Compuertas Lógicas</h2>
+
+<div class="concept-chain">
+  <div class="concept-item">
+    <div class="concept-num">1</div>
+    <div class="concept-text">
+      <div class="concept-title">¿Qué es una compuerta lógica?</div>
+      <div class="concept-desc">Un circuito electrónico que toma una o más entradas binarias (0 o 1) y produce una salida binaria según una regla fija. Son el hardware del Álgebra de Boole.</div>
     </div>
   </div>
-
-  <!-- ═══════════════ COMPUERTAS ═══════════════ -->
-  <h2 class="section-title" id="compuertas">🔌 Compuertas Lógicas Elementales</h2>
-  <p class="section-sub">Una compuerta transforma una o más entradas binarias en una salida según una regla fija. Son el hardware del Álgebra de Boole.</p>
-
-  <div class="gate-intro">
-    <p><strong>Cómo leerlas:</strong> A y B son entradas (0 = apagado, 1 = encendido). Q es la salida. Tocá los botones del simulador de abajo y mirá cómo cambia el LED.</p>
-    <table>
-      <thead><tr><th>Compuerta</th><th>Notación</th><th>Regla</th></tr></thead>
-      <tbody>
-        <tr><td><strong>BUF</strong></td><td>Q = A</td><td>Repite la entrada</td></tr>
-        <tr><td><strong>NOT</strong></td><td>Q = Ā</td><td>Invierte: 0→1, 1→0</td></tr>
-        <tr><td><strong>AND</strong></td><td>Q = A · B</td><td>Q=1 solo si A y B son 1</td></tr>
-        <tr><td><strong>NAND</strong></td><td>Q = ¬(A·B)</td><td>Opuesto a AND</td></tr>
-        <tr><td><strong>OR</strong></td><td>Q = A + B</td><td>Q=1 si A o B (o ambos) son 1</td></tr>
-        <tr><td><strong>NOR</strong></td><td>Q = ¬(A+B)</td><td>Q=1 solo si ambos son 0</td></tr>
-        <tr><td><strong>XOR</strong></td><td>Q = A ⊕ B</td><td>Q=1 si A y B son distintos</td></tr>
-        <tr><td><strong>XNOR</strong></td><td>Q = ¬(A⊕B)</td><td>Q=1 si A y B son iguales</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="gate-board">
-    <div class="gate-board-title">⚡ Simulador de compuertas</div>
-    <div class="gate-grid" id="gateGrid"></div>
-  </div>
-
-
-  <!-- ════ MODO PREDECÍ COMPUERTAS ════ -->
-  <h2 class="section-title" style="margin-top:2rem">🎯 Modo predecí — ¿Cuál es la salida?</h2>
-  <p class="section-sub">Compuerta + entradas → elegís Q antes de ver el resultado. 10 rondas.</p>
-  <div class="gate-predict">
-    <div class="gate-predict-title">🎯 Predecí la salida Q</div>
-    <div class="gate-predict-sub">Elegí 0 o 1 antes de ver la explicación.</div>
-    <div class="gp-counter"><span id="gpNum">1</span>/10</div>
-    <div class="gp-challenge">
-      <div class="gp-gate-name" id="gpGateName">—</div>
-      <div class="gp-equation" id="gpEq">—</div>
-      <div class="gp-inputs" id="gpInputs">—</div>
+  <div class="concept-item">
+    <div class="concept-num">2</div>
+    <div class="concept-text">
+      <div class="concept-title">Compuertas de una entrada: BUF y NOT</div>
+      <div class="concept-desc">BUF transmite sin cambiar. NOT invierte: 0→1 y 1→0. Son las más simples.</div>
     </div>
-    <div class="gp-opts">
-      <button class="gp-opt" onclick="gpAnswer(0)" aria-label="Respuesta 0">0</button>
-      <button class="gp-opt" onclick="gpAnswer(1)" aria-label="Respuesta 1">1</button>
-    </div>
-    <div class="gp-fb" id="gpFb"></div>
-    <button class="gp-next" id="gpNext" onclick="gpNext()">Siguiente →</button>
   </div>
+  <div class="concept-item">
+    <div class="concept-num">3</div>
+    <div class="concept-text">
+      <div class="concept-title">Compuertas básicas: AND, OR</div>
+      <div class="concept-desc">AND: las dos entradas en 1 para que Q=1. OR: basta con una entrada en 1.</div>
+    </div>
+  </div>
+  <div class="concept-item">
+    <div class="concept-num">4</div>
+    <div class="concept-text">
+      <div class="concept-title">Compuertas negadas: NAND, NOR</div>
+      <div class="concept-desc">Son AND/OR con la salida invertida (negada). Cualquier función lógica se puede construir solo con NAND o solo con NOR.</div>
+    </div>
+  </div>
+  <div class="concept-item">
+    <div class="concept-num">5</div>
+    <div class="concept-text">
+      <div class="concept-title">XOR y XNOR — diferencia/igualdad</div>
+      <div class="concept-desc">XOR da 1 solo cuando las entradas son DISTINTAS. XNOR da 1 cuando son IGUALES. Fundamentales en comparadores y detectores de paridad.</div>
+    </div>
+  </div>
+</div>
 
-  <!-- ═══════════════ ÁLGEBRA DE BOOLE ═══════════════ -->
-  <h2 class="section-title" id="boole">🔣 Álgebra de Boole y Simplificación</h2>
-  <p class="section-sub">Postulados y teoremas para simplificar expresiones lógicas. El objetivo: encontrar la expresión mínima equivalente.</p>
+<div class="card card-accent-blue">
+  <h3>📋 Tabla de referencia — todas las compuertas</h3>
+  <table style="width:100%;border-collapse:collapse;font-size:.88rem">
+    <thead><tr style="background:#f8fafc"><th style="border:1px solid var(--border);padding:.5rem .7rem;text-align:left">Compuerta</th><th style="border:1px solid var(--border);padding:.5rem .7rem">Notación</th><th style="border:1px solid var(--border);padding:.5rem .7rem;text-align:left">Regla</th><th style="border:1px solid var(--border);padding:.5rem .7rem;text-align:left">Diferencia clave</th></tr></thead>
+    <tbody>
+      <tr><td style="border:1px solid var(--border);padding:.5rem .7rem"><strong>BUF</strong></td><td style="border:1px solid var(--border);padding:.5rem .7rem;font-family:Courier New,monospace">Q = A</td><td style="border:1px solid var(--border);padding:.5rem .7rem">Repite la entrada</td><td style="border:1px solid var(--border);padding:.5rem .7rem">Sin cambio</td></tr>
+      <tr><td style="border:1px solid var(--border);padding:.5rem .7rem"><strong>NOT</strong></td><td style="border:1px solid var(--border);padding:.5rem .7rem;font-family:Courier New,monospace">Q = Ā</td><td style="border:1px solid var(--border);padding:.5rem .7rem">Invierte: 0→1, 1→0</td><td style="border:1px solid var(--border);padding:.5rem .7rem">Única con 1 entrada</td></tr>
+      <tr><td style="border:1px solid var(--border);padding:.5rem .7rem"><strong>AND</strong></td><td style="border:1px solid var(--border);padding:.5rem .7rem;font-family:Courier New,monospace">Q = A · B</td><td style="border:1px solid var(--border);padding:.5rem .7rem">Q=1 solo si A=1 y B=1</td><td style="border:1px solid var(--border);padding:.5rem .7rem">Las DOS deben ser 1</td></tr>
+      <tr><td style="border:1px solid var(--border);padding:.5rem .7rem"><strong>NAND</strong></td><td style="border:1px solid var(--border);padding:.5rem .7rem;font-family:Courier New,monospace">Q = ¬(A·B)</td><td style="border:1px solid var(--border);padding:.5rem .7rem">Q=0 solo si A=1 y B=1</td><td style="border:1px solid var(--border);padding:.5rem .7rem">AND invertida</td></tr>
+      <tr><td style="border:1px solid var(--border);padding:.5rem .7rem"><strong>OR</strong></td><td style="border:1px solid var(--border);padding:.5rem .7rem;font-family:Courier New,monospace">Q = A + B</td><td style="border:1px solid var(--border);padding:.5rem .7rem">Q=1 si A o B (o ambos)</td><td style="border:1px solid var(--border);padding:.5rem .7rem">Basta UNA en 1</td></tr>
+      <tr><td style="border:1px solid var(--border);padding:.5rem .7rem"><strong>NOR</strong></td><td style="border:1px solid var(--border);padding:.5rem .7rem;font-family:Courier New,monospace">Q = ¬(A+B)</td><td style="border:1px solid var(--border);padding:.5rem .7rem">Q=1 solo si A=0 y B=0</td><td style="border:1px solid var(--border);padding:.5rem .7rem">OR invertida</td></tr>
+      <tr><td style="border:1px solid var(--border);padding:.5rem .7rem"><strong>XOR</strong></td><td style="border:1px solid var(--border);padding:.5rem .7rem;font-family:Courier New,monospace">Q = A ⊕ B</td><td style="border:1px solid var(--border);padding:.5rem .7rem">Q=1 si entradas DISTINTAS</td><td style="border:1px solid var(--border);padding:.5rem .7rem">≠ OR: 1+1=0 en XOR</td></tr>
+      <tr><td style="border:1px solid var(--border);padding:.5rem .7rem"><strong>XNOR</strong></td><td style="border:1px solid var(--border);padding:.5rem .7rem;font-family:Courier New,monospace">Q = ¬(A⊕B)</td><td style="border:1px solid var(--border);padding:.5rem .7rem">Q=1 si entradas IGUALES</td><td style="border:1px solid var(--border);padding:.5rem .7rem">XOR invertida</td></tr>
+    </tbody>
+  </table>
+  <div class="warn" style="margin-top:.8rem"><strong>XOR ≠ OR:</strong> OR(1,1)=1 pero XOR(1,1)=0. Este es el error más frecuente en parcial.</div>
+</div>
 
-  <div class="theorem-grid">
+<!-- Simulador de compuertas -->
+<h2 class="stitle"><span class="stitle-icon">⚡</span>Simulador interactivo</h2>
+<div class="gate-board">
+  <div class="gate-board-title">⚡ Tocá las entradas — la salida Q se actualiza en tiempo real</div>
+  <div class="gate-grid" id="gateGrid"></div>
+</div>
+
+<!-- Predecí -->
+<h2 class="stitle"><span class="stitle-icon">🎯</span>Modo predecí — ¿Cuál es la salida?</h2>
+<div class="gate-predict">
+  <div class="gate-predict-title">🎯 Predecí la salida Q</div>
+  <div class="gate-predict-sub">10 rondas. Elegís 0 o 1 antes de ver la explicación.</div>
+  <div class="gp-counter"><span id="gpNum">1</span>/10</div>
+  <div class="gp-challenge">
+    <div class="gp-gate-name" id="gpGateName">—</div>
+    <div class="gp-equation" id="gpEq">—</div>
+    <div class="gp-inputs" id="gpInputs">—</div>
+  </div>
+  <div class="gp-opts">
+    <button class="gp-opt" onclick="gpAnswer(0)" aria-label="Respuesta 0">0</button>
+    <button class="gp-opt" onclick="gpAnswer(1)" aria-label="Respuesta 1">1</button>
+  </div>
+  <div class="gp-fb" id="gpFb"></div>
+  <button class="gp-next" id="gpNext" onclick="gpNext()">Siguiente →</button>
+</div>
+
+<!-- Quiz -->
+<h2 class="stitle" id="quiz"><span class="stitle-icon">🧠</span>Quiz — Compuertas y Boole</h2>
+<div class="quiz-wrap">
+  <div class="quiz-progress">
+    <div class="qp-bar"><div class="qp-fill" id="qpFill" style="width:0%"></div></div>
+    <div class="qp-label" id="qpLabel">0 / 15</div>
+  </div>
+  <div id="quizContent">
+    <div class="quiz-q-num" id="qNum">Pregunta 1 de 15</div>
+    <div class="quiz-q-text" id="qText">Cargando...</div>
+    <div class="quiz-options" id="qOptions"></div>
+    <div class="quiz-feedback" id="qFeedback"></div>
+    <button class="quiz-next" id="qNext" onclick="quizNext()">Siguiente →</button>
+  </div>
+  <div class="quiz-score" id="quizScore">
+    <div class="score-big" id="scoreBig">—</div>
+    <div class="score-label" id="scoreLabel">sobre 15 preguntas</div>
+    <button class="quiz-restart" onclick="quizStart()">🔄 Volver a intentar</button>
+  </div>
+</div>
+
+</div><!-- /container -->
+</div><!-- /tab-c -->
+
+<!-- ════════════ TAB D: BOOLE & K-MAP ════════════ -->
+<div class="page" id="tab-d">
+<div class="container">
+
+<h2 class="stitle" id="boole"><span class="stitle-icon">🔣</span>Álgebra de Boole y Simplificación</h2>
+
+<div class="concept-chain">
+  <div class="concept-item">
+    <div class="concept-num">1</div>
+    <div class="concept-text">
+      <div class="concept-title">¿Para qué sirve simplificar?</div>
+      <div class="concept-desc">Menos términos = menos compuertas = circuito más barato y rápido. La expresión mínima equivalente hace exactamente lo mismo con menos hardware.</div>
+    </div>
+  </div>
+  <div class="concept-item">
+    <div class="concept-num">2</div>
+    <div class="concept-text">
+      <div class="concept-title">Postulados básicos (siempre ciertos)</div>
+      <div class="concept-desc">Elemento neutro, elemento nulo, complementario. Son las reglas fundamentales de donde se derivan todos los demás teoremas.</div>
+    </div>
+  </div>
+  <div class="concept-item">
+    <div class="concept-num">3</div>
+    <div class="concept-text">
+      <div class="concept-title">Teoremas de simplificación</div>
+      <div class="concept-desc">Idempotencia, absorción, absorción variante, De Morgan. Se aplican para reducir la expresión paso a paso.</div>
+    </div>
+  </div>
+  <div class="concept-item">
+    <div class="concept-num">4</div>
+    <div class="concept-text">
+      <div class="concept-title">Mapa de Karnaugh — simplificación visual</div>
+      <div class="concept-desc">Alternativa algebraica. Colocás los 1s de la tabla de verdad en el mapa y los agrupás en potencias de 2 para obtener la expresión mínima directamente.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Postulados -->
+<div class="card card-accent-blue">
+  <h3>📐 Postulados del Álgebra de Boole</h3>
+  <div class="theorem-grid" style="margin-top:.8rem">
     <div class="theorem-card"><div class="th-name">Elemento neutro AND</div><div class="th-eq">A · 1 = A</div></div>
     <div class="theorem-card"><div class="th-name">Elemento nulo AND</div><div class="th-eq">A · 0 = 0</div></div>
     <div class="theorem-card"><div class="th-name">Elemento neutro OR</div><div class="th-eq">A + 0 = A</div></div>
     <div class="theorem-card"><div class="th-name">Elemento nulo OR</div><div class="th-eq">A + 1 = 1</div></div>
     <div class="theorem-card"><div class="th-name">Complementario AND</div><div class="th-eq">A · Ā = 0</div></div>
-    <div class="theorem-card"><div class="th-name">Complementario OR</div><div class="th-eq">A + Ā = 1 ← ¡clave!</div></div>
-    <div class="theorem-card"><div class="th-name">Idempotencia AND</div><div class="th-eq">A · A = A</div></div>
-    <div class="theorem-card"><div class="th-name">Idempotencia OR</div><div class="th-eq">A + A = A</div></div>
-    <div class="theorem-card"><div class="th-name">Absorción</div><div class="th-eq">A + A·B = A</div></div>
-    <div class="theorem-card"><div class="th-name">Absorción variante</div><div class="th-eq">A + Ā·B = A + B</div></div>
-    <div class="theorem-card"><div class="th-name">De Morgan 1</div><div class="th-eq">¬(A·B) = Ā + B̄</div></div>
-    <div class="theorem-card"><div class="th-name">De Morgan 2</div><div class="th-eq">¬(A+B) = Ā · B̄</div></div>
+    <div class="theorem-card"><div class="th-name">Complementario OR ← ¡clave!</div><div class="th-eq">A + Ā = 1</div></div>
   </div>
-
-  <!-- Procedimiento Boole paso a paso (expandible) -->
-  <div class="boole-proc open" id="booleProc">
-    <div class="boole-proc-header" onclick="document.getElementById('booleProc').classList.toggle('open')">
-      <h2>📝 Ejemplo del parcial — F(A,B,C) = A·B̄ + Ā·B̄ + A·B·C → desarrollo completo</h2>
-      <span class="boole-proc-toggle">▼</span>
-    </div>
-    <div class="boole-proc-body">
-
-      <div class="bp-step open" id="bpStep1">
-        <div class="bp-step-head" onclick="document.getElementById('bpStep1').classList.toggle('open')">
-          <div class="bp-step-num">1</div>
-          <div class="bp-step-title">Factor común B̄ en los dos primeros términos</div>
-          <span class="bp-prop-badge">Distributividad</span>
-          <span class="bp-step-chevron">▼</span>
-        </div>
-        <div class="bp-step-body">
-          <div class="bp-dato">Expresión inicial:</div>
-          <div class="bp-op">F = A·B̄ + Ā·B̄ + A·B·C</div>
-          <div class="bp-dato" style="margin-top:.6rem">Factorizo B̄ (distributiva: X·Z + Y·Z = (X+Y)·Z):</div>
-          <div class="bp-op">A·B̄ + Ā·B̄ = (A + Ā)·B̄</div>
-          <div class="bp-dato" style="margin-top:.6rem">Resultado parcial:</div>
-          <div class="bp-result">F = (A + Ā)·B̄ + A·B·C</div>
-        </div>
-      </div>
-
-      <div class="bp-step open" id="bpStep2">
-        <div class="bp-step-head" onclick="document.getElementById('bpStep2').classList.toggle('open')">
-          <div class="bp-step-num">2</div>
-          <div class="bp-step-title">A + Ā = 1 → simplifica el factor</div>
-          <span class="bp-prop-badge">Complementario OR</span>
-          <span class="bp-step-chevron">▼</span>
-        </div>
-        <div class="bp-step-body">
-          <div class="bp-dato">Por complementario OR: <code>A + Ā = 1</code></div>
-          <div class="bp-op">(A + Ā)·B̄ = 1·B̄ = B̄</div>
-          <div class="bp-dato" style="margin-top:.6rem">Resultado parcial:</div>
-          <div class="bp-result">F = B̄ + A·B·C</div>
-        </div>
-      </div>
-
-      <div class="bp-step open" id="bpStep3">
-        <div class="bp-step-head" onclick="document.getElementById('bpStep3').classList.toggle('open')">
-          <div class="bp-step-num">3</div>
-          <div class="bp-step-title">Reordenar A·B·C para exponer el patrón X̄·Y</div>
-          <span class="bp-prop-badge">Conmutatividad AND</span>
-          <span class="bp-step-chevron">▼</span>
-        </div>
-        <div class="bp-step-body">
-          <div class="bp-dato">Necesito aplicar absorción variante: <code>X + X̄·Y = X + Y</code><br>Con X = B̄ → X̄ = B. Reordeno el tercer término:</div>
-          <div class="bp-op">A·B·C = B·A·C = B·(A·C)</div>
-          <div class="bp-dato" style="margin-top:.6rem">Resultado parcial:</div>
-          <div class="bp-result">F = B̄ + B·(A·C)</div>
-        </div>
-      </div>
-
-      <div class="bp-step open" id="bpStep4">
-        <div class="bp-step-head" onclick="document.getElementById('bpStep4').classList.toggle('open')">
-          <div class="bp-step-num">4</div>
-          <div class="bp-step-title">Absorción variante: X + X̄·Y = X + Y</div>
-          <span class="bp-prop-badge">Absorción variante</span>
-          <span class="bp-step-chevron">▼</span>
-        </div>
-        <div class="bp-step-body">
-          <div class="bp-dato">Aplico: <code>X = B̄</code>, <code>X̄ = B</code>, <code>Y = A·C</code></div>
-          <div class="bp-op">B̄ + B·(A·C) = B̄ + A·C</div>
-          <div class="bp-dato" style="margin-top:.6rem">Forma mínima:</div>
-          <div class="bp-result">F(A,B,C) = B̄ + A·C ✓</div>
-          <div style="margin-top:.8rem;font-size:.82rem;color:var(--green);font-weight:700">
-            ✅ La tabla de verdad confirma F=1 exactamente en m(0,1,4,5,7) — mismos que la expresión original.
-          </div>
-        </div>
-      </div>
-
-      <button class="bp-verify-btn" onclick="document.getElementById('truth-table-card').scrollIntoView({behavior:'smooth'})">
-        📋 Ver tabla de verdad de verificación ↓
-      </button>
-    </div>
-  </div>
-
-  <div class="card" id="truth-table-card">
-    <h2>📋 Tabla de Verdad de F = B̄ + A·C</h2>
-    <p>Minitérminos activos: F = Σm(0, 1, 4, 5, 7)</p>
-    <div class="bool-table-wrap">
-      <table class="bool-table">
-        <thead><tr><th>A</th><th>B</th><th>C</th><th>B̄</th><th>A·C</th><th>F</th></tr></thead>
-        <tbody>
-          <tr><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td class="one">1</td></tr>
-          <tr><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td class="one">1</td></tr>
-          <tr><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td class="zero">0</td></tr>
-          <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td class="zero">0</td></tr>
-          <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td class="one">1</td></tr>
-          <tr><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td class="one">1</td></tr>
-          <tr><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td class="zero">0</td></tr>
-          <tr><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td class="one">1</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ═══════════════ KARNAUGH ═══════════════ -->
-  <h2 class="section-title" id="karnaugh">🗺️ Mapas de Karnaugh (3 variables)</h2>
-  <p class="section-sub">Herramienta gráfica para minimizar funciones booleanas. Las columnas van en código Gray (01 → 11 → adyacentes).</p>
-
-  <div class="card">
-    <h2>📐 Reglas de los grupos (lazos)</h2>
-    <p>• Los grupos deben ser de tamaño <strong>potencia de 2</strong>: 1, 2, 4, 8... <br>
-    • Los grupos deben ser lo más grandes posible. <br>
-    • Cada 1 debe estar cubierto (puede estar en más de un grupo). <br>
-    • El mapa "se envuelve" — la primera y última columna son adyacentes.</p>
-    <p><strong>Columnas en 3 variables:</strong> A es la fila (0/1) y BC va en código Gray: 00 | 01 | 11 | 10</p>
-    <div class="tip"><strong>Clave:</strong> código Gray garantiza que columnas vecinas difieran solo en 1 bit, que es la condición de adyacencia para poder eliminar variables.</div>
-  </div>
-
-  <div class="card" style="border-left:4px solid var(--teal)">
-    <h2 style="color:var(--teal)">📝 Ejemplo del parcial — F = Σm(1, 3, 4, 5, 7)</h2>
-    <div class="kmap-wrap">
-      <table class="kmap-table">
-        <thead>
-          <tr><th>A \ BC</th><th>00</th><th>01</th><th>11</th><th>10</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="background:#f8fafc;font-size:.75rem;font-weight:700;color:var(--gray-lt)">A=0</td>
-            <td class="cell-0">0</td>
-            <td class="cell-1 group-a">1</td>
-            <td class="cell-1 group-a">1</td>
-            <td class="cell-0">0</td>
-          </tr>
-          <tr>
-            <td style="background:#f8fafc;font-size:.75rem;font-weight:700;color:var(--gray-lt)">A=1</td>
-            <td class="cell-1 group-b">1</td>
-            <td class="cell-1 group-ab">1</td>
-            <td class="cell-1 group-a">1</td>
-            <td class="cell-0">0</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:.8rem;font-size:.85rem">
-      <span style="background:#d1fae5;padding:.2rem .7rem;border-radius:6px;color:#14532d;font-weight:700">🟢 Grupo C (cuarteto m1,m3,m5,m7): C = 1 → término: C</span>
-      <span style="background:#fce7f3;padding:.2rem .7rem;border-radius:6px;color:#be185d;font-weight:700">🔴 Grupo A·B̄ (dupla m4,m5): A=1, B=0 → término: A·B̄</span>
-    </div>
-    <div class="tip"><strong>Expresión mínima SOP:</strong> F(A,B,C) = C + A·B̄</div>
-  </div>
-
-  <div class="card">
-    <h2>🔄 Combinacional vs. Secuencial</h2>
-    <p><strong>Combinacional:</strong> la salida depende <em>únicamente</em> de las entradas actuales. Sin memoria, sin realimentación. Ejemplos: MUX, decodificador, sumador, compuertas AND/OR.</p>
-    <p><strong>Secuencial:</strong> la salida depende de las entradas actuales <em>y del estado anterior</em>. Contiene elementos de memoria (flip-flops) y realimentación. Ejemplos: Flip-Flop RS/D/JK, contadores, registros de desplazamiento.</p>
-  </div>
-
-
-  <!-- ════ K-MAP INTERACTIVO ════ -->
-  <h2 class="section-title" style="margin-top:2rem" id="kmap-int">🗺️ K-map interactivo — Simplificá vos</h2>
-  <p class="section-sub">Marcá los grupos en el mapa y verificá la expresión simplificada.</p>
-  <div class="kmap-interactive">
-    <div class="kmap-int-title">🗺️ Resolvé el mapa de Karnaugh</div>
-    <div class="kmap-int-sub">3 ejercicios de distinta dificultad. Seleccioná las celdas del grupo y verificá.</div>
-    <div class="kmap-ex-select" id="kmapExBtns"></div>
-    <div class="kmap-int-fn" id="kmapIntFn">—</div>
-    <div class="kmap-int-instr">Hacé clic en las celdas con 1 para marcarlas en tu agrupación. Los bordes del mapa son adyacentes (columna 0 y columna 3 se tocan).</div>
-    <div class="kmap-int-wrap" id="kmapIntWrap"></div>
-    <div class="kmap-int-btns">
-      <button class="kmap-int-btn check" onclick="kmapCheck()">✓ Verificar agrupación</button>
-      <button class="kmap-int-btn reset" onclick="kmapReset()">↺ Limpiar</button>
-    </div>
-    <div class="kmap-int-fb" id="kmapIntFb"></div>
-  </div>
-
-  <!-- ═══════════════ ISA 5.1 ═══════════════ -->
-  <h2 class="section-title" id="isa">📊 Normativa ISA 5.1 — Diagramas P&ID</h2>
-  <p class="section-sub">Los tags ISA identifican cada instrumento: primera letra = variable, letras siguientes = función. Lazo = número de circuito.</p>
-
-  <div class="card">
-    <h2>🔤 Variables de proceso (primera letra)</h2>
-    <div class="isa-grid">
-      <div class="isa-card"><div class="isa-tag">T</div><div class="isa-fn">Temperatura</div></div>
-      <div class="isa-card"><div class="isa-tag">P</div><div class="isa-fn">Presión</div></div>
-      <div class="isa-card"><div class="isa-tag">F</div><div class="isa-fn">Caudal / Flujo</div></div>
-      <div class="isa-card"><div class="isa-tag">L</div><div class="isa-fn">Nivel (Level)</div></div>
-      <div class="isa-card"><div class="isa-tag">A</div><div class="isa-fn">Análisis</div></div>
-      <div class="isa-card"><div class="isa-tag">S</div><div class="isa-fn">Velocidad (Speed)</div></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>⚙️ Funciones (letras siguientes)</h2>
-    <div class="isa-grid">
-      <div class="isa-card"><div class="isa-tag">T</div><div class="isa-fn">Transmisor</div></div>
-      <div class="isa-card"><div class="isa-tag">I</div><div class="isa-fn">Indicador</div></div>
-      <div class="isa-card"><div class="isa-tag">C</div><div class="isa-fn">Controlador</div></div>
-      <div class="isa-card"><div class="isa-tag">CV</div><div class="isa-fn">Válvula de Control</div></div>
-      <div class="isa-card"><div class="isa-tag">SH</div><div class="isa-fn">Switch High (alto)</div></div>
-      <div class="isa-card"><div class="isa-tag">SL</div><div class="isa-fn">Switch Low (bajo)</div></div>
-    </div>
-  </div>
-
-  <div class="card" style="border-left:4px solid var(--orange)">
-    <h2 style="color:var(--orange)">📝 Tags del parcial decodificados</h2>
-    <div class="isa-grid">
-      <div class="isa-card" style="border-color:var(--orange)">
-        <div class="isa-tag">TT-101</div>
-        <div class="isa-var">Temperatura</div>
-        <div class="isa-fn">Transmisor — lazo 101</div>
-      </div>
-      <div class="isa-card" style="border-color:var(--blue)">
-        <div class="isa-tag">PIC-204</div>
-        <div class="isa-var">Presión</div>
-        <div class="isa-fn">Indicador + Controlador — lazo 204</div>
-      </div>
-      <div class="isa-card" style="border-color:var(--teal)">
-        <div class="isa-tag">FCV-302</div>
-        <div class="isa-var">Caudal</div>
-        <div class="isa-fn">Válvula de Control — lazo 302</div>
-      </div>
-      <div class="isa-card" style="border-color:var(--red)">
-        <div class="isa-tag">LSH-105</div>
-        <div class="isa-var">Nivel</div>
-        <div class="isa-fn">Interruptor de Nivel Alto — lazo 105</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>〰️ Tipos de líneas en P&ID</h2>
-    <div class="bool-table-wrap">
-      <table class="bool-table">
-        <thead><tr><th>Trazo</th><th>Tipo</th><th>Qué representa</th></tr></thead>
-        <tbody>
-          <tr><td>――――――――</td><td>Línea continua gruesa</td><td>Tubería de proceso principal</td></tr>
-          <tr><td>- - - - - - -</td><td>Línea discontinua guiones</td><td>Señal eléctrica (4–20 mA, 24 Vcc)</td></tr>
-          <tr><td>―― // ―― //</td><td>Barra doble oblicua</td><td>Señal neumática (3–15 psi)</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="tip" style="margin-top:.8rem"><strong>Símbolos de burbuja:</strong> círculo limpio = instrumento en campo (local). Círculo con línea horizontal al centro = instrumento en panel de control (sala centralizada).</div>
-  </div>
-
-
-  <!-- ════ ISA PRÁCTICA ════ -->
-  <h2 class="section-title" style="margin-top:2rem">🏋️ Práctica — Interpretá la etiqueta ISA</h2>
-  <p class="section-sub">10 tags de planta real. Primera letra = variable, letras siguientes = función.</p>
-  <div class="isa-practice">
-    <div class="isa-prac-title">🏷️ ¿Qué significa este tag?</div>
-    <div class="isa-prac-sub">Feedback con desglose por letra en cada respuesta.</div>
-    <div class="isa-prac-tag" id="isaPracTag">—</div>
-    <div class="isa-prac-q" id="isaPracQ">Elegí la descripción correcta:</div>
-    <div class="isa-prac-opts" id="isaPracOpts"></div>
-    <div class="isa-prac-fb" id="isaPracFb"></div>
-    <button class="isa-prac-next" id="isaPracNext" onclick="isaPracNext()">Siguiente →</button>
-  </div>
-
-  <!-- ═══════════════ CIRCUITOS ═══════════════ -->
-  <h2 class="section-title" id="circuitos">⚡ Circuitos de Fuerza y Mando — IEC 60947</h2>
-  <p class="section-sub">Arranque directo de motor trifásico con contactor KM1 y relé térmico. Sesión 05.</p>
-
-  <div class="card" style="border-left:4px solid var(--teal)">
-    <h2 style="color:var(--teal)">🔒 Auto-retención (contacto 13-14)</h2>
-    <p>El contacto auxiliar <strong>NA 13-14</strong> del contactor KM1 se conecta <strong>en paralelo</strong> con el pulsador de marcha S1.</p>
-    <p>Al pulsar S1 → la bobina KM1 se energiza → 13-14 se cierra → cuando soltás S1 la bobina <strong>sigue alimentada</strong> por el camino alternativo del 13-14.</p>
-    <div class="tip"><strong>Sin 13-14:</strong> el motor funcionaría solo mientras mantenés S1 apretado (modo "jogging" o "impulso"). Al soltar S1, el motor se detiene inmediatamente.</div>
-  </div>
-
-  <div class="card" style="border-left:4px solid var(--red)">
-    <h2 style="color:var(--red)">🌡️ Protección térmica — Relé bimetálico</h2>
-    <p><strong>Contacto 95-96 (NC):</strong> se conecta <em>en serie</em> con la botonera de comando. En condición normal está cerrado. Si el motor se sobrecalienta, las láminas bimetálicas abren 95-96 → se corta la alimentación de la bobina KM1 → el motor se detiene.</p>
-    <p><strong>Contacto 97-98 (NA):</strong> al disparar el térmico se cierra → alimenta una lámpara piloto de avería (color ámbar) o envía alarma al SCADA/PLC.</p>
-  </div>
-
-  <div class="card">
-    <h2>🔢 Marcado de Bornes Normalizado IEC 60947</h2>
-    <div class="bornes-grid">
-      <div class="borne-card"><div class="bc-label">Bobina electromagnética KM1</div><div class="bc-val">A1 (+) — A2 (−)</div></div>
-      <div class="borne-card"><div class="bc-label">Contactos de potencia entrada</div><div class="bc-val">1 — 3 — 5 (L1/L2/L3)</div></div>
-      <div class="borne-card"><div class="bc-label">Contactos de potencia salida</div><div class="bc-val">2 — 4 — 6 (T1/T2/T3)</div></div>
-      <div class="borne-card"><div class="bc-label">Auxiliar NA (auto-retención)</div><div class="bc-val">13 — 14</div></div>
-      <div class="borne-card"><div class="bc-label">Auxiliar NC</div><div class="bc-val">21 — 22</div></div>
-      <div class="borne-card"><div class="bc-label">Relé térmico (NC corte)</div><div class="bc-val">95 — 96</div></div>
-      <div class="borne-card"><div class="bc-label">Relé térmico (NA alarma)</div><div class="bc-val">97 — 98</div></div>
-    </div>
-  </div>
-
-
-  <!-- ════ CIRCUITO INTERACTIVO ════ -->
-  <h2 class="section-title" style="margin-top:2rem">🔍 Explorá el circuito — función de cada elemento</h2>
-  <p class="section-sub">Hacé clic en un componente para ver su función, protección y qué pasa si falla.</p>
-  <div class="circuit-int" id="circuit-int-wrap">
-    <div class="circuit-int-title">⚡ Arranque directo de motor</div>
-    <div class="circuit-int-sub">Seleccioná cualquier elemento del circuito de fuerza.</div>
-    <div class="circuit-components" id="circuitComps"></div>
-    <div class="circuit-info" id="circuitInfo">
-      <div class="circuit-info-name" id="ciName">—</div>
-      <div class="circuit-info-fn" id="ciFn">—</div>
-      <div class="circuit-info-risk" id="ciRisk">—</div>
-    </div>
-    <div class="circuit-seq" style="margin-top:1.3rem">
-      <div class="circuit-seq-title">🧩 Mini evaluación — ¿Cuál es la secuencia de protección correcta en el circuito de fuerza?</div>
-      <div class="circuit-seq-opts" id="circuitSeqOpts"></div>
-      <div class="circuit-seq-fb" id="circuitSeqFb"></div>
-    </div>
-  </div>
-
-  <!-- ═══════════════ QUIZ ═══════════════ -->
-  <h2 class="section-title" id="quiz">🧠 Quiz — Modelo de parcial</h2>
-  <p class="section-sub">15 preguntas tipo examen sobre los 5 temas. Ves el feedback y la explicación después de cada respuesta.</p>
-
-  <div class="quiz-wrap">
-    <div id="quizContent">
-      <div class="quiz-progress">
-        <div class="qp-bar"><div class="qp-fill" id="qpFill" style="width:0%"></div></div>
-        <span class="qp-label" id="qpLabel">1 / 15</span>
-      </div>
-      <div class="quiz-q-num" id="qNum">Pregunta 1</div>
-      <div class="quiz-q-text" id="qText"></div>
-      <div class="quiz-options" id="qOptions"></div>
-      <div class="quiz-feedback" id="qFeedback"></div>
-      <button class="quiz-next" id="qNext" onclick="quizNext()">Siguiente →</button>
-    </div>
-    <div class="quiz-score" id="quizScore">
-      <div class="score-big" id="scoreBig">0/15</div>
-      <div class="score-label" id="scoreLabel">Puntos obtenidos</div>
-      <button class="quiz-restart" onclick="quizStart()">🔄 Volver a intentar</button>
-    </div>
-  </div>
-
-
-
-
-  <!-- ═══════════════ PLAN PRIMER PARCIAL ═══════════════ -->
-  <h2 class="section-title" id="plan-parcial">📅 Plan de preparación — Primer Parcial</h2>
-  <p class="section-sub">Sesiones 01–06 cubiertas antes del parcial teórico-práctico de Sesión 07.</p>
-  <div class="plan-parcial">
-    <div class="plan-parcial-title">📅 Etapas hacia el primer parcial</div>
-    <div class="plan-parcial-sub">Completá cada sección para desbloquear el simulacro del parcial. El estado se guarda en tu navegador.</div>
-    <div class="plan-steps" id="planSteps"></div>
-    <div class="plan-sim-lock" id="planSimLock">
-      🔒 Completá al menos 4 etapas para habilitar el simulacro del parcial
-    </div>
-  </div>
-
-  <!-- ═══════════════ MATERIAL DE LA CURSADA ═══════════════ -->
-  <h2 class="section-title" id="material">📂 Material de la cursada y avance de estudio</h2>
-  <p class="section-sub">31 archivos organizados por unidad. Estado de análisis y enlaces directos a cada documento.</p>
-  <div class="material-wrap">
-    <div class="material-header">
-      <div class="material-title">📂 Archivos de la materia</div>
-      <div class="material-sub">Seguí el avance de incorporación de cada tema a los apuntes interactivos.</div>
-      <div class="material-stats">
-        <div class="material-stat">Revisados: <span id="matRevisados">0</span> / <span id="matTotal">0</span></div>
-        <div class="material-stat">Incorporados: <span id="matIncorporados">0</span> / <span id="matTotal2">0</span></div>
-      </div>
-      <div class="material-bar-wrap"><div class="material-bar" id="matBar" style="width:0%"></div></div>
-      <div class="material-pct" id="matPct">0%</div>
-    </div>
-    <div id="materialList"></div>
-  </div>
-
-  <!-- ═══════════════ SIMULACRO ═══════════════ -->
-  <h2 class="section-title" id="simulacro">🧪 Simulacro integrador</h2>
-  <p class="section-sub">12 preguntas · 2 por módulo · resultado por área · recomendaciones de repaso.</p>
-  <div class="simulacro">
-    <div id="simStart" class="simulacro-header">
-      <div class="simulacro-title">🧪 Simulacro de parcial</div>
-      <div class="simulacro-desc">12 preguntas aleatorias cubriendo todos los módulos.<br>Necesitás 10/12 para marcar el repaso integrador como completado.</div>
-      <button class="sim-start-btn" onclick="simStart()">▶ Comenzar simulacro</button>
-    </div>
-    <div class="sim-body" id="simBody">
-      <div class="sim-progress">
-        <div class="sim-progress-bar-wrap"><div class="sim-progress-bar" id="simBar" style="width:0%"></div></div>
-        <div class="sim-progress-label"><span id="simQLabel">Pregunta 1 de 12</span><span id="simCatLabel">—</span></div>
-      </div>
-      <div class="sim-category-badge" id="simCatBadge">—</div>
-      <div class="sim-q-text" id="simQText">—</div>
-      <div class="sim-opts" id="simOpts"></div>
-      <button class="sim-next" id="simNext" onclick="simNext()">Siguiente →</button>
-    </div>
-    <div class="sim-results" id="simResults">
-      <div class="sim-results-big" id="simResultsBig">—</div>
-      <div class="sim-results-label">sobre 12 preguntas</div>
-      <div class="sim-module-scores" id="simModScores"></div>
-      <div class="sim-results-btns">
-        <button class="sim-results-btn primary" onclick="simReviewAll()">📋 Ver todas las respuestas</button>
-        <button class="sim-results-btn secondary" onclick="simReviewWrong()">❌ Ver solo errores</button>
-        <button class="sim-results-btn secondary" onclick="simStart()">🔄 Nuevo intento</button>
-      </div>
-      <div class="sim-review" id="simReview"></div>
-    </div>
-  </div>
-
-  <!-- ═══════════════ JUEGOS ═══════════════ -->
-  <h2 class="section-title" id="juegos">🎮 Juegos para aprender</h2>
-  <p class="section-sub">Tres juegos para practicar hasta que los temas entren solos.</p>
-
-  <!-- Juego 1: Conversión rápida -->
-  <div class="game-card">
-    <div class="game-title">⚡ Juego 1 — Conversión de bases</div>
-    <div class="game-desc">Convertí el número mostrado a la base pedida antes de que se acabe el tiempo. Cada respuesta correcta suma 10 puntos.</div>
-    <div class="game-status">
-      <div class="gs-item">Puntos: <span id="convScore">0</span></div>
-      <div class="gs-item">Ronda: <span id="convRound">1</span>/10</div>
-      <div class="gs-item">Tiempo: <span id="convTimer">15</span>s</div>
-    </div>
-    <div class="conv-game-area" id="convArea">
-      <div class="conv-challenge">Convertir a:</div>
-      <div class="conv-number" id="convNum">—</div>
-      <div class="conv-target" id="convTarget">— base —</div>
-      <input class="conv-input" type="text" id="convInput" placeholder="Escribe la respuesta..." autocomplete="off" spellcheck="false" oninput="convInputChange()">
-      <button class="conv-btn" onclick="convCheck()">✓ Verificar</button>
-      <div class="conv-result" id="convResult"></div>
-    </div>
-    <button style="padding:.6rem 1.4rem;background:var(--teal);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;margin-top:.5rem;font-family:inherit" onclick="convStart()">▶ Iniciar juego</button>
-  </div>
-
-  <!-- Juego 2: Identificá el tag ISA -->
-  <div class="game-card">
-    <div class="game-title">🏷️ Juego 2 — ¿Qué significa el tag?</div>
-    <div class="game-desc">Se muestra un tag ISA 5.1 y cuatro opciones. Elegí la descripción correcta.</div>
-    <div class="game-status">
-      <div class="gs-item">Puntos: <span id="isaScore">0</span></div>
-      <div class="gs-item">Ronda: <span id="isaRound">1</span>/10</div>
-    </div>
-    <div class="isa-game-q" id="isaTag">—</div>
-    <div class="isa-opts" id="isaOpts"></div>
-    <button class="isa-next" id="isaNext" onclick="isaNextQ()">Siguiente →</button>
-    <div style="margin-top:1rem">
-      <button style="padding:.6rem 1.4rem;background:var(--purple);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit" onclick="isaStart()">▶ Iniciar juego</button>
-    </div>
-  </div>
-
-  <!-- Juego 3: Tabla de verdad -->
-  <div class="game-card">
-    <div class="game-title">📋 Juego 3 — Completá la tabla de verdad</div>
-    <div class="game-desc">Se te da una función F(A,B,C). Hacé clic en las celdas de la columna F para poner 0 o 1. Cuando terminás, verificás.</div>
-    <div class="game-status">
-      <div class="gs-item">Puntos: <span id="tvScore">0</span></div>
-      <div class="gs-item">Ronda: <span id="tvRound">1</span>/5</div>
-    </div>
-    <div class="tv-fn" id="tvFn">—</div>
-    <div class="bool-table-wrap">
-      <table class="tv-table" id="tvTable"></table>
-    </div>
-    <button class="tv-check" onclick="tvCheck()">✓ Verificar tabla</button>
-    <div class="tv-feedback" id="tvFeedback"></div>
-    <div style="margin-top:.8rem">
-      <button style="padding:.6rem 1.4rem;background:var(--orange);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit" onclick="tvStart()">▶ Iniciar juego</button>
-    </div>
-  </div>
-
-  <footer>Automatización y Control · Universidad Nacional de Pilar · Sesiones 01–05</footer>
 </div>
 
+<!-- Teoremas -->
+<div class="card card-accent-purple">
+  <h3>🔧 Teoremas de simplificación</h3>
+  <div class="theorem-grid" style="margin-top:.8rem">
+    <div class="theorem-card"><div class="th-name">Idempotencia AND</div><div class="th-eq">A · A = A</div></div>
+    <div class="theorem-card"><div class="th-name">Idempotencia OR</div><div class="th-eq">A + A = A</div></div>
+    <div class="theorem-card"><div class="th-name">Doble negación</div><div class="th-eq">¬(¬A) = A</div></div>
+    <div class="theorem-card"><div class="th-name">Absorción</div><div class="th-eq">A + A·B = A</div></div>
+    <div class="theorem-card"><div class="th-name">Absorción variante ← parcial</div><div class="th-eq">A + Ā·B = A + B</div></div>
+    <div class="theorem-card"><div class="th-name">De Morgan 1</div><div class="th-eq">¬(A·B) = Ā + B̄</div></div>
+    <div class="theorem-card"><div class="th-name">De Morgan 2</div><div class="th-eq">¬(A+B) = Ā · B̄</div></div>
+    <div class="theorem-card"><div class="th-name">Distributiva AND</div><div class="th-eq">A·(B+C) = A·B + A·C</div></div>
+  </div>
+</div>
+
+<!-- Procedimiento del parcial -->
+<h2 class="stitle" id="boole-proc-section"><span class="stitle-icon">📝</span>Ejemplo del parcial — paso a paso</h2>
+<div class="boole-proc open" id="booleProc">
+  <div class="boole-proc-header" onclick="document.getElementById('booleProc').classList.toggle('open')">
+    <h2>📝 F(A,B,C) = A·B̄ + Ā·B̄ + A·B·C → desarrollo completo</h2>
+    <span class="boole-proc-toggle">▼</span>
+  </div>
+  <div class="boole-proc-body">
+    <div class="bp-step open" id="bpStep1">
+      <div class="bp-step-head" onclick="document.getElementById('bpStep1').classList.toggle('open')">
+        <div class="bp-step-num">1</div>
+        <div class="bp-step-title">Factor común B̄ en los dos primeros términos</div>
+        <span class="bp-prop-badge">Distributividad</span>
+        <span class="bp-step-chevron">▼</span>
+      </div>
+      <div class="bp-step-body">
+        <div class="bp-dato">Expresión inicial:</div>
+        <div class="bp-op">F = A·B̄ + Ā·B̄ + A·B·C</div>
+        <div class="bp-dato" style="margin-top:.6rem">Factorizo B̄ (distributiva: X·Z + Y·Z = (X+Y)·Z):</div>
+        <div class="bp-op">A·B̄ + Ā·B̄ = (A + Ā)·B̄</div>
+        <div class="bp-dato" style="margin-top:.6rem">Resultado parcial:</div>
+        <div class="bp-result">F = (A + Ā)·B̄ + A·B·C</div>
+      </div>
+    </div>
+    <div class="bp-step open" id="bpStep2">
+      <div class="bp-step-head" onclick="document.getElementById('bpStep2').classList.toggle('open')">
+        <div class="bp-step-num">2</div>
+        <div class="bp-step-title">A + Ā = 1 → simplifica el factor</div>
+        <span class="bp-prop-badge">Complementario OR</span>
+        <span class="bp-step-chevron">▼</span>
+      </div>
+      <div class="bp-step-body">
+        <div class="bp-dato">Por complementario OR: A + Ā = 1</div>
+        <div class="bp-op">(A + Ā)·B̄ = 1·B̄ = B̄</div>
+        <div class="bp-result">F = B̄ + A·B·C</div>
+      </div>
+    </div>
+    <div class="bp-step open" id="bpStep3">
+      <div class="bp-step-head" onclick="document.getElementById('bpStep3').classList.toggle('open')">
+        <div class="bp-step-num">3</div>
+        <div class="bp-step-title">Reordenar A·B·C para exponer el patrón X̄·Y</div>
+        <span class="bp-prop-badge">Conmutatividad AND</span>
+        <span class="bp-step-chevron">▼</span>
+      </div>
+      <div class="bp-step-body">
+        <div class="bp-dato">Para absorción variante necesito X + X̄·Y = X + Y, con X = B̄ → X̄ = B:</div>
+        <div class="bp-op">A·B·C = B·(A·C)</div>
+        <div class="bp-result">F = B̄ + B·(A·C)</div>
+      </div>
+    </div>
+    <div class="bp-step open" id="bpStep4">
+      <div class="bp-step-head" onclick="document.getElementById('bpStep4').classList.toggle('open')">
+        <div class="bp-step-num">4</div>
+        <div class="bp-step-title">Absorción variante: X + X̄·Y = X + Y</div>
+        <span class="bp-prop-badge">Absorción variante</span>
+        <span class="bp-step-chevron">▼</span>
+      </div>
+      <div class="bp-step-body">
+        <div class="bp-dato">X = B̄, X̄ = B, Y = A·C:</div>
+        <div class="bp-op">B̄ + B·(A·C) = B̄ + A·C</div>
+        <div class="bp-result">F(A,B,C) = B̄ + A·C ✓</div>
+        <div style="margin-top:.8rem;font-size:.82rem;color:var(--green);font-weight:700">✅ Verificado por tabla de verdad: F=1 en m(0,1,4,5,7) en ambas expresiones.</div>
+      </div>
+    </div>
+    <button class="bp-verify-btn" onclick="showTab('tab-d',document.querySelectorAll('.tab-btn')[3]);setTimeout(()=>document.getElementById('truth-table-card').scrollIntoView({behavior:'smooth'}),300)">
+      📋 Ver tabla de verdad completa ↓
+    </button>
+  </div>
+</div>
+
+<!-- Tabla de verdad -->
+<div class="card" id="truth-table-card">
+  <h3>📋 Tabla de Verdad de F = B̄ + A·C</h3>
+  <p style="font-size:.85rem;margin-bottom:.8rem">Minitérminos activos: F = Σm(0, 1, 4, 5, 7)</p>
+  <div class="bool-table-wrap">
+    <table class="bool-table">
+      <thead><tr><th>A</th><th>B</th><th>C</th><th>B̄</th><th>A·C</th><th>F</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>0</td><td>0</td><td class="one">1</td><td class="zero">0</td><td class="one">1</td></tr>
+        <tr><td>0</td><td>0</td><td>1</td><td class="one">1</td><td class="zero">0</td><td class="one">1</td></tr>
+        <tr><td>0</td><td>1</td><td>0</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td></tr>
+        <tr><td>0</td><td>1</td><td>1</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td></tr>
+        <tr><td>1</td><td>0</td><td>0</td><td class="one">1</td><td class="zero">0</td><td class="one">1</td></tr>
+        <tr><td>1</td><td>0</td><td>1</td><td class="one">1</td><td class="one">1</td><td class="one">1</td></tr>
+        <tr><td>1</td><td>1</td><td>0</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td></tr>
+        <tr><td>1</td><td>1</td><td>1</td><td class="zero">0</td><td class="one">1</td><td class="one">1</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Karnaugh estático -->
+<h2 class="stitle" id="karnaugh"><span class="stitle-icon">🗺️</span>Mapa de Karnaugh — 3 variables</h2>
+
+<div class="concept-chain">
+  <div class="concept-item">
+    <div class="concept-num">1</div>
+    <div class="concept-text">
+      <div class="concept-title">¿Qué es un K-map?</div>
+      <div class="concept-desc">Una tabla que reorganiza la tabla de verdad en un formato donde los minitérminos adyacentes difieren en solo 1 bit (código Gray). Eso permite ver agrupaciones de 1s que simplifican la función.</div>
+    </div>
+  </div>
+  <div class="concept-item">
+    <div class="concept-num">2</div>
+    <div class="concept-text">
+      <div class="concept-title">Reglas de agrupación</div>
+      <div class="concept-desc">Los grupos deben tener tamaño potencia de 2 (1, 2 o 4 para 3 variables). Los bordes del mapa son adyacentes. Una celda puede estar en más de un grupo.</div>
+    </div>
+  </div>
+  <div class="concept-item">
+    <div class="concept-num">3</div>
+    <div class="concept-text">
+      <div class="concept-title">Leer la expresión mínima</div>
+      <div class="concept-desc">Cada grupo se convierte en un término producto. Las variables que cambian dentro del grupo se eliminan. El resultado es la suma de esos términos.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card card-accent-green">
+  <h3>🗺️ K-map de F(A,B,C) = Σm(0,1,4,5,7)</h3>
+  <div class="kmap-wrap">
+    <table class="kmap-table">
+      <thead>
+        <tr><th>A \ BC</th><th>00</th><th>01</th><th>11</th><th>10</th></tr>
+      </thead>
+      <tbody>
+        <tr><th>A=0</th><td class="cell-1 group-a">1<br><small>m0</small></td><td class="cell-1 group-a">1<br><small>m1</small></td><td class="cell-0">0<br><small>m3</small></td><td class="cell-0">0<br><small>m2</small></td></tr>
+        <tr><th>A=1</th><td class="cell-1 group-a">1<br><small>m4</small></td><td class="cell-1 group-ab">1<br><small>m5</small></td><td class="cell-1 group-b">1<br><small>m7</small></td><td class="cell-0">0<br><small>m6</small></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:.85rem;margin-top:.8rem">
+    <strong style="color:var(--green)">Grupo verde (m0,1,4,5) → B̄</strong>: 4 celdas, B=0 en todas, A y C varían → se eliminan → queda B̄<br>
+    <strong style="color:#be185d">Grupo rosa (m5,m7) → A·C</strong>: 2 celdas, A=1 y C=1 en ambas, B varía → se elimina → queda A·C<br>
+    <strong>Resultado: F = B̄ + A·C</strong>
+  </p>
+</div>
+
+<!-- K-map interactivo -->
+<h2 class="stitle" id="kmap-int"><span class="stitle-icon">🏋️</span>K-map interactivo — Resolvé vos</h2>
+<div class="kmap-interactive">
+  <div class="kmap-int-title">🗺️ Resolvé el mapa de Karnaugh</div>
+  <div class="kmap-int-sub">3 ejercicios de distinta dificultad. Seleccioná las celdas del grupo y verificá.</div>
+  <div class="kmap-ex-select" id="kmapExBtns"></div>
+  <div class="kmap-int-fn" id="kmapIntFn">—</div>
+  <div class="kmap-int-instr">Hacé clic en las celdas con 1 para marcarlas. Los bordes son adyacentes. Una celda puede estar en más de un grupo.</div>
+  <div class="kmap-int-wrap" id="kmapIntWrap"></div>
+  <div class="kmap-int-btns">
+    <button class="kmap-int-btn check" onclick="kmapCheck()">✓ Verificar</button>
+    <button class="kmap-int-btn reset" onclick="kmapReset()">↺ Limpiar</button>
+  </div>
+  <div class="kmap-int-fb" id="kmapIntFb"></div>
+</div>
+
+<!-- Juego tabla de verdad -->
+<h2 class="stitle"><span class="stitle-icon">🎮</span>Juego — Completá la tabla de verdad</h2>
+<div class="game-card">
+  <div class="game-title">📋 Completá la tabla de verdad</div>
+  <div class="game-desc">Se te da F(A,B,C). Hacé clic en las celdas de la columna F para poner 0 o 1. 5 rondas.</div>
+  <div class="game-status">
+    <div class="gs-item">Puntos: <span id="tvScore">0</span></div>
+    <div class="gs-item">Ronda: <span id="tvRound">1</span>/5</div>
+  </div>
+  <div class="tv-fn" id="tvFn">—</div>
+  <div class="bool-table-wrap">
+    <table class="tv-table" id="tvTable"></table>
+  </div>
+  <button class="tv-check" onclick="tvCheck()">✓ Verificar tabla</button>
+  <div class="tv-feedback" id="tvFeedback"></div>
+</div>
+
+</div><!-- /container -->
+</div><!-- /tab-d -->
+
+<!-- ════════════ TAB E: ISA & CIRCUITOS ════════════ -->
+<div class="page" id="tab-e">
+<div class="container">
+
+<h2 class="stitle" id="isa"><span class="stitle-icon">📊</span>Norma ISA 5.1 — Instrumentación</h2>
+
+<div class="concept-chain">
+  <div class="concept-item">
+    <div class="concept-num">1</div>
+    <div class="concept-text">
+      <div class="concept-title">¿Qué es ISA 5.1?</div>
+      <div class="concept-desc">Una norma internacional para nombrar y simbolizar los instrumentos de medición y control en diagramas P&ID. Permite que cualquier ingeniero de cualquier país entienda un plano de planta.</div>
+    </div>
+  </div>
+  <div class="concept-item">
+    <div class="concept-num">2</div>
+    <div class="concept-text">
+      <div class="concept-title">Estructura del tag: letras + número</div>
+      <div class="concept-desc">Primera letra = variable de proceso (T=temperatura, P=presión…). Letras siguientes = función del instrumento (T=transmisor, I=indicador, C=controlador). Número = identificador del lazo.</div>
+    </div>
+  </div>
+  <div class="concept-item">
+    <div class="concept-num">3</div>
+    <div class="concept-text">
+      <div class="concept-title">Instrumento de campo vs. en panel</div>
+      <div class="concept-desc">El símbolo varía según dónde está el instrumento: en el campo (círculo simple) o en el panel de control (círculo con línea horizontal).</div>
+    </div>
+  </div>
+</div>
+
+<div class="card card-accent-blue">
+  <h3>🔤 Variables de proceso — Primera letra</h3>
+  <div class="isa-grid">
+    <div class="isa-card"><div class="isa-tag">T</div><div class="isa-var">Temperatura</div><div class="isa-fn">TT-101 = transmisor de temperatura lazo 101</div></div>
+    <div class="isa-card"><div class="isa-tag">P</div><div class="isa-var">Presión</div><div class="isa-fn">PT-202 = transmisor de presión lazo 202</div></div>
+    <div class="isa-card"><div class="isa-tag">F</div><div class="isa-var">Caudal (Flow)</div><div class="isa-fn">FT-301 = transmisor de caudal lazo 301</div></div>
+    <div class="isa-card"><div class="isa-tag">L</div><div class="isa-var">Nivel (Level)</div><div class="isa-fn">LT-401 = transmisor de nivel lazo 401</div></div>
+    <div class="isa-card"><div class="isa-tag">A</div><div class="isa-var">Análisis</div><div class="isa-fn">AT-501 = transmisor de análisis (pH, conductividad…)</div></div>
+    <div class="isa-card"><div class="isa-tag">S</div><div class="isa-var">Velocidad (Speed)</div><div class="isa-fn">SI-601 = indicador de velocidad lazo 601</div></div>
+  </div>
+</div>
+
+<div class="card card-accent-teal">
+  <h3>⚙️ Funciones del instrumento — Letras siguientes</h3>
+  <div class="isa-grid">
+    <div class="isa-card"><div class="isa-tag">I</div><div class="isa-var">Indicador</div><div class="isa-fn">Solo muestra el valor en pantalla</div></div>
+    <div class="isa-card"><div class="isa-tag">T</div><div class="isa-var">Transmisor</div><div class="isa-fn">Convierte la señal a estándar (4-20mA)</div></div>
+    <div class="isa-card"><div class="isa-tag">C</div><div class="isa-var">Controlador</div><div class="isa-fn">Compara con setpoint y genera señal de control</div></div>
+    <div class="isa-card"><div class="isa-tag">V</div><div class="isa-var">Válvula (Valve)</div><div class="isa-fn">Actúa sobre el fluido del proceso</div></div>
+    <div class="isa-card"><div class="isa-tag">H</div><div class="isa-var">High (alto)</div><div class="isa-fn">Alarma o switch de nivel alto</div></div>
+    <div class="isa-card"><div class="isa-tag">IC</div><div class="isa-var">Indicador + Controlador</div><div class="isa-fn">TIC-102 = controla y muestra temperatura</div></div>
+  </div>
+</div>
+
+<div class="card card-accent-purple">
+  <h3>📋 Tags del parcial modelo</h3>
+  <div class="isa-grid">
+    <div class="isa-card"><div class="isa-tag">TT-101</div><div class="isa-var">Transmisor de temperatura</div><div class="isa-fn">T=temp · T=transmisor · lazo 101</div></div>
+    <div class="isa-card"><div class="isa-tag">PIC-204</div><div class="isa-var">Controlador-indicador de presión</div><div class="isa-fn">P=presión · I=indicador · C=controlador</div></div>
+    <div class="isa-card"><div class="isa-tag">FCV-302</div><div class="isa-var">Válvula de control de caudal</div><div class="isa-fn">F=caudal · C=controlada · V=válvula</div></div>
+    <div class="isa-card"><div class="isa-tag">LSH-105</div><div class="isa-var">Switch de nivel alto</div><div class="isa-fn">L=nivel · S=switch · H=high (alto)</div></div>
+  </div>
+</div>
+
+<!-- ISA práctica -->
+<h2 class="stitle"><span class="stitle-icon">🏋️</span>Práctica — Interpretá la etiqueta ISA</h2>
+<div class="isa-practice">
+  <div class="isa-prac-title">🏷️ ¿Qué significa este tag?</div>
+  <div class="isa-prac-sub">10 tags de planta real. Feedback con desglose por letra en cada respuesta.</div>
+  <div class="isa-prac-tag" id="isaPracTag">—</div>
+  <div class="isa-prac-q" id="isaPracQ">Elegí la descripción correcta:</div>
+  <div class="isa-prac-opts" id="isaPracOpts"></div>
+  <div class="isa-prac-fb" id="isaPracFb"></div>
+  <button class="isa-prac-next" id="isaPracNext" onclick="isaPracNext()">Siguiente →</button>
+</div>
+
+<!-- Juego ISA -->
+<h2 class="stitle"><span class="stitle-icon">🎮</span>Juego — ¿Qué significa el tag?</h2>
+<div class="game-card">
+  <div class="game-title">🏷️ Identificá el tag ISA</div>
+  <div class="game-desc">Se muestra un tag ISA 5.1 y cuatro opciones. Elegí la descripción correcta. 10 rondas.</div>
+  <div class="game-status">
+    <div class="gs-item">Puntos: <span id="isaScore">0</span></div>
+    <div class="gs-item">Ronda: <span id="isaRound">1</span>/10</div>
+  </div>
+  <div class="isa-game-q" id="isaTag">—</div>
+  <div class="isa-opts" id="isaOpts"></div>
+  <button class="isa-next" id="isaNext" onclick="isaNextQ()">Siguiente →</button>
+  <div style="margin-top:1rem">
+    <button style="padding:.6rem 1.4rem;background:var(--purple);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit" onclick="isaStart()">▶ Iniciar juego</button>
+  </div>
+</div>
+
+<!-- Circuitos -->
+<h2 class="stitle" id="circuitos"><span class="stitle-icon">⚡</span>Circuitos de Fuerza y Mando</h2>
+
+<div class="concept-chain">
+  <div class="concept-item">
+    <div class="concept-num">1</div>
+    <div class="concept-text">
+      <div class="concept-title">Circuito de fuerza vs. circuito de mando</div>
+      <div class="concept-desc">El circuito de fuerza lleva la potencia hasta el motor (alta tensión, alta corriente). El circuito de mando lleva las órdenes de control (baja tensión, baja corriente). Son independientes y se diagraman por separado.</div>
+    </div>
+  </div>
+  <div class="concept-item">
+    <div class="concept-num">2</div>
+    <div class="concept-text">
+      <div class="concept-title">Arranque directo</div>
+      <div class="concept-desc">La forma más simple de arrancar un motor trifásico. El contactor conecta directamente la red al motor. No hay reducción de corriente de arranque.</div>
+    </div>
+  </div>
+  <div class="concept-item">
+    <div class="concept-num">3</div>
+    <div class="concept-text">
+      <div class="concept-title">Auto-retención (enclavamiento)</div>
+      <div class="concept-desc">El contacto auxiliar 13-14 del contactor en paralelo con el pulsador de marcha S1. Sin él, el motor funciona solo mientras mantenés S1 apretado.</div>
+    </div>
+  </div>
+  <div class="concept-item">
+    <div class="concept-num">4</div>
+    <div class="concept-text">
+      <div class="concept-title">Protección: relé térmico ≠ protección de cortocircuito</div>
+      <div class="concept-desc">El relé térmico protege ante sobrecarga sostenida (actúa en segundos). La protección termomagnética o fusibles protegen ante cortocircuito (actúan en milisegundos). No confundirlos.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card card-accent-teal">
+  <h3>🔒 Auto-retención — contacto 13-14</h3>
+  <p>El contacto auxiliar <strong>NA 13-14</strong> del contactor KM1 se conecta <strong>en paralelo</strong> con el pulsador de marcha S1.</p>
+  <p>Al pulsar S1 → la bobina KM1 se energiza → 13-14 se cierra → cuando soltás S1, la bobina <strong>sigue alimentada</strong> por el camino del 13-14.</p>
+  <div class="tip"><strong>Sin 13-14:</strong> el motor funciona solo mientras mantenés S1 apretado (modo impulso). Al soltar S1 se detiene.</div>
+</div>
+
+<div class="card card-accent-red">
+  <h3>🌡️ Relé Térmico — protección de sobrecarga</h3>
+  <p>El relé térmico <strong>protege al motor ante sobrecargas sostenidas</strong>. Cuando la corriente supera el umbral calibrado por un tiempo determinado, el bimetal se calienta y abre el circuito de mando.</p>
+  <div class="warn"><strong>⚠️ No confundir:</strong> el relé térmico NO es la protección de cortocircuito. Su tiempo de actuación es demasiado largo para cortocircuitos. Los fusibles o disyuntor termomagnético cumplen esa función.</div>
+  <div class="bool-table-wrap" style="margin-top:.8rem">
+    <table style="width:100%;border-collapse:collapse;font-size:.85rem">
+      <thead><tr style="background:#f8fafc"><th style="border:1px solid var(--border);padding:.4rem .6rem">Contacto</th><th style="border:1px solid var(--border);padding:.4rem .6rem">Tipo</th><th style="border:1px solid var(--border);padding:.4rem .6rem">Estado normal</th><th style="border:1px solid var(--border);padding:.4rem .6rem">Al actuar</th></tr></thead>
+      <tbody>
+        <tr><td style="border:1px solid var(--border);padding:.4rem .6rem"><code>95-96</code></td><td style="border:1px solid var(--border);padding:.4rem .6rem">NC</td><td style="border:1px solid var(--border);padding:.4rem .6rem">Cerrado (circuito activo)</td><td style="border:1px solid var(--border);padding:.4rem .6rem">Abre → detiene el motor</td></tr>
+        <tr><td style="border:1px solid var(--border);padding:.4rem .6rem"><code>97-98</code></td><td style="border:1px solid var(--border);padding:.4rem .6rem">NA</td><td style="border:1px solid var(--border);padding:.4rem .6rem">Abierto</td><td style="border:1px solid var(--border);padding:.4rem .6rem">Cierra → activa alarma</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card card-accent-blue">
+  <h3>📋 Bornes IEC — marcado estándar</h3>
+  <div class="bornes-grid">
+    <div class="borne-card"><div class="bc-label">Bobina del contactor</div><div class="bc-val">A1 — A2</div></div>
+    <div class="borne-card"><div class="bc-label">Contactos principales (fuerza)</div><div class="bc-val">1/L1 — 2/T1, 3/L2 — 4/T2, 5/L3 — 6/T3</div></div>
+    <div class="borne-card"><div class="bc-label">Contacto auxiliar NA</div><div class="bc-val">13 — 14</div></div>
+    <div class="borne-card"><div class="bc-label">Contacto auxiliar NC</div><div class="bc-val">21 — 22</div></div>
+    <div class="borne-card"><div class="bc-label">Relé térmico NC (mando)</div><div class="bc-val">95 — 96</div></div>
+    <div class="borne-card"><div class="bc-label">Relé térmico NA (alarma)</div><div class="bc-val">97 — 98</div></div>
+  </div>
+</div>
+
+<!-- Circuito interactivo -->
+<h2 class="stitle"><span class="stitle-icon">🔍</span>Explorá el circuito de fuerza</h2>
+<div class="circuit-int" id="circuit-int-wrap">
+  <div class="circuit-int-title">⚡ Arranque directo — función de cada elemento</div>
+  <div class="circuit-int-sub">Hacé clic en un componente para ver su función, su protección y qué pasa si falla.</div>
+  <div class="circuit-components" id="circuitComps"></div>
+  <div class="circuit-info" id="circuitInfo">
+    <div class="circuit-info-name" id="ciName">—</div>
+    <div class="circuit-info-fn" id="ciFn">—</div>
+    <div class="circuit-info-risk" id="ciRisk">—</div>
+  </div>
+  <div class="circuit-seq" style="margin-top:1.3rem">
+    <div class="circuit-seq-title">🧩 Mini evaluación — ¿Cuál es la secuencia correcta de protección en el circuito de fuerza?</div>
+    <div class="circuit-seq-opts" id="circuitSeqOpts"></div>
+    <div class="circuit-seq-fb" id="circuitSeqFb"></div>
+  </div>
+</div>
+
+</div><!-- /container -->
+</div><!-- /tab-e -->
+
+<!-- ════════════ TAB F: SIMULACRO ════════════ -->
+<div class="page" id="tab-f">
+<div class="container">
+
+<!-- Ruta de estudio -->
+<h2 class="stitle" id="ruta"><span class="stitle-icon">📍</span>Ruta de estudio</h2>
+<div class="ruta-wrap">
+  <div class="ruta-title">📚 Módulos — Lógica Digital</div>
+  <div class="ruta-sub">Completá la actividad de cada módulo para marcarlo como Completado. El avance se guarda en este navegador.</div>
+  <div class="ruta-list" id="rutaList"></div>
+  <button class="ruta-reset" onclick="rutaReset()">🗑️ Reiniciar mi progreso</button>
+</div>
+
+<!-- Plan primer parcial -->
+<h2 class="stitle" id="plan-parcial"><span class="stitle-icon">📅</span>Plan del Primer Parcial</h2>
+<div class="plan-parcial">
+  <div class="plan-parcial-title">📅 Etapas hacia el primer parcial (Sesiones 01–06)</div>
+  <div class="plan-parcial-sub">Completá cada sección para desbloquear el simulacro. El estado se guarda en tu navegador.</div>
+  <div class="plan-steps" id="planSteps"></div>
+  <div class="plan-sim-lock" id="planSimLock">🔒 Completá al menos 4 etapas para habilitar el simulacro del parcial</div>
+</div>
+
+<!-- Simulacro -->
+<h2 class="stitle" id="simulacro"><span class="stitle-icon">🧪</span>Simulacro integrador</h2>
+<p style="font-size:.9rem;color:var(--gray-lt);margin-bottom:1rem">12 preguntas · 2 por módulo · resultado por área · revisión de errores</p>
+<div class="simulacro">
+  <div id="simStart" class="simulacro-header">
+    <div class="simulacro-title">🧪 Simulacro de parcial</div>
+    <div class="simulacro-desc">12 preguntas aleatorias cubriendo todos los módulos.<br>Necesitás 10/12 para marcar el repaso integrador como completado.</div>
+    <button class="sim-start-btn" onclick="simStart()">▶ Comenzar simulacro</button>
+  </div>
+  <div class="sim-body" id="simBody">
+    <div class="sim-progress">
+      <div class="sim-progress-bar-wrap"><div class="sim-progress-bar" id="simBar" style="width:0%"></div></div>
+      <div class="sim-progress-label"><span id="simQLabel">Pregunta 1 de 12</span><span id="simCatLabel">—</span></div>
+    </div>
+    <div class="sim-category-badge" id="simCatBadge">—</div>
+    <div class="sim-q-text" id="simQText">—</div>
+    <div class="sim-opts" id="simOpts"></div>
+    <button class="sim-next" id="simNext" onclick="simNext()">Siguiente →</button>
+  </div>
+  <div class="sim-results" id="simResults">
+    <div class="sim-results-big" id="simResultsBig">—</div>
+    <div class="sim-results-label">sobre 12 preguntas</div>
+    <div class="sim-module-scores" id="simModScores"></div>
+    <div class="sim-results-btns">
+      <button class="sim-results-btn primary" onclick="simReviewAll()">📋 Ver todas las respuestas</button>
+      <button class="sim-results-btn secondary" onclick="simReviewWrong()">❌ Ver solo errores</button>
+      <button class="sim-results-btn secondary" onclick="simStart()">🔄 Nuevo intento</button>
+    </div>
+    <div class="sim-review" id="simReview"></div>
+  </div>
+</div>
+
+<!-- Material de la cursada -->
+<h2 class="stitle" id="material"><span class="stitle-icon">📂</span>Material de la cursada</h2>
+<div class="material-wrap">
+  <div class="material-header">
+    <div class="material-title">📂 Archivos de la materia</div>
+    <div class="material-sub">31 archivos organizados por unidad. Estado de análisis y enlaces directos.</div>
+    <div class="material-stats">
+      <div class="material-stat">Revisados: <span id="matRevisados">0</span> / <span id="matTotal">0</span></div>
+      <div class="material-stat">Incorporados: <span id="matIncorporados">0</span> / <span id="matTotal2">0</span></div>
+    </div>
+    <div class="material-bar-wrap"><div class="material-bar" id="matBar" style="width:0%"></div></div>
+    <div class="material-pct" id="matPct">0%</div>
+  </div>
+  <div id="materialList"></div>
+</div>
+
+</div><!-- /container -->
+</div><!-- /tab-f -->
+
+<footer>Automatización y Control · Universidad Nacional de Pilar · Sesiones 01–05</footer>
+
 <script>
+/* ══ TAB NAVIGATION ══ */
+function showTab(id, btn) {
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  // Reinit components that need visible canvas
+  if(id === 'tab-c') { setTimeout(function(){ if(typeof gpRender==='function') gpRender(); }, 50); }
+  if(id === 'tab-d') { setTimeout(function(){ if(typeof kmapDraw==='function') kmapDraw(); }, 50); }
+}
+function showTabByIdx(n) {
+  var btns = document.querySelectorAll('.tab-btn');
+  if(btns[n]) showTab('tab-'+['a','b','c','d','e','f'][n], btns[n]);
+}
+
+/* ── Read old JS from here ── */
+
 /* ══════════════════════════════════════════════
    CALCULADORA DE BASES
 ══════════════════════════════════════════════ */
@@ -2513,6 +2519,7 @@ function mnemoNext() {
   mnemoRender();
 }
 mnemoRender();
+
 
 </script>
 </body>

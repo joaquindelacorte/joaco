@@ -325,6 +325,194 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
 .cim-score-label{font-size:.95rem;color:var(--gray-lt);margin:.4rem 0 .8rem}
 .cim-score-msg{font-size:.88rem;line-height:1.55;color:var(--gray);margin-bottom:1.2rem;padding:.75rem 1rem;border-radius:8px;background:#f8fafc}
 .cim-restart{padding:.7rem 1.8rem;background:var(--blue);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:.9rem;cursor:pointer;font-family:inherit}
+
+/* ════ Ruta de estudio ════ */
+.ruta-wrap{background:var(--card);border:2px solid var(--blue);border-radius:20px;padding:1.8rem;margin:1.5rem 0 2.5rem}
+.ruta-title{font-size:1rem;font-weight:800;color:var(--blue);margin-bottom:.25rem}
+.ruta-sub{font-size:.82rem;color:var(--gray-lt);margin-bottom:1.3rem}
+.ruta-list{display:grid;gap:.7rem}
+.ruta-item{display:flex;align-items:center;gap:1rem;padding:.9rem 1.1rem;border:2px solid var(--border);border-radius:12px;background:#fafbfc;transition:.15s}
+.ruta-item.done{border-color:#15803d;background:#f0fdf4}
+.ruta-item.active{border-color:var(--blue);background:var(--blue-bg)}
+.ruta-num{width:28px;height:28px;border-radius:50%;background:var(--gray-lt);color:#fff;font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ruta-item.done .ruta-num{background:#15803d}
+.ruta-item.active .ruta-num{background:var(--blue)}
+.ruta-info{flex:1}
+.ruta-name{font-weight:700;font-size:.92rem;color:#0c1a2e;margin-bottom:.15rem}
+.ruta-obj{font-size:.78rem;color:var(--gray-lt);line-height:1.4}
+.ruta-badge{font-size:.72rem;font-weight:700;padding:.25rem .65rem;border-radius:6px;white-space:nowrap;flex-shrink:0}
+.ruta-badge.pending{background:#f1f5f9;color:var(--gray-lt)}
+.ruta-badge.active-st{background:var(--blue-bg);color:var(--blue)}
+.ruta-badge.done{background:#dcfce7;color:#15803d}
+.ruta-goto{font-size:.78rem;font-weight:700;padding:.25rem .7rem;border:none;border-radius:7px;background:var(--blue-bg);color:var(--blue);cursor:pointer;font-family:inherit;flex-shrink:0;transition:.15s}
+.ruta-goto:hover{background:var(--blue);color:#fff}
+.ruta-reset{margin-top:1rem;padding:.5rem 1.2rem;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:.78rem;font-weight:700;color:var(--gray-lt);cursor:pointer;font-family:inherit;transition:.15s}
+.ruta-reset:hover{border-color:#b91c1c;color:#b91c1c}
+/* ════ Conv practice ════ */
+.conv-practice{background:var(--card);border:2px solid var(--orange);border-radius:18px;padding:1.6rem;margin:1.5rem 0}
+.conv-prac-title{font-size:1rem;font-weight:800;color:var(--orange);margin-bottom:.25rem}
+.conv-prac-sub{font-size:.82rem;color:var(--gray-lt);margin-bottom:1.2rem}
+.conv-prac-counter{font-size:.78rem;font-weight:700;color:var(--gray-lt);text-align:right;margin-bottom:.4rem}
+.conv-prac-q{font-size:1.1rem;font-weight:800;font-family:'Courier New',monospace;color:#0c1a2e;text-align:center;padding:1rem;background:#f8fafc;border-radius:10px;margin-bottom:.5rem;min-height:3.2rem;display:flex;align-items:center;justify-content:center}
+.conv-prac-hint{font-size:.78rem;color:var(--gray-lt);text-align:center;margin-bottom:.8rem}
+.conv-prac-input{font-family:'Courier New',monospace;font-size:1.1rem;padding:.65rem 1rem;border:2px solid var(--border);border-radius:10px;width:100%;max-width:320px;display:block;margin:0 auto .8rem;text-align:center;outline:none;color:#0c1a2e;background:#fff}
+.conv-prac-input:focus{border-color:var(--orange)}
+.conv-prac-input.ok{border-color:#15803d;background:#dcfce7}
+.conv-prac-input.fail{border-color:#b91c1c;background:#fee2e2}
+.conv-prac-btns{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;margin-bottom:.8rem}
+.conv-prac-btn{padding:.6rem 1.4rem;border:none;border-radius:10px;font-weight:700;font-size:.88rem;cursor:pointer;font-family:inherit;transition:.15s}
+.conv-prac-btn.primary{background:var(--orange);color:#fff}
+.conv-prac-btn.primary:hover{background:#9a3f00}
+.conv-prac-btn.secondary{background:#f1f5f9;color:var(--gray);border:1.5px solid var(--border)}
+.conv-prac-btn.secondary:hover{background:#e2e8f0}
+.conv-prac-fb{font-size:.84rem;line-height:1.65;padding:.85rem 1rem;border-radius:10px;display:none;margin-bottom:.8rem}
+.conv-prac-fb.show{display:block}
+.conv-prac-fb.ok{background:#dcfce7;color:#14532d;border-left:4px solid #15803d}
+.conv-prac-fb.fail{background:#fee2e2;color:#7f1d1d;border-left:4px solid #b91c1c}
+.conv-prac-score{text-align:center;display:none;padding:.5rem 0}
+.conv-prac-score.show{display:block}
+.cps-big{font-size:2.8rem;font-weight:900;color:var(--orange);line-height:1}
+.cps-label{font-size:.88rem;color:var(--gray-lt);margin:.3rem 0 .8rem}
+.cps-msg{font-size:.83rem;color:var(--gray);margin-bottom:1rem;line-height:1.5}
+/* ════ Predecí ════ */
+.gate-predict{background:var(--card);border:2px solid var(--teal);border-radius:18px;padding:1.6rem;margin:1.5rem 0}
+.gate-predict-title{font-size:1rem;font-weight:800;color:var(--teal);margin-bottom:.25rem}
+.gate-predict-sub{font-size:.82rem;color:var(--gray-lt);margin-bottom:1.2rem}
+.gp-counter{font-size:.78rem;font-weight:700;color:var(--gray-lt);text-align:right;margin-bottom:.4rem}
+.gp-challenge{text-align:center;padding:.9rem;background:#f8fafc;border-radius:10px;margin-bottom:1rem}
+.gp-gate-name{font-size:1.5rem;font-weight:900;color:#0c1a2e;font-family:'Courier New',monospace}
+.gp-equation{font-size:.88rem;color:var(--teal);font-family:'Courier New',monospace;margin:.2rem 0}
+.gp-inputs{font-size:.95rem;font-weight:700;color:var(--gray);margin:.35rem 0}
+.gp-opts{display:flex;gap:.7rem;justify-content:center;margin:1rem 0}
+.gp-opt{width:72px;height:58px;border:2px solid var(--border);border-radius:12px;background:#f8fafc;font-size:1.5rem;font-weight:900;cursor:pointer;font-family:'Courier New',monospace;transition:.15s;color:var(--gray)}
+.gp-opt:hover:not(:disabled){border-color:var(--teal);background:var(--teal-bg)}
+.gp-opt.correct{border-color:#15803d;background:#dcfce7;color:#15803d}
+.gp-opt.wrong{border-color:#b91c1c;background:#fee2e2;color:#b91c1c}
+.gp-opt:disabled{cursor:default}
+.gp-fb{font-size:.84rem;line-height:1.6;padding:.8rem 1rem;border-radius:10px;display:none;margin-top:.5rem}
+.gp-fb.show{display:block}
+.gp-fb.ok{background:#dcfce7;color:#14532d;border-left:4px solid #15803d}
+.gp-fb.fail{background:#fee2e2;color:#7f1d1d;border-left:4px solid #b91c1c}
+.gp-next{margin-top:.9rem;padding:.6rem 1.5rem;background:var(--teal);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;display:none;font-family:inherit}
+.gp-next.show{display:inline-block}
+/* ════ K-map int ════ */
+.kmap-interactive{background:var(--card);border:2px solid var(--green);border-radius:18px;padding:1.6rem;margin:1.5rem 0}
+.kmap-int-title{font-size:1rem;font-weight:800;color:var(--green);margin-bottom:.25rem}
+.kmap-int-sub{font-size:.82rem;color:var(--gray-lt);margin-bottom:1.2rem}
+.kmap-ex-select{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.8rem}
+.kmap-ex-btn{padding:.4rem .9rem;border:1.5px solid var(--border);border-radius:8px;background:#f8fafc;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;color:var(--gray)}
+.kmap-ex-btn.active{background:var(--green-bg);border-color:var(--green);color:var(--green)}
+.kmap-int-fn{font-size:.92rem;font-weight:800;font-family:'Courier New',monospace;color:var(--green);text-align:center;padding:.6rem;background:var(--green-bg);border-radius:8px;margin-bottom:.7rem}
+.kmap-int-instr{font-size:.82rem;color:var(--gray);margin:.5rem 0;line-height:1.5}
+.kmap-int-wrap{overflow-x:auto;margin:.8rem 0;text-align:center}
+.kmap-int-table{border-collapse:collapse;margin:0 auto;font-family:'Courier New',monospace;user-select:none}
+.kmap-int-table th{background:#f8fafc;font-size:.72rem;font-weight:700;color:var(--gray-lt);border:2px solid var(--border);width:58px;height:44px;text-align:center;vertical-align:middle;padding:.2rem}
+.kmap-int-table td{border:2px solid var(--border);width:58px;height:50px;text-align:center;vertical-align:middle;cursor:pointer;font-size:1.1rem;font-weight:800;transition:.15s}
+.kmap-int-table td.k-0{background:#fff;color:var(--gray-lt)}
+.kmap-int-table td.k-1{background:#dbeafe;color:var(--blue)}
+.kmap-int-table td.k-sel{outline:3px solid var(--green);outline-offset:-2px;background:#d1fae5;color:var(--green)}
+.kmap-int-btns{display:flex;gap:.6rem;flex-wrap:wrap;margin:.8rem 0}
+.kmap-int-btn{padding:.55rem 1.2rem;border:none;border-radius:9px;font-weight:700;font-size:.83rem;cursor:pointer;font-family:inherit;transition:.15s}
+.kmap-int-btn.check{background:var(--green);color:#fff}
+.kmap-int-btn.check:hover{background:#14532d}
+.kmap-int-btn.reset{background:#f1f5f9;border:1.5px solid var(--border);color:var(--gray)}
+.kmap-int-fb{font-size:.84rem;line-height:1.6;padding:.8rem 1rem;border-radius:10px;display:none;margin-top:.6rem}
+.kmap-int-fb.show{display:block}
+.kmap-int-fb.ok{background:#dcfce7;color:#14532d;border-left:4px solid #15803d}
+.kmap-int-fb.fail{background:#fee2e2;color:#7f1d1d;border-left:4px solid #b91c1c}
+/* ════ ISA práctica ════ */
+.isa-practice{background:var(--card);border:2px solid var(--blue);border-radius:18px;padding:1.6rem;margin:1.5rem 0}
+.isa-prac-title{font-size:1rem;font-weight:800;color:var(--blue);margin-bottom:.25rem}
+.isa-prac-sub{font-size:.82rem;color:var(--gray-lt);margin-bottom:1.2rem}
+.isa-prac-tag{font-size:2rem;font-weight:900;font-family:'Courier New',monospace;color:#0c1a2e;text-align:center;padding:.8rem;background:#f8fafc;border-radius:10px;margin-bottom:.5rem;letter-spacing:.08em}
+.isa-prac-q{font-size:.86rem;color:var(--gray-lt);text-align:center;margin-bottom:1rem}
+.isa-prac-opts{display:grid;gap:.5rem;margin-bottom:.8rem}
+.isa-prac-opt{width:100%;text-align:left;padding:.7rem .95rem;border:2px solid var(--border);border-radius:10px;background:#fff;cursor:pointer;font-size:.88rem;color:var(--gray);transition:.15s;font-family:inherit}
+.isa-prac-opt:hover:not(:disabled){border-color:var(--blue-lt);background:var(--blue-bg)}
+.isa-prac-opt.correct{border-color:#15803d;background:#dcfce7;color:#14532d;font-weight:700}
+.isa-prac-opt.wrong{border-color:#b91c1c;background:#fee2e2;color:#7f1d1d}
+.isa-prac-opt:disabled{cursor:default}
+.isa-prac-fb{font-size:.84rem;line-height:1.6;padding:.8rem 1rem;border-radius:10px;display:none;margin-bottom:.8rem}
+.isa-prac-fb.show{display:block}
+.isa-prac-fb.ok{background:#dcfce7;color:#14532d;border-left:4px solid #15803d}
+.isa-prac-fb.fail{background:#fee2e2;color:#7f1d1d;border-left:4px solid #b91c1c}
+.isa-prac-next{padding:.6rem 1.5rem;background:var(--blue);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;display:none;font-family:inherit}
+.isa-prac-next.show{display:inline-block}
+/* ════ Circuito int ════ */
+.circuit-int{background:var(--card);border:2px solid var(--teal);border-radius:18px;padding:1.6rem;margin:1.5rem 0}
+.circuit-int-title{font-size:1rem;font-weight:800;color:var(--teal);margin-bottom:.25rem}
+.circuit-int-sub{font-size:.82rem;color:var(--gray-lt);margin-bottom:1.2rem}
+.circuit-components{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.6rem;margin-bottom:1.2rem}
+.circuit-comp{border:2px solid var(--border);border-radius:12px;padding:.85rem .9rem;cursor:pointer;transition:.15s;background:#fff;text-align:center}
+.circuit-comp:hover{border-color:var(--teal);background:var(--teal-bg)}
+.circuit-comp.selected{border-color:var(--teal);background:var(--teal-bg)}
+.circuit-comp-icon{font-size:1.4rem;margin-bottom:.25rem}
+.circuit-comp-name{font-weight:700;font-size:.83rem;color:#0c1a2e;margin-bottom:.1rem}
+.circuit-comp-role{font-size:.72rem;color:var(--gray-lt)}
+.circuit-info{background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;display:none;margin-bottom:1rem}
+.circuit-info.show{display:block}
+.circuit-info-name{font-weight:800;font-size:.92rem;color:var(--teal);margin-bottom:.35rem}
+.circuit-info-fn{font-size:.86rem;color:#0c1a2e;line-height:1.6;margin-bottom:.35rem}
+.circuit-info-risk{font-size:.8rem;color:var(--orange);line-height:1.5;border-top:1px solid var(--border);padding-top:.35rem;margin-top:.35rem}
+.circuit-seq-title{font-weight:700;font-size:.88rem;color:#0c1a2e;margin-bottom:.6rem}
+.circuit-seq-opts{display:grid;gap:.45rem}
+.circuit-seq-opt{display:flex;align-items:center;gap:.6rem;padding:.65rem .9rem;border:2px solid var(--border);border-radius:10px;background:#fff;cursor:pointer;font-size:.85rem;color:var(--gray);transition:.15s;font-family:inherit;width:100%;text-align:left}
+.circuit-seq-opt:hover:not(:disabled){border-color:var(--teal);background:var(--teal-bg)}
+.circuit-seq-opt.correct{border-color:#15803d;background:#dcfce7;color:#14532d;font-weight:700}
+.circuit-seq-opt.wrong{border-color:#b91c1c;background:#fee2e2;color:#7f1d1d}
+.circuit-seq-opt:disabled{cursor:default}
+.circuit-seq-fb{font-size:.84rem;line-height:1.6;padding:.8rem 1rem;border-radius:10px;display:none;margin-top:.7rem}
+.circuit-seq-fb.show{display:block}
+.circuit-seq-fb.ok{background:#dcfce7;color:#14532d;border-left:4px solid #15803d}
+.circuit-seq-fb.fail{background:#fee2e2;color:#7f1d1d;border-left:4px solid #b91c1c}
+/* ════ Simulacro ════ */
+.simulacro{background:var(--card);border:2px solid var(--blue);border-radius:20px;padding:1.8rem;margin:2rem 0}
+.simulacro-header{text-align:center;margin-bottom:1.5rem}
+.simulacro-title{font-size:1.15rem;font-weight:900;color:var(--blue);margin-bottom:.3rem}
+.simulacro-desc{font-size:.85rem;color:var(--gray-lt);line-height:1.5}
+.sim-start-btn{padding:.8rem 2rem;background:var(--blue);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit;transition:.15s;margin-top:1rem}
+.sim-start-btn:hover{background:var(--blue-lt)}
+.sim-body{display:none}
+.sim-body.show{display:block}
+.sim-progress{margin-bottom:1.2rem}
+.sim-progress-bar-wrap{height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-bottom:.4rem}
+.sim-progress-bar{height:100%;background:linear-gradient(90deg,var(--blue),var(--teal));border-radius:999px;transition:.4s}
+.sim-progress-label{font-size:.78rem;font-weight:700;color:var(--gray-lt);display:flex;justify-content:space-between}
+.sim-category-badge{display:inline-block;font-size:.7rem;font-weight:700;padding:.2rem .65rem;border-radius:6px;background:var(--blue-bg);color:var(--blue);margin-bottom:.6rem;text-transform:uppercase;letter-spacing:.05em}
+.sim-q-text{font-size:.95rem;font-weight:700;color:#0c1a2e;line-height:1.55;margin-bottom:1rem;padding:.8rem 1rem;background:#f8fafc;border-radius:10px;border-left:4px solid var(--blue)}
+.sim-opts{display:grid;gap:.55rem;margin-bottom:1rem}
+.sim-opt{width:100%;text-align:left;padding:.75rem 1rem;border:2px solid var(--border);border-radius:10px;background:#fff;cursor:pointer;font-size:.88rem;color:var(--gray);transition:.15s;font-family:inherit}
+.sim-opt:hover:not(:disabled){border-color:var(--blue-lt);background:var(--blue-bg)}
+.sim-opt.correct{border-color:#15803d;background:#dcfce7;color:#14532d;font-weight:700}
+.sim-opt.wrong{border-color:#b91c1c;background:#fee2e2;color:#7f1d1d;font-weight:700}
+.sim-opt:disabled{cursor:default}
+.sim-next{padding:.65rem 1.6rem;background:var(--blue);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:.88rem;cursor:pointer;display:none;font-family:inherit}
+.sim-next.show{display:inline-block}
+.sim-results{display:none;text-align:center}
+.sim-results.show{display:block}
+.sim-results-big{font-size:3.5rem;font-weight:900;color:var(--blue);line-height:1}
+.sim-results-label{font-size:.95rem;color:var(--gray-lt);margin:.4rem 0 1.2rem}
+.sim-module-scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.6rem;margin:1rem 0;text-align:left}
+.sim-mod-score{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:.65rem .85rem}
+.sim-mod-name{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-lt);margin-bottom:.2rem}
+.sim-mod-val{font-size:.98rem;font-weight:800;color:#0c1a2e}
+.sim-mod-val.perfect{color:#15803d}
+.sim-mod-val.fail{color:#b91c1c}
+.sim-results-btns{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;margin-top:1.2rem}
+.sim-results-btn{padding:.65rem 1.5rem;border:none;border-radius:10px;font-weight:700;font-size:.88rem;cursor:pointer;font-family:inherit;transition:.15s}
+.sim-results-btn.primary{background:var(--blue);color:#fff}
+.sim-results-btn.primary:hover{background:var(--blue-lt)}
+.sim-results-btn.secondary{background:#f1f5f9;border:1.5px solid var(--border);color:var(--gray)}
+.sim-results-btn.secondary:hover{background:#e2e8f0}
+.sim-review{margin-top:1.5rem;text-align:left;display:none}
+.sim-review.show{display:block}
+.sim-review-item{border:1px solid var(--border);border-radius:10px;padding:.8rem 1rem;margin-bottom:.6rem;font-size:.84rem;line-height:1.55}
+.sim-review-item.was-correct{border-left:4px solid #15803d}
+.sim-review-item.was-wrong{border-left:4px solid #b91c1c}
+.sim-review-q{font-weight:700;color:#0c1a2e;margin-bottom:.3rem}
+.sim-review-yours{color:#7f1d1d;margin-bottom:.15rem}
+.sim-review-correct{color:#14532d;font-weight:700}
+
 .cim-restart:hover{background:var(--blue-lt)}
 
 </style>
@@ -344,6 +532,7 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
   </header>
 
   <div class="section-nav">
+    <a href="#ruta">📍 Ruta</a>
     <a href="#cim">🏭 CIM</a>
     <a href="#bases">🔢 Bases</a>
     <a href="#compuertas">🔌 Compuertas</a>
@@ -351,8 +540,18 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
     <a href="#karnaugh">🗺️ Karnaugh</a>
     <a href="#isa">📊 ISA 5.1</a>
     <a href="#circuitos">⚡ Circuitos</a>
-    <a href="#quiz">🧠 Quiz</a>
-    <a href="#juegos">🎮 Juegos</a>
+    <a href="#simulacro">🧪 Simulacro</a>
+  </div>
+
+
+  <!-- ═══════════════ RUTA DE ESTUDIO ═══════════════ -->
+  <h2 class="section-title" id="ruta">📍 Ruta de estudio</h2>
+  <p class="section-sub">Seguí este orden. Tu avance se guarda en el navegador (no necesitás login).</p>
+  <div class="ruta-wrap">
+    <div class="ruta-title">📚 Módulos — Lógica Digital</div>
+    <div class="ruta-sub">Completá la actividad de cada módulo (≥80%) para marcarlo Completado.</div>
+    <div class="ruta-list" id="rutaList"></div>
+    <button class="ruta-reset" onclick="rutaReset()">🗑️ Reiniciar mi progreso</button>
   </div>
 
   <!-- ═══════════════ PIRÁMIDE CIM ═══════════════ -->
@@ -444,6 +643,32 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
     </div>
   </div>
 
+
+  <!-- ════ PRÁCTICA CONVERSIONES ════ -->
+  <h2 class="section-title" style="margin-top:2rem">🏋️ Práctica — Conversiones y BCD</h2>
+  <p class="section-sub">6 ejercicios aleatorios: decimal↔binario y decimal→BCD. Procedimiento detallado si errás.</p>
+  <div class="conv-practice">
+    <div class="conv-prac-title">⚡ Convertí y verificá</div>
+    <div class="conv-prac-sub">BCD: podés separar los grupos con espacios: <code>0101 0011</code></div>
+    <div id="convPracBody">
+      <div class="conv-prac-counter"><span id="cpNum">1</span>/6</div>
+      <div class="conv-prac-q" id="cpQ">—</div>
+      <div class="conv-prac-hint" id="cpHint"></div>
+      <input class="conv-prac-input" type="text" id="cpInput" placeholder="Tu respuesta..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter')cpCheck()">
+      <div class="conv-prac-btns">
+        <button class="conv-prac-btn primary" onclick="cpCheck()">✓ Verificar</button>
+        <button class="conv-prac-btn secondary" id="cpNextBtn" onclick="cpNext()" style="display:none">Siguiente →</button>
+      </div>
+      <div class="conv-prac-fb" id="cpFb"></div>
+    </div>
+    <div class="conv-prac-score" id="cpScore">
+      <div class="cps-big" id="cpScoreBig">—</div>
+      <div class="cps-label">sobre 6 ejercicios</div>
+      <div class="cps-msg" id="cpScoreMsg"></div>
+      <button class="conv-prac-btn primary" style="margin:0 auto;display:block" onclick="cpRestart()">🔄 Repetir</button>
+    </div>
+  </div>
+
   <!-- ═══════════════ COMPUERTAS ═══════════════ -->
   <h2 class="section-title" id="compuertas">🔌 Compuertas Lógicas Elementales</h2>
   <p class="section-sub">Una compuerta transforma una o más entradas binarias en una salida según una regla fija. Son el hardware del Álgebra de Boole.</p>
@@ -468,6 +693,27 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
   <div class="gate-board">
     <div class="gate-board-title">⚡ Simulador de compuertas</div>
     <div class="gate-grid" id="gateGrid"></div>
+  </div>
+
+
+  <!-- ════ MODO PREDECÍ COMPUERTAS ════ -->
+  <h2 class="section-title" style="margin-top:2rem">🎯 Modo predecí — ¿Cuál es la salida?</h2>
+  <p class="section-sub">Compuerta + entradas → elegís Q antes de ver el resultado. 10 rondas.</p>
+  <div class="gate-predict">
+    <div class="gate-predict-title">🎯 Predecí la salida Q</div>
+    <div class="gate-predict-sub">Elegí 0 o 1 antes de ver la explicación.</div>
+    <div class="gp-counter"><span id="gpNum">1</span>/10</div>
+    <div class="gp-challenge">
+      <div class="gp-gate-name" id="gpGateName">—</div>
+      <div class="gp-equation" id="gpEq">—</div>
+      <div class="gp-inputs" id="gpInputs">—</div>
+    </div>
+    <div class="gp-opts">
+      <button class="gp-opt" onclick="gpAnswer(0)" aria-label="Respuesta 0">0</button>
+      <button class="gp-opt" onclick="gpAnswer(1)" aria-label="Respuesta 1">1</button>
+    </div>
+    <div class="gp-fb" id="gpFb"></div>
+    <button class="gp-next" id="gpNext" onclick="gpNext()">Siguiente →</button>
   </div>
 
   <!-- ═══════════════ ÁLGEBRA DE BOOLE ═══════════════ -->
@@ -640,6 +886,24 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
     <p><strong>Secuencial:</strong> la salida depende de las entradas actuales <em>y del estado anterior</em>. Contiene elementos de memoria (flip-flops) y realimentación. Ejemplos: Flip-Flop RS/D/JK, contadores, registros de desplazamiento.</p>
   </div>
 
+
+  <!-- ════ K-MAP INTERACTIVO ════ -->
+  <h2 class="section-title" style="margin-top:2rem" id="kmap-int">🗺️ K-map interactivo — Simplificá vos</h2>
+  <p class="section-sub">Marcá los grupos en el mapa y verificá la expresión simplificada.</p>
+  <div class="kmap-interactive">
+    <div class="kmap-int-title">🗺️ Resolvé el mapa de Karnaugh</div>
+    <div class="kmap-int-sub">3 ejercicios de distinta dificultad. Seleccioná las celdas del grupo y verificá.</div>
+    <div class="kmap-ex-select" id="kmapExBtns"></div>
+    <div class="kmap-int-fn" id="kmapIntFn">—</div>
+    <div class="kmap-int-instr">Hacé clic en las celdas con 1 para marcarlas en tu agrupación. Los bordes del mapa son adyacentes (columna 0 y columna 3 se tocan).</div>
+    <div class="kmap-int-wrap" id="kmapIntWrap"></div>
+    <div class="kmap-int-btns">
+      <button class="kmap-int-btn check" onclick="kmapCheck()">✓ Verificar agrupación</button>
+      <button class="kmap-int-btn reset" onclick="kmapReset()">↺ Limpiar</button>
+    </div>
+    <div class="kmap-int-fb" id="kmapIntFb"></div>
+  </div>
+
   <!-- ═══════════════ ISA 5.1 ═══════════════ -->
   <h2 class="section-title" id="isa">📊 Normativa ISA 5.1 — Diagramas P&ID</h2>
   <p class="section-sub">Los tags ISA identifican cada instrumento: primera letra = variable, letras siguientes = función. Lazo = número de circuito.</p>
@@ -709,6 +973,20 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
     <div class="tip" style="margin-top:.8rem"><strong>Símbolos de burbuja:</strong> círculo limpio = instrumento en campo (local). Círculo con línea horizontal al centro = instrumento en panel de control (sala centralizada).</div>
   </div>
 
+
+  <!-- ════ ISA PRÁCTICA ════ -->
+  <h2 class="section-title" style="margin-top:2rem">🏋️ Práctica — Interpretá la etiqueta ISA</h2>
+  <p class="section-sub">10 tags de planta real. Primera letra = variable, letras siguientes = función.</p>
+  <div class="isa-practice">
+    <div class="isa-prac-title">🏷️ ¿Qué significa este tag?</div>
+    <div class="isa-prac-sub">Feedback con desglose por letra en cada respuesta.</div>
+    <div class="isa-prac-tag" id="isaPracTag">—</div>
+    <div class="isa-prac-q" id="isaPracQ">Elegí la descripción correcta:</div>
+    <div class="isa-prac-opts" id="isaPracOpts"></div>
+    <div class="isa-prac-fb" id="isaPracFb"></div>
+    <button class="isa-prac-next" id="isaPracNext" onclick="isaPracNext()">Siguiente →</button>
+  </div>
+
   <!-- ═══════════════ CIRCUITOS ═══════════════ -->
   <h2 class="section-title" id="circuitos">⚡ Circuitos de Fuerza y Mando — IEC 60947</h2>
   <p class="section-sub">Arranque directo de motor trifásico con contactor KM1 y relé térmico. Sesión 05.</p>
@@ -739,6 +1017,26 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
     </div>
   </div>
 
+
+  <!-- ════ CIRCUITO INTERACTIVO ════ -->
+  <h2 class="section-title" style="margin-top:2rem">🔍 Explorá el circuito — función de cada elemento</h2>
+  <p class="section-sub">Hacé clic en un componente para ver su función, protección y qué pasa si falla.</p>
+  <div class="circuit-int" id="circuit-int-wrap">
+    <div class="circuit-int-title">⚡ Arranque directo de motor</div>
+    <div class="circuit-int-sub">Seleccioná cualquier elemento del circuito de fuerza.</div>
+    <div class="circuit-components" id="circuitComps"></div>
+    <div class="circuit-info" id="circuitInfo">
+      <div class="circuit-info-name" id="ciName">—</div>
+      <div class="circuit-info-fn" id="ciFn">—</div>
+      <div class="circuit-info-risk" id="ciRisk">—</div>
+    </div>
+    <div class="circuit-seq" style="margin-top:1.3rem">
+      <div class="circuit-seq-title">🧩 Mini evaluación — ¿Cuál es la secuencia de protección correcta en el circuito de fuerza?</div>
+      <div class="circuit-seq-opts" id="circuitSeqOpts"></div>
+      <div class="circuit-seq-fb" id="circuitSeqFb"></div>
+    </div>
+  </div>
+
   <!-- ═══════════════ QUIZ ═══════════════ -->
   <h2 class="section-title" id="quiz">🧠 Quiz — Modelo de parcial</h2>
   <p class="section-sub">15 preguntas tipo examen sobre los 5 temas. Ves el feedback y la explicación después de cada respuesta.</p>
@@ -759,6 +1057,39 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
       <div class="score-big" id="scoreBig">0/15</div>
       <div class="score-label" id="scoreLabel">Puntos obtenidos</div>
       <button class="quiz-restart" onclick="quizStart()">🔄 Volver a intentar</button>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════ SIMULACRO ═══════════════ -->
+  <h2 class="section-title" id="simulacro">🧪 Simulacro integrador</h2>
+  <p class="section-sub">12 preguntas · 2 por módulo · resultado por área · recomendaciones de repaso.</p>
+  <div class="simulacro">
+    <div id="simStart" class="simulacro-header">
+      <div class="simulacro-title">🧪 Simulacro de parcial</div>
+      <div class="simulacro-desc">12 preguntas aleatorias cubriendo todos los módulos.<br>Necesitás 10/12 para marcar el repaso integrador como completado.</div>
+      <button class="sim-start-btn" onclick="simStart()">▶ Comenzar simulacro</button>
+    </div>
+    <div class="sim-body" id="simBody">
+      <div class="sim-progress">
+        <div class="sim-progress-bar-wrap"><div class="sim-progress-bar" id="simBar" style="width:0%"></div></div>
+        <div class="sim-progress-label"><span id="simQLabel">Pregunta 1 de 12</span><span id="simCatLabel">—</span></div>
+      </div>
+      <div class="sim-category-badge" id="simCatBadge">—</div>
+      <div class="sim-q-text" id="simQText">—</div>
+      <div class="sim-opts" id="simOpts"></div>
+      <button class="sim-next" id="simNext" onclick="simNext()">Siguiente →</button>
+    </div>
+    <div class="sim-results" id="simResults">
+      <div class="sim-results-big" id="simResultsBig">—</div>
+      <div class="sim-results-label">sobre 12 preguntas</div>
+      <div class="sim-module-scores" id="simModScores"></div>
+      <div class="sim-results-btns">
+        <button class="sim-results-btn primary" onclick="simReviewAll()">📋 Ver todas las respuestas</button>
+        <button class="sim-results-btn secondary" onclick="simReviewWrong()">❌ Ver solo errores</button>
+        <button class="sim-results-btn secondary" onclick="simStart()">🔄 Nuevo intento</button>
+      </div>
+      <div class="sim-review" id="simReview"></div>
     </div>
   </div>
 
@@ -1352,6 +1683,168 @@ function cimExNext() {
 }
 
 cimExRestart();
+
+/* ══ RUTA DE ESTUDIO ══ */
+const RUTA_MODULES=[
+  {id:'cim',name:'Pirámide CIM',obj:'Identificar los 5 niveles y qué sistema pertenece a cada uno.',anchor:'cim'},
+  {id:'bases',name:'Sistemas de numeración',obj:'Convertir entre decimal, binario, hexadecimal y BCD 8421.',anchor:'bases'},
+  {id:'compuertas',name:'Compuertas lógicas',obj:'Predecir la salida de cualquier compuerta dadas sus entradas.',anchor:'compuertas'},
+  {id:'boole',name:'Álgebra de Boole',obj:'Simplificar expresiones lógicas aplicando los teoremas.',anchor:'boole'},
+  {id:'karnaugh',name:'Tablas de verdad y K-maps',obj:'Construir y simplificar con mapa de Karnaugh.',anchor:'kmap-int'},
+  {id:'isa',name:'ISA 5.1',obj:'Interpretar y construir tags de instrumentación.',anchor:'isa'},
+  {id:'circuitos',name:'Circuitos de fuerza',obj:'Identificar la función de cada componente en el arranque directo.',anchor:'circuitos'},
+  {id:'simulacro',name:'Repaso integrador',obj:'Completar el simulacro de 12 preguntas con ≥10/12.',anchor:'simulacro'},
+];
+function rutaLoad(){return JSON.parse(localStorage.getItem('logica_ruta')||'{}');}
+function rutaSave(s){localStorage.setItem('logica_ruta',JSON.stringify(s));}
+function rutaReset(){if(!confirm('¿Reiniciar todo el progreso?'))return;localStorage.removeItem('logica_ruta');rutaRender();}
+function rutaMarkDone(id){const s=rutaLoad();s[id]='done';rutaSave(s);rutaRender();}
+function rutaRender(){
+  const s=rutaLoad();
+  const list=document.getElementById('rutaList');
+  if(!list)return;
+  list.innerHTML=RUTA_MODULES.map((m,i)=>{
+    const st=s[m.id]||'pending';
+    const badge=st==='done'?'<span class="ruta-badge done">✓ Completado</span>':'<span class="ruta-badge pending">Pendiente</span>';
+    const cls=st==='done'?'done':'';
+    return '<div class="ruta-item '+cls+'"><div class="ruta-num">'+(i+1)+'</div><div class="ruta-info"><div class="ruta-name">'+m.name+'</div><div class="ruta-obj">'+m.obj+'</div></div>'+badge+'<button class="ruta-goto" onclick="document.getElementById(''+m.anchor+'')&&document.getElementById(''+m.anchor+'').scrollIntoView({behavior:'smooth'})">Ir →</button></div>';
+  }).join('');
+}
+rutaRender();
+
+/* ══ PRÁCTICA CONVERSIONES ══ */
+function d2b8(n){return n.toString(2).padStart(8,'0');}
+function d2bcd(n){return String(n).split('').map(d=>parseInt(d).toString(2).padStart(4,'0')).join(' ');}
+let cpPool=[],cpIdx=0,cpScore=0,cpChecked=false;
+function cpBuild(){
+  cpPool=[];
+  for(let i=0;i<3;i++){const n=Math.floor(Math.random()*200)+10;cpPool.push({label:n+'₁₀ → ?₂',hint:'Dividí por 2 o usá suma de potencias de 2.',check:s=>s.replace(/\s/g,'')===d2b8(n),explain:()=>n+'₁₀ = '+d2b8(n)+'₂
+Suma: '+[128,64,32,16,8,4,2,1].filter(p=>n&p).join(' + ')+' = '+n});}
+  for(let i=0;i<2;i++){const n=Math.floor(Math.random()*200)+10;const b=d2b8(n);cpPool.push({label:b+'₂ → ?₁₀',hint:'Multiplicá cada bit por su potencia de 2 y sumá.',check:s=>parseInt(s.trim())===n,explain:()=>b+'₂ = '+n+'₁₀'});}
+  const n=Math.floor(Math.random()*89)+10;const bcd=d2bcd(n);
+  cpPool.push({label:n+'₁₀ → ? BCD 8421',hint:'Codificá CADA dígito decimal por separado en 4 bits. No es el binario del número completo.',check:s=>s.replace(/\s/g,'')===bcd.replace(/\s/g,''),explain:()=>{const d=String(n).split('');return n+' en BCD: '+d.map(x=>parseInt(x).toString(2).padStart(4,'0')).join(' ')+'
+'+d.map(x=>x+'→'+parseInt(x).toString(2).padStart(4,'0')).join(' | ')+'
+⚠️ Binario de '+n+' sería '+d2b8(n)+' — son distintos!';}});
+  cpPool.sort(()=>Math.random()-.5);
+}
+function cpRestart(){cpBuild();cpIdx=0;cpScore=0;cpChecked=false;document.getElementById('cpScore').className='conv-prac-score';document.getElementById('convPracBody').style.display='';cpRender();}
+function cpRender(){const q=cpPool[cpIdx];document.getElementById('cpNum').textContent=cpIdx+1;document.getElementById('cpQ').textContent=q.label;document.getElementById('cpHint').textContent=q.hint;const inp=document.getElementById('cpInput');inp.value='';inp.className='conv-prac-input';inp.disabled=false;inp.focus();document.getElementById('cpFb').className='conv-prac-fb';document.getElementById('cpNextBtn').style.display='none';cpChecked=false;}
+function cpCheck(){if(cpChecked)return;const q=cpPool[cpIdx];const val=document.getElementById('cpInput').value.trim();if(!val)return;const ok=q.check(val);cpChecked=true;if(ok)cpScore++;const inp=document.getElementById('cpInput');inp.className='conv-prac-input '+(ok?'ok':'fail');inp.disabled=true;const fb=document.getElementById('cpFb');fb.className='conv-prac-fb show '+(ok?'ok':'fail');fb.innerHTML=(ok?'✅ Correcto! ':'❌ Incorrecto. ')+'<pre style="margin-top:.4rem;font-size:.82rem;white-space:pre-wrap">'+q.explain()+'</pre>';document.getElementById('cpNextBtn').style.display='';}
+function cpNext(){cpIdx++;if(cpIdx>=6){document.getElementById('convPracBody').style.display='none';const sc=document.getElementById('cpScore');sc.className='conv-prac-score show';document.getElementById('cpScoreBig').textContent=cpScore+'/6';const msgs=['🔄 Repasá teoría de bases.','📖 Revisá los ejercicios fallados.','✅ Bien. Identificá qué tipo costó más.','✅ Muy bien.','🏆 ¡Casi perfecto!','🏆 ¡Perfecto!'];document.getElementById('cpScoreMsg').textContent=msgs[cpScore];if(cpScore>=5)rutaMarkDone('bases');return;}cpRender();}
+cpRestart();
+
+/* ══ PREDECÍ COMPUERTAS ══ */
+const GP_GATES=[
+  {name:'BUF',eq:'Q = A',inputs:1,fn:function(a){return a;}},
+  {name:'NOT',eq:'Q = Ā',inputs:1,fn:function(a){return a?0:1;}},
+  {name:'AND',eq:'Q = A · B',inputs:2,fn:function(a,b){return a&&b?1:0;}},
+  {name:'NAND',eq:'Q = ¬(A·B)',inputs:2,fn:function(a,b){return a&&b?0:1;}},
+  {name:'OR',eq:'Q = A + B',inputs:2,fn:function(a,b){return a||b?1:0;}},
+  {name:'NOR',eq:'Q = ¬(A+B)',inputs:2,fn:function(a,b){return a||b?0:1;}},
+  {name:'XOR',eq:'Q = A ⊕ B',inputs:2,fn:function(a,b){return a!==b?1:0;}},
+  {name:'XNOR',eq:'Q = ¬(A⊕B)',inputs:2,fn:function(a,b){return a===b?1:0;}},
+];
+function gpExplain(g,ins){
+  const a=ins[0],b=ins[1];
+  const explains={BUF:'BUF repite la entrada: A='+a+' → Q='+a,NOT:'NOT invierte: A='+a+' → Q='+(a?0:1),AND:'AND da 1 solo si ambas son 1. A='+a+', B='+b+' → Q='+(a&&b?1:0),NAND:'AND='+( a&&b?1:0)+' → NAND invierte → Q='+(a&&b?0:1),OR:'OR da 1 si al menos una es 1. A='+a+', B='+b+' → Q='+(a||b?1:0),NOR:'OR='+(a||b?1:0)+' → NOR invierte → Q='+(a||b?0:1),XOR:'XOR da 1 si entradas son DISTINTAS. A='+a+', B='+b+' → '+(a!==b?'distintas → Q=1':'iguales → Q=0'),XNOR:'XNOR da 1 si entradas son IGUALES. A='+a+', B='+b+' → '+(a===b?'iguales → Q=1':'distintas → Q=0')};
+  return explains[g.name]||'';
+}
+let gpRound=0,gpScore=0,gpGate,gpIns;
+function gpGenQ(){gpGate=GP_GATES[Math.floor(Math.random()*GP_GATES.length)];gpIns=[];for(let i=0;i<gpGate.inputs;i++)gpIns.push(Math.floor(Math.random()*2));}
+function gpRender(){gpGenQ();document.getElementById('gpNum').textContent=gpRound+1;document.getElementById('gpGateName').textContent=gpGate.name;document.getElementById('gpEq').textContent=gpGate.eq;document.getElementById('gpInputs').textContent=gpIns.map((v,i)=>(i===0?'A':'B')+'='+v).join(' | ');document.getElementById('gpFb').className='gp-fb';document.getElementById('gpNext').className='gp-next';document.querySelectorAll('.gp-opt').forEach(b=>{b.disabled=false;b.className='gp-opt';});}
+function gpAnswer(val){const correct=gpGate.fn.apply(null,gpIns);const isOk=val===correct;if(isOk)gpScore++;document.querySelectorAll('.gp-opt').forEach(b=>{b.disabled=true;if(parseInt(b.textContent)===correct)b.classList.add('correct');else if(parseInt(b.textContent)===val&&!isOk)b.classList.add('wrong');});const fb=document.getElementById('gpFb');fb.className='gp-fb show '+(isOk?'ok':'fail');fb.textContent=(isOk?'✅ ':'❌ ')+gpExplain(gpGate,gpIns);document.getElementById('gpNext').className='gp-next show';}
+function gpNext(){gpRound++;if(gpRound>=10){document.getElementById('gpGateName').textContent='🏁 Fin: '+gpScore+'/10';document.getElementById('gpEq').textContent='';document.getElementById('gpInputs').textContent='';const fb=document.getElementById('gpFb');fb.className='gp-fb show '+(gpScore>=8?'ok':'fail');fb.textContent=gpScore>=8?'🏆 ¡Excelente! Dominás las compuertas.':gpScore>=6?'✅ Bien. Repasá XOR vs OR.':'📖 Repasá la tabla y volvé a intentarlo.';document.getElementById('gpNext').className='gp-next';document.querySelectorAll('.gp-opt').forEach(b=>b.disabled=true);if(gpScore>=8)rutaMarkDone('compuertas');gpRound=0;gpScore=0;return;}gpRender();}
+gpRender();
+
+/* ══ K-MAP INTERACTIVO ══ */
+const KMAP_EX=[
+  {label:'Básico',fn:'F(A,B,C) = Σm(0,1,4,5)',minterms:[0,1,4,5],answer:'F = B̄',expl:'m(0,1,4,5): toda la columna B=0. Grupo de 4 celdas → factor común B̄.'},
+  {label:'Intermedio',fn:'F(A,B,C) = Σm(1,3,5,7)',minterms:[1,3,5,7],answer:'F = C',expl:'m(1,3,5,7): todos tienen C=1. Grupo de 4 → F = C.'},
+  {label:'Del parcial',fn:'F(A,B,C) = Σm(0,1,4,5,7)',minterms:[0,1,4,5,7],answer:'F = B̄ + A·C',expl:'Grupo 1: m(0,1,4,5) → B̄. Grupo 2: m(5,7) → A·C. Una celda puede estar en dos grupos. F = B̄ + A·C.'},
+];
+let kmapCur=0,kmapSel=[];
+function kmapLoad(i){kmapCur=i;kmapSel=[];document.querySelectorAll('.kmap-ex-btn').forEach((b,j)=>b.className='kmap-ex-btn'+(j===i?' active':''));document.getElementById('kmapIntFn').textContent=KMAP_EX[i].fn;document.getElementById('kmapIntFb').className='kmap-int-fb';kmapDraw();}
+function kmapDraw(){const ex=KMAP_EX[kmapCur];const w=document.getElementById('kmapIntWrap');let t='<table class="kmap-int-table"><thead><tr><th>A \ BC</th><th>00</th><th>01</th><th>11</th><th>10</th></tr></thead><tbody>';for(let a=0;a<=1;a++){t+='<tr><th>A='+a+'</th>';[[0,0],[0,1],[1,1],[1,0]].forEach(function(bc){const mt=a*4+bc[0]*2+bc[1];const is1=ex.minterms.includes(mt);const isSel=kmapSel.includes(mt);let cls=is1?(isSel?'k-1 k-sel':'k-1'):(isSel?'k-0 k-sel':'k-0');t+='<td class="'+cls+'" onclick="kmapTog('+mt+')">'+(is1?1:0)+'</td>';});t+='</tr>';}t+='</tbody></table>';w.innerHTML=t;}
+function kmapTog(mt){const ex=KMAP_EX[kmapCur];if(!ex.minterms.includes(mt))return;const i=kmapSel.indexOf(mt);if(i>=0)kmapSel.splice(i,1);else kmapSel.push(mt);kmapDraw();}
+function kmapCheck(){const ex=KMAP_EX[kmapCur];const allOk=ex.minterms.every(m=>kmapSel.includes(m));const fb=document.getElementById('kmapIntFb');if(allOk){fb.className='kmap-int-fb show ok';fb.innerHTML='✅ ¡Correcto! '+ex.expl+'<br><strong style="margin-top:.4rem;display:block">'+ex.answer+'</strong>';if(kmapCur>=2)rutaMarkDone('karnaugh');}else{const miss=ex.minterms.filter(m=>!kmapSel.includes(m));fb.className='kmap-int-fb show fail';fb.textContent='❌ Faltan los minitérminos: '+miss.join(', ')+'. Recordá: grupos de potencia de 2, bordes adyacentes, una celda puede estar en más de un grupo.';}}
+function kmapReset(){kmapSel=[];kmapDraw();document.getElementById('kmapIntFb').className='kmap-int-fb';}
+(function kmapInit(){const el=document.getElementById('kmapExBtns');if(!el)return;el.innerHTML=KMAP_EX.map((e,i)=>'<button class="kmap-ex-btn'+(i===0?' active':'')+'" onclick="kmapLoad('+i+')">'+e.label+'</button>').join('');kmapLoad(0);})();
+
+/* ══ ISA PRÁCTICA ══ */
+const ISA_POOL=[
+  {tag:'TT-101',correct:'Transmisor de temperatura (lazo 101)',opts:['Transmisor de temperatura (lazo 101)','Controlador de temperatura','Transmisor de presión','Indicador de nivel'],why:'T=Temperatura. T(2ª)=Transmisor. El número identifica el lazo, no tiene valor universal.'},
+  {tag:'PT-202',correct:'Transmisor de presión',opts:['Transmisor de presión','Transmisor de temperatura','Controlador de presión','Indicador de nivel'],why:'P=Presión. T=Transmisor.'},
+  {tag:'FT-301',correct:'Transmisor de caudal/flujo',opts:['Transmisor de caudal/flujo','Indicador de temperatura','Transmisor de nivel','Controlador de caudal'],why:'F=Caudal (Flow). T=Transmisor.'},
+  {tag:'LT-401',correct:'Transmisor de nivel',opts:['Transmisor de nivel','Transmisor de presión','Controlador de nivel','Indicador de caudal'],why:'L=Nivel (Level). T=Transmisor.'},
+  {tag:'TIC-102',correct:'Controlador-Indicador de temperatura',opts:['Controlador-Indicador de temperatura','Transmisor de temperatura','Indicador de presión','Controlador de nivel'],why:'T=Temperatura. I=Indicador. C=Controlador. Un TIC mide, muestra y controla.'},
+  {tag:'PIC-201',correct:'Controlador-Indicador de presión',opts:['Controlador-Indicador de presión','Transmisor de presión','Indicador de temperatura','Controlador de caudal'],why:'P=Presión. I=Indicador. C=Controlador.'},
+  {tag:'FIC-303',correct:'Controlador-Indicador de caudal',opts:['Controlador-Indicador de caudal','Transmisor de caudal','Indicador de nivel','Controlador de temperatura'],why:'F=Caudal. I=Indicador. C=Controlador.'},
+  {tag:'LI-403',correct:'Indicador de nivel',opts:['Indicador de nivel','Transmisor de nivel','Controlador de nivel','Indicador de caudal'],why:'L=Nivel. I=Indicador. Solo muestra valor, no transmite señal procesada.'},
+  {tag:'AT-501',correct:'Transmisor de análisis',opts:['Transmisor de análisis','Transmisor de temperatura','Indicador de presión','Controlador de análisis'],why:'A=Análisis (composición, pH, conductividad). T=Transmisor.'},
+  {tag:'SI-601',correct:'Indicador de velocidad',opts:['Indicador de velocidad','Transmisor de nivel','Controlador de velocidad','Indicador de caudal'],why:'S=Velocidad (Speed). I=Indicador.'},
+];
+let isaIdx=0,isaScore=0,isaOrder=[];
+function isaRestart(){isaOrder=[0,1,2,3,4,5,6,7,8,9].sort(()=>Math.random()-.5).slice(0,10);isaIdx=0;isaScore=0;isaRender();}
+function isaRender(){if(isaIdx>=10){document.getElementById('isaPracTag').textContent='🏁 '+isaScore+'/10';document.getElementById('isaPracQ').textContent=isaScore>=8?'🏆 Dominás ISA 5.1!':isaScore>=6?'✅ Bien. Repasá funciones I y C.':'📖 Repasá la tabla de variables y funciones.';document.getElementById('isaPracOpts').innerHTML='<button class="isa-prac-opt" onclick="isaRestart()">🔄 Reiniciar</button>';document.getElementById('isaPracFb').className='isa-prac-fb';document.getElementById('isaPracNext').className='isa-prac-next';if(isaScore>=8)rutaMarkDone('isa');return;}const q=ISA_POOL[isaOrder[isaIdx]];document.getElementById('isaPracTag').textContent=q.tag;document.getElementById('isaPracQ').textContent='Pregunta '+(isaIdx+1)+'/10 — ¿Qué significa?';document.getElementById('isaPracFb').className='isa-prac-fb';document.getElementById('isaPracNext').className='isa-prac-next';const opts=[...q.opts].sort(()=>Math.random()-.5);document.getElementById('isaPracOpts').innerHTML=opts.map(o=>'<button class="isa-prac-opt" onclick="isaAnswer(this,'+JSON.stringify(o)+','+JSON.stringify(q.correct)+','+JSON.stringify(q.why)+')">'+o+'</button>').join('');}
+function isaAnswer(btn,chosen,correct,why){const isOk=chosen===correct;if(isOk)isaScore++;document.querySelectorAll('.isa-prac-opt').forEach(b=>{b.disabled=true;if(b.textContent===correct)b.classList.add('correct');else if(b===btn&&!isOk)b.classList.add('wrong');});const fb=document.getElementById('isaPracFb');fb.className='isa-prac-fb show '+(isOk?'ok':'fail');fb.textContent=(isOk?'✅ ':'❌ ')+why;document.getElementById('isaPracNext').className='isa-prac-next show';}
+function isaPracNext(){isaIdx++;isaRender();}
+isaRestart();
+
+/* ══ CIRCUITO INTERACTIVO ══ */
+const CIRC_COMPS=[
+  {icon:'🔌',name:'Alimentación trifásica',role:'L1, L2, L3',fn:'Suministra energía eléctrica trifásica. Sin ella ningún elemento funciona.',risk:'Si cae la tensión o se interrumpe una fase, el motor no arranca.'},
+  {icon:'⚡',name:'Protección termomagnética',role:'Disyuntor / Fusibles',fn:'Protege contra CORTOCIRCUITOS (parte magnética, actuación instantánea) y sobrecargas lentas (parte térmica).',risk:'⚠️ Es el único elemento que puede cortar un cortocircuito. El relé térmico NO puede hacerlo — actúa demasiado lento.'},
+  {icon:'🔲',name:'Contactor KM1',role:'Mando de potencia',fn:'Conecta y desconecta la alimentación al motor por orden del circuito de mando. Sus contactos principales soportan la corriente del motor.',risk:'Si queda pegado (contactos soldados), el motor no se puede detener desde el mando.'},
+  {icon:'🌡️',name:'Relé térmico',role:'Protección de sobrecarga',fn:'Protege contra sobrecargas SOSTENIDAS. Abre el circuito de mando cuando el bimetal supera el umbral calibrado.',risk:'⚠️ Protege contra SOBRECARGA, NO contra cortocircuito. Su tiempo de actuación es demasiado largo para cortocircuitos.'},
+  {icon:'🔄',name:'Motor trifásico',role:'Carga / Actuador — Nivel 0 CIM',fn:'Transforma la energía eléctrica en mecánica. Corriente de arranque: 5–7 veces la nominal.',risk:'Actúa según ordena el PLC (Nivel 1 CIM) a través del contactor.'},
+];
+function circInit(){const el=document.getElementById('circuitComps');if(!el)return;el.innerHTML=CIRC_COMPS.map((c,i)=>'<div class="circuit-comp" onclick="circSel('+i+')"><div class="circuit-comp-icon">'+c.icon+'</div><div class="circuit-comp-name">'+c.name+'</div><div class="circuit-comp-role">'+c.role+'</div></div>').join('');const SOPTS=['Contactor → Protección → Relé térmico → Motor','Protección → Contactor → Relé térmico → Motor','Protección → Relé térmico → Contactor → Motor','Relé térmico → Protección → Contactor → Motor'];document.getElementById('circuitSeqOpts').innerHTML=SOPTS.map(o=>'<button class="circuit-seq-opt" onclick="circSeq(this,'+JSON.stringify(o)+')">'+o+'</button>').join('');}
+function circSel(i){document.querySelectorAll('.circuit-comp').forEach((c,j)=>c.className='circuit-comp'+(i===j?' selected':''));const d=CIRC_COMPS[i];const info=document.getElementById('circuitInfo');info.className='circuit-info show';document.getElementById('ciName').textContent=d.name;document.getElementById('ciFn').textContent=d.fn;document.getElementById('ciRisk').textContent=d.risk;rutaMarkDone('circuitos');}
+function circSeq(btn,chosen){const correct='Protección → Contactor → Relé térmico → Motor';const isOk=chosen===correct;document.querySelectorAll('.circuit-seq-opt').forEach(b=>{b.disabled=true;if(b.textContent===correct)b.classList.add('correct');else if(b===btn&&!isOk)b.classList.add('wrong');});const fb=document.getElementById('circuitSeqFb');fb.className='circuit-seq-fb show '+(isOk?'ok':'fail');fb.textContent=isOk?'✅ Correcto. La protección termomagnética va primero (corta cortocircuitos antes de que lleguen al contactor). Luego el contactor conmuta la potencia, el relé térmico protege ante sobrecarga sostenida, y finalmente el motor.':'❌ No es esa. Correcta: Protección termomagnética → Contactor KM1 → Relé térmico → Motor. La protección de cortocircuito siempre va antes del contactor.';}
+circInit();
+
+/* ══ SIMULACRO ══ */
+const SIM_Q={
+  CIM:[
+    {q:'¿En qué nivel CIM opera un sensor de temperatura que transmite señal al tablero de control?',opts:['Nivel 0 — Campo','Nivel 1 — PLC','Nivel 2 — HMI','Nivel 3 — MES'],correct:0,why:'El sensor es Nivel 0: transforma magnitud física en señal eléctrica sin tomar decisiones.'},
+    {q:'¿Qué nivel CIM ejecuta algoritmos de control en tiempo real (Ladder, FBD)?',opts:['Nivel 0 — Campo','Nivel 1 — PLC','Nivel 2 — SCADA','Nivel 4 — ERP'],correct:1,why:'El PLC ejecuta lógica en tiempo real. Es Nivel 1.'},
+    {q:'El SCADA/HMI de operación permite visualizar alarmas y modificar setpoints. ¿Qué nivel es?',opts:['Nivel 1','Nivel 2','Nivel 3','Nivel 4'],correct:1,why:'SCADA/HMI local de operador es Nivel 2: supervisión y configuración de parámetros.'},
+  ],
+  Conversiones:[
+    {q:'¿Cuál es el binario de 45₁₀ en 8 bits?',opts:['00101101','00111001','00101010','01000101'],correct:0,why:'45=32+8+4+1 → 00101101'},
+    {q:'¿Cuál es el BCD 8421 de 27?',opts:['0010 0111','00011011','0001 1011','0111 0010'],correct:0,why:'BCD: 2→0010, 7→0111 → 0010 0111. El binario directo sería 00011011.'},
+    {q:'¿A qué decimal equivale 10110100₂?',opts:['180','172','184','176'],correct:0,why:'128+32+16+4=180'},
+  ],
+  Compuertas:[
+    {q:'Compuerta XOR: A=1, B=1. ¿Cuál es Q?',opts:['0','1'],correct:0,why:'XOR da 1 solo si entradas son DISTINTAS. A=B=1 → iguales → Q=0.'},
+    {q:'Compuerta NAND: A=1, B=0. ¿Cuál es Q?',opts:['1','0'],correct:0,why:'AND(1,0)=0 → NAND invierte → Q=1.'},
+    {q:'Compuerta NOR: A=0, B=0. ¿Cuál es Q?',opts:['1','0'],correct:0,why:'OR(0,0)=0 → NOR invierte → Q=1.'},
+  ],
+  Boole:[
+    {q:'Forma mínima de F = A·B̄ + Ā·B̄ + A·B·C:',opts:['F = B̄ + A·C','F = B̄ + A','F = A·C','F = B̄'],correct:0,why:'Factor B̄ → complementario OR → absorción variante → F = B̄ + A·C'},
+    {q:'¿Qué dice la absorción variante?',opts:['A + Ā·B = A + B','A + A·B = A','A · Ā = 0','A + 0 = A'],correct:0,why:'Absorción variante: A + Ā·B = A + B. Clave en el ejemplo del parcial.'},
+    {q:'Forma simplificada de Σm(0,1,4,5):',opts:['F = B̄','F = C','F = A·B','F = A + C'],correct:0,why:'m(0,1,4,5): todos con B=0 → grupo de 4 → F = B̄.'},
+  ],
+  ISA:[
+    {q:'¿Qué significa TIC-102?',opts:['Controlador-Indicador de temperatura','Transmisor de temperatura','Indicador de temperatura','Controlador de presión'],correct:0,why:'T=Temperatura, I=Indicador, C=Controlador. El número identifica el lazo.'},
+    {q:'¿Qué variable de proceso representa "F" en ISA 5.1?',opts:['Caudal / Flujo','Fuerza','Frecuencia','Físico'],correct:0,why:'F=Caudal (Flow).'},
+    {q:'¿Qué función indica "T" en segunda posición en ISA 5.1?',opts:['Transmisor','Temperatura','Temporizador','Tipo'],correct:0,why:'En posición funcional, T=Transmisor. En primera posición es la variable Temperatura.'},
+  ],
+  Circuitos:[
+    {q:'¿Cuál es la función del contacto auxiliar 13-14 del contactor KM1?',opts:['Auto-retención','Protección térmica','Arranque estrella-triángulo','Inversión de marcha'],correct:0,why:'13-14 en paralelo con S1 mantiene la bobina energizada después de soltar el pulsador (auto-retención).'},
+    {q:'¿Qué elemento del circuito de fuerza protege contra cortocircuito?',opts:['Protección termomagnética / fusibles','Relé térmico','Contactor','Motor'],correct:0,why:'El relé térmico protege contra SOBRECARGA sostenida. El cortocircuito lo corta la protección termomagnética o los fusibles.'},
+  ],
+};
+let simOrder=[],simIdx=0,simAnswers=[],simCats=[];
+function simBuild(){simOrder=[];simCats=[];Object.keys(SIM_Q).forEach(cat=>{const qs=[...SIM_Q[cat]].sort(()=>Math.random()-.5).slice(0,2);qs.forEach(q=>{simOrder.push(q);simCats.push(cat);});});const pairs=[];for(let i=0;i<simOrder.length;i+=2)pairs.push([simOrder[i],simOrder[i+1],simCats[i],simCats[i+1]]);pairs.sort(()=>Math.random()-.5);simOrder=[];simCats=[];pairs.forEach(p=>{simOrder.push(p[0],p[1]);simCats.push(p[2],p[3]);});}
+function simStart(){simBuild();simIdx=0;simAnswers=[];document.getElementById('simStart').style.display='none';document.getElementById('simResults').className='sim-results';document.getElementById('simReview').className='sim-review';document.getElementById('simBody').className='sim-body show';simRender();}
+function simRender(){const q=simOrder[simIdx];document.getElementById('simBar').style.width=((simIdx/12)*100)+'%';document.getElementById('simQLabel').textContent='Pregunta '+(simIdx+1)+' de 12';document.getElementById('simCatLabel').textContent=simCats[simIdx];document.getElementById('simCatBadge').textContent=simCats[simIdx];document.getElementById('simQText').textContent=q.q;document.getElementById('simNext').className='sim-next';const opts=q.opts.map((o,i)=>({t:o,i})).sort(()=>Math.random()-.5);document.getElementById('simOpts').innerHTML=opts.map(o=>'<button class="sim-opt" data-orig="'+o.i+'" onclick="simAnswer(this)">'+o.t+'</button>').join('');}
+function simAnswer(btn){const q=simOrder[simIdx];const chosen=parseInt(btn.dataset.orig);simAnswers.push({q:q.q,chosen,correct:q.correct,chText:btn.textContent,corrText:q.opts[q.correct],why:q.why});document.querySelectorAll('.sim-opt').forEach(b=>b.disabled=true);document.getElementById('simNext').className='sim-next show';}
+function simNext(){simIdx++;if(simIdx>=12){simShowResults();return;}simRender();}
+function simShowResults(){document.getElementById('simBody').className='sim-body';document.getElementById('simBar').style.width='100%';const total=simAnswers.filter(a=>a.chosen===a.correct).length;document.getElementById('simResults').className='sim-results show';document.getElementById('simResultsBig').textContent=total+'/12';const cats=Object.keys(SIM_Q);document.getElementById('simModScores').innerHTML=cats.map(cat=>{const idxs=simCats.map((c,i)=>c===cat?i:-1).filter(i=>i>=0);const ok=idxs.filter(i=>simAnswers[i]&&simAnswers[i].chosen===simAnswers[i].correct).length;const n=idxs.length;const cls=ok===n?'perfect':ok===0?'fail':'';return '<div class="sim-mod-score"><div class="sim-mod-name">'+cat+'</div><div class="sim-mod-val '+cls+'">'+ok+'/'+n+'</div></div>';}).join('');if(total>=10)rutaMarkDone('simulacro');}
+function simReviewAll(){const rev=document.getElementById('simReview');rev.className='sim-review show';rev.innerHTML=simAnswers.map((a,i)=>{const ok=a.chosen===a.correct;return '<div class="sim-review-item '+(ok?'was-correct':'was-wrong')+'"><div class="sim-review-q">'+(i+1)+'. '+a.q+'</div>'+(ok?'':'<div class="sim-review-yours">Tu respuesta: '+a.chText+'</div>')+'<div class="sim-review-correct">'+(ok?'✅':'✅ Correcta:')+' '+a.corrText+'</div><div style="font-size:.8rem;color:var(--gray-lt);margin-top:.2rem">'+a.why+'</div></div>';}).join('');}
+function simReviewWrong(){const rev=document.getElementById('simReview');rev.className='sim-review show';const wrong=simAnswers.filter(a=>a.chosen!==a.correct);if(!wrong.length){rev.innerHTML='<p style="color:#15803d;font-weight:700">¡Sin errores! Perfecto.</p>';return;}rev.innerHTML=wrong.map(a=>'<div class="sim-review-item was-wrong"><div class="sim-review-q">'+a.q+'</div><div class="sim-review-yours">Tu respuesta: '+a.chText+'</div><div class="sim-review-correct">✅ Correcta: '+a.corrText+'</div><div style="font-size:.8rem;color:var(--gray-lt);margin-top:.2rem">'+a.why+'</div></div>').join('');}
+
 
 </script>
 </body>

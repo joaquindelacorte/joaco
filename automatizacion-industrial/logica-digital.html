@@ -595,6 +595,34 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
 
 
 
+/* ════ Plan primer parcial ════ */
+.plan-parcial{background:var(--card);border:2px solid var(--orange);border-radius:20px;padding:1.8rem;margin:2rem 0}
+.plan-parcial-title{font-size:1rem;font-weight:800;color:var(--orange);margin-bottom:.25rem}
+.plan-parcial-sub{font-size:.82rem;color:var(--gray-lt);margin-bottom:1.3rem}
+.plan-steps{display:grid;gap:.65rem}
+.plan-step{display:flex;align-items:center;gap:1rem;padding:.9rem 1.1rem;border:2px solid var(--border);border-radius:12px;background:#fafbfc;transition:.15s}
+.plan-step.done{border-color:#15803d;background:#f0fdf4}
+.plan-step.active{border-color:var(--orange);background:#fff7ed}
+.plan-step-num{width:32px;height:32px;border-radius:50%;background:var(--orange);color:#fff;font-weight:900;font-size:.82rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Courier New',monospace}
+.plan-step.done .plan-step-num{background:#15803d}
+.plan-step-info{flex:1}
+.plan-step-session{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--orange);margin-bottom:.15rem}
+.plan-step.done .plan-step-session{color:#15803d}
+.plan-step-name{font-weight:700;font-size:.9rem;color:#0c1a2e;margin-bottom:.15rem}
+.plan-step-practica{font-size:.75rem;color:var(--gray-lt);line-height:1.4}
+.plan-step-badge{font-size:.72rem;font-weight:700;padding:.25rem .65rem;border-radius:6px;white-space:nowrap;flex-shrink:0}
+.plan-step-badge.pendiente{background:#f1f5f9;color:var(--gray-lt)}
+.plan-step-badge.en-practica{background:#fff7ed;color:var(--orange)}
+.plan-step-badge.done{background:#dcfce7;color:#15803d}
+.plan-step-goto{font-size:.78rem;font-weight:700;padding:.25rem .7rem;border:none;border-radius:7px;background:var(--orange-bg);color:var(--orange);cursor:pointer;font-family:inherit;flex-shrink:0;text-decoration:none;transition:.15s}
+.plan-step-goto:hover{background:var(--orange);color:#fff}
+.plan-sim-lock{margin-top:1rem;padding:.8rem 1rem;border-radius:10px;background:#f8fafc;border:1px solid var(--border);font-size:.82rem;color:var(--gray-lt);text-align:center;line-height:1.5}
+.plan-sim-lock.unlocked{background:#dcfce7;color:#14532d;border-color:#15803d}
+@media(max-width:600px){
+  .plan-step{flex-wrap:wrap;gap:.5rem}
+  .plan-step-practica{display:none}
+}
+
 /* ════ Material de la cursada ════ */
 .material-wrap{background:var(--card);border:2px solid var(--blue);border-radius:20px;padding:1.8rem;margin:2rem 0}
 .material-header{margin-bottom:1.4rem}
@@ -681,6 +709,7 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
   <a href="#karnaugh" onclick="closeDrawer()">🗺️ Karnaugh</a>
   <a href="#isa" onclick="closeDrawer()">📊 ISA 5.1</a>
   <a href="#circuitos" onclick="closeDrawer()">⚡ Circuitos de fuerza</a>
+  <a href="#plan-parcial" onclick="closeDrawer()">📅 Plan del Parcial</a>
   <a href="#material" onclick="closeDrawer()">📂 Material de la cursada</a>
   <a href="#simulacro" onclick="closeDrawer()">🧪 Simulacro integrador</a>
   <a href="#juegos" onclick="closeDrawer()">🎮 Juegos</a>
@@ -702,6 +731,7 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
     <a href="#karnaugh">🗺️ Karnaugh</a>
     <a href="#isa">📊 ISA 5.1</a>
     <a href="#circuitos">⚡ Circuitos</a>
+    <a href="#plan-parcial">📅 Parcial</a>
     <a href="#material">📂 Material</a>
     <a href="#simulacro">🧪 Simulacro</a>
   </div>
@@ -1224,6 +1254,19 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
   </div>
 
 
+
+
+  <!-- ═══════════════ PLAN PRIMER PARCIAL ═══════════════ -->
+  <h2 class="section-title" id="plan-parcial">📅 Plan de preparación — Primer Parcial</h2>
+  <p class="section-sub">Sesiones 01–06 cubiertas antes del parcial teórico-práctico de Sesión 07.</p>
+  <div class="plan-parcial">
+    <div class="plan-parcial-title">📅 Etapas hacia el primer parcial</div>
+    <div class="plan-parcial-sub">Completá cada sección para desbloquear el simulacro del parcial. El estado se guarda en tu navegador.</div>
+    <div class="plan-steps" id="planSteps"></div>
+    <div class="plan-sim-lock" id="planSimLock">
+      🔒 Completá al menos 4 etapas para habilitar el simulacro del parcial
+    </div>
+  </div>
 
   <!-- ═══════════════ MATERIAL DE LA CURSADA ═══════════════ -->
   <h2 class="section-title" id="material">📂 Material de la cursada y avance de estudio</h2>
@@ -2055,8 +2098,8 @@ document.addEventListener('click', function(e) {
 const MATERIAL_FILES = [
   // Unidad 0
   { id:'u0', unit:'Unidad 0 — Organización de la materia', items:[
-    { num:1, name:'Programa de Automatización Industrial', topic:'Plan de la materia, objetivos, evaluación', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
-    { num:2, name:'Planificación de clases', topic:'Cronograma, sesiones, fechas de parciales', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:1, name:'Programa de Automatización Industrial', topic:'Plan de la materia, objetivos, evaluación', status:'revisado', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:2, name:'Planificación de clases', topic:'Cronograma, sesiones, fechas de parciales', status:'revisado', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
   ]},
   // Unidad 1
   { id:'u1', unit:'Unidad 1 — Fundamentos y lógica digital', items:[
@@ -2143,6 +2186,72 @@ function matRender() {
 }
 
 matRender();
+
+
+/* ══ PLAN PRIMER PARCIAL ══ */
+const PLAN_STEPS_DATA = [
+  { id:'p01', session:'Sesión 01', name:'Fundamentos, Industria 4.0 y Pirámide CIM', practica:'Resolvé el ejercicio CIM autocorregible y la práctica de conversiones.', anchor:'#cim' },
+  { id:'p02', session:'Sesión 02', name:'Compuertas lógicas, Álgebra de Boole y tablas de verdad', practica:'Completá el modo Predecí y el procedimiento de simplificación.', anchor:'#compuertas' },
+  { id:'p03', session:'Sesión 03', name:'K-maps, circuitos combinacionales y secuenciales', practica:'Resolvé los 3 ejercicios del K-map interactivo.', anchor:'#karnaugh' },
+  { id:'p04', session:'Sesión 04', name:'P&ID, ISA 5.1 e interpretación de planos', practica:'Completá la práctica de etiquetas ISA con ≥8/10.', anchor:'#isa' },
+  { id:'p05', session:'Sesión 05', name:'Fuerza, mando, bornes IEC y CADeSIMU', practica:'Explorá el circuito interactivo y respondé la secuencia de protección.', anchor:'#circuitos' },
+  { id:'p06', session:'Sesión 06', name:'Ladder eléctrico, temporización y repaso integrador', practica:'Completá el simulacro integrador con ≥10/12.', anchor:'#simulacro' },
+];
+
+function planLoad() { return JSON.parse(localStorage.getItem('logica_plan') || '{}'); }
+function planSave(s) { localStorage.setItem('logica_plan', JSON.stringify(s)); }
+
+function planRender() {
+  const s = planLoad();
+  const el = document.getElementById('planSteps');
+  if (!el) return;
+  el.innerHTML = PLAN_STEPS_DATA.map((step, i) => {
+    const st = s[step.id] || 'pendiente';
+    const badge = st === 'done' ? '<span class="plan-step-badge done">✓ Completado</span>'
+      : st === 'en-practica' ? '<span class="plan-step-badge en-practica">En práctica</span>'
+      : '<span class="plan-step-badge pendiente">Pendiente</span>';
+    const cls = st === 'done' ? 'done' : st === 'en-practica' ? 'active' : '';
+    return '<div class="plan-step ' + cls + '">' +
+      '<div class="plan-step-num">0' + (i+1) + '</div>' +
+      '<div class="plan-step-info">' +
+        '<div class="plan-step-session">' + step.session + '</div>' +
+        '<div class="plan-step-name">' + step.name + '</div>' +
+        '<div class="plan-step-practica">' + step.practica + '</div>' +
+      '</div>' +
+      badge +
+      '<a class="plan-step-goto" href="' + step.anchor + '">Estudiar →</a>' +
+    '</div>';
+  }).join('');
+  // Check sim lock
+  const done = PLAN_STEPS_DATA.filter(s2 => (s[s2.id] === 'done' || s[s2.id] === 'en-practica')).length;
+  const lockEl = document.getElementById('planSimLock');
+  if (lockEl) {
+    if (done >= 4) {
+      lockEl.className = 'plan-sim-lock unlocked';
+      lockEl.innerHTML = '✅ Simulacro habilitado — avanzaste ' + done + '/6 etapas. <a href="#simulacro" style="color:inherit;font-weight:800">Ir al simulacro →</a>';
+    } else {
+      lockEl.className = 'plan-sim-lock';
+      lockEl.textContent = '🔒 Completá al menos 4 etapas para habilitar el simulacro del parcial (' + done + '/4)';
+    }
+  }
+}
+
+// Conectar con el sistema de ruta existente — cuando se marca done en ruta, sync al plan
+const _origRutaMarkDone = rutaMarkDone;
+rutaMarkDone = function(id) {
+  _origRutaMarkDone(id);
+  const map = { cim:'p01', bases:'p01', compuertas:'p02', boole:'p02', karnaugh:'p03', isa:'p04', circuitos:'p05', simulacro:'p06' };
+  if (map[id]) {
+    const ps = planLoad();
+    if (!ps[map[id]] || ps[map[id]] === 'pendiente') { ps[map[id]] = 'en-practica'; planSave(ps); }
+    if (id === 'karnaugh' || id === 'isa' || id === 'circuitos' || id === 'simulacro') {
+      ps[map[id]] = 'done'; planSave(ps);
+    }
+    planRender();
+  }
+};
+
+planRender();
 
 </script>
 </body>

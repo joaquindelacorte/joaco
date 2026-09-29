@@ -272,6 +272,61 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
   background: rgba(255,255,255,.06);
 }
 .apuntes-footer-nav a:hover { background: rgba(255,255,255,.12); color: #e2e8f0; }
+
+/* ──────────── Procedimiento Boole paso a paso ──────────── */
+.boole-proc{border:2px solid var(--purple);border-radius:18px;overflow:hidden;margin:1.5rem 0}
+.boole-proc-header{background:var(--purple-bg);padding:1rem 1.4rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}
+.boole-proc-header h2{margin:0;font-size:1rem;font-weight:800;color:var(--purple)}
+.boole-proc-toggle{font-size:1.2rem;color:var(--purple);transition:transform .2s}
+.boole-proc.open .boole-proc-toggle{transform:rotate(180deg)}
+.boole-proc-body{display:none;padding:1.2rem 1.4rem}
+.boole-proc.open .boole-proc-body{display:block}
+.bp-step{border:1px solid var(--border);border-radius:12px;margin-bottom:.9rem;overflow:hidden}
+.bp-step-head{display:flex;align-items:center;gap:.75rem;padding:.65rem 1rem;background:#f8fafc;cursor:pointer}
+.bp-step-num{background:var(--purple);color:#fff;font-weight:800;font-size:.78rem;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bp-step-title{font-weight:700;font-size:.9rem;color:#0c1a2e;flex:1}
+.bp-prop-badge{font-size:.68rem;font-weight:700;background:var(--purple-bg);color:var(--purple);padding:.2rem .55rem;border-radius:6px;white-space:nowrap}
+.bp-step-chevron{font-size:.9rem;color:var(--gray-lt);transition:transform .2s}
+.bp-step.open .bp-step-chevron{transform:rotate(180deg)}
+.bp-step-body{display:none;padding:.8rem 1rem;font-size:.9rem;line-height:1.7}
+.bp-step.open .bp-step-body{display:block}
+.bp-dato{color:var(--gray-lt);font-size:.82rem;margin-bottom:.3rem}
+.bp-op{font-family:'Courier New',monospace;font-size:.95rem;color:#0c1a2e;background:#f1f5f9;border-radius:6px;padding:.3rem .7rem;display:inline-block;margin:.2rem 0}
+.bp-result{font-family:'Courier New',monospace;font-size:1rem;font-weight:800;color:var(--purple);background:var(--purple-bg);border-radius:6px;padding:.35rem .8rem;display:inline-block;margin-top:.3rem}
+.bp-verify-btn{margin-top:1.2rem;padding:.6rem 1.4rem;background:var(--teal);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:.88rem;cursor:pointer;font-family:inherit;transition:.15s}
+.bp-verify-btn:hover{background:#0f766e}
+
+/* ──────────── Ejercicio CIM autocorregible ──────────── */
+.cim-exercise{background:var(--card);border:2px solid var(--blue);border-radius:18px;padding:1.8rem;margin:1.5rem 0}
+.cim-ex-title{font-size:1rem;font-weight:800;color:var(--blue);margin-bottom:.3rem}
+.cim-ex-subtitle{font-size:.83rem;color:var(--gray-lt);margin-bottom:1.3rem}
+.cim-ex-progress{display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem}
+.cim-ex-progress .cep-bar{flex:1;height:7px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.cim-ex-progress .cep-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--teal));border-radius:999px;transition:.4s}
+.cim-ex-progress .cep-label{font-size:.78rem;font-weight:700;color:var(--gray-lt);white-space:nowrap}
+.cim-ex-q{font-size:.95rem;font-weight:700;color:#0c1a2e;line-height:1.55;margin-bottom:1rem;padding:.8rem 1rem;background:#f8fafc;border-radius:10px;border-left:4px solid var(--blue)}
+.cim-ex-opts{display:grid;gap:.55rem;margin-bottom:1rem}
+.cim-ex-opt{width:100%;text-align:left;padding:.75rem 1rem;border:2px solid var(--border);border-radius:10px;background:#fff;cursor:pointer;font-size:.88rem;color:var(--gray);transition:.15s;font-family:inherit;display:flex;align-items:center;gap:.7rem}
+.cim-ex-opt:hover:not(:disabled){border-color:var(--blue-lt);background:var(--blue-bg)}
+.cim-ex-opt.correct{border-color:#15803d;background:#dcfce7;color:#14532d;font-weight:700}
+.cim-ex-opt.wrong{border-color:#b91c1c;background:#fee2e2;color:#7f1d1d;font-weight:700}
+.cim-ex-opt:disabled{cursor:default}
+.cim-ex-opt .opt-level{font-family:'Courier New',monospace;font-weight:800;font-size:.85rem;min-width:54px}
+.cim-fb{padding:.85rem 1rem;border-radius:10px;font-size:.86rem;line-height:1.6;display:none;margin-bottom:1rem}
+.cim-fb.show{display:block}
+.cim-fb.ok{background:#dcfce7;color:#14532d;border-left:4px solid #15803d}
+.cim-fb.fail{background:#fee2e2;color:#7f1d1d;border-left:4px solid #b91c1c}
+.cim-ex-next{padding:.65rem 1.6rem;background:var(--blue);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:.88rem;cursor:pointer;display:none;font-family:inherit;transition:.15s}
+.cim-ex-next.show{display:inline-block}
+.cim-ex-next:hover{background:var(--blue-lt)}
+.cim-ex-score{text-align:center;display:none}
+.cim-ex-score.show{display:block}
+.cim-score-big{font-size:3.2rem;font-weight:900;color:var(--blue);line-height:1}
+.cim-score-label{font-size:.95rem;color:var(--gray-lt);margin:.4rem 0 .8rem}
+.cim-score-msg{font-size:.88rem;line-height:1.55;color:var(--gray);margin-bottom:1.2rem;padding:.75rem 1rem;border-radius:8px;background:#f8fafc}
+.cim-restart{padding:.7rem 1.8rem;background:var(--blue);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:.9rem;cursor:pointer;font-family:inherit}
+.cim-restart:hover{background:var(--blue-lt)}
+
 </style>
 </head>
 <body>
@@ -320,6 +375,29 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
     <h2 style="color:#d97706">📍 Nivel 1 — Control (PLC)</h2>
     <p>Ejecuta <strong>algoritmos de control determinísticos en tiempo real</strong> (ciclo de scan). Recibe entradas del campo, procesa la lógica programada (Ladder, FBD, ST) y envía órdenes automáticas a los actuadores.</p>
     <div class="tip"><strong>Clave del parcial:</strong> PLC = Nivel 1. Sensores/actuadores = Nivel 0.</div>
+  </div>
+
+
+  <!-- ═══════════════ EJERCICIO CIM ═══════════════ -->
+  <div class="cim-exercise" id="cim-exercise">
+    <div class="cim-ex-title">🏋️ Ejercicio — ¿En qué nivel CIM ocurre esto?</div>
+    <div class="cim-ex-subtitle">Leé cada situación y elegí el nivel correcto. 5 preguntas aleatorias, feedback inmediato.</div>
+    <div class="cim-ex-progress">
+      <div class="cep-bar"><div class="cep-fill" id="cimEpBar" style="width:0%"></div></div>
+      <div class="cep-label"><span id="cimEpNum">1</span>/5</div>
+    </div>
+    <div id="cimExBody">
+      <div class="cim-ex-q" id="cimExQ">Cargando...</div>
+      <div class="cim-ex-opts" id="cimExOpts"></div>
+      <div class="cim-fb" id="cimExFb"></div>
+      <button class="cim-ex-next" id="cimExNext" onclick="cimExNext()">Siguiente →</button>
+    </div>
+    <div class="cim-ex-score" id="cimExScore">
+      <div class="cim-score-big" id="cimScoreBig">—</div>
+      <div class="cim-score-label">sobre 5 preguntas</div>
+      <div class="cim-score-msg" id="cimScoreMsg"></div>
+      <button class="cim-restart" onclick="cimExRestart()">🔄 Repetir ejercicio</button>
+    </div>
   </div>
 
   <!-- ═══════════════ BASES NUMÉRICAS ═══════════════ -->
@@ -411,19 +489,86 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
     <div class="theorem-card"><div class="th-name">De Morgan 2</div><div class="th-eq">¬(A+B) = Ā · B̄</div></div>
   </div>
 
-  <div class="card" style="border-left:4px solid var(--purple)">
-    <h2 style="color:var(--purple)">📝 Ejemplo del parcial — F(A,B,C) = A·B̄ + Ā·B̄ + A·B·C</h2>
-    <p><strong>Paso 1:</strong> factor común B̄ en los dos primeros términos:<br>
-    <code>A·B̄ + Ā·B̄ = (A + Ā)·B̄</code></p>
-    <p><strong>Paso 2:</strong> A + Ā = 1 (complementario OR):<br>
-    <code>= 1·B̄ = B̄</code></p>
-    <p><strong>Paso 3:</strong> la expresión queda: F = B̄ + A·B·C</p>
-    <p><strong>Paso 4:</strong> absorción variante (X + X̄·Y = X + Y, con X=B̄, Y=A·C):<br>
-    <code>B̄ + B·(A·C) = B̄ + A·C</code></p>
-    <div class="tip"><strong>Resultado mínimo:</strong> F(A,B,C) = B̄ + A·C</div>
+  <!-- Procedimiento Boole paso a paso (expandible) -->
+  <div class="boole-proc open" id="booleProc">
+    <div class="boole-proc-header" onclick="document.getElementById('booleProc').classList.toggle('open')">
+      <h2>📝 Ejemplo del parcial — F(A,B,C) = A·B̄ + Ā·B̄ + A·B·C → desarrollo completo</h2>
+      <span class="boole-proc-toggle">▼</span>
+    </div>
+    <div class="boole-proc-body">
+
+      <div class="bp-step open" id="bpStep1">
+        <div class="bp-step-head" onclick="document.getElementById('bpStep1').classList.toggle('open')">
+          <div class="bp-step-num">1</div>
+          <div class="bp-step-title">Factor común B̄ en los dos primeros términos</div>
+          <span class="bp-prop-badge">Distributividad</span>
+          <span class="bp-step-chevron">▼</span>
+        </div>
+        <div class="bp-step-body">
+          <div class="bp-dato">Expresión inicial:</div>
+          <div class="bp-op">F = A·B̄ + Ā·B̄ + A·B·C</div>
+          <div class="bp-dato" style="margin-top:.6rem">Factorizo B̄ (distributiva: X·Z + Y·Z = (X+Y)·Z):</div>
+          <div class="bp-op">A·B̄ + Ā·B̄ = (A + Ā)·B̄</div>
+          <div class="bp-dato" style="margin-top:.6rem">Resultado parcial:</div>
+          <div class="bp-result">F = (A + Ā)·B̄ + A·B·C</div>
+        </div>
+      </div>
+
+      <div class="bp-step open" id="bpStep2">
+        <div class="bp-step-head" onclick="document.getElementById('bpStep2').classList.toggle('open')">
+          <div class="bp-step-num">2</div>
+          <div class="bp-step-title">A + Ā = 1 → simplifica el factor</div>
+          <span class="bp-prop-badge">Complementario OR</span>
+          <span class="bp-step-chevron">▼</span>
+        </div>
+        <div class="bp-step-body">
+          <div class="bp-dato">Por complementario OR: <code>A + Ā = 1</code></div>
+          <div class="bp-op">(A + Ā)·B̄ = 1·B̄ = B̄</div>
+          <div class="bp-dato" style="margin-top:.6rem">Resultado parcial:</div>
+          <div class="bp-result">F = B̄ + A·B·C</div>
+        </div>
+      </div>
+
+      <div class="bp-step open" id="bpStep3">
+        <div class="bp-step-head" onclick="document.getElementById('bpStep3').classList.toggle('open')">
+          <div class="bp-step-num">3</div>
+          <div class="bp-step-title">Reordenar A·B·C para exponer el patrón X̄·Y</div>
+          <span class="bp-prop-badge">Conmutatividad AND</span>
+          <span class="bp-step-chevron">▼</span>
+        </div>
+        <div class="bp-step-body">
+          <div class="bp-dato">Necesito aplicar absorción variante: <code>X + X̄·Y = X + Y</code><br>Con X = B̄ → X̄ = B. Reordeno el tercer término:</div>
+          <div class="bp-op">A·B·C = B·A·C = B·(A·C)</div>
+          <div class="bp-dato" style="margin-top:.6rem">Resultado parcial:</div>
+          <div class="bp-result">F = B̄ + B·(A·C)</div>
+        </div>
+      </div>
+
+      <div class="bp-step open" id="bpStep4">
+        <div class="bp-step-head" onclick="document.getElementById('bpStep4').classList.toggle('open')">
+          <div class="bp-step-num">4</div>
+          <div class="bp-step-title">Absorción variante: X + X̄·Y = X + Y</div>
+          <span class="bp-prop-badge">Absorción variante</span>
+          <span class="bp-step-chevron">▼</span>
+        </div>
+        <div class="bp-step-body">
+          <div class="bp-dato">Aplico: <code>X = B̄</code>, <code>X̄ = B</code>, <code>Y = A·C</code></div>
+          <div class="bp-op">B̄ + B·(A·C) = B̄ + A·C</div>
+          <div class="bp-dato" style="margin-top:.6rem">Forma mínima:</div>
+          <div class="bp-result">F(A,B,C) = B̄ + A·C ✓</div>
+          <div style="margin-top:.8rem;font-size:.82rem;color:var(--green);font-weight:700">
+            ✅ La tabla de verdad confirma F=1 exactamente en m(0,1,4,5,7) — mismos que la expresión original.
+          </div>
+        </div>
+      </div>
+
+      <button class="bp-verify-btn" onclick="document.getElementById('truth-table-card').scrollIntoView({behavior:'smooth'})">
+        📋 Ver tabla de verdad de verificación ↓
+      </button>
+    </div>
   </div>
 
-  <div class="card">
+  <div class="card" id="truth-table-card">
     <h2>📋 Tabla de Verdad de F = B̄ + A·C</h2>
     <p>Minitérminos activos: F = Σm(0, 1, 4, 5, 7)</p>
     <div class="bool-table-wrap">
@@ -1083,6 +1228,131 @@ function tvCheck(){
 }
 
 tvStart();
+
+/* ══════════════════════════════════════════════
+   EJERCICIO CIM AUTOCORREGIBLE
+══════════════════════════════════════════════ */
+const CIM_QUESTIONS = [
+  {
+    q: 'Un sensor de temperatura detecta que la caldera superó los 95 °C y transmite la señal al sistema de control.',
+    correct: 0,
+    opts: [
+      { level: 'Nivel 0', desc: 'Campo / Sensor-Actuador', why: '✅ Correcto. Los sensores son Nivel 0: transforman una magnitud física en señal eléctrica. No toman decisiones.' },
+      { level: 'Nivel 1', desc: 'Control / PLC', why: '❌ No. El PLC (Nivel 1) procesa esa señal y actúa, pero el sensor en sí pertenece al campo físico (Nivel 0).' },
+      { level: 'Nivel 2', desc: 'Control Supervisorio / HMI', why: '❌ No. La HMI visualiza alarmas (Nivel 2), pero el sensor está en Nivel 0.' },
+      { level: 'Nivel 3', desc: 'MES / Gestión de producción', why: '❌ No. El MES coordina órdenes de fabricación, muy lejos del campo físico.' },
+    ]
+  },
+  {
+    q: 'El PLC ejecuta una rutina Ladder: si la presión supera 6 bar AND la válvula principal está abierta, activa la bomba auxiliar.',
+    correct: 1,
+    opts: [
+      { level: 'Nivel 0', desc: 'Campo / Sensor-Actuador', why: '❌ No. La bomba y válvula son Nivel 0, pero la lógica de decisión ("si presión > 6 bar...") la ejecuta el PLC en Nivel 1.' },
+      { level: 'Nivel 1', desc: 'Control / PLC', why: '✅ Correcto. El PLC ejecuta algoritmos de control determinísticos en tiempo real. Ladder, FBD, ST = lenguajes de Nivel 1.' },
+      { level: 'Nivel 2', desc: 'Control Supervisorio / HMI', why: '❌ No. El HMI permite operar visualmente, pero la lógica automática de enclavamiento es del PLC (Nivel 1).' },
+      { level: 'Nivel 4', desc: 'Gestión / ERP', why: '❌ No. El ERP maneja planificación corporativa; la lógica de control automático en tiempo real es Nivel 1.' },
+    ]
+  },
+  {
+    q: 'Desde una pantalla táctil el operador visualiza las alarmas activas y modifica el setpoint de temperatura de 80 °C a 85 °C.',
+    correct: 2,
+    opts: [
+      { level: 'Nivel 1', desc: 'Control / PLC', why: '❌ No. El PLC recibe el setpoint modificado y lo ejecuta, pero la interfaz de operación (HMI) es Nivel 2.' },
+      { level: 'Nivel 0', desc: 'Campo / Sensor-Actuador', why: '❌ No. El campo físico no tiene pantallas de configuración; pertenece a Nivel 0.' },
+      { level: 'Nivel 2', desc: 'Control Supervisorio / HMI', why: '✅ Correcto. El HMI (Human-Machine Interface) es Nivel 2: interfaz de operación, visualización de alarmas y ajuste de parámetros.' },
+      { level: 'Nivel 3', desc: 'MES / SCADA', why: '❌ Cuidado: SCADA puede ser Nivel 2 ó 3 según el alcance. Una HMI local de operador en planta es Nivel 2.' },
+    ]
+  },
+  {
+    q: 'El sistema registra la producción por turno, genera la orden de fabricación para el próximo lote y coordina los recursos de la planta.',
+    correct: 3,
+    opts: [
+      { level: 'Nivel 1', desc: 'Control / PLC', why: '❌ No. El PLC ejecuta órdenes de control, no genera órdenes de fabricación ni coordina recursos.' },
+      { level: 'Nivel 2', desc: 'Control Supervisorio', why: '❌ No. El Nivel 2 supervisa y configura parámetros de proceso, no gestiona órdenes ni recursos de producción.' },
+      { level: 'Nivel 0', desc: 'Campo / Proceso', why: '❌ No. El campo físico solo registra señales; no gestiona órdenes de producción.' },
+      { level: 'Nivel 3', desc: 'MES / Gestión de producción', why: '✅ Correcto. El MES (Nivel 3) registra producción, genera órdenes de fabricación y coordina recursos en tiempo real de planta.' },
+    ]
+  },
+  {
+    q: 'El sistema ERP planifica la compra de materia prima para el próximo trimestre basándose en el pronóstico de ventas y el plan financiero.',
+    correct: 0,
+    opts: [
+      { level: 'Nivel 4', desc: 'Gestión / ERP', why: '✅ Correcto. El ERP (Nivel 4) gestiona la empresa: planificación de compras, costos, finanzas y logística corporativa.' },
+      { level: 'Nivel 3', desc: 'MES', why: '❌ No. El MES (Nivel 3) gestiona la producción en planta en tiempo real; el ERP gestiona el negocio a nivel corporativo.' },
+      { level: 'Nivel 2', desc: 'SCADA / DCS', why: '❌ No. El SCADA supervisa el proceso físico en planta (Nivel 2). La planificación financiera y de compras es Nivel 4.' },
+      { level: 'Nivel 1', desc: 'PLC', why: '❌ No. El PLC ejecuta control automático en tiempo real; la planificación financiera trimestral es Nivel 4.' },
+    ]
+  },
+];
+
+let cimOrder = [], cimIdx = 0, cimScore = 0;
+
+function cimExRestart() {
+  cimOrder = [0,1,2,3,4].sort(() => Math.random() - .5);
+  cimIdx = 0; cimScore = 0;
+  document.getElementById('cimExScore').className = 'cim-ex-score';
+  document.getElementById('cimExBody').style.display = '';
+  cimExRender();
+}
+
+function cimExRender() {
+  const q = CIM_QUESTIONS[cimOrder[cimIdx]];
+  document.getElementById('cimEpNum').textContent = cimIdx + 1;
+  document.getElementById('cimEpBar').style.width = ((cimIdx / 5) * 100) + '%';
+  document.getElementById('cimExQ').textContent = q.q;
+  const optsEl = document.getElementById('cimExOpts');
+  optsEl.innerHTML = '';
+  const shuffled = q.opts.map((o, i) => ({...o, origIdx: i})).sort(() => Math.random() - .5);
+  shuffled.forEach(opt => {
+    const b = document.createElement('button');
+    b.className = 'cim-ex-opt';
+    b.innerHTML = '<span class="opt-level">' + opt.level + '</span><span>' + opt.desc + '</span>';
+    b.onclick = () => cimExAnswer(opt, b, q.correct, q.opts, optsEl);
+    optsEl.appendChild(b);
+  });
+  document.getElementById('cimExFb').className = 'cim-fb';
+  document.getElementById('cimExFb').textContent = '';
+  document.getElementById('cimExNext').className = 'cim-ex-next';
+}
+
+function cimExAnswer(opt, btn, correctIdx, allOpts, optsEl) {
+  const isCorrect = opt.origIdx === correctIdx;
+  optsEl.querySelectorAll('.cim-ex-opt').forEach(b => b.disabled = true);
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    optsEl.querySelectorAll('.cim-ex-opt').forEach(b => {
+      if (b.querySelector('.opt-level').textContent === allOpts[correctIdx].level) b.classList.add('correct');
+    });
+  }
+  if (isCorrect) cimScore++;
+  const fb = document.getElementById('cimExFb');
+  fb.className = 'cim-fb show ' + (isCorrect ? 'ok' : 'fail');
+  fb.textContent = opt.why;
+  document.getElementById('cimExNext').className = 'cim-ex-next show';
+}
+
+function cimExNext() {
+  cimIdx++;
+  if (cimIdx >= 5) {
+    document.getElementById('cimEpBar').style.width = '100%';
+    document.getElementById('cimExBody').style.display = 'none';
+    const scoreEl = document.getElementById('cimExScore');
+    scoreEl.className = 'cim-ex-score show';
+    document.getElementById('cimScoreBig').textContent = cimScore + '/5';
+    const msgs = ['🔄 Empezá repasando las descripciones de cada nivel y volvé a intentarlo.',
+                  '⚠️ Conviene revisar bien la pirámide CIM antes del parcial.',
+                  '📖 Bien, pero repasá los límites entre niveles: sobre todo 0 vs 1 y 2 vs 3.',
+                  '✅ Muy bien. Revisá la pregunta que falló y ya tenés el tema.',
+                  '✅ Muy bien. Revisá la pregunta que falló y ya tenés el tema.',
+                  '🏆 ¡Perfecto! Dominás la pirámide CIM.'];
+    document.getElementById('cimScoreMsg').textContent = msgs[cimScore];
+    return;
+  }
+  cimExRender();
+}
+
+cimExRestart();
+
 </script>
 </body>
 </html>

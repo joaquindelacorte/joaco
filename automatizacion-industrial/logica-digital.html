@@ -224,16 +224,17 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
 .apuntes-nav {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 200;
   display: flex;
   align-items: center;
   gap: .75rem;
   padding: .5rem 1rem;
-  background: rgba(10,10,18,.92);
-  backdrop-filter: blur(8px);
+  background: rgba(10,10,18,.95);
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255,255,255,.08);
   font-family: 'Inter', sans-serif;
   font-size: .82rem;
+  min-height: 48px;
 }
 .apuntes-nav a {
   color: #94a3b8;
@@ -241,6 +242,7 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
   padding: .2rem .5rem;
   border-radius: 4px;
   transition: background .15s;
+  white-space: nowrap;
 }
 .apuntes-nav a:hover { background: rgba(255,255,255,.07); color: #e2e8f0; }
 .apuntes-nav__hub { color: #38bdf8 !important; }
@@ -249,8 +251,84 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
   color: #64748b;
   font-family: 'JetBrains Mono', monospace;
   font-size: .75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
 }
-@media (max-width: 480px) { .apuntes-nav__current { display: none; } }
+
+/* ── Hamburger ── */
+.burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: .35rem;
+  margin-left: auto;
+  z-index: 201;
+}
+.burger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #94a3b8;
+  border-radius: 2px;
+  transition: transform .25s, opacity .25s;
+}
+.burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.burger.open span:nth-child(2) { opacity: 0; }
+.burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── Mobile section-nav drawer ── */
+.section-nav-drawer {
+  display: none;
+  position: fixed;
+  top: 48px;
+  left: 0;
+  right: 0;
+  z-index: 190;
+  background: rgba(10,10,18,.97);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,.1);
+  padding: .75rem 1rem 1rem;
+  flex-direction: column;
+  gap: .35rem;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+}
+.section-nav-drawer.open { display: flex; }
+.section-nav-drawer a {
+  color: #94a3b8;
+  text-decoration: none;
+  padding: .7rem 1rem;
+  border-radius: 10px;
+  font-size: .92rem;
+  font-weight: 600;
+  transition: background .15s;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.section-nav-drawer a:hover,
+.section-nav-drawer a:active { background: rgba(255,255,255,.08); color: #e2e8f0; }
+.section-nav-drawer__label {
+  font-size: .65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: #475569;
+  padding: .5rem 1rem .25rem;
+}
+
+@media (max-width: 600px) {
+  .apuntes-nav__current { display: none; }
+  .burger { display: flex; }
+  .section-nav { display: none; }  /* hide pill nav on mobile; drawer replaces it */
+}
+@media (min-width: 601px) {
+  .section-nav-drawer { display: none !important; }
+  .burger { display: none !important; }
+}
 .apuntes-footer-nav {
   margin-top: 3rem;
   padding: 1rem 1.25rem;
@@ -515,14 +593,60 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
 
 .cim-restart:hover{background:var(--blue-lt)}
 
+
+/* ════ RESPONSIVE GENERAL ════ */
+@media (max-width: 600px) {
+  .container { padding: 0 .9rem; }
+  header h1 { font-size: 1.6rem; }
+  h2.section-title { font-size: 1.1rem; }
+  .cim-pyramid { font-size: .82rem; }
+  .cim-level { padding: .6rem .8rem !important; font-size: .8rem; }
+  .theorem-grid { grid-template-columns: 1fr 1fr; }
+  .gate-grid { grid-template-columns: repeat(2,1fr); }
+  .kmap-int-table th, .kmap-int-table td { width: 44px; height: 42px; font-size: .85rem; }
+  .gp-opt { width: 60px; height: 50px; font-size: 1.2rem; }
+  .circuit-components { grid-template-columns: 1fr 1fr; }
+  .sim-module-scores { grid-template-columns: 1fr 1fr; }
+  .boole-proc-header h2 { font-size: .85rem; }
+  .bp-prop-badge { display: none; }
+  .sim-results-btns { flex-direction: column; align-items: stretch; }
+  .sim-results-btn { text-align: center; }
+  .conv-prac-btns { flex-direction: column; align-items: stretch; }
+  .conv-prac-btn { text-align: center; }
+  .isa-prac-tag { font-size: 1.5rem; }
+  .ruta-item { flex-wrap: wrap; gap: .5rem; }
+  .ruta-goto { margin-left: auto; }
+}
+@media (max-width: 380px) {
+  .gate-grid { grid-template-columns: 1fr; }
+  .kmap-int-table th, .kmap-int-table td { width: 38px; height: 38px; font-size: .78rem; }
+}
 </style>
 </head>
 <body>
 <div class="apuntes-nav">
   <a href="https://joacodelacorte.netlify.app/#apuntes" class="apuntes-nav__back">← Portafolio</a>
   <a href="../apuntes/" class="apuntes-nav__hub">Hub Apuntes</a>
-  <span class="apuntes-nav__current">Automatización Industrial</span>
+  <span class="apuntes-nav__current">Lógica Digital</span>
+  <button class="burger" id="burgerBtn" onclick="toggleDrawer()" aria-label="Menú de secciones" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </div>
+
+<!-- Drawer mobile con todas las secciones -->
+<nav class="section-nav-drawer" id="sectionDrawer" role="navigation" aria-label="Secciones del apunte">
+  <div class="section-nav-drawer__label">Secciones</div>
+  <a href="#ruta" onclick="closeDrawer()">📍 Ruta de estudio</a>
+  <a href="#cim" onclick="closeDrawer()">🏭 Pirámide CIM</a>
+  <a href="#bases" onclick="closeDrawer()">🔢 Sistemas de numeración</a>
+  <a href="#compuertas" onclick="closeDrawer()">🔌 Compuertas lógicas</a>
+  <a href="#boole" onclick="closeDrawer()">🔣 Álgebra de Boole</a>
+  <a href="#karnaugh" onclick="closeDrawer()">🗺️ Karnaugh</a>
+  <a href="#isa" onclick="closeDrawer()">📊 ISA 5.1</a>
+  <a href="#circuitos" onclick="closeDrawer()">⚡ Circuitos de fuerza</a>
+  <a href="#simulacro" onclick="closeDrawer()">🧪 Simulacro integrador</a>
+  <a href="#juegos" onclick="closeDrawer()">🎮 Juegos</a>
+</nav>
 <div class="container">
   <a class="back" href="../index.html">← Volver al inicio</a>
   <header>
@@ -1846,6 +1970,29 @@ function simReviewAll(){const rev=document.getElementById('simReview');rev.class
 function simReviewWrong(){const rev=document.getElementById('simReview');rev.className='sim-review show';const wrong=simAnswers.filter(a=>a.chosen!==a.correct);if(!wrong.length){rev.innerHTML='<p style="color:#15803d;font-weight:700">¡Sin errores! Perfecto.</p>';return;}rev.innerHTML=wrong.map(a=>'<div class="sim-review-item was-wrong"><div class="sim-review-q">'+a.q+'</div><div class="sim-review-yours">Tu respuesta: '+a.chText+'</div><div class="sim-review-correct">✅ Correcta: '+a.corrText+'</div><div style="font-size:.8rem;color:var(--gray-lt);margin-top:.2rem">'+a.why+'</div></div>').join('');}
 
 
+
+/* ══ MENÚ SANDWICH ══ */
+function toggleDrawer() {
+  const drawer = document.getElementById('sectionDrawer');
+  const btn = document.getElementById('burgerBtn');
+  const isOpen = drawer.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+  btn.setAttribute('aria-expanded', isOpen);
+}
+function closeDrawer() {
+  document.getElementById('sectionDrawer').classList.remove('open');
+  const btn = document.getElementById('burgerBtn');
+  btn.classList.remove('open');
+  btn.setAttribute('aria-expanded', 'false');
+}
+// Cerrar drawer al hacer click fuera
+document.addEventListener('click', function(e) {
+  const drawer = document.getElementById('sectionDrawer');
+  const btn = document.getElementById('burgerBtn');
+  if (drawer && drawer.classList.contains('open') && !drawer.contains(e.target) && !btn.contains(e.target)) {
+    closeDrawer();
+  }
+});
 </script>
 </body>
 </html>

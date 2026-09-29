@@ -1923,15 +1923,20 @@ function rutaLoad(){return JSON.parse(localStorage.getItem('logica_ruta')||'{}')
 function rutaSave(s){localStorage.setItem('logica_ruta',JSON.stringify(s));}
 function rutaReset(){if(!confirm('¿Reiniciar todo el progreso?'))return;localStorage.removeItem('logica_ruta');rutaRender();}
 function rutaMarkDone(id){const s=rutaLoad();s[id]='done';rutaSave(s);rutaRender();}
+function rutaGoTo(anchor) {
+  var id = anchor.replace('#','');
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({behavior:'smooth'});
+}
 function rutaRender(){
-  const s=rutaLoad();
-  const list=document.getElementById('rutaList');
+  var s=rutaLoad();
+  var list=document.getElementById('rutaList');
   if(!list)return;
-  list.innerHTML=RUTA_MODULES.map((m,i)=>{
-    const st=s[m.id]||'pending';
-    const badge=st==='done'?'<span class="ruta-badge done">✓ Completado</span>':'<span class="ruta-badge pending">Pendiente</span>';
-    const cls=st==='done'?'done':'';
-    return '<div class="ruta-item '+cls+'"><div class="ruta-num">'+(i+1)+'</div><div class="ruta-info"><div class="ruta-name">'+m.name+'</div><div class="ruta-obj">'+m.obj+'</div></div>'+badge+'<button class="ruta-goto" onclick="document.getElementById(''+m.anchor+'')&&document.getElementById(''+m.anchor+'').scrollIntoView({behavior:'smooth'})">Ir →</button></div>';
+  list.innerHTML=RUTA_MODULES.map(function(m,i){
+    var st=s[m.id]||'pending';
+    var badge=st==='done'?'<span class="ruta-badge done">\u2713 Completado</span>':'<span class="ruta-badge pending">Pendiente</span>';
+    var cls=st==='done'?'done':'';
+    return '<div class="ruta-item '+cls+'"><div class="ruta-num">'+(i+1)+'</div><div class="ruta-info"><div class="ruta-name">'+m.name+'</div><div class="ruta-obj">'+m.obj+'</div></div>'+badge+'<button class="ruta-goto" onclick="rutaGoTo(RUTA_MODULES['+i+'].anchor)">Ir \u2192</button></div>';
   }).join('');
 }
 rutaRender();
@@ -1942,13 +1947,10 @@ function d2bcd(n){return String(n).split('').map(d=>parseInt(d).toString(2).padS
 let cpPool=[],cpIdx=0,cpScore=0,cpChecked=false;
 function cpBuild(){
   cpPool=[];
-  for(let i=0;i<3;i++){const n=Math.floor(Math.random()*200)+10;cpPool.push({label:n+'₁₀ → ?₂',hint:'Dividí por 2 o usá suma de potencias de 2.',check:s=>s.replace(/\s/g,'')===d2b8(n),explain:()=>n+'₁₀ = '+d2b8(n)+'₂
-Suma: '+[128,64,32,16,8,4,2,1].filter(p=>n&p).join(' + ')+' = '+n});}
+  for(let i=0;i<3;i++){const n=Math.floor(Math.random()*200)+10;cpPool.push({label:n+'₁₀ → ?₂',hint:'Dividí por 2 o usá suma de potencias de 2.',check:s=>s.replace(/\s/g,'')===d2b8(n),explain:()=>n+'\u2081\u2080 = '+d2b8(n)+'\u2082 | Suma: '+[128,64,32,16,8,4,2,1].filter(function(pw){return n&pw;}).join(' + ')+' = '+n});}
   for(let i=0;i<2;i++){const n=Math.floor(Math.random()*200)+10;const b=d2b8(n);cpPool.push({label:b+'₂ → ?₁₀',hint:'Multiplicá cada bit por su potencia de 2 y sumá.',check:s=>parseInt(s.trim())===n,explain:()=>b+'₂ = '+n+'₁₀'});}
   const n=Math.floor(Math.random()*89)+10;const bcd=d2bcd(n);
-  cpPool.push({label:n+'₁₀ → ? BCD 8421',hint:'Codificá CADA dígito decimal por separado en 4 bits. No es el binario del número completo.',check:s=>s.replace(/\s/g,'')===bcd.replace(/\s/g,''),explain:()=>{const d=String(n).split('');return n+' en BCD: '+d.map(x=>parseInt(x).toString(2).padStart(4,'0')).join(' ')+'
-'+d.map(x=>x+'→'+parseInt(x).toString(2).padStart(4,'0')).join(' | ')+'
-⚠️ Binario de '+n+' sería '+d2b8(n)+' — son distintos!';}});
+  cpPool.push({label:n+'₁₀ → ? BCD 8421',hint:'Codificá CADA dígito decimal por separado en 4 bits. No es el binario del número completo.',check:s=>s.replace(/\s/g,'')===bcd.replace(/\s/g,''),explain:()=>{const d=String(n).split('');return n+' en BCD: '+d.map(x=>parseInt(x).toString(2).padStart(4,'0')).join(' ')+' | '+d.map(x=>x+'>'+parseInt(x).toString(2).padStart(4,'0')).join(', ')+' | ⚠️ Binario de '+n+' sería '+d2b8(n)+' — son distintos!';}});
   cpPool.sort(()=>Math.random()-.5);
 }
 function cpRestart(){cpBuild();cpIdx=0;cpScore=0;cpChecked=false;document.getElementById('cpScore').className='conv-prac-score';document.getElementById('convPracBody').style.display='';cpRender();}
@@ -2007,11 +2009,11 @@ const ISA_POOL=[
   {tag:'AT-501',correct:'Transmisor de análisis',opts:['Transmisor de análisis','Transmisor de temperatura','Indicador de presión','Controlador de análisis'],why:'A=Análisis (composición, pH, conductividad). T=Transmisor.'},
   {tag:'SI-601',correct:'Indicador de velocidad',opts:['Indicador de velocidad','Transmisor de nivel','Controlador de velocidad','Indicador de caudal'],why:'S=Velocidad (Speed). I=Indicador.'},
 ];
-let isaIdx=0,isaScore=0,isaOrder=[];
-function isaRestart(){isaOrder=[0,1,2,3,4,5,6,7,8,9].sort(()=>Math.random()-.5).slice(0,10);isaIdx=0;isaScore=0;isaRender();}
-function isaRender(){if(isaIdx>=10){document.getElementById('isaPracTag').textContent='🏁 '+isaScore+'/10';document.getElementById('isaPracQ').textContent=isaScore>=8?'🏆 Dominás ISA 5.1!':isaScore>=6?'✅ Bien. Repasá funciones I y C.':'📖 Repasá la tabla de variables y funciones.';document.getElementById('isaPracOpts').innerHTML='<button class="isa-prac-opt" onclick="isaRestart()">🔄 Reiniciar</button>';document.getElementById('isaPracFb').className='isa-prac-fb';document.getElementById('isaPracNext').className='isa-prac-next';if(isaScore>=8)rutaMarkDone('isa');return;}const q=ISA_POOL[isaOrder[isaIdx]];document.getElementById('isaPracTag').textContent=q.tag;document.getElementById('isaPracQ').textContent='Pregunta '+(isaIdx+1)+'/10 — ¿Qué significa?';document.getElementById('isaPracFb').className='isa-prac-fb';document.getElementById('isaPracNext').className='isa-prac-next';const opts=[...q.opts].sort(()=>Math.random()-.5);document.getElementById('isaPracOpts').innerHTML=opts.map(o=>'<button class="isa-prac-opt" onclick="isaAnswer(this,'+JSON.stringify(o)+','+JSON.stringify(q.correct)+','+JSON.stringify(q.why)+')">'+o+'</button>').join('');}
-function isaAnswer(btn,chosen,correct,why){const isOk=chosen===correct;if(isOk)isaScore++;document.querySelectorAll('.isa-prac-opt').forEach(b=>{b.disabled=true;if(b.textContent===correct)b.classList.add('correct');else if(b===btn&&!isOk)b.classList.add('wrong');});const fb=document.getElementById('isaPracFb');fb.className='isa-prac-fb show '+(isOk?'ok':'fail');fb.textContent=(isOk?'✅ ':'❌ ')+why;document.getElementById('isaPracNext').className='isa-prac-next show';}
-function isaPracNext(){isaIdx++;isaRender();}
+var isaPIdx=0,isaPScore=0,isaPOrder=[];
+function isaRestart(){isaPOrder=[0,1,2,3,4,5,6,7,8,9].sort(()=>Math.random()-.5).slice(0,10);isaPIdx=0;isaPScore=0;isaRender();}
+function isaRender(){if(isaPIdx>=10){document.getElementById('isaPracTag').textContent='🏁 '+isaPScore+'/10';document.getElementById('isaPracQ').textContent=isaPScore>=8?'🏆 Dominás ISA 5.1!':isaPScore>=6?'✅ Bien. Repasá funciones I y C.':'📖 Repasá la tabla de variables y funciones.';document.getElementById('isaPracOpts').innerHTML='<button class="isa-prac-opt" onclick="isaRestart()">🔄 Reiniciar</button>';document.getElementById('isaPracFb').className='isa-prac-fb';document.getElementById('isaPracNext').className='isa-prac-next';if(isaPScore>=8)rutaMarkDone('isa');return;}const q=ISA_POOL[isaPOrder[isaPIdx]];document.getElementById('isaPracTag').textContent=q.tag;document.getElementById('isaPracQ').textContent='Pregunta '+(isaPIdx+1)+'/10 — ¿Qué significa?';document.getElementById('isaPracFb').className='isa-prac-fb';document.getElementById('isaPracNext').className='isa-prac-next';const opts=[...q.opts].sort(()=>Math.random()-.5);document.getElementById('isaPracOpts').innerHTML=opts.map(o=>'<button class="isa-prac-opt" onclick="isaAnswer(this,'+JSON.stringify(o)+','+JSON.stringify(q.correct)+','+JSON.stringify(q.why)+')">'+o+'</button>').join('');}
+function isaAnswer(btn,chosen,correct,why){const isOk=chosen===correct;if(isOk)isaPScore++;document.querySelectorAll('.isa-prac-opt').forEach(b=>{b.disabled=true;if(b.textContent===correct)b.classList.add('correct');else if(b===btn&&!isOk)b.classList.add('wrong');});const fb=document.getElementById('isaPracFb');fb.className='isa-prac-fb show '+(isOk?'ok':'fail');fb.textContent=(isOk?'✅ ':'❌ ')+why;document.getElementById('isaPracNext').className='isa-prac-next show';}
+function isaPracNext(){isaPIdx++;isaRender();}
 isaRestart();
 
 /* ══ CIRCUITO INTERACTIVO ══ */

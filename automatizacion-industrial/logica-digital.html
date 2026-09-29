@@ -594,6 +594,43 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
 .cim-restart:hover{background:var(--blue-lt)}
 
 
+
+/* ════ Material de la cursada ════ */
+.material-wrap{background:var(--card);border:2px solid var(--blue);border-radius:20px;padding:1.8rem;margin:2rem 0}
+.material-header{margin-bottom:1.4rem}
+.material-title{font-size:1rem;font-weight:800;color:var(--blue);margin-bottom:.25rem}
+.material-sub{font-size:.82rem;color:var(--gray-lt);margin-bottom:1rem}
+.material-stats{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:.8rem}
+.material-stat{font-size:.82rem;font-weight:700;color:var(--gray)}
+.material-stat span{color:var(--blue);font-weight:900}
+.material-bar-wrap{height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-bottom:.3rem}
+.material-bar{height:100%;background:linear-gradient(90deg,var(--blue),var(--teal));border-radius:999px;transition:.5s}
+.material-pct{font-size:.72rem;font-weight:700;color:var(--gray-lt);text-align:right;margin-bottom:1.2rem}
+.material-unit{margin-bottom:1.2rem}
+.material-unit-title{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--gray-lt);padding:.4rem 0;border-bottom:1px solid var(--border);margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem}
+.material-unit-dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex-shrink:0}
+.material-item{display:flex;align-items:center;gap:.7rem;padding:.65rem .8rem;border:1px solid var(--border);border-radius:10px;margin-bottom:.4rem;background:#fafbfc;flex-wrap:wrap}
+.material-item.revisado{border-left:3px solid var(--teal);background:#f0fdfa}
+.material-item.incorporado{border-left:3px solid #15803d;background:#f0fdf4}
+.material-item-num{font-size:.72rem;font-weight:800;color:var(--gray-lt);font-family:'Courier New',monospace;min-width:24px;flex-shrink:0}
+.material-item-name{font-weight:600;font-size:.86rem;color:#0c1a2e;flex:1;min-width:120px}
+.material-item-topic{font-size:.75rem;color:var(--gray-lt);flex:1;min-width:100px}
+.material-item-status{font-size:.68rem;font-weight:700;padding:.2rem .6rem;border-radius:6px;white-space:nowrap;flex-shrink:0}
+.material-item-status.pendiente{background:#f1f5f9;color:var(--gray-lt)}
+.material-item-status.revisado{background:var(--teal-bg);color:var(--teal)}
+.material-item-status.incorporado{background:#dcfce7;color:#15803d}
+.material-item-links{display:flex;gap:.4rem;flex-shrink:0;flex-wrap:wrap}
+.material-link{font-size:.72rem;font-weight:700;padding:.2rem .55rem;border-radius:6px;text-decoration:none;transition:.15s;border:1px solid}
+.material-link.drive{background:var(--blue-bg);color:var(--blue);border-color:transparent}
+.material-link.drive:hover{background:var(--blue);color:#fff}
+.material-link.interno{background:var(--green-bg);color:var(--green);border-color:transparent}
+.material-link.interno:hover{background:var(--green);color:#fff}
+@media(max-width:600px){
+  .material-item{gap:.5rem}
+  .material-item-topic{display:none}
+  .material-stats{gap:1rem}
+}
+
 /* ════ RESPONSIVE GENERAL ════ */
 @media (max-width: 600px) {
   .container { padding: 0 .9rem; }
@@ -644,6 +681,7 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
   <a href="#karnaugh" onclick="closeDrawer()">🗺️ Karnaugh</a>
   <a href="#isa" onclick="closeDrawer()">📊 ISA 5.1</a>
   <a href="#circuitos" onclick="closeDrawer()">⚡ Circuitos de fuerza</a>
+  <a href="#material" onclick="closeDrawer()">📂 Material de la cursada</a>
   <a href="#simulacro" onclick="closeDrawer()">🧪 Simulacro integrador</a>
   <a href="#juegos" onclick="closeDrawer()">🎮 Juegos</a>
 </nav>
@@ -664,6 +702,7 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
     <a href="#karnaugh">🗺️ Karnaugh</a>
     <a href="#isa">📊 ISA 5.1</a>
     <a href="#circuitos">⚡ Circuitos</a>
+    <a href="#material">📂 Material</a>
     <a href="#simulacro">🧪 Simulacro</a>
   </div>
 
@@ -1184,6 +1223,24 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
     </div>
   </div>
 
+
+
+  <!-- ═══════════════ MATERIAL DE LA CURSADA ═══════════════ -->
+  <h2 class="section-title" id="material">📂 Material de la cursada y avance de estudio</h2>
+  <p class="section-sub">31 archivos organizados por unidad. Estado de análisis y enlaces directos a cada documento.</p>
+  <div class="material-wrap">
+    <div class="material-header">
+      <div class="material-title">📂 Archivos de la materia</div>
+      <div class="material-sub">Seguí el avance de incorporación de cada tema a los apuntes interactivos.</div>
+      <div class="material-stats">
+        <div class="material-stat">Revisados: <span id="matRevisados">0</span> / <span id="matTotal">0</span></div>
+        <div class="material-stat">Incorporados: <span id="matIncorporados">0</span> / <span id="matTotal2">0</span></div>
+      </div>
+      <div class="material-bar-wrap"><div class="material-bar" id="matBar" style="width:0%"></div></div>
+      <div class="material-pct" id="matPct">0%</div>
+    </div>
+    <div id="materialList"></div>
+  </div>
 
   <!-- ═══════════════ SIMULACRO ═══════════════ -->
   <h2 class="section-title" id="simulacro">🧪 Simulacro integrador</h2>
@@ -1993,6 +2050,100 @@ document.addEventListener('click', function(e) {
     closeDrawer();
   }
 });
+
+/* ══ MATERIAL DE LA CURSADA ══ */
+const MATERIAL_FILES = [
+  // Unidad 0
+  { id:'u0', unit:'Unidad 0 — Organización de la materia', items:[
+    { num:1, name:'Programa de Automatización Industrial', topic:'Plan de la materia, objetivos, evaluación', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:2, name:'Planificación de clases', topic:'Cronograma, sesiones, fechas de parciales', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+  ]},
+  // Unidad 1
+  { id:'u1', unit:'Unidad 1 — Fundamentos y lógica digital', items:[
+    { num:3, name:'Fundamentos de Automatización e Industria 4.0', topic:'Pirámide CIM, niveles, conceptos base', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:'#cim' },
+    { num:4, name:'Guía práctica: Álgebra de Boole y tablas de verdad', topic:'Ejercicios resueltos, tablas, simplificación', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:'#boole' },
+    { num:5, name:'Puertas lógicas y Álgebra de Boole', topic:'Compuertas, propiedades, teoremas', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:'#compuertas' },
+    { num:6, name:'Guía práctica: Minimización y lógica secuencial', topic:'K-map, SOP mínima, flip-flops', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:'#karnaugh' },
+    { num:7, name:'Karnaugh, circuitos combinacionales y secuenciales', topic:'Mapas de Karnaugh, diferencia combinacional/secuencial', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:'#karnaugh' },
+    { num:8, name:'Parcial Modelo Resuelto', topic:'CIM, conversiones, Boole, K-map, ISA 5.1, fuerza y mando', status:'revisado', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:'#simulacro' },
+  ]},
+  // Unidad 2
+  { id:'u2', unit:'Unidad 2 — Planos, ISA, fuerza y mando', items:[
+    { num:9, name:'Esquemática, planos, diagramas P&ID e ISA 5.1', topic:'Lectura de tags, simbología, instrumentos de campo y panel', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:'#isa' },
+    { num:10, name:'Boceto de diagrama P&ID', topic:'Diagrama P&ID de planta, líneas de señal', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:'#isa' },
+    { num:11, name:'Esquemas de potencia, mando, marcado de bornes y CADeSIMU', topic:'Auto-retención, relé térmico, bornes IEC, software', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:'#circuitos' },
+  ]},
+  // Unidad 3
+  { id:'u3', unit:'Unidad 3 — Control e instrumentación industrial', items:[
+    { num:12, name:'Control industrial', topic:'Lazos de control, PID, realimentación', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:13, name:'Guía integradora: línea de producción y cinco tableros', topic:'Ejercicio integrador de aplicación', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:14, name:'Instrumentación, sensores y comandos', topic:'Tipos de sensores, señales, comandos eléctricos', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:15, name:'Automatización de procesos industriales', topic:'Procesos continuos y discretos, control automático', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:16, name:'Instrumentación industrial', topic:'Medición, transmisores, calibración', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+  ]},
+  // Unidad 4
+  { id:'u4', unit:'Unidad 4 — Herramientas, relés y sensores', items:[
+    { num:17, name:'Manual CADeSIMU', topic:'Software de simulación de esquemáticos eléctricos', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:18, name:'Datasheet Relé (1)', topic:'Documentación técnica de relé', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:19, name:'Datasheet Relé (2)', topic:'Documentación técnica de relé', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:20, name:'Datasheet Sensor (1)', topic:'Documentación técnica de sensor', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:21, name:'Datasheet Sensor (2)', topic:'Documentación técnica de sensor', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:22, name:'Datasheet Módulo (1)', topic:'Documentación técnica de módulo', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:23, name:'Datasheet Módulo (2)', topic:'Documentación técnica de módulo', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:24, name:'Datasheet Módulo (3)', topic:'Documentación técnica de módulo', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+  ]},
+  // Unidad 5
+  { id:'u5', unit:'Unidad 5 — Prácticas de aplicación', items:[
+    { num:25, name:'Seguridad y enclavamiento', topic:'Circuitos de seguridad, enclavamientos eléctricos', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:26, name:'Clasificación de materiales', topic:'Práctica de clasificación con sensores', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:27, name:'Secuenciador Slim', topic:'Automatización con secuenciador', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:28, name:'Barrera óptica IFM', topic:'Sensor de presencia óptico, datasheet y aplicación', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:29, name:'Modos manual, automático y nivel', topic:'Control de modos de operación en tablero', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:30, name:'Manual teórico de lógica, relés y sensores 24 V', topic:'Referencia teórica integrada', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+  ]},
+  // Consolidado
+  { id:'u9', unit:'Material consolidado', items:[
+    { num:31, name:'ZIP — Paquete completo de archivos', topic:'Descargable con los 30 documentos (no cuenta como contenido adicional)', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+  ]},
+];
+
+function matRender() {
+  const allItems = MATERIAL_FILES.flatMap(u => u.items).filter(i => i.num <= 30);
+  const total = allItems.length;
+  const revisados = allItems.filter(i => i.status === 'revisado' || i.status === 'incorporado').length;
+  const incorporados = allItems.filter(i => i.status === 'incorporado').length;
+  const pct = Math.round((revisados / total) * 100);
+
+  ['matTotal','matTotal2'].forEach(id => { const el = document.getElementById(id); if(el) el.textContent = total; });
+  const elR = document.getElementById('matRevisados'); if(elR) elR.textContent = revisados;
+  const elI = document.getElementById('matIncorporados'); if(elI) elI.textContent = incorporados;
+  const bar = document.getElementById('matBar'); if(bar) bar.style.width = pct + '%';
+  const pctEl = document.getElementById('matPct'); if(pctEl) pctEl.textContent = pct + '% analizado';
+
+  const list = document.getElementById('materialList');
+  if (!list) return;
+  list.innerHTML = MATERIAL_FILES.map(unit => {
+    const items = unit.items.map(item => {
+      const statusLabel = item.status === 'incorporado' ? 'Incorporado' : item.status === 'revisado' ? 'Revisado' : 'Pendiente';
+      const statusCls = item.status;
+      const driveLink = item.drive ? '<a class="material-link drive" href="' + item.drive + '" target="_blank" rel="noopener">📄 Abrir</a>' : '';
+      const internoLink = item.interno ? '<a class="material-link interno" href="' + item.interno + '">📍 Ver apunte</a>' : '';
+      return '<div class="material-item ' + statusCls + '">' +
+        '<span class="material-item-num">' + String(item.num).padStart(2,'0') + '</span>' +
+        '<span class="material-item-name">' + item.name + '</span>' +
+        '<span class="material-item-topic">' + item.topic + '</span>' +
+        '<span class="material-item-status ' + statusCls + '">' + statusLabel + '</span>' +
+        '<div class="material-item-links">' + driveLink + internoLink + '</div>' +
+        '</div>';
+    }).join('');
+    return '<div class="material-unit">' +
+      '<div class="material-unit-title"><div class="material-unit-dot"></div>' + unit.unit + '</div>' +
+      items + '</div>';
+  }).join('');
+}
+
+matRender();
+
 </script>
 </body>
 </html>

@@ -659,6 +659,57 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
   .material-stats{gap:1rem}
 }
 
+/* ════ Mnemotecnias ════ */
+.mnemo-wrap{margin:1.5rem 0}
+.mnemo-header{margin-bottom:1rem}
+.mnemo-title{font-size:1rem;font-weight:800;color:var(--purple);margin-bottom:.2rem}
+.mnemo-sub{font-size:.82rem;color:var(--gray-lt)}
+.mnemo-cards{display:grid;gap:.7rem}
+.mnemo-card{border:2px solid var(--border);border-radius:14px;overflow:hidden;background:var(--card)}
+.mnemo-card.open{border-color:var(--purple)}
+.mnemo-card-head{display:flex;align-items:center;gap:.75rem;padding:.8rem 1rem;cursor:pointer;user-select:none;background:#fafbfc;transition:.15s}
+.mnemo-card.open .mnemo-card-head{background:var(--purple-bg)}
+.mnemo-card-icon{font-size:1.2rem;flex-shrink:0}
+.mnemo-card-label{font-weight:700;font-size:.9rem;color:#0c1a2e;flex:1}
+.mnemo-card.open .mnemo-card-label{color:var(--purple)}
+.mnemo-card-arrow{font-size:.85rem;color:var(--gray-lt);transition:transform .2s}
+.mnemo-card.open .mnemo-card-arrow{transform:rotate(180deg)}
+.mnemo-card-body{display:none;padding:1rem 1.1rem;border-top:1px solid var(--border)}
+.mnemo-card.open .mnemo-card-body{display:block}
+.mnemo-rule{font-size:1rem;font-weight:800;color:var(--purple);background:var(--purple-bg);border-radius:10px;padding:.65rem 1rem;margin-bottom:.9rem;line-height:1.4}
+.mnemo-steps{margin:.6rem 0}
+.mnemo-steps li{font-size:.88rem;color:var(--gray);line-height:1.7;margin-left:1.1rem}
+.mnemo-example{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:.7rem .9rem;margin:.7rem 0;font-family:'Courier New',monospace;font-size:.88rem;color:#0c1a2e;white-space:pre-wrap;line-height:1.65}
+.mnemo-contrast{background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:.7rem .9rem;margin:.7rem 0;font-family:'Courier New',monospace;font-size:.85rem;line-height:1.65}
+.mnemo-contrast-title{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--orange);margin-bottom:.3rem}
+.mnemo-error{background:#fee2e2;border-left:3px solid #b91c1c;border-radius:8px;padding:.55rem .85rem;margin-top:.7rem;font-size:.82rem;color:#7f1d1d;line-height:1.5}
+.mnemo-error::before{content:"⚠️ Error típico: ";font-weight:700}
+.mnemo-hex-table{display:flex;flex-wrap:wrap;gap:.4rem;margin:.5rem 0}
+.mnemo-hex-cell{background:var(--purple-bg);color:var(--purple);font-family:'Courier New',monospace;font-weight:800;font-size:.85rem;padding:.3rem .6rem;border-radius:6px}
+
+/* ════ Microactividad reglas ════ */
+.mnemo-quiz{background:var(--card);border:2px solid var(--purple);border-radius:16px;padding:1.4rem;margin-top:1.2rem}
+.mnemo-quiz-title{font-size:.9rem;font-weight:800;color:var(--purple);margin-bottom:.3rem}
+.mnemo-quiz-sub{font-size:.8rem;color:var(--gray-lt);margin-bottom:1rem}
+.mnemo-quiz-q{font-size:.92rem;font-weight:700;color:#0c1a2e;padding:.7rem .9rem;background:#f8fafc;border-radius:9px;border-left:3px solid var(--purple);margin-bottom:.7rem}
+.mnemo-quiz-opts{display:grid;gap:.45rem;margin-bottom:.6rem}
+.mnemo-quiz-opt{width:100%;text-align:left;padding:.65rem .9rem;border:2px solid var(--border);border-radius:9px;background:#fff;cursor:pointer;font-size:.86rem;color:var(--gray);transition:.15s;font-family:inherit}
+.mnemo-quiz-opt:hover:not(:disabled){border-color:var(--purple);background:var(--purple-bg)}
+.mnemo-quiz-opt.correct{border-color:#15803d;background:#dcfce7;color:#14532d;font-weight:700}
+.mnemo-quiz-opt.wrong{border-color:#b91c1c;background:#fee2e2;color:#7f1d1d}
+.mnemo-quiz-opt:disabled{cursor:default}
+.mnemo-quiz-fb{font-size:.83rem;line-height:1.6;padding:.7rem .9rem;border-radius:9px;display:none;margin-bottom:.7rem}
+.mnemo-quiz-fb.show{display:block}
+.mnemo-quiz-fb.ok{background:#dcfce7;color:#14532d;border-left:3px solid #15803d}
+.mnemo-quiz-fb.fail{background:#fee2e2;color:#7f1d1d;border-left:3px solid #b91c1c}
+.mnemo-quiz-next{padding:.55rem 1.3rem;background:var(--purple);color:#fff;border:none;border-radius:9px;font-weight:700;cursor:pointer;display:none;font-family:inherit;font-size:.85rem}
+.mnemo-quiz-next.show{display:inline-block}
+.mnemo-quiz-progress{font-size:.75rem;font-weight:700;color:var(--gray-lt);text-align:right;margin-bottom:.5rem}
+@media(max-width:600px){
+  .mnemo-example,.mnemo-contrast{font-size:.78rem}
+  .mnemo-hex-table{gap:.3rem}
+}
+
 /* ════ RESPONSIVE GENERAL ════ */
 @media (max-width: 600px) {
   .container { padding: 0 .9rem; }
@@ -704,6 +755,7 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
   <a href="#ruta" onclick="closeDrawer()">📍 Ruta de estudio</a>
   <a href="#cim" onclick="closeDrawer()">🏭 Pirámide CIM</a>
   <a href="#bases" onclick="closeDrawer()">🔢 Sistemas de numeración</a>
+  <a href="#mnemotecnias-numeracion" onclick="closeDrawer()">🧠 Atajos de memoria</a>
   <a href="#compuertas" onclick="closeDrawer()">🔌 Compuertas lógicas</a>
   <a href="#boole" onclick="closeDrawer()">🔣 Álgebra de Boole</a>
   <a href="#karnaugh" onclick="closeDrawer()">🗺️ Karnaugh</a>
@@ -726,6 +778,7 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
     <a href="#ruta">📍 Ruta</a>
     <a href="#cim">🏭 CIM</a>
     <a href="#bases">🔢 Bases</a>
+    <a href="#mnemotecnias-numeracion">🧠 Atajos</a>
     <a href="#compuertas">🔌 Compuertas</a>
     <a href="#boole">🔣 Boole</a>
     <a href="#karnaugh">🗺️ Karnaugh</a>
@@ -816,6 +869,140 @@ footer{text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--gray-lt)
     <div class="tip"><strong>Ojo:</strong> 53 en binario = 00110101. En BCD = 0101 0011. ¡Son distintos!</div>
     <div class="ej">5 → 0101 | 3 → 0011 | → BCD: 0101 0011</div>
   </div>
+
+
+  <!-- ═══════════════ MNEMOTECNIAS ═══════════════ -->
+  <div id="mnemotecnias-numeracion" class="mnemo-wrap">
+    <div class="mnemo-header">
+      <div class="mnemo-title">🧠 Atajos de memoria — Conversiones sin perderse</div>
+      <div class="mnemo-sub">5 reglas breves para recordar cada procedimiento bajo presión de parcial. Expandí la que necesitás.</div>
+    </div>
+    <div class="mnemo-cards">
+
+      <!-- Tarjeta 1 -->
+      <div class="mnemo-card open" id="mnemo1">
+        <div class="mnemo-card-head" onclick="document.getElementById('mnemo1').classList.toggle('open')">
+          <span class="mnemo-card-icon">🔢→🔵</span>
+          <span class="mnemo-card-label">Decimal → Binario</span>
+          <span class="mnemo-card-arrow">▼</span>
+        </div>
+        <div class="mnemo-card-body">
+          <div class="mnemo-rule">"Dividí por 2; los restos se leen al revés."</div>
+          <div style="font-size:.82rem;font-weight:700;color:var(--gray-lt);margin-bottom:.4rem">Atajo rápido para 8 bits — escala fija:</div>
+          <div class="mnemo-example">128 | 64 | 32 | 16 | 8 | 4 | 2 | 1</div>
+          <div style="font-size:.82rem;color:var(--gray);margin:.4rem 0">Marcá con 1 cada potencia que cabe en el número. Restá y continuá.</div>
+          <div class="mnemo-example">53 = 32 + 16 + 4 + 1
+  0   0   1   1  0  1  0  1
+53₁₀ = 00110101₂</div>
+          <div class="mnemo-error">leer los restos de arriba hacia abajo — el primer resto es el bit menos significativo, va al final.</div>
+        </div>
+      </div>
+
+      <!-- Tarjeta 2 -->
+      <div class="mnemo-card" id="mnemo2">
+        <div class="mnemo-card-head" onclick="document.getElementById('mnemo2').classList.toggle('open')">
+          <span class="mnemo-card-icon">🔵→🔢</span>
+          <span class="mnemo-card-label">Binario → Decimal</span>
+          <span class="mnemo-card-arrow">▼</span>
+        </div>
+        <div class="mnemo-card-body">
+          <div class="mnemo-rule">"Cada 1 pesa; los 0 no suman."</div>
+          <ol class="mnemo-steps">
+            <li>Ubicar cada bit sobre su potencia de 2 (empezando desde la derecha: 2⁰=1, 2¹=2…)</li>
+            <li>Sumar solo las posiciones donde haya <strong>1</strong>.</li>
+          </ol>
+          <div class="mnemo-example">00110101₂
+  posiciones: 128·0 + 64·0 + 32·1 + 16·1 + 8·0 + 4·1 + 2·0 + 1·1
+  = 32 + 16 + 4 + 1 = 53₁₀</div>
+          <div class="mnemo-error">contar posiciones desde cero por izquierda — la posición 0 es siempre el bit de la DERECHA.</div>
+        </div>
+      </div>
+
+      <!-- Tarjeta 3 -->
+      <div class="mnemo-card" id="mnemo3">
+        <div class="mnemo-card-head" onclick="document.getElementById('mnemo3').classList.toggle('open')">
+          <span class="mnemo-card-icon">🔵→🟣</span>
+          <span class="mnemo-card-label">Binario → Hexadecimal</span>
+          <span class="mnemo-card-arrow">▼</span>
+        </div>
+        <div class="mnemo-card-body">
+          <div class="mnemo-rule">"Hexa trabaja de a cuatro bits."</div>
+          <ol class="mnemo-steps">
+            <li>Completar con ceros a la izquierda hasta múltiplo de 4.</li>
+            <li>Agrupar en bloques de 4 bits desde la derecha.</li>
+            <li>Convertir cada grupo a su dígito hex.</li>
+          </ol>
+          <div class="mnemo-example">00110101₂  →  0011 | 0101
+                       ↓       ↓
+                       3       5
+00110101₂ = 35₁₆</div>
+          <div style="font-size:.82rem;font-weight:700;color:var(--gray);margin:.6rem 0 .3rem">Letras hexadecimales — correspondencia directa:</div>
+          <div class="mnemo-hex-table">
+            <span class="mnemo-hex-cell">10=A</span><span class="mnemo-hex-cell">11=B</span>
+            <span class="mnemo-hex-cell">12=C</span><span class="mnemo-hex-cell">13=D</span>
+            <span class="mnemo-hex-cell">14=E</span><span class="mnemo-hex-cell">15=F</span>
+          </div>
+          <div style="font-size:.8rem;color:var(--gray-lt);margin:.3rem 0">"A B C D E F → diez, once, doce, trece, catorce, quince."</div>
+          <div class="mnemo-error">agrupar de izquierda a derecha sin completar a múltiplo de 4 bits.</div>
+        </div>
+      </div>
+
+      <!-- Tarjeta 4 -->
+      <div class="mnemo-card" id="mnemo4">
+        <div class="mnemo-card-head" onclick="document.getElementById('mnemo4').classList.toggle('open')">
+          <span class="mnemo-card-icon">🔢→🟠</span>
+          <span class="mnemo-card-label">Decimal → BCD 8421</span>
+          <span class="mnemo-card-arrow">▼</span>
+        </div>
+        <div class="mnemo-card-body">
+          <div class="mnemo-rule">"BCD: cada dígito tiene su propia caja de 4 bits."</div>
+          <ol class="mnemo-steps">
+            <li>Separar los dígitos decimales individualmente.</li>
+            <li>Convertir cada dígito por separado a 4 bits.</li>
+            <li><strong>No</strong> convertir el número completo a binario.</li>
+          </ol>
+          <div class="mnemo-example">53₁₀ → dígito 5 y dígito 3
+  5 → 0101
+  3 → 0011
+53 en BCD = 0101 0011</div>
+          <div class="mnemo-contrast">
+            <div class="mnemo-contrast-title">⚠️ Diferencia clave — no confundir:</div>53 en binario natural:  00110101
+53 en BCD 8421:         0101 0011</div>
+          <div class="mnemo-error">responder 00110101 como BCD. Eso es binario natural, no BCD.</div>
+        </div>
+      </div>
+
+      <!-- Tarjeta 5 -->
+      <div class="mnemo-card" id="mnemo5">
+        <div class="mnemo-card-head" onclick="document.getElementById('mnemo5').classList.toggle('open')">
+          <span class="mnemo-card-icon">🔢→🟣</span>
+          <span class="mnemo-card-label">Decimal → Hexadecimal (por divisiones)</span>
+          <span class="mnemo-card-arrow">▼</span>
+        </div>
+        <div class="mnemo-card-body">
+          <div class="mnemo-rule">"Dividí por 16; los restos se leen al revés."</div>
+          <div style="font-size:.82rem;color:var(--gray);margin-bottom:.5rem">Mismo patrón que binario, pero dividiendo por 16.</div>
+          <div class="mnemo-example">53 ÷ 16 = 3,  resto 5   ← segundo dígito
+ 3 ÷ 16 = 0,  resto 3   ← primer dígito
+Leer restos de abajo hacia arriba: 3, 5
+53₁₀ = 35₁₆</div>
+          <div class="mnemo-error">escribir 53₁₆ (copiar el número decimal sin convertir) o leer el primer resto como dígito más significativo.</div>
+        </div>
+      </div>
+
+    </div><!-- /.mnemo-cards -->
+
+    <!-- Microactividad -->
+    <div class="mnemo-quiz" id="mnemo-quiz-wrap">
+      <div class="mnemo-quiz-title">🎯 ¿Qué regla usarías?</div>
+      <div class="mnemo-quiz-sub">4 preguntas rápidas — elegí el procedimiento correcto. Explicación inmediata en cada respuesta.</div>
+      <div class="mnemo-quiz-progress"><span id="mnemoQNum">1</span>/4</div>
+      <div class="mnemo-quiz-q" id="mnemoQText">—</div>
+      <div class="mnemo-quiz-opts" id="mnemoQOpts"></div>
+      <div class="mnemo-quiz-fb" id="mnemoQFb"></div>
+      <button class="mnemo-quiz-next" id="mnemoQNext" onclick="mnemoNext()">Siguiente →</button>
+    </div>
+  </div><!-- /#mnemotecnias-numeracion -->
 
   <div class="calc">
     <h2>🧮 Calculadora de bases (Bin / Hex / BCD)</h2>
@@ -2100,8 +2287,8 @@ document.addEventListener('click', function(e) {
 const MATERIAL_FILES = [
   // Unidad 0
   { id:'u0', unit:'Unidad 0 — Organización de la materia', items:[
-    { num:1, name:'Programa de Automatización Industrial', topic:'Plan de la materia, objetivos, evaluación', status:'revisado', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
-    { num:2, name:'Planificación de clases', topic:'Cronograma, sesiones, fechas de parciales', status:'revisado', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:1, name:'Programa de Automatización Industrial', topic:'Plan de la materia, objetivos, evaluación', status:'incorporado', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
+    { num:2, name:'Planificación de clases', topic:'Cronograma, sesiones, fechas de parciales', status:'incorporado', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:null },
   ]},
   // Unidad 1
   { id:'u1', unit:'Unidad 1 — Fundamentos y lógica digital', items:[
@@ -2110,7 +2297,7 @@ const MATERIAL_FILES = [
     { num:5, name:'Puertas lógicas y Álgebra de Boole', topic:'Compuertas, propiedades, teoremas', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:'#compuertas' },
     { num:6, name:'Guía práctica: Minimización y lógica secuencial', topic:'K-map, SOP mínima, flip-flops', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:'#karnaugh' },
     { num:7, name:'Karnaugh, circuitos combinacionales y secuenciales', topic:'Mapas de Karnaugh, diferencia combinacional/secuencial', status:'pendiente', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:'#karnaugh' },
-    { num:8, name:'Parcial Modelo Resuelto', topic:'CIM, conversiones, Boole, K-map, ISA 5.1, fuerza y mando', status:'revisado', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:'#simulacro' },
+    { num:8, name:'Parcial Modelo Resuelto', topic:'CIM, conversiones, Boole, K-map, ISA 5.1, fuerza y mando', status:'incorporado', drive:'https://drive.google.com/drive/folders/16uMxnv164y3QsgriHCfqSWWyXxK0jDcT', interno:'#simulacro' },
   ]},
   // Unidad 2
   { id:'u2', unit:'Unidad 2 — Planos, ISA, fuerza y mando', items:[
@@ -2254,6 +2441,78 @@ rutaMarkDone = function(id) {
 };
 
 planRender();
+
+
+/* ══ MNEMOTECNIAS — microactividad ══ */
+var MNEMO_QS = [
+  { q:'Necesitás pasar 53 decimal a BCD 8421. ¿Qué hacés?',
+    opts:['Convertir 53 a binario completo (00110101)','Separar cada dígito y codificarlo en 4 bits por separado','Dividir por 16 y leer los restos al revés','Sumar las potencias de 2'],
+    correct: 1,
+    explain: 'BCD trabaja dígito a dígito: 5→0101, 3→0011 → resultado: 0101 0011. Convertir el número completo a binario da 00110101 que es binario natural, NO BCD.' },
+  { q:'Querés pasar 00110101 binario a hexadecimal. ¿Cuál es el primer paso?',
+    opts:['Convertir primero a decimal','Agrupar los bits de a cuatro desde la derecha','Dividir por 16','Sumar los bits que valen 1'],
+    correct: 1,
+    explain: 'Hexa trabaja de a cuatro bits. 0011|0101 → 3|5 → 35₁₆. Siempre agrupá desde la derecha y completá con ceros si hace falta.' },
+  { q:'Estás convirtiendo decimal a binario por divisiones. ¿Cómo leés los restos?',
+    opts:['De arriba hacia abajo (primer resto = bit más significativo)','De abajo hacia arriba (último resto = bit más significativo)','El orden no importa','Solo si son pares'],
+    correct: 1,
+    explain: 'Los restos se leen al revés: el último resto obtenido es el bit más significativo (el de mayor peso). Leerlos al derecho es el error más frecuente en parcial.' },
+  { q:'Pasás 00110101 binario a decimal. ¿Qué sumás?',
+    opts:['Todos los bits (unos y ceros)','Solo las posiciones donde hay un 1, multiplicadas por su potencia de 2','Solo los bits de los extremos','Los bits pares de la secuencia'],
+    correct: 1,
+    explain: 'Cada 1 pesa; los 0 no suman. 32+16+4+1=53. La potencia de 2 de cada posición se cuenta desde la derecha (posición 0 = valor 1).' },
+];
+
+var mnemoQIdx = 0, mnemoQScore = 0;
+function mnemoRender() {
+  var q = MNEMO_QS[mnemoQIdx];
+  var numEl = document.getElementById('mnemoQNum');
+  var textEl = document.getElementById('mnemoQText');
+  var optsEl = document.getElementById('mnemoQOpts');
+  var fbEl = document.getElementById('mnemoQFb');
+  var nextEl = document.getElementById('mnemoQNext');
+  if(!textEl) return;
+  numEl.textContent = mnemoQIdx + 1;
+  textEl.textContent = q.q;
+  fbEl.className = 'mnemo-quiz-fb';
+  fbEl.textContent = '';
+  nextEl.className = 'mnemo-quiz-next';
+  var shuffled = q.opts.map(function(o,i){ return {t:o, i:i}; }).sort(function(){ return Math.random()-.5; });
+  optsEl.innerHTML = shuffled.map(function(o){
+    return '<button class="mnemo-quiz-opt" onclick="mnemoAnswer(this,' + o.i + ')">' + o.t + '</button>';
+  }).join('');
+}
+function mnemoAnswer(btn, chosen) {
+  var q = MNEMO_QS[mnemoQIdx];
+  var isOk = chosen === q.correct;
+  if(isOk) mnemoQScore++;
+  document.querySelectorAll('.mnemo-quiz-opt').forEach(function(b){
+    b.disabled = true;
+    var idx = parseInt(b.getAttribute('onclick').match(/\d+\)$/)[0]);
+    if(idx === q.correct) b.classList.add('correct');
+    else if(b === btn && !isOk) b.classList.add('wrong');
+  });
+  var fb = document.getElementById('mnemoQFb');
+  fb.className = 'mnemo-quiz-fb show ' + (isOk ? 'ok' : 'fail');
+  fb.textContent = (isOk ? '✅ Correcto. ' : '❌ No es esa. ') + q.explain;
+  document.getElementById('mnemoQNext').className = 'mnemo-quiz-next show';
+}
+function mnemoNext() {
+  mnemoQIdx++;
+  if(mnemoQIdx >= 4) {
+    var t = document.getElementById('mnemoQText');
+    var o = document.getElementById('mnemoQOpts');
+    var nb = document.getElementById('mnemoQNext');
+    var fb = document.getElementById('mnemoQFb');
+    if(t) t.textContent = '🏁 Resultado: ' + mnemoQScore + '/4';
+    if(o) o.innerHTML = '<button class="mnemo-quiz-opt" style="border-color:var(--purple);color:var(--purple)" onclick="mnemoQIdx=0;mnemoQScore=0;mnemoRender()">🔄 Repetir</button>';
+    if(fb) { fb.className='mnemo-quiz-fb show ok'; fb.textContent = mnemoQScore===4?'🏆 ¡Perfecto! Tenés claros todos los procedimientos.':mnemoQScore>=3?'✅ Muy bien. Repasá la tarjeta del que fallaste.':'📖 Revisá las tarjetas de arriba y volvé a intentarlo.'; }
+    if(nb) nb.className = 'mnemo-quiz-next';
+    return;
+  }
+  mnemoRender();
+}
+mnemoRender();
 
 </script>
 </body>

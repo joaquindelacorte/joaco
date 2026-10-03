@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Álgebra Lineal — Juegos para el Parcial</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -851,6 +851,19 @@ function gTab(world,game,btn){
 function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
 function rndNz(a,b){var v;do{v=rnd(a,b);}while(v===0);return v;}
 function cross(u,v){return[u[1]*v[2]-u[2]*v[1],-(u[0]*v[2]-u[2]*v[0]),u[0]*v[1]-u[1]*v[0]];}
+// ─── KaTeX sync helper ───────────────────────────────────
+function tex(src, disp) {
+  if (window.katex) {
+    try { return katex.renderToString(src, {throwOnError:false, displayMode:!!disp}); }
+    catch(e) { return src; }
+  }
+  return src;
+}
+function tv(v) {
+  return tex('\\left('+v.join(',\\,')+'\\right)');
+}
+// ─────────────────────────────────────────────────────────
+
 function dot(u,v){return u[0]*v[0]+u[1]*v[1]+u[2]*v[2];}
 function norm2(v){return Math.sqrt(dot(v,v));}
 function isProportional(a,b){
@@ -1058,7 +1071,7 @@ function newG1A(){
   var ans, qhtml, opts=[];
   if(type===0){
     ans=[u[0]+v[0],u[1]+v[1],u[2]+v[2]];
-    qhtml='Calculá <b>u + v</b><br>$\\mathbf{u}='+vStr(u)+'$ &nbsp; $\\mathbf{v}='+vStr(v)+'$';
+    qhtml='Calculá '+tex('\\mathbf{u}+\\mathbf{v}')+'<br>'+tex('\\mathbf{u}=')+tv(u)+'&ensp;'+tex('\\mathbf{v}=')+tv(v);
     // three wrong answers
     opts=[
       {text:vStr(ans), ok:true},
@@ -1121,7 +1134,6 @@ function newG1A(){
     markAllChoices('g1a-opts',G1A.opts.findIndex(function(o){return o.ok;}));
     if(window.renderMathInElement) renderMathInElement(document.getElementById('g1a-q'));
   });
-  if(window.renderMathInElement) setTimeout(function(){renderMathInElement(document.getElementById('g1a-q'));},100);
 }
 
 // ─────────────────────────────────────────────────────────
@@ -1154,14 +1166,13 @@ function newG1B(){
   var dp=Math.round(dot(u,v)*100)/100;
   var cx=cross(u,v).map(function(x){return Math.round(x*100)/100;});
   document.getElementById('g1b-q').innerHTML=
-    '$\\mathbf{u}='+vStr(u)+'$ &nbsp; $\\mathbf{v}='+vStr(v.map(function(x){return Math.round(x*100)/100;}))+'$';
+    tex('\\mathbf{u}=')+tv(u)+'&ensp;'+tex('\\mathbf{v}=')+tv(v.map(function(x){return Math.round(x*100)/100;}));
   document.getElementById('g1b-calc').innerHTML=
-    'u&#xB7;v = <b style="color:var(--cyan)">'+dp+'</b> &nbsp;&nbsp; u&#xD7;v = <b style="color:var(--ora)">'+vStr(cx)+'</b>';
+    tex('\\mathbf{u}\\cdot\\mathbf{v}')+'&ensp;=&ensp;<b style="color:var(--cyan)">'+dp+'</b>&emsp;'+tex('\\mathbf{u}\\times\\mathbf{v}')+'&ensp;=&ensp;<b style="color:var(--ora)">'+vStr(cx)+'</b>';
   // Draw
   addArrow('cv-1b',[0,0,0],u,0xff5555,1);
   addArrow('cv-1b',[0,0,0],v.map(function(x){return Math.round(x*100)/100;}),0x5588ff,1);
   document.getElementById('g1b-fb').innerHTML='';
-  if(window.renderMathInElement) setTimeout(function(){renderMathInElement(document.getElementById('g1b-q'));},100);
 }
 function ansG1B(ans){
   var real=G1B.correct;
@@ -1191,12 +1202,12 @@ function newG1C(){
   var n=cross(u,v);
   G1C={u:u,v:v,n:n,sel:{i:null,j:null,k:null}};
   document.getElementById('g1c-q').innerHTML=
-    '$\\mathbf{u}='+vStr(u)+'$, $\\mathbf{v}='+vStr(v)+'$<br>Calculá $\\mathbf{u}\\times\\mathbf{v}$';
+    tex('\\mathbf{u}=')+tv(u)+',&ensp;'+tex('\\mathbf{v}=')+tv(v)+'<br>Calculá&ensp;'+tex('\\mathbf{u}\\times\\mathbf{v}');
   document.getElementById('g1c-det').innerHTML=
     '<b>Expand&#xED; el determinante:</b><br>' +
-    '<code>i('+u[1]+'&#xB7;'+v[2]+' &minus; '+u[2]+'&#xB7;'+v[1]+') &nbsp;'+
-    '<span style="color:var(--red)">&#x2212; j('+u[0]+'&#xB7;'+v[2]+' &minus; '+u[2]+'&#xB7;'+v[0]+')</span>'+
-    ' &nbsp;+ k('+u[0]+'&#xB7;'+v[1]+' &minus; '+u[1]+'&#xB7;'+v[0]+')</code>';
+    tex('\\mathbf{i}('+u[1]+'\\cdot'+v[2]+' - '+u[2]+'\\cdot'+v[1]+')') +
+    '<span style="color:var(--red)">'+tex(' - \\mathbf{j}('+u[0]+'\\cdot'+v[2]+' - '+u[2]+'\\cdot'+v[0]+')')+'</span>' +
+    tex(' + \\mathbf{k}('+u[0]+'\\cdot'+v[1]+' - '+u[1]+'\\cdot'+v[0]+')');
   // Build options with distractors for each component
   function makeOpts(correct, u, v, comp){
     var wrong1=correct+(rnd(1,2)*2-1); // correct±1
@@ -1235,7 +1246,6 @@ function newG1C(){
   document.getElementById('g1c-fb').innerHTML='';
   addArrow('cv-1c',[0,0,0],u,0xff5555,1);
   addArrow('cv-1c',[0,0,0],v,0x5588ff,1);
-  if(window.renderMathInElement) setTimeout(function(){renderMathInElement(document.getElementById('g1c-q'));},100);
 }
 function chkG1C(){
   var sel=G1C.sel;
@@ -1285,7 +1295,7 @@ function newG2A(){
   G2A={u:u,v:v,P:P,n:n,d:d,step2done:false};
 
   document.getElementById('g2a-q').innerHTML=
-    '<b>Plano param&#xE9;trico:</b><br>$(x,y,z) = \\alpha'+vStr(u)+' + \\beta'+vStr(v)+' + '+vStr(P)+'$';
+    '<b>Plano param&#xE9;trico:</b><br>'+tex('(x,y,z) = \\alpha'+vStr(u)+' + \\beta'+vStr(v)+' + '+vStr(P));
 
   // Step 1: choose correct normal (proportional to n)
   var nWrong1=cross(v,u); // reversed = -n
@@ -1347,7 +1357,6 @@ function newG2A(){
   addPoint3D('cv-2a',P,0x22d3ee,0.18);
   document.getElementById('g2a-fb').innerHTML='';
   document.getElementById('g2a-step2').style.display='none';
-  if(window.renderMathInElement) setTimeout(function(){renderMathInElement(document.getElementById('g2a-q'));},100);
 }
 
 // ─────────────────────────────────────────────────────────
@@ -1377,9 +1386,9 @@ function newG2B(){
   G2B={n:n,d:d,Q:Q,belongs:belongs};
   var calc=dot(n,Q);
   document.getElementById('g2b-q').innerHTML=
-    '<b>Plano:</b> $'+n[0]+'x + '+n[1]+'y + '+n[2]+'z = '+d+'$<br><b>Punto Q = '+vStr(Q)+'</b>';
+    '<b>Plano:</b> '+tex(n[0]+'x + '+n[1]+'y + '+n[2]+'z = '+d)+'<br><b>Punto Q = '+vStr(Q)+'</b>';
   document.getElementById('g2b-calc').innerHTML=
-    'Calculá: n&#xB7;Q = '+n[0]+'&#xB7;'+Q[0]+' + '+n[1]+'&#xB7;'+Q[1]+' + '+n[2]+'&#xB7;'+Q[2]+' = <b style="color:var(--cyan)">'+calc+'</b>';
+    tex('\\mathbf{n}\\cdot Q = '+n[0]+'\\cdot'+Q[0]+' + '+n[1]+'\\cdot'+Q[1]+' + '+n[2]+'\\cdot'+Q[2])+'&ensp;=&ensp;<b style="color:var(--cyan)">'+calc+'</b>';
   // Draw
   addPlane3D('cv-2b',n,d,0x7c3aed,0.35);
   var col=belongs?0x22d3ee:0xef4444;
@@ -1394,7 +1403,6 @@ function newG2B(){
     addPoint3D('cv-2b',foot,0xf59e0b,0.12);
   }
   document.getElementById('g2b-fb').innerHTML='';
-  if(window.renderMathInElement) setTimeout(function(){renderMathInElement(document.getElementById('g2b-q'));},100);
 }
 function ansG2B(userAns){
   var real=G2B.belongs;
@@ -1446,8 +1454,8 @@ function newG3A(){
   else d2=rnd(-4,4);
   G3A={cls:cls,n1:n1,n2:n2,d1:d1,d2:d2};
   document.getElementById('g3a-q').innerHTML=
-    '<b>&#x3A0;&#x2081;:</b> $'+n1[0]+'x + '+n1[1]+'y + '+n1[2]+'z = '+d1+'$<br>'+
-    '<b>&#x3A0;&#x2082;:</b> $'+n2[0]+'x + '+n2[1]+'y + '+n2[2]+'z = '+d2+'$';
+    '<b>&#x3A0;&#x2081;:</b>&ensp;'+tex(n1[0]+'x + '+n1[1]+'y + '+n1[2]+'z = '+d1)+'<br>'+
+    '<b>&#x3A0;&#x2082;:</b>&ensp;'+tex(n2[0]+'x + '+n2[1]+'y + '+n2[2]+'z = '+d2);
   // Draw planes
   addPlane3D('cv-3a',n1,d1,0x7c3aed,0.35);
   addPlane3D('cv-3a',n2,d2,0x22d3ee,0.35);
@@ -1485,7 +1493,6 @@ function newG3A(){
       markAllChoices('g3a-cls-opts',clsOpts.findIndex(function(o){return o.ok;}));
     }
   });
-  if(window.renderMathInElement) setTimeout(function(){renderMathInElement(document.getElementById('g3a-q'));},100);
 }
 
 // ─────────────────────────────────────────────────────────
@@ -1541,7 +1548,6 @@ function newG3B(){
       markAllChoices('g3b-opts',opts.findIndex(function(o){return o.ok;}));
     }
   });
-  if(window.renderMathInElement) setTimeout(function(){renderMathInElement(document.getElementById('g3b-q'));},100);
 }
 
 // ─────────────────────────────────────────────────────────
@@ -1567,7 +1573,7 @@ function newG3C(){
   var v_bad2=[n[0]+1,n[1],n[2]]; // neither
   G3C={n:n,d:d,P0:P0,v_ok:v_ok};
   document.getElementById('g3c-q').innerHTML=
-    '<b>Plano &#x3A0;:</b> $'+n[0]+'x + '+n[1]+'y + '+n[2]+'z = '+d+'$<br>Elegí la recta que queda DENTRO del plano.';
+    '<b>Plano &#x3A0;:</b>&ensp;'+tex(n[0]+'x + '+n[1]+'y + '+n[2]+'z = '+d)+'<br>Eleg&#xED; la recta que queda DENTRO del plano.';
   addPlane3D('cv-3c',n,d,0x7c3aed,0.35);
   var opts=shuffle([
     {P:P0,v:v_ok,ok:true,text:'L: '+vStr(P0)+' + t&#xB7;'+vStr(v_ok)},
@@ -1598,7 +1604,6 @@ function newG3C(){
       markAllChoices('g3c-opts',opts.findIndex(function(o){return o.ok;}));
     }
   });
-  if(window.renderMathInElement) setTimeout(function(){renderMathInElement(document.getElementById('g3c-q'));},100);
 }
 
 // ─────────────────────────────────────────────────────────
@@ -1768,25 +1773,26 @@ function newG4C(){
   var c=rnd(2,4), m2=rnd(2,3);
   var qhtml,ans,trap_wrong,trap_lbl;
   if(type===0){
-    qhtml='Si $\\det(A)='+det_a+'$ (A de 3&#xD7;3), calculá $\\det('+c+'A)$';
+    qhtml='Si '+tex('\\det(A)='+det_a)+' (A de 3×3), calculá '+tex('\\det('+c+'A)');
     ans=Math.pow(c,3)*det_a;
     trap_wrong=c*det_a; trap_lbl='det(cA) = c&#xB7;det(A) en vez de c\u00b3&#xB7;det(A)';
   } else if(type===1){
-    qhtml='Si $\\det(A)='+det_a+'$, calculá $\\det(A^'+m2+')$';
+    qhtml='Si '+tex('\\det(A)='+det_a)+', calculá '+tex('\\det(A^{'+m2+'})');
     ans=Math.pow(det_a,m2);
     trap_wrong=det_a*m2; trap_lbl='det(A\u1d50) = m&#xB7;det(A) en vez de det(A)\u1d50';
   } else if(type===2){
     var k=1; var dK=detAk(k); // = 8
-    qhtml='Con $k=1$, $\\det(A)='+dK+'$. Calculá $\\det\\bigl(\\tfrac{1}{2}A^2\\bigr)$.';
+    qhtml='Con '+tex('k=1')+', '+tex('\\det(A)='+dK)+'. Calculá '+tex('\\det\\!\\left(\\tfrac{1}{2}A^2\\right)')+'.'
     ans=(1/8)*dK*dK; // (1/2)^3 * 8^2 = 8
     trap_wrong=0.5*dK*dK; trap_lbl='det(\u00bdA\u00b2) = \u00bd\u00b7det(A)\u00b2 (olvid\u00f3 n=3 en el escalar)';
   } else {
-    qhtml='Si $\\det(A)='+det_a+'$, calculá $\\det(A^T)$';
+    qhtml='Si '+tex('\\det(A)='+det_a)+', calculá '+tex('\\det(A^T)');
     ans=det_a; trap_wrong=det_a+1;
     trap_lbl='A\u1D40 confundida con A\u207b\u00b9';
   }
   G4C={ans:ans,trap_wrong:trap_wrong};
   document.getElementById('g4c-q').innerHTML=qhtml;
+  if(window.katex&&window.renderMathInElement) renderMathInElement(document.getElementById('g4c-q'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
   var r=ans, tw=trap_wrong;
   var opts=shuffle([
     {text:''+Math.round(r*1000)/1000,ok:true},
@@ -1810,7 +1816,6 @@ function newG4C(){
       markAllChoices('g4c-opts',opts.findIndex(function(o){return o.ok;}));
     }
   });
-  if(window.renderMathInElement) setTimeout(function(){renderMathInElement(document.getElementById('g4c-q'));},100);
 }
 
 // ─────────────────────────────────────────────────────────

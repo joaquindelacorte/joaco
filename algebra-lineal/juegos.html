@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Álgebra Lineal — Juegos para el Parcial</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
+<style>
+:root{
+  --pur:#6d28d9;--pur-lt:#8b5cf6;--pur-bg:#ede9fe;
+  --blue:#1d4ed8;--blue-bg:#dbeafe;
+  --green:#15803d;--green-bg:#dcfce7;
+  --orange:#c2410c;--orange-bg:#fff3e0;
+  --red:#b91c1c;--red-bg:#fee2e2;
+  --teal:#0d9488;--teal-bg:#ccfbf1;
+  --yellow:#d97706;--yellow-bg:#fef9c3;
+  --gray:#374151;--gray-lt:#6b7280;
+  --bg:#f8f7fc;--card:#fff;--border:#e5e2f0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65;overflow-x:hidden}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:var(--pur);display:flex;align-items:center;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.brand{color:#fff;font-size:1.05rem;font-weight:800;padding:.8rem 1.2rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.2);cursor:pointer}
+.tabs{display:flex;overflow-x:auto;flex:1;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{padding:.75rem 1rem;border:none;background:transparent;color:rgba(255,255,255,.75);font-size:.82rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s;font-family:inherit}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tab-btn.active{color:#fff;border-bottom-color:#c4b5fd;background:rgba(255,255,255,.08)}
+.tab-btn .wstar{font-size:.7rem;margin-left:2px}
+.xp-pill{color:#fef08a;font-weight:700;font-size:.82rem;padding:.6rem 1rem;white-space:nowrap}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#2e1065 0%,var(--pur) 60%,var(--pur-lt) 100%);color:#fff;text-align:center;padding:2.5rem 1rem 2rem}
+.hero h1{font-size:2.1rem;font-weight:900;letter-spacing:-.5px}
+.hero p{opacity:.88;margin-top:.4rem;max-width:640px;margin:0 auto;margin-top:.4rem}
+
+/* PAGES */
+.page{display:none}.page.active{display:block}
+.container{max-width:1000px;margin:0 auto;padding:2rem 1.5rem}
+
+/* STITLE */
+.stitle{display:flex;align-items:center;gap:.6rem;font-size:1.2rem;font-weight:800;color:var(--pur);margin:2rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid var(--pur-bg)}
+.stitle:first-child{margin-top:.5rem}
+.ico{font-size:1.15rem}
+
+/* CARDS */
+.grid{display:grid;gap:1rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;box-shadow:0 1px 4px rgba(0,0,0,.05);transition:.2s}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.card h3{font-size:.97rem;font-weight:700;margin-bottom:.45rem;color:var(--pur)}
+.card p,.card li{font-size:.9rem;color:var(--gray)}
+.card.pu{border-left:4px solid var(--pur);background:var(--pur-bg)}
+.card.bl{border-left:4px solid var(--blue);background:var(--blue-bg)}
+.card.gr{border-left:4px solid var(--green);background:var(--green-bg)}
+.card.or{border-left:4px solid var(--orange);background:var(--orange-bg)}
+.card.re{border-left:4px solid var(--red);background:var(--red-bg)}
+.card.te{border-left:4px solid var(--teal);background:var(--teal-bg)}
+.card.ye{border-left:4px solid var(--yellow);background:var(--yellow-bg)}
+
+/* FORMULA BOX */
+.fbox{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:.9rem 1.2rem;text-align:center;margin:.7rem 0;font-size:.95rem;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.fbox .lbl{font-size:.75rem;color:#94a3b8;display:block;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.07em}
+.fbox .val{font-size:1.1rem;font-weight:700;color:#c4b5fd}
+
+/* GAME CARDS */
+.game-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;box-shadow:0 2px 10px rgba(109,40,217,.08)}
+.game-title{font-size:1.1rem;font-weight:800;color:var(--pur);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.exercise-body{background:#f5f3ff;border-radius:10px;padding:1rem 1.2rem;margin:.8rem 0;font-size:.95rem;border-left:3px solid var(--pur)}
+.exercise-body b{color:var(--pur)}
+
+/* INPUTS */
+.input-row{display:flex;align-items:center;gap:.6rem;margin:.8rem 0;flex-wrap:wrap}
+.input-row label{font-weight:700;font-size:.9rem;color:var(--pur);min-width:20px}
+.math-input{border:2px solid var(--border);border-radius:8px;padding:.45rem .75rem;font-size:.95rem;font-family:inherit;width:80px;text-align:center;transition:.2s}
+.math-input:focus{outline:none;border-color:var(--pur-lt);box-shadow:0 0 0 3px rgba(139,92,246,.15)}
+.math-input.wide{width:140px}
+.math-input.ok{border-color:var(--green);background:var(--green-bg)}
+.math-input.err{border-color:var(--red);background:var(--red-bg)}
+select.sel-input{border:2px solid var(--border);border-radius:8px;padding:.45rem .75rem;font-size:.93rem;font-family:inherit;background:var(--card);cursor:pointer}
+select.sel-input:focus{outline:none;border-color:var(--pur-lt)}
+
+/* BUTTONS */
+.btn-row{display:flex;gap:.6rem;flex-wrap:wrap;margin:.8rem 0}
+.btn{border:none;border-radius:8px;padding:.55rem 1.1rem;font-size:.88rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s}
+.btn-check{background:var(--pur);color:#fff}.btn-check:hover{background:var(--pur-lt)}
+.btn-hint{background:var(--yellow-bg);color:var(--yellow);border:1.5px solid var(--yellow)}.btn-hint:hover{background:#fef3c7}
+.btn-new{background:var(--teal-bg);color:var(--teal);border:1.5px solid var(--teal)}.btn-new:hover{background:#a7f3d0}
+.btn-sol{background:var(--blue-bg);color:var(--blue);border:1.5px solid var(--blue)}.btn-sol:hover{background:#bfdbfe}
+
+/* FEEDBACK */
+.fb{border-radius:10px;padding:.75rem 1rem;margin:.6rem 0;font-size:.93rem;font-weight:600}
+.fb-ok{background:var(--green-bg);color:var(--green);border:1.5px solid var(--green)}
+.fb-err{background:var(--red-bg);color:var(--red);border:1.5px solid var(--red)}
+.fb-warn{background:var(--yellow-bg);color:var(--yellow);border:1.5px solid var(--yellow)}
+.fb-info{background:var(--blue-bg);color:var(--blue);border:1px solid #93c5fd}
+.trap-card{background:#1e1b4b;color:#e0e7ff;border-radius:10px;padding:.8rem 1rem;margin:.6rem 0;font-size:.88rem;border-left:4px solid #818cf8}
+.trap-card b{color:#c4b5fd}
+
+/* SOLUTION STEPS */
+.sol-steps{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:1rem;margin:.7rem 0;font-size:.9rem}
+.sol-steps .step{padding:.35rem 0;border-bottom:1px solid var(--border);color:var(--gray)}
+.sol-steps .step:last-child{border:none}
+.sol-steps .step b{color:var(--pur)}
+
+/* WORLD MAP */
+.world-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.2rem;margin:1.5rem 0}
+.world-card{background:var(--card);border:2px solid var(--border);border-radius:16px;padding:1.4rem;cursor:pointer;transition:.25s;position:relative}
+.world-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(109,40,217,.15);border-color:var(--pur-lt)}
+.world-card.locked{opacity:.5;cursor:not-allowed;pointer-events:none}
+.world-card .wnum{font-size:2rem;margin-bottom:.4rem}
+.world-card h3{font-size:1rem;font-weight:800;color:var(--pur);margin-bottom:.3rem}
+.world-card p{font-size:.83rem;color:var(--gray-lt)}
+.world-stars{margin-top:.8rem;font-size:1.1rem;letter-spacing:2px}
+.world-xp{position:absolute;top:.8rem;right:.8rem;background:var(--pur-bg);color:var(--pur);font-size:.72rem;font-weight:800;padding:.2rem .6rem;border-radius:2rem}
+
+/* XP bar */
+.xp-bar-wrap{height:8px;background:rgba(109,40,217,.15);border-radius:9px;margin:.5rem 0;overflow:hidden}
+.xp-bar{height:100%;background:linear-gradient(90deg,var(--pur),var(--pur-lt));border-radius:9px;transition:width .5s ease}
+
+/* PROGRESS STRIP */
+.prog-strip{display:flex;gap:1rem;flex-wrap:wrap;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;margin-bottom:1.5rem}
+.prog-item{text-align:center}
+.prog-item .pval{font-size:1.4rem;font-weight:900;color:var(--pur)}
+.prog-item .plbl{font-size:.72rem;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.07em}
+
+/* DET TABLE */
+.det-table{border-collapse:collapse;margin:.8rem auto;font-size:1rem;font-family:'Courier New',monospace}
+.det-table td{padding:.35rem .6rem;text-align:center;border:1px solid var(--border);min-width:40px;transition:.3s}
+.det-table td.hi-a{background:#fef9c3}
+.det-table td.hi-b{background:#e0f2fe}
+.det-table td.hi-c{background:#f0fdf4}
+.det-table td.hi-na{background:#fee2e2}
+.det-table td.hi-nb{background:#fce7f3}
+.det-table td.hi-nc{background:#fff7ed}
+.det-table .k-param{color:var(--pur);font-weight:700}
+
+/* CANVAS */
+.vec-canvas{border-radius:10px;border:1px solid var(--border);display:block;background:#fafafa}
+.canvas-wrap{display:flex;justify-content:center;margin:.8rem 0}
+
+/* TABS INSIDE A WORLD (game selector) */
+.game-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.2rem}
+.game-tab-btn{border:2px solid var(--border);border-radius:8px;padding:.4rem .85rem;font-size:.83rem;font-weight:700;cursor:pointer;background:var(--card);color:var(--gray-lt);font-family:inherit;transition:.2s}
+.game-tab-btn:hover{border-color:var(--pur-lt);color:var(--pur)}
+.game-tab-btn.active{border-color:var(--pur);background:var(--pur);color:#fff}
+.game-panel{display:none}.game-panel.active{display:block}
+
+/* SIMULACRO */
+.sim-timer{font-size:1.5rem;font-weight:900;color:var(--pur);text-align:center;padding:.8rem;background:var(--pur-bg);border-radius:12px;margin-bottom:1.2rem;font-variant-numeric:tabular-nums}
+.sim-timer.warning{color:var(--red);background:var(--red-bg)}
+.sim-section{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:1.3rem;margin-bottom:1rem}
+.sim-section h3{font-size:1rem;font-weight:800;color:var(--pur);margin-bottom:.8rem}
+.sim-answer{border:2px solid var(--border);border-radius:8px;padding:.7rem;width:100%;font-family:inherit;font-size:.9rem;min-height:90px;resize:vertical;margin:.4rem 0}
+.sim-answer:focus{outline:none;border-color:var(--pur-lt)}
+.score-big{font-size:3rem;font-weight:900;color:var(--pur);text-align:center;display:block;margin:1rem 0}
+
+/* GAUSS TABLE */
+.gauss-wrap{overflow-x:auto;margin:.8rem 0}
+.gauss-table{border-collapse:collapse;font-family:'Courier New',monospace;font-size:.9rem;margin:0 auto}
+.gauss-table td,.gauss-table th{padding:.3rem .7rem;border:1px solid var(--border);text-align:center;min-width:45px}
+.gauss-table th{background:var(--pur-bg);color:var(--pur);font-weight:800}
+.gauss-table .pivot{background:#fef9c3;font-weight:700}
+.gauss-table .zero{color:#94a3b8}
+.gauss-table .kparam{color:var(--pur);font-weight:700}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .hero h1{font-size:1.5rem}
+  .input-row{gap:.4rem}
+  .math-input{width:65px}
+  .world-grid{grid-template-columns:1fr 1fr}
+}
+
+/* FOOTER NAV */
+.apuntes-footer-nav{display:flex;align-items:center;gap:.8rem;padding:.9rem 1.5rem;background:var(--card);border-top:1px solid var(--border);flex-wrap:wrap;font-size:.88rem}
+.apuntes-footer-nav__label{color:var(--gray-lt);font-weight:600}
+.apuntes-footer-nav a{color:var(--pur);text-decoration:none;font-weight:700;padding:.2rem .6rem;border-radius:6px;border:1px solid var(--pur-bg)}
+.apuntes-footer-nav a:hover{background:var(--pur-bg)}
+</style>
+</head>
+<body>
+<nav>
+  <span class="brand" onclick="showWorld('map',null)">&#x1F3AE; AL Juegos</span>
+  <div class="tabs">
+    <button class="tab-btn" onclick="showWorld('map',this)">&#x1F5FA; Mapa</button>
+    <button class="tab-btn" onclick="showWorld('1',this)">1&#xFE0F;&#x20E3; Vectores</button>
+    <button class="tab-btn" onclick="showWorld('2',this)">2&#xFE0F;&#x20E3; Planos</button>
+    <button class="tab-btn" onclick="showWorld('3',this)">3&#xFE0F;&#x20E3; Distancias</button>
+    <button class="tab-btn" onclick="showWorld('4',this)">4&#xFE0F;&#x20E3; Matrices</button>
+    <button class="tab-btn" onclick="showWorld('5',this)">5&#xFE0F;&#x20E3; Sistemas</button>
+    <button class="tab-btn" onclick="showWorld('6',this)">&#x1F451; Simulacro</button>
+  </div>
+  <span class="xp-pill" id="xp-display">0 XP</span>
+</nav>
+
+<div class="hero">
+  <h1>&#x1F3AE; Juegos para el Parcial</h1>
+  <p>&#xC1;lgebra Lineal &mdash; aprend&#xE9; jugando. 6 mundos, ejercicios aleatorios, aritm&#xE9;tica exacta.</p>
+</div>
+
+<!-- PAGE MAP -->
+<div class="page active" id="page-map">
+<div class="container">
+  <div class="prog-strip">
+    <div class="prog-item"><span class="pval" id="tot-xp">0</span><span class="plbl">XP total</span></div>
+    <div class="prog-item"><span class="pval" id="tot-streak">0</span><span class="plbl">Racha</span></div>
+    <div class="prog-item"><span class="pval" id="tot-stars">0/36</span><span class="plbl">Estrellas</span></div>
+  </div>
+  <div class="xp-bar-wrap"><div class="xp-bar" id="xp-bar" style="width:0%"></div></div>
+
+  <div class="world-grid">
+    <div class="world-card" onclick="showWorld('1', document.querySelectorAll('.tab-btn')[1])">
+      <div class="wnum">&#x2192;</div>
+      <h3>Mundo 1 &mdash; Vectores</h3>
+      <p>Producto vectorial, perpendicularidad, paralelismo en R&#xB3;</p>
+      <div class="world-stars" id="stars-1">&#x2606;&#x2606;&#x2606;</div>
+      <span class="world-xp" id="wxp-1">0 XP</span>
+    </div>
+    <div class="world-card" onclick="showWorld('2', document.querySelectorAll('.tab-btn')[2])">
+      <div class="wnum">&#x25A1;</div>
+      <h3>Mundo 2 &mdash; Planos</h3>
+      <p>Forma param&#xE9;trica &#x2192; general, normal, pertenencia de puntos</p>
+      <div class="world-stars" id="stars-2">&#x2606;&#x2606;&#x2606;</div>
+      <span class="world-xp" id="wxp-2">0 XP</span>
+    </div>
+    <div class="world-card" onclick="showWorld('3', document.querySelectorAll('.tab-btn')[3])">
+      <div class="wnum">&#x2194;</div>
+      <h3>Mundo 3 &mdash; Distancias</h3>
+      <p>Clasificar planos, distancia punto-plano, distancia entre planos</p>
+      <div class="world-stars" id="stars-3">&#x2606;&#x2606;&#x2606;</div>
+      <span class="world-xp" id="wxp-3">0 XP</span>
+    </div>
+    <div class="world-card" onclick="showWorld('4', document.querySelectorAll('.tab-btn')[4])">
+      <div class="wnum">&#x25A6;</div>
+      <h3>Mundo 4 &mdash; Matrices</h3>
+      <p>Determinante 3&#xD7;3, Sarrus, det con par&#xE1;metro k</p>
+      <div class="world-stars" id="stars-4">&#x2606;&#x2606;&#x2606;</div>
+      <span class="world-xp" id="wxp-4">0 XP</span>
+    </div>
+    <div class="world-card" onclick="showWorld('5', document.querySelectorAll('.tab-btn')[5])">
+      <div class="wnum">&#x2261;</div>
+      <h3>Mundo 5 &mdash; Sistemas</h3>
+      <p>Discusi&#xF3;n seg&#xFA;n k, Rouché-Frobenius, SCD/SCI/SI</p>
+      <div class="world-stars" id="stars-5">&#x2606;&#x2606;&#x2606;</div>
+      <span class="world-xp" id="wxp-5">0 XP</span>
+    </div>
+    <div class="world-card" onclick="showWorld('6', document.querySelectorAll('.tab-btn')[6])" style="border-color:var(--pur);background:linear-gradient(135deg,#f5f3ff,#ede9fe)">
+      <div class="wnum">&#x1F451;</div>
+      <h3>Jefe Final &mdash; Simulacro</h3>
+      <p>Parcial completo con datos aleatorios, cron&#xF3;metro 2 hs, correcci&#xF3;n autom&#xE1;tica</p>
+      <div class="world-stars" id="stars-6">&#x2606;&#x2606;&#x2606;</div>
+      <span class="world-xp" id="wxp-6">0 XP</span>
+    </div>
+  </div>
+
+  <div class="card pu" style="margin-top:1rem">
+    <h3>&#x26A0; Errores frecuentes detectados</h3>
+    <div id="errors-display" style="font-size:.88rem;margin-top:.4rem;color:var(--gray)">Todav&#xED;a no hay errores registrados. &#xA1;Jug&#xE1; para ver tu historial!</div>
+  </div>
+</div>
+</div>
+
+<!-- WORLD 1: VECTORES -->
+<div class="page" id="page-1">
+<div class="container">
+  <div class="stitle"><span class="ico">&#x2192;</span> Mundo 1 &mdash; Vectores en R&#xB3;</div>
+
+  <div class="game-tabs">
+    <button class="game-tab-btn active" onclick="showGameTab('w1','1a',this)">&#x26A1; 1A &mdash; Operaciones</button>
+    <button class="game-tab-btn" onclick="showGameTab('w1','1b',this)">&#x1F978; 1B &mdash; &#xBF;Perp. o Paral.?</button>
+    <button class="game-tab-btn" onclick="showGameTab('w1','1c',this)">&#x2715; 1C &mdash; Cazador de Normales</button>
+  </div>
+
+  <!-- JUEGO 1A: OPERACIONES -->
+  <div class="game-panel active" id="gp-w1-1a">
+    <div class="game-card">
+      <div class="game-title">&#x26A1; Vector Rush &mdash; Operaciones contrarreloj</div>
+      <div id="g1a-ex" class="exercise-body">Cargando...</div>
+      <div class="input-row">
+        <label>Resultado:</label>
+        <input class="math-input wide" id="g1a-ans" placeholder="x,y,z o n&#xFA;mero" onkeydown="if(event.key==='Enter')chkG1A()">
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-check" onclick="chkG1A()">&#x2713; Verificar</button>
+        <button class="btn btn-hint" onclick="hintG1A()">&#x1F4A1; Pista</button>
+        <button class="btn btn-new" onclick="newG1A()">&#x21BB; Nuevo</button>
+      </div>
+      <div id="g1a-fb" style="margin-top:.5rem"></div>
+      <div id="g1a-sol" style="margin-top:.5rem"></div>
+      <div id="g1a-score" style="font-size:.82rem;color:var(--gray-lt);margin-top:.5rem"></div>
+    </div>
+  </div>
+
+  <!-- JUEGO 1B: PERP/PARAL -->
+  <div class="game-panel" id="gp-w1-1b">
+    <div class="game-card">
+      <div class="game-title">&#x1F978; &#xBF;Perpendiculares o Paralelos? &mdash; Decid&#xED; r&#xE1;pido</div>
+      <div id="g1b-ex" class="exercise-body">Cargando...</div>
+      <div class="btn-row">
+        <button class="btn btn-check" style="background:#0d9488" onclick="ansG1B('perp')">&#x22A5; Perpendiculares</button>
+        <button class="btn btn-check" style="background:#1d4ed8" onclick="ansG1B('paral')">&#x2225; Paralelos</button>
+        <button class="btn btn-check" style="background:#c2410c" onclick="ansG1B('ninguno')">&#x2205; Ninguno</button>
+        <button class="btn btn-new" onclick="newG1B()">&#x21BB; Nuevo</button>
+      </div>
+      <div id="g1b-fb" style="margin-top:.5rem"></div>
+    </div>
+  </div>
+
+  <!-- JUEGO 1C: PRODUCTO VECTORIAL -->
+  <div class="game-panel" id="gp-w1-1c">
+    <div class="game-card">
+      <div class="game-title">&#x2715; Cazador de Normales &mdash; u &#xD7; v componente a componente</div>
+      <div id="g1c-ex" class="exercise-body">Cargando...</div>
+      <div class="fbox" id="g1c-det" style="font-size:.9rem;text-align:left">Generando...</div>
+      <p style="font-size:.85rem;color:var(--gray-lt);margin:.4rem 0">Ingres&#xE1; los componentes del vector normal:</p>
+      <div class="input-row">
+        <label><b>i</b></label><input class="math-input" id="g1c-i" placeholder="i">
+        <label style="margin-left:.5rem"><b>j</b></label><input class="math-input" id="g1c-j" placeholder="j">
+        <label style="margin-left:.5rem"><b>k</b></label><input class="math-input" id="g1c-k" placeholder="k" onkeydown="if(event.key==='Enter')chkG1C()">
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-check" onclick="chkG1C()">&#x2713; Verificar</button>
+        <button class="btn btn-hint" onclick="hintG1C()">&#x1F4A1; Pista j</button>
+        <button class="btn btn-new" onclick="newG1C()">&#x21BB; Nuevo</button>
+      </div>
+      <div id="g1c-fb" style="margin-top:.5rem"></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- WORLD 2: PLANOS -->
+<div class="page" id="page-2">
+<div class="container">
+  <div class="stitle"><span class="ico">&#x25A1;</span> Mundo 2 &mdash; Planos en R&#xB3;</div>
+
+  <div class="game-tabs">
+    <button class="game-tab-btn active" onclick="showGameTab('w2','2a',this)">&#x1F3ED; 2A &mdash; F&#xE1;brica de Planos</button>
+    <button class="game-tab-btn" onclick="showGameTab('w2','2b',this)">&#x1F4CD; 2B &mdash; &#xBF;Est&#xE1; o no est&#xE1;?</button>
+  </div>
+
+  <!-- JUEGO 2A: FABRICA DE PLANOS -->
+  <div class="game-panel active" id="gp-w2-2a">
+    <div class="game-card">
+      <div class="game-title">&#x1F3ED; F&#xE1;brica de Planos &mdash; Param&#xE9;trica &#x2192; General</div>
+      <div id="g2a-ex" class="exercise-body">Cargando...</div>
+      <div class="card bl" style="margin:.8rem 0;font-size:.88rem">
+        <b>Pasos:</b>
+        <ol style="margin:.4rem 0 0 1.2rem;line-height:1.9">
+          <li>Calculá la normal: <b>n = u &#xD7; v</b></li>
+          <li>Reemplazá el punto P para hallar <b>d = n&#xB7;P</b></li>
+          <li>Escribí la ecuación: <b>n&#xB7;x = d</b></li>
+        </ol>
+      </div>
+
+      <p style="font-weight:700;color:var(--pur);font-size:.9rem">Paso 1 &mdash; n = u &#xD7; v</p>
+      <div class="input-row">
+        <label>n = (</label>
+        <input class="math-input" id="g2a-ni" placeholder="i">
+        <span>,</span><input class="math-input" id="g2a-nj" placeholder="j">
+        <span>,</span><input class="math-input" id="g2a-nk" placeholder="k">
+        <label>)</label>
+      </div>
+
+      <p style="font-weight:700;color:var(--pur);font-size:.9rem;margin-top:.7rem">Paso 2 &mdash; Ecuaci&#xF3;n general ax+by+cz=d</p>
+      <div class="input-row">
+        <input class="math-input" id="g2a-a" placeholder="a">
+        <span>x +</span><input class="math-input" id="g2a-b" placeholder="b">
+        <span>y +</span><input class="math-input" id="g2a-c" placeholder="c">
+        <span>z =</span><input class="math-input" id="g2a-d" placeholder="d">
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-check" onclick="chkG2A()">&#x2713; Verificar todo</button>
+        <button class="btn btn-hint" onclick="hintG2A()">&#x1F4A1; Pista</button>
+        <button class="btn btn-new" onclick="newG2A()">&#x21BB; Nuevo</button>
+      </div>
+      <div id="g2a-fb" style="margin-top:.5rem"></div>
+    </div>
+  </div>
+
+  <!-- JUEGO 2B: PERTENENCIA -->
+  <div class="game-panel" id="gp-w2-2b">
+    <div class="game-card">
+      <div class="game-title">&#x1F4CD; &#xBF;Est&#xE1; o no est&#xE1;? &mdash; Pertenencia de un punto</div>
+      <div id="g2b-ex" class="exercise-body">Cargando...</div>
+      <div id="g2b-hint-area"></div>
+      <div class="btn-row">
+        <button class="btn btn-check" style="background:var(--green)" onclick="ansG2B(true)">&#x2713; S&#xED;, pertenece</button>
+        <button class="btn btn-check" style="background:var(--red)" onclick="ansG2B(false)">&#x2717; No pertenece</button>
+        <button class="btn btn-new" onclick="newG2B()">&#x21BB; Nuevo</button>
+      </div>
+      <div id="g2b-fb" style="margin-top:.5rem"></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- WORLD 3: DISTANCIAS -->
+<div class="page" id="page-3">
+<div class="container">
+  <div class="stitle"><span class="ico">&#x2194;</span> Mundo 3 &mdash; Posiciones relativas y distancias</div>
+
+  <div class="game-tabs">
+    <button class="game-tab-btn active" onclick="showGameTab('w3','3a',this)">&#x1F575; 3A &mdash; Detective Espacial</button>
+    <button class="game-tab-btn" onclick="showGameTab('w3','3b',this)">&#x1F4CF; 3B &mdash; Medí la Brecha</button>
+    <button class="game-tab-btn" onclick="showGameTab('w3','3c',this)">&#x1F9F1; 3C &mdash; Constructor de Rectas</button>
+  </div>
+
+  <!-- 3A: DETECTIVE ESPACIAL -->
+  <div class="game-panel active" id="gp-w3-3a">
+    <div class="game-card">
+      <div class="game-title">&#x1F575; Detective Espacial &mdash; Clasificar posici&#xF3;n relativa</div>
+      <div id="g3a-ex" class="exercise-body">Cargando...</div>
+      <div class="input-row">
+        <label>Clasificaci&#xF3;n:</label>
+        <select class="sel-input" id="g3a-cls">
+          <option value="">-- elegir --</option>
+          <option value="paralelos_distintos">Paralelos distintos</option>
+          <option value="coincidentes">Coincidentes</option>
+          <option value="secantes">Secantes</option>
+        </select>
+      </div>
+      <p style="font-size:.87rem;font-weight:700;color:var(--pur);margin-top:.6rem">Justificaci&#xF3;n (elegiá la correcta):</p>
+      <div id="g3a-just" style="margin:.5rem 0"></div>
+      <div class="btn-row">
+        <button class="btn btn-check" onclick="chkG3A()">&#x2713; Verificar</button>
+        <button class="btn btn-hint" onclick="hintG3A()">&#x1F4A1; Pista</button>
+        <button class="btn btn-new" onclick="newG3A()">&#x21BB; Nuevo</button>
+      </div>
+      <div id="g3a-fb" style="margin-top:.5rem"></div>
+    </div>
+  </div>
+
+  <!-- 3B: DISTANCIA ENTRE PLANOS -->
+  <div class="game-panel" id="gp-w3-3b">
+    <div class="game-card">
+      <div class="game-title">&#x1F4CF; Med&#xED; la Brecha &mdash; Distancia entre planos paralelos</div>
+      <div id="g3b-ex" class="exercise-body">Cargando...</div>
+      <div class="card or" style="margin:.8rem 0;font-size:.88rem">
+        <b>Trampa a evitar:</b> si las normales son proporcionales (ej. (2,&minus;1,&minus;3) y (4,&minus;2,&minus;6)), 
+        unific&#xE1;las <b>antes</b> de restar los t&#xE9;rminos independientes. 
+        F&#xF3;rmula: $d = \dfrac{|d_2 - d_1|}{\|\mathbf{n}\|}$ (con la misma normal).
+      </div>
+      <div class="input-row">
+        <label>Distancia =</label>
+        <input class="math-input wide" id="g3b-ans" placeholder="ej: 3/sqrt(14)">
+      </div>
+      <p style="font-size:.8rem;color:var(--gray-lt);margin-top:-.3rem">Aceptado: fracción, decimal (tol. 1e-4), o expresión como <code>3/sqrt(14)</code></p>
+      <div class="btn-row">
+        <button class="btn btn-check" onclick="chkG3B()">&#x2713; Verificar</button>
+        <button class="btn btn-hint" onclick="hintG3B()">&#x1F4A1; Pista</button>
+        <button class="btn btn-new" onclick="newG3B()">&#x21BB; Nuevo</button>
+      </div>
+      <div id="g3b-fb" style="margin-top:.5rem"></div>
+    </div>
+  </div>
+
+  <!-- 3C: CONSTRUCTOR DE RECTAS EN PLANO -->
+  <div class="game-panel" id="gp-w3-3c">
+    <div class="game-card">
+      <div class="game-title">&#x1F9F1; Constructor de Rectas &mdash; Recta contenida en un plano</div>
+      <div id="g3c-ex" class="exercise-body">Cargando...</div>
+      <div class="card bl" style="margin:.8rem 0;font-size:.88rem">
+        <b>Para que L &#x2282; &#x3A0; se necesitan dos condiciones:</b>
+        <ol style="margin:.4rem 0 0 1.1rem;line-height:1.9">
+          <li>El punto P<sub>0</sub> debe pertenecer al plano: <b>n&#xB7;P&#xB0; = d</b></li>
+          <li>La direcci&#xF3;n v debe ser perpendicular a la normal: <b>n&#xB7;v = 0</b></li>
+        </ol>
+      </div>
+      <p style="font-weight:700;font-size:.9rem;color:var(--pur)">Punt&#xF3; P<sub>0</sub> del plano:</p>
+      <div class="input-row">
+        <label>(</label><input class="math-input" id="g3c-px" placeholder="x">
+        <span>,</span><input class="math-input" id="g3c-py" placeholder="y">
+        <span>,</span><input class="math-input" id="g3c-pz" placeholder="z"><label>)</label>
+      </div>
+      <p style="font-weight:700;font-size:.9rem;color:var(--pur);margin-top:.5rem">Direcci&#xF3;n v (con n&#xB7;v = 0):</p>
+      <div class="input-row">
+        <label>(</label><input class="math-input" id="g3c-vx" placeholder="x">
+        <span>,</span><input class="math-input" id="g3c-vy" placeholder="y">
+        <span>,</span><input class="math-input" id="g3c-vz" placeholder="z"><label>)</label>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-check" onclick="chkG3C()">&#x2713; Verificar</button>
+        <button class="btn btn-hint" onclick="hintG3C()">&#x1F4A1; Pista</button>
+        <button class="btn btn-new" onclick="newG3C()">&#x21BB; Nuevo</button>
+      </div>
+      <div id="g3c-fb" style="margin-top:.5rem"></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- WORLD 4: MATRICES Y DETERMINANTES -->
+<div class="page" id="page-4">
+<div class="container">
+  <div class="stitle"><span class="ico">&#x25A6;</span> Mundo 4 &mdash; Matrices y Determinantes</div>
+
+  <div class="game-tabs">
+    <button class="game-tab-btn active" onclick="showGameTab('w4','4a',this)">&#x1F4A5; 4A &mdash; Sarrus Express</button>
+    <button class="game-tab-btn" onclick="showGameTab('w4','4b',this)">&#x1F50D; 4B &mdash; Det con par&#xE1;metro k</button>
+    <button class="game-tab-btn" onclick="showGameTab('w4','4c',this)">&#x1F4A3; 4C &mdash; Trampa de Propiedades</button>
+  </div>
+
+  <!-- 4A: SARRUS -->
+  <div class="game-panel active" id="gp-w4-4a">
+    <div class="game-card">
+      <div class="game-title">&#x1F4A5; Sarrus Express &mdash; Determinante 3&#xD7;3</div>
+      <p style="font-size:.87rem;color:var(--gray-lt);margin-bottom:.8rem">Calculá det(A). Cada celda es un n&#xFA;mero entero.</p>
+      <div class="gauss-wrap">
+        <table class="det-table" id="det4a-mat">
+          <tr><td id="m00">?</td><td id="m01">?</td><td id="m02">?</td></tr>
+          <tr><td id="m10">?</td><td id="m11">?</td><td id="m12">?</td></tr>
+          <tr><td id="m20">?</td><td id="m21">?</td><td id="m22">?</td></tr>
+        </table>
+      </div>
+      <div class="input-row" style="margin-top:1rem">
+        <label>det(A) =</label>
+        <input class="math-input wide" id="g4a-ans" placeholder="enter" onkeydown="if(event.key==='Enter')chkG4A()">
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-check" onclick="chkG4A()">&#x2713; Verificar</button>
+        <button class="btn btn-hint" onclick="hintG4A()">&#x1F4A1; Sarrus</button>
+        <button class="btn btn-new" onclick="newG4A()">&#x21BB; Nuevo</button>
+      </div>
+      <div id="g4a-fb"></div>
+      <div id="g4a-sol"></div>
+    </div>
+  </div>
+
+  <!-- 4B: DET CON PARAMETRO K — PARCIAL ORIGINAL -->
+  <div class="game-panel" id="gp-w4-4b">
+    <div class="game-card">
+      <div class="game-title">&#x1F50D; Determinante Detective &mdash; Det con par&#xE1;metro k</div>
+      <div class="exercise-body">
+        <b>Matriz del parcial:</b><br>
+        $$A = \begin{pmatrix} k+2 & 8 & 2k \\ 1 & 2 & k \\ 1 & -4 & 0 \end{pmatrix}$$
+        Calculá <b>det(A)</b> en funci&#xF3;n de k, factorizá y encontrá los valores que anulan el determinante.
+      </div>
+
+      <div class="fbox" style="margin:.8rem 0">
+        <span class="lbl">Slider k (para explorar)</span>
+        <input type="range" min="-5" max="5" step="0.1" value="1" id="k-slider" oninput="updateKSlider()" style="width:80%;margin:.5rem 0">
+        <span class="val" id="k-val">k = 1 &nbsp;&#x2192;&nbsp; det = <span id="k-det">?</span></span>
+      </div>
+
+      <p style="font-weight:700;font-size:.9rem;color:var(--pur)">Ingres&#xE1; tu respuesta en forma factorizada:</p>
+      <div class="input-row">
+        <label>det(A) = 4k(k+</label>
+        <input class="math-input" id="g4b-factor" placeholder="?" style="width:60px">
+        <label>) = 0 &rarr; k =</label>
+        <input class="math-input wide" id="g4b-roots" placeholder="0 y ...">
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-check" onclick="chkG4B()">&#x2713; Verificar</button>
+        <button class="btn btn-sol" onclick="solG4B()">&#x1F4D6; Ver soluci&#xF3;n</button>
+      </div>
+      <div id="g4b-fb"></div>
+      <div id="g4b-sol"></div>
+    </div>
+  </div>
+
+  <!-- 4C: PROPIEDADES -->
+  <div class="game-panel" id="gp-w4-4c">
+    <div class="game-card">
+      <div class="game-title">&#x1F4A3; Trampa de Propiedades</div>
+      <div class="card or" style="margin-bottom:.8rem;font-size:.88rem">
+        <b>Trampa cl&#xE1;sica:</b> det(&#xBD;A&#xB2;) &ne; &#xBD;&#xB7;det(A)&#xB2;<br>
+        La f&#xF3;rmula correcta: <b>det(cA&#x6D;) = c&#x2E3;&#xB7;det(A)&#x6D;</b> donde n = dimensi&#xF3;n.
+      </div>
+      <div id="g4c-ex" class="exercise-body">Cargando...</div>
+      <div class="input-row">
+        <label>Resultado:</label>
+        <input class="math-input wide" id="g4c-ans" placeholder="n&#xFA;mero" onkeydown="if(event.key==='Enter')chkG4C()">
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-check" onclick="chkG4C()">&#x2713; Verificar</button>
+        <button class="btn btn-hint" onclick="hintG4C()">&#x1F4A1; F&#xF3;rmula</button>
+        <button class="btn btn-new" onclick="newG4C()">&#x21BB; Nuevo</button>
+      </div>
+      <div id="g4c-fb"></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- WORLD 5: SISTEMAS -->
+<div class="page" id="page-5">
+<div class="container">
+  <div class="stitle"><span class="ico">&#x2261;</span> Mundo 5 &mdash; Sistemas de ecuaciones lineales</div>
+
+  <div class="game-tabs">
+    <button class="game-tab-btn active" onclick="showGameTab('w5','5a',this)">&#x1F6A6; 5A &mdash; Sem&#xE1;foro de k</button>
+    <button class="game-tab-btn" onclick="showGameTab('w5','5b',this)">&#x1F3AE; 5B &mdash; Escalonador</button>
+  </div>
+
+  <!-- 5A: SEMAFORO DE K (Parcial original) -->
+  <div class="game-panel active" id="gp-w5-5a">
+    <div class="game-card">
+      <div class="game-title">&#x1F6A6; Sem&#xE1;foro de k &mdash; Discusi&#xF3;n de sistemas homog&#xE9;neos</div>
+      <div class="exercise-body">
+        <b>Sistema del parcial</b> — A&#xB7;X = 0 con
+        $$A = \begin{pmatrix} k+2 & 8 & 2k \\ 1 & 2 & k \\ 1 & -4 & 0 \end{pmatrix}$$
+        donde det(A) = 4k(k+1).
+      </div>
+
+      <div class="card bl" style="margin:.8rem 0;font-size:.88rem">
+        <b>Regla para sistemas homog&#xE9;neos:</b><br>
+        A&#xB7;X=0 es <em>siempre compatible</em> (X=0 siempre es soluci&#xF3;n).<br>
+        SCD &#x21D4; det(A) &#x2260; 0 &nbsp;|&nbsp; SCI &#x21D4; det(A) = 0
+      </div>
+
+      <p style="font-weight:700;font-size:.9rem;color:var(--pur)">Clasificá seg&#xFA;n el valor de k:</p>
+      <div style="display:grid;gap:.6rem;margin:.8rem 0">
+        <div class="input-row">
+          <span style="min-width:120px;font-weight:600">k &#x2209; {0, -1}:</span>
+          <select class="sel-input" id="g5a-s1">
+            <option value="">-- tipo --</option>
+            <option value="SCD">SCD (&#xFA;nica soluci&#xF3;n)</option>
+            <option value="SCI">SCI (infinitas)</option>
+            <option value="SI">SI (sin soluci&#xF3;n)</option>
+          </select>
+        </div>
+        <div class="input-row">
+          <span style="min-width:120px;font-weight:600">k = 0:</span>
+          <select class="sel-input" id="g5a-s2">
+            <option value="">-- tipo --</option>
+            <option value="SCD">SCD</option>
+            <option value="SCI">SCI</option>
+            <option value="SI">SI</option>
+          </select>
+        </div>
+        <div class="input-row">
+          <span style="min-width:120px;font-weight:600">k = -1:</span>
+          <select class="sel-input" id="g5a-s3">
+            <option value="">-- tipo --</option>
+            <option value="SCD">SCD</option>
+            <option value="SCI">SCI</option>
+            <option value="SI">SI</option>
+          </select>
+        </div>
+      </div>
+
+      <p style="font-weight:700;font-size:.9rem;color:var(--pur)">Soluci&#xF3;n para k=0 (una direcci&#xF3;n v):</p>
+      <div class="input-row">
+        <label>X = t(</label>
+        <input class="math-input" id="g5a-v1" placeholder="x">
+        <span>,</span><input class="math-input" id="g5a-v2" placeholder="y">
+        <span>,</span><input class="math-input" id="g5a-v3" placeholder="z">
+        <label>)</label>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-check" onclick="chkG5A()">&#x2713; Verificar todo</button>
+        <button class="btn btn-sol" onclick="solG5A()">&#x1F4D6; Ver soluci&#xF3;n</button>
+      </div>
+      <div id="g5a-fb"></div>
+      <div id="g5a-sol"></div>
+    </div>
+  </div>
+
+  <!-- 5B: ESCALONADOR INTERACTIVO -->
+  <div class="game-panel" id="gp-w5-5b">
+    <div class="game-card">
+      <div class="game-title">&#x1F3AE; Escalonador &mdash; Gauss jugable</div>
+      <p style="font-size:.87rem;color:var(--gray-lt);margin-bottom:.8rem">Usá los botones para escalonar la matriz ampliada. Gauss en la menor cantidad de pasos posible.</p>
+      <div id="g5b-mat-wrap" class="gauss-wrap">Cargando...</div>
+      <div id="g5b-ops" class="btn-row" style="flex-wrap:wrap;gap:.4rem"></div>
+      <div id="g5b-steps" style="font-size:.8rem;color:var(--gray-lt);margin:.3rem 0"></div>
+      <div class="btn-row">
+        <button class="btn btn-new" onclick="newG5B()">&#x21BB; Nuevo sistema</button>
+        <button class="btn btn-check" onclick="checkG5B()">&#x2713; &#xBF;Escalonado?</button>
+      </div>
+      <div id="g5b-fb"></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- WORLD 6: SIMULACRO -->
+<div class="page" id="page-6">
+<div class="container">
+  <div class="stitle"><span class="ico">&#x1F451;</span> Jefe Final &mdash; Simulacro del Parcial</div>
+
+  <div id="sim-start-panel">
+    <div class="card pu" style="margin-bottom:1rem">
+      <h3>&#x1F4CB; Condiciones del simulacro</h3>
+      <ul style="margin:.5rem 0 0 1.2rem;font-size:.9rem;line-height:2">
+        <li>Tiempo: <b>2 horas</b> (el cron&#xF3;metro cuenta regresivo)</li>
+        <li>Sin pistas &mdash; igual que en el parcial real</li>
+        <li>Los datos son aleatorios (no exactamente los del parcial)</li>
+        <li>Puntaje: Ej.1: 1+1+2+1 pts &#xB7; Ej.2: 1+1+1+2 pts = 10 pts</li>
+        <li>Al terminar: nota estimada + recomendaciones de repaso</li>
+      </ul>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-check" style="font-size:1rem;padding:.8rem 1.8rem" onclick="startSim()">&#x23F1; Iniciar Simulacro</button>
+      <button class="btn btn-sol" onclick="loadOriginalExam()">&#x1F4C4; Parcial original</button>
+    </div>
+  </div>
+
+  <div id="sim-active-panel" style="display:none">
+    <div class="sim-timer" id="sim-timer">2:00:00</div>
+
+    <div class="sim-section">
+      <h3>Ejercicio 1 &mdash; Planos y rectas (5 puntos)</h3>
+      <div id="sim-e1-body" class="exercise-body" style="margin-bottom:.8rem">Cargando...</div>
+
+      <p style="font-weight:700;font-size:.9rem;color:var(--pur)">1a) Probar que los planos son paralelos:</p>
+      <textarea class="sim-answer" id="sim-1a" placeholder="Describí los pasos: calcul&#xE1; la normal de &#x3A0;1 = u&#xD7;v, mostr&#xE1; que es proporcional a la normal de &#x3A0;2, y que d1 &#x2260; d2..."></textarea>
+
+      <p style="font-weight:700;font-size:.9rem;color:var(--pur);margin-top:.7rem">1b) Recta perpendicular por P, intersecci&#xF3;n con cada plano:</p>
+      <textarea class="sim-answer" id="sim-1b" placeholder="L: P + t&#xB7;n = ... &#x2192; L&#x2229;&#x3A0;1 = ... &#x2192; L&#x2229;&#x3A0;2 = ..."></textarea>
+
+      <p style="font-weight:700;font-size:.9rem;color:var(--pur);margin-top:.7rem">1c) Distancia entre los planos:</p>
+      <textarea class="sim-answer" id="sim-1c" style="min-height:65px" placeholder="d = |d2 - d1| / &#x2016;n&#x2016; = ..."></textarea>
+
+      <p style="font-weight:700;font-size:.9rem;color:var(--pur);margin-top:.7rem">1d) Recta L2 contenida en &#x3A0;1:</p>
+      <textarea class="sim-answer" id="sim-1d" style="min-height:65px" placeholder="L2: P0 + &#x3BB;v con P0 &#x2208; &#x3A0;1 y v&#xB7;n = 0 ..."></textarea>
+    </div>
+
+    <div class="sim-section">
+      <h3>Ejercicio 2 &mdash; Matrices y sistemas (5 puntos)</h3>
+      <div id="sim-e2-body" class="exercise-body" style="margin-bottom:.8rem">Cargando...</div>
+
+      <p style="font-weight:700;font-size:.9rem;color:var(--pur)">2a) Valores de k para SCD:</p>
+      <textarea class="sim-answer" id="sim-2a" style="min-height:65px" placeholder="Calculá det(A) = ... = 0 &#x2192; valores cr&#xED;ticos ... &#x2192; SCD si k &#x2209; {...}"></textarea>
+
+      <p style="font-weight:700;font-size:.9rem;color:var(--pur);margin-top:.7rem">2b) Valores k para SCI y soluci&#xF3;n param&#xE9;trica:</p>
+      <textarea class="sim-answer" id="sim-2b" placeholder="Para k = ...: escalonar, obtener X = t(...)&#xA;Para k = ...: X = t(...)"></textarea>
+
+      <p style="font-weight:700;font-size:.9rem;color:var(--pur);margin-top:.7rem">2c) Valor k y vector b para que A&#xB7;X = b sea SI:</p>
+      <textarea class="sim-answer" id="sim-2c" style="min-height:65px" placeholder="k = ..., b = (...) porque rg(A) &#x2260; rg(A|b) ya que b &#x2209; col(A)"></textarea>
+
+      <p style="font-weight:700;font-size:.9rem;color:var(--pur);margin-top:.7rem">2d) k=1: calcular det(&#xBD;A&#xB2;):</p>
+      <textarea class="sim-answer" id="sim-2d" style="min-height:65px" placeholder="det(A) con k=1 = ... &#x2192; det(&#xBD;A&#xB2;) = (&#xBD;)&#xB3;&#xB7;det(A)&#xB2; = ..."></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-check" style="font-size:1rem;padding:.7rem 1.5rem" onclick="submitSim()">&#x1F4E4; Entregar y corregir</button>
+      <button class="btn" style="background:#f1f5f9;color:var(--gray)" onclick="if(confirm('&#xBF;Abandonar el simulacro?'))resetSim()">Abandonar</button>
+    </div>
+  </div>
+
+  <div id="sim-result-panel" style="display:none">
+    <div class="game-card">
+      <div class="game-title">&#x1F4CA; Resultado del simulacro</div>
+      <span class="score-big" id="sim-score-display">?/10</span>
+      <div id="sim-corrections"></div>
+      <div class="btn-row" style="justify-content:center;margin-top:1rem">
+        <button class="btn btn-new" onclick="resetSim()">&#x21BB; Intentar de nuevo</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// STORAGE
+// ══════════════════════════════════════════════
+function gGet(k){ try{return JSON.parse(localStorage.getItem('alj_'+k)||'null');}catch(e){return null;} }
+function gSet(k,v){ try{localStorage.setItem('alj_'+k,JSON.stringify(v));}catch(e){} }
+
+// ══════════════════════════════════════════════
+// XP & PROGRESS
+// ══════════════════════════════════════════════
+var XP = gGet('xp') || 0;
+var STREAK = gGet('streak') || 0;
+var ERRORS = gGet('errors') || {};
+
+function addXP(n, bonus){
+  XP += n * (1 + 0.1 * Math.min(STREAK, 5));
+  if(bonus) XP += bonus;
+  STREAK++;
+  gSet('xp', XP); gSet('streak', STREAK);
+  updateXPDisplay();
+}
+function wrongXP(){
+  STREAK = 0;
+  gSet('streak', 0);
+  updateXPDisplay();
+}
+function recordError(code){
+  ERRORS[code] = (ERRORS[code]||0) + 1;
+  gSet('errors', ERRORS);
+  updateErrorDisplay();
+}
+function updateXPDisplay(){
+  var el = document.getElementById('xp-display');
+  if(el) el.textContent = Math.round(XP) + ' XP';
+  var te = document.getElementById('tot-xp');
+  if(te) te.textContent = Math.round(XP);
+  var ts = document.getElementById('tot-streak');
+  if(ts) ts.textContent = STREAK;
+  var xb = document.getElementById('xp-bar');
+  if(xb) xb.style.width = Math.min(100, (XP/500)*100) + '%';
+}
+function updateErrorDisplay(){
+  var el = document.getElementById('errors-display');
+  if(!el) return;
+  var keys = Object.keys(ERRORS);
+  if(!keys.length){ el.textContent = 'Todav\u00eda no hay errores registrados. \u00a1Jug\u00e1 para ver tu historial!'; return; }
+  el.innerHTML = keys.sort(function(a,b){return ERRORS[b]-ERRORS[a];}).map(function(k){
+    return '<div style="margin:.2rem 0"><b style="color:var(--red)">'+ERRORS[k]+'x</b> &mdash; '+k+'</div>';
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+// NAV
+// ══════════════════════════════════════════════
+var _worldInited = {};
+function showWorld(id, btn){
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  var pg = document.getElementById('page-'+id);
+  if(pg) pg.classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(id !== 'map' && !_worldInited[id]){
+    _worldInited[id] = true;
+    if(id==='1'){ newG1A(); newG1B(); newG1C(); }
+    if(id==='2'){ newG2A(); newG2B(); }
+    if(id==='3'){ newG3A(); newG3B(); newG3C(); }
+    if(id==='4'){ newG4A(); initG4B(); newG4C(); }
+    if(id==='5'){ newG5B(); }
+    if(id==='6'){ initSim(); }
+  }
+  updateXPDisplay();
+  updateErrorDisplay();
+}
+function showGameTab(world, game, btn){
+  var prefix = 'gp-'+world+'-';
+  document.querySelectorAll('[id^="'+prefix+'"]').forEach(function(p){ p.classList.remove('active'); });
+  var parent = btn ? btn.closest('.game-tabs') : null;
+  if(parent) parent.querySelectorAll('.game-tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  var panel = document.getElementById(prefix+game);
+  if(panel) panel.classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+
+// ══════════════════════════════════════════════
+// MATH HELPERS
+// ══════════════════════════════════════════════
+function rnd(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+function rndNz(a,b){ var v; do{ v=rnd(a,b); }while(v===0); return v; }
+function gcd(a,b){ a=Math.abs(a);b=Math.abs(b); while(b){var t=b;b=a%b;a=t;} return a||1; }
+function frac(n,d){ // returns {n,d} reduced
+  if(d<0){n=-n;d=-d;} var g=gcd(Math.abs(n),Math.abs(d)); return {n:n/g,d:d/g};
+}
+function fStr(n,d){ // display fraction or int
+  var f=frac(n,d);
+  if(f.d===1) return ''+f.n;
+  return f.n+'/'+f.d;
+}
+function parseNum(s){ // parse "3/4", "-2", "0.5"
+  s = s.trim();
+  if(/^-?\d+\/\d+$/.test(s)){
+    var p=s.split('/'); return parseInt(p[0])/parseInt(p[1]);
+  }
+  return parseFloat(s);
+}
+function cross(u,v){
+  return [u[1]*v[2]-u[2]*v[1], -(u[0]*v[2]-u[2]*v[0]), u[0]*v[1]-u[1]*v[0]];
+}
+function dot(u,v){ return u[0]*v[0]+u[1]*v[1]+u[2]*v[2]; }
+function norm2(v){ return Math.sqrt(dot(v,v)); }
+// proportional: b = lambda*a for some lambda != 0
+function isProportional(a,b){
+  var nz = a.filter(function(x){return x!==0;});
+  if(!nz.length) return false;
+  var i0 = a.indexOf(nz[0]);
+  var lam = b[i0]/a[i0];
+  return a.every(function(ai,i){ return Math.abs(b[i]-lam*ai)<1e-9; });
+}
+function parseVec(s){ // "1,2,3" or "(1,2,3)"
+  return s.replace(/[()]/g,'').split(',').map(function(x){return parseNum(x.trim());});
+}
+function vecStr(v){ return '('+v.join(', ')+')'; }
+function det3(m){ // m = [[row0],[row1],[row2]]
+  return m[0][0]*(m[1][1]*m[2][2]-m[1][2]*m[2][1])
+        -m[0][1]*(m[1][0]*m[2][2]-m[1][2]*m[2][0])
+        +m[0][2]*(m[1][0]*m[2][1]-m[1][1]*m[2][0]);
+}
+function fb(id, cls, html){
+  var el = document.getElementById(id);
+  if(el){ el.innerHTML = '<div class="fb fb-'+cls+'">'+html+'</div>'; }
+}
+
+// ══════════════════════════════════════════════
+// WORLD 1 — G1A: Vector Rush
+// ══════════════════════════════════════════════
+var G1A = {};
+function newG1A(){
+  var type = rnd(0,3);
+  var u = [rnd(-4,4),rnd(-4,4),rnd(-4,4)];
+  var v = [rnd(-4,4),rnd(-4,4),rnd(-4,4)];
+  var sc = rndNz(-4,4);
+  G1A = {};
+  var ex, ans, kind;
+  if(type===0){
+    kind='suma'; ex='Calculá <b>u + v</b> con $\\mathbf{u}='+vecStr(u)+'$ y $\\mathbf{v}='+vecStr(v)+'$';
+    ans = [u[0]+v[0],u[1]+v[1],u[2]+v[2]]; G1A.vecAns=ans;
+  } else if(type===1){
+    kind='escalar'; ex='Calculá <b>'+sc+'·u</b> con $\\mathbf{u}='+vecStr(u)+'$';
+    ans = [sc*u[0],sc*u[1],sc*u[2]]; G1A.vecAns=ans;
+  } else if(type===2){
+    kind='norma'; ex='Calculá $\\|\\mathbf{u}\\|^2$ con $\\mathbf{u}='+vecStr(u)+'$';
+    G1A.scAns = dot(u,u); G1A.vecAns=null;
+  } else {
+    kind='dotprod'; ex='Calculá $\\mathbf{u}\\cdot\\mathbf{v}$ con $\\mathbf{u}='+vecStr(u)+'$ y $\\mathbf{v}='+vecStr(v)+'$';
+    G1A.scAns = dot(u,v); G1A.vecAns=null;
+  }
+  G1A.kind=kind; G1A.u=u; G1A.v=v; G1A.sc=sc; G1A.hintLevel=0;
+  document.getElementById('g1a-ex').innerHTML = ex;
+  document.getElementById('g1a-ans').value = '';
+  document.getElementById('g1a-fb').innerHTML = '';
+  document.getElementById('g1a-sol').innerHTML = '';
+  document.getElementById('g1a-score').innerHTML = '';
+  if(window.renderMathInElement) renderMathInElement(document.getElementById('g1a-ex'));
+}
+function chkG1A(){
+  var raw = document.getElementById('g1a-ans').value.trim();
+  var ok = false;
+  if(G1A.vecAns){
+    var vals = raw.replace(/[()]/g,'').split(',').map(function(x){return parseNum(x.trim());});
+    ok = vals.length===3 && vals.every(function(v,i){return Math.abs(v-G1A.vecAns[i])<1e-9;});
+  } else {
+    ok = Math.abs(parseNum(raw)-G1A.scAns)<1e-9;
+  }
+  if(ok){
+    fb('g1a-fb','ok','&#x2705; Correcto! +20 XP');
+    addXP(20);
+  } else {
+    fb('g1a-fb','err','&#x274C; Incorrecto. Pista: us\u00e1 la f\u00f3rmula correcta o ped\u00ed la pista.');
+    wrongXP();
+    showSolG1A();
+  }
+}
+function hintG1A(){
+  G1A.hintLevel = (G1A.hintLevel||0)+1;
+  var hints = {
+    suma: ['La suma vectorial se hace componente a componente.','$(u_1+v_1, u_2+v_2, u_3+v_3)$'],
+    escalar: ['Multiplic\u00e1 cada componente por el escalar.','$(c\\cdot u_1, c\\cdot u_2, c\\cdot u_3)$'],
+    norma: ['$\\|u\\|^2 = u_1^2+u_2^2+u_3^2$','Sum\u00e1 los cuadrados de cada componente.'],
+    dotprod: ['$u\\cdot v = u_1v_1+u_2v_2+u_3v_3$','Sum\u00e1 los productos componente a componente.']
+  };
+  var hs = hints[G1A.kind] || [];
+  var h = hs[Math.min(G1A.hintLevel-1, hs.length-1)];
+  fb('g1a-fb','warn','&#x1F4A1; '+h);
+  if(window.renderMathInElement) renderMathInElement(document.getElementById('g1a-fb'));
+}
+function showSolG1A(){
+  var sol = '';
+  if(G1A.kind==='suma') sol='u + v = '+vecStr(G1A.vecAns);
+  else if(G1A.kind==='escalar') sol=G1A.sc+'\u00b7u = '+vecStr(G1A.vecAns);
+  else if(G1A.kind==='norma') sol='||u||^2 = '+G1A.scAns;
+  else sol='u\u00b7v = '+G1A.scAns;
+  document.getElementById('g1a-sol').innerHTML='<div class="sol-steps"><div class="step"><b>Respuesta:</b> '+sol+'</div></div>';
+}
+
+// ══════════════════════════════════════════════
+// WORLD 1 — G1B: Perp/Paral
+// ══════════════════════════════════════════════
+var G1B = {};
+function newG1B(){
+  var type = rnd(0,2);
+  var u = [rndNz(-4,4),rnd(-3,3),rnd(-3,3)];
+  var v, correct;
+  if(type===0){ // perpendiculares
+    // build v perp to u: swap two + negate
+    v = [rnd(-3,3),rnd(-3,3),0];
+    // force u.v=0
+    if(u[2]!==0) v[2] = -(u[0]*v[0]+u[1]*v[1])/u[2];
+    else { v = [-u[1],u[0],0]; }
+    correct='perp';
+  } else if(type===1){ // paralelos
+    var lam = rndNz(-3,3);
+    v = [lam*u[0],lam*u[1],lam*u[2]];
+    correct='paral';
+  } else { // ninguno
+    do { v=[rnd(-3,3),rnd(-3,3),rnd(-3,3)]; }
+    while(!v.some(function(x){return x!==0;}) || isProportional(u,v) || Math.abs(dot(u,v))<1e-9);
+    correct='ninguno';
+  }
+  G1B={u:u,v:v,correct:correct};
+  var html = '$\\mathbf{u}='+vecStr(u.map(Math.round))+'$, $\\mathbf{v}='+vecStr(v.map(Math.round))+'$<br><span style="font-size:.85rem;color:var(--gray-lt)">u\u00b7v = '+Math.round(dot(u,v))+'</span>';
+  document.getElementById('g1b-ex').innerHTML = html;
+  document.getElementById('g1b-fb').innerHTML = '';
+  if(window.renderMathInElement) renderMathInElement(document.getElementById('g1b-ex'));
+}
+function ansG1B(ans){
+  var d = Math.round(dot(G1B.u,G1B.v));
+  var cx = cross(G1B.u,G1B.v).map(Math.round);
+  var isPerp = d===0;
+  var isParal = cx.every(function(x){return x===0;});
+  var real = isPerp?'perp':(isParal?'paral':'ninguno');
+  if(ans===real){
+    var expl = isPerp?'u\u00b7v = '+d+' = 0 \u21d2 perpendiculares':
+               isParal?'u\u00d7v = 0 \u21d2 paralelos':
+               'u\u00b7v = '+d+' \u2260 0 y u\u00d7v \u2260 0 \u21d2 ni perp. ni paral.';
+    fb('g1b-fb','ok','&#x2705; Correcto! '+expl+' +15 XP');
+    addXP(15);
+  } else {
+    fb('g1b-fb','err','&#x274C; Incorrecto. u\u00b7v = '+d+', u\u00d7v = '+vecStr(cx)+'. La respuesta era: '+G1B.correct+'.');
+    wrongXP();
+    if(ans==='perp' && !isPerp) recordError('Perpendicular por u\u00b7v mal calculado');
+    if(ans==='paral' && !isParal) recordError('Paralelo: no verific\u00f3 u\u00d7v=0');
+  }
+  setTimeout(newG1B, 2000);
+}
+
+// ══════════════════════════════════════════════
+// WORLD 1 — G1C: Cazador de Normales
+// ══════════════════════════════════════════════
+var G1C = {};
+function newG1C(){
+  var u = [rndNz(-3,3),rnd(-3,3),rnd(-3,3)];
+  var v = [rnd(-3,3),rndNz(-3,3),rnd(-3,3)];
+  var n = cross(u,v);
+  G1C={u:u,v:v,n:n,hintLevel:0};
+  document.getElementById('g1c-ex').innerHTML =
+    '$\\mathbf{u}='+vecStr(u)+'$, $\\mathbf{v}='+vecStr(v)+'$<br>Calculá $\\mathbf{u}\\times\\mathbf{v}$';
+  document.getElementById('g1c-det').innerHTML =
+    '<span class="lbl">Determinante expandido</span>' +
+    '<span style="color:#c4b5fd">i\u22c5('+u[1]+'\u22c5'+v[2]+' - '+u[2]+'\u22c5'+v[1]+') &nbsp;&minus;&nbsp; j\u22c5('+u[0]+'\u22c5'+v[2]+' - '+u[2]+'\u22c5'+v[0]+') &nbsp;+&nbsp; k\u22c5('+u[0]+'\u22c5'+v[1]+' - '+u[1]+'\u22c5'+v[0]+')</span>';
+  ['g1c-i','g1c-j','g1c-k'].forEach(function(id){ document.getElementById(id).value=''; });
+  document.getElementById('g1c-fb').innerHTML = '';
+  if(window.renderMathInElement){ renderMathInElement(document.getElementById('g1c-ex')); }
+}
+function chkG1C(){
+  var ri=parseNum(document.getElementById('g1c-i').value||'x');
+  var rj=parseNum(document.getElementById('g1c-j').value||'x');
+  var rk=parseNum(document.getElementById('g1c-k').value||'x');
+  if(isNaN(ri)||isNaN(rj)||isNaN(rk)){ fb('g1c-fb','warn','Complet\u00e1 los tres componentes.'); return; }
+  var u=G1C.u, v=G1C.v, n=G1C.n;
+  var jCorrect = -(u[0]*v[2]-u[2]*v[0]);
+  var iOk = Math.abs(ri-n[0])<1e-9;
+  var jOk = Math.abs(rj-n[1])<1e-9;
+  var kOk = Math.abs(rk-n[2])<1e-9;
+  if(iOk&&jOk&&kOk){
+    fb('g1c-fb','ok','&#x2705; Perfecto! n = '+vecStr(n)+'. Verific\u00e1: u\u00b7n = '+dot(u,n)+', v\u00b7n = '+dot(v,n)+'. +25 XP');
+    addXP(25);
+  } else {
+    var errs = [];
+    if(!iOk) errs.push('i: esperado '+n[0]+', ingresaste '+ri);
+    if(!jOk){
+      errs.push('j: esperado '+n[1]+', ingresaste '+rj);
+      recordError('Trampa del signo en j (u\u00d7v)');
+      document.getElementById('g1c-fb').insertAdjacentHTML('afterend',
+        '<div class="trap-card"><b>&#x26A0; Trampa del signo en j</b>: el componente j lleva un <b>signo negativo</b> en el determinante: &minus;(u\u2081v\u2083 \u2212 u\u2083v\u2081). \u00a1Es el error m\u00e1s frecuente!</div>');
+    }
+    if(!kOk) errs.push('k: esperado '+n[2]+', ingresaste '+rk);
+    fb('g1c-fb','err','&#x274C; '+errs.join(' | '));
+    wrongXP();
+  }
+}
+function hintG1C(){
+  var u=G1C.u, v=G1C.v;
+  fb('g1c-fb','warn','&#x1F4A1; Signo de j: &minus;det([[i,k],[u\u2080,u\u2082],[v\u2080,v\u2082]]) = &minus;('+u[0]+'\u22c5'+v[2]+' \u2212 '+u[2]+'\u22c5'+v[0]+') = '+( -(u[0]*v[2]-u[2]*v[0]) )+'.');
+}
+
+// ══════════════════════════════════════════════
+// WORLD 2 — G2A: Fabrica de Planos
+// ══════════════════════════════════════════════
+var G2A = {};
+function newG2A(){
+  var u = [rndNz(-3,3),rnd(-3,3),rnd(-3,3)];
+  var v = [rnd(-3,3),rndNz(-3,3),rnd(-3,3)];
+  var n = cross(u,v);
+  // make sure n != 0
+  while(n.every(function(x){return x===0;})){ u=[rndNz(-3,3),rnd(-3,3),rnd(-3,3)]; v=[rnd(-3,3),rndNz(-3,3),rnd(-3,3)]; n=cross(u,v); }
+  var P = [rnd(-3,3),rnd(-3,3),rnd(-3,3)];
+  var d = dot(n,P);
+  G2A={u:u,v:v,P:P,n:n,d:d,hintLevel:0};
+  document.getElementById('g2a-ex').innerHTML =
+    '<b>Plano param\u00e9trico:</b><br>$(x,y,z) = \\alpha'+vecStr(u)+' + \\beta'+vecStr(v)+' + '+vecStr(P)+'$';
+  ['g2a-ni','g2a-nj','g2a-nk','g2a-a','g2a-b','g2a-c','g2a-d'].forEach(function(id){
+    document.getElementById(id).value='';
+    document.getElementById(id).className='math-input'+(id==='g2a-a'||id==='g2a-b'||id==='g2a-c'||id==='g2a-d'?'':'');
+  });
+  document.getElementById('g2a-fb').innerHTML='';
+  if(window.renderMathInElement) renderMathInElement(document.getElementById('g2a-ex'));
+}
+function chkG2A(){
+  var ri=[parseNum(document.getElementById('g2a-ni').value),parseNum(document.getElementById('g2a-nj').value),parseNum(document.getElementById('g2a-nk').value)];
+  var ra=[parseNum(document.getElementById('g2a-a').value),parseNum(document.getElementById('g2a-b').value),parseNum(document.getElementById('g2a-c').value)];
+  var rd=parseNum(document.getElementById('g2a-d').value);
+  var n=G2A.n, d=G2A.d;
+  var nOk = isProportional(n,ri);
+  // For the equation: ra proportional to n, rd/ra[i] = d/n[i] for same lambda
+  var lam = (ri[0]!==0?ri[0]/n[0]:(ri[1]!==0?ri[1]/n[1]:ri[2]/n[2]));
+  var dOk = Math.abs(rd - d*lam) < 1e-9;
+  var eqOk = nOk && dOk;
+  if(nOk && eqOk){
+    fb('g2a-fb','ok','&#x2705; Correcto! n = '+vecStr(n)+', plano: '+n[0]+'x + '+n[1]+'y + '+n[2]+'z = '+d+'. +30 XP');
+    addXP(30);
+  } else {
+    var err = [];
+    if(!nOk) err.push('Normal incorrecta (esperada proporcional a '+vecStr(n)+')');
+    if(!dOk) err.push('d incorrecto (esperado d = n\u00b7P = '+d+' o m\u00faltiplo)');
+    fb('g2a-fb','err','&#x274C; '+err.join(' | '));
+    wrongXP();
+  }
+}
+function hintG2A(){
+  G2A.hintLevel++;
+  var hints=[
+    'n = u \u00d7 v = '+vecStr(G2A.n),
+    'd = n\u00b7P = '+dot(G2A.n,G2A.P)+' (reemplaz\u00e1 P en la ecuaci\u00f3n)'
+  ];
+  fb('g2a-fb','warn','&#x1F4A1; '+hints[Math.min(G2A.hintLevel-1,hints.length-1)]);
+}
+
+// ══════════════════════════════════════════════
+// WORLD 2 — G2B: Pertenencia
+// ══════════════════════════════════════════════
+var G2B = {};
+function newG2B(){
+  var n = [rndNz(-3,3),rnd(-3,3),rndNz(-3,3)];
+  var P = [rnd(-3,3),rnd(-3,3),rnd(-3,3)]; // punto del plano
+  var d = dot(n,P);
+  var belongs = (rnd(0,1)===0);
+  var Q;
+  if(belongs){
+    // Generate a point on the plane: Q = P + t*v where v perp n... 
+    // simpler: vary P along u perp to n
+    var t = rnd(-3,3);
+    var u = [-n[1],n[0],0]; // perp to n (if n[0] or n[1] != 0)
+    if(u[0]===0&&u[1]===0) u=[0,-n[2],n[1]];
+    Q = [P[0]+t*u[0], P[1]+t*u[1], P[2]+t*u[2]];
+  } else {
+    do { Q=[rnd(-4,4),rnd(-4,4),rnd(-4,4)]; } while(Math.abs(dot(n,Q)-d)<1e-9);
+  }
+  G2B={n:n,d:d,Q:Q,belongs:belongs};
+  document.getElementById('g2b-ex').innerHTML =
+    '<b>Plano:</b> $'+n[0]+'x + '+n[1]+'y + '+n[2]+'z = '+d+'$<br><b>Punto Q = '+vecStr(Q.map(Math.round))+'</b><br><span style="font-size:.85rem;color:var(--gray-lt)">&iquest;Q pertenece al plano?</span>';
+  document.getElementById('g2b-fb').innerHTML='';
+  document.getElementById('g2b-hint-area').innerHTML='';
+  if(window.renderMathInElement) renderMathInElement(document.getElementById('g2b-ex'));
+}
+function ansG2B(userAns){
+  var real = G2B.belongs;
+  var calc = dot(G2B.n, G2B.Q);
+  if(userAns===real){
+    fb('g2b-fb','ok','&#x2705; Correcto! n\u00b7Q = '+calc.toFixed(2)+(real?' = d \u21d2 pertenece':' \u2260 d \u21d2 no pertenece')+'. +15 XP');
+    addXP(15);
+  } else {
+    fb('g2b-fb','err','&#x274C; n\u00b7Q = '+calc.toFixed(2)+', d = '+G2B.d+'. '+(real?'Q s\u00ed pertenece.':'Q no pertenece: n\u00b7Q \u2260 d.'));
+    wrongXP();
+  }
+  setTimeout(newG2B, 2200);
+}
+
+// ══════════════════════════════════════════════
+// WORLD 3 — G3A: Detective Espacial
+// ══════════════════════════════════════════════
+var G3A = {};
+var G3A_JUSTS = {
+  paralelos_distintos: [
+    {t:'Las normales son proporcionales y d1 &ne; d2.', ok:true},
+    {t:'Las normales son iguales pero los planos son distintos.', ok:false},
+    {t:'Los planos tienen un punto en com\u00fan pero no son el mismo.', ok:false}
+  ],
+  coincidentes: [
+    {t:'Las normales son proporcionales y d1/n = d2/n\u2032 (misma ecuaci\u00f3n).', ok:true},
+    {t:'Los planos tienen la misma normal pero distintos t\u00e9rminos independientes.', ok:false},
+    {t:'Se intersectan en una recta.', ok:false}
+  ],
+  secantes: [
+    {t:'Las normales NO son proporcionales \u21d2 se cortan en al menos una recta.', ok:true},
+    {t:'Las normales son proporcionales y d distinto.', ok:false},
+    {t:'Los planos son paralelos pero no coincidentes.', ok:false}
+  ]
+};
+function newG3A(){
+  var type = rnd(0,2);
+  var types = ['paralelos_distintos','coincidentes','secantes'];
+  var cls = types[type];
+  var n1 = [rndNz(-3,3),rnd(-3,3),rnd(-3,3)];
+  var lam = rndNz(-2,2);
+  var n2 = cls==='secantes' ? [rndNz(-3,3),rnd(-3,3),rndNz(-3,3)] : [lam*n1[0],lam*n1[1],lam*n1[2]];
+  while(cls==='secantes' && isProportional(n1,n2)) n2=[rndNz(-3,3),rnd(-3,3),rndNz(-3,3)];
+  var d1 = rnd(-5,5);
+  var d2;
+  if(cls==='coincidentes') d2 = lam*d1;
+  else if(cls==='paralelos_distintos') { do{d2=rnd(-5,5);}while(Math.abs(d2-lam*d1)<1e-9); }
+  else d2 = rnd(-5,5);
+  G3A={cls:cls,n1:n1,n2:n2,d1:d1,d2:d2};
+  document.getElementById('g3a-ex').innerHTML =
+    '<b>\u03a01:</b> $'+n1[0]+'x + '+n1[1]+'y + '+n1[2]+'z = '+d1+'$<br><b>\u03a02:</b> $'+n2[0]+'x + '+n2[1]+'y + '+n2[2]+'z = '+d2+'$';
+  // Shuffle justifications
+  var justs = G3A_JUSTS[cls].slice().sort(function(){return Math.random()-.5;});
+  G3A.justs = justs;
+  document.getElementById('g3a-just').innerHTML = justs.map(function(j,i){
+    return '<label style="display:block;padding:.35rem .5rem;margin:.2rem 0;border-radius:8px;border:1px solid var(--border);cursor:pointer;font-size:.87rem"><input type="radio" name="g3a-j" value="'+i+'" style="margin-right:.5rem">'+j.t+'</label>';
+  }).join('');
+  document.getElementById('g3a-fb').innerHTML='';
+  if(window.renderMathInElement) renderMathInElement(document.getElementById('g3a-ex'));
+}
+function chkG3A(){
+  var sel = document.getElementById('g3a-cls').value;
+  var justSel = document.querySelector('input[name="g3a-j"]:checked');
+  if(!sel){ fb('g3a-fb','warn','Elegiá la clasificaci\u00f3n.'); return; }
+  if(!justSel){ fb('g3a-fb','warn','Elegiá tambi\u00e9n la justificaci\u00f3n.'); return; }
+  var clsOk = (sel === G3A.cls);
+  var justOk = G3A.justs[parseInt(justSel.value)].ok;
+  if(clsOk&&justOk){
+    fb('g3a-fb','ok','&#x2705; Perfecto! Clasificaci\u00f3n y justificaci\u00f3n correctas. +30 XP');
+    addXP(30);
+  } else if(clsOk){
+    fb('g3a-fb','warn','&#x1F7E1; Clasificaci\u00f3n correcta pero la justificaci\u00f3n no es precisa. Revis\u00e1 la raz\u00f3n. +10 XP');
+    addXP(10);
+  } else {
+    fb('g3a-fb','err','&#x274C; Incorrecto. Era: '+G3A.cls+'.');
+    wrongXP();
+  }
+}
+function hintG3A(){
+  fb('g3a-fb','warn','&#x1F4A1; Compar\u00e1 las normales: si son proporcionales \u21d2 parallel o coinc. (seg\u00fan d). Si no son proporcionales \u21d2 secantes.');
+}
+
+// ══════════════════════════════════════════════
+// WORLD 3 — G3B: Distancia entre planos
+// ══════════════════════════════════════════════
+var G3B = {};
+function newG3B(){
+  var n = [rndNz(-3,3),rnd(-3,3),rndNz(-3,3)];
+  var lam = rndNz(-2,2);
+  // same normal family, different d
+  var d1 = rnd(-5,5);
+  var d2; do{d2=rnd(-5,5);}while(d2===d1);
+  // normalize both to same n
+  G3B={n:n,lam:lam,n2:[lam*n[0],lam*n[1],lam*n[2]],d1:d1,d2:lam*d2,origD2:d2};
+  var distN = Math.abs(d2-d1);
+  var distD = Math.sqrt(dot(n,n));
+  G3B.ans = distN/distD;
+  document.getElementById('g3b-ex').innerHTML =
+    '<b>\u03a01:</b> $'+n[0]+'x + '+n[1]+'y + '+n[2]+'z = '+d1+'$<br>' +
+    '<b>\u03a02:</b> $'+(lam*n[0])+'x + '+(lam*n[1])+'y + '+(lam*n[2])+'z = '+(lam*d2)+'$<br>' +
+    '<span style="font-size:.85rem;color:var(--gray-lt)">(Normaliz\u00e1 antes de calcular)</span>';
+  document.getElementById('g3b-ans').value='';
+  document.getElementById('g3b-fb').innerHTML='';
+  if(window.renderMathInElement) renderMathInElement(document.getElementById('g3b-ex'));
+}
+function parseExpr(s){
+  // parse "3/sqrt(14)" or "3/sqrt14" etc
+  try{
+    var clean = s.replace(/sqrt\(?(\d+)\)?/g, function(_,x){ return Math.sqrt(parseFloat(x)); });
+    return eval(clean);
+  }catch(e){ return NaN; }
+}
+function chkG3B(){
+  var raw = document.getElementById('g3b-ans').value.trim();
+  var val = isNaN(parseNum(raw)) ? parseExpr(raw) : parseNum(raw);
+  if(Math.abs(val-G3B.ans)<1e-4){
+    fb('g3b-fb','ok','&#x2705; Correcto! d = |'+G3B.origD2+'-'+G3B.d1+'|/||n|| = '+G3B.ans.toFixed(4)+'. +30 XP');
+    addXP(30);
+  } else {
+    // check if they forgot to normalize
+    var wrongAns = Math.abs(G3B.d2-G3B.d1)/Math.sqrt(dot(G3B.n2,G3B.n2));
+    if(Math.abs(val-wrongAns)<1e-4){
+      fb('g3b-fb','err','&#x274C; Normales proporcionales no normalizadas. Us\u00e1 siempre la misma normal (escal\u00e1 \u03a02 para que coincidan). Esperado: '+G3B.ans.toFixed(4));
+      recordError('Normales proporcionales sin normalizar (\u03a0 paralelos)');
+    } else {
+      fb('g3b-fb','err','&#x274C; Incorrecto. d = '+G3B.ans.toFixed(4));
+    }
+    wrongXP();
+  }
+}
+function hintG3B(){
+  fb('g3b-fb','warn','&#x1F4A1; Pas\u00e1 \u03a02 a la misma normal que \u03a01: divid\u00ed por '+G3B.lam+'. Luego d = |d2 \u2212 d1| / ||n|| = |'+G3B.origD2+' \u2212 '+G3B.d1+'| / ||'+vecStr(G3B.n)+'||');
+}
+
+// ══════════════════════════════════════════════
+// WORLD 3 — G3C: Constructor de Rectas en plano
+// ══════════════════════════════════════════════
+var G3C = {};
+function newG3C(){
+  var n = [rndNz(-3,3),rndNz(-3,3),rnd(-3,3)];
+  var d = rnd(-5,5);
+  // A point on the plane: set z=0 and solve
+  var P;
+  if(n[0]!==0) P=[d/n[0],0,0];
+  else if(n[1]!==0) P=[0,d/n[1],0];
+  else P=[0,0,d/n[2]];
+  P=P.map(function(x){return Math.round(x*4)/4;}); // keep fractions simple
+  G3C={n:n,d:d,P:P};
+  document.getElementById('g3c-ex').innerHTML =
+    '<b>Plano \u03a0:</b> $'+n[0]+'x + '+n[1]+'y + '+n[2]+'z = '+d+'$<br>Constru\u00ed una recta L &#x2282; \u03a0.';
+  ['g3c-px','g3c-py','g3c-pz','g3c-vx','g3c-vy','g3c-vz'].forEach(function(id){ document.getElementById(id).value=''; });
+  document.getElementById('g3c-fb').innerHTML='';
+  if(window.renderMathInElement) renderMathInElement(document.getElementById('g3c-ex'));
+}
+function chkG3C(){
+  var px=parseNum(document.getElementById('g3c-px').value);
+  var py=parseNum(document.getElementById('g3c-py').value);
+  var pz=parseNum(document.getElementById('g3c-pz').value);
+  var vx=parseNum(document.getElementById('g3c-vx').value);
+  var vy=parseNum(document.getElementById('g3c-vy').value);
+  var vz=parseNum(document.getElementById('g3c-vz').value);
+  if([px,py,pz,vx,vy,vz].some(isNaN)){ fb('g3c-fb','warn','Complet\u00e1 todos los campos.'); return; }
+  var n=G3C.n, d=G3C.d;
+  var P=[px,py,pz], v=[vx,vy,vz];
+  var pOnPlane = Math.abs(dot(n,P)-d)<1e-9;
+  var vPerpN = Math.abs(dot(n,v))<1e-9;
+  var vNonZero = v.some(function(x){return Math.abs(x)>1e-9;});
+  if(pOnPlane&&vPerpN&&vNonZero){
+    fb('g3c-fb','ok','&#x2705; Correcto! n\u00b7P = '+dot(n,P).toFixed(2)+' = d, n\u00b7v = '+dot(n,v).toFixed(2)+' = 0. +30 XP');
+    addXP(30);
+  } else {
+    var errs=[];
+    if(!pOnPlane) errs.push('P no est\u00e1 en el plano (n\u00b7P = '+dot(n,P).toFixed(2)+' \u2260 '+d+')');
+    if(!vPerpN) errs.push('v no es perpendicular a n (n\u00b7v = '+dot(n,v).toFixed(2)+' \u2260 0)');
+    if(!vNonZero) errs.push('v no puede ser el vector cero');
+    fb('g3c-fb','err','&#x274C; '+errs.join(' | '));
+    wrongXP();
+  }
+}
+function hintG3C(){
+  fb('g3c-fb','warn','&#x1F4A1; Punto de \u03a0: us\u00e1 P = '+vecStr(G3C.P.map(function(x){return Math.round(x*100)/100;}))+'. Direcci\u00f3n: cualquier v con n\u00b7v = 0 (ej. permut\u00e1 dos componentes de n y neg\u00e1 una).');
+}
+
+// ══════════════════════════════════════════════
+// WORLD 4 — G4A: Sarrus Express
+// ══════════════════════════════════════════════
+var G4A_mat = null;
+function newG4A(){
+  var m = [[rnd(-5,5),rnd(-5,5),rnd(-5,5)],[rnd(-5,5),rnd(-5,5),rnd(-5,5)],[rnd(-5,5),rnd(-5,5),rnd(-5,5)]];
+  G4A_mat = m;
+  for(var i=0;i<3;i++) for(var j=0;j<3;j++) document.getElementById('m'+i+j).textContent = m[i][j];
+  document.getElementById('g4a-ans').value='';
+  document.getElementById('g4a-fb').innerHTML='';
+  document.getElementById('g4a-sol').innerHTML='';
+}
+function chkG4A(){
+  var m=G4A_mat, ans=parseNum(document.getElementById('g4a-ans').value);
+  var real=det3(m);
+  if(Math.abs(ans-real)<1e-9){
+    fb('g4a-fb','ok','&#x2705; Correcto! det = '+real+'. +25 XP');
+    addXP(25);
+  } else {
+    fb('g4a-fb','err','&#x274C; Incorrecto. Correcto: det = '+real);
+    document.getElementById('g4a-sol').innerHTML=
+      '<div class="sol-steps">' +
+      '<div class="step"><b>Sarrus (+):</b> '+m[0][0]+'\u22c5'+m[1][1]+'\u22c5'+m[2][2]+' + '+m[0][1]+'\u22c5'+m[1][2]+'\u22c5'+m[2][0]+' + '+m[0][2]+'\u22c5'+m[1][0]+'\u22c5'+m[2][1]+' = '+(m[0][0]*m[1][1]*m[2][2]+m[0][1]*m[1][2]*m[2][0]+m[0][2]*m[1][0]*m[2][1])+'</div>' +
+      '<div class="step"><b>Sarrus (&minus;):</b> '+m[2][0]+'\u22c5'+m[1][1]+'\u22c5'+m[0][2]+' + '+m[2][1]+'\u22c5'+m[1][2]+'\u22c5'+m[0][0]+' + '+m[2][2]+'\u22c5'+m[1][0]+'\u22c5'+m[0][1]+' = '+(m[2][0]*m[1][1]*m[0][2]+m[2][1]*m[1][2]*m[0][0]+m[2][2]*m[1][0]*m[0][1])+'</div>' +
+      '<div class="step"><b>det = </b>'+real+'</div>' +
+      '</div>';
+    wrongXP();
+  }
+}
+function hintG4A(){
+  fb('g4a-fb','warn','&#x1F4A1; Sarrus: suma de diagonales / \u21d8 menos suma de antidiagonales \\. det = (a11a22a33 + a12a23a31 + a13a21a32) \u2212 (a31a22a13 + a32a23a11 + a33a21a12)');
+}
+
+// ══════════════════════════════════════════════
+// WORLD 4 — G4B: Det con parametro k (parcial)
+// ══════════════════════════════════════════════
+function detAofK(k){
+  // A = [[k+2,8,2k],[1,2,k],[1,-4,0]]
+  var m = [[k+2,8,2*k],[1,2,k],[1,-4,0]];
+  return det3(m);
+}
+function initG4B(){
+  updateKSlider();
+}
+function updateKSlider(){
+  var k = parseFloat(document.getElementById('k-slider').value);
+  var d = detAofK(k);
+  document.getElementById('k-val').innerHTML = 'k = '+k.toFixed(1)+' &nbsp;&rarr;&nbsp; det = <span id="k-det">'+d.toFixed(2)+'</span>';
+}
+function chkG4B(){
+  var factor = parseNum(document.getElementById('g4b-factor').value);
+  var rootsRaw = document.getElementById('g4b-roots').value;
+  var roots = rootsRaw.split(/[,\s;y]+/).map(function(x){return parseNum(x.trim());}).filter(function(x){return !isNaN(x);});
+  var factorOk = Math.abs(factor-1)<1e-9; // 4k(k+1), so +1
+  var rootsOk = roots.length>=2 && roots.some(function(r){return Math.abs(r)<1e-9;}) && roots.some(function(r){return Math.abs(r+1)<1e-9;});
+  if(factorOk&&rootsOk){
+    fb('g4b-fb','ok','&#x2705; Correcto! det(A) = 4k(k+1), ra\u00edces k = 0 y k = \u22121. +30 XP');
+    addXP(30);
+  } else {
+    var errs=[];
+    if(!factorOk) errs.push('Factor (k+?): esperado (k+1), ingresaste '+factor);
+    if(!rootsOk) errs.push('Ra\u00edces: deben ser k=0 y k=\u22121');
+    fb('g4b-fb','err','&#x274C; '+errs.join(' | '));
+    wrongXP();
+  }
+}
+function solG4B(){
+  document.getElementById('g4b-sol').innerHTML =
+    '<div class="sol-steps">' +
+    '<div class="step"><b>Expansi\u00f3n por cofactores fila 3:</b></div>' +
+    '<div class="step">det(A) = 1\u22c5det([[8,2k],[2,k]]) - (-4)\u22c5det([[k+2,2k],[1,k]]) + 0</div>' +
+    '<div class="step">= (8k \u2212 4k) + 4((k+2)k \u2212 2k) = 4k + 4(k\u00b2 + 2k \u2212 2k) = 4k + 4k\u00b2</div>' +
+    '<div class="step">= <b>4k(k+1)</b></div>' +
+    '<div class="step">Ra\u00edces: k = 0 y k = \u22121</div>' +
+    '</div>';
+}
+
+// ══════════════════════════════════════════════
+// WORLD 4 — G4C: Trampa de Propiedades
+// ══════════════════════════════════════════════
+var G4C = {};
+function newG4C(){
+  var base = rnd(2,4);
+  var det_a = rndNz(-4,4);
+  var c = rnd(1,3);
+  var m = rnd(1,3);
+  var type = rnd(0,3);
+  var ex, ans;
+  if(type===0){
+    // det(c*A) = c^3 * det(A) (n=3)
+    ex='Si $\\det(A)='+det_a+'$, calculá $\\det('+c+'A)$ con A de 3\u00d73.';
+    ans = Math.pow(c,3)*det_a;
+  } else if(type===1){
+    // det(A^m) = det(A)^m
+    ex='Si $\\det(A)='+det_a+'$, calculá $\\det(A^'+m+')$.';
+    ans = Math.pow(det_a,m);
+  } else if(type===2){
+    // det(1/2 A^2) — la trampa del parcial
+    var k = 1;
+    var detK = detAofK(k); // = 8
+    ex='Con $k=1$, calculá $\\det\\left(\\tfrac{1}{2}A^2\\right)$ dado que $\\det(A)='+detK+'$. (Trampa del parcial)';
+    ans = (1/8)*detK*detK; // (1/2)^3 * det(A)^2
+    G4C.trap=true;
+  } else {
+    // det(A^T) = det(A)
+    ex='Si $\\det(A)='+det_a+'$, calculá $\\det(A^T)$.';
+    ans = det_a;
+  }
+  G4C={det_a:det_a,c:c,m:m,ans:ans,type:type};
+  document.getElementById('g4c-ex').innerHTML = ex;
+  document.getElementById('g4c-ans').value = '';
+  document.getElementById('g4c-fb').innerHTML='';
+  if(window.renderMathInElement) renderMathInElement(document.getElementById('g4c-ex'));
+}
+function chkG4C(){
+  var raw=parseNum(document.getElementById('g4c-ans').value);
+  if(G4C.type===2){
+    var wrong = 0.5*Math.pow(G4C.ans/((1/8)), 1); // = 0.5 * det^2 naive
+    var wrongAns = 0.5 * Math.pow(detAofK(1),2);
+    if(Math.abs(raw-wrongAns)<1e-9){
+      fb('g4c-fb','err','&#x274C; \u00a1Trampa detectada! No es \u00bd\u22c5det(A)\u00b2. La f\u00f3rmula es det(cA\u1d50) = c\u207f\u22c5det(A)\u1d50 con n=3: det(\u00bdA\u00b2) = (\u00bd)\u00b3\u22c5det(A)\u00b2 = '+G4C.ans);
+      recordError('Trampa del \u00bd suelto en det(\u00bdA\u00b2)');
+      wrongXP(); return;
+    }
+  }
+  if(Math.abs(raw-G4C.ans)<1e-9){
+    fb('g4c-fb','ok','&#x2705; Correcto! Resultado = '+G4C.ans+'. +25 XP');
+    addXP(25);
+  } else {
+    fb('g4c-fb','err','&#x274C; Incorrecto. Esperado: '+G4C.ans);
+    wrongXP();
+  }
+}
+function hintG4C(){
+  fb('g4c-fb','warn','&#x1F4A1; det(cA) = c\u207f\u22c5det(A) (n=dim). det(A\u1d50) = det(A)\u1d50. det(A\u1d40) = det(A). Combinadas: det(cA\u1d50) = c\u207f\u22c5det(A)\u1d50.');
+  if(window.renderMathInElement) renderMathInElement(document.getElementById('g4c-fb'));
+}
+
+// ══════════════════════════════════════════════
+// WORLD 5 — G5A: Semaforo de k
+// ══════════════════════════════════════════════
+function chkG5A(){
+  var s1=document.getElementById('g5a-s1').value;
+  var s2=document.getElementById('g5a-s2').value;
+  var s3=document.getElementById('g5a-s3').value;
+  var v1=parseNum(document.getElementById('g5a-v1').value);
+  var v2=parseNum(document.getElementById('g5a-v2').value);
+  var v3=parseNum(document.getElementById('g5a-v3').value);
+  var errs=[];
+  if(s1!=='SCD') errs.push('k \u2209 {0,-1}: es SCD (det \u2260 0 \u21d2 \u00fanica soluci\u00f3n trivial)');
+  if(s2!=='SCI') errs.push('k=0: es SCI (homog\u00e9neo nunca es SI, y det=0 \u21d2 infinitas soluciones)');
+  if(s3!=='SCI') errs.push('k=-1: es SCI');
+  if(s2==='SI'){ recordError('Sistema homog\u00e9neo clasificado como SI'); }
+  // For k=0: A = [[2,8,0],[1,2,0],[1,-4,0]], sol = t(0,0,1)
+  var solOk = !isNaN(v1)&&!isNaN(v2)&&!isNaN(v3);
+  if(solOk){
+    // Check A(k=0)*v = 0
+    var m0=[[2,8,0],[1,2,0],[1,-4,0]];
+    var Av=[m0[0][0]*v1+m0[0][1]*v2+m0[0][2]*v3, m0[1][0]*v1+m0[1][1]*v2+m0[1][2]*v3, m0[2][0]*v1+m0[2][1]*v2+m0[2][2]*v3];
+    if(!Av.every(function(x){return Math.abs(x)<1e-9;})){
+      errs.push('Soluci\u00f3n para k=0 incorrecta: A\u22c5v \u2260 0. La correcta es t(0,0,1).');
+    }
+  }
+  if(!errs.length){
+    fb('g5a-fb','ok','&#x2705; Todo correcto! +40 XP');
+    addXP(40);
+  } else {
+    fb('g5a-fb','err','&#x274C; '+errs.join('<br>'));
+    wrongXP();
+  }
+}
+function solG5A(){
+  document.getElementById('g5a-sol').innerHTML =
+    '<div class="sol-steps">' +
+    '<div class="step"><b>det(A) = 4k(k+1)</b></div>' +
+    '<div class="step">k \u2209 {0,-1}: det \u2260 0 \u21d2 <b>SCD</b> (solo X=0)</div>' +
+    '<div class="step">k=0: A=[[2,8,0],[1,2,0],[1,-4,0]], rg=2 &lt; 3 \u21d2 <b>SCI</b>, X = t(0,0,1)</div>' +
+    '<div class="step">k=-1: A=[[1,8,-2],[1,2,-1],[1,-4,0]], rg=2 \u21d2 <b>SCI</b>, X = t(4,1,6)</div>' +
+    '</div>';
+}
+
+// ══════════════════════════════════════════════
+// WORLD 5 — G5B: Escalonador interactivo
+// ══════════════════════════════════════════════
+var G5B = {mat:null, steps:0};
+function newG5B(){
+  // random 3x4 augmented matrix (3 equations, 3 unknowns + rhs)
+  var m=[];
+  for(var i=0;i<3;i++){ var row=[]; for(var j=0;j<4;j++) row.push(rnd(-4,4)); m.push(row); }
+  G5B.mat = m.map(function(r){return r.slice();});
+  G5B.steps=0;
+  renderG5B();
+}
+function renderG5B(){
+  var m=G5B.mat;
+  var html='<table class="gauss-table"><thead><tr><th>x</th><th>y</th><th>z</th><th>|b</th></tr></thead><tbody>';
+  for(var i=0;i<3;i++){
+    html+='<tr>';
+    for(var j=0;j<4;j++){
+      var cls = (j===3)?'':''; // could highlight pivot
+      html+='<td class="'+cls+'">'+(Math.round(m[i][j]*100)/100)+'</td>';
+    }
+    html+='</tr>';
+  }
+  html+='</tbody></table>';
+  document.getElementById('g5b-mat-wrap').innerHTML=html;
+  document.getElementById('g5b-steps').textContent='Pasos usados: '+G5B.steps;
+  renderG5BOps();
+}
+function renderG5BOps(){
+  var ops=document.getElementById('g5b-ops');
+  ops.innerHTML='';
+  var rows=['F1','F2','F3'];
+  // Operations: Fi <- Fi - c*Fj for all i!=j pairs, with c = round(m[i][pivot] / m[j][pivot])
+  for(var i=0;i<3;i++){
+    for(var j=0;j<3;j++){
+      if(i===j) continue;
+      // find first non-zero in j
+      var piv=-1;
+      for(var col=0;col<3;col++){ if(Math.abs(G5B.mat[j][col])>1e-9){piv=col;break;} }
+      if(piv<0) continue;
+      var c=G5B.mat[i][piv]/G5B.mat[j][piv];
+      var cr=Math.round(c*100)/100;
+      if(Math.abs(c)<1e-9) continue;
+      (function(ii,jj,cc){
+        var btn=document.createElement('button');
+        btn.className='btn btn-check';
+        btn.style='font-size:.78rem;padding:.35rem .6rem;background:#4f46e5';
+        btn.textContent='F'+( ii+1)+'\u2190F'+(ii+1)+'\u2212('+cc+')F'+(jj+1);
+        btn.onclick=function(){ elimRow(ii,jj,cc); };
+        ops.appendChild(btn);
+      })(i,j,cr);
+    }
+  }
+  // Swap buttons
+  for(var a=0;a<3;a++){
+    for(var b2=a+1;b2<3;b2++){
+      (function(ra,rb){
+        var btn=document.createElement('button');
+        btn.className='btn btn-hint';
+        btn.style='font-size:.78rem;padding:.35rem .6rem';
+        btn.textContent='F'+(ra+1)+' \u21c4 F'+(rb+1);
+        btn.onclick=function(){ swapRows(ra,rb); };
+        ops.appendChild(btn);
+      })(a,b2);
+    }
+  }
+}
+function elimRow(i,j,c){
+  for(var col=0;col<4;col++) G5B.mat[i][col] -= c*G5B.mat[j][col];
+  G5B.steps++;
+  renderG5B();
+}
+function swapRows(a,b){
+  var tmp=G5B.mat[a]; G5B.mat[a]=G5B.mat[b]; G5B.mat[b]=tmp;
+  G5B.steps++;
+  renderG5B();
+}
+function checkG5B(){
+  // Check if upper triangular (all below diagonal are ~0)
+  var m=G5B.mat;
+  var ok = Math.abs(m[1][0])<1e-6 && Math.abs(m[2][0])<1e-6 && Math.abs(m[2][1])<1e-6;
+  if(ok){
+    fb('g5b-fb','ok','&#x2705; Escalonada correctamente en '+G5B.steps+' paso(s)! '+(G5B.steps<=3?'+30 XP (m\u00ednimo)':'+15 XP')+' ');
+    addXP(G5B.steps<=3?30:15);
+  } else {
+    fb('g5b-fb','warn','&#x26A0; Todav\u00eda no est\u00e1 escalonada. Falta anular elementos bajo la diagonal.');
+  }
+}
+
+// ══════════════════════════════════════════════
+// WORLD 6 — SIMULACRO
+// ══════════════════════════════════════════════
+var SIM = {timer:null, remaining:7200, started:false};
+function genSimData(){
+  // Generate random but "nice" exam data
+  var u=[rndNz(-3,3),rnd(-3,3),rnd(-3,3)];
+  var v=[rnd(-3,3),rndNz(-3,3),rnd(-3,3)];
+  var n=cross(u,v);
+  while(n.every(function(x){return x===0;})){ u=[rndNz(-3,3),rnd(-3,3),rnd(-3,3)]; v=[rnd(-3,3),rndNz(-3,3),rnd(-3,3)]; n=cross(u,v); }
+  var P=[rnd(-2,2),rnd(-2,2),rnd(-2,2)];
+  var d1=dot(n,P);
+  var d2=d1+rndNz(-5,5); // parallel plane: same n, different d
+  SIM.n=n; SIM.u=u; SIM.v=v; SIM.P=P; SIM.d1=d1; SIM.d2=d2;
+  return {n:n,u:u,v:v,P:P,d1:d1,d2:d2};
+}
+function initSim(){
+  var d=genSimData();
+  var n=d.n, u=d.u, v=d.v, P=d.P, d1=d.d1, d2=d.d2;
+  document.getElementById('sim-e1-body').innerHTML =
+    '<b>\u03a01:</b> $(x,y,z) = \\alpha'+vecStr(u)+' + \\beta'+vecStr(v)+' + '+vecStr(P)+'$<br>' +
+    '<b>\u03a02:</b> $'+n[0]+'x + '+n[1]+'y + '+n[2]+'z = '+d2+'$<br>' +
+    '<span style="font-size:.85rem;color:var(--gray-lt)">Punto P = '+vecStr(P)+'</span>';
+  document.getElementById('sim-e2-body').innerHTML =
+    '$A = \\begin{pmatrix} k+2 & 8 & 2k \\\\ 1 & 2 & k \\\\ 1 & -4 & 0 \\end{pmatrix}$, sistema $A \\cdot X = 0$';
+  if(window.renderMathInElement){
+    renderMathInElement(document.getElementById('sim-e1-body'));
+    renderMathInElement(document.getElementById('sim-e2-body'));
+  }
+}
+function startSim(){
+  document.getElementById('sim-start-panel').style.display='none';
+  document.getElementById('sim-active-panel').style.display='block';
+  SIM.remaining=7200; SIM.started=true;
+  SIM.timer=setInterval(function(){
+    SIM.remaining--;
+    var h=Math.floor(SIM.remaining/3600);
+    var m=Math.floor((SIM.remaining%3600)/60);
+    var s=SIM.remaining%60;
+    var str=(h>0?h+':':'')+(m<10&&h>0?'0':'')+m+':'+(s<10?'0':'')+s;
+    var el=document.getElementById('sim-timer');
+    el.textContent=str;
+    if(SIM.remaining<=600) el.classList.add('warning');
+    if(SIM.remaining<=0){ clearInterval(SIM.timer); submitSim(); }
+  },1000);
+}
+function submitSim(){
+  if(SIM.timer) clearInterval(SIM.timer);
+  document.getElementById('sim-active-panel').style.display='none';
+  document.getElementById('sim-result-panel').style.display='block';
+  // Basic auto-scoring on 2d (det property trap)
+  var ans2d = (document.getElementById('sim-2d').value||'').toLowerCase();
+  var score2d = (ans2d.indexOf('8')>=0 && (ans2d.indexOf('1/8')>=0||ans2d.indexOf('(1/2)^3')>=0||ans2d.indexOf('(1/2)³')>=0)) ? 2 : (ans2d.indexOf('8')>=0?1:0);
+  var notaAprox = score2d + 4; // base partial score
+  document.getElementById('sim-score-display').textContent = '\u2248 '+notaAprox.toFixed(1)+'/10';
+  var html='<div class="sol-steps">';
+  html+='<div class="step"><b>Ejercicio 1:</b> Revis\u00e1 manualmente comparando con las soluciones del spec. La correci\u00f3n autom\u00e1tica completa est\u00e1 en desarrollo.</div>';
+  html+='<div class="step"><b>2d) Esperado:</b> det(A)|k=1 = 8 \u21d2 det(\u00bdA\u00b2) = (\u00bd)\u00b3\u00b78\u00b2 = 8. Tu respuesta: "'+ans2d+'"</div>';
+  html+='<div class="step"><b>Recomendaci\u00f3n:</b> Si no llegaste a 2d, repas\u00e1 Mundo 4 (propiedades de determinantes).</div>';
+  html+='</div>';
+  document.getElementById('sim-corrections').innerHTML=html;
+  addXP(50);
+}
+function resetSim(){
+  if(SIM.timer) clearInterval(SIM.timer);
+  document.getElementById('sim-start-panel').style.display='block';
+  document.getElementById('sim-active-panel').style.display='none';
+  document.getElementById('sim-result-panel').style.display='none';
+  ['sim-1a','sim-1b','sim-1c','sim-1d','sim-2a','sim-2b','sim-2c','sim-2d'].forEach(function(id){ document.getElementById(id).value=''; });
+  initSim();
+}
+function loadOriginalExam(){
+  document.getElementById('sim-e1-body').innerHTML =
+    '<b>\u03a01 (original):</b> $(x,y,z) = \\alpha(1,2,0) + \\beta(2,1,1) + (1,0,1)$<br>' +
+    '<b>\u03a02 (original):</b> $2x - y - 3z = 2$<br>' +
+    '<span style="font-size:.85rem;color:var(--gray-lt)">P = (1,0,1) &mdash; Datos exactos del parcial</span>';
+  document.getElementById('sim-e2-body').innerHTML =
+    '$A = \\begin{pmatrix} k+2 & 8 & 2k \\\\ 1 & 2 & k \\\\ 1 & -4 & 0 \\end{pmatrix}$, sistema $A \\cdot X = 0$';
+  if(window.renderMathInElement){
+    renderMathInElement(document.getElementById('sim-e1-body'));
+    renderMathInElement(document.getElementById('sim-e2-body'));
+  }
+  document.getElementById('sim-start-panel').style.display='block';
+}
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+updateXPDisplay();
+updateErrorDisplay();
+// Activate first tab
+(function(){
+  var firstBtn = document.querySelector('.tab-btn');
+  if(firstBtn) firstBtn.classList.add('active');
+})();
+</script>
+
+<nav class="apuntes-footer-nav">
+  <span class="apuntes-footer-nav__label">Más de esta materia:</span>
+  <a href="teoria.html">Unidad 1 &mdash; Teoría</a>
+  <a href="teoria-unidad2.html">Unidad 2</a>
+</nav>
+</body>
+</html>

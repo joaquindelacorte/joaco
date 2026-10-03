@@ -184,9 +184,27 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .apnav a:hover{background:var(--purdi)}
 
 @media(max-width:600px){.hero h1{font-size:1.55rem}.wgrid{grid-template-columns:1fr 1fr}.game-canvas{height:220px}}
+.apuntes-nav{position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:.5rem;padding:.45rem .9rem;background:rgba(10,10,18,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.07);font-family:'Segoe UI',system-ui,sans-serif;font-size:.82rem;flex-wrap:wrap}
+.apuntes-nav a{color:#94a3b8;text-decoration:none;padding:.2rem .55rem;border-radius:5px;transition:.15s;white-space:nowrap}
+.apuntes-nav a:hover{background:rgba(255,255,255,.08);color:#e2e8f0}
+.apuntes-nav .an-hub{color:#38bdf8!important}
+.apuntes-nav .an-cur{color:#e2e8f0;font-weight:700;background:rgba(255,255,255,.08);padding:.2rem .55rem;border-radius:5px;white-space:nowrap}
+.apuntes-nav .an-sep{color:rgba(255,255,255,.2);pointer-events:none}
+@media(max-width:480px){.apuntes-nav .an-long{display:none}}
 </style>
 </head>
 <body>
+<div class="apuntes-nav">
+  <a href="https://joacodelacorte.netlify.app/#apuntes">&#x2190; Portafolio</a>
+  <span class="an-sep">/</span>
+  <a href="../apuntes/" class="an-hub">Hub</a>
+  <span class="an-sep">/</span>
+  <a href="teoria.html">Unidad 1</a>
+  <span class="an-sep">&middot;</span>
+  <a href="teoria-unidad2.html">Unidad 2</a>
+  <span class="an-sep">&middot;</span>
+  <span class="an-cur">&#x1F3AE; Juegos</span>
+</div>
 <nav>
   <span class="brand" onclick="goWorld('map')">&#x1F3AE; AL&#xA0;Juegos</span>
   <div class="tabs">
@@ -862,6 +880,9 @@ function tex(src, disp) {
 function tv(v) {
   return tex('\\left('+v.join(',\\,')+'\\right)');
 }
+function teqv(letter, arr) {
+  return tex('\\mathbf{'+letter+'} = \\left('+arr.join(',\\,')+'\\right)');
+}
 // ─────────────────────────────────────────────────────────
 
 function dot(u,v){return u[0]*v[0]+u[1]*v[1]+u[2]*v[2];}
@@ -1071,7 +1092,7 @@ function newG1A(){
   var ans, qhtml, opts=[];
   if(type===0){
     ans=[u[0]+v[0],u[1]+v[1],u[2]+v[2]];
-    qhtml='Calculá '+tex('\\mathbf{u}+\\mathbf{v}')+'<br>'+tex('\\mathbf{u}=')+tv(u)+'&ensp;'+tex('\\mathbf{v}=')+tv(v);
+    qhtml='Calculá '+tex('\\mathbf{u}+\\mathbf{v}')+'<br>'+teqv('u',u)+'&emsp;'+teqv('v',v);
     // three wrong answers
     opts=[
       {text:vStr(ans), ok:true},
@@ -1166,7 +1187,7 @@ function newG1B(){
   var dp=Math.round(dot(u,v)*100)/100;
   var cx=cross(u,v).map(function(x){return Math.round(x*100)/100;});
   document.getElementById('g1b-q').innerHTML=
-    tex('\\mathbf{u}=')+tv(u)+'&ensp;'+tex('\\mathbf{v}=')+tv(v.map(function(x){return Math.round(x*100)/100;}));
+    teqv('u',u)+'&emsp;'+teqv('v',v.map(function(x){return Math.round(x*100)/100;}));
   document.getElementById('g1b-calc').innerHTML=
     tex('\\mathbf{u}\\cdot\\mathbf{v}')+'&ensp;=&ensp;<b style="color:var(--cyan)">'+dp+'</b>&emsp;'+tex('\\mathbf{u}\\times\\mathbf{v}')+'&ensp;=&ensp;<b style="color:var(--ora)">'+vStr(cx)+'</b>';
   // Draw
@@ -1202,7 +1223,7 @@ function newG1C(){
   var n=cross(u,v);
   G1C={u:u,v:v,n:n,sel:{i:null,j:null,k:null}};
   document.getElementById('g1c-q').innerHTML=
-    tex('\\mathbf{u}=')+tv(u)+',&ensp;'+tex('\\mathbf{v}=')+tv(v)+'<br>Calculá&ensp;'+tex('\\mathbf{u}\\times\\mathbf{v}');
+    teqv('u',u)+'&ensp;'+teqv('v',v)+'<br>Calculá&ensp;'+tex('\\mathbf{u}\\times\\mathbf{v}');
   document.getElementById('g1c-det').innerHTML=
     '<b>Expand&#xED; el determinante:</b><br>' +
     tex('\\mathbf{i}('+u[1]+'\\cdot'+v[2]+' - '+u[2]+'\\cdot'+v[1]+')') +
@@ -1295,7 +1316,7 @@ function newG2A(){
   G2A={u:u,v:v,P:P,n:n,d:d,step2done:false};
 
   document.getElementById('g2a-q').innerHTML=
-    '<b>Plano param&#xE9;trico:</b><br>'+tex('(x,y,z) = \\alpha'+vStr(u)+' + \\beta'+vStr(v)+' + '+vStr(P));
+    '<b>Plano param&#xE9;trico:</b><br>'+tex('(x,y,z) = \\alpha'+vStr(u)+' + \\beta'+vStr(v)+' + '+vStr(P),false);
 
   // Step 1: choose correct normal (proportional to n)
   var nWrong1=cross(v,u); // reversed = -n

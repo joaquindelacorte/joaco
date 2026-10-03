@@ -244,36 +244,13 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
 </style>
 
 <style>
-.apuntes-nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  gap: .75rem;
-  padding: .5rem 1rem;
-  background: rgba(10,10,18,.92);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(255,255,255,.08);
-  font-family: 'Inter', sans-serif;
-  font-size: .82rem;
-}
-.apuntes-nav a {
-  color: #94a3b8;
-  text-decoration: none;
-  padding: .2rem .5rem;
-  border-radius: 4px;
-  transition: background .15s;
-}
-.apuntes-nav a:hover { background: rgba(255,255,255,.07); color: #e2e8f0; }
-.apuntes-nav__hub { color: #38bdf8 !important; }
-.apuntes-nav__current {
-  margin-left: auto;
-  color: #64748b;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: .75rem;
-}
-@media (max-width: 480px) { .apuntes-nav__current { display: none; } }
+.apuntes-nav{position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:.5rem;padding:.45rem .9rem;background:rgba(10,10,18,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.07);font-family:'Segoe UI',system-ui,sans-serif;font-size:.82rem;flex-wrap:wrap}
+.apuntes-nav a{color:#94a3b8;text-decoration:none;padding:.2rem .55rem;border-radius:5px;transition:.15s;white-space:nowrap}
+.apuntes-nav a:hover{background:rgba(255,255,255,.08);color:#e2e8f0}
+.apuntes-nav .an-hub{color:#38bdf8!important}
+.apuntes-nav .an-cur{color:#e2e8f0;font-weight:700;background:rgba(255,255,255,.08);padding:.2rem .55rem;border-radius:5px;white-space:nowrap}
+.apuntes-nav .an-sep{color:rgba(255,255,255,.2);pointer-events:none}
+@media(max-width:480px){.apuntes-nav .an-long{display:none}} }
 .apuntes-footer-nav {
   margin-top: 3rem;
   padding: 1rem 1.25rem;
@@ -299,9 +276,15 @@ details[open] summary{background:var(--pur-bg);color:var(--pur)}
 </head>
 <body>
 <div class="apuntes-nav">
-  <a href="https://joacodelacorte.netlify.app/#apuntes" class="apuntes-nav__back">← Portafolio</a>
-  <a href="../apuntes/" class="apuntes-nav__hub">Hub Apuntes</a>
-  <span class="apuntes-nav__current">Álgebra Lineal</span>
+  <a href="https://joacodelacorte.netlify.app/#apuntes">&#x2190; Portafolio</a>
+  <span class="an-sep">/</span>
+  <a href="../apuntes/" class="an-hub">Hub</a>
+  <span class="an-sep">/</span>
+  <a href="teoria.html">Unidad 1</a>
+  <span class="an-sep">&middot;</span>
+  <span class="an-cur">&#x1F9EE; Unidad 2</span>
+  <span class="an-sep">&middot;</span>
+  <a href="juegos.html">&#x1F3AE; Juegos</a>
 </div>
 
 <nav>

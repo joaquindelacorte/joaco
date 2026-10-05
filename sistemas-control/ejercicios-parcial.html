@@ -301,15 +301,57 @@ canvas.chart{width:100%;height:240px;background:#fbfbff;border-radius:8px;border
   <div class="card gr"><h3>✅ y_ss = 6</h3></div>
 
   <div class="sub">b) Tiempo para alcanzar el 63 % del valor final</div>
-  <div class="card bl">
-    <h3>τ = 2 segundos</h3>
-    <p>La constante de tiempo es el coeficiente de <i>s</i> en el denominador: <b>τ = 2 s</b>. Por definición, el 63,2 % del valor final se alcanza exactamente en <b>t = τ = 2 s</b>.</p>
+  <p style="font-size:.88rem;color:var(--gray-lt);margin-bottom:.7rem">No alcanza con decir "por definición τ=2". Hay que verificarlo sustituyendo t=τ y además mostrar cómo se despeja t de la ecuación.</p>
+
+  <div style="border-left:3px solid var(--main-lt);padding-left:1rem;margin-bottom:1rem">
+    <p style="font-weight:700;color:var(--main-lt);font-size:.9rem">Paso 1 — verificar que t=2s da el 63%</p>
+    <p style="font-size:.86rem;margin-top:.3rem">Sustituimos t=2 directamente en y(t)=6·(1−e<sup>−t/2</sup>):</p>
+    <div style="background:#181633;border-radius:8px;padding:.6rem 1rem;font-family:monospace;font-size:.88rem;color:#a5b4fc;margin:.4rem 0;line-height:2">
+      y(2) = 6 · (1 − e<sup>−2/2</sup>)<br>
+      y(2) = 6 · (1 − e<sup>−1</sup>)<br>
+      y(2) = 6 · (1 − 0.368)<br>
+      y(2) = 6 · 0.632 = <span style="color:#7ee8a2;font-weight:700">3.792 ✓</span>
+    </div>
+    <p style="font-size:.84rem;color:var(--gray-lt)">3.792 es el 63.2% de 6 → confirmado.</p>
   </div>
 
-  <div class="sub">c) Si se duplica el coeficiente de s → G(s) = 3/(4s+1)</div>
+  <div style="border-left:3px solid var(--main-lt);padding-left:1rem;margin-bottom:1.2rem">
+    <p style="font-weight:700;color:var(--main-lt);font-size:.9rem">Paso 2 — despejar t de la ecuación (método del compañero)</p>
+    <p style="font-size:.86rem;margin-top:.3rem">Armamos la ecuación de igualdad partiendo de 3.792 = y(t) y despejamos t:</p>
+    <div style="background:#181633;border-radius:8px;padding:.7rem 1rem;font-family:monospace;font-size:.88rem;color:#a5b4fc;margin:.4rem 0;line-height:2.2">
+      3.792 = 6 · (1 − e<sup>−t/2</sup>)<br>
+      3.792 / 6 = 1 − e<sup>−t/2</sup><br>
+      0.632 − 1 = −e<sup>−t/2</sup> &nbsp;<span style="color:#6b7280;font-size:.8em">← paso ambos términos</span><br>
+      −0.368 = −e<sup>−t/2</sup><br>
+      0.368 = e<sup>−t/2</sup> &nbsp;<span style="color:#6b7280;font-size:.8em">← multiplico por −1 ambos lados</span><br>
+      ln(0.368) = −t/2 &nbsp;<span style="color:#6b7280;font-size:.8em">← aplico ln para cancelar e</span><br>
+      −1 = −t/2 &nbsp;<span style="color:#6b7280;font-size:.8em">← porque ln(e<sup>−1</sup>) = −1</span><br>
+      <span style="color:#7ee8a2;font-weight:700">t = 2 s ✓</span>
+    </div>
+    <p style="font-size:.84rem;color:var(--gray-lt)">El truco clave: aplicar ln() en ambos lados cancela el e. Como ln(0.368) = ln(e<sup>−1</sup>) = −1, el resultado es exacto.</p>
+  </div>
+
+  <div class="card gr"><h3>✅ t = τ = 2 s → y = 3.792 (63% de 6)</h3></div>
+
+  <div class="sub">c) Si se duplica el coeficiente de s → G(s) = 3/(4s+1), τ=4s</div>
+  <p style="font-size:.88rem;color:var(--gray-lt);margin-bottom:.7rem">Misma pregunta: ¿en qué tiempo se alcanza el 63% del valor final? Repetimos el mismo proceso con τ=4.</p>
+
+  <div style="border-left:3px solid var(--orange);padding-left:1rem;margin-bottom:1.2rem">
+    <p style="font-weight:700;color:var(--orange);font-size:.9rem">Mismo despeje, τ reemplazado por 4</p>
+    <div style="background:#181633;border-radius:8px;padding:.7rem 1rem;font-family:monospace;font-size:.88rem;color:#a5b4fc;margin:.4rem 0;line-height:2.2">
+      0.632 = 1 − e<sup>−t/4</sup><br>
+      0.632 − 1 = −e<sup>−t/4</sup><br>
+      −0.368 = −e<sup>−t/4</sup><br>
+      ln(0.368) = −t/4<br>
+      −1 = −t/4<br>
+      <span style="color:#fb923c;font-weight:700">t = 4 s</span>
+    </div>
+  </div>
+
   <div class="card am">
-    <h3>⏳ Sistema más lento (τ pasa de 2 a 4 s)</h3>
-    <p>Mayor τ → la exponencial decae más despacio → el sistema tarda más en alcanzar el estado estacionario. El valor final <i>no cambia</i> (y_ss sigue siendo 6), solo cambia la velocidad de respuesta.</p>
+    <h3>⏳ t pasó de 2 s a 4 s — el sistema se vuelve más lento</h3>
+    <p>Al duplicar τ, el tiempo para llegar al mismo punto (63%) también se duplicó: de 2 a 4 segundos. El valor final <em>no cambia</em> (y_ss sigue siendo 6), solo la velocidad con la que llega.</p>
+    <p style="font-size:.85rem;margin-top:.5rem;color:var(--gray-lt)">Conclusión del compañero: <em>"Al duplicar el coeficiente, el tiempo que tarda el sistema en llegar al mismo punto pasa de 2 a 4 segundos."</em></p>
   </div>
 
 </div>

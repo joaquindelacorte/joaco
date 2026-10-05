@@ -271,6 +271,7 @@ footer a{color:var(--main)}
     <a class="tab-btn" href="ejercicios-parcial.html" style="text-decoration:none">📝 Parcial</a>
     <a class="tab-btn" href="simulador-octave.html" style="text-decoration:none">🔬 Octave</a>
     <a class="tab-btn" href="octave-ide.html" style="text-decoration:none">💻 IDE Octave</a>
+    <button class="tab-btn" onclick="showTab('sim2')">✏️ Simulacro</button>
   </div>
 </nav>
 
@@ -1562,6 +1563,277 @@ pause();</div>
   </div>
 </div>
 
+<!-- ================= SIMULACRO ================= -->
+<div class="page" id="page-sim2">
+  <div class="container">
+
+    <span class="supp-tag">✏️ Simulacro cátedra · Ing. Jorge Tirabasso · Contenido complementario</span>
+
+    <div class="stitle"><span class="ico">✏️</span>Simulacro — Ejercicios Tipo Parcial</div>
+    <p class="lead">Basado en el simulacro de la cátedra. Cinco secciones de lo más simple a lo más complejo — con teoría complementaria, ejemplos resueltos y quiz final para validar lo aprendido.</p>
+
+    <!-- SECCIÓN A -->
+    <div class="stitle"><span class="ico">🔁</span>Sección A — Conceptos básicos</div>
+    <p class="lead">Antes de cualquier fórmula: la diferencia entre un sistema que "solo obedece" y uno que "aprende de su error".</p>
+
+    <div class="grid g2">
+      <div class="card or">
+        <h3>🔓 Lazo abierto</h3>
+        <p>La salida real <b>no afecta</b> al controlador. La acción de control es calculada de antemano y no se corrige.</p>
+        <ul style="margin-top:.5rem">
+          <li>Sin realimentación de la salida</li>
+          <li>Simple y económico</li>
+          <li>Vulnerable a perturbaciones externas</li>
+          <li><b>Ejemplo:</b> temporizador de tostadora — mismo tiempo sin importar el grosor del pan</li>
+        </ul>
+      </div>
+      <div class="card gr">
+        <h3>🔁 Lazo cerrado</h3>
+        <p>La salida real se <b>mide, compara con la referencia</b> y la diferencia (error) alimenta al controlador continuamente.</p>
+        <ul style="margin-top:.5rem">
+          <li><b>Sensor</b> → mide la variable de salida real</li>
+          <li><b>Controlador</b> → procesa el error y decide la acción</li>
+          <li><b>Actuador</b> → ejecuta físicamente la corrección</li>
+          <li><b>Ejemplo:</b> termostato con sensor de temperatura</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card te" style="margin-top:1rem">
+      <h3>💡 Ejemplo A.1 — Termostato (18°C → 22°C)</h3>
+      <div class="grid g3" style="margin-top:.6rem">
+        <div>
+          <p><b>¿Lazo cerrado?</b></p>
+          <p style="font-size:.9rem;margin-top:.3rem">Sí — el sistema mide constantemente la temperatura real mediante el sensor y la compara con los límites para decidir si enciende o apaga.</p>
+        </div>
+        <div>
+          <p><b>Sensor · Controlador · Actuador</b></p>
+          <ul style="font-size:.88rem;margin-top:.3rem">
+            <li><b>Sensor:</b> termómetro / elemento sensible del termostato</li>
+            <li><b>Controlador:</b> circuito lógico o bimetal que procesa T° y decide</li>
+            <li><b>Actuador:</b> relé, válvula o contactor — el que ejecuta la orden</li>
+          </ul>
+        </div>
+        <div>
+          <p><b>¿Qué pasa sin histéresis?</b></p>
+          <p style="font-size:.9rem;margin-top:.3rem">Conmutaría continuamente (parpadeo). Cualquier fluctuación mínima haría encender y apagar instantáneamente, desgastando los componentes. La banda 18–22°C evita ese problema.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub">Función de transferencia y teorema del valor final</div>
+    <p class="lead">G(s) describe cómo el sistema transforma la entrada en la salida en el dominio de Laplace. La forma estándar de <b>1er orden</b>:</p>
+
+    <div class="fbox">
+      <span class="big">G(s) = K / (τs + 1)</span>
+      <span class="sub-f">K = ganancia estática (qué tanto amplifica en estado estacionario) · τ = constante de tiempo [s]</span>
+    </div>
+
+    <div class="card am" style="margin-top:1rem">
+      <h3>📐 Teorema del valor final — sin resolver la EDO completa</h3>
+      <div class="fbox" style="margin:.5rem 0">
+        <span class="big">y<sub>ss</sub> = lim<sub>s→0</sub> [s · G(s) · R(s)]</span>
+        <span class="sub-f">Para escalón de amplitud A: R(s) = A/s → el s se cancela</span>
+      </div>
+      <p><b>Ejemplo A.2:</b> G(s) = 3/(2s+1), escalón amplitud 2 → R(s) = 2/s</p>
+      <p style="font-family:monospace;font-size:.9rem;margin-top:.4rem;color:var(--main)">y<sub>ss</sub> = lim<sub>s→0</sub> [s · 3/(2s+1) · 2/s] = 3 · 2 = <b>6</b></p>
+      <p style="margin-top:.5rem;font-size:.88rem">La constante de tiempo τ=2s indica que a t=2s el sistema llega al 63% de 6, es decir ≈3.79. Si se duplica el coeficiente de s, τ=4s → sistema más lento (mismo valor final pero tarda el doble).</p>
+    </div>
+
+    <!-- SECCIÓN B -->
+    <div class="stitle" style="margin-top:2.5rem"><span class="ico">⏱️</span>Sección B — Sistemas de 1er orden</div>
+    <p class="lead">La constante de tiempo <b>τ (tau)</b> es la métrica clave: indica cuánto tarda el sistema en reaccionar ante un cambio de entrada. Se aplica a circuitos RC, termómetros, sistemas térmicos — cualquier proceso de "carga y descarga".</p>
+
+    <div class="grid g2">
+      <div class="card bl">
+        <h3>⚡ Circuito RC — física de τ</h3>
+        <p>El capacitor guarda carga. Para cambiar su tensión, debe circular corriente a través de R. Más resistencia = más oposición = más lento.</p>
+        <div class="fbox" style="margin:.5rem 0">
+          <span class="big">τ = R · C [segundos]</span>
+          <span class="unit">Ω · F = s · (Circuito 1: 1kΩ·1000μF = 1 s · Circuito 2: 10kΩ·1000μF = 10 s)</span>
+        </div>
+        <p style="font-size:.88rem">El circuito 1 tiene resistencia 10× menor → la corriente circula más libremente → el capacitor alcanza la carga en 10× menos tiempo.</p>
+      </div>
+      <div class="card gr">
+        <h3>📊 Interpretación universal de τ</h3>
+        <p>Para cualquier sistema de 1er orden ante escalón:</p>
+        <div class="fbox" style="margin:.5rem 0">
+          <span class="big">y(t) = y<sub>ss</sub> · (1 − e<sup>−t/τ</sup>)</span>
+        </div>
+        <ul style="font-size:.88rem;margin-top:.3rem">
+          <li>A t=τ → <b>63.2%</b> del valor final</li>
+          <li>A t=2τ → <b>86.5%</b></li>
+          <li>A t=3τ → <b>95%</b></li>
+          <li>A t=5τ → <b>99.3%</b> (prácticamente estabilizado)</li>
+        </ul>
+        <p style="font-size:.88rem;margin-top:.4rem">El 63.2% es universal: si a cierto tiempo el sistema llegó al 63.2% del cambio total, ese tiempo es τ.</p>
+      </div>
+    </div>
+
+    <div class="card te" style="margin-top:1rem">
+      <h3>🌡️ Ejemplo B.2 — Termómetro digital: de 20°C a 80°C, a t=5s marca 58°C</h3>
+      <div class="grid g3" style="margin-top:.5rem">
+        <div>
+          <p><b>a) Hallar τ</b></p>
+          <p style="font-size:.88rem;margin-top:.3rem">Cambio total = 80−20 = 60°C<br>63.2% de 60 = 37.9°C<br>Temperatura objetivo = 20+37.9 = 57.9°C ≈ 58°C<br>Eso ocurre a t=5s → <b>τ = 5 s</b></p>
+        </div>
+        <div>
+          <p><b>b) Tiempo para 79°C</b></p>
+          <p style="font-size:.88rem;margin-top:.3rem">y(t) = 80 − 60·e<sup>−t/5</sup> = 79<br>60·e<sup>−t/5</sup> = 1<br>e<sup>−t/5</sup> = 1/60<br>−t/5 = ln(1/60)<br>t = 5·ln(60) ≈ <b>20.4 s</b></p>
+        </div>
+        <div>
+          <p><b>c) Mayor masa térmica</b></p>
+          <p style="font-size:.88rem;margin-top:.3rem">Mayor capacidad calorífica → necesita absorber más energía antes de cambiar temperatura → τ <b>aumenta</b> → respuesta más lenta. Analógico a aumentar C en un circuito RC.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN C -->
+    <div class="stitle" style="margin-top:2.5rem"><span class="ico">📍</span>Sección C — Polos y estabilidad</div>
+    <p class="lead">Los <b>polos</b> de G(s) son los valores de s que hacen infinito al denominador. Su ubicación en el plano complejo determina completamente el comportamiento transitorio del sistema.</p>
+
+    <div class="grid g3">
+      <div class="card re">
+        <h3>🔴 Polo con parte real positiva</h3>
+        <p><b>INESTABLE.</b> La respuesta crece sin límite — la salida explota.</p>
+        <p style="font-family:monospace;font-size:.85rem;margin-top:.5rem">G₂(s) = 1/(s−2)<br>→ polo en s = +2<br>→ parte real +2 &gt; 0<br>→ <b>INESTABLE &#x1F534;</b></p>
+      </div>
+      <div class="card gr">
+        <h3>🟢 Polo con parte real negativa</h3>
+        <p><b>ESTABLE.</b> La respuesta decae exponencialmente. Más negativo = más rápido.</p>
+        <p style="font-family:monospace;font-size:.85rem;margin-top:.5rem">G₁(s) = 1/(s+2)<br>→ polo en s = −2<br>→ parte real −2 &lt; 0<br>→ <b>ESTABLE &#x2705;</b></p>
+      </div>
+      <div class="card bl">
+        <h3>🔵 Polos complejos conjugados</h3>
+        <p><b>Oscila</b> (parte Im ≠ 0). Estable si parte Re &lt; 0, inestable si Re &gt; 0.</p>
+        <p style="font-family:monospace;font-size:.85rem;margin-top:.5rem">G₃ = 1/(s²+2s+5)<br>→ polos en s = −1±2j<br>→ parte real −1 &lt; 0 → estable<br>→ Im ≠ 0 → <b>oscila &#x2705;</b></p>
+      </div>
+    </div>
+
+    <div class="card am" style="margin-top:1rem">
+      <h3>📐 Efecto de la ganancia en lazo cerrado — Ejemplo C.1</h3>
+      <p>Al aplicar Kp=10 a G₁(s)=1/(s+2) en lazo cerrado:</p>
+      <div class="fbox" style="margin:.5rem 0">
+        <span class="big">T(s) = Kp·G(s) / (1 + Kp·G(s)) = 10/(s+1) / (1+10/(s+2)) = <b>10/(s+12)</b></span>
+        <span class="sub-f">Nuevo polo en s = −12 (más a la izquierda que −2 → sistema más rápido y sigue siendo estable)</span>
+      </div>
+      <p style="font-size:.88rem"><b>Regla:</b> aumentar Kp empuja los polos de lazo cerrado hacia la izquierda (respuesta más rápida), pero si la planta tiene retardo o es de orden alto, puede crear polos complejos con overshoot excesivo o incluso inestabilizar.</p>
+    </div>
+
+    <div class="card te" style="margin-top:1rem">
+      <h3>🎯 Ejemplo C.2 — Polos en s = −1 ± 2j</h3>
+      <div class="grid g2" style="margin-top:.5rem">
+        <div>
+          <p><b>Estabilidad y comportamiento</b></p>
+          <ul style="font-size:.88rem;margin-top:.3rem">
+            <li><b>Estable:</b> parte real = −1 &lt; 0 ✅</li>
+            <li><b>Oscila:</b> parte imaginaria = ±2 ≠ 0 → sistema subamortiguado → habrá sobrepaso (overshoot)</li>
+            <li>Frecuencia de oscilación: ω<sub>d</sub> = 2 rad/s</li>
+            <li>Velocidad de decaimiento: σ = 1</li>
+          </ul>
+        </div>
+        <div>
+          <p><b>Si los polos se mueven a −3 ± 2j:</b></p>
+          <ul style="font-size:.88rem;margin-top:.3rem">
+            <li><b>Más rápido:</b> parte real más negativa (−3 vs −1) → decae antes</li>
+            <li><b>Mismo período de oscilación:</b> ω<sub>d</sub>=2 no cambia</li>
+            <li><b>Menor overshoot:</b> σ/ω<sub>n</sub> mayor → más amortiguado</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN D -->
+    <div class="stitle" style="margin-top:2.5rem"><span class="ico">🎚️</span>Sección D — Control On-Off y Proporcional</div>
+    <p class="lead">Progresión del control: de todo-nada (el más simple) al proporcional (continuo), con sus ventajas, limitaciones y el concepto clave de <b>offset</b>.</p>
+
+    <div class="grid g2">
+      <div class="card or">
+        <h3>🔀 Control On-Off (todo-nada)</h3>
+        <p>El actuador tiene dos únicos estados: encendido o apagado. Nunca se estabiliza exactamente — el sistema oscila permanentemente.</p>
+        <ul style="margin-top:.5rem;font-size:.88rem">
+          <li>La histéresis crea una banda diferencial que evita conmutación infinita</li>
+          <li>El nivel oscila alrededor del setpoint sin converger</li>
+          <li>Usos: heladeras, aires domésticos, hornos de cocina</li>
+          <li>No sirve cuando se necesita precisión estática</li>
+        </ul>
+      </div>
+      <div class="card bl">
+        <h3>📐 Control Proporcional (P)</h3>
+        <p>El controlador genera una señal continua proporcional al error: <b>u = Kp · e</b></p>
+        <div class="fbox" style="margin:.5rem 0;font-size:.82rem">
+          <span class="big">T(s) = Kp·G(s) / (1 + Kp·G(s))</span>
+          <span class="sub-f">G(s)=1/(s+1), Kp=3 → T(s)=3/(s+4) → y<sub>ss</sub>=0.75</span>
+        </div>
+        <p style="font-size:.88rem">La salida se estabiliza — pero con un error permanente (offset). Nunca llega exactamente al setpoint.</p>
+      </div>
+    </div>
+
+    <div class="card re" style="margin-top:1rem">
+      <h3>⚠️ El offset del control P — y por qué no desaparece</h3>
+      <p style="font-size:.9rem">Para que el actuador haga algo (u≠0), necesitás error (e≠0): u=Kp·e. En equilibrio, si u≠0 → e≠0. No importa cuánto aumentes Kp.</p>
+      <div style="overflow-x:auto;margin:.7rem 0">
+        <table style="width:100%;border-collapse:collapse;font-size:.85rem;text-align:center">
+          <thead><tr style="background:var(--main);color:#fff"><th style="padding:.4rem .7rem;text-align:left">Kp</th><th style="padding:.4rem">T(s) resultante</th><th style="padding:.4rem">y<sub>ss</sub></th><th style="padding:.4rem">Offset</th><th style="padding:.4rem">Polo LC</th></tr></thead>
+          <tbody>
+            <tr><td style="padding:.35rem .7rem;font-family:monospace;text-align:left">Kp=3</td><td style="font-family:monospace">3/(s+4)</td><td>3/4 = 0.75</td><td style="color:var(--red);font-weight:700">25%</td><td style="font-family:monospace">−4</td></tr>
+            <tr style="background:#f9fafb"><td style="padding:.35rem .7rem;font-family:monospace;text-align:left">Kp=5</td><td style="font-family:monospace">5/(s+6)</td><td>5/6 ≈ 0.83</td><td style="color:var(--red);font-weight:700">16.7%</td><td style="font-family:monospace">−6</td></tr>
+            <tr><td style="padding:.35rem .7rem;font-family:monospace;text-align:left">Kp=10</td><td style="font-family:monospace">10/(s+11)</td><td>10/11 ≈ 0.91</td><td style="color:var(--red);font-weight:700">9.1%</td><td style="font-family:monospace">−11</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:.88rem"><b>Para eliminar el offset</b> se agrega la <b>acción integral (I)</b>, creando un controlador PI o PID. La integral acumula el error a lo largo del tiempo y genera señal de control incluso cuando e=0 en ese instante, obligando al sistema a alcanzar exactamente el setpoint.</p>
+    </div>
+
+    <div class="card gr" style="margin-top:1rem">
+      <h3>🔍 Identificar el controlador desde la gráfica de respuesta</h3>
+      <div class="grid g2" style="margin-top:.5rem">
+        <ul style="font-size:.88rem;line-height:2">
+          <li>Oscila permanentemente → <b>On-Off</b></li>
+          <li>Se estabiliza pero con error permanente → <b>P puro</b></li>
+        </ul>
+        <ul style="font-size:.88rem;line-height:2">
+          <li>Llega exactamente al setpoint sin overshoot → <b>PI ajustado</b></li>
+          <li>Llega exactamente al setpoint con overshoot → <b>PI o PID</b></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SECCIÓN E -->
+    <div class="stitle" style="margin-top:2.5rem"><span class="ico">🔗</span>Sección E — Función de transferencia de lazo cerrado</div>
+    <p class="lead">Dada la planta G(s) y el controlador C(s), la función de transferencia de lazo cerrado T(s) permite calcular analíticamente el valor final, el offset y la ubicación del nuevo polo.</p>
+
+    <div class="fbox">
+      <span class="big">T(s) = C(s)·G(s) / (1 + C(s)·G(s))</span>
+      <span class="sub-f">Para C(s) = Kp (proporcional puro): T(s) = Kp·G(s) / (1 + Kp·G(s))</span>
+    </div>
+
+    <div class="card te" style="margin-top:1rem">
+      <h3>📐 Ejemplo E.1 paso a paso — G(s)=1/(s+1), Kp=2, escalón unitario</h3>
+      <ol style="margin:.5rem 0 0 1.2rem;font-size:.9rem;line-height:2">
+        <li><b>Función lazo cerrado:</b><br>T(s) = 2·(1/(s+1)) / (1 + 2·(1/(s+1))) = (2/(s+1)) / ((s+1+2)/(s+1)) = <b>2/(s+3)</b></li>
+        <li><b>Nuevo polo:</b> s = −3 (era −1 en lazo abierto → lazo cerrado lo aceleró)</li>
+        <li><b>Valor final:</b> y<sub>ss</sub> = lim(s→0) s · T(s) · (1/s) = T(0) = 2/3 ≈ <b>0.667</b></li>
+        <li><b>Offset:</b> 1 − 2/3 = 1/3 ≈ <b>33.3%</b></li>
+        <li><b>Con Kp=5:</b> T=5/(s+6), y<sub>ss</sub>=5/6≈0.833, offset≈16.7%</li>
+        <li><b>Con Kp=10:</b> T=10/(s+11), y<sub>ss</sub>=10/11≈0.909, offset≈9%</li>
+        <li><b>Conclusión:</b> Mayor Kp → menor offset, pero nunca llega a cero → se necesita acción integral.</li>
+      </ol>
+    </div>
+
+    <div class="card am" style="margin-top:1rem">
+      <h3>💡 ¿Por qué la acción integral elimina el offset?</h3>
+      <p style="font-size:.9rem">En control P: u = Kp·e → para u≠0 necesitás e≠0 en ese instante. En control PI: u = Kp·e + Ki·∫e·dt → el término integral puede ser ≠0 incluso si e=0 ahora (acumula el error histórico). Esto significa que el sistema puede mantener la acción de control necesaria mientras el error estacionario sea cero — rompiendo la lógica del P puro.</p>
+    </div>
+
+    <!-- QUIZ FINAL -->
+    <div class="stitle" style="margin-top:2.5rem"><span class="ico">🏁</span>Quiz Final — Validá lo aprendido</div>
+    <p class="lead">10 preguntas sobre las 5 secciones del simulacro. Necesitás 7/10 para considerar el contenido asimilado.</p>
+    <div class="quiz-box" id="quizBoxSim2"></div>
+
+  </div>
+</div>
+
 <footer>Apuntes de cátedra (Ing. Jorge Tirabasso, UN Pilar) reorganizados para repasar · <a href="../index.html">← volver al inicio</a></footer>
 
 <script>
@@ -2607,6 +2879,119 @@ function initC5(){
   drawSpeed();
   drawNoise();
 }
+
+
+/* ===================== QUIZ SIMULACRO ===================== */
+var SIM2_QUIZ = [
+  {
+    q: '¿Qué diferencia fundamental tiene un sistema de lazo cerrado respecto al lazo abierto?',
+    opts: ['Mide la salida real y la usa para corregir el error','Tiene un actuador más potente','Funciona sin sensor alguno','Es más rápido siempre'],
+    correct: 0,
+    expl: 'El lazo cerrado retroalimenta la salida real para compararla con la referencia y calcular el error. El lazo abierto no mide la salida real.'
+  },
+  {
+    q: 'En un termostato (18°C–22°C), ¿qué elemento actúa como actuador?',
+    opts: ['El relé, válvula o contactor que enciende/apaga la calefacción','El termómetro que mide la temperatura','El circuito lógico que decide encender','El usuario que ajusta el setpoint'],
+    correct: 0,
+    expl: 'El actuador es el dispositivo físico que ejecuta la orden: el relé, válvula o contactor. El termómetro es el sensor, el circuito lógico es el controlador.'
+  },
+  {
+    q: 'Para G(s) = 3/(2s+1) con escalón de amplitud 2, ¿cuál es el valor en estado estacionario?',
+    opts: ['6','3','1.5','2'],
+    correct: 0,
+    expl: 'y_ss = lim(s→0) [s · G(s) · (2/s)] = G(0) · 2 = (3/1) · 2 = 6. El teorema del valor final simplifica el cálculo.'
+  },
+  {
+    q: 'Un circuito RC con R=10kΩ y C=1000μF, ¿cuál es su constante de tiempo τ?',
+    opts: ['10 segundos','1 segundo','0.1 segundos','10000 segundos'],
+    correct: 0,
+    expl: 'τ = R·C = 10000Ω · 0.001F = 10 s. La fórmula τ=RC con unidades Ω·F da directamente segundos.'
+  },
+  {
+    q: 'Un termómetro va de 20°C a 80°C y a t=5s marca 58°C. ¿Cuánto vale τ?',
+    opts: ['5 segundos','58 segundos','8 segundos','3.8 segundos'],
+    correct: 0,
+    expl: 'Cambio total=60°C. 63.2% de 60=37.9°C → temperatura a t=τ es 20+37.9=57.9°C ≈ 58°C. Eso ocurre a t=5s, entonces τ=5s.'
+  },
+  {
+    q: 'De G₁=1/(s+2), G₂=1/(s−2), G₃=1/(s²+2s+5): ¿cuál es inestable?',
+    opts: ['G₂ — polo en s=+2 (parte real positiva)','G₁ — polo en s=−2','G₃ — polos complejos','Las tres son inestables'],
+    correct: 0,
+    expl: 'G₂ tiene polo en s=+2 (parte real positiva → respuesta exponencial creciente → inestable). G₁ y G₃ tienen polos con parte real negativa → estables.'
+  },
+  {
+    q: 'G₃(s)=1/(s²+2s+5) tiene polos en s=−1±2j. ¿La respuesta al escalón tiene sobrepaso (overshoot)?',
+    opts: ['Sí, porque los polos tienen parte imaginaria ≠ 0 → sistema subamortiguado','No, porque la parte real es negativa','No, porque no tiene ganancia proporcional','Solo si Kp>1'],
+    correct: 0,
+    expl: 'Polos complejos con Im≠0 → sistema oscila (subamortiguado). La parte real negativa garantiza estabilidad, pero la parte imaginaria produce oscilaciones y overshoot.'
+  },
+  {
+    q: 'Con G(s)=1/(s+1) y Kp=3 en lazo cerrado, ¿cuál es el error en estado estacionario?',
+    opts: ['25% — y_ss=3/4=0.75, error=0.25','0% — el control P elimina el error','50% — siempre es la mitad de Kp','9% — depende de la constante de tiempo'],
+    correct: 0,
+    expl: 'T(s)=Kp·G/(1+Kp·G)=3/(s+4). y_ss=T(0)=3/4=0.75. Error estacionario=1−0.75=0.25=25%. El control P puro nunca elimina el offset.'
+  },
+  {
+    q: 'La respuesta al escalón de un sistema llega exactamente al setpoint pero con sobrepaso. ¿Qué controlador se usó?',
+    opts: ['PI o PID — la acción integral elimina el offset','P puro con alta ganancia','On-Off con histéresis mínima','Controlador en lazo abierto'],
+    correct: 0,
+    expl: 'Para y_ss = setpoint exacto (sin offset) se necesita acción integral. El sobrepaso indica acción proporcional también presente. Resultado: PI o PID.'
+  },
+  {
+    q: '¿Por qué el control P puro siempre tiene error estacionario sin importar cuánto valga Kp?',
+    opts: ['Para que u≠0, debe haber e≠0: u=Kp·e → el error es condición necesaria para actuar','Porque Kp tiene un límite físico en la práctica','Porque la planta introduce retardo','Porque el setpoint siempre cambia'],
+    correct: 0,
+    expl: 'En equilibrio, u=Kp·e. Si el actuador hace algo (u≠0), entonces e≠0 obligatoriamente. La acción integral rompe esto: puede mantener u≠0 acumulando el error histórico, aunque e=0 en ese instante.'
+  }
+];
+
+var sim2Idx = 0, sim2Score = 0;
+
+function sim2Render(){
+  var box = document.getElementById('quizBoxSim2');
+  if(!box) return;
+  if(sim2Idx >= SIM2_QUIZ.length){ sim2Result(); return; }
+  var q = SIM2_QUIZ[sim2Idx];
+  var html = '<div class="quiz-q"><span class="quiz-num">Pregunta '+(sim2Idx+1)+' / '+SIM2_QUIZ.length+'</span><p class="quiz-text">'+q.q+'</p><div class="quiz-opts">';
+  q.opts.forEach(function(o,i){
+    html += '<button class="opt-btn" onclick="sim2Answer('+i+')">'+o+'</button>';
+  });
+  html += '</div><div class="quiz-expl" id="sim2Expl">'+q.expl+'</div>';
+  html += '<button class="next-q-btn" id="sim2Next" onclick="sim2GoNext()">Siguiente &#x2192;</button></div>';
+  box.innerHTML = html;
+}
+
+function sim2Answer(i){
+  var q = SIM2_QUIZ[sim2Idx];
+  document.querySelectorAll('#quizBoxSim2 .opt-btn').forEach(function(b,idx){
+    b.disabled = true;
+    if(idx === q.correct) b.classList.add('correct');
+    else if(idx === i) b.classList.add('wrong');
+  });
+  if(i === q.correct) sim2Score++;
+  var expl = document.getElementById('sim2Expl');
+  var nxt = document.getElementById('sim2Next');
+  if(expl) expl.classList.add('show');
+  if(nxt) nxt.classList.add('show');
+}
+
+function sim2GoNext(){ sim2Idx++; sim2Render(); }
+
+function sim2Result(){
+  var box = document.getElementById('quizBoxSim2');
+  var pct = Math.round(100*sim2Score/SIM2_QUIZ.length);
+  box.innerHTML = '<div class="quiz-result">'+
+    '<div style="font-size:2.2rem">'+(pct>=70?'&#x1F389;':'&#x1F4DA;')+'</div>'+
+    '<div class="score">'+sim2Score+' / '+SIM2_QUIZ.length+'</div>'+
+    '<div class="quiz-score-display">'+(pct>=70?'Simulacro aprobado &#x2705;':'Repas&#xE1; las secciones y volv&#xE9; &#x1F4AA;')+'</div>'+
+    '<p style="margin-top:.8rem;color:#6b7280">'+(pct>=70?'Dom&#xE9;s los fundamentos de control — secciones A a E.':'Revisá los temas donde fallaste antes del parcial real.')+'</p>'+
+    '<button class="retry-btn" onclick="sim2Restart()">Reintentar</button>'+
+    '</div>';
+}
+
+function sim2Restart(){ sim2Idx=0; sim2Score=0; sim2Render(); }
+sim2Render();
+
 
 </script>
 

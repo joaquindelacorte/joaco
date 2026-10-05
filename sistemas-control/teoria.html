@@ -272,6 +272,7 @@ footer a{color:var(--main)}
     <a class="tab-btn" href="simulador-octave.html" style="text-decoration:none">🔬 Octave</a>
     <a class="tab-btn" href="octave-ide.html" style="text-decoration:none">💻 IDE Octave</a>
     <button class="tab-btn" onclick="showTab('sim2')">✏️ Simulacro</button>
+    <button class="tab-btn" onclick="showTab('mapa')">🗺️ Mapa</button>
   </div>
 </nav>
 
@@ -1559,6 +1560,383 @@ pause();</div>
 
     <div class="stitle"><span class="ico">🧠</span>Quiz — Clase 1 y 2</div>
     <div class="quiz-box" id="quizBox"></div>
+
+  </div>
+</div>
+
+<!-- ================= MAPA CONCEPTUAL ================= -->
+<div class="page" id="page-mapa">
+  <div class="container">
+
+    <div class="stitle"><span class="ico">🗺️</span>¿De dónde salen las letras?</div>
+    <p class="lead">Cada letra en las fórmulas y gráficos tiene una historia. Esta página explica el origen de cada símbolo, qué representa físicamente y cómo se conecta con los demás — antes de avanzar a la teoría.</p>
+
+    <!-- ── VARIABLE s ── -->
+    <div class="sub">La variable misteriosa: s</div>
+    <p class="lead"><b>s</b> es la variable del <b>dominio de Laplace</b>. Cuando hacés la transformada de Laplace de una ecuación diferencial, el tiempo t desaparece y aparece s. ¿Para qué sirve? Para convertir la EDO en álgebra.</p>
+
+    <div class="grid g2">
+      <div class="card bl">
+        <h3>📐 s = σ + jω</h3>
+        <p>s es un número <b>complejo</b> con dos partes:</p>
+        <ul style="margin-top:.5rem">
+          <li><b>σ (sigma)</b> = parte real → controla si la respuesta crece (σ&gt;0) o decrece (σ&lt;0). Es lo que determina la <b>estabilidad</b>.</li>
+          <li><b>jω (omega)</b> = parte imaginaria → si ≠ 0, el sistema <b>oscila</b>. La frecuencia de oscilación es ω rad/s.</li>
+          <li><b>j</b> = √−1 (se usa j en lugar de i para no confundir con la corriente eléctrica)</li>
+        </ul>
+      </div>
+      <div class="card am">
+        <h3>🔄 ¿Por qué Laplace?</h3>
+        <p>La ecuación diferencial de un circuito RC es RC·dy/dt + y = u — difícil de resolver analíticamente en general. Con Laplace se convierte en: RC·s·Y(s) + Y(s) = U(s), y ya podés despejar Y(s)/U(s) directamente.</p>
+        <p style="margin-top:.5rem;font-size:.88rem">La letra <b>s</b> viene de "complex frequency" — es la frecuencia generalizada que incluye crecimiento/decaimiento exponencial (σ) y oscilación (ω) al mismo tiempo.</p>
+      </div>
+    </div>
+
+    <!-- ── DIAGRAMA DE BLOQUES ── -->
+    <div class="sub" style="margin-top:1.5rem">El diagrama de bloques y sus letras</div>
+    <p class="lead">El diagrama de bloques es el lenguaje universal del control. Cada señal tiene una letra que viene de su nombre en inglés (es el estándar internacional).</p>
+
+    <div style="background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:1.2rem;margin-bottom:1rem;overflow-x:auto">
+      <svg viewBox="0 0 860 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:860px;height:auto;display:block;margin:0 auto" aria-label="Diagrama de bloques de lazo cerrado">
+        <!-- Flecha entrada R -->
+        <defs>
+          <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#374151"/></marker>
+          <marker id="arrB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3730a3"/></marker>
+        </defs>
+        <!-- R(s) label -->
+        <text x="8" y="74" font-family="Segoe UI,sans-serif" font-size="13" font-weight="700" fill="#3730a3">R(s)</text>
+        <line x1="55" y1="70" x2="120" y2="70" stroke="#374151" stroke-width="2" marker-end="url(#arr)"/>
+        <!-- Sumador -->
+        <circle cx="140" cy="70" r="20" fill="white" stroke="#374151" stroke-width="2"/>
+        <text x="130" y="66" font-family="Segoe UI,sans-serif" font-size="16" fill="#374151">+</text>
+        <text x="130" y="82" font-family="Segoe UI,sans-serif" font-size="16" fill="#b91c1c">−</text>
+        <!-- E(s) -->
+        <line x1="160" y1="70" x2="220" y2="70" stroke="#374151" stroke-width="2" marker-end="url(#arr)"/>
+        <text x="172" y="62" font-family="Segoe UI,sans-serif" font-size="12" font-weight="700" fill="#0d9488">E(s)</text>
+        <!-- Bloque Controlador C -->
+        <rect x="220" y="48" width="110" height="44" rx="8" fill="#e0e7ff" stroke="#3730a3" stroke-width="2"/>
+        <text x="275" y="68" font-family="Segoe UI,sans-serif" font-size="12" font-weight="800" fill="#3730a3" text-anchor="middle">C(s)</text>
+        <text x="275" y="83" font-family="Segoe UI,sans-serif" font-size="10" fill="#4f46e5" text-anchor="middle">Controlador</text>
+        <!-- U(s) -->
+        <line x1="330" y1="70" x2="390" y2="70" stroke="#374151" stroke-width="2" marker-end="url(#arr)"/>
+        <text x="346" y="62" font-family="Segoe UI,sans-serif" font-size="12" font-weight="700" fill="#b45309">U(s)</text>
+        <!-- Bloque Planta G -->
+        <rect x="390" y="48" width="110" height="44" rx="8" fill="#fef9c3" stroke="#b45309" stroke-width="2"/>
+        <text x="445" y="68" font-family="Segoe UI,sans-serif" font-size="12" font-weight="800" fill="#b45309" text-anchor="middle">G(s)</text>
+        <text x="445" y="83" font-family="Segoe UI,sans-serif" font-size="10" fill="#b45309" text-anchor="middle">Planta</text>
+        <!-- Y(s) salida -->
+        <line x1="500" y1="70" x2="600" y2="70" stroke="#374151" stroke-width="2" marker-end="url(#arr)"/>
+        <text x="536" y="62" font-family="Segoe UI,sans-serif" font-size="13" font-weight="700" fill="#15803d">Y(s)</text>
+        <!-- Caja salida -->
+        <rect x="600" y="55" width="60" height="30" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+        <text x="630" y="74" font-family="Segoe UI,sans-serif" font-size="11" font-weight="700" fill="#15803d" text-anchor="middle">Salida</text>
+        <!-- Realimentación: línea hacia abajo desde Y y hacia el sumador -->
+        <line x1="565" y1="70" x2="565" y2="116" stroke="#374151" stroke-width="2"/>
+        <line x1="565" y1="116" x2="140" y2="116" stroke="#374151" stroke-width="2"/>
+        <line x1="140" y1="116" x2="140" y2="90" stroke="#374151" stroke-width="2" marker-end="url(#arr)"/>
+        <text x="345" y="134" font-family="Segoe UI,sans-serif" font-size="11" fill="#6b7280" text-anchor="middle">⟵ Realimentación (lazo cerrado)</text>
+        <!-- Lazo abierto label -->
+        <text x="430" y="20" font-family="Segoe UI,sans-serif" font-size="10" fill="#9ca3af" text-anchor="middle" font-style="italic">En lazo abierto no existe esta realimentación</text>
+      </svg>
+    </div>
+
+    <div class="grid g2">
+      <div class="card bl">
+        <h3>R(s) — Reference (Referencia)</h3>
+        <p>La señal de entrada deseada. Lo que <b>querés</b> que el sistema logre. También llamado <b>setpoint</b>. La R viene de "Reference".</p>
+        <p style="font-size:.85rem;margin-top:.4rem;color:var(--gray-lt)">Ejemplo: el 22°C deseado en el termostato. El nivel deseado de agua en el tanque.</p>
+      </div>
+      <div class="card te">
+        <h3>E(s) — Error</h3>
+        <p>La diferencia entre lo que querés (R) y lo que tenés (Y): <b>E(s) = R(s) − Y(s)</b>. La E viene de "Error". El controlador actúa sobre este error.</p>
+        <p style="font-size:.85rem;margin-top:.4rem;color:var(--gray-lt)">Si E=0, el sistema logró el objetivo. En control P puro, E nunca llega a cero en estado estacionario.</p>
+      </div>
+      <div class="card am">
+        <h3>U(s) — señal de Control</h3>
+        <p>La salida del controlador, que entra a la planta. La U viene de "control <b>U</b>nit output" o simplemente es la letra estándar para la variable de control en inglés.</p>
+        <p style="font-size:.85rem;margin-top:.4rem;color:var(--gray-lt)">Ejemplo: la corriente que manda el controlador al motor, la apertura de la válvula, el voltaje al actuador.</p>
+      </div>
+      <div class="card gr">
+        <h3>Y(s) — Salida (Output)</h3>
+        <p>Lo que el sistema produce realmente. La Y se usa en vez de O para no confundir con el cero (0). En algunos textos también se usa C(s) para la salida.</p>
+        <p style="font-size:.85rem;margin-top:.4rem;color:var(--gray-lt)">Ejemplo: la temperatura real medida, el nivel actual del tanque, la posición real del motor.</p>
+      </div>
+      <div class="card bl">
+        <h3>G(s) — Planta (Plant / Gain)</h3>
+        <p>La función de transferencia de la planta: la relación Y(s)/U(s). La G viene de "Gain" (ganancia) o simplemente es la letra estándar para la planta. Describe el comportamiento físico del proceso a controlar.</p>
+        <p style="font-size:.85rem;margin-top:.4rem;color:var(--gray-lt)">Para G(s)=1/(s+1): ante una entrada escalón unitario, la salida sube hasta 1 con constante de tiempo τ=1s.</p>
+      </div>
+      <div class="card or">
+        <h3>C(s) o Kp — Controlador</h3>
+        <p>La función de transferencia del controlador. La C viene de "Controller". Para un controlador proporcional puro, C(s)=Kp (un número). Para un PID, C(s) tiene la forma Kp + Ki/s + Kd·s.</p>
+        <p style="font-size:.85rem;margin-top:.4rem;color:var(--gray-lt)">Kp = ganancia Proporcional, Ki = ganancia Integral, Kd = ganancia Derivativa.</p>
+      </div>
+    </div>
+
+    <!-- ── FUNCIÓN DE TRANSFERENCIA ── -->
+    <div class="sub" style="margin-top:1.5rem">Las letras dentro de G(s) = K / (τs + 1)</div>
+    <p class="lead">Esta es la forma estándar de un sistema de <b>primer orden</b>. Tiene exactamente dos parámetros: K y τ. Cada uno controla un aspecto diferente de la respuesta.</p>
+
+    <div class="grid g2">
+      <div class="card am">
+        <h3>K — Ganancia estática</h3>
+        <p>Es el valor de G(0): lo que da G(s) cuando s=0 (estado estacionario, frecuencia cero). Responde a "¿cuánto amplifica el sistema?"</p>
+        <div class="fbox" style="margin:.5rem 0;font-size:.85rem">
+          <span class="big">K = G(0) = y<sub>ss</sub> / u<sub>ss</sub></span>
+          <span class="sub-f">G(s)=3/(2s+1) → K=3 → ante escalón 2, y_ss=3·2=6</span>
+        </div>
+        <p style="font-size:.85rem">La K viene de la palabra alemana <i>Konstante</i> o simplemente del inglés "gain". Un K=1 significa que la salida en estado estacionario iguala la entrada.</p>
+      </div>
+      <div class="card bl">
+        <h3>τ — Constante de tiempo (tau)</h3>
+        <p>τ es la letra griega tau. Indica la "velocidad" del sistema: a t=τ, la salida llegó al <b>63.2%</b> de su valor final.</p>
+        <div class="fbox" style="margin:.5rem 0;font-size:.85rem">
+          <span class="big">τ = RC [circuito RC]</span>
+          <span class="sub-f">Mayor τ = sistema más lento · Menor τ = respuesta más rápida</span>
+        </div>
+        <p style="font-size:.85rem">El 63.2% sale de 1−e⁻¹ = 1−0.368 = 0.632. La constante e≈2.718 aparece naturalmente en la solución de la EDO de 1er orden.</p>
+      </div>
+    </div>
+
+    <!-- ── PLANO COMPLEJO ── -->
+    <div class="sub" style="margin-top:1.5rem">El plano s: σ y ω</div>
+    <p class="lead">Cuando hablamos de la "ubicación de los polos", estamos hablando de dónde queda s en el plano complejo. El eje horizontal es σ (la parte real) y el eje vertical es jω (la parte imaginaria).</p>
+
+    <div class="grid g2">
+      <div class="card" style="border-left:4px solid var(--main-lt);background:var(--main-bg)">
+        <h3>Plano complejo: lo que nos dice cada eje</h3>
+        <div style="overflow-x:auto">
+          <svg viewBox="-10 -10 320 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;height:auto;display:block;margin:0 auto" aria-label="Plano complejo s">
+            <!-- Ejes -->
+            <line x1="0" y1="130" x2="300" y2="130" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+            <line x1="150" y1="260" x2="150" y2="0" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+            <text x="288" y="143" font-family="Segoe UI,sans-serif" font-size="12" fill="#374151">σ</text>
+            <text x="155" y="11" font-family="Segoe UI,sans-serif" font-size="12" fill="#374151">jω</text>
+            <text x="148" y="143" font-family="Segoe UI,sans-serif" font-size="11" fill="#6b7280">0</text>
+            <!-- Zona estable -->
+            <rect x="0" y="0" width="150" height="260" fill="rgba(21,128,61,0.07)" rx="0"/>
+            <text x="50" y="200" font-family="Segoe UI,sans-serif" font-size="11" fill="#15803d" text-anchor="middle">ESTABLE</text>
+            <text x="50" y="214" font-family="Segoe UI,sans-serif" font-size="10" fill="#15803d" text-anchor="middle">(σ &lt; 0)</text>
+            <!-- Zona inestable -->
+            <rect x="150" y="0" width="150" height="260" fill="rgba(185,28,28,0.07)" rx="0"/>
+            <text x="230" y="200" font-family="Segoe UI,sans-serif" font-size="11" fill="#b91c1c" text-anchor="middle">INESTABLE</text>
+            <text x="230" y="214" font-family="Segoe UI,sans-serif" font-size="10" fill="#b91c1c" text-anchor="middle">(σ &gt; 0)</text>
+            <!-- Polo G1: s=-2 → x=50 -->
+            <circle cx="70" cy="130" r="7" fill="#15803d" stroke="white" stroke-width="1.5"/>
+            <text x="56" y="118" font-family="Segoe UI,sans-serif" font-size="10" fill="#15803d">G₁: s=−2</text>
+            <!-- Polo G2: s=+2 → x=230 -->
+            <circle cx="210" cy="130" r="7" fill="#b91c1c" stroke="white" stroke-width="1.5"/>
+            <text x="196" y="118" font-family="Segoe UI,sans-serif" font-size="10" fill="#b91c1c">G₂: s=+2</text>
+            <!-- Polos G3: s=-1±2j -->
+            <circle cx="100" cy="80" r="6" fill="#3730a3" stroke="white" stroke-width="1.5"/>
+            <circle cx="100" cy="180" r="6" fill="#3730a3" stroke="white" stroke-width="1.5"/>
+            <text x="108" y="78" font-family="Segoe UI,sans-serif" font-size="9" fill="#3730a3">G₃: −1+2j</text>
+            <text x="108" y="183" font-family="Segoe UI,sans-serif" font-size="9" fill="#3730a3">G₃: −1−2j</text>
+            <!-- Linea vertical en σ=-1 -->
+            <line x1="100" y1="82" x2="100" y2="178" stroke="#3730a3" stroke-width="1" stroke-dasharray="3,3"/>
+            <!-- Anotaciones ejes -->
+            <text x="12" y="143" font-family="Segoe UI,sans-serif" font-size="10" fill="#6b7280">−2</text>
+            <text x="200" y="143" font-family="Segoe UI,sans-serif" font-size="10" fill="#6b7280">+2</text>
+            <text x="155" y="83" font-family="Segoe UI,sans-serif" font-size="10" fill="#6b7280">+2j</text>
+            <text x="155" y="183" font-family="Segoe UI,sans-serif" font-size="10" fill="#6b7280">−2j</text>
+          </svg>
+        </div>
+      </div>
+      <div>
+        <div class="card gr" style="margin-bottom:.8rem">
+          <h3>σ (sigma) — parte real</h3>
+          <ul style="font-size:.88rem;margin-top:.3rem">
+            <li><b>σ &lt; 0</b>: polo a la izquierda del eje → respuesta decae → <b>estable</b></li>
+            <li><b>σ &gt; 0</b>: polo a la derecha → respuesta crece → <b>inestable</b></li>
+            <li><b>σ = 0</b>: polo en el eje imaginario → oscilación sostenida (marginalmente estable)</li>
+            <li>Más negativo = decae más rápido = τ más chico = <b>más veloz</b></li>
+          </ul>
+        </div>
+        <div class="card bl">
+          <h3>ω (omega) — parte imaginaria</h3>
+          <ul style="font-size:.88rem;margin-top:.3rem">
+            <li><b>ω = 0</b>: polo real, sin oscilación, respuesta exponencial pura</li>
+            <li><b>ω ≠ 0</b>: polo complejo → la respuesta oscila a ω rad/s</li>
+            <li>Siempre aparecen en <b>pares conjugados</b>: s = σ ± jω (para sistemas reales)</li>
+            <li>Mayor |ω| = oscila más rápido</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RESPUESTA TEMPORAL ── -->
+    <div class="sub" style="margin-top:1.5rem">Variables de la respuesta temporal y(t)</div>
+
+    <div class="grid g2" style="margin-bottom:1rem">
+      <div class="card gr">
+        <h3>y<sub>ss</sub> — Valor en estado estacionario</h3>
+        <p>La abreviatura "ss" viene de <b>"steady state"</b> (estado estacionario en inglés). Es el valor al que converge la salida cuando t → ∞.</p>
+        <div class="fbox" style="margin:.4rem 0;font-size:.85rem">
+          <span class="big">y<sub>ss</sub> = K · u<sub>ss</sub></span>
+          <span class="sub-f">Para escalón unitario: y_ss = K (la ganancia estática)</span>
+        </div>
+      </div>
+      <div class="card or">
+        <h3>Offset (error estacionario)</h3>
+        <p>La diferencia entre el setpoint R y el valor final Y<sub>ss</sub>. En control proporcional puro siempre existe porque el controlador necesita error para generar acción.</p>
+        <div class="fbox" style="margin:.4rem 0;font-size:.85rem">
+          <span class="big">offset = R − y<sub>ss</sub> = 1 − Kp/(1+Kp)</span>
+          <span class="sub-f">Con G(s)=1/(s+1) y Kp=3: offset = 1 − 3/4 = 25%</span>
+        </div>
+      </div>
+      <div class="card bl">
+        <h3>Overshoot (sobrepaso)</h3>
+        <p>La salida supera el valor final antes de estabilizarse. Ocurre en sistemas de 2do orden subamortiguados (polos complejos con Im≠0). Se mide en % del valor final.</p>
+        <p style="font-size:.85rem;margin-top:.3rem">El overshoot es señal de que el sistema tiene momento propio — como frenar un auto a alta velocidad, que "pasa de largo" antes de detenerse.</p>
+      </div>
+      <div class="card re">
+        <h3>Tiempo de establecimiento (t<sub>s</sub>)</h3>
+        <p>Cuánto tarda la respuesta en quedarse dentro de ±2% (o ±5%) del valor final para siempre. Regla práctica: t<sub>s</sub> ≈ 4τ para sistemas de 1er orden.</p>
+        <p style="font-size:.85rem;margin-top:.3rem">Corresponde a que a 4τ el sistema llegó al 98.2% del valor final, dentro de la banda del ±2%.</p>
+      </div>
+    </div>
+
+    <!-- ── RED CONCEPTUAL ── -->
+    <div class="stitle" style="margin-top:2rem"><span class="ico">🕸️</span>Red conceptual — cómo se conecta todo</div>
+    <p class="lead">Todos los conceptos de la materia forman una red. Este mapa muestra cómo cada idea se conecta con las demás y en qué pestaña de la teoría encontrás cada bloque.</p>
+
+    <div style="background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:1.2rem;overflow-x:auto;margin-bottom:1.5rem">
+      <svg viewBox="0 0 960 580" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:640px;height:auto;display:block;margin:0 auto" aria-label="Red conceptual de Sistemas de Control">
+        <defs>
+          <marker id="marr" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5 z" fill="#9ca3af"/></marker>
+          <marker id="marrB" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5 z" fill="#3730a3"/></marker>
+          <marker id="marrG" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5 z" fill="#0d9488"/></marker>
+          <marker id="marrA" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5 z" fill="#b45309"/></marker>
+          <marker id="marrR" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5 z" fill="#b91c1c"/></marker>
+          <marker id="marrO" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5 z" fill="#c2410c"/></marker>
+          <marker id="marrGr" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5 z" fill="#15803d"/></marker>
+          <filter id="shadow"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.1"/></filter>
+        </defs>
+
+        <!-- ── NODO CENTRAL ── -->
+        <rect x="360" y="240" width="240" height="60" rx="14" fill="#3730a3" filter="url(#shadow)"/>
+        <text x="480" y="265" font-family="Segoe UI,sans-serif" font-size="14" font-weight="800" fill="white" text-anchor="middle">🎛️ SISTEMA DE CONTROL</text>
+        <text x="480" y="284" font-family="Segoe UI,sans-serif" font-size="10" fill="rgba(255,255,255,.75)" text-anchor="middle">medir · comparar · corregir</text>
+
+        <!-- ── NODO: LAPLACE ── -->
+        <rect x="30" y="30" width="190" height="70" rx="12" fill="#e0e7ff" stroke="#3730a3" stroke-width="2" filter="url(#shadow)"/>
+        <text x="125" y="55" font-family="Segoe UI,sans-serif" font-size="12" font-weight="800" fill="#3730a3" text-anchor="middle">📐 Dominio de Laplace</text>
+        <text x="125" y="71" font-family="Segoe UI,sans-serif" font-size="10" fill="#4f46e5" text-anchor="middle">s = σ + jω</text>
+        <text x="125" y="85" font-family="Segoe UI,sans-serif" font-size="9" fill="#6b7280" text-anchor="middle">EDO → álgebra · Clase 1</text>
+
+        <!-- ── NODO: DIAGRAMA BLOQUES ── -->
+        <rect x="380" y="30" width="200" height="70" rx="12" fill="#ccfbf1" stroke="#0d9488" stroke-width="2" filter="url(#shadow)"/>
+        <text x="480" y="55" font-family="Segoe UI,sans-serif" font-size="12" font-weight="800" fill="#0d9488" text-anchor="middle">🔁 Diagrama de Bloques</text>
+        <text x="480" y="71" font-family="Segoe UI,sans-serif" font-size="10" fill="#0d9488" text-anchor="middle">R(s) → E(s) → G(s) → Y(s)</text>
+        <text x="480" y="85" font-family="Segoe UI,sans-serif" font-size="9" fill="#6b7280" text-anchor="middle">Lazo cerrado · Clase 1</text>
+
+        <!-- ── NODO: FUNC. TRANSFERENCIA ── -->
+        <rect x="730" y="30" width="200" height="70" rx="12" fill="#fef9c3" stroke="#b45309" stroke-width="2" filter="url(#shadow)"/>
+        <text x="830" y="55" font-family="Segoe UI,sans-serif" font-size="12" font-weight="800" fill="#b45309" text-anchor="middle">📊 Función de Transf.</text>
+        <text x="830" y="71" font-family="Segoe UI,sans-serif" font-size="10" fill="#b45309" text-anchor="middle">G(s) = K / (τs + 1)</text>
+        <text x="830" y="85" font-family="Segoe UI,sans-serif" font-size="9" fill="#6b7280" text-anchor="middle">K, τ · Clase 2 y 3</text>
+
+        <!-- ── NODO: CONTROLADORES ── -->
+        <rect x="30" y="480" width="200" height="70" rx="12" fill="#ffedd5" stroke="#c2410c" stroke-width="2" filter="url(#shadow)"/>
+        <text x="130" y="505" font-family="Segoe UI,sans-serif" font-size="12" font-weight="800" fill="#c2410c" text-anchor="middle">🎚️ Controladores</text>
+        <text x="130" y="521" font-family="Segoe UI,sans-serif" font-size="10" fill="#c2410c" text-anchor="middle">On-Off · P · PI · PID</text>
+        <text x="130" y="537" font-family="Segoe UI,sans-serif" font-size="9" fill="#6b7280" text-anchor="middle">Kp, Ki, Kd · Clase 4 y 6</text>
+
+        <!-- ── NODO: RESPUESTA TEMPORAL ── -->
+        <rect x="380" y="480" width="200" height="70" rx="12" fill="#dcfce7" stroke="#15803d" stroke-width="2" filter="url(#shadow)"/>
+        <text x="480" y="505" font-family="Segoe UI,sans-serif" font-size="12" font-weight="800" fill="#15803d" text-anchor="middle">📈 Respuesta Temporal</text>
+        <text x="480" y="521" font-family="Segoe UI,sans-serif" font-size="10" fill="#15803d" text-anchor="middle">y(t) = K(1−e^(−t/τ))</text>
+        <text x="480" y="537" font-family="Segoe UI,sans-serif" font-size="9" fill="#6b7280" text-anchor="middle">τ, y_ss, overshoot · Clase 3 y 5</text>
+
+        <!-- ── NODO: ESTABILIDAD / POLOS ── -->
+        <rect x="730" y="480" width="200" height="70" rx="12" fill="#fee2e2" stroke="#b91c1c" stroke-width="2" filter="url(#shadow)"/>
+        <text x="830" y="505" font-family="Segoe UI,sans-serif" font-size="12" font-weight="800" fill="#b91c1c" text-anchor="middle">📍 Polos y Estabilidad</text>
+        <text x="830" y="521" font-family="Segoe UI,sans-serif" font-size="10" fill="#b91c1c" text-anchor="middle">σ &lt; 0 → estable</text>
+        <text x="830" y="537" font-family="Segoe UI,sans-serif" font-size="9" fill="#6b7280" text-anchor="middle">Plano s · Clase 5</text>
+
+        <!-- ── CONEXIONES: central ↔ nodos ── -->
+        <!-- Central ↔ Laplace -->
+        <path d="M370,252 C280,200 200,140 220,100" fill="none" stroke="#3730a3" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#marrB)"/>
+        <text x="268" y="186" font-family="Segoe UI,sans-serif" font-size="9" fill="#3730a3" transform="rotate(-32,268,186)">usa s</text>
+
+        <!-- Central ↔ Diagrama -->
+        <line x1="430" y1="240" x2="470" y2="100" stroke="#0d9488" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#marrG)"/>
+        <text x="438" y="168" font-family="Segoe UI,sans-serif" font-size="9" fill="#0d9488" transform="rotate(-72,438,168)">lazo</text>
+
+        <!-- Central ↔ FT -->
+        <path d="M600,252 C680,200 750,140 740,100" fill="none" stroke="#b45309" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#marrA)"/>
+        <text x="700" y="175" font-family="Segoe UI,sans-serif" font-size="9" fill="#b45309" transform="rotate(32,700,175)">modela</text>
+
+        <!-- Central ↔ Controladores -->
+        <path d="M380,300 C280,360 200,420 230,480" fill="none" stroke="#c2410c" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#marrO)"/>
+        <text x="268" y="395" font-family="Segoe UI,sans-serif" font-size="9" fill="#c2410c" transform="rotate(38,268,395)">corrige</text>
+
+        <!-- Central ↔ Respuesta -->
+        <line x1="470" y1="300" x2="480" y2="480" stroke="#15803d" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#marrGr)"/>
+        <text x="484" y="390" font-family="Segoe UI,sans-serif" font-size="9" fill="#15803d">genera</text>
+
+        <!-- Central ↔ Estabilidad -->
+        <path d="M590,295 C670,360 750,420 740,480" fill="none" stroke="#b91c1c" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#marrR)"/>
+        <text x="700" y="395" font-family="Segoe UI,sans-serif" font-size="9" fill="#b91c1c" transform="rotate(-38,700,395)">define</text>
+
+        <!-- ── CONEXIONES CRUZADAS ── -->
+        <!-- Laplace ↔ FT (s está en G(s)) -->
+        <path d="M220,65 C400,20 590,20 730,65" fill="none" stroke="#9ca3af" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#marr)"/>
+        <text x="480" y="20" font-family="Segoe UI,sans-serif" font-size="9" fill="#9ca3af" text-anchor="middle">s aparece en G(s)</text>
+
+        <!-- FT ↔ Estabilidad (polos de G(s)) -->
+        <line x1="830" y1="100" x2="830" y2="480" stroke="#9ca3af" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#marr)"/>
+        <text x="845" y="295" font-family="Segoe UI,sans-serif" font-size="9" fill="#9ca3af">polos</text>
+
+        <!-- Estabilidad ↔ Respuesta (forma de y(t)) -->
+        <path d="M730,520 C640,560 580,560 580,550" fill="none" stroke="#9ca3af" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#marr)"/>
+        <text x="655" y="567" font-family="Segoe UI,sans-serif" font-size="9" fill="#9ca3af" text-anchor="middle">forma de y(t)</text>
+
+        <!-- Controladores ↔ Respuesta -->
+        <line x1="230" y1="520" x2="380" y2="520" stroke="#9ca3af" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#marr)"/>
+        <text x="305" y="514" font-family="Segoe UI,sans-serif" font-size="9" fill="#9ca3af" text-anchor="middle">afecta</text>
+
+        <!-- Diagrama ↔ Controladores -->
+        <path d="M390,100 C280,160 200,340 140,480" fill="none" stroke="#9ca3af" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#marr)"/>
+        <text x="238" y="290" font-family="Segoe UI,sans-serif" font-size="9" fill="#9ca3af" transform="rotate(-62,238,290)">C(s) en el lazo</text>
+
+        <!-- Leyenda -->
+        <rect x="370" y="358" width="220" height="54" rx="8" fill="rgba(255,255,255,.9)" stroke="#e2e8f0" stroke-width="1"/>
+        <line x1="382" y1="373" x2="408" y2="373" stroke="#3730a3" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <text x="414" y="377" font-family="Segoe UI,sans-serif" font-size="9" fill="#374151">Relación principal</text>
+        <line x1="382" y1="393" x2="408" y2="393" stroke="#9ca3af" stroke-width="1.2" stroke-dasharray="3,3"/>
+        <text x="414" y="397" font-family="Segoe UI,sans-serif" font-size="9" fill="#6b7280">Relación secundaria</text>
+        <text x="480" y="403" font-family="Segoe UI,sans-serif" font-size="9" fill="#9ca3af" text-anchor="middle">&#9;</text>
+      </svg>
+    </div>
+
+    <!-- ── TABLA RESUMEN ── -->
+    <div class="sub">Tabla de referencia rápida</div>
+    <div class="grid g2" style="margin-bottom:1.5rem">
+      <div class="card bl">
+        <h3>🔤 Letras del diagrama de bloques</h3>
+        <table style="width:100%;font-size:.84rem;border-collapse:collapse;margin-top:.5rem">
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:.3rem .4rem;font-family:monospace;font-weight:700;color:var(--main-lt)">R(s)</td><td style="padding:.3rem .4rem">Referencia — setpoint deseado</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:.3rem .4rem;font-family:monospace;font-weight:700;color:#0d9488">E(s)</td><td style="padding:.3rem .4rem">Error = R − Y</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:.3rem .4rem;font-family:monospace;font-weight:700;color:#3730a3">C(s)</td><td style="padding:.3rem .4rem">Controlador (controller)</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:.3rem .4rem;font-family:monospace;font-weight:700;color:#b45309">U(s)</td><td style="padding:.3rem .4rem">Señal de control → planta</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:.3rem .4rem;font-family:monospace;font-weight:700;color:#b45309">G(s)</td><td style="padding:.3rem .4rem">Función de transferencia planta</td></tr>
+          <tr><td style="padding:.3rem .4rem;font-family:monospace;font-weight:700;color:#15803d">Y(s)</td><td style="padding:.3rem .4rem">Salida real del sistema</td></tr>
+        </table>
+      </div>
+      <div class="card am">
+        <h3>🔣 Letras de las fórmulas</h3>
+        <table style="width:100%;font-size:.84rem;border-collapse:collapse;margin-top:.5rem">
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:.3rem .4rem;font-family:monospace;font-weight:700;color:var(--main-lt)">s</td><td style="padding:.3rem .4rem">Variable compleja de Laplace</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:.3rem .4rem;font-family:monospace;font-weight:700;color:#374151">K</td><td style="padding:.3rem .4rem">Ganancia estática G(0)</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:.3rem .4rem;font-family:monospace;font-weight:700;color:#374151">τ</td><td style="padding:.3rem .4rem">Constante de tiempo [s]</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:.3rem .4rem;font-family:monospace;font-weight:700;color:#15803d">σ</td><td style="padding:.3rem .4rem">Parte real de s (estabilidad)</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:.3rem .4rem;font-family:monospace;font-weight:700;color:#3730a3">ω</td><td style="padding:.3rem .4rem">Parte imaginaria (oscilación)</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:.3rem .4rem;font-family:monospace;font-weight:700;color:#374151">Kp, Ki, Kd</td><td style="padding:.3rem .4rem">Ganancias P, I, D del PID</td></tr>
+          <tr><td style="padding:.3rem .4rem;font-family:monospace;font-weight:700;color:#374151">y<sub>ss</sub></td><td style="padding:.3rem .4rem">Valor final (steady state)</td></tr>
+        </table>
+      </div>
+    </div>
 
   </div>
 </div>

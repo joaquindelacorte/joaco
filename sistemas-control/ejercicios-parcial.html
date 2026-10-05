@@ -199,6 +199,43 @@ canvas.chart{width:100%;height:240px;background:#fbfbff;border-radius:8px;border
     <h3>Sistema de primer orden G(s) = 3 / (2s + 1)</h3>
   </div>
 
+  <!-- Explicación del sistema -->
+  <div class="grid g2" style="margin:1rem 0 1.4rem">
+    <div class="card bl">
+      <h3>¿Qué describe G(s) = 3 / (2s + 1)?</h3>
+      <p>Esta es la <b>forma canónica de 1er orden</b>: un sistema con dos parámetros que determinan completamente su respuesta al escalón.</p>
+      <ul style="margin:.5rem 0 0 1rem;font-size:.88rem;line-height:1.9">
+        <li><b>K = 3</b> — ganancia estática: por cada 1 unidad de entrada, la salida llega a 3 en estado estacionario. Con escalón de amplitud 2 → la salida llega a 6.</li>
+        <li><b>τ = 2 s</b> — constante de tiempo: la "inercia" del sistema. Tarda 2 s en llegar al 63 % del valor final. Más τ = más lento.</li>
+      </ul>
+      <p style="font-size:.85rem;margin-top:.6rem;color:var(--gray-lt)">Sistemas que tienen esta forma: circuito RC (τ=RC), termómetro de inmersión, tanque de agua con válvula, horno de primer orden — cualquier proceso con <em>acumulación</em> y <em>pérdidas proporcionales</em>.</p>
+    </div>
+    <div class="card am">
+      <h3>Los dos parámetros, visualmente</h3>
+      <ul style="font-size:.88rem;line-height:2;margin-top:.3rem">
+        <li>🔺 <b>K grande</b> → curva llega más alto (mismo tiempo)</li>
+        <li>⏱️ <b>τ grande</b> → curva llega más despacio (misma altura final)</li>
+        <li>La curva siempre tiene forma de <em>exponencial creciente</em></li>
+        <li>A t = τ → 63 % del final · A t = 2τ → 86 % · A t = 5τ → 99 %</li>
+      </ul>
+      <div style="margin-top:.6rem;background:#181633;border-radius:8px;padding:.5rem .7rem;font-family:monospace;font-size:.82rem;color:#a5b4fc">
+        y(t) = K·U·(1 − e<sup>−t/τ</sup>)<br>
+        y(t) = 3·2·(1 − e<sup>−t/2</sup>) = 6·(1 − e<sup>−t/2</sup>)
+      </div>
+    </div>
+  </div>
+
+  <!-- Canvas: respuesta al escalón -->
+  <div class="sub">Respuesta al escalón — visualización</div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
+    <canvas id="a2Chart" style="width:100%;height:220px;display:block"></canvas>
+    <p style="font-size:.82rem;color:var(--gray-lt);margin-top:.5rem;text-align:center">
+      <span style="display:inline-block;width:18px;height:3px;background:#4f46e5;vertical-align:middle;margin-right:4px"></span> G(s)=3/(2s+1), τ=2 s &nbsp;&nbsp;
+      <span style="display:inline-block;width:18px;height:3px;background:#c2410c;vertical-align:middle;margin-right:4px;border-top:2px dashed #c2410c;background:none"></span> G(s)=3/(4s+1), τ=4 s (parte c) &nbsp;&nbsp;
+      <span style="display:inline-block;width:18px;height:2px;background:#15803d;vertical-align:middle;margin-right:4px"></span> y_ss = 6
+    </p>
+  </div>
+
   <div class="sub">a) Estado estacionario con escalón de amplitud 2</div>
   <div class="fbox">
     <span class="big">y_ss = lim[s→0] s · G(s) · (2/s) = G(0) · 2 = (3/1) · 2 = 6</span>
@@ -793,11 +830,104 @@ function updateKpSim(val){
 }
 function setKp(v){document.getElementById('kpSlider').value=v;updateKpSim(v)}
 
+/* ─── A2 CHART ─── */
+function drawA2Chart(){
+  var cv = document.getElementById('a2Chart');
+  if(!cv) return;
+  var ctx = cv.getContext('2d');
+  var dpr = window.devicePixelRatio || 1;
+  var cssW = cv.clientWidth || 600, cssH = 220;
+  if(cv.width !== cssW*dpr || cv.height !== cssH*dpr){ cv.width=cssW*dpr; cv.height=cssH*dpr; }
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,cssW,cssH);
+  var W=cssW, H=cssH;
+  var padL=42, padR=14, padT=16, padB=28;
+  var pw=W-padL-padR, ph=H-padT-padB;
+  var tMax=14, yMax=7.2, U=2;
+
+  function tx(t){ return padL+(t/tMax)*pw; }
+  function ty(v){ return padT+(1-v/yMax)*ph; }
+
+  // Grid
+  ctx.strokeStyle='#e2e8f0'; ctx.lineWidth=1;
+  [0,2,4,6].forEach(function(yv){
+    ctx.beginPath(); ctx.moveTo(padL,ty(yv)); ctx.lineTo(padL+pw,ty(yv)); ctx.stroke();
+    ctx.fillStyle='#9ca3af'; ctx.font='9px Segoe UI'; ctx.textAlign='right';
+    ctx.fillText(yv,padL-4,ty(yv)+3);
+  });
+  [0,2,4,6,8,10,12,14].forEach(function(tv){
+    ctx.beginPath(); ctx.moveTo(tx(tv),padT); ctx.lineTo(tx(tv),padT+ph); ctx.stroke();
+    ctx.fillStyle='#9ca3af'; ctx.font='9px Segoe UI'; ctx.textAlign='center';
+    ctx.fillText(tv+'s',tx(tv),padT+ph+14);
+  });
+
+  // Axes
+  ctx.strokeStyle='#374151'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(padL,padT); ctx.lineTo(padL,padT+ph); ctx.lineTo(padL+pw,padT+ph); ctx.stroke();
+  ctx.fillStyle='#6b7280'; ctx.font='9px Segoe UI'; ctx.textAlign='left';
+  ctx.fillText('y(t)',2,padT+8); ctx.fillText('t (s)',padL+pw-12,padT+ph+22);
+
+  // y_ss = 6 line
+  ctx.strokeStyle='#15803d'; ctx.lineWidth=1.2; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(padL,ty(6)); ctx.lineTo(padL+pw,ty(6)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='#15803d'; ctx.font='9px Segoe UI'; ctx.textAlign='left';
+  ctx.fillText('y_ss = 6',padL+pw+2,ty(6)+3);
+
+  // Escalon entrada (u=2)
+  ctx.strokeStyle='rgba(99,102,241,0.25)'; ctx.lineWidth=1; ctx.setLineDash([2,4]);
+  ctx.beginPath(); ctx.moveTo(padL,ty(2)); ctx.lineTo(padL+pw,ty(2)); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Curve 2: τ=4s (orange dashed, part c)
+  ctx.strokeStyle='#c2410c'; ctx.lineWidth=2; ctx.setLineDash([6,3]);
+  ctx.beginPath();
+  for(var i=0;i<=400;i++){
+    var t=i/400*tMax;
+    var v=6*(1-Math.exp(-t/4));
+    i===0? ctx.moveTo(tx(t),ty(v)) : ctx.lineTo(tx(t),ty(v));
+  }
+  ctx.stroke(); ctx.setLineDash([]);
+
+  // Curve 1: τ=2s (blue, main)
+  ctx.strokeStyle='#4f46e5'; ctx.lineWidth=2.5;
+  ctx.beginPath();
+  for(var i=0;i<=400;i++){
+    var t=i/400*tMax;
+    var v=6*(1-Math.exp(-t/2));
+    i===0? ctx.moveTo(tx(t),ty(v)) : ctx.lineTo(tx(t),ty(v));
+  }
+  ctx.stroke();
+
+  // Marker τ=2 (blue)
+  var tau1y = 6*(1-Math.exp(-1)); // ≈3.79
+  ctx.fillStyle='#4f46e5';
+  ctx.beginPath(); ctx.arc(tx(2),ty(tau1y),5,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#4f46e5'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+  ctx.beginPath(); ctx.moveTo(tx(2),ty(tau1y)); ctx.lineTo(tx(2),padT+ph); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='#1e1b4b'; ctx.font='bold 9px Segoe UI'; ctx.textAlign='center';
+  ctx.fillText('τ=2s',tx(2),padT+ph+22);
+  ctx.fillStyle='#4f46e5'; ctx.textAlign='left';
+  ctx.fillText('63% = 3.79',tx(2)+8,ty(tau1y)-5);
+
+  // Marker τ=4 (orange)
+  var tau2y = 6*(1-Math.exp(-1)); // same % at t=4
+  ctx.fillStyle='#c2410c';
+  ctx.beginPath(); ctx.arc(tx(4),ty(tau2y),5,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#c2410c'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+  ctx.beginPath(); ctx.moveTo(tx(4),ty(tau2y)); ctx.lineTo(tx(4),padT+ph); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='#7c2d12'; ctx.font='bold 9px Segoe UI'; ctx.textAlign='center';
+  ctx.fillText('τ=4s (c)',tx(4),padT+ph+22);
+}
+
 /* ─── INIT ─── */
 window.addEventListener('load',()=>{
   drawRC(1);
   drawPoles();
   drawKpSim(5);
+  drawA2Chart();
 });
 window.addEventListener('resize',()=>{
   const active=document.querySelector('.page.active');
@@ -805,6 +935,7 @@ window.addEventListener('resize',()=>{
   if(active.id==='page-b') drawRC(rcProgress>0?rcProgress:1);
   if(active.id==='page-c') drawPoles();
   if(active.id==='page-e') drawKpSim(+document.getElementById('kpSlider').value);
+  if(active.id==='page-a') drawA2Chart();
 });
 </script>
 </body>

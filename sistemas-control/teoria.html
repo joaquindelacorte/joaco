@@ -940,6 +940,78 @@ footer a{color:var(--main)}
 
     <div class="tip"><span class="tip-i">💡</span><div>Dato interesante: en la termorregulación corporal, el error <code>e</code> nunca llega exactamente a cero — siempre queda un pequeño margen, por eso sudamos o tiritamos en ciclos y no de forma continua. Es exactamente el mismo comportamiento que vas a ver en los simuladores de respuesta al escalón de la pestaña "Simuladores": el sistema oscila o se acerca gradualmente al valor deseado, pero rara vez lo toca de forma perfecta e instantánea.</div></div>
 
+
+    <div id="sec-2orden"></div>
+    <div class="stitle" style="margin-top:2.5rem"><span class="ico">📊</span>Sistemas de 2do orden — ζ, overshoot y tiempo de establecimiento</div>
+    <span class="supp-tag">Cómo leer la respuesta — ζ, OS% y t_s</span>
+
+    <p class="lead">Cuando la función de transferencia de lazo cerrado tiene <b>dos polos</b> (por ejemplo, un sistema de 1er orden controlado con PI), la respuesta al escalón puede oscilar. El <b>factor de amortiguamiento ζ</b> (zeta) resume todo ese comportamiento en un único número.</p>
+
+    <div class="grid g2">
+      <div class="card bl">
+        <h3>Forma estándar de 2do orden</h3>
+        <div class="fbox" style="margin:.5rem 0">
+          <span class="big">G(s) = ωₙ² / (s² + 2ζωₙs + ωₙ²)</span>
+          <span class="sub-f">ωₙ = frecuencia natural [rad/s] · ζ = factor de amortiguamiento</span>
+        </div>
+        <p style="font-size:.88rem;margin-top:.4rem">Los polos están en:</p>
+        <div class="fbox" style="margin:.4rem 0;font-size:.85rem">
+          <span class="big">s = −ζωₙ ± jωₙ√(1−ζ²)</span>
+          <span class="sub-f">Parte real = −ζωₙ (estabilidad) · Parte imag. = ωₙ√(1−ζ²) (oscilación)</span>
+        </div>
+      </div>
+      <div class="card am">
+        <h3>¿Qué vale ζ y qué significa?</h3>
+        <div style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-size:.85rem;margin-top:.3rem">
+            <tr style="background:var(--main);color:#fff"><th style="padding:.3rem .6rem;text-align:left">ζ</th><th style="padding:.3rem">Régimen</th><th style="padding:.3rem">Overshoot</th></tr>
+            <tr><td style="padding:.3rem .6rem;font-family:monospace">ζ &gt; 1</td><td style="padding:.3rem;text-align:center">Sobreamortiguado</td><td style="padding:.3rem;text-align:center;color:var(--green)">0% (no oscila)</td></tr>
+            <tr style="background:#f9fafb"><td style="padding:.3rem .6rem;font-family:monospace">ζ = 1</td><td style="padding:.3rem;text-align:center">Críticamente amort.</td><td style="padding:.3rem;text-align:center;color:var(--green)">0% (más rápido sin OS)</td></tr>
+            <tr><td style="padding:.3rem .6rem;font-family:monospace">0 &lt; ζ &lt; 1</td><td style="padding:.3rem;text-align:center"><b>Subamortiguado</b></td><td style="padding:.3rem;text-align:center;color:var(--red);font-weight:700">OS &gt; 0% ⚠️</td></tr>
+            <tr style="background:#f9fafb"><td style="padding:.3rem .6rem;font-family:monospace">ζ = 0</td><td style="padding:.3rem;text-align:center">Sin amortiguamiento</td><td style="padding:.3rem;text-align:center;color:var(--red)">Oscila indefinidamente</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub" style="margin-top:1.2rem">Fórmulas clave del 2do orden</div>
+    <div class="grid g2">
+      <div class="card gr">
+        <h3>OS% — Porcentaje de sobrepaso</h3>
+        <div class="fbox" style="margin:.5rem 0">
+          <span class="big">OS% = e<sup>−πζ/√(1−ζ²)</sup> × 100</span>
+          <span class="sub-f">Solo válido para 0 &lt; ζ &lt; 1 (subamortiguado)</span>
+        </div>
+        <p style="font-size:.88rem;margin-top:.4rem"><b>Ejemplo:</b> polos en s=−1±2j → ωₙ=√5, ζ = 1/√5 ≈ 0.45</p>
+        <p style="font-family:monospace;font-size:.85rem;color:var(--main);margin-top:.3rem">OS% = e<sup>−π·0.45/√(1−0.45²)</sup> × 100<br>= e<sup>−1.41/0.89</sup> × 100 ≈ e<sup>−1.58</sup> × 100 ≈ <b>20.5%</b></p>
+        <p style="font-size:.83rem;margin-top:.4rem;color:var(--gray-lt)">Regla práctica: ζ ≈ 0.7 da OS ≈ 5% (buen balance velocidad/suavidad).</p>
+      </div>
+      <div class="card te">
+        <h3 id="sec-ts">t<sub>s</sub> — Tiempo de establecimiento</h3>
+        <p style="font-size:.88rem">Tiempo en que la respuesta se queda dentro de ±2% del valor final para siempre.</p>
+        <div class="fbox" style="margin:.5rem 0">
+          <span class="big">t<sub>s</sub> ≈ 4 / (ζ · ωₙ) = 4 / |σ|</span>
+          <span class="sub-f">σ = parte real del polo = −ζωₙ</span>
+        </div>
+        <p style="font-size:.88rem;margin-top:.4rem"><b>Para sistema de 1er orden</b> (polo en s=−a):</p>
+        <p style="font-family:monospace;font-size:.85rem;color:var(--main);margin-top:.2rem">t_s ≈ 4/a = 4τ</p>
+        <p style="font-size:.88rem;margin-top:.4rem"><b>Ejemplo:</b> polos s=−1±2j → σ=1 → t_s ≈ 4/1 = <b>4 segundos</b></p>
+        <p style="font-size:.83rem;margin-top:.4rem;color:var(--gray-lt)">¿Por qué 4τ? A t=4τ el sistema llegó al 98.2% del valor final, dentro de la banda del ±2%.</p>
+      </div>
+    </div>
+
+    <div class="card or" style="margin-top:1rem">
+      <h3>¿Cómo calcular ζ desde los polos?</h3>
+      <p style="font-size:.9rem">Si los polos son <b>s = −σ ± jω<sub>d</sub></b>:</p>
+      <div class="fbox" style="margin:.5rem 0">
+        <span class="big">ζ = σ / ωₙ = σ / √(σ² + ω<sub>d</sub>²)</span>
+        <span class="sub-f">ωₙ = módulo del polo = distancia al origen en el plano s</span>
+      </div>
+      <p style="font-size:.88rem;margin-top:.4rem"><b>Ejemplo concreto — ejercicios-parcial, problema C.2:</b> polos en s=−1±2j → σ=1, ω<sub>d</sub>=2</p>
+      <p style="font-family:monospace;font-size:.85rem;color:var(--main);margin-top:.3rem">ωₙ = √(1²+2²) = √5 ≈ 2.24 rad/s<br>ζ = 1/√5 ≈ <b>0.45</b> → subamortiguado → OS ≈ 20%</p>
+    </div>
+
+    
   </div>
 </div>
 
@@ -1373,6 +1445,62 @@ footer a{color:var(--main)}
       </div>
       <p class="euler-note"><b>Interpretación:</b> On-Off entrega esfuerzo máximo o nulo; por inercia, la salida cruza los umbrales y oscila. P equilibra pérdida y esfuerzo suavemente, pero ese equilibrio ocurre por debajo de r: el offset desaparece recién al agregar acción integral.</p>
     </div>
+
+    <div id="sec-pi-pid"></div>
+    <div class="stitle" style="margin-top:2.5rem"><span class="ico">🧮</span>Control PI y PID</div>
+    <span class="supp-tag">Ver en detalle: <a href="pid-horno.html" style="color:#0d9488;font-weight:700">PID Horno →</a></span>
+
+    <p class="lead">El control proporcional puro deja un error permanente. La <b>acción integral</b> lo elimina acumulando el error en el tiempo. La <b>acción derivativa</b> anticipa la tendencia y reduce el sobrepaso.</p>
+
+    <div class="grid g2">
+      <div class="card bl">
+        <h3>PI — Proporcional + Integral</h3>
+        <div class="fbox" style="margin:.4rem 0">
+          <span class="big">u = Kp·e + Ki·∫e·dt</span>
+          <span class="sub-f">C(s) = Kp + Ki/s = (Kp·s + Ki)/s</span>
+        </div>
+        <ul style="font-size:.85rem;margin-top:.4rem">
+          <li><b>Kp</b> reacciona al error actual (presente)</li>
+          <li><b>Ki</b> acumula el error histórico (pasado) → y_ss = R exacto ✅</li>
+          <li>El 1/s agrega un <b>polo en s=0</b> → puede dar overshoot</li>
+        </ul>
+        <p style="font-size:.83rem;margin-top:.5rem;color:var(--gray-lt)">Ejemplo: G=1/(s+1), C=(s+2)/s → T(s)=(s+2)/(s²+2s+2) → y_ss=1=R ✅</p>
+      </div>
+      <div class="card or">
+        <h3>PID — Proporcional + Integral + Derivativo</h3>
+        <div class="fbox" style="margin:.4rem 0">
+          <span class="big">u = Kp·e + Ki·∫e·dt + Kd·de/dt</span>
+          <span class="sub-f">C(s) = Kp + Ki/s + Kd·s</span>
+        </div>
+        <ul style="font-size:.85rem;margin-top:.4rem">
+          <li><b>Kd·de/dt</b> reacciona al cambio del error (tendencia futura)</li>
+          <li>Si el error cae rápido → frena antes del overshoot</li>
+          <li>⚠️ Amplifica ruido de sensor — usar con medición filtrada</li>
+        </ul>
+        <p style="font-size:.83rem;margin-top:.5rem"><a href="pid-horno.html" style="color:var(--main-lt);font-weight:700">→ Simulador completo con horno en pid-horno.html</a></p>
+      </div>
+    </div>
+
+    <div class="card am" style="margin-top:1rem">
+      <h3>Comparativa y efectos de cada ganancia</h3>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:.84rem;text-align:center">
+          <thead><tr style="background:var(--main);color:#fff">
+            <th style="padding:.4rem .7rem;text-align:left">Aumentar…</th>
+            <th style="padding:.4rem">T° de subida</th><th style="padding:.4rem">Overshoot</th>
+            <th style="padding:.4rem">T° establecimiento</th><th style="padding:.4rem">Error permanente</th>
+          </tr></thead>
+          <tbody>
+            <tr><td style="padding:.32rem .7rem;text-align:left;font-weight:700">Kp</td><td>↓ Baja</td><td style="color:var(--red)">↑ Sube</td><td>Cambia poco</td><td>↓ Baja</td></tr>
+            <tr style="background:#f9fafb"><td style="padding:.32rem .7rem;text-align:left;font-weight:700">Ki</td><td>↓ Levemente</td><td style="color:var(--red)">↑ Sube</td><td style="color:var(--red)">↑ Sube</td><td style="color:var(--green);font-weight:700">→ 0 ✅</td></tr>
+            <tr><td style="padding:.32rem .7rem;text-align:left;font-weight:700">Kd</td><td>Poco efecto</td><td style="color:var(--green)">↓ Baja</td><td style="color:var(--green)">↓ Baja</td><td>Sin efecto</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:.82rem;margin-top:.5rem;color:var(--gray-lt)">Fuente: tabla de pid-horno.html. Los efectos son aproximados — en la práctica los parámetros interactúan entre sí.</p>
+    </div>
+
+    
   </div>
 </div>
 

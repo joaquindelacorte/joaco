@@ -103,6 +103,11 @@ hr.sec-div{border:none;border-top:2px solid var(--main-bg);margin:2.5rem 0}
 .footer-nav a:hover{text-decoration:underline}
 footer{background:var(--main-bg);padding-bottom:1.2rem;border-top:1px solid var(--border)}
 </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
+
 </head>
 <body>
 
@@ -182,14 +187,14 @@ footer{background:var(--main-bg);padding-bottom:1.2rem;border-top:1px solid var(
 <div class="grid g2" style="margin-top:.8rem">
   <div>
     <div class="fbox">
-      <span class="big">τ·dy/dt + y = K·u</span>
+      <span class="big">$\tau \dfrac{dy}{dt} + y = K \cdot u$</span>
       <span class="sub-f">EDO de 1er orden (circuito RC, sistema térmico, nivel de tanque)</span>
-      <span class="cond">→ G(s) = K / (τs + 1)</span>
+      <span class="cond">$\Rightarrow G(s) = \dfrac{K}{\tau s + 1}$</span>
     </div>
     <div class="fbox">
-      <span class="big">M·d²x/dt² + B·dx/dt + K·x = F</span>
+      <span class="big">$M\dfrac{d^2x}{dt^2} + B\dfrac{dx}{dt} + Kx = F$</span>
       <span class="sub-f">EDO de 2do orden (masa-resorte-amortiguador, RLC)</span>
-      <span class="cond">→ G(s) = 1/(Ms² + Bs + K)</span>
+      <span class="cond">$\Rightarrow G(s) = \dfrac{1}{Ms^2 + Bs + K}$</span>
     </div>
   </div>
   <div class="card am">
@@ -232,14 +237,14 @@ footer{background:var(--main-bg);padding-bottom:1.2rem;border-top:1px solid var(
 <div class="grid g2">
   <div>
     <div class="fbox">
-      <span class="big">y(t) = y<sub>ss</sub> · (1 − e<sup>−t/τ</sup>)</span>
-      <span class="sub-f">Respuesta de 1er orden ante escalón — válida para cualquier sistema G=K/(τs+1)</span>
-      <span class="cond">y_ss = K · U (donde U es la amplitud del escalón)</span>
+      <span class="big">$y(t) = y_{ss}\left(1 - e^{-t/\tau}\right)$</span>
+      <span class="sub-f">Respuesta de 1er orden ante escalón — válida para cualquier sistema $G=\frac{K}{\tau s+1}$</span>
+      <span class="cond">$y_{ss} = K \cdot U$ (donde $U$ es la amplitud del escalón)</span>
     </div>
     <div class="fbox">
-      <span class="big">y<sub>ss</sub> = lim<sub>s→0</sub> [s · G(s) · R(s)]</span>
-      <span class="sub-f">Teorema del valor final — para escalón R(s)=A/s: y_ss = G(0)·A = K·A</span>
-      <span class="cond">Solo aplica si el sistema es estable (polos en semiplano izquierdo)</span>
+      <span class="big">$y_{ss} = \lim_{s \to 0}\, s \cdot G(s) \cdot R(s)$</span>
+      <span class="sub-f">Teorema del valor final — para escalón $R(s)=A/s$: $y_{ss} = G(0)\cdot A = K\cdot A$</span>
+      <span class="cond">Solo aplica si el sistema es estable (polos con $\sigma &lt; 0$)</span>
     </div>
   </div>
   <div class="card bl">
@@ -260,24 +265,24 @@ footer{background:var(--main-bg);padding-bottom:1.2rem;border-top:1px solid var(
   <div class="card gr">
     <h3>t<sub>s</sub> — Tiempo de establecimiento</h3>
     <div class="fbox" style="margin:.4rem 0;font-size:.85rem">
-      <span class="big">t<sub>s</sub> ≈ 4τ = 4/|σ|</span>
-      <span class="sub-f">Criterio ±2% del valor final</span>
+      <span class="big">$t_s \approx 4\tau = \dfrac{4}{|\sigma|}$</span>
+      <span class="sub-f">Criterio $\pm 2\%$ del valor final</span>
     </div>
-    <p style="font-size:.84rem">σ = parte real del polo (negativa en sistema estable). Más negativo = más rápido = menor t_s.</p>
+    <p style="font-size:.84rem">$\sigma$ = parte real del polo (negativa en sistema estable). Más negativo = más rápido = menor t_s.</p>
   </div>
   <div class="card or">
     <h3>Offset — error estacionario</h3>
     <div class="fbox" style="margin:.4rem 0;font-size:.85rem">
-      <span class="big">Offset = R − y<sub>ss</sub></span>
-      <span class="sub-f">Con control P puro: Offset = 1/(1+Kp)</span>
+      <span class="big">$\text{Offset} = R - y_{ss}$</span>
+      <span class="sub-f">Con control P puro: $\text{Offset} = \dfrac{1}{1+K_p}$</span>
     </div>
     <p style="font-size:.84rem">Con control P puro SIEMPRE existe offset. Solo desaparece con acción integral (PI o PID).</p>
   </div>
   <div class="card re">
     <h3>Overshoot — sobrepaso</h3>
     <div class="fbox" style="margin:.4rem 0;font-size:.85rem">
-      <span class="big">OS% = e<sup>−πζ/√(1−ζ²)</sup> × 100</span>
-      <span class="sub-f">Solo si ζ &lt; 1 (subamortiguado)</span>
+      <span class="big">$OS\% = e^{-\pi\zeta/\sqrt{1-\zeta^2}} \times 100$</span>
+      <span class="sub-f">Solo si $\zeta &lt; 1$ (subamortiguado)</span>
     </div>
     <p style="font-size:.84rem">ζ ≈ 0.7 → OS ≈ 5% (buen balance). ζ = 1 → sin overshoot. ζ = 0 → oscila sin parar.</p>
   </div>
@@ -286,9 +291,12 @@ footer{background:var(--main-bg);padding-bottom:1.2rem;border-top:1px solid var(
 <div class="step" style="margin-top:.9rem">
   <div class="step-title">Cómo despejar t de y(t) = y_ss·(1−e^(−t/τ)) — truco del compañero</div>
   <p style="font-family:monospace;font-size:.85rem;line-height:2;color:var(--gray)">
-    y<sub>target</sub> / y<sub>ss</sub> = 1 − e<sup>−t/τ</sup> &nbsp;→&nbsp;
-    e<sup>−t/τ</sup> = 1 − (y<sub>target</sub>/y<sub>ss</sub>) &nbsp;→&nbsp;
-    <b>t = −τ · ln(1 − y<sub>target</sub>/y<sub>ss</sub>)</b>
+    $\dfrac{y_{\text{target}}}{y_{ss}} = 1 - e^{-t/\tau}$
+    &nbsp;→&nbsp;
+    $e^{-t/\tau} = 1 - \dfrac{y_{\text{target}}}{y_{ss}}$
+    &nbsp;→&nbsp;
+    $\boxed{t = -\tau \cdot \ln\!\left(1 - \dfrac{y_{\text{target}}}{y_{ss}}\right)}$
+    <b style="display:none">placeholder y<sub>ss</sub>)</b>
   </p>
   <p style="font-size:.83rem;color:var(--gray-lt)">ln() cancela el e. Si y_target = 63.2% → 1−0.632 = 0.368 = e<sup>−1</sup> → ln(0.368) = −1 → t = τ.</p>
 </div>
@@ -305,9 +313,9 @@ footer{background:var(--main-bg);padding-bottom:1.2rem;border-top:1px solid var(
 <p class="lead">Los <b>polos</b> son los valores de s donde el denominador de G(s) = 0. Su posición en el plano complejo determina completamente el comportamiento del sistema.</p>
 
 <div class="fbox">
-  <span class="big">s = σ + jω</span>
-  <span class="sub-f">σ (sigma) = parte real · ω (omega) = parte imaginaria · j = √(−1)</span>
-  <span class="cond">σ &lt; 0 → estable · σ &gt; 0 → inestable · ω ≠ 0 → oscila</span>
+  <span class="big">$s = \sigma + j\omega$</span>
+  <span class="sub-f">$\sigma$ (sigma) = parte real &nbsp;·&nbsp; $\omega$ (omega) = parte imaginaria &nbsp;·&nbsp; $j = \sqrt{-1}$</span>
+  <span class="cond">$\sigma &lt; 0$ → estable &nbsp;·&nbsp; $\sigma &gt; 0$ → inestable &nbsp;·&nbsp; $\omega \neq 0$ → oscila</span>
 </div>
 
 <div class="grid g3" style="margin-top:.9rem">
@@ -333,13 +341,13 @@ footer{background:var(--main-bg);padding-bottom:1.2rem;border-top:1px solid var(
   <div class="grid g2" style="margin-top:.5rem">
     <div>
       <div class="fbox" style="font-size:.85rem">
-        <span class="big">G(s) = ωₙ² / (s² + 2ζωₙs + ωₙ²)</span>
-        <span class="sub-f">Polos: s = −ζωₙ ± jωₙ√(1−ζ²)</span>
+        <span class="big">$G(s) = \dfrac{\omega_n^2}{s^2 + 2\zeta\omega_n s + \omega_n^2}$</span>
+        <span class="sub-f">Polos: $s = -\zeta\omega_n \pm j\omega_n\sqrt{1-\zeta^2}$</span>
       </div>
       <div class="fbox" style="font-size:.85rem;margin-top:.5rem">
-        <span class="big">ζ = σ / ωₙ = σ / √(σ²+ωd²)</span>
-        <span class="sub-f">σ = parte real del polo · ωₙ = módulo del polo</span>
-        <span class="cond">ζ = 1: crítico (sin OS) · ζ &lt; 1: subamortiguado (OS) · ζ &gt; 1: sobreamortiguado</span>
+        <span class="big">$\zeta = \dfrac{\sigma}{\omega_n} = \dfrac{\sigma}{\sqrt{\sigma^2 + \omega_d^2}}$</span>
+        <span class="sub-f">$\sigma$ = parte real del polo &nbsp;·&nbsp; $\omega_n$ = módulo del polo</span>
+        <span class="cond">$\zeta = 1$: crítico (sin OS) &nbsp;·&nbsp; $\zeta &lt; 1$: subamortiguado (OS) &nbsp;·&nbsp; $\zeta &gt; 1$: sobreamortiguado</span>
       </div>
     </div>
     <div>
@@ -359,8 +367,8 @@ footer{background:var(--main-bg);padding-bottom:1.2rem;border-top:1px solid var(
   <h3>Efecto de Kp sobre el polo de lazo cerrado</h3>
   <p style="font-size:.87rem">Con G(s)=1/(s+a) y controlador proporcional Kp, el polo de lazo cerrado es:</p>
   <div class="fbox" style="margin:.4rem 0;font-size:.88rem">
-    <span class="big">T(s) = Kp/(s+a+Kp) → polo en s = −(a+Kp)</span>
-    <span class="sub-f">Más Kp → polo más a la izquierda → respuesta más rápida (τ_eff = 1/(a+Kp))</span>
+    <span class="big">$T(s) = \dfrac{K_p}{s+a+K_p}$ &nbsp;→&nbsp; polo en $s = -(a+K_p)$</span>
+    <span class="sub-f">Más $K_p$ → polo más a la izquierda → respuesta más rápida ($\tau_{eff} = \frac{1}{a+K_p}$)</span>
   </div>
   <p style="font-size:.83rem;color:var(--gray-lt)">Ejemplo: G=1/(s+1), Kp=10 → polo en s=−11 en vez de s=−1 → 11× más rápido.</p>
 </div>
@@ -375,9 +383,9 @@ footer{background:var(--main-bg);padding-bottom:1.2rem;border-top:1px solid var(
 </div>
 
 <div class="fbox">
-  <span class="big">T(s) = C(s)·G(s) / (1 + C(s)·G(s))</span>
+  <span class="big">$T(s) = \dfrac{C(s)\cdot G(s)}{1 + C(s)\cdot G(s)}$</span>
   <span class="sub-f">Fórmula universal del lazo cerrado con realimentación unitaria</span>
-  <span class="cond">Para C(s) = Kp (proporcional puro): T(s) = Kp·G(s) / (1 + Kp·G(s))</span>
+  <span class="cond">Para $C(s) = K_p$: $T(s) = \dfrac{K_p G(s)}{1 + K_p G(s)}$</span>
 </div>
 
 <div class="grid g2" style="margin-top:.8rem">
@@ -417,8 +425,8 @@ footer{background:var(--main-bg);padding-bottom:1.2rem;border-top:1px solid var(
   <div class="card or">
     <h3>P — Proporcional</h3>
     <div class="fbox" style="margin:.4rem 0;font-size:.85rem">
-      <span class="big">u = Kp · e</span>
-      <span class="sub-f">C(s) = Kp</span>
+      <span class="big">$u = K_p \cdot e$</span>
+      <span class="sub-f">$C(s) = K_p$</span>
       <span class="warn">Siempre deja offset</span>
     </div>
     <ul style="font-size:.83rem">
@@ -430,8 +438,8 @@ footer{background:var(--main-bg);padding-bottom:1.2rem;border-top:1px solid var(
   <div class="card te">
     <h3>PI — Proporcional + Integral</h3>
     <div class="fbox" style="margin:.4rem 0;font-size:.85rem">
-      <span class="big">u = Kp·e + Ki·∫e·dt</span>
-      <span class="sub-f">C(s) = Kp + Ki/s = (Kp·s+Ki)/s</span>
+      <span class="big">$u = K_p e + K_i \int e\, dt$</span>
+      <span class="sub-f">$C(s) = K_p + \dfrac{K_i}{s} = \dfrac{K_p s + K_i}{s}$</span>
       <span class="cond">Elimina el offset ✅</span>
     </div>
     <ul style="font-size:.83rem">
@@ -443,8 +451,8 @@ footer{background:var(--main-bg);padding-bottom:1.2rem;border-top:1px solid var(
   <div class="card bl">
     <h3>PID — Proporcional + Integral + Derivativo</h3>
     <div class="fbox" style="margin:.4rem 0;font-size:.85rem">
-      <span class="big">u = Kp·e + Ki·∫e + Kd·de/dt</span>
-      <span class="sub-f">C(s) = Kp + Ki/s + Kd·s</span>
+      <span class="big">$u = K_p e + K_i\int e\,dt + K_d\dfrac{de}{dt}$</span>
+      <span class="sub-f">$C(s) = K_p + \dfrac{K_i}{s} + K_d s$</span>
       <span class="cond">Elimina offset + reduce OS ✅</span>
     </div>
     <ul style="font-size:.83rem">

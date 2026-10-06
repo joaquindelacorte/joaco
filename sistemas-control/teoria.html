@@ -2336,7 +2336,7 @@ function showTab(id){
   var trigger=arguments[1]||(typeof event!=='undefined'?event.target:null);
   if(trigger) trigger.classList.add('active');
   if(id==='quiz'){ renderBadges(); }
-  if(id==='labs'){ initLabs(); }
+  if(id==='labs'){ setTimeout(initLabs,30); }
   if(id==='sim'){ drawFirstOrder(); drawSecondOrder(); drawAcChart(); }
   if(id==='c4'){ onGainKChange(); onDelayChange(); }
   if(id==='c5'){ initC5(); }
@@ -2681,7 +2681,10 @@ function drawSecondOrder(){
   info.textContent = txt;
 }
 
-window.addEventListener('resize', ()=>{ drawFirstOrder(); drawSecondOrder(); drawAcChart(); drawEulerRC(); drawOnOffPSim(); });
+window.addEventListener('resize', ()=>{ drawFirstOrder(); drawSecondOrder(); drawAcChart(); drawEulerRC(); drawOnOffPSim();
+  var la=document.querySelector('.lab-page[style*="block"]');
+  if(la){var lid=la.id;if(lid==='lab1'){labK1();labRC();labYT();}else if(lid==='lab2'){labTVF();labTs();}else if(lid==='lab3'){labLC();}else if(lid==='lab4'){labPcomp();labPIDcomp();}}
+});
 drawFirstOrder();
 drawSecondOrder();
 
@@ -3409,7 +3412,9 @@ function labDraw(cvId, fn) {
   var cv = document.getElementById(cvId);
   if (!cv) return;
   var dpr = window.devicePixelRatio || 1;
-  var cssW = cv.clientWidth || 320, cssH = 220;
+  var cssW = cv.clientWidth || (cv.parentElement&&cv.parentElement.clientWidth) || 320;
+  if(cssW<10) cssW=320;
+  var cssH = 220;
   if (cv.width !== cssW*dpr || cv.height !== cssH*dpr) {
     cv.width = cssW*dpr; cv.height = cssH*dpr;
   }
@@ -3731,7 +3736,8 @@ function showLab(id, btn) {
 }
 
 function initLabs(){
-  labK1(); labRC(); labYT();
+  var firstBtn=document.querySelector('#page-labs .lab-btn');
+  showLab('lab1',firstBtn);
 }
 
 /* ===================== QUIZ SIMULACRO ===================== */

@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Resumen 30 min — Sistemas de Control</title>
+<style>
+:root{
+  --main:#3730a3;--main-lt:#4f46e5;--main-bg:#e0e7ff;
+  --amber:#b45309;--amber-bg:#fef9c3;
+  --teal:#0d9488;--teal-bg:#ccfbf1;
+  --orange:#c2410c;--orange-bg:#ffedd5;
+  --red:#b91c1c;--red-bg:#fee2e2;
+  --green:#15803d;--green-bg:#dcfce7;
+  --gray:#374151;--gray-lt:#6b7280;
+  --bg:#f5f6fb;--card:#fff;--border:#e2e8f0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:var(--main);display:flex;align-items:center;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.brand{color:#fff;font-size:1.05rem;font-weight:800;padding:.8rem 1.2rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.2)}
+.nav-links{display:flex;overflow-x:auto;flex:1;gap:0}
+.nav-links a{padding:.75rem 1rem;color:rgba(255,255,255,.75);font-size:.82rem;font-weight:600;text-decoration:none;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s}
+.nav-links a:hover{color:#fff;background:rgba(255,255,255,.1)}
+.nav-links a.active{color:#fff;border-bottom-color:#a5b4fc}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1e1b4b 0%,var(--main-lt) 100%);color:#fff;text-align:center;padding:2.2rem 1rem 1.8rem}
+.hero h1{font-size:2rem;font-weight:900;letter-spacing:-.5px}
+.hero p{opacity:.88;margin-top:.35rem;max-width:600px;margin-left:auto;margin-right:auto;font-size:.95rem}
+.chips{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:.9rem}
+.chip{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.2rem .75rem;font-size:.77rem;font-weight:700}
+.chip.green{background:rgba(21,128,61,.4);border-color:rgba(21,128,61,.6)}
+
+/* LAYOUT */
+.container{max-width:1080px;margin:0 auto;padding:2rem 1.4rem}
+.sec-header{display:flex;align-items:center;gap:.6rem;margin:2.2rem 0 1rem}
+.sec-num{background:var(--main);color:#fff;font-weight:900;font-size:.8rem;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sec-title{font-size:1.2rem;font-weight:800;color:var(--main)}
+.sec-time{font-size:.74rem;font-weight:700;color:var(--gray-lt);background:var(--border);border-radius:2rem;padding:.15rem .6rem;margin-left:.3rem}
+.lead{font-size:.93rem;color:var(--gray);margin-bottom:.9rem}
+
+/* CARDS */
+.grid{display:grid;gap:1rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.card h3{font-size:.95rem;font-weight:700;margin-bottom:.45rem;color:var(--main)}
+.card p,.card li{font-size:.87rem;color:var(--gray)}
+.card ul{margin-left:1.1rem;margin-top:.3rem}
+.card.bl{border-left:4px solid var(--main-lt);background:var(--main-bg)}
+.card.gr{border-left:4px solid var(--green);background:var(--green-bg)}
+.card.or{border-left:4px solid var(--orange);background:var(--orange-bg)}
+.card.re{border-left:4px solid var(--red);background:var(--red-bg)}
+.card.te{border-left:4px solid var(--teal);background:var(--teal-bg)}
+.card.am{border-left:4px solid var(--amber);background:var(--amber-bg)}
+
+/* FORMULA BOX */
+.fbox{background:#181633;color:#e8e6ff;border-radius:10px;padding:1rem 1.2rem;font-family:'Courier New',monospace;margin:.7rem 0;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.fbox .big{font-size:1.1rem;font-weight:700;color:#a5b4fc;display:block;margin-bottom:.2rem}
+.fbox .sub-f{font-size:.82rem;color:#c7c5e8;display:block;margin-top:.2rem}
+.fbox .cond{font-size:.78rem;color:#7ee8a2;display:block;margin-top:.2rem}
+.fbox .warn{font-size:.78rem;color:#fca5a5;display:block;margin-top:.2rem}
+.inline-f{display:inline-block;background:#181633;color:#a5b4fc;padding:.1rem .5rem;border-radius:5px;font-family:monospace;font-size:.86rem}
+
+/* FORMULA TABLE */
+.ftable{width:100%;border-collapse:collapse;font-size:.84rem;margin:.5rem 0}
+.ftable th{background:var(--main);color:#fff;padding:.42rem .8rem;text-align:left;font-weight:700}
+.ftable td{padding:.38rem .8rem;border-bottom:1px solid var(--border);vertical-align:top}
+.ftable tr:nth-child(even){background:#f8f9fb}
+.ftable code{background:#181633;color:#a5b4fc;padding:.05rem .4rem;border-radius:4px;font-size:.82rem}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;border-radius:2rem;padding:.1rem .5rem;white-space:nowrap}
+.tag-1{background:var(--main-bg);color:var(--main)}
+.tag-2{background:var(--amber-bg);color:var(--amber)}
+.tag-all{background:var(--green-bg);color:var(--green)}
+.tag-cl{background:var(--orange-bg);color:var(--orange)}
+.tag-pid{background:var(--teal-bg);color:var(--teal)}
+
+/* STEP */
+.step{border-left:3px solid var(--main-lt);padding-left:.9rem;margin:.7rem 0}
+.step-title{font-weight:700;color:var(--main-lt);font-size:.9rem;margin-bottom:.3rem}
+.step p{font-size:.87rem}
+
+/* DIVIDER */
+hr.sec-div{border:none;border-top:2px solid var(--main-bg);margin:2.5rem 0}
+
+/* STABLE/UNSTABLE CHIPS */
+.chip-est{display:inline-block;border-radius:2rem;padding:.15rem .65rem;font-size:.8rem;font-weight:700}
+.est{background:var(--green-bg);color:var(--green)}
+.inest{background:var(--red-bg);color:var(--red)}
+.osc{background:var(--main-bg);color:var(--main-lt)}
+
+/* POLO ROW */
+.polo-row{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;font-size:.86rem;margin:.3rem 0}
+
+/* FOOTER NAV */
+.footer-nav{display:flex;flex-wrap:wrap;gap:.5rem 1rem;padding:1.5rem 1.4rem;max-width:1080px;margin:0 auto;font-size:.85rem}
+.footer-nav a{color:var(--main-lt);text-decoration:none;font-weight:600}
+.footer-nav a:hover{text-decoration:underline}
+footer{background:var(--main-bg);padding-bottom:1.2rem;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">🎛️ Sistemas de Control</div>
+  <div class="nav-links">
+    <a href="teoria.html">📖 Teoría</a>
+    <a href="ejercicios-parcial.html">📝 Parcial</a>
+    <a href="pid-horno.html">🔥 PID Horno</a>
+    <a href="resumen-30min.html" class="active">⚡ Resumen 30 min</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>⚡ Resumen — Sistemas de Control</h1>
+  <p>Todo lo que necesitás saber para el parcial, organizado de lo más simple a lo más complejo. Fórmulas clasificadas por tipo de sistema.</p>
+  <div class="chips">
+    <span class="chip">⏱️ 30 minutos</span>
+    <span class="chip">📐 7 bloques</span>
+    <span class="chip">🧮 23 fórmulas</span>
+    <span class="chip green">🏁 Quiz al final</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ══════════════════ 1. BASE ══════════════════ -->
+<div class="sec-header">
+  <div class="sec-num">1</div>
+  <span class="sec-title">Base conceptual</span>
+  <span class="sec-time">⏱ 2 min</span>
+</div>
+
+<div class="grid g2">
+  <div class="card or">
+    <h3>🔓 Lazo abierto</h3>
+    <p>El controlador actúa sin medir la salida real. Sin realimentación — si algo perturba el sistema, no se entera.</p>
+    <p style="margin-top:.4rem;font-size:.84rem;color:var(--gray-lt)">Ejemplo: tostadora por tiempo. Ventaja: simple. Desventaja: no corrige errores.</p>
+  </div>
+  <div class="card gr">
+    <h3>🔁 Lazo cerrado</h3>
+    <p>Mide la salida Y(s), la compara con la referencia R(s) y usa la diferencia (error E) para corregir continuamente.</p>
+    <p style="margin-top:.4rem;font-size:.84rem;color:var(--gray-lt)">Ejemplo: termostato. Ventaja: se autocorrige. Desventaja: puede volverse inestable.</p>
+  </div>
+</div>
+
+<div class="card bl" style="margin-top:.9rem">
+  <h3>Variables del diagrama de bloques</h3>
+  <div class="grid g4" style="margin-top:.4rem">
+    <div><span class="inline-f">R(s)</span><br><span style="font-size:.82rem">Referencia (setpoint deseado)</span></div>
+    <div><span class="inline-f">E(s)</span><br><span style="font-size:.82rem">Error = R − Y</span></div>
+    <div><span class="inline-f">G(s)</span><br><span style="font-size:.82rem">Planta (sistema físico)</span></div>
+    <div><span class="inline-f">Y(s)</span><br><span style="font-size:.82rem">Salida real del sistema</span></div>
+    <div><span class="inline-f">C(s)</span><br><span style="font-size:.82rem">Controlador</span></div>
+    <div><span class="inline-f">U(s)</span><br><span style="font-size:.82rem">Señal de control → planta</span></div>
+    <div><span class="inline-f">s</span><br><span style="font-size:.82rem">Variable compleja σ+jω</span></div>
+    <div><span class="inline-f">T(s)</span><br><span style="font-size:.82rem">Función de transf. lazo cerrado</span></div>
+  </div>
+</div>
+
+<hr class="sec-div">
+
+<!-- ══════════════════ 2. MODELADO ══════════════════ -->
+<div class="sec-header">
+  <div class="sec-num">2</div>
+  <span class="sec-title">Modelado — del sistema físico a G(s)</span>
+  <span class="sec-time">⏱ 4 min</span>
+</div>
+
+<p class="lead">Todo sistema de control parte de una ecuación diferencial (EDO). Laplace la convierte en álgebra y G(s) emerge de despejar Y(s)/U(s).</p>
+
+<div class="step">
+  <div class="step-title">Receta: EDO → G(s)</div>
+  <p>① Escribí la EDO del sistema físico &nbsp;→&nbsp; ② Aplicá Laplace (dy/dt → s·Y) &nbsp;→&nbsp; ③ Despejá Y(s)/U(s)</p>
+</div>
+
+<div class="grid g2" style="margin-top:.8rem">
+  <div>
+    <div class="fbox">
+      <span class="big">τ·dy/dt + y = K·u</span>
+      <span class="sub-f">EDO de 1er orden (circuito RC, sistema térmico, nivel de tanque)</span>
+      <span class="cond">→ G(s) = K / (τs + 1)</span>
+    </div>
+    <div class="fbox">
+      <span class="big">M·d²x/dt² + B·dx/dt + K·x = F</span>
+      <span class="sub-f">EDO de 2do orden (masa-resorte-amortiguador, RLC)</span>
+      <span class="cond">→ G(s) = 1/(Ms² + Bs + K)</span>
+    </div>
+  </div>
+  <div class="card am">
+    <h3>Analogías entre dominios físicos</h3>
+    <table class="ftable" style="margin-top:.3rem">
+      <tr><th>Dominio</th><th>Resistencia (τ↑)</th><th>Capacidad (τ↑)</th></tr>
+      <tr><td>Eléctrico RC</td><td>R [Ω]</td><td>C [F] → τ=RC</td></tr>
+      <tr><td>Térmico</td><td>R<sub>t</sub> [°C/W]</td><td>C<sub>t</sub> [J/°C] → τ=R<sub>t</sub>C<sub>t</sub></td></tr>
+      <tr><td>Mecánico</td><td>B [N·s/m]</td><td>M [kg] → τ=M/B</td></tr>
+    </table>
+    <p style="font-size:.82rem;margin-top:.5rem;color:var(--gray-lt)">La misma matemática describe sistemas físicos distintos — por eso G(s) es tan poderosa.</p>
+  </div>
+</div>
+
+<div class="card te" style="margin-top:.9rem">
+  <h3>Leer K y τ directamente de G(s) = K / (τs + 1)</h3>
+  <div class="grid g2" style="margin-top:.4rem">
+    <div>
+      <p><b>K (ganancia estática)</b> = G(0) — evaluá G en s=0:</p>
+      <div style="font-family:monospace;font-size:.88rem;margin:.3rem 0;color:var(--main)">K = G(0) = K/(τ·0+1) = K</div>
+      <p style="font-size:.83rem">Significa: ante entrada constante de 1 unidad, la salida llega a K unidades.</p>
+    </div>
+    <div>
+      <p><b>τ (constante de tiempo)</b> = coeficiente de s en el denominador:</p>
+      <div style="font-family:monospace;font-size:.88rem;margin:.3rem 0;color:var(--main)">G(s) = 3/(2s+1) → τ = 2 s</div>
+      <p style="font-size:.83rem">Indica la velocidad: a t=τ el sistema llegó al 63.2% del valor final.</p>
+    </div>
+  </div>
+</div>
+
+<hr class="sec-div">
+
+<!-- ══════════════════ 3. RESPUESTA TEMPORAL ══════════════════ -->
+<div class="sec-header">
+  <div class="sec-num">3</div>
+  <span class="sec-title">Respuesta temporal al escalón</span>
+  <span class="sec-time">⏱ 5 min</span>
+</div>
+
+<div class="grid g2">
+  <div>
+    <div class="fbox">
+      <span class="big">y(t) = y<sub>ss</sub> · (1 − e<sup>−t/τ</sup>)</span>
+      <span class="sub-f">Respuesta de 1er orden ante escalón — válida para cualquier sistema G=K/(τs+1)</span>
+      <span class="cond">y_ss = K · U (donde U es la amplitud del escalón)</span>
+    </div>
+    <div class="fbox">
+      <span class="big">y<sub>ss</sub> = lim<sub>s→0</sub> [s · G(s) · R(s)]</span>
+      <span class="sub-f">Teorema del valor final — para escalón R(s)=A/s: y_ss = G(0)·A = K·A</span>
+      <span class="cond">Solo aplica si el sistema es estable (polos en semiplano izquierdo)</span>
+    </div>
+  </div>
+  <div class="card bl">
+    <h3>Tabla de tiempos — regla de los múltiplos de τ</h3>
+    <table class="ftable">
+      <tr><th>Tiempo</th><th>% del valor final</th><th>Interpretación</th></tr>
+      <tr><td><code>t = τ</code></td><td><b>63.2%</b></td><td>Definición de τ — siempre</td></tr>
+      <tr><td><code>t = 2τ</code></td><td>86.5%</td><td>Sistema "ya va por las 3/4 partes"</td></tr>
+      <tr><td><code>t = 3τ</code></td><td>95.0%</td><td>Criterio de "establecido" (±5%)</td></tr>
+      <tr><td><code>t = 4τ</code></td><td>98.2%</td><td><b>t_s</b> — criterio ±2%</td></tr>
+      <tr><td><code>t = 5τ</code></td><td>99.3%</td><td>Prácticamente estabilizado</td></tr>
+    </table>
+    <p style="font-size:.82rem;margin-top:.4rem;color:var(--gray-lt)">El 63.2% viene de 1−e<sup>−1</sup> = 0.632 — constante matemática, no arbitraria.</p>
+  </div>
+</div>
+
+<div class="grid g3" style="margin-top:.9rem">
+  <div class="card gr">
+    <h3>t<sub>s</sub> — Tiempo de establecimiento</h3>
+    <div class="fbox" style="margin:.4rem 0;font-size:.85rem">
+      <span class="big">t<sub>s</sub> ≈ 4τ = 4/|σ|</span>
+      <span class="sub-f">Criterio ±2% del valor final</span>
+    </div>
+    <p style="font-size:.84rem">σ = parte real del polo (negativa en sistema estable). Más negativo = más rápido = menor t_s.</p>
+  </div>
+  <div class="card or">
+    <h3>Offset — error estacionario</h3>
+    <div class="fbox" style="margin:.4rem 0;font-size:.85rem">
+      <span class="big">Offset = R − y<sub>ss</sub></span>
+      <span class="sub-f">Con control P puro: Offset = 1/(1+Kp)</span>
+    </div>
+    <p style="font-size:.84rem">Con control P puro SIEMPRE existe offset. Solo desaparece con acción integral (PI o PID).</p>
+  </div>
+  <div class="card re">
+    <h3>Overshoot — sobrepaso</h3>
+    <div class="fbox" style="margin:.4rem 0;font-size:.85rem">
+      <span class="big">OS% = e<sup>−πζ/√(1−ζ²)</sup> × 100</span>
+      <span class="sub-f">Solo si ζ &lt; 1 (subamortiguado)</span>
+    </div>
+    <p style="font-size:.84rem">ζ ≈ 0.7 → OS ≈ 5% (buen balance). ζ = 1 → sin overshoot. ζ = 0 → oscila sin parar.</p>
+  </div>
+</div>
+
+<div class="step" style="margin-top:.9rem">
+  <div class="step-title">Cómo despejar t de y(t) = y_ss·(1−e^(−t/τ)) — truco del compañero</div>
+  <p style="font-family:monospace;font-size:.85rem;line-height:2;color:var(--gray)">
+    y<sub>target</sub> / y<sub>ss</sub> = 1 − e<sup>−t/τ</sup> &nbsp;→&nbsp;
+    e<sup>−t/τ</sup> = 1 − (y<sub>target</sub>/y<sub>ss</sub>) &nbsp;→&nbsp;
+    <b>t = −τ · ln(1 − y<sub>target</sub>/y<sub>ss</sub>)</b>
+  </p>
+  <p style="font-size:.83rem;color:var(--gray-lt)">ln() cancela el e. Si y_target = 63.2% → 1−0.632 = 0.368 = e<sup>−1</sup> → ln(0.368) = −1 → t = τ.</p>
+</div>
+
+<hr class="sec-div">
+
+<!-- ══════════════════ 4. POLOS ══════════════════ -->
+<div class="sec-header">
+  <div class="sec-num">4</div>
+  <span class="sec-title">Polos y estabilidad</span>
+  <span class="sec-time">⏱ 5 min</span>
+</div>
+
+<p class="lead">Los <b>polos</b> son los valores de s donde el denominador de G(s) = 0. Su posición en el plano complejo determina completamente el comportamiento del sistema.</p>
+
+<div class="fbox">
+  <span class="big">s = σ + jω</span>
+  <span class="sub-f">σ (sigma) = parte real · ω (omega) = parte imaginaria · j = √(−1)</span>
+  <span class="cond">σ &lt; 0 → estable · σ &gt; 0 → inestable · ω ≠ 0 → oscila</span>
+</div>
+
+<div class="grid g3" style="margin-top:.9rem">
+  <div class="card re">
+    <h3>🔴 Polo con σ &gt; 0</h3>
+    <p><b>Inestable</b> — la respuesta crece sin límite. La salida explota.</p>
+    <p style="font-family:monospace;font-size:.84rem;margin-top:.4rem">G₂ = 1/(s−2) → polo s=+2<br>σ=+2 &gt; 0 → ❌ INESTABLE</p>
+  </div>
+  <div class="card gr">
+    <h3>🟢 Polo con σ &lt; 0</h3>
+    <p><b>Estable</b> — respuesta decae. Más negativo = más rápido y más lejos del borde.</p>
+    <p style="font-family:monospace;font-size:.84rem;margin-top:.4rem">G₁ = 1/(s+2) → polo s=−2<br>σ=−2 &lt; 0 → ✅ ESTABLE</p>
+  </div>
+  <div class="card bl">
+    <h3>🔵 Polos complejos conjugados</h3>
+    <p><b>Oscila</b> si ω≠0. Estable si σ&lt;0. Es el sistema subamortiguado.</p>
+    <p style="font-family:monospace;font-size:.84rem;margin-top:.4rem">G₃ = 1/(s²+2s+5) → s=−1±2j<br>σ=−1&lt;0 ✅ · ω=2≠0 → oscila</p>
+  </div>
+</div>
+
+<div class="card am" style="margin-top:.9rem">
+  <h3>Sistema de 2do orden — parámetros ζ y ωₙ</h3>
+  <div class="grid g2" style="margin-top:.5rem">
+    <div>
+      <div class="fbox" style="font-size:.85rem">
+        <span class="big">G(s) = ωₙ² / (s² + 2ζωₙs + ωₙ²)</span>
+        <span class="sub-f">Polos: s = −ζωₙ ± jωₙ√(1−ζ²)</span>
+      </div>
+      <div class="fbox" style="font-size:.85rem;margin-top:.5rem">
+        <span class="big">ζ = σ / ωₙ = σ / √(σ²+ωd²)</span>
+        <span class="sub-f">σ = parte real del polo · ωₙ = módulo del polo</span>
+        <span class="cond">ζ = 1: crítico (sin OS) · ζ &lt; 1: subamortiguado (OS) · ζ &gt; 1: sobreamortiguado</span>
+      </div>
+    </div>
+    <div>
+      <table class="ftable">
+        <tr><th>ζ</th><th>Régimen</th><th>Overshoot</th></tr>
+        <tr><td>&gt; 1</td><td>Sobreamortiguado</td><td style="color:var(--green)">0%</td></tr>
+        <tr><td>= 1</td><td>Críticamente amort.</td><td style="color:var(--green)">0% (óptimo)</td></tr>
+        <tr><td>≈ 0.7</td><td>Subamortiguado</td><td>≈ 5% (buen balance)</td></tr>
+        <tr><td>≈ 0.45</td><td>Subamortiguado</td><td>≈ 20%</td></tr>
+        <tr><td>= 0</td><td>Sin amortiguamiento</td><td style="color:var(--red)">∞ (no para)</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="card te" style="margin-top:.9rem">
+  <h3>Efecto de Kp sobre el polo de lazo cerrado</h3>
+  <p style="font-size:.87rem">Con G(s)=1/(s+a) y controlador proporcional Kp, el polo de lazo cerrado es:</p>
+  <div class="fbox" style="margin:.4rem 0;font-size:.88rem">
+    <span class="big">T(s) = Kp/(s+a+Kp) → polo en s = −(a+Kp)</span>
+    <span class="sub-f">Más Kp → polo más a la izquierda → respuesta más rápida (τ_eff = 1/(a+Kp))</span>
+  </div>
+  <p style="font-size:.83rem;color:var(--gray-lt)">Ejemplo: G=1/(s+1), Kp=10 → polo en s=−11 en vez de s=−1 → 11× más rápido.</p>
+</div>
+
+<hr class="sec-div">
+
+<!-- ══════════════════ 5. LAZO CERRADO ══════════════════ -->
+<div class="sec-header">
+  <div class="sec-num">5</div>
+  <span class="sec-title">Función de transferencia de lazo cerrado</span>
+  <span class="sec-time">⏱ 4 min</span>
+</div>
+
+<div class="fbox">
+  <span class="big">T(s) = C(s)·G(s) / (1 + C(s)·G(s))</span>
+  <span class="sub-f">Fórmula universal del lazo cerrado con realimentación unitaria</span>
+  <span class="cond">Para C(s) = Kp (proporcional puro): T(s) = Kp·G(s) / (1 + Kp·G(s))</span>
+</div>
+
+<div class="grid g2" style="margin-top:.8rem">
+  <div class="card bl">
+    <h3>Derivación paso a paso — G(s) = 1/(s+1), Kp = 5</h3>
+    <div style="font-family:monospace;font-size:.83rem;line-height:2;margin-top:.3rem">
+      T(s) = 5·(1/(s+1)) / (1 + 5·(1/(s+1)))<br>
+      T(s) = (5/(s+1)) / ((s+1+5)/(s+1))<br>
+      T(s) = <b>5 / (s + 6)</b><br>
+      y_ss = T(0) = 5/6 ≈ 0.833<br>
+      Offset = 1 − 5/6 = 1/6 ≈ 16.7%
+    </div>
+  </div>
+  <div class="card am">
+    <h3>Tabla: Kp vs. offset — G(s) = 1/(s+1)</h3>
+    <table class="ftable">
+      <tr><th>Kp</th><th>T(s)</th><th>y_ss</th><th>Offset</th><th>Polo LC</th></tr>
+      <tr><td><code>2</code></td><td><code>2/(s+3)</code></td><td>0.667</td><td style="color:var(--red)">33.3%</td><td>−3</td></tr>
+      <tr><td><code>5</code></td><td><code>5/(s+6)</code></td><td>0.833</td><td style="color:var(--red)">16.7%</td><td>−6</td></tr>
+      <tr><td><code>10</code></td><td><code>10/(s+11)</code></td><td>0.909</td><td style="color:var(--red)">9.1%</td><td>−11</td></tr>
+      <tr><td><code>∞</code></td><td>—</td><td>1.000</td><td style="color:var(--green)">0%</td><td>−∞</td></tr>
+    </table>
+    <p style="font-size:.82rem;margin-top:.3rem;color:var(--gray-lt)">Con P puro: offset = 1/(1+Kp). Nunca exactamente 0 para Kp finito.</p>
+  </div>
+</div>
+
+<hr class="sec-div">
+
+<!-- ══════════════════ 6. CONTROLADORES ══════════════════ -->
+<div class="sec-header">
+  <div class="sec-num">6</div>
+  <span class="sec-title">Controladores — P, PI y PID</span>
+  <span class="sec-time">⏱ 5 min</span>
+</div>
+
+<div class="grid g3">
+  <div class="card or">
+    <h3>P — Proporcional</h3>
+    <div class="fbox" style="margin:.4rem 0;font-size:.85rem">
+      <span class="big">u = Kp · e</span>
+      <span class="sub-f">C(s) = Kp</span>
+      <span class="warn">Siempre deja offset</span>
+    </div>
+    <ul style="font-size:.83rem">
+      <li>Reacciona al <b>presente</b></li>
+      <li>↑ Kp → menos offset pero más riesgo de OS</li>
+      <li>Úsalo cuando se tolera offset</li>
+    </ul>
+  </div>
+  <div class="card te">
+    <h3>PI — Proporcional + Integral</h3>
+    <div class="fbox" style="margin:.4rem 0;font-size:.85rem">
+      <span class="big">u = Kp·e + Ki·∫e·dt</span>
+      <span class="sub-f">C(s) = Kp + Ki/s = (Kp·s+Ki)/s</span>
+      <span class="cond">Elimina el offset ✅</span>
+    </div>
+    <ul style="font-size:.83rem">
+      <li>I reacciona al <b>pasado</b> (acumula)</li>
+      <li>El polo en s=0 garantiza y_ss = R</li>
+      <li>Más usado en la industria</li>
+    </ul>
+  </div>
+  <div class="card bl">
+    <h3>PID — Proporcional + Integral + Derivativo</h3>
+    <div class="fbox" style="margin:.4rem 0;font-size:.85rem">
+      <span class="big">u = Kp·e + Ki·∫e + Kd·de/dt</span>
+      <span class="sub-f">C(s) = Kp + Ki/s + Kd·s</span>
+      <span class="cond">Elimina offset + reduce OS ✅</span>
+    </div>
+    <ul style="font-size:.83rem">
+      <li>D reacciona a la <b>tendencia</b> (anticipa)</li>
+      <li>Reduce overshoot y t_s</li>
+      <li>⚠️ Amplifica ruido del sensor</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card am" style="margin-top:.9rem">
+  <h3>Efectos de cada ganancia — tabla de referencia</h3>
+  <table class="ftable" style="margin-top:.4rem">
+    <tr><th>Aumentar…</th><th>Tiempo de subida</th><th>Overshoot</th><th>T. establecimiento</th><th>Error permanente</th></tr>
+    <tr><td><code>Kp</code></td><td>↓ Disminuye</td><td style="color:var(--red)">↑ Aumenta</td><td>Cambia poco</td><td>↓ Disminuye</td></tr>
+    <tr><td><code>Ki</code></td><td>↓ Levemente</td><td style="color:var(--red)">↑ Aumenta</td><td style="color:var(--red)">↑ Aumenta</td><td style="color:var(--green);font-weight:700">→ 0 ✅</td></tr>
+    <tr><td><code>Kd</code></td><td>Sin efecto directo</td><td style="color:var(--green)">↓ Disminuye</td><td style="color:var(--green)">↓ Disminuye</td><td>Sin efecto</td></tr>
+  </table>
+  <p style="font-size:.82rem;margin-top:.4rem;color:var(--gray-lt)">Los efectos son aproximados — en la práctica los parámetros interactúan. Ver simulador en <a href="pid-horno.html" style="color:var(--teal)">pid-horno.html</a>.</p>
+</div>
+
+<div class="card re" style="margin-top:.9rem">
+  <h3>🔀 Control On-Off</h3>
+  <p style="font-size:.87rem">Solo dos estados: 100% o 0%. <b>Nunca se estabiliza</b> — oscila permanentemente en un ciclo límite. La <b>histéresis</b> (banda diferencial) evita la conmutación infinita y protege los actuadores.</p>
+  <p style="font-size:.83rem;margin-top:.4rem;color:var(--gray-lt)">Uso: heladeras, aires domésticos, hornos de cocina — sistemas donde la oscilación es aceptable.</p>
+</div>
+
+<hr class="sec-div">
+
+<!-- ══════════════════ 7. TABLA FÓRMULAS ══════════════════ -->
+<div class="sec-header">
+  <div class="sec-num">7</div>
+  <span class="sec-title">Todas las fórmulas — clasificadas por tipo de sistema</span>
+  <span class="sec-time">⏱ 3 min (para repasar)</span>
+</div>
+
+<p class="lead">Agrupadas por contexto de uso. <span class="tag tag-1">1er orden</span> <span class="tag tag-2">2do orden</span> <span class="tag tag-all">Cualquier orden</span> <span class="tag tag-cl">Lazo cerrado</span> <span class="tag tag-pid">Controladores</span></p>
+
+<div style="overflow-x:auto;margin-bottom:1.5rem">
+<table class="ftable">
+  <thead>
+    <tr><th>Fórmula</th><th>Nombre / uso</th><th>Aplica a</th><th>Condición</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>G(s) = K/(τs+1)</code></td>
+      <td>Función de transferencia de 1er orden</td>
+      <td><span class="tag tag-1">1er orden</span></td>
+      <td>RC, térmico, nivel de tanque</td>
+    </tr>
+    <tr>
+      <td><code>τ = RC</code></td>
+      <td>Constante de tiempo — circuito RC</td>
+      <td><span class="tag tag-1">1er orden</span></td>
+      <td>R en Ω, C en F → τ en s</td>
+    </tr>
+    <tr>
+      <td><code>y(t) = y_ss·(1−e^(−t/τ))</code></td>
+      <td>Respuesta al escalón de 1er orden</td>
+      <td><span class="tag tag-1">1er orden</span></td>
+      <td>Sistema estable, entrada escalón</td>
+    </tr>
+    <tr>
+      <td><code>t = −τ·ln(1 − y/y_ss)</code></td>
+      <td>Tiempo para llegar a un valor y</td>
+      <td><span class="tag tag-1">1er orden</span></td>
+      <td>Despejar t de la respuesta exponencial</td>
+    </tr>
+    <tr>
+      <td><code>y_ss = lim(s→0) s·G(s)·R(s)</code></td>
+      <td>Teorema del valor final</td>
+      <td><span class="tag tag-all">Cualquier orden</span></td>
+      <td>Sistema estable, R(s) conocido</td>
+    </tr>
+    <tr>
+      <td><code>y_ss = K · U</code></td>
+      <td>Valor final con escalón amplitud U</td>
+      <td><span class="tag tag-all">Cualquier orden</span></td>
+      <td>Simplificación del teorema del VF</td>
+    </tr>
+    <tr>
+      <td><code>t_s ≈ 4τ = 4/|σ|</code></td>
+      <td>Tiempo de establecimiento (±2%)</td>
+      <td><span class="tag tag-all">Cualquier orden</span></td>
+      <td>σ = parte real del polo dominante</td>
+    </tr>
+    <tr>
+      <td><code>G(s) = ωₙ²/(s²+2ζωₙs+ωₙ²)</code></td>
+      <td>Forma estándar de 2do orden</td>
+      <td><span class="tag tag-2">2do orden</span></td>
+      <td>Masa-resorte, RLC, lazo cerrado con PI</td>
+    </tr>
+    <tr>
+      <td><code>s = −ζωₙ ± jωₙ√(1−ζ²)</code></td>
+      <td>Polos del sistema de 2do orden</td>
+      <td><span class="tag tag-2">2do orden</span></td>
+      <td>ζ &lt; 1 → polos complejos conjugados</td>
+    </tr>
+    <tr>
+      <td><code>ζ = σ/ωₙ = σ/√(σ²+ωd²)</code></td>
+      <td>Factor de amortiguamiento</td>
+      <td><span class="tag tag-2">2do orden</span></td>
+      <td>ζ&lt;1 oscila, ζ=1 crítico, ζ&gt;1 sin OS</td>
+    </tr>
+    <tr>
+      <td><code>OS% = e^(−πζ/√(1−ζ²))×100</code></td>
+      <td>Porcentaje de sobrepaso</td>
+      <td><span class="tag tag-2">2do orden</span></td>
+      <td>Solo para ζ &lt; 1 (subamortiguado)</td>
+    </tr>
+    <tr>
+      <td><code>T(s) = C·G/(1+C·G)</code></td>
+      <td>Función de transferencia lazo cerrado</td>
+      <td><span class="tag tag-cl">Lazo cerrado</span></td>
+      <td>Realimentación unitaria, cualquier C y G</td>
+    </tr>
+    <tr>
+      <td><code>T(s) = Kp·G/(1+Kp·G)</code></td>
+      <td>Lazo cerrado con control proporcional</td>
+      <td><span class="tag tag-cl">Lazo cerrado</span></td>
+      <td>C(s) = Kp (constante)</td>
+    </tr>
+    <tr>
+      <td><code>Offset = 1/(1+Kp)</code></td>
+      <td>Error estacionario con control P</td>
+      <td><span class="tag tag-cl">Lazo cerrado</span></td>
+      <td>G(s)=1/(s+1), escalón unitario, C=Kp</td>
+    </tr>
+    <tr>
+      <td><code>u = Kp·e</code></td>
+      <td>Ley de control Proporcional</td>
+      <td><span class="tag tag-pid">Controladores</span></td>
+      <td>Deja offset permanente</td>
+    </tr>
+    <tr>
+      <td><code>u = Kp·e + Ki·∫e·dt</code></td>
+      <td>Ley de control PI</td>
+      <td><span class="tag tag-pid">Controladores</span></td>
+      <td>Elimina offset — más usado en industria</td>
+    </tr>
+    <tr>
+      <td><code>u = Kp·e + Ki·∫e + Kd·de/dt</code></td>
+      <td>Ley de control PID</td>
+      <td><span class="tag tag-pid">Controladores</span></td>
+      <td>Elimina offset + reduce OS, amplifica ruido</td>
+    </tr>
+    <tr>
+      <td><code>C_PI(s) = (Kp·s+Ki)/s</code></td>
+      <td>Transferencia controlador PI</td>
+      <td><span class="tag tag-pid">Controladores</span></td>
+      <td>Polo en s=0 garantiza y_ss=R</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<hr class="sec-div">
+
+<!-- ══════════════════ QUIZ ══════════════════ -->
+<div class="sec-header">
+  <div class="sec-num">🏁</div>
+  <span class="sec-title">Mini quiz de repaso — 5 preguntas</span>
+  <span class="sec-time">⏱ 2 min</span>
+</div>
+<p class="lead">Verificá que asimilaste los conceptos clave antes de cerrar.</p>
+<div id="rq-box"></div>
+
+</div><!-- /container -->
+
+<footer>
+  <div class="footer-nav">
+    <span style="font-weight:700;color:var(--gray-lt)">Más de esta materia:</span>
+    <a href="teoria.html">📖 Teoría</a>
+    <a href="ejercicios-parcial.html">📝 Ejercicios Parcial</a>
+    <a href="pid-horno.html">🔥 PID Horno</a>
+    <a href="simulador-octave.html">🔬 Octave</a>
+    <a href="../index.html">← Hub Apuntes</a>
+  </div>
+</footer>
+
+<script>
+var RQ = [
+  {
+    q: 'G(s) = 5/(3s+1) — ¿cuánto vale la constante de tiempo τ?',
+    opts:['3 s','5 s','1 s','0.33 s'],
+    correct:0,
+    expl:'τ es el coeficiente de s en el denominador cuando está en forma (τs+1). Acá 3s+1 → τ=3.'
+  },
+  {
+    q: 'Con G(s)=1/(s+1) y Kp=9, ¿cuál es el offset?',
+    opts:['10%','9%','50%','0%'],
+    correct:0,
+    expl:'Offset = 1/(1+Kp) = 1/(1+9) = 1/10 = 10%. Con control P puro nunca es 0.'
+  },
+  {
+    q: 'Un polo en s = −2+3j: ¿el sistema es estable y oscila?',
+    opts:['Sí — σ=−2&lt;0 ✅ y ω=3≠0 → oscila','No — σ negativo significa inestable','Sí — pero no oscila porque σ≠0','No — solo oscila si σ=0'],
+    correct:0,
+    expl:'σ=−2&lt;0 → estable. ω=3≠0 → oscila. Ambas cosas pueden coexistir — es el sistema subamortiguado.'
+  },
+  {
+    q: '¿Qué fórmula usás para calcular cuánto tiempo tarda un sistema de 1er orden en llegar a un valor específico?',
+    opts:['t = −τ·ln(1 − y/y_ss)','t = τ · y/y_ss','t = y_ss · (1 − e^(−τ))','t = 4τ siempre'],
+    correct:0,
+    expl:'Despejás t de y(t)=y_ss·(1−e^(−t/τ)). Aplicando ln: t = −τ·ln(1 − y/y_ss). El 4τ es solo para la banda del ±2%.'
+  },
+  {
+    q: '¿Qué diferencia al controlador PI del P en cuanto al error permanente?',
+    opts:['PI elimina el offset — la integral acumula el error histórico hasta que e=0','PI tiene más ganancia y por eso el offset desaparece','PI es más rápido que P y eso elimina el offset','No hay diferencia en el error permanente'],
+    correct:0,
+    expl:'Con P: u=Kp·e — necesita e≠0 para actuar. Con PI: el término integral puede mantener u≠0 incluso cuando e=0 en ese instante, por eso la salida puede alcanzar exactamente el setpoint.'
+  }
+];
+
+var rqIdx=0, rqScore=0;
+function rqRender(){
+  var box=document.getElementById('rq-box');
+  if(!box) return;
+  if(rqIdx>=RQ.length){ rqResult(); return; }
+  var q=RQ[rqIdx];
+  var h='<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;box-shadow:0 1px 4px rgba(0,0,0,.05)">';
+  h+='<p style="font-size:.78rem;font-weight:700;color:var(--gray-lt);margin-bottom:.5rem">Pregunta '+(rqIdx+1)+' / '+RQ.length+'</p>';
+  h+='<p style="font-weight:600;font-size:.95rem;margin-bottom:.8rem">'+q.q+'</p>';
+  h+='<div style="display:flex;flex-direction:column;gap:.4rem">';
+  q.opts.forEach(function(o,i){
+    h+='<button onclick="rqAnswer('+i+')" style="text-align:left;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:.6rem .9rem;font-size:.88rem;cursor:pointer;font-family:inherit;transition:.15s" onmouseover="this.style.borderColor=\'#4f46e5\'" onmouseout="this.style.borderColor=\'var(--border)\'">'+o+'</button>';
+  });
+  h+='</div>';
+  h+='<div id="rq-expl" style="display:none;margin-top:.8rem;padding:.7rem .9rem;border-radius:8px;font-size:.85rem;background:var(--main-bg);color:var(--main);border-left:3px solid var(--main-lt)">'+q.expl+'</div>';
+  h+='<button id="rq-next" onclick="rqNext()" style="display:none;margin-top:.8rem;background:var(--main);color:#fff;border:none;border-radius:8px;padding:.6rem 1.4rem;font-size:.88rem;font-weight:700;cursor:pointer;font-family:inherit">Siguiente →</button>';
+  h+='</div>';
+  box.innerHTML=h;
+}
+function rqAnswer(i){
+  var q=RQ[rqIdx];
+  var btns=document.querySelectorAll('#rq-box button:not(#rq-next)');
+  btns.forEach(function(b,idx){
+    b.disabled=true;
+    if(idx===q.correct) b.style.background='var(--green-bg)',b.style.borderColor='var(--green)',b.style.color='var(--green)';
+    else if(idx===i) b.style.background='var(--red-bg)',b.style.borderColor='var(--red)',b.style.color='var(--red)';
+  });
+  if(i===q.correct) rqScore++;
+  document.getElementById('rq-expl').style.display='block';
+  document.getElementById('rq-next').style.display='inline-block';
+}
+function rqNext(){ rqIdx++; rqRender(); }
+function rqResult(){
+  var pct=Math.round(100*rqScore/RQ.length);
+  document.getElementById('rq-box').innerHTML=
+    '<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.8rem;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.05)">'+
+    '<div style="font-size:2.5rem">'+(pct>=80?'🎉':'📚')+'</div>'+
+    '<div style="font-size:1.8rem;font-weight:900;color:var(--main);margin:.3rem 0">'+rqScore+' / '+RQ.length+'</div>'+
+    '<p style="font-size:.9rem;color:var(--gray-lt);margin-bottom:1rem">'+(pct>=80?'¡Sólido! Dominás los fundamentos para el parcial.':'Repasá las secciones donde fallaste y volvé.')+'</p>'+
+    '<button onclick="rqIdx=0;rqScore=0;rqRender()" style="background:var(--main);color:#fff;border:none;border-radius:8px;padding:.65rem 1.6rem;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit">Reintentar</button>'+
+    '</div>';
+}
+rqRender();
+</script>
+</body>
+</html>

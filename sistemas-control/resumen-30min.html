@@ -639,34 +639,34 @@ footer{background:var(--main-bg);padding-bottom:1.2rem;border-top:1px solid var(
 <script>
 var RQ = [
   {
-    q: 'G(s) = 5/(3s+1) — ¿cuánto vale la constante de tiempo τ?',
-    opts:['3 s','5 s','1 s','0.33 s'],
+    q: 'Para $G(s) = \\dfrac{5}{3s+1}$, ¿cuánto vale la constante de tiempo $\\tau$?',
+    opts:['$\\tau = 3$ s','$\\tau = 5$ s','$\\tau = 1$ s','$\\tau = 0.33$ s'],
     correct:0,
-    expl:'τ es el coeficiente de s en el denominador cuando está en forma (τs+1). Acá 3s+1 → τ=3.'
+    expl:'$\\tau$ es el coeficiente de $s$ en el denominador en forma $(\\tau s+1)$. Acá $3s+1 \\Rightarrow \\tau=3$.'
   },
   {
-    q: 'Con G(s)=1/(s+1) y Kp=9, ¿cuál es el offset?',
-    opts:['10%','9%','50%','0%'],
+    q: 'Con $G(s)=\\dfrac{1}{s+1}$ y $K_p=9$, ¿cuál es el offset en estado estacionario?',
+    opts:['$\\text{Offset} = \\dfrac{1}{1+K_p} = 10\\%$','$\\text{Offset} = 9\\%$','$\\text{Offset} = 50\\%$','$\\text{Offset} = 0\\%$'],
     correct:0,
-    expl:'Offset = 1/(1+Kp) = 1/(1+9) = 1/10 = 10%. Con control P puro nunca es 0.'
+    expl:'$\\text{Offset} = \\dfrac{1}{1+K_p} = \\dfrac{1}{1+9} = \\dfrac{1}{10} = 10\\%$. Con control P puro nunca es $0$.'
   },
   {
-    q: 'Un polo en s = −2+3j: ¿el sistema es estable y oscila?',
-    opts:['Sí — σ=−2&lt;0 ✅ y ω=3≠0 → oscila','No — σ negativo significa inestable','Sí — pero no oscila porque σ≠0','No — solo oscila si σ=0'],
+    q: 'Polo en $s = -2+3j$: ¿el sistema es estable y oscila?',
+    opts:['Sí — $\\sigma=-2<0$ ✅ y $\\omega=3\\neq 0$ → oscila','No — $\\sigma$ negativo significa inestable','Sí — pero no oscila porque $\\sigma\\neq 0$','No — solo oscila si $\\sigma=0$'],
     correct:0,
-    expl:'σ=−2&lt;0 → estable. ω=3≠0 → oscila. Ambas cosas pueden coexistir — es el sistema subamortiguado.'
+    expl:'$\\sigma=-2<0$ → estable. $\\omega=3\\neq 0$ → oscila. Ambas cosas coexisten: es un sistema subamortiguado estable.'
   },
   {
-    q: '¿Qué fórmula usás para calcular cuánto tiempo tarda un sistema de 1er orden en llegar a un valor específico?',
-    opts:['t = −τ·ln(1 − y/y_ss)','t = τ · y/y_ss','t = y_ss · (1 − e^(−τ))','t = 4τ siempre'],
+    q: '¿Qué fórmula usás para despejar el tiempo $t$ en un sistema de 1er orden?',
+    opts:['$t = -\\tau \\cdot \\ln\\!\\left(1 - \\dfrac{y}{y_{ss}}\\right)$','$t = \\tau \\cdot \\dfrac{y}{y_{ss}}$','$t = y_{ss} \\cdot (1 - e^{-\\tau})$','$t = 4\\tau$ siempre'],
     correct:0,
-    expl:'Despejás t de y(t)=y_ss·(1−e^(−t/τ)). Aplicando ln: t = −τ·ln(1 − y/y_ss). El 4τ es solo para la banda del ±2%.'
+    expl:'Despejás $t$ de $y(t)=y_{ss}(1-e^{-t/\\tau})$. Aplicando $\\ln$: $t = -\\tau\\ln(1 - y/y_{ss})$. El $4\\tau$ es solo para la banda $\\pm 2\\%$.'
   },
   {
-    q: '¿Qué diferencia al controlador PI del P en cuanto al error permanente?',
-    opts:['PI elimina el offset — la integral acumula el error histórico hasta que e=0','PI tiene más ganancia y por eso el offset desaparece','PI es más rápido que P y eso elimina el offset','No hay diferencia en el error permanente'],
+    q: '¿Qué diferencia al controlador PI del P puro en cuanto al error permanente?',
+    opts:['PI elimina el offset — $K_i\\int e\\,dt$ puede mantener $u\\neq 0$ con $e=0$','PI tiene más $K_p$ y por eso el offset desaparece','PI es más rápido que P y eso elimina el offset','No hay diferencia en el error permanente'],
     correct:0,
-    expl:'Con P: u=Kp·e — necesita e≠0 para actuar. Con PI: el término integral puede mantener u≠0 incluso cuando e=0 en ese instante, por eso la salida puede alcanzar exactamente el setpoint.'
+    expl:'Con P: $u=K_p e$ — necesita $e\\neq 0$ para actuar. Con PI: el término $K_i\\int e\\,dt$ acumula el error histórico y puede generar señal aunque $e=0$, llevando la salida exactamente al setpoint.'
   }
 ];
 
@@ -688,6 +688,9 @@ function rqRender(){
   h+='<button id="rq-next" onclick="rqNext()" style="display:none;margin-top:.8rem;background:var(--main);color:#fff;border:none;border-radius:8px;padding:.6rem 1.4rem;font-size:.88rem;font-weight:700;cursor:pointer;font-family:inherit">Siguiente →</button>';
   h+='</div>';
   box.innerHTML=h;
+  if(typeof renderMathInElement !== 'undefined'){
+    renderMathInElement(box,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+  }
 }
 function rqAnswer(i){
   var q=RQ[rqIdx];
@@ -700,6 +703,10 @@ function rqAnswer(i){
   if(i===q.correct) rqScore++;
   document.getElementById('rq-expl').style.display='block';
   document.getElementById('rq-next').style.display='inline-block';
+  var box=document.getElementById('rq-box');
+  if(typeof renderMathInElement !== 'undefined'){
+    renderMathInElement(box,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+  }
 }
 function rqNext(){ rqIdx++; rqRender(); }
 function rqResult(){

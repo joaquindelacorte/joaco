@@ -278,6 +278,7 @@ footer a{color:var(--main)}
     <a class="tab-btn" href="octave-ide.html" style="text-decoration:none">💻 IDE Octave</a>
     <a class="tab-btn" href="resumen-30min.html" style="text-decoration:none;background:rgba(234,88,12,.18);color:#fb923c;font-weight:800">⚡ 30 min</a>
     <a class="tab-btn" href="simulador-tanque.html" style="text-decoration:none;background:rgba(2,132,199,.15);color:#38bdf8;font-weight:700">🚰 Tanque</a>
+    <button class="tab-btn" onclick="showTab('labs')">🔬 Labs</button>
     <button class="tab-btn" onclick="showTab('sim2')">✏️ Simulacro</button>
     <button class="tab-btn" onclick="showTab('mapa')">🗺️ Mapa</button>
   </div>
@@ -2335,6 +2336,7 @@ function showTab(id){
   var trigger=arguments[1]||(typeof event!=='undefined'?event.target:null);
   if(trigger) trigger.classList.add('active');
   if(id==='quiz'){ renderBadges(); }
+  if(id==='labs'){ initLabs(); }
   if(id==='sim'){ drawFirstOrder(); drawSecondOrder(); drawAcChart(); }
   if(id==='c4'){ onGainKChange(); onDelayChange(); }
   if(id==='c5'){ initC5(); }
@@ -3376,6 +3378,362 @@ function goToSection(tab, anchor) {
   }
 }
 
+
+/* ══════════════ LABS CSS extra ══════════════ */
+/* (injected via JS to avoid editing <style> block) */
+(function(){
+  var s = document.createElement('style');
+  s.textContent = [
+    '.lab-btn{padding:.45rem 1rem;border:none;background:transparent;color:var(--gray-lt);',
+    'font-size:.82rem;font-weight:600;cursor:pointer;border-radius:7px;transition:.15s;font-family:inherit}',
+    '.lab-btn.active{background:var(--main);color:#fff}',
+    '.lab-btn:hover:not(.active){background:var(--main-bg);color:var(--main)}',
+    '.lab-page{display:none}.lab-page.active{display:block}',
+    '.lab-card{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;',
+    'background:var(--card);border:1px solid var(--border);border-radius:14px;',
+    'padding:1.3rem;margin-bottom:1.2rem;box-shadow:0 1px 4px rgba(0,0,0,.05)}',
+    '@media(max-width:700px){.lab-card{grid-template-columns:1fr}}',
+    '.lab-controls{display:flex;flex-direction:column;gap:.45rem;margin-top:.6rem}',
+    '.lab-controls label{font-size:.82rem;color:var(--gray);font-family:inherit}',
+    '.lab-controls input[type=range]{width:100%}',
+    '.lab-canvas{width:100%;height:220px;display:block;border-radius:8px}',
+    '.lab-readout{font-size:.82rem;font-family:monospace;color:var(--main-lt);',
+    'background:var(--main-bg);border-radius:8px;padding:.5rem .7rem;margin-top:.5rem;line-height:1.8}',
+    '.lab-left{display:flex;flex-direction:column}'
+  ].join('');
+  document.head.appendChild(s);
+})();
+
+/* ══════════════ SHARED DRAWING HELPER ══════════════ */
+function labDraw(cvId, fn) {
+  var cv = document.getElementById(cvId);
+  if (!cv) return;
+  var dpr = window.devicePixelRatio || 1;
+  var cssW = cv.clientWidth || 320, cssH = 220;
+  if (cv.width !== cssW*dpr || cv.height !== cssH*dpr) {
+    cv.width = cssW*dpr; cv.height = cssH*dpr;
+  }
+  var ctx = cv.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,cssW,cssH);
+  fn(ctx, cssW, cssH);
+}
+
+function labAxes(ctx,W,H,pL,pR,pT,pB,xMax,yMax,xlabel,ylabel) {
+  var pw = W-pL-pR, ph = H-pT-pB;
+  ctx.strokeStyle='#e2e8f0'; ctx.lineWidth=1;
+  for (var i=0;i<=4;i++) {
+    var gv=yMax*i/4, gy=pT+(1-gv/yMax)*ph;
+    ctx.beginPath(); ctx.moveTo(pL,gy); ctx.lineTo(pL+pw,gy); ctx.stroke();
+    ctx.fillStyle='#9ca3af'; ctx.font='9px Segoe UI'; ctx.textAlign='right';
+    ctx.fillText(gv.toFixed(gv<1?2:1), pL-3, gy+3);
+  }
+  for (var j=0;j<=5;j++) {
+    var gx=pL+(j/5)*pw;
+    ctx.beginPath(); ctx.moveTo(gx,pT); ctx.lineTo(gx,pT+ph); ctx.stroke();
+    ctx.fillStyle='#9ca3af'; ctx.font='9px Segoe UI'; ctx.textAlign='center';
+    ctx.fillText((xMax*j/5).toFixed(1)+'s', gx, pT+ph+12);
+  }
+  ctx.strokeStyle='#374151'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(pL,pT); ctx.lineTo(pL,pT+ph); ctx.lineTo(pL+pw,pT+ph); ctx.stroke();
+  ctx.fillStyle='#6b7280'; ctx.font='9px Segoe UI'; ctx.textAlign='left';
+  ctx.fillText(ylabel, 2, pT+8);
+  ctx.fillText(xlabel+' →', pL+pw-28, pT+ph+12);
+  return {pw:pw, ph:ph,
+    tx:function(t){return pL+(t/xMax)*pw;},
+    ty:function(v){return pT+(1-Math.min(v,yMax*1.05)/yMax)*ph;}};
+}
+
+function labCurve(ctx,axes,fn,tMax,N,color,lw) {
+  ctx.strokeStyle=color; ctx.lineWidth=lw||2.5; ctx.beginPath();
+  for(var i=0;i<=N;i++){
+    var t=i/N*tMax, v=fn(t);
+    i===0?ctx.moveTo(axes.tx(t),axes.ty(v)):ctx.lineTo(axes.tx(t),axes.ty(v));
+  }
+  ctx.stroke();
+}
+
+/* ══════════════ LAB 1: F1 — G(s)=K/(τs+1) ══════════════ */
+function labK1() {
+  var K=+document.getElementById('slK').value;
+  var tau=+document.getElementById('slTau1').value;
+  var U=+document.getElementById('slU1').value;
+  document.getElementById('lbK').textContent=K.toFixed(1);
+  document.getElementById('lbTau1').textContent=tau.toFixed(1);
+  document.getElementById('lbU1').textContent=U.toFixed(1);
+  var yss=K*U, tMax=Math.max(6*tau,4);
+  document.getElementById('outK1').innerHTML=
+    'G(0) = K = '+K.toFixed(1)+' &nbsp;|&nbsp; τ = '+tau.toFixed(1)+' s<br>'+
+    'y_ss = K·U = '+K.toFixed(1)+'×'+U.toFixed(1)+' = <b>'+yss.toFixed(2)+'</b><br>'+
+    'A t=τ: y = '+( yss*(1-Math.exp(-1)) ).toFixed(3)+' (63.2%)<br>'+
+    't_s ≈ 4τ = '+(4*tau).toFixed(1)+' s';
+  labDraw('cvK1', function(ctx,W,H) {
+    var pL=40,pR=12,pT=14,pB=24;
+    var a=labAxes(ctx,W,H,pL,pR,pT,pB,tMax,yss*1.15,'t','y');
+    ctx.strokeStyle='#9ca3af'; ctx.lineWidth=1.2; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(pL,a.ty(yss)); ctx.lineTo(W-pR,a.ty(yss)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#9ca3af'; ctx.font='9px Segoe UI'; ctx.textAlign='left';
+    ctx.fillText('y_ss='+yss.toFixed(2), W-pR+2, a.ty(yss)+3);
+    labCurve(ctx,a,function(t){return yss*(1-Math.exp(-t/tau));},tMax,400,'#4f46e5');
+    // τ marker
+    var tauY=yss*(1-Math.exp(-1));
+    ctx.fillStyle='#ea580c'; ctx.beginPath(); ctx.arc(a.tx(tau),a.ty(tauY),5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#ea580c'; ctx.font='9px Segoe UI'; ctx.textAlign='left';
+    ctx.fillText('63% @τ='+tau.toFixed(1)+'s', a.tx(tau)+6, a.ty(tauY)-4);
+  });
+}
+
+/* ══════════════ LAB 1: F2 — τ = RC ══════════════ */
+function labRC() {
+  var R=+document.getElementById('slR').value;
+  var C=+document.getElementById('slC').value/1e6;
+  document.getElementById('lbR').textContent=R;
+  document.getElementById('lbC').textContent=Math.round(C*1e6);
+  var tau=R*C, V=5, tMax=Math.max(5*tau,0.1);
+  document.getElementById('outRC').innerHTML=
+    'τ = R×C = '+R+'Ω × '+(C*1e6).toFixed(0)+'μF = <b>'+tau.toFixed(3)+'s</b><br>'+
+    'V_C(τ) = '+( V*(1-Math.exp(-1)) ).toFixed(3)+' V (63.2% de 5V)<br>'+
+    't_s ≈ 4τ = '+(4*tau).toFixed(3)+' s';
+  labDraw('cvRC', function(ctx,W,H) {
+    var pL=36,pR=12,pT=14,pB=24;
+    var a=labAxes(ctx,W,H,pL,pR,pT,pB,tMax,V*1.15,'t','V_C');
+    ctx.strokeStyle='#9ca3af'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(pL,a.ty(V)); ctx.lineTo(W-pR,a.ty(V)); ctx.stroke();
+    ctx.setLineDash([]);
+    labCurve(ctx,a,function(t){return V*(1-Math.exp(-t/tau));},tMax,400,'#0d9488');
+    var tauY=V*(1-Math.exp(-1));
+    ctx.fillStyle='#b45309'; ctx.beginPath(); ctx.arc(a.tx(tau),a.ty(tauY),5,0,Math.PI*2); ctx.fill();
+  });
+}
+
+/* ══════════════ LAB 1: F3+F4 — y(t) y despeje de t ══════════════ */
+function labYT() {
+  var tau=+document.getElementById('slTau3').value;
+  var yss=+document.getElementById('slYss').value;
+  var pct=+document.getElementById('slYpct').value;
+  document.getElementById('lbTau3').textContent=tau.toFixed(1);
+  document.getElementById('lbYss').textContent=yss.toFixed(1);
+  document.getElementById('lbYpct').textContent=pct;
+  var ytgt=yss*pct/100;
+  var t_calc=-tau*Math.log(1-pct/100);
+  var tMax=Math.max(6*tau,4);
+  document.getElementById('outYT').innerHTML=
+    'y_target = '+pct+'% × '+yss.toFixed(1)+' = <b>'+ytgt.toFixed(3)+'</b><br>'+
+    't = −τ·ln(1−y/y_ss) = −'+tau.toFixed(1)+'·ln(1−'+pct+'/100)<br>'+
+    '<b>t ≈ '+t_calc.toFixed(3)+' s</b> &nbsp;(= '+(t_calc/tau).toFixed(2)+'τ)';
+  labDraw('cvYT', function(ctx,W,H) {
+    var pL=40,pR=12,pT=14,pB=24;
+    var a=labAxes(ctx,W,H,pL,pR,pT,pB,tMax,yss*1.15,'t','y');
+    ctx.strokeStyle='#9ca3af'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(pL,a.ty(yss)); ctx.lineTo(W-pR,a.ty(yss)); ctx.stroke();
+    ctx.setLineDash([]);
+    labCurve(ctx,a,function(t){return yss*(1-Math.exp(-t/tau));},tMax,400,'#4f46e5');
+    // target line + point
+    ctx.strokeStyle='#15803d'; ctx.lineWidth=1.2; ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(pL,a.ty(ytgt)); ctx.lineTo(W-pR,a.ty(ytgt)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(a.tx(t_calc),a.ty(0)); ctx.lineTo(a.tx(t_calc),a.ty(ytgt)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#15803d'; ctx.beginPath(); ctx.arc(a.tx(t_calc),a.ty(ytgt),6,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#15803d'; ctx.font='9px Segoe UI'; ctx.textAlign='left';
+    ctx.fillText('t='+t_calc.toFixed(2)+'s', a.tx(t_calc)+6, a.ty(ytgt)-5);
+  });
+}
+
+/* ══════════════ LAB 2: F5+F6 — TVF ══════════════ */
+function labTVF() {
+  var K=+document.getElementById('slK2').value;
+  var U=+document.getElementById('slU2').value;
+  var tau=+document.getElementById('slTau2').value;
+  document.getElementById('lbK2').textContent=K.toFixed(1);
+  document.getElementById('lbU2').textContent=U.toFixed(1);
+  document.getElementById('lbTau2').textContent=tau.toFixed(1);
+  var yss=K*U, tMax=Math.max(6*tau,4);
+  document.getElementById('outTVF').innerHTML=
+    'G(0) = K = '+K.toFixed(1)+' &nbsp;·&nbsp; U = '+U.toFixed(1)+'<br>'+
+    'y_ss = lim(s→0) s·G(s)·(U/s) = G(0)·U = K·U<br>'+
+    '<b>y_ss = '+K.toFixed(1)+'×'+U.toFixed(1)+' = '+yss.toFixed(2)+'</b>';
+  labDraw('cvTVF', function(ctx,W,H) {
+    var pL=40,pR=40,pT=14,pB=24;
+    var a=labAxes(ctx,W,H,pL,pR,pT,pB,tMax,yss*1.2,'t','y');
+    ctx.strokeStyle='#9ca3af'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(pL,a.ty(yss)); ctx.lineTo(W-pR,a.ty(yss)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#b45309'; ctx.font='bold 9px Segoe UI'; ctx.textAlign='left';
+    ctx.fillText('y_ss='+yss.toFixed(2), W-pR+3, a.ty(yss)+3);
+    labCurve(ctx,a,function(t){return yss*(1-Math.exp(-t/tau));},tMax,400,'#b45309');
+  });
+}
+
+/* ══════════════ LAB 2: F7 — t_s ≈ 4τ ══════════════ */
+function labTs() {
+  var tau=+document.getElementById('slTauTs').value;
+  var K=+document.getElementById('slKTs').value;
+  var U=+document.getElementById('slUTs').value;
+  document.getElementById('lbTauTs').textContent=tau.toFixed(1);
+  document.getElementById('lbKTs').textContent=K.toFixed(1);
+  document.getElementById('lbUTs').textContent=U.toFixed(1);
+  document.getElementById('lbTs').textContent=(4*tau).toFixed(1);
+  var yss=K*U, ts=4*tau, tMax=Math.max(ts*1.6,4);
+  document.getElementById('outTs').innerHTML=
+    't_s ≈ 4τ = 4×'+tau.toFixed(1)+' = <b>'+(4*tau).toFixed(1)+' s</b><br>'+
+    'A t_s: y = '+yss*(1-Math.exp(-4)).toFixed(3)+' ('+((1-Math.exp(-4))*100).toFixed(1)+'% de y_ss)';
+  labDraw('cvTs', function(ctx,W,H) {
+    var pL=40,pR=12,pT=14,pB=24;
+    var a=labAxes(ctx,W,H,pL,pR,pT,pB,tMax,yss*1.2,'t','y');
+    // ±2% band
+    ctx.fillStyle='rgba(21,128,61,0.08)';
+    ctx.fillRect(a.tx(0),a.ty(yss*1.02),a.tx(tMax)-a.tx(0),a.ty(yss*0.98)-a.ty(yss*1.02));
+    ctx.strokeStyle='#15803d'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(pL,a.ty(yss*1.02)); ctx.lineTo(W-12,a.ty(yss*1.02)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pL,a.ty(yss*0.98)); ctx.lineTo(W-12,a.ty(yss*0.98)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#15803d'; ctx.font='8px Segoe UI';
+    ctx.fillText('+2%', W-12+2, a.ty(yss*1.02)+3);
+    ctx.fillText('-2%', W-12+2, a.ty(yss*0.98)+3);
+    labCurve(ctx,a,function(t){return yss*(1-Math.exp(-t/tau));},tMax,400,'#4f46e5');
+    // t_s vertical
+    ctx.strokeStyle='#ea580c'; ctx.lineWidth=2; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(a.tx(ts),a.ty(0)); ctx.lineTo(a.tx(ts),a.ty(yss*1.15)); ctx.stroke();
+    ctx.fillStyle='#ea580c'; ctx.font='bold 9px Segoe UI'; ctx.textAlign='center';
+    ctx.fillText('t_s='+ts.toFixed(1)+'s', a.tx(ts), a.ty(yss*1.15)-2);
+    ctx.fillStyle='#9ca3af'; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(pL,a.ty(yss)); ctx.lineTo(W-12,a.ty(yss)); ctx.stroke();
+    ctx.setLineDash([]);
+  });
+}
+
+/* ══════════════ LAB 3: F8+F9+F10 — T(s) y Offset ══════════════ */
+function labLC() {
+  var Kp=+document.getElementById('slKpLC').value;
+  document.getElementById('lbKpLC').textContent=Kp.toFixed(1);
+  var yss=Kp/(1+Kp), tau_lc=1/(1+Kp), offset=(1-yss)*100;
+  var tMax=Math.max(5*tau_lc,2);
+  document.getElementById('outLC').innerHTML=
+    'T(s) = '+Kp.toFixed(1)+'/(s+'+(1+Kp).toFixed(1)+')  →  Polo en s=−'+(1+Kp).toFixed(1)+'<br>'+
+    'y_ss = Kp/(1+Kp) = <b>'+yss.toFixed(3)+'</b><br>'+
+    'Offset = 1/(1+Kp) = <b>'+offset.toFixed(1)+'%</b><br>'+
+    'τ_eff = 1/(1+Kp) = '+tau_lc.toFixed(3)+' s &nbsp;('+((1/(1+Kp))/(1)).toFixed(2)+'× más rápido)';
+  labDraw('cvLC', function(ctx,W,H) {
+    var pL=40,pR=12,pT=14,pB=24;
+    var a=labAxes(ctx,W,H,pL,pR,pT,pB,tMax,1.15,'t','y');
+    // setpoint
+    ctx.strokeStyle='#9ca3af'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(pL,a.ty(1)); ctx.lineTo(W-12,a.ty(1)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#9ca3af'; ctx.font='9px Segoe UI'; ctx.textAlign='left';
+    ctx.fillText('r=1', W-12+2, a.ty(1)+3);
+    // offset band
+    ctx.fillStyle='rgba(220,38,38,0.08)';
+    ctx.fillRect(a.tx(tMax*0.6),a.ty(1),a.tx(tMax)-a.tx(tMax*0.6),a.ty(yss)-a.ty(1));
+    // T(s) response
+    labCurve(ctx,a,function(t){return yss*(1-Math.exp(-t/tau_lc));},tMax,400,'#4f46e5');
+    // offset label
+    ctx.strokeStyle='#b91c1c'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(pL,a.ty(yss)); ctx.lineTo(W-12,a.ty(yss)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#b91c1c'; ctx.font='bold 9px Segoe UI';
+    ctx.fillText('offset '+offset.toFixed(1)+'%', W-12+2, a.ty(yss)+3);
+  });
+}
+
+/* ══════════════ LAB 4: F11 — Control P ══════════════ */
+function labPcomp() {
+  var Kp=+document.getElementById('slKpP').value;
+  document.getElementById('lbKpP').textContent=Kp.toFixed(1);
+  var yss=Kp/(1+Kp), tau_lc=1/(1+Kp), tMax=Math.max(6*tau_lc,2);
+  document.getElementById('outP').innerHTML=
+    'u = Kp·e = '+Kp.toFixed(1)+'·(1−y)<br>'+
+    'y_ss = '+yss.toFixed(3)+' &nbsp;Offset = '+((1-yss)*100).toFixed(1)+'%<br>'+
+    'Para eliminar el offset → agregar acción integral (PI)';
+  labDraw('cvP', function(ctx,W,H) {
+    var pL=40,pR=12,pT=14,pB=24;
+    var a=labAxes(ctx,W,H,pL,pR,pT,pB,tMax,1.15,'t','y');
+    ctx.strokeStyle='#9ca3af'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(pL,a.ty(1)); ctx.lineTo(W-12,a.ty(1)); ctx.stroke();
+    ctx.setLineDash([]);
+    labCurve(ctx,a,function(t){return yss*(1-Math.exp(-t/tau_lc));},tMax,400,'#c2410c');
+    ctx.strokeStyle='#b91c1c'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(pL,a.ty(yss)); ctx.lineTo(W-12,a.ty(yss)); ctx.stroke();
+    ctx.setLineDash([]);
+  });
+}
+
+/* ══════════════ LAB 4: F12+F13+F14 — PI y PID ══════════════ */
+function labPIDcomp() {
+  var Kp=+document.getElementById('slKpPID').value;
+  var Ki=+document.getElementById('slKiPID').value;
+  var Kd=+document.getElementById('slKdPID').value;
+  document.getElementById('lbKpPID').textContent=Kp.toFixed(1);
+  document.getElementById('lbKiPID').textContent=Ki.toFixed(2);
+  document.getElementById('lbKdPID').textContent=Kd.toFixed(2);
+
+  var dt=0.02, N=400, r=1;
+  function simEuler(useI, useD) {
+    var y=0, ei=0, eprev=0, out=[];
+    for(var k=0;k<N;k++){
+      var e=r-y;
+      var u=Kp*e + (useI?Ki*ei:0) + (useD&&k>0?Kd*(e-eprev)/dt:0);
+      if(u<0)u=0; if(u>10)u=10;
+      y += dt*(u-y);
+      ei += dt*e; eprev=e;
+      out.push(y);
+    }
+    return out;
+  }
+  var yP=simEuler(false,false);
+  var yPI=simEuler(true,false);
+  var yPID=simEuler(true,true);
+  var tMax=N*dt;
+  var yMax=Math.max(...yP,...yPI,...yPID,1.05)*1.1;
+  var yssP=yP[N-1], yssPI=yPI[N-1];
+  document.getElementById('outPID').innerHTML=
+    '<span style="color:#c2410c">P</span>: y_ss='+yssP.toFixed(3)+' offset='+((1-yssP)*100).toFixed(1)+'%<br>'+
+    '<span style="color:#0d9488">PI</span>: y_ss='+yssPI.toFixed(3)+' offset='+((1-yssPI)*100).toFixed(2)+'%<br>'+
+    '<span style="color:#4f46e5">PID</span>: Kp='+Kp+' Ki='+Ki+' Kd='+Kd;
+  labDraw('cvPID', function(ctx,W,H) {
+    var pL=40,pR=40,pT=14,pB=24;
+    var a=labAxes(ctx,W,H,pL,pR,pT,pB,tMax,yMax,'t','y');
+    ctx.strokeStyle='#9ca3af'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(pL,a.ty(1)); ctx.lineTo(W-pR,a.ty(1)); ctx.stroke();
+    ctx.setLineDash([]);
+    [[yP,'#c2410c','P'],[yPI,'#0d9488','PI'],[yPID,'#4f46e5','PID']].forEach(function(item,idx){
+      var data=item[0],col=item[1],lbl=item[2];
+      ctx.strokeStyle=col; ctx.lineWidth=2.2; ctx.beginPath();
+      data.forEach(function(v,i){
+        var t=i*dt; i===0?ctx.moveTo(a.tx(t),a.ty(v)):ctx.lineTo(a.tx(t),a.ty(v));
+      });
+      ctx.stroke();
+      ctx.fillStyle=col; ctx.font='bold 9px Segoe UI'; ctx.textAlign='left';
+      ctx.fillText(lbl, W-pR+4, a.ty(data[N-1])+idx*12);
+    });
+  });
+}
+
+/* ══════════════ INIT ══════════════ */
+function showLab(id, btn) {
+  document.querySelectorAll('.lab-page').forEach(function(p){p.style.display='none';});
+  document.querySelectorAll('.lab-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById(id).style.display='block';
+  if(btn) btn.classList.add('active');
+  setTimeout(function(){
+    if(id==='lab1'){labK1();labRC();labYT();}
+    if(id==='lab2'){labTVF();labTs();}
+    if(id==='lab3'){labLC();}
+    if(id==='lab4'){labPcomp();labPIDcomp();}
+    if(typeof renderMathInElement!=='undefined'){
+      renderMathInElement(document.getElementById('page-labs'),{
+        delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
+        throwOnError:false
+      });
+    }
+  },50);
+}
+
+function initLabs(){
+  labK1(); labRC(); labYT();
+}
+
 /* ===================== QUIZ SIMULACRO ===================== */
 var SIM2_QUIZ = [
   {
@@ -3499,5 +3857,242 @@ sim2Render();
   <a href="pid-horno.html">PID Horno</a>
   <a href="simulador-tanque.html">🚰 Simulador Tanque</a>
 </nav>
+
+<!-- ═══════════════ LABS — SIMULADORES POR FÓRMULA ═══════════════ -->
+<div class="page" id="page-labs">
+<div class="container">
+
+  <div class="stitle"><span class="ico">🔬</span>Simuladores por Fórmula</div>
+  <p class="lead">Un simulador interactivo para cada fórmula. Mové los sliders y observá cómo cambian los parámetros en tiempo real.</p>
+
+  <!-- Mini-tabs de categoría -->
+  <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:1.5rem;padding:.3rem;background:var(--main-bg);border-radius:10px;border:1px solid var(--border)">
+    <button class="lab-btn active" onclick="showLab('lab1',this)">① 1er Orden</button>
+    <button class="lab-btn" onclick="showLab('lab2',this)">② Cualquier Orden</button>
+    <button class="lab-btn" onclick="showLab('lab3',this)">③ Lazo Cerrado</button>
+    <button class="lab-btn" onclick="showLab('lab4',this)">④ P · PI · PID</button>
+  </div>
+
+  <!-- ═══ LAB 1: 1er Orden ═══ -->
+  <div id="lab1" class="lab-page">
+
+    <!-- F1: G(s) = K/(τs+1) -->
+    <div class="lab-card">
+      <div class="lab-left">
+        <span class="supp-tag">Fórmula 1 · 1er Orden</span>
+        <div class="fbox" style="margin:.5rem 0">
+          <span class="big">$$G(s) = \frac{K}{\tau s + 1}$$</span>
+          <span class="sub-f">$K$ = ganancia estática &nbsp;·&nbsp; $\tau$ = constante de tiempo [s]</span>
+        </div>
+        <p class="lead" style="font-size:.86rem"><b>Ejemplo:</b> Circuito RC, sistema térmico de calentamiento, nivel de líquido en un tanque. Cualquier proceso con acumulación y pérdidas proporcionales.</p>
+        <div class="lab-controls">
+          <label>$K$ (ganancia) = <b id="lbK">2.0</b></label>
+          <input type="range" id="slK" min="0.5" max="5" step="0.1" value="2" oninput="labK1()">
+          <label>$\tau$ (constante) = <b id="lbTau1">2.0</b> s</label>
+          <input type="range" id="slTau1" min="0.2" max="6" step="0.1" value="2" oninput="labK1()">
+          <label>$U$ (escalón) = <b id="lbU1">1.0</b></label>
+          <input type="range" id="slU1" min="0.5" max="4" step="0.1" value="1" oninput="labK1()">
+        </div>
+        <div id="outK1" class="lab-readout"></div>
+      </div>
+      <div class="lab-right"><canvas id="cvK1" class="lab-canvas"></canvas></div>
+    </div>
+
+    <!-- F2: τ = RC -->
+    <div class="lab-card">
+      <div class="lab-left">
+        <span class="supp-tag">Fórmula 2 · 1er Orden</span>
+        <div class="fbox" style="margin:.5rem 0">
+          <span class="big">$$\tau = R \cdot C$$</span>
+          <span class="sub-f">$R$ = resistencia [Ω] &nbsp;·&nbsp; $C$ = capacitancia [F]</span>
+        </div>
+        <p class="lead" style="font-size:.86rem"><b>Ejemplo:</b> Carga de un condensador $C$ alimentado a través de una resistencia $R$. La tensión sube con $V_C(t) = V\,(1-e^{-t/\tau})$.</p>
+        <div class="lab-controls">
+          <label>$R$ = <b id="lbR">1000</b> Ω</label>
+          <input type="range" id="slR" min="100" max="10000" step="100" value="1000" oninput="labRC()">
+          <label>$C$ = <b id="lbC">1000</b> μF</label>
+          <input type="range" id="slC" min="100" max="5000" step="100" value="1000" oninput="labRC()">
+        </div>
+        <div id="outRC" class="lab-readout"></div>
+      </div>
+      <div class="lab-right"><canvas id="cvRC" class="lab-canvas"></canvas></div>
+    </div>
+
+    <!-- F3 + F4: y(t) y despeje de t -->
+    <div class="lab-card">
+      <div class="lab-left">
+        <span class="supp-tag">Fórmulas 3 y 4 · 1er Orden</span>
+        <div class="fbox" style="margin:.5rem 0">
+          <span class="big">$$y(t) = y_{ss}\!\left(1 - e^{-t/\tau}\right)$$</span>
+          <span class="sub-f">Respuesta al escalón unitario de cualquier sistema de 1er orden</span>
+        </div>
+        <div class="fbox" style="margin:.5rem 0">
+          <span class="big">$$t = -\tau \ln\!\left(1 - \frac{y}{y_{ss}}\right)$$</span>
+          <span class="sub-f">Tiempo para alcanzar el $y\%$ del valor final</span>
+        </div>
+        <p class="lead" style="font-size:.86rem"><b>Ejemplo:</b> Tiempo que tarda el nivel del tanque en alcanzar el 80% de capacidad, o el termómetro en llegar a 79°C.</p>
+        <div class="lab-controls">
+          <label>$\tau$ = <b id="lbTau3">2.0</b> s</label>
+          <input type="range" id="slTau3" min="0.5" max="6" step="0.1" value="2" oninput="labYT()">
+          <label>$y_{ss}$ = <b id="lbYss">6.0</b></label>
+          <input type="range" id="slYss" min="1" max="10" step="0.5" value="6" oninput="labYT()">
+          <label>Objetivo $y_{target}$ = <b id="lbYpct">80</b>% de $y_{ss}$</label>
+          <input type="range" id="slYpct" min="10" max="99" step="1" value="80" oninput="labYT()">
+        </div>
+        <div id="outYT" class="lab-readout"></div>
+      </div>
+      <div class="lab-right"><canvas id="cvYT" class="lab-canvas"></canvas></div>
+    </div>
+
+  </div><!-- /lab1 -->
+
+  <!-- ═══ LAB 2: Cualquier Orden ═══ -->
+  <div id="lab2" class="lab-page" style="display:none">
+
+    <!-- F5: TVF + F6: y_ss = K·U -->
+    <div class="lab-card">
+      <div class="lab-left">
+        <span class="supp-tag">Fórmulas 5 y 6 · Cualquier Orden</span>
+        <div class="fbox" style="margin:.5rem 0">
+          <span class="big">$$y_{ss} = \lim_{s \to 0} s \cdot G(s) \cdot R(s)$$</span>
+          <span class="sub-f">Teorema del Valor Final — para escalón $R(s)=U/s$: $y_{ss} = G(0)\cdot U = K\cdot U$</span>
+        </div>
+        <div class="fbox" style="margin:.5rem 0">
+          <span class="big">$$y_{ss} = K \cdot U$$</span>
+          <span class="sub-f">Simplificación del TVF para escalón de amplitud $U$ y planta con ganancia $K$</span>
+        </div>
+        <p class="lead" style="font-size:.86rem"><b>Ejemplo:</b> Velocidad final de un motor ante un voltaje de entrada $U$, o cambio de presión $U$ multiplicado por la ganancia estática $K$.</p>
+        <div class="lab-controls">
+          <label>$K$ (ganancia) = <b id="lbK2">3.0</b></label>
+          <input type="range" id="slK2" min="0.5" max="8" step="0.1" value="3" oninput="labTVF()">
+          <label>$U$ (amplitud escalón) = <b id="lbU2">2.0</b></label>
+          <input type="range" id="slU2" min="0.5" max="5" step="0.1" value="2" oninput="labTVF()">
+          <label>$\tau$ = <b id="lbTau2">1.5</b> s</label>
+          <input type="range" id="slTau2" min="0.2" max="4" step="0.1" value="1.5" oninput="labTVF()">
+        </div>
+        <div id="outTVF" class="lab-readout"></div>
+      </div>
+      <div class="lab-right"><canvas id="cvTVF" class="lab-canvas"></canvas></div>
+    </div>
+
+    <!-- F7: t_s ≈ 4τ -->
+    <div class="lab-card">
+      <div class="lab-left">
+        <span class="supp-tag">Fórmula 7 · Cualquier Orden</span>
+        <div class="fbox" style="margin:.5rem 0">
+          <span class="big">$$t_s \approx 4\tau = \frac{4}{|\sigma|}$$</span>
+          <span class="sub-f">Criterio $\pm 2\%$ · $\sigma$ = parte real del polo dominante</span>
+        </div>
+        <p class="lead" style="font-size:.86rem"><b>Ejemplo:</b> Tiempo para que la respuesta de una máquina permanezca dentro de la banda $\pm 2\%$ del valor de estado estacionario.</p>
+        <div class="lab-controls">
+          <label>$\tau$ = <b id="lbTauTs">2.0</b> s → $t_s \approx$ <b id="lbTs">8.0</b> s</label>
+          <input type="range" id="slTauTs" min="0.5" max="5" step="0.1" value="2" oninput="labTs()">
+          <label>$K$ = <b id="lbKTs">2.0</b></label>
+          <input type="range" id="slKTs" min="0.5" max="5" step="0.1" value="2" oninput="labTs()">
+          <label>$U$ = <b id="lbUTs">1.0</b></label>
+          <input type="range" id="slUTs" min="0.5" max="3" step="0.1" value="1" oninput="labTs()">
+        </div>
+        <div id="outTs" class="lab-readout"></div>
+      </div>
+      <div class="lab-right"><canvas id="cvTs" class="lab-canvas"></canvas></div>
+    </div>
+
+  </div><!-- /lab2 -->
+
+  <!-- ═══ LAB 3: Lazo Cerrado ═══ -->
+  <div id="lab3" class="lab-page" style="display:none">
+
+    <!-- F8+F9+F10: T(s) y Offset -->
+    <div class="lab-card">
+      <div class="lab-left">
+        <span class="supp-tag">Fórmulas 8, 9 y 10 · Lazo Cerrado</span>
+        <div class="fbox" style="margin:.5rem 0">
+          <span class="big">$$T(s) = \frac{K_p\,G(s)}{1 + K_p\,G(s)}$$</span>
+          <span class="sub-f">Con $G(s)=1/(s+1)$: $T(s) = \dfrac{K_p}{s + 1 + K_p}$ — polo en $s=-(1+K_p)$</span>
+        </div>
+        <div class="fbox" style="margin:.5rem 0">
+          <span class="big">$$\text{Offset} = \frac{1}{1+K_p}$$</span>
+          <span class="sub-f">Error permanente con control P puro — nunca llega a $0$ para $K_p$ finito</span>
+        </div>
+        <p class="lead" style="font-size:.86rem"><b>Ejemplo:</b> Temperatura real de un horno controlado proporcionalmente — siempre queda una desviación respecto al setpoint.</p>
+        <div class="lab-controls">
+          <label>$K_p$ = <b id="lbKpLC">3.0</b></label>
+          <input type="range" id="slKpLC" min="0.5" max="20" step="0.5" value="3" oninput="labLC()">
+        </div>
+        <div id="outLC" class="lab-readout"></div>
+      </div>
+      <div class="lab-right"><canvas id="cvLC" class="lab-canvas"></canvas></div>
+    </div>
+
+    <!-- Tabla offset vs Kp -->
+    <div class="card bl" style="margin-bottom:1.2rem">
+      <h3>Tabla: $K_p$ → polo LC → $y_{ss}$ → Offset (para $G=1/(s+1)$)</h3>
+      <div style="overflow-x:auto;margin-top:.5rem">
+        <table style="width:100%;border-collapse:collapse;font-size:.85rem;text-align:center">
+          <thead><tr style="background:var(--main);color:#fff"><th style="padding:.4rem .7rem;text-align:left">$K_p$</th><th>$T(s)$</th><th>Polo LC</th><th>$y_{ss}$</th><th>Offset</th></tr></thead>
+          <tbody>
+            <tr><td style="padding:.3rem .6rem;text-align:left">2</td><td style="font-family:monospace">$2/(s+3)$</td><td>$-3$</td><td>$2/3 = 0.667$</td><td style="color:var(--red)">33.3%</td></tr>
+            <tr style="background:#f9fafb"><td style="padding:.3rem .6rem;text-align:left">5</td><td style="font-family:monospace">$5/(s+6)$</td><td>$-6$</td><td>$5/6 = 0.833$</td><td style="color:var(--red)">16.7%</td></tr>
+            <tr><td style="padding:.3rem .6rem;text-align:left">10</td><td style="font-family:monospace">$10/(s+11)$</td><td>$-11$</td><td>$10/11 = 0.909$</td><td style="color:var(--red)">9.1%</td></tr>
+            <tr style="background:#f9fafb"><td style="padding:.3rem .6rem;text-align:left">∞</td><td style="font-family:monospace">—</td><td>$-\infty$</td><td>1.000</td><td style="color:var(--green)">0%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /lab3 -->
+
+  <!-- ═══ LAB 4: P / PI / PID ═══ -->
+  <div id="lab4" class="lab-page" style="display:none">
+
+    <!-- F11: u = Kp·e -->
+    <div class="lab-card">
+      <div class="lab-left">
+        <span class="supp-tag">Fórmula 11 · Control P</span>
+        <div class="fbox" style="margin:.5rem 0">
+          <span class="big">$$u = K_p \cdot e$$</span>
+          <span class="sub-f">$e = r - y$ = error actual &nbsp;·&nbsp; $u$ = señal de control</span>
+        </div>
+        <p class="lead" style="font-size:.86rem"><b>Ejemplo:</b> Válvula activada por flotador — cuanto mayor es el error de nivel $e$, más se abre la válvula. Siempre deja offset.</p>
+        <div class="lab-controls">
+          <label>$K_p$ = <b id="lbKpP">3.0</b></label>
+          <input type="range" id="slKpP" min="0.5" max="15" step="0.5" value="3" oninput="labPcomp()">
+        </div>
+        <div id="outP" class="lab-readout"></div>
+      </div>
+      <div class="lab-right"><canvas id="cvP" class="lab-canvas"></canvas></div>
+    </div>
+
+    <!-- F12+F13+F14: PI y PID comparación -->
+    <div class="lab-card">
+      <div class="lab-left">
+        <span class="supp-tag">Fórmulas 12, 13 y 14 · PI y PID</span>
+        <div class="fbox" style="margin:.5rem 0">
+          <span class="big">$$u = K_p e + K_i \int e\,dt + K_d\frac{de}{dt}$$</span>
+          <span class="sub-f">P = presente · I = pasado acumulado · D = tendencia futura</span>
+        </div>
+        <div class="fbox" style="margin:.5rem 0">
+          <span class="big">$$C_{PI}(s) = \frac{K_p s + K_i}{s}$$</span>
+          <span class="sub-f">Polo en $s=0$ garantiza $y_{ss} = r$ (sin offset) · Cero en $s = -K_i/K_p$</span>
+        </div>
+        <p class="lead" style="font-size:.86rem"><b>Ejemplo:</b> Control de velocidad en cinta transportadora (PI elimina offset) o brazo robótico (PID reduce sobrepico).</p>
+        <div class="lab-controls">
+          <label>$K_p$ = <b id="lbKpPID">2.0</b></label>
+          <input type="range" id="slKpPID" min="0.5" max="8" step="0.5" value="2" oninput="labPIDcomp()">
+          <label>$K_i$ = <b id="lbKiPID">1.0</b></label>
+          <input type="range" id="slKiPID" min="0" max="5" step="0.25" value="1" oninput="labPIDcomp()">
+          <label>$K_d$ = <b id="lbKdPID">0.5</b></label>
+          <input type="range" id="slKdPID" min="0" max="3" step="0.25" value="0.5" oninput="labPIDcomp()">
+        </div>
+        <div id="outPID" class="lab-readout"></div>
+      </div>
+      <div class="lab-right"><canvas id="cvPID" class="lab-canvas"></canvas></div>
+    </div>
+
+  </div><!-- /lab4 -->
+
+</div><!-- /container -->
+</div><!-- /page-labs -->
+
 </body>
 </html>

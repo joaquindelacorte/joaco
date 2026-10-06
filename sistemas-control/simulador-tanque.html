@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Control de Nivel y Vaciado de Tanque</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- KaTeX CSS & JS para renderizado matemático -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <style>
+        @keyframes flowAnimation {
+            0% { stroke-dashoffset: 20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .water-flow {
+            stroke-dasharray: 8, 4;
+            animation: flowAnimation 0.5s linear infinite;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-slate-800 border-b border-slate-700 p-4 shadow-lg">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-blue-600 rounded-lg shadow-md">
+                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="flex items-center gap-3 mb-1">
+                        <a href="teoria.html" class="text-xs text-slate-400 hover:text-sky-400 transition flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                            Volver a Teoría
+                        </a>
+                        <a href="ejercicios-parcial.html" class="text-xs text-slate-400 hover:text-sky-400 transition">Parcial</a>
+                        <a href="pid-horno.html" class="text-xs text-slate-400 hover:text-sky-400 transition">PID Horno</a>
+                        <a href="resumen-30min.html" class="text-xs text-amber-400 hover:text-amber-300 transition font-semibold">⚡ 30 min</a>
+                    </div>
+                    <h1 class="text-xl font-bold text-white">Simulador de Control de Nivel de Agua</h1>
+                    <p class="text-xs text-slate-400">Planta de 1er Orden: $G(s) = \frac{1}{\tau s + 1}$ | Análisis On-Off, Histéresis y Vaciado</p>
+                </div>
+            </div>
+
+            <!-- Controles de Simulación Globales -->
+            <div class="flex items-center gap-3 bg-slate-900/80 p-2 rounded-xl border border-slate-700">
+                <button id="btnPlayPause" class="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-lg transition shadow">
+                    <svg id="iconPlay" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span id="textPlay">Pausar</span>
+                </button>
+                <button id="btnReset" class="flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white font-medium rounded-lg transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    Reiniciar
+                </button>
+                <div class="flex items-center gap-2 border-l border-slate-700 pl-3">
+                    <span class="text-xs text-slate-400 font-medium">Velocidad:</span>
+                    <select id="selectSpeed" class="bg-slate-800 text-white text-xs rounded border border-slate-600 p-1 focus:outline-none">
+                        <option value="0.5">0.5x</option>
+                        <option value="1.0" selected>1.0x</option>
+                        <option value="2.0">2.0x</option>
+                        <option value="5.0">5.0x</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Panel Izquierdo: Animación del Tanque y Variables Live (4 columnas) -->
+        <div class="lg:col-span-4 flex flex-col gap-6">
+            
+            <!-- Animación SVG del Tanque -->
+            <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700 shadow-xl flex flex-col items-center relative overflow-hidden">
+                <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400 mb-3 w-full text-left flex justify-between items-center">
+                    <span>Visualización Físico-Dinámica</span>
+                    <span id="badgeState" class="px-2 py-0.5 rounded text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">Ciclando</span>
+                </h2>
+
+                <!-- Canvas / SVG Animation Container -->
+                <div class="relative w-full h-80 flex justify-center items-center bg-slate-950/60 rounded-xl p-4 border border-slate-800">
+                    <svg id="svgTank" class="w-full h-full max-w-[280px]" viewBox="0 0 240 300">
+                        <!-- Estructura del Tanque -->
+                        <rect x="50" y="50" width="140" height="200" rx="8" fill="#1e293b" stroke="#475569" stroke-width="4"/>
+                        
+                        <!-- Agua en el Tanque -->
+                        <rect id="rectWater" x="52" y="248" width="136" height="2" fill="#0284c7" opacity="0.85" transition="all 0.1s linear"/>
+                        <!-- Superficie / Ola de agua -->
+                        <ellipse id="ellipseWaterSurface" cx="120" cy="248" rx="68" ry="4" fill="#38bdf8" opacity="0.9"/>
+
+                        <!-- Marcas de Escala en el Tanque -->
+                        <g stroke="#64748b" stroke-width="1.5" opacity="0.6">
+                            <line x1="42" y1="250" x2="50" y2="250"/><text x="28" y="253" fill="#94a3b8" font-size="9">0.0</text>
+                            <line x1="42" y1="200" x2="50" y2="200"/><text x="28" y="203" fill="#94a3b8" font-size="9">0.5</text>
+                            <line x1="42" y1="150" x2="50" y2="150"/><text x="28" y="153" fill="#94a3b8" font-size="9">1.0</text>
+                            <line x1="42" y1="100" x2="50" y2="100"/><text x="28" y="103" fill="#94a3b8" font-size="9">1.5</text>
+                            <line x1="42" y1="50" x2="50" y2="50"/><text x="28" y="53" fill="#94a3b8" font-size="9">2.0</text>
+                        </g>
+
+                        <!-- Línea de Setpoint -->
+                        <line id="lineSetpoint" x1="50" y1="150" x2="190" y2="150" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,4"/>
+                        <!-- Línea Banda Superior -->
+                        <line id="lineHMax" x1="50" y1="130" x2="190" y2="130" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="2,2"/>
+                        <!-- Línea Banda Inferior -->
+                        <line id="lineHMin" x1="50" y1="170" x2="190" y2="170" stroke="#10b981" stroke-width="1.5" stroke-dasharray="2,2"/>
+
+                        <!-- Tubería de Entrada (Arriba) -->
+                        <path d="M 10 30 L 90 30 L 90 48" stroke="#64748b" stroke-width="12" fill="none" stroke-linejoin="round"/>
+                        <path d="M 10 30 L 90 30 L 90 48" stroke="#334155" stroke-width="8" fill="none" stroke-linejoin="round"/>
+                        <!-- Chorro de Agua Entrada -->
+                        <line id="streamIn" x1="90" y1="48" x2="90" y2="248" stroke="#38bdf8" stroke-width="6" class="water-flow" opacity="0"/>
+
+                        <!-- Tubería de Salida / Desagüe (Abajo Derecha) -->
+                        <path d="M 188 230 L 230 230" stroke="#64748b" stroke-width="10" fill="none"/>
+                        <path d="M 188 230 L 230 230" stroke="#334155" stroke-width="6" fill="none"/>
+                        <!-- Chorro de Salida -->
+                        <line id="streamOut" x1="230" y1="230" x2="240" y2="230" stroke="#0284c7" stroke-width="4" class="water-flow" opacity="0"/>
+
+                        <!-- Sensor Flotador -->
+                        <circle id="sensorFloat" cx="120" cy="245" r="7" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                        <line id="sensorRod" x1="120" y1="245" x2="120" y2="30" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="2,2"/>
+                    </svg>
+                </div>
+
+                <!-- Leyenda del Esquema -->
+                <div class="flex flex-wrap justify-center gap-3 mt-3 text-xs">
+                    <span class="flex items-center gap-1 text-amber-400"><span class="w-3 h-0.5 bg-amber-400 inline-block"></span> Setpoint ($r$)</span>
+                    <span class="flex items-center gap-1 text-red-400"><span class="w-3 h-0.5 bg-red-400 inline-block"></span> $h_{\max}$</span>
+                    <span class="flex items-center gap-1 text-emerald-400"><span class="w-3 h-0.5 bg-emerald-400 inline-block"></span> $h_{\min}$</span>
+                </div>
+            </div>
+
+            <!-- Valores en Tiempo Real (Telemetría) -->
+            <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700 shadow-xl">
+                <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400 mb-4">Telemetría del Sistema</h2>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-700/60">
+                        <span class="text-xs text-slate-400 block">Nivel Agua $y(t)$</span>
+                        <span id="valY" class="text-2xl font-bold text-sky-400">0.00 <span class="text-xs text-slate-400">L</span></span>
+                    </div>
+
+                    <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-700/60">
+                        <span class="text-xs text-slate-400 block">Entrada $u(t)$ (Bomba)</span>
+                        <span id="valU" class="text-2xl font-bold text-emerald-400">0.00 <span class="text-xs text-slate-400">L/s</span></span>
+                    </div>
+
+                    <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-700/60">
+                        <span class="text-xs text-slate-400 block">Salida $q_{out}(t) = \frac{y}{\tau}$</span>
+                        <span id="valQout" class="text-2xl font-bold text-amber-400">0.00 <span class="text-xs text-slate-400">L/s</span></span>
+                    </div>
+
+                    <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-700/60">
+                        <span class="text-xs text-slate-400 block">Tiempo Transcurrido</span>
+                        <span id="valTime" class="text-2xl font-bold text-purple-400">0.0 <span class="text-xs text-slate-400">s</span></span>
+                    </div>
+                </div>
+
+                <!-- Estado del Actuador -->
+                <div class="mt-4 p-3 bg-slate-900/90 rounded-xl border border-slate-700 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <div id="ledPump" class="w-3.5 h-3.5 rounded-full bg-slate-600 shadow-md"></div>
+                        <span class="text-xs font-medium text-slate-300">Estado de la Bomba:</span>
+                    </div>
+                    <span id="textPumpState" class="text-xs font-bold text-slate-400 uppercase">APAGADA (0 L/s)</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Panel Central & Derecho: Gráficos y Panel de Control (8 columnas) -->
+        <div class="lg:col-span-8 flex flex-col gap-6">
+
+            <!-- Panel de Modo de Operación y Parámetros -->
+            <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700 shadow-xl">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5 border-b border-slate-700 pb-4">
+                    <div>
+                        <h2 class="text-base font-bold text-white">Modo de Control y Configuración de Parámetros</h2>
+                        <p class="text-xs text-slate-400">Ajustá la dinámica del sistema e inspeccioná su respuesta transitoria</p>
+                    </div>
+
+                    <!-- Botones Selector de Modo -->
+                    <div class="flex p-1 bg-slate-900 rounded-xl border border-slate-700 w-full sm:w-auto">
+                        <button id="modeOnOff" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white shadow transition">Control On-Off</button>
+                        <button id="modeProp" class="px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition">Control $K_p$</button>
+                        <button id="modeDrain" class="px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition">Vaciado Libre ($u=0$)</button>
+                    </div>
+                </div>
+
+                <!-- Controles Deslizantes (Sliders) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    
+                    <!-- Setpoint -->
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-slate-300 font-medium">Setpoint ($r$ - Nivel Deseado):</span>
+                            <span id="lblSetpoint" class="text-amber-400 font-bold">1.00 L</span>
+                        </div>
+                        <input type="range" id="inputSetpoint" min="0.2" max="1.8" step="0.05" value="1.0" class="w-full accent-amber-500 bg-slate-700 h-2 rounded-lg cursor-pointer">
+                    </div>
+
+                    <!-- Histéresis (Banda Delta h) -->
+                    <div id="containerHysteresis">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-slate-300 font-medium">Banda Histéresis ($\pm\Delta h$):</span>
+                            <span id="lblHysteresis" class="text-emerald-400 font-bold">$\pm 0.20$ L</span>
+                        </div>
+                        <input type="range" id="inputHysteresis" min="0.02" max="0.50" step="0.01" value="0.20" class="w-full accent-emerald-500 bg-slate-700 h-2 rounded-lg cursor-pointer">
+                        <p class="text-[10px] text-slate-400 mt-1">Con conmuta entre $h_{\min} =$ <span id="txtHmin">0.80</span>L y $h_{\max} =$ <span id="txtHmax">1.20</span>L</p>
+                    </div>
+
+                    <!-- Ganancia Kp (oculto por defecto) -->
+                    <div id="containerKp" class="hidden">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-slate-300 font-medium">Ganancia Proporcional ($K_p$):</span>
+                            <span id="lblKp" class="text-purple-400 font-bold">3.0</span>
+                        </div>
+                        <input type="range" id="inputKp" min="0.5" max="15.0" step="0.5" value="3.0" class="w-full accent-purple-500 bg-slate-700 h-2 rounded-lg cursor-pointer">
+                        <p class="text-[10px] text-slate-400 mt-1">Error permanente estimado (Offset): $e_{ee} = \frac{r}{1+K_p} \approx$ <span id="txtOffset">0.25</span>L</p>
+                    </div>
+
+                    <!-- Caudal Máximo Bomba (u_max) -->
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-slate-300 font-medium">Caudal Máx. Bomba ($u_{\max}$):</span>
+                            <span id="lblUmax" class="text-sky-400 font-bold">2.00 L/s</span>
+                        </div>
+                        <input type="range" id="inputUmax" min="0.5" max="5.0" step="0.1" value="2.0" class="w-full accent-sky-500 bg-slate-700 h-2 rounded-lg cursor-pointer">
+                    </div>
+
+                    <!-- Constante de Tiempo tau -->
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-slate-300 font-medium">Constante de Tiempo ($\tau$ del Tanque):</span>
+                            <span id="lblTau" class="text-indigo-400 font-bold">1.00 s</span>
+                        </div>
+                        <input type="range" id="inputTau" min="0.2" max="5.0" step="0.1" value="1.0" class="w-full accent-indigo-500 bg-slate-700 h-2 rounded-lg cursor-pointer">
+                        <p class="text-[10px] text-slate-400 mt-1">Tiempo de vaciado práctico ($4\tau$ al 98.2%): <span id="txtDrainTime">4.00</span> s</p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Gráficos de Respuesta Temporal Chart.js -->
+            <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700 shadow-xl flex flex-col gap-4">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400">Respuesta Temporal del Sistema en Tiempo Real</h2>
+                    <span class="text-xs text-slate-400">Muestreo: 100 Hz ($\Delta t = 0.01\text{s}$)</span>
+                </div>
+
+                <!-- Gráfico 1: Nivel de Agua y Umbrales -->
+                <div class="h-52 w-full relative">
+                    <canvas id="chartLevel"></canvas>
+                </div>
+
+                <!-- Gráfico 2: Señal de Control / Caudal de Bomba -->
+                <div class="h-32 w-full relative">
+                    <canvas id="chartControl"></canvas>
+                </div>
+            </div>
+
+            <!-- Apartado Teórico Didáctico y Deducción Matemática -->
+            <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700 shadow-xl">
+                <details class="group">
+                    <summary class="flex justify-between items-center font-bold text-slate-200 cursor-pointer list-none">
+                        <span class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                            Fundamento Matemático e Integración Integrada Paso a Paso
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </span>
+                    </summary>
+
+                    <div class="mt-4 pt-4 border-t border-slate-700 text-sm text-slate-300 space-y-4 custom-scrollbar max-h-96 overflow-y-auto pr-2">
+                        
+                        <div>
+                            <h3 class="font-bold text-sky-400 mb-1">1. Ecuación Diferencial del Tanque</h3>
+                            <p>Partiendo de la función de transferencia dada $G(s) = \frac{Y(s)}{U(s)} = \frac{1}{\tau s + 1}$, multiplicando cruzado e invirtiendo la transformada de Laplace se obtiene:</p>
+                            <p class="my-2 text-center text-amber-300 font-mono bg-slate-900 p-2 rounded border border-slate-800">
+                                $$\tau \frac{dy(t)}{dt} + y(t) = u(t) \implies \frac{dy(t)}{dt} = \frac{u(t) - y(t)}{\tau}$$
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3 class="font-bold text-emerald-400 mb-1">2. Integración para el Vaciado ($u = 0$)</h3>
+                            <p>Cuando la bomba se apaga totalmente ($u(t) = 0$), se aplica **separación de variables**:</p>
+                            <p class="my-2 text-center text-slate-200 font-mono bg-slate-900 p-2 rounded border border-slate-800">
+                                $$\frac{1}{y} dy = -\frac{1}{\tau} dt \implies \int_{y_0}^{y(t)} \frac{1}{y} dy = -\frac{1}{\tau} \int_{0}^{t} dt$$
+                            </p>
+                            <p class="my-2 text-center text-slate-200 font-mono bg-slate-900 p-2 rounded border border-slate-800">
+                                $$\ln\left(\frac{y(t)}{y_0}\right) = -\frac{t}{\tau} \implies y(t) = y_0 e^{-\frac{t}{\tau}}$$
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3 class="font-bold text-purple-400 mb-1">3. Criterios de Tiempo de Vaciado Practico</h3>
+                            <ul class="list-disc pl-5 space-y-1 text-xs">
+                                <li><strong>$t = 1\tau$:</strong> Queda el $36.8\%$ de agua (se ha vaciado el $63.2\%$).</li>
+                                <li><strong>$t = 3\tau$:</strong> Queda el $5.0\%$ de agua (se ha vaciado el $95.0\%$).</li>
+                                <li><strong>$t = 4\tau$:</strong> Queda el $1.8\%$ de agua (se ha vaciado el **$98.2\%$**, criterio de estado estacionario estándar en ingeniería).</li>
+                                <li><strong>$t = 5\tau$:</strong> Queda el $0.7\%$ de agua (se ha vaciado el **$99.3\%$**).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 class="font-bold text-amber-400 mb-1">4. ¿Por qué ocurre el Ciclo Límite en On-Off?</h3>
+                            <p class="text-xs">
+                                El control On-Off conmuta entre la curva exponencial de llenado $y(t) = U_{\max} - (U_{\max} - h_{\min})e^{-t/\tau}$ (hacia $U_{\max}$) y la de vaciado $y(t) = h_{\max}e^{-t/\tau}$ (hacia $0$). Debido a que commuta en los umbrales fijos $h_{\min}$ y $h_{\max}$, la salida jamás se detiene en un único valor, generando una oscilación periódica autosostenida llamada <strong>ciclo límite</strong>.
+                            </p>
+                        </div>
+
+                    </div>
+                </details>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Script Principal de Simulación y Visualización -->
+    <script>
+        // --- Estado de la Simulación ---
+        const state = {
+            running: true,
+            mode: 'onoff', // 'onoff', 'prop', 'drain'
+            t: 0,
+            dt: 0.01, // Paso de tiempo (10ms)
+            speed: 1.0,
+            
+            // Parámetros de la planta y controlador
+            y: 0.0,         // Nivel actual
+            u: 0.0,         // Caudal de entrada actual
+            setpoint: 1.0,  // r
+            hyster: 0.20,   // delta h
+            umax: 2.0,      // Caudal máx bomba
+            tau: 1.0,       // Constante de tiempo
+            kp: 3.0,        // Ganancia proporcional
+            
+            pumpOn: false,  // Estado binario para On-Off
+            
+            // Historial de datos para gráficos (máximo 500 puntos)
+            maxPoints: 500,
+            timeHistory: [],
+            yHistory: [],
+            uHistory: [],
+            spHistory: [],
+            hMaxHistory: [],
+            hMinHistory: []
+        };
+
+        // --- Elementos DOM ---
+        const btnPlayPause = document.getElementById('btnPlayPause');
+        const iconPlay = document.getElementById('iconPlay');
+        const textPlay = document.getElementById('textPlay');
+        const btnReset = document.getElementById('btnReset');
+        const selectSpeed = document.getElementById('selectSpeed');
+
+        const modeOnOff = document.getElementById('modeOnOff');
+        const modeProp = document.getElementById('modeProp');
+        const modeDrain = document.getElementById('modeDrain');
+
+        const inputSetpoint = document.getElementById('inputSetpoint');
+        const inputHysteresis = document.getElementById('inputHysteresis');
+        const inputKp = document.getElementById('inputKp');
+        const inputUmax = document.getElementById('inputUmax');
+        const inputTau = document.getElementById('inputTau');
+
+        const lblSetpoint = document.getElementById('lblSetpoint');
+        const lblHysteresis = document.getElementById('lblHysteresis');
+        const lblKp = document.getElementById('lblKp');
+        const lblUmax = document.getElementById('lblUmax');
+        const lblTau = document.getElementById('lblTau');
+        const txtHmin = document.getElementById('txtHmin');
+        const txtHmax = document.getElementById('txtHmax');
+        const txtOffset = document.getElementById('txtOffset');
+        const txtDrainTime = document.getElementById('txtDrainTime');
+
+        const containerHysteresis = document.getElementById('containerHysteresis');
+        const containerKp = document.getElementById('containerKp');
+
+        const valY = document.getElementById('valY');
+        const valU = document.getElementById('valU');
+        const valQout = document.getElementById('valQout');
+        const valTime = document.getElementById('valTime');
+        const ledPump = document.getElementById('ledPump');
+        const textPumpState = document.getElementById('textPumpState');
+        const badgeState = document.getElementById('badgeState');
+
+        // Elementos SVG Animación
+        const rectWater = document.getElementById('rectWater');
+        const ellipseWaterSurface = document.getElementById('ellipseWaterSurface');
+        const lineSetpoint = document.getElementById('lineSetpoint');
+        const lineHMax = document.getElementById('lineHMax');
+        const lineHMin = document.getElementById('lineHMin');
+        const streamIn = document.getElementById('streamIn');
+        const streamOut = document.getElementById('streamOut');
+        const sensorFloat = document.getElementById('sensorFloat');
+
+        // --- Configuración de Gráficos Chart.js ---
+        const ctxLevel = document.getElementById('chartLevel').getContext('2d');
+        const ctxControl = document.getElementById('chartControl').getContext('2d');
+
+        const chartLevel = new Chart(ctxLevel, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                    { label: 'Nivel y(t)', data: [], borderColor: '#38bdf8', borderWidth: 2.5, pointRadius: 0, fill: false },
+                    { label: 'Setpoint (r)', data: [], borderColor: '#f59e0b', borderWidth: 1.5, borderDash: [4, 4], pointRadius: 0, fill: false },
+                    { label: 'h_max', data: [], borderColor: '#ef4444', borderWidth: 1, borderDash: [2, 2], pointRadius: 0, fill: false },
+                    { label: 'h_min', data: [], borderColor: '#10b981', borderWidth: 1, borderDash: [2, 2], pointRadius: 0, fill: false }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: false,
+                scales: {
+                    x: { type: 'linear', title: { display: true, text: 'Tiempo (s)', color: '#94a3b8' }, ticks: { color: '#64748b' }, grid: { color: '#334155' } },
+                    y: { min: 0, max: 2.2, title: { display: true, text: 'Nivel (L)', color: '#94a3b8' }, ticks: { color: '#64748b' }, grid: { color: '#334155' } }
+                },
+                plugins: { legend: { labels: { color: '#cbd5e1', boxWidth: 12, font: { size: 10 } } } }
+            }
+        });
+
+        const chartControl = new Chart(ctxControl, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                    { label: 'Bomba u(t) (L/s)', data: [], borderColor: '#10b981', borderWidth: 2, pointRadius: 0, fill: true, backgroundColor: 'rgba(16, 185, 129, 0.1)' }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: false,
+                scales: {
+                    x: { type: 'linear', title: { display: true, text: 'Tiempo (s)', color: '#94a3b8' }, ticks: { color: '#64748b' }, grid: { color: '#334155' } },
+                    y: { min: 0, max: 5.5, title: { display: true, text: 'Caudal u(t)', color: '#94a3b8' }, ticks: { color: '#64748b' }, grid: { color: '#334155' } }
+                },
+                plugins: { legend: { labels: { color: '#cbd5e1', boxWidth: 12, font: { size: 10 } } } }
+            }
+        });
+
+        // --- Funciones de Lógica de Control y Simulación ---
+
+        function updateLabels() {
+            state.setpoint = parseFloat(inputSetpoint.value);
+            state.hyster = parseFloat(inputHysteresis.value);
+            state.kp = parseFloat(inputKp.value);
+            state.umax = parseFloat(inputUmax.value);
+            state.tau = parseFloat(inputTau.value);
+
+            lblSetpoint.innerHTML = `${state.setpoint.toFixed(2)} L`;
+            lblHysteresis.innerHTML = `&plusmn;${state.hyster.toFixed(2)} L`;
+            lblKp.innerHTML = `${state.kp.toFixed(1)}`;
+            lblUmax.innerHTML = `${state.umax.toFixed(2)} L/s`;
+            lblTau.innerHTML = `${state.tau.toFixed(2)} s`;
+
+            const hMinVal = Math.max(0, state.setpoint - state.hyster);
+            const hMaxVal = state.setpoint + state.hyster;
+            txtHmin.innerText = hMinVal.toFixed(2);
+            txtHmax.innerText = hMaxVal.toFixed(2);
+
+            const offsetVal = state.setpoint / (1 + state.kp);
+            txtOffset.innerText = offsetVal.toFixed(2);
+
+            const drainTime = 4 * state.tau;
+            txtDrainTime.innerText = drainTime.toFixed(2);
+
+            // Actualizar líneas en SVG del tanque (Mapeo: Y=0 L -> SVG Y=248, Y=2.0 L -> SVG Y=50)
+            const mapLToSvg = (l) => 248 - (l / 2.0) * 198;
+            lineSetpoint.setAttribute('y1', mapLToSvg(state.setpoint));
+            lineSetpoint.setAttribute('y2', mapLToSvg(state.setpoint));
+
+            lineHMax.setAttribute('y1', mapLToSvg(hMaxVal));
+            lineHMax.setAttribute('y2', mapLToSvg(hMaxVal));
+
+            lineHMin.setAttribute('y1', mapLToSvg(hMinVal));
+            lineHMin.setAttribute('y2', mapLToSvg(hMinVal));
+
+            if (state.mode === 'onoff') {
+                lineHMax.style.display = 'block';
+                lineHMin.style.display = 'block';
+            } else {
+                lineHMax.style.display = 'none';
+                lineHMin.style.display = 'none';
+            }
+        }
+
+        function calculateControlSignal() {
+            if (state.mode === 'drain') {
+                state.u = 0.0;
+                state.pumpOn = false;
+                return;
+            }
+
+            if (state.mode === 'onoff') {
+                const hMax = state.setpoint + state.hyster;
+                const hMin = state.setpoint - state.hyster;
+
+                if (state.y <= hMin) {
+                    state.pumpOn = true;
+                } else if (state.y >= hMax) {
+                    state.pumpOn = false;
+                }
+
+                state.u = state.pumpOn ? state.umax : 0.0;
+            } else if (state.mode === 'prop') {
+                const err = state.setpoint - state.y;
+                let uProp = state.kp * err;
+                // Clamping entre 0 y umax
+                if (uProp < 0) uProp = 0;
+                if (uProp > state.umax) uProp = state.umax;
+
+                state.u = uProp;
+                state.pumpOn = state.u > 0.05;
+            }
+        }
+
+        function stepSimulation() {
+            calculateControlSignal();
+
+            // Integración Solución Analítica exacta sobre dt para evitar inestabilidad Euler
+            // dy/dt = (u - y) / tau  => y(t+dt) = u + (y(t) - u) * exp(-dt / tau)
+            const factor = Math.exp(-state.dt / state.tau);
+            state.y = state.u + (state.y - state.u) * factor;
+
+            if (state.y < 0) state.y = 0; // Saturación física nivel no negativo
+
+            state.t += state.dt;
+
+            // Historial de Datos
+            state.timeHistory.push(state.t);
+            state.yHistory.push(state.y);
+            state.uHistory.push(state.u);
+            state.spHistory.push(state.setpoint);
+            state.hMaxHistory.push(state.setpoint + state.hyster);
+            state.hMinHistory.push(Math.max(0, state.setpoint - state.hyster));
+
+            if (state.timeHistory.length > state.maxPoints) {
+                state.timeHistory.shift();
+                state.yHistory.shift();
+                state.uHistory.shift();
+                state.spHistory.shift();
+                state.hMaxHistory.shift();
+                state.hMinHistory.shift();
+            }
+        }
+
+        function updateGraphics() {
+            // 1. Telemetría numérica
+            valY.innerHTML = `${state.y.toFixed(2)} <span class="text-xs text-slate-400">L</span>`;
+            valU.innerHTML = `${state.u.toFixed(2)} <span class="text-xs text-slate-400">L/s</span>`;
+            const qOut = state.y / state.tau;
+            valQout.innerHTML = `${qOut.toFixed(2)} <span class="text-xs text-slate-400">L/s</span>`;
+            valTime.innerHTML = `${state.t.toFixed(1)} <span class="text-xs text-slate-400">s</span>`;
+
+            // LED y Estado de Bomba
+            if (state.u > 0.05) {
+                ledPump.className = "w-3.5 h-3.5 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/50 animate-pulse";
+                textPumpState.innerText = `ENCENDIDA (${state.u.toFixed(2)} L/s)`;
+                textPumpState.className = "text-xs font-bold text-emerald-400 uppercase";
+            } else {
+                ledPump.className = "w-3.5 h-3.5 rounded-full bg-slate-600";
+                textPumpState.innerText = "APAGADA (0 L/s)";
+                textPumpState.className = "text-xs font-bold text-slate-400 uppercase";
+            }
+
+            // Badge de Estado General
+            if (state.mode === 'drain') {
+                badgeState.innerText = "Vaciando";
+                badgeState.className = "px-2 py-0.5 rounded text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30";
+            } else if (state.mode === 'onoff') {
+                badgeState.innerText = "Ciclo Límite On-Off";
+                badgeState.className = "px-2 py-0.5 rounded text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30";
+            } else {
+                badgeState.innerText = "Control Proporcional";
+                badgeState.className = "px-2 py-0.5 rounded text-xs font-bold bg-purple-500/20 text-purple-400 border border-purple-500/30";
+            }
+
+            // 2. Animación SVG del Tanque
+            // Mapeo: Y=0 L -> Height=2, Y=2.0 L -> Height=198
+            const waterHeight = Math.min(198, Math.max(2, (state.y / 2.0) * 198));
+            const waterY = 248 - waterHeight;
+
+            rectWater.setAttribute('y', waterY);
+            rectWater.setAttribute('height', waterHeight);
+            ellipseWaterSurface.setAttribute('cy', waterY);
+
+            // Chorro Entrada
+            if (state.u > 0.05) {
+                streamIn.style.opacity = Math.min(1.0, state.u / state.umax);
+                streamIn.setAttribute('y2', waterY);
+            } else {
+                streamIn.style.opacity = 0;
+            }
+
+            // Chorro Salida (Proporcional a y(t))
+            if (state.y > 0.02) {
+                streamOut.style.opacity = Math.min(1.0, qOut / 2.0);
+                streamOut.setAttribute('stroke-width', Math.max(1, Math.min(8, qOut * 3)));
+            } else {
+                streamOut.style.opacity = 0;
+            }
+
+            // Sensor Flotador
+            sensorFloat.setAttribute('cy', waterY);
+
+            // 3. Gráficos Chart.js
+            chartLevel.data.labels = state.timeHistory;
+            chartLevel.data.datasets[0].data = state.yHistory;
+            chartLevel.data.datasets[1].data = state.spHistory;
+            chartLevel.data.datasets[2].data = state.hMaxHistory;
+            chartLevel.data.datasets[3].data = state.hMinHistory;
+            chartLevel.update('none');
+
+            chartControl.data.labels = state.timeHistory;
+            chartControl.data.datasets[0].data = state.uHistory;
+            chartControl.update('none');
+        }
+
+        // --- Loop Principal ---
+        function loop() {
+            if (state.running) {
+                const steps = Math.round(state.speed);
+                for (let i = 0; i < steps; i++) {
+                    stepSimulation();
+                }
+                updateGraphics();
+            }
+            requestAnimationFrame(loop);
+        }
+
+        // --- Event Listeners y Manejadores ---
+
+        btnPlayPause.addEventListener('click', () => {
+            state.running = !state.running;
+            if (state.running) {
+                textPlay.innerText = "Pausar";
+                iconPlay.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/>`;
+                btnPlayPause.className = "flex items-center gap-2 px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white font-medium rounded-lg transition shadow";
+            } else {
+                textPlay.innerText = "Reanudar";
+                iconPlay.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>`;
+                btnPlayPause.className = "flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-lg transition shadow";
+            }
+        });
+
+        btnReset.addEventListener('click', () => {
+            state.t = 0;
+            state.y = 0;
+            state.u = 0;
+            state.pumpOn = false;
+            state.timeHistory = [];
+            state.yHistory = [];
+            state.uHistory = [];
+            state.spHistory = [];
+            state.hMaxHistory = [];
+            state.hMinHistory = [];
+            updateLabels();
+            updateGraphics();
+        });
+
+        selectSpeed.addEventListener('change', (e) => {
+            state.speed = parseFloat(e.target.value);
+        });
+
+        // Cambio de Modos
+        modeOnOff.addEventListener('click', () => {
+            state.mode = 'onoff';
+            modeOnOff.className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white shadow transition";
+            modeProp.className = "px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition";
+            modeDrain.className = "px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition";
+            containerHysteresis.classList.remove('hidden');
+            containerKp.classList.add('hidden');
+            updateLabels();
+        });
+
+        modeProp.addEventListener('click', () => {
+            state.mode = 'prop';
+            modeProp.className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-purple-600 text-white shadow transition";
+            modeOnOff.className = "px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition";
+            modeDrain.className = "px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition";
+            containerHysteresis.classList.add('hidden');
+            containerKp.classList.remove('hidden');
+            updateLabels();
+        });
+
+        modeDrain.addEventListener('click', () => {
+            state.mode = 'drain';
+            modeDrain.className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-500 text-white shadow transition";
+            modeOnOff.className = "px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition";
+            modeProp.className = "px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition";
+            containerHysteresis.classList.add('hidden');
+            containerKp.classList.add('hidden');
+            updateLabels();
+        });
+
+        // Inputs en vivo
+        [inputSetpoint, inputHysteresis, inputKp, inputUmax, inputTau].forEach(input => {
+            input.addEventListener('input', updateLabels);
+        });
+
+        // Inicialización
+        window.addEventListener('DOMContentLoaded', () => {
+            updateLabels();
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ]
+            });
+            requestAnimationFrame(loop);
+        });
+    </script>
+</body>
+</html>

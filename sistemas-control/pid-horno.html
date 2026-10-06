@@ -177,6 +177,11 @@ details[open] summary{background:var(--main-bg);color:var(--main)}
 footer{text-align:center;padding:2rem 1rem 3rem;font-size:.8rem;color:var(--gray-lt)}
 footer a{color:var(--main)}
 </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredTags:['script','noscript','style','textarea','pre'],throwOnError:false});"></script>
+
 
 <style>
 .apuntes-nav {
@@ -357,7 +362,7 @@ footer a{color:var(--main)}
     <p class="lead">La temperatura del horno sube cuando la resistencia entrega más calor del que se pierde hacia el ambiente, y baja en el caso contrario. Ese balance se escribe como una ecuación diferencial de primer orden:</p>
 
     <div class="fbox">
-      <span class="big">C · dT/dt = P<sub>max</sub> · u(t) − k<sub>pérdidas</sub> · (T − T<sub>amb</sub>)</span>
+      <span class="big">$C\,\dfrac{dT}{dt} = P_{\max}\,u(t) - k_{\text{pérd}}\,(T - T_{amb})$</span>
       <span class="sub-f">calor acumulado = calor entregado por la resistencia − calor perdido al ambiente</span>
     </div>
 
@@ -390,7 +395,7 @@ footer a{color:var(--main)}
     <p class="lead">Una computadora no integra ecuaciones diferenciales de forma continua: las resuelve a pasos discretos de tiempo Δt (método de Euler). El simulador de esta página avanza así, muchas veces por segundo:</p>
 
     <div class="fbox">
-      <span class="big">T[k+1] = T[k] + Δt · ( P<sub>max</sub>·u[k−L] − k<sub>pérdidas</sub>·(T[k] − T<sub>amb</sub>) ) / C</span>
+      <span class="big">$T[k+1] = T[k] + \Delta t\,\dfrac{P_{\max}\,u[k-L] - k_{\text{pérd}}\,(T[k]-T_{amb})}{C}$</span>
       <span class="sub-f">u[k−L]: la potencia que el controlador ordenó L pasos atrás (tiempo muerto), no la de ahora</span>
       <span class="unit">Δt pequeño (fracciones de segundo simulado) → la curva se ve suave</span>
     </div>
@@ -411,26 +416,26 @@ footer a{color:var(--main)}
     <p class="lead">El controlador PID calcula la potencia de la resistencia sumando <b>tres términos</b> que reaccionan al error <b>e(t) = setpoint − T(t)</b> de formas distintas y complementarias.</p>
 
     <div class="fbox">
-      <span class="big">u(t) = K<sub>p</sub>·e(t) &nbsp;+&nbsp; K<sub>i</sub>·∫e(t)dt &nbsp;+&nbsp; K<sub>d</sub>·de(t)/dt</span>
+      <span class="big">$u(t) = K_p\,e(t) \;+\; K_i\!\int_0^t\!e(\tau)\,d\tau \;+\; K_d\,\dfrac{de(t)}{dt}$</span>
       <span class="sub-f">saturado entre 0% y 100% — la resistencia no puede dar menos de 0 ni más de su máximo</span>
     </div>
 
     <div class="grid g3">
       <div class="card or">
         <h3>P — Proporcional</h3>
-        <div class="fbox" style="margin:.6rem 0"><span class="big" style="font-size:1rem">u<sub>P</sub> = K<sub>p</sub> · e(t)</span></div>
+        <div class="fbox" style="margin:.6rem 0"><span class="big" style="font-size:1rem">$u_P = K_p \cdot e(t)$</span></div>
         <p><b>Reacciona al presente.</b> Cuanto más lejos está la temperatura del setpoint, más potencia manda — proporcional y sin memoria.</p>
         <p style="margin-top:.5rem"><b>Problema:</b> para sostener calor contra las pérdidas necesita un error distinto de cero (si el error fuera 0, P mandaría 0% de potencia y el horno se enfriaría). Ese error que queda "clavado" en régimen permanente se llama <b>offset</b>.</p>
       </div>
       <div class="card bl">
         <h3>I — Integral</h3>
-        <div class="fbox" style="margin:.6rem 0"><span class="big" style="font-size:1rem">u<sub>I</sub> = K<sub>i</sub> · ∫₀ᵗ e(τ) dτ</span></div>
+        <div class="fbox" style="margin:.6rem 0"><span class="big" style="font-size:1rem">$u_I = K_i \displaystyle\int_0^t e(\tau)\,d\tau$</span></div>
         <p><b>Reacciona al pasado.</b> Va acumulando el error a lo largo del tiempo. Mientras exista <i>cualquier</i> error, aunque sea chiquito, la integral sigue creciendo y empujando más potencia — hasta que el error llega exactamente a cero.</p>
         <p style="margin-top:.5rem"><b>Problema:</b> introduce demora (lag) y, si se acumula de más mientras la salida está saturada, produce <b>windup</b>: sigue empujando por un rato incluso después de cruzar el setpoint, causando sobreoscilación.</p>
       </div>
       <div class="card pu">
         <h3>D — Derivativo</h3>
-        <div class="fbox" style="margin:.6rem 0"><span class="big" style="font-size:1rem">u<sub>D</sub> = K<sub>d</sub> · de(t)/dt</span></div>
+        <div class="fbox" style="margin:.6rem 0"><span class="big" style="font-size:1rem">$u_D = K_d\,\dfrac{de(t)}{dt}$</span></div>
         <p><b>Reacciona a la tendencia (futuro cercano).</b> Mide qué tan rápido está cambiando el error. Si la temperatura sube muy rápido hacia el setpoint, D "frena" bajando potencia antes de llegar — amortigua la sobreoscilación.</p>
         <p style="margin-top:.5rem"><b>Problema:</b> amplifica el ruido de medición (una lectura de sensor con jitter genera una derivada muy ruidosa). En la práctica, D casi siempre se aplica sobre la medición filtrada, no sobre el error crudo.</p>
       </div>

@@ -190,6 +190,11 @@ canvas.chart{width:100%;height:240px;background:#fbfbff;border-radius:8px;border
 footer{text-align:center;padding:2rem 1rem 3rem;font-size:.8rem;color:var(--gray-lt)}
 footer a{color:var(--main)}
 </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredTags:['script','noscript','style','textarea','pre'],throwOnError:false});"></script>
+
 
 <style>
 .apuntes-nav {
@@ -410,14 +415,14 @@ footer a{color:var(--main)}
       <div class="card bl">
         <h3>1 · Modelo continuo del circuito RC</h3>
         <p><b>u(t)</b> es la tensión que aplica la fuente (V), <b>y(t)</b> la tensión medida en el capacitor (V), <b>R</b> la resistencia (Ω) y <b>C</b> la capacitancia (F). La corriente <b>i(t)</b> (A) es la misma por R y C porque están en serie.</p>
-        <div class="fbox"><span class="big">RC·dy/dt + y = u</span><span class="sub-f">para este ejemplo: RC = τ = 5 s → 5·dy/dt + y = u</span></div>
+        <div class="fbox"><span class="big">$RC\,\dfrac{dy}{dt} + y = u$</span><span class="sub-f">para este ejemplo: RC = τ = 5 s → 5·dy/dt + y = u</span></div>
         <p>El capacitor guarda carga: para que y cambie tiene que circular corriente. Por eso y no puede saltar instantáneamente cuando u salta; se acerca gradualmente. <b>τ = R·C</b> tiene unidades Ω·F = s y fija la rapidez: a mayor τ, más lenta la carga. Con y(0)=0 y un escalón constante U, la solución exacta es <b>y(t) = U(1 − e<sup>−t/5</sup>)</b>; al cabo de τ llega aproximadamente al 63% de U.</p>
       </div>
       <div class="card te">
         <h3>2 · Euler hacia adelante, Ts = 1 s</h3>
         <p>Una computadora no conoce una curva completa: guarda muestras y[0], y[1], … separadas por <b>Ts</b> segundos. Euler reemplaza la pendiente actual por el cambio que predice hasta la próxima muestra.</p>
-        <div class="fbox"><span class="big">dy/dt ≈ (y[k+1] − y[k]) / Ts</span><span class="sub-f">en la ecuación: τ·(y[k+1] − y[k])/Ts + y[k] = u[k]</span></div>
-        <div class="fbox"><span class="big">y[k+1] = (1 − Ts/τ)y[k] + (Ts/τ)u[k]</span><span class="sub-f">con τ = 5 s y Ts = 1 s: y[k+1] = 0.8·y[k] + 0.2·u[k]</span></div>
+        <div class="fbox"><span class="big">$\dfrac{dy}{dt} \approx \dfrac{y[k+1] - y[k]}{T_s}$</span><span class="sub-f">en la ecuación: τ·(y[k+1] − y[k])/Ts + y[k] = u[k]</span></div>
+        <div class="fbox"><span class="big">$y[k+1] = \!\left(1 - \dfrac{T_s}{\tau}\right)y[k] + \dfrac{T_s}{\tau}\,u[k]$</span><span class="sub-f">con τ = 5 s y Ts = 1 s: y[k+1] = 0.8·y[k] + 0.2·u[k]</span></div>
         <p>Así, cada segundo se conserva el 80% del valor ya cargado y se agrega el 20% de la entrada. No es una fórmula mágica: sale de despejar y[k+1].</p>
       </div>
     </div>
@@ -540,7 +545,7 @@ footer a{color:var(--main)}
       </div>
       <div>
         <div class="fbox">
-          <span class="big">F(s) = Vs(s)/Ve(s) = 1 / (1 + RCs)</span>
+          <span class="big">$F(s) = \dfrac{V_s(s)}{V_e(s)} = \dfrac{1}{1 + RCs}$</span>
           <span class="sub-f">función de transferencia del circuito RC</span>
         </div>
         <p class="lead">La tensión en el capacitor no puede cambiar instantáneamente — sube exponencialmente hacia Ve con una velocidad marcada por el producto <b>R·C</b>.</p>
@@ -579,7 +584,7 @@ footer a{color:var(--main)}
       </div>
       <div>
         <div class="fbox">
-          <span class="big">F(s) = T(s)/Te(s) = 1 / (1 + Rt·Cc·s)</span>
+          <span class="big">$F(s) = \dfrac{T(s)}{T_e(s)} = \dfrac{1}{1 + R_t C_c s}$</span>
           <span class="sub-f">Rt: resistencia térmica · Cc: capacidad calorífica</span>
         </div>
         <p class="lead">Misma estructura matemática que el circuito RC — solo cambian los nombres de las variables. Este es exactamente el modelo que usa el <a href="pid-horno.html">simulador de PID del horno</a>.</p>
@@ -626,7 +631,7 @@ footer a{color:var(--main)}
       </div>
       <div>
         <div class="fbox">
-          <span class="big">f(t) = M·d²x/dt² + B·dx/dt + K·x</span>
+          <span class="big">$f(t) = M\dfrac{d^2x}{dt^2} + B\dfrac{dx}{dt} + Kx$</span>
           <span class="sub-f">ecuación de movimiento (Leyes de Newton)</span>
         </div>
         <p class="lead">M: masa (inercia) · B: amortiguador (fricción viscosa) · K: resorte (elasticidad). Es un sistema de <b>segundo orden</b> — a diferencia de los dos anteriores, puede oscilar.</p>
@@ -675,7 +680,7 @@ footer a{color:var(--main)}
       </div>
       <div>
         <div class="fbox">
-          <span class="big">i(t) = C·dv/dt + (1/R)·v + (1/L)·∫v dt</span>
+          <span class="big">$i(t) = C\dfrac{dv}{dt} + \dfrac{v}{R} + \dfrac{1}{L}\!\int v\,dt$</span>
           <span class="sub-f">ecuación de tensión (Kirchhoff)</span>
         </div>
         <p class="lead">También segundo orden. Fijate que la resistencia aparece como <b>1/R</b> (conductancia) porque está en paralelo — esto es clave para la analogía con el sistema mecánico.</p>
@@ -810,18 +815,18 @@ footer a{color:var(--main)}
       </div>
       <div class="card am">
         <h3>r — Señal realimentada</h3>
-        <div class="fbox"><span class="big">r = y · H</span></div>
+        <div class="fbox"><span class="big">$r = y \cdot H$</span></div>
         <p>Es lo que el sensor efectivamente "le devuelve" al comparador — la medición de la salida, ya procesada por H.</p>
       </div>
       <div class="card re">
         <h3>e — Error de control</h3>
-        <div class="fbox"><span class="big">e = c − r</span></div>
+        <div class="fbox"><span class="big">$e = c - r$</span></div>
         <p>La diferencia entre lo que se quiere (c) y lo que se mide (r). Es el motor de todo sistema de lazo cerrado: mientras haya error, el sistema sigue corrigiendo.</p>
       </div>
     </div>
 
     <div class="stitle"><span class="ico">🔓</span>Sistema de lazo abierto</div>
-    <div class="fbox"><span class="big">y = c · G</span></div>
+    <div class="fbox"><span class="big">$y = c \cdot G$</span></div>
     <div class="diagram">
       <svg viewBox="0 0 340 90" width="100%" style="max-width:420px;display:block;margin:0 auto">
         <line x1="10" y1="45" x2="60" y2="45" stroke="#374151" stroke-width="2"/>
@@ -854,7 +859,7 @@ footer a{color:var(--main)}
     <div class="grid g3" style="margin-bottom:1rem">
       <div class="fbox"><span class="sub-f">1) El sensor mide la salida</span><span class="big">r = y · H</span></div>
       <div class="fbox"><span class="sub-f">2) El comparador calcula la diferencia</span><span class="big">e = c − r</span></div>
-      <div class="fbox"><span class="sub-f">3) La planta actúa según el error</span><span class="big">y = e · G</span></div>
+      <div class="fbox"><span class="sub-f">3) La planta actúa según el error</span><span class="big">$y = e \cdot G$</span></div>
     </div>
     <div class="diagram">
       <svg viewBox="0 0 340 150" width="100%" style="max-width:420px;display:block;margin:0 auto">
@@ -903,19 +908,19 @@ footer a{color:var(--main)}
     <div class="card bl">
       <ol style="display:flex;flex-direction:column;gap:.9rem">
         <li><b>Sustituimos el error <code>e</code> en la salida:</b>
-          <div class="fbox" style="margin-top:.4rem"><span class="sub-f">y = e · G</span><span class="big">y = (c − r) · G</span></div>
+          <div class="fbox" style="margin-top:.4rem"><span class="sub-f">y = e · G</span><span class="big">$y = (c - r)\cdot G$</span></div>
         </li>
         <li><b>Reemplazamos la señal realimentada <code>r</code>:</b>
-          <div class="fbox" style="margin-top:.4rem"><span class="big">y = (c − y · H) · G</span></div>
+          <div class="fbox" style="margin-top:.4rem"><span class="big">$y = (c - y H)\cdot G$</span></div>
         </li>
         <li><b>Aplicamos propiedad distributiva:</b>
-          <div class="fbox" style="margin-top:.4rem"><span class="big">y = c · G − y · G · H</span></div>
+          <div class="fbox" style="margin-top:.4rem"><span class="big">$y = cG - yGH$</span></div>
         </li>
         <li><b>Agrupamos los términos con <code>y</code> del lado izquierdo:</b>
-          <div class="fbox" style="margin-top:.4rem"><span class="big">y + y · G · H = c · G</span></div>
+          <div class="fbox" style="margin-top:.4rem"><span class="big">$y + yGH = cG$</span></div>
         </li>
         <li><b>Sacamos factor común <code>y</code>:</b>
-          <div class="fbox" style="margin-top:.4rem"><span class="big">y · (1 + G · H) = c · G</span></div>
+          <div class="fbox" style="margin-top:.4rem"><span class="big">$y(1 + GH) = cG$</span></div>
         </li>
         <li><b>Despejamos la relación Salida / Consigna:</b>
           <div class="fbox" style="margin-top:.4rem;background:#0c1a2e"><span class="big" style="font-size:1.4rem;color:#7dd3fc">y / c = G / (1 + G · H)</span></div>
@@ -952,12 +957,12 @@ footer a{color:var(--main)}
       <div class="card bl">
         <h3>Forma estándar de 2do orden</h3>
         <div class="fbox" style="margin:.5rem 0">
-          <span class="big">G(s) = ωₙ² / (s² + 2ζωₙs + ωₙ²)</span>
+          <span class="big">$G(s) = \dfrac{\omega_n^2}{s^2 + 2\zeta\omega_n s + \omega_n^2}$</span>
           <span class="sub-f">ωₙ = frecuencia natural [rad/s] · ζ = factor de amortiguamiento</span>
         </div>
         <p style="font-size:.88rem;margin-top:.4rem">Los polos están en:</p>
         <div class="fbox" style="margin:.4rem 0;font-size:.85rem">
-          <span class="big">s = −ζωₙ ± jωₙ√(1−ζ²)</span>
+          <span class="big">$s = -\zeta\omega_n \pm j\omega_n\sqrt{1-\zeta^2}$</span>
           <span class="sub-f">Parte real = −ζωₙ (estabilidad) · Parte imag. = ωₙ√(1−ζ²) (oscilación)</span>
         </div>
       </div>
@@ -980,11 +985,11 @@ footer a{color:var(--main)}
       <div class="card gr">
         <h3>OS% — Porcentaje de sobrepaso</h3>
         <div class="fbox" style="margin:.5rem 0">
-          <span class="big">OS% = e<sup>−πζ/√(1−ζ²)</sup> × 100</span>
+          <span class="big">$OS\% = e^{-\pi\zeta/\sqrt{1-\zeta^2}} \times 100$</span>
           <span class="sub-f">Solo válido para 0 &lt; ζ &lt; 1 (subamortiguado)</span>
         </div>
         <p style="font-size:.88rem;margin-top:.4rem"><b>Ejemplo:</b> polos en s=−1±2j → ωₙ=√5, ζ = 1/√5 ≈ 0.45</p>
-        <p style="font-family:monospace;font-size:.85rem;color:var(--main);margin-top:.3rem">OS% = e<sup>−π·0.45/√(1−0.45²)</sup> × 100<br>= e<sup>−1.41/0.89</sup> × 100 ≈ e<sup>−1.58</sup> × 100 ≈ <b>20.5%</b></p>
+        <p style="font-family:monospace;font-size:.85rem;color:var(--main);margin-top:.3rem">$OS\% = e^{-\pi \cdot 0.45/\sqrt{1-0.45^2}} \times 100 = e^{-1.41/0.89}\times 100 \approx \mathbf{20.5\%}$</p>
         <p style="font-size:.83rem;margin-top:.4rem;color:var(--gray-lt)">Regla práctica: ζ ≈ 0.7 da OS ≈ 5% (buen balance velocidad/suavidad).</p>
       </div>
       <div class="card te">
@@ -1005,7 +1010,7 @@ footer a{color:var(--main)}
       <h3>¿Cómo calcular ζ desde los polos?</h3>
       <p style="font-size:.9rem">Si los polos son <b>s = −σ ± jω<sub>d</sub></b>:</p>
       <div class="fbox" style="margin:.5rem 0">
-        <span class="big">ζ = σ / ωₙ = σ / √(σ² + ω<sub>d</sub>²)</span>
+        <span class="big">$\zeta = \dfrac{\sigma}{\omega_n} = \dfrac{\sigma}{\sqrt{\sigma^2+\omega_d^2}}$</span>
         <span class="sub-f">ωₙ = módulo del polo = distancia al origen en el plano s</span>
       </div>
       <p style="font-size:.88rem;margin-top:.4rem"><b>Ejemplo concreto — ejercicios-parcial, problema C.2:</b> polos en s=−1±2j → σ=1, ω<sub>d</sub>=2</p>
@@ -1457,7 +1462,7 @@ footer a{color:var(--main)}
       <div class="card bl">
         <h3>PI — Proporcional + Integral</h3>
         <div class="fbox" style="margin:.4rem 0">
-          <span class="big">u = Kp·e + Ki·∫e·dt</span>
+          <span class="big">$u = K_p e + K_i\!\int e\,dt$</span>
           <span class="sub-f">C(s) = Kp + Ki/s = (Kp·s + Ki)/s</span>
         </div>
         <ul style="font-size:.85rem;margin-top:.4rem">
@@ -1470,7 +1475,7 @@ footer a{color:var(--main)}
       <div class="card or">
         <h3>PID — Proporcional + Integral + Derivativo</h3>
         <div class="fbox" style="margin:.4rem 0">
-          <span class="big">u = Kp·e + Ki·∫e·dt + Kd·de/dt</span>
+          <span class="big">$u = K_p e + K_i\!\int e\,dt + K_d\dfrac{de}{dt}$</span>
           <span class="sub-f">C(s) = Kp + Ki/s + Kd·s</span>
         </div>
         <ul style="font-size:.85rem;margin-top:.4rem">
@@ -1803,7 +1808,7 @@ pause();</div>
     </div>
 
     <!-- ── FUNCIÓN DE TRANSFERENCIA ── -->
-    <div class="sub" style="margin-top:1.5rem">Las letras dentro de G(s) = K / (τs + 1)</div>
+    <div class="sub" style="margin-top:1.5rem">Las letras dentro de $G(s) = \dfrac{K}{\tau s + 1}$</div>
     <p class="lead">Esta es la forma estándar de un sistema de <b>primer orden</b>. Tiene exactamente dos parámetros: K y τ. Cada uno controla un aspecto diferente de la respuesta.</p>
 
     <div class="grid g2">
@@ -1811,7 +1816,7 @@ pause();</div>
         <h3>K — Ganancia estática</h3>
         <p>Es el valor de G(0): lo que da G(s) cuando s=0 (estado estacionario, frecuencia cero). Responde a "¿cuánto amplifica el sistema?"</p>
         <div class="fbox" style="margin:.5rem 0;font-size:.85rem">
-          <span class="big">K = G(0) = y<sub>ss</sub> / u<sub>ss</sub></span>
+          <span class="big">$K = G(0) = \dfrac{y_{ss}}{u_{ss}}$</span>
           <span class="sub-f">G(s)=3/(2s+1) → K=3 → ante escalón 2, y_ss=3·2=6</span>
         </div>
         <p style="font-size:.85rem">La K viene de la palabra alemana <i>Konstante</i> o simplemente del inglés "gain". Un K=1 significa que la salida en estado estacionario iguala la entrada.</p>
@@ -1820,7 +1825,7 @@ pause();</div>
         <h3>τ — Constante de tiempo (tau)</h3>
         <p>τ es la letra griega tau. Indica la "velocidad" del sistema: a t=τ, la salida llegó al <b>63.2%</b> de su valor final.</p>
         <div class="fbox" style="margin:.5rem 0;font-size:.85rem">
-          <span class="big">τ = RC [circuito RC]</span>
+          <span class="big">$\tau = RC \quad[\text{circuito RC}]$</span>
           <span class="sub-f">Mayor τ = sistema más lento · Menor τ = respuesta más rápida</span>
         </div>
         <p style="font-size:.85rem">El 63.2% sale de 1−e⁻¹ = 1−0.368 = 0.632. La constante e≈2.718 aparece naturalmente en la solución de la EDO de 1er orden.</p>
@@ -1901,7 +1906,7 @@ pause();</div>
         <h3>y<sub>ss</sub> — Valor en estado estacionario</h3>
         <p>La abreviatura "ss" viene de <b>"steady state"</b> (estado estacionario en inglés). Es el valor al que converge la salida cuando t → ∞.</p>
         <div class="fbox" style="margin:.4rem 0;font-size:.85rem">
-          <span class="big">y<sub>ss</sub> = K · u<sub>ss</sub></span>
+          <span class="big">$y_{ss} = K \cdot u_{ss}$</span>
           <span class="sub-f">Para escalón unitario: y_ss = K (la ganancia estática)</span>
         </div>
       </div>
@@ -1909,7 +1914,7 @@ pause();</div>
         <h3>Offset (error estacionario)</h3>
         <p>La diferencia entre el setpoint R y el valor final Y<sub>ss</sub>. En control proporcional puro siempre existe porque el controlador necesita error para generar acción.</p>
         <div class="fbox" style="margin:.4rem 0;font-size:.85rem">
-          <span class="big">offset = R − y<sub>ss</sub> = 1 − Kp/(1+Kp)</span>
+          <span class="big">$\text{offset} = R - y_{ss} = 1 - \dfrac{K_p}{1+K_p}$</span>
           <span class="sub-f">Con G(s)=1/(s+1) y Kp=3: offset = 1 − 3/4 = 25%</span>
         </div>
       </div>
@@ -2105,7 +2110,7 @@ pause();</div>
     <div class="card am" style="margin-top:1rem">
       <h3>📐 Teorema del valor final — sin resolver la EDO completa</h3>
       <div class="fbox" style="margin:.5rem 0">
-        <span class="big">y<sub>ss</sub> = lim<sub>s→0</sub> [s · G(s) · R(s)]</span>
+        <span class="big">$y_{ss} = \lim_{s\to 0}\,s\cdot G(s)\cdot R(s)$</span>
         <span class="sub-f">Para escalón de amplitud A: R(s) = A/s → el s se cancela</span>
       </div>
       <p><b>Ejemplo A.2:</b> G(s) = 3/(2s+1), escalón amplitud 2 → R(s) = 2/s</p>
@@ -2122,7 +2127,7 @@ pause();</div>
         <h3>⚡ Circuito RC — física de τ</h3>
         <p>El capacitor guarda carga. Para cambiar su tensión, debe circular corriente a través de R. Más resistencia = más oposición = más lento.</p>
         <div class="fbox" style="margin:.5rem 0">
-          <span class="big">τ = R · C [segundos]</span>
+          <span class="big">$\tau = R \cdot C \quad[\text{segundos}]$</span>
           <span class="unit">Ω · F = s · (Circuito 1: 1kΩ·1000μF = 1 s · Circuito 2: 10kΩ·1000μF = 10 s)</span>
         </div>
         <p style="font-size:.88rem">El circuito 1 tiene resistencia 10× menor → la corriente circula más libremente → el capacitor alcanza la carga en 10× menos tiempo.</p>
@@ -2131,7 +2136,7 @@ pause();</div>
         <h3>📊 Interpretación universal de τ</h3>
         <p>Para cualquier sistema de 1er orden ante escalón:</p>
         <div class="fbox" style="margin:.5rem 0">
-          <span class="big">y(t) = y<sub>ss</sub> · (1 − e<sup>−t/τ</sup>)</span>
+          <span class="big">$y(t) = y_{ss}\!\left(1 - e^{-t/\tau}\right)$</span>
         </div>
         <ul style="font-size:.88rem;margin-top:.3rem">
           <li>A t=τ → <b>63.2%</b> del valor final</li>
@@ -2187,7 +2192,7 @@ pause();</div>
       <h3>📐 Efecto de la ganancia en lazo cerrado — Ejemplo C.1</h3>
       <p>Al aplicar Kp=10 a G₁(s)=1/(s+2) en lazo cerrado:</p>
       <div class="fbox" style="margin:.5rem 0">
-        <span class="big">T(s) = Kp·G(s) / (1 + Kp·G(s)) = 10/(s+1) / (1+10/(s+2)) = <b>10/(s+12)</b></span>
+        <span class="big">$T(s) = \dfrac{K_p\, G(s)}{1 + K_p\, G(s)}$ = 10/(s+1) / (1+10/(s+2)) = <b>10/(s+12)</b></span>
         <span class="sub-f">Nuevo polo en s = −12 (más a la izquierda que −2 → sistema más rápido y sigue siendo estable)</span>
       </div>
       <p style="font-size:.88rem"><b>Regla:</b> aumentar Kp empuja los polos de lazo cerrado hacia la izquierda (respuesta más rápida), pero si la planta tiene retardo o es de orden alto, puede crear polos complejos con overshoot excesivo o incluso inestabilizar.</p>
@@ -2277,7 +2282,7 @@ pause();</div>
     <p class="lead">Dada la planta G(s) y el controlador C(s), la función de transferencia de lazo cerrado T(s) permite calcular analíticamente el valor final, el offset y la ubicación del nuevo polo.</p>
 
     <div class="fbox">
-      <span class="big">T(s) = C(s)·G(s) / (1 + C(s)·G(s))</span>
+      <span class="big">$T(s) = \dfrac{C(s)\cdot G(s)}{1 + C(s)\cdot G(s)}$</span>
       <span class="sub-f">Para C(s) = Kp (proporcional puro): T(s) = Kp·G(s) / (1 + Kp·G(s))</span>
     </div>
 

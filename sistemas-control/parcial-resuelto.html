@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parcial Resuelto — Sistemas de Control</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+  :root {
+    --main:#4f46e5; --main-lt:#818cf8; --main-bg:#eef2ff;
+    --green:#15803d; --green-bg:#dcfce7;
+    --yellow:#b45309; --yellow-bg:#fef9c3;
+    --red:#b91c1c; --red-bg:#fee2e2;
+    --card:#fff; --border:#e2e8f0; --gray:#64748b; --gray-lt:#94a3b8;
+    --text:#1e293b; --bg:#f8fafc;
+    --paso-bg:#1e1b4b; --paso-text:#c7d2fe;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:15px}
+
+  /* NAV */
+  .topnav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:2px solid var(--main);padding:.5rem 1rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;box-shadow:0 2px 8px rgba(79,70,229,.1)}
+  .topnav a,.topnav button{padding:.35rem .75rem;border-radius:7px;font-size:.8rem;font-weight:600;text-decoration:none;border:none;cursor:pointer;font-family:inherit;transition:.15s}
+  .topnav a{background:var(--main-bg);color:var(--main)}
+  .topnav a:hover{background:var(--main);color:#fff}
+  .topnav .back{background:transparent;color:var(--gray);border:1px solid var(--border)}
+  .topnav .back:hover{background:var(--text);color:#fff}
+
+  .container{max-width:860px;margin:0 auto;padding:1.5rem 1rem 4rem}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,#1e1b4b 0%,#3730a3 100%);color:#fff;padding:2rem 1.5rem 1.5rem;border-radius:16px;margin-bottom:2rem}
+  .hero h1{font-size:1.6rem;font-weight:800;margin-bottom:.4rem}
+  .hero p{color:#c7d2fe;font-size:.92rem}
+  .hero .meta{display:flex;gap:1rem;margin-top:.8rem;flex-wrap:wrap}
+  .hero .badge{background:rgba(255,255,255,.15);padding:.25rem .7rem;border-radius:20px;font-size:.79rem;font-weight:600}
+
+  /* PROBLEMA */
+  .problema{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:2rem;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+  .prob-header{padding:1rem 1.4rem;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--main-bg)}
+  .prob-header h2{font-size:1.05rem;font-weight:800;color:var(--main)}
+  .prob-pts{background:var(--main);color:#fff;padding:.25rem .7rem;border-radius:20px;font-size:.8rem;font-weight:700}
+  .prob-body{padding:1.3rem 1.4rem;display:flex;flex-direction:column;gap:1.4rem}
+
+  /* ENUNCIADO */
+  .enunciado{background:#f1f5f9;border-left:4px solid var(--gray-lt);border-radius:0 10px 10px 0;padding:.85rem 1rem;font-size:.9rem;color:#334155}
+  .enunciado strong{color:var(--text)}
+
+  /* INCISO */
+  .inciso{display:flex;flex-direction:column;gap:.7rem}
+  .inc-q{font-size:.88rem;font-weight:700;color:#334155;background:var(--main-bg);padding:.5rem .8rem;border-radius:8px}
+  .inc-q .pts{float:right;color:var(--main);font-size:.78rem}
+
+  /* RESPUESTA */
+  .resp{display:flex;flex-direction:column;gap:.55rem}
+  .resp p{font-size:.9rem;color:var(--text)}
+  .resp .highlight{background:var(--green-bg);border-left:3px solid var(--green);padding:.55rem .9rem;border-radius:0 8px 8px 0;font-size:.88rem;color:#14532d;font-weight:600}
+  .resp .warning{background:var(--yellow-bg);border-left:3px solid var(--yellow);padding:.55rem .9rem;border-radius:0 8px 8px 0;font-size:.88rem;color:#78350f}
+  .resp .danger{background:var(--red-bg);border-left:3px solid var(--red);padding:.55rem .9rem;border-radius:0 8px 8px 0;font-size:.88rem;color:#7f1d1d}
+
+  /* PASO A PASO */
+  .pasos{background:var(--paso-bg);border-radius:12px;padding:1rem 1.2rem;display:flex;flex-direction:column;gap:.5rem}
+  .pasos .paso{font-family:'Consolas','Courier New',monospace;font-size:.86rem;color:var(--paso-text);padding:.3rem 0;border-bottom:1px solid rgba(255,255,255,.06)}
+  .pasos .paso:last-child{border-bottom:none}
+  .pasos .paso .label{color:#6ee7b7;font-weight:700;margin-right:.5rem}
+  .pasos .result{color:#fcd34d;font-weight:700;font-size:.9rem;margin-top:.3rem;padding:.35rem .6rem;background:rgba(255,255,255,.07);border-radius:6px}
+
+  /* FORMULA DISPLAY */
+  .fdisp{text-align:center;padding:.7rem;font-size:1.05rem}
+  .fdisp-sm{text-align:center;padding:.4rem;font-size:.95rem}
+
+  /* TABLA */
+  table{width:100%;border-collapse:collapse;font-size:.85rem}
+  th{background:var(--main-bg);color:var(--main);font-weight:700;padding:.5rem .7rem;text-align:left;border-bottom:2px solid var(--main)}
+  td{padding:.45rem .7rem;border-bottom:1px solid var(--border);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  tr:nth-child(even) td{background:#f8fafc}
+
+  /* DIVISOR */
+  .divider{border:none;border-top:1px solid var(--border);margin:.3rem 0}
+
+  /* PUNTAJE TOTAL */
+  .puntaje-total{background:linear-gradient(135deg,#14532d,#15803d);color:#fff;border-radius:14px;padding:1.2rem 1.5rem;text-align:center;margin-top:2rem}
+  .puntaje-total h3{font-size:1.1rem;margin-bottom:.5rem}
+  .puntaje-total .pts-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;margin-top:.8rem}
+  .puntaje-total .pts-item{background:rgba(255,255,255,.15);border-radius:8px;padding:.4rem .3rem;font-size:.78rem;font-weight:700}
+
+  @media(max-width:600px){.prob-header{flex-direction:column;gap:.3rem;align-items:flex-start}.puntaje-total .pts-grid{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="teoria" class="back">← Teoría</a>
+  <a href="ejercicios-parcial">Ejercicios</a>
+  <a href="resumen-30min">⚡ 30 min</a>
+  <a href="simulador-tanque">🚰 Tanque</a>
+</nav>
+
+<div class="container">
+
+  <div class="hero">
+    <h1>📋 Parcial Resuelto — Sistemas de Control</h1>
+    <p>Resolución detallada con desarrollo completo, explicación física y resultado final de cada inciso.</p>
+    <div class="meta">
+      <span class="badge">100 puntos</span>
+      <span class="badge">5 problemas</span>
+      <span class="badge">Prof. Tirabasso</span>
+      <span class="badge">Ingeniería</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PROBLEMA 1
+  ════════════════════════════════════════════════════════════ -->
+  <div class="problema">
+    <div class="prob-header">
+      <h2>Problema 1 — Horno On-Off con resistencia más potente</h2>
+      <span class="prob-pts">10 pts</span>
+    </div>
+    <div class="prob-body">
+
+      <div class="enunciado">
+        <strong>Situación:</strong> Un horno industrial usa un controlador de temperatura On-Off que activa/desactiva una resistencia eléctrica. Un operario "mejora" el sistema colocando una resistencia más potente, sin cambiar nada más.
+      </div>
+
+      <!-- inciso a -->
+      <div class="inciso">
+        <div class="inc-q">a) ¿Qué efecto tendrá sobre la velocidad de calentamiento? <span class="pts">2 pts</span></div>
+        <div class="resp">
+          <p>La resistencia más potente entrega <strong>más calor por unidad de tiempo</strong>, es decir, aumenta la potencia térmica $P$ [W]. Esto equivale a <strong>aumentar la ganancia estática $K$</strong> del modelo de planta:</p>
+          <div class="fdisp">$$G(s) = \frac{K}{\tau s + 1}$$</div>
+          <p>Un $K$ mayor significa que ante el mismo escalón de entrada (resistencia encendida), la temperatura sube <strong>más rápido y hasta un valor mayor</strong>.</p>
+          <div class="highlight">✅ La velocidad de calentamiento <em>aumenta</em> — el horno llega a temperatura de trabajo en menos tiempo.</div>
+        </div>
+      </div>
+
+      <!-- inciso b -->
+      <div class="inciso">
+        <div class="inc-q">b) ¿Qué otros efectos tendrá el cambio si el controlador es On-Off? <span class="pts">3 pts</span></div>
+        <div class="resp">
+          <p>El controlador On-Off con histéresis $\pm h$ enciende cuando $T < T_{sp} - h$ y apaga cuando $T > T_{sp} + h$. La banda de histéresis <strong>no cambia</strong> (no la tocamos), pero la resistencia ahora calienta más rápido.</p>
+          <p>Consecuencias:</p>
+          <div class="warning">
+            ⚠️ <strong>Ciclos más rápidos (mayor frecuencia de oscilación):</strong> como la temperatura sube más rápido, cruza el límite superior $T_{sp}+h$ antes → apaga antes → también baja hasta $T_{sp}-h$ en el mismo tiempo (simetría) → el ciclo On-Off es más corto en duración.
+          </div>
+          <p>Las <strong>amplitudes de oscilación</strong> NO cambian — siguen siendo $\pm h$ porque la histéresis es fija. Pero encender y apagar más seguido <strong>desgasta el actuador</strong> (relé, contactor) acelerando su vida útil.</p>
+          <div class="warning">⚠️ Mayor frecuencia de switching → mayor desgaste mecánico/térmico del actuador.</div>
+        </div>
+      </div>
+
+      <!-- inciso c -->
+      <div class="inciso">
+        <div class="inc-q">c) ¿Qué habría que ajustar para mantener el comportamiento original? <span class="pts">3 pts</span></div>
+        <div class="resp">
+          <p>Para que el sistema cicle igual que antes (misma frecuencia, misma amplitud de temperatura), hay que <strong>ampliar la banda de histéresis $h$</strong>:</p>
+          <div class="fdisp-sm">$$h_{nuevo} > h_{original}$$</div>
+          <p>Con una resistencia más potente que sube la temperatura más rápido, una histéresis mayor hace que tarde más en cruzar el umbral superior — compensando la velocidad extra y devolviendo el período de oscilación al valor anterior.</p>
+          <div class="highlight">✅ Ajuste: aumentar la banda de histéresis del controlador On-Off proporcionalmente al incremento de potencia.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PROBLEMA 2
+  ════════════════════════════════════════════════════════════ -->
+  <div class="problema">
+    <div class="prob-header">
+      <h2>Problema 2 — Dos tanques con agujeros de distinto tamaño</h2>
+      <span class="prob-pts">20 pts</span>
+    </div>
+    <div class="prob-body">
+
+      <div class="enunciado">
+        <strong>Situación:</strong> Dos tanques idénticos (misma sección $A$), llenados con la misma bomba (caudal de entrada $q_{in}$ constante). La única diferencia: el <strong>Tanque B</strong> tiene un agujero de salida <em>más grande</em> que el <strong>Tanque A</strong>.
+      </div>
+
+      <!-- inciso a -->
+      <div class="inciso">
+        <div class="inc-q">a) ¿Cuál tanque tarda más en llenarse? Justificá físicamente. <span class="pts">5 pts</span></div>
+        <div class="resp">
+          <p>El "llenarse" de un tanque en este contexto significa llegar al <strong>nivel de equilibrio</strong> (donde $q_{in} = q_{out}$). El agujero más grande (Tanque B) permite que salga más agua a la misma altura → drena más → necesita alcanzar un nivel MENOR para que $q_{out} = q_{in}$.</p>
+          <p>El <strong>modelo de primer orden</strong> de un tanque es:</p>
+          <div class="fdisp">$$A \frac{dh}{dt} = q_{in} - \frac{h}{R}$$</div>
+          <p>donde $R$ es la resistencia al flujo de salida. Agujero grande → $R$ pequeño → $\tau = R \cdot A$ pequeño → <strong>llega al equilibrio más rápido</strong>.</p>
+          <div class="highlight">✅ El Tanque B (agujero grande) tarda <em>menos</em> en llegar a su equilibrio — tiene constante de tiempo τ menor.</div>
+          <p>El Tanque A (agujero chico) tarda <em>más</em> porque $\tau_A = R_A \cdot A$ con $R_A > R_B$.</p>
+        </div>
+      </div>
+
+      <!-- inciso b -->
+      <div class="inciso">
+        <div class="inc-q">b) ¿Cuál tanque alcanza un nivel de equilibrio más alto? ¿Por qué? <span class="pts">5 pts</span></div>
+        <div class="resp">
+          <p>En equilibrio, $q_{in} = q_{out} = h_{eq}/R$, entonces:</p>
+          <div class="fdisp">$$h_{eq} = q_{in} \cdot R$$</div>
+          <div class="pasos">
+            <div class="paso"><span class="label">Tanque A (agujero chico):</span> $R_A$ grande → $h_{eq,A} = q_{in} \cdot R_A$ → nivel ALTO</div>
+            <div class="paso"><span class="label">Tanque B (agujero grande):</span> $R_B$ pequeño → $h_{eq,B} = q_{in} \cdot R_B$ → nivel BAJO</div>
+            <div class="result">✅ Tanque A alcanza nivel de equilibrio más alto. Física: el agua "tarda más en salir" → se acumula más.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- inciso c -->
+      <div class="inciso">
+        <div class="inc-q">c) Si modelara cada tanque con G(s) de primer orden, ¿qué parámetro sería diferente? <span class="pts">10 pts</span></div>
+        <div class="resp">
+          <p>Tomando la transformada de Laplace del modelo del tanque:</p>
+          <div class="fdisp">$$G(s) = \frac{H(s)}{Q_{in}(s)} = \frac{R}{RAs + 1} = \frac{K}{\tau s + 1}$$</div>
+          <p>Los parámetros del modelo son:</p>
+          <table>
+            <tr><th>Parámetro</th><th>Fórmula</th><th>Tanque A (agujero chico)</th><th>Tanque B (agujero grande)</th></tr>
+            <tr><td>Ganancia estática $K$</td><td>$K = R$</td><td>$K_A$ grande (nivel de eq. alto)</td><td>$K_B$ pequeño (nivel de eq. bajo)</td></tr>
+            <tr><td>Constante de tiempo $\tau$</td><td>$\tau = R \cdot A$</td><td>$\tau_A$ grande (llega lento)</td><td>$\tau_B$ pequeño (llega rápido)</td></tr>
+          </table>
+          <div class="highlight">✅ Ambos parámetros difieren: $K$ (ganancia/nivel de equilibrio) y $\tau$ (velocidad de respuesta). La sección $A$ es igual en ambos tanques.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PROBLEMA 3
+  ════════════════════════════════════════════════════════════ -->
+  <div class="problema">
+    <div class="prob-header">
+      <h2>Problema 3 — Análisis de G(s) = 1/[(s+1)(s+2)]</h2>
+      <span class="prob-pts">20 pts</span>
+    </div>
+    <div class="prob-body">
+
+      <div class="enunciado">
+        <strong>Sistema dado:</strong>
+        <div class="fdisp">$$G(s) = \frac{1}{(s+1)(s+2)}$$</div>
+      </div>
+
+      <!-- inciso a -->
+      <div class="inciso">
+        <div class="inc-q">a) ¿Cuáles son los polos? ¿Están en el semiplano izquierdo o derecho? <span class="pts">5 pts</span></div>
+        <div class="resp">
+          <p>Los <strong>polos</strong> son los valores de $s$ que hacen que el denominador se anule. El denominador $(s+1)(s+2) = 0$ cuando:</p>
+          <div class="pasos">
+            <div class="paso"><span class="label">Polo 1:</span> $s + 1 = 0 \Rightarrow s_1 = -1$</div>
+            <div class="paso"><span class="label">Polo 2:</span> $s + 2 = 0 \Rightarrow s_2 = -2$</div>
+            <div class="result">Ambos polos son reales y negativos → están en el semiplano izquierdo (SPI)</div>
+          </div>
+          <p>En el plano complejo, $s = \sigma + j\omega$. Aquí $\sigma = -1$ y $\sigma = -2$, ambos negativos → <strong>SPI</strong>.</p>
+          <div class="highlight">✅ Polos: $s_1 = -1$ y $s_2 = -2$, ambos en el semiplano izquierdo.</div>
+        </div>
+      </div>
+
+      <!-- inciso b -->
+      <div class="inciso">
+        <div class="inc-q">b) ¿El sistema es estable o inestable? <span class="pts">5 pts</span></div>
+        <div class="resp">
+          <p>La condición de <strong>estabilidad BIBO</strong> es que todos los polos tengan parte real negativa ($\sigma < 0$), es decir, que estén en el SPI.</p>
+          <div class="pasos">
+            <div class="paso"><span class="label">$\text{Re}(s_1)$</span> = −1 &lt; 0 ✓</div>
+            <div class="paso"><span class="label">$\text{Re}(s_2)$</span> = −2 &lt; 0 ✓</div>
+            <div class="result">✅ El sistema es ESTABLE — ambos polos en SPI</div>
+          </div>
+          <p><strong>Interpretación física:</strong> Los polos en $s = -1$ y $s = -2$ corresponden a respuestas transitorias $e^{-t}$ y $e^{-2t}$, que decaen a cero. El sistema "amortiguado" vuelve al equilibrio.</p>
+        </div>
+      </div>
+
+      <!-- inciso c -->
+      <div class="inciso">
+        <div class="inc-q">c) ¿La respuesta al escalón tendrá sobrepico? Justificá calculando. <span class="pts">10 pts</span></div>
+        <div class="resp">
+          <p>Primero expandimos el denominador para identificar la forma estándar de segundo orden:</p>
+          <div class="fdisp">$$G(s) = \frac{1}{(s+1)(s+2)} = \frac{1}{s^2 + 3s + 2}$$</div>
+          <p>Forma canónica de segundo orden: $G(s) = \dfrac{\omega_n^2}{s^2 + 2\zeta\omega_n s + \omega_n^2}$</p>
+          <div class="pasos">
+            <div class="paso"><span class="label">Identificar $\omega_n^2$:</span> $\omega_n^2 = 2 \Rightarrow \omega_n = \sqrt{2} \approx 1.414$ rad/s</div>
+            <div class="paso"><span class="label">Identificar $2\zeta\omega_n$:</span> $2\zeta\omega_n = 3 \Rightarrow \zeta = \dfrac{3}{2\sqrt{2}} = \dfrac{3}{2.828} \approx 1.06$</div>
+            <div class="result">$\zeta \approx 1.06 > 1$ → sistema SOBREAMORTIGUADO</div>
+          </div>
+          <p>La fórmula de sobrepico (OS%) solo aplica para sistemas subamortiguados ($\zeta < 1$):</p>
+          <div class="fdisp-sm">$$OS\% = e^{-\pi\zeta/\sqrt{1-\zeta^2}} \times 100$$</div>
+          <p>Con $\zeta > 1$ no existe $\sqrt{1-\zeta^2}$ real → los polos son <strong>reales</strong> (no complejos conjugados) → no hay oscilación.</p>
+          <div class="highlight">✅ NO hay sobrepico. Con $\zeta \approx 1.06 > 1$, el sistema es sobreamortiguado: la respuesta sube monotónicamente hasta el valor final sin oscilar.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PROBLEMA 4
+  ════════════════════════════════════════════════════════════ -->
+  <div class="problema">
+    <div class="prob-header">
+      <h2>Problema 4 — G(s)=1/(s+1): On-Off vs Proporcional</h2>
+      <span class="prob-pts">30 pts</span>
+    </div>
+    <div class="prob-body">
+
+      <div class="enunciado">
+        <strong>Planta:</strong> $G(s) = \dfrac{1}{s+1}$ &nbsp;|&nbsp; $K=1$, $\tau=1\text{ s}$ &nbsp;|&nbsp; Setpoint $r = 1$
+        <br><br>
+        Se prueban dos controladores: <strong>On-Off</strong> con histéresis $\pm 0.1$, y <strong>Proporcional</strong> con $K_p = 2$.
+      </div>
+
+      <!-- inciso a -->
+      <div class="inciso">
+        <div class="inc-q">a) On-Off: ¿qué forma tiene la respuesta al escalón? Describila. <span class="pts">5 pts</span></div>
+        <div class="resp">
+          <p>El controlador On-Off no tiene ganancia variable: simplemente <strong>enciende ($u = u_{max}$) o apaga ($u = 0$)</strong>. Con histéresis $\pm 0.1$:</p>
+          <table>
+            <tr><th>Condición</th><th>Acción del controlador</th></tr>
+            <tr><td>$y < r - 0.1 = 0.9$</td><td>Enciende: $u = u_{max}$</td></tr>
+            <tr><td>$y > r + 0.1 = 1.1$</td><td>Apaga: $u = 0$</td></tr>
+            <tr><td>$0.9 \le y \le 1.1$</td><td>Mantiene el estado anterior (histéresis)</td></tr>
+          </table>
+          <p style="margin-top:.6rem">La respuesta:</p>
+          <div class="pasos">
+            <div class="paso"><span class="label">1.</span> Parte de $y=0$ → controlador enciende → planta sube exponencialmente</div>
+            <div class="paso"><span class="label">2.</span> Al llegar $y = 1.1$ → apaga → planta baja exponencialmente</div>
+            <div class="paso"><span class="label">3.</span> Al llegar $y = 0.9$ → vuelve a encender → sube de nuevo</div>
+            <div class="result">Ciclo sostenido: OSCILACIÓN PERMANENTE en torno al setpoint, dentro de la banda $[0.9, 1.1]$</div>
+          </div>
+          <div class="warning">⚠️ El On-Off <em>nunca se estabiliza exactamente</em> en $r=1$. La temperatura sigue ciclando para siempre (esto es inherente al control tipo bang-bang).</div>
+          <div class="highlight">✅ Forma de la respuesta: oscilación continua entre 0.9 y 1.1, con forma de "dientes de sierra" suavizados por la dinámica de primer orden de la planta.</div>
+        </div>
+      </div>
+
+      <!-- inciso b -->
+      <div class="inciso">
+        <div class="inc-q">b) Proporcional: ¿la salida llega al setpoint? ¿Por qué? <span class="pts">5 pts</span></div>
+        <div class="resp">
+          <p>Con control proporcional $C(s) = K_p$, la función de transferencia en lazo cerrado es:</p>
+          <div class="fdisp">$$T(s) = \frac{K_p \cdot G(s)}{1 + K_p \cdot G(s)} = \frac{K_p \cdot \frac{1}{s+1}}{1 + K_p \cdot \frac{1}{s+1}} = \frac{K_p}{s + 1 + K_p}$$</div>
+          <p>El valor final para un escalón $r = 1$ es:</p>
+          <div class="fdisp">$$y_{ss} = T(0) \cdot r = \frac{K_p}{1 + K_p} \cdot 1$$</div>
+          <p>Con $K_p = 2$: $y_{ss} = \frac{2}{3} \approx 0.667$.</p>
+          <div class="danger">❌ NO llega al setpoint. Siempre queda un error de estado estacionario (offset) cuando se usa solo acción proporcional.</div>
+          <p><strong>¿Por qué?</strong> El controlador P solo actúa si hay error: $u = K_p \cdot e$. Para que haya acción de control ($u \neq 0$) en estado estacionario, el error <em>debe</em> ser no nulo. Es una contradicción estructural: para mantener la salida, necesita error.</p>
+        </div>
+      </div>
+
+      <!-- inciso c -->
+      <div class="inciso">
+        <div class="inc-q">c) ¿Cuál es el valor final de la salida con control Proporcional? (Setpoint = 1) <span class="pts">20 pts</span></div>
+        <div class="resp">
+          <p><strong>Desarrollo completo:</strong></p>
+          <div class="pasos">
+            <div class="paso"><span class="label">Dato:</span> $G(s) = \dfrac{1}{s+1}$, $K_p = 2$, $r = 1$</div>
+            <div class="paso"><span class="label">Lazo cerrado:</span> $T(s) = \dfrac{K_p G(s)}{1 + K_p G(s)} = \dfrac{2 \cdot \frac{1}{s+1}}{1 + 2 \cdot \frac{1}{s+1}}$</div>
+            <div class="paso"><span class="label">Simplificar num:</span> Numerador $= \dfrac{2}{s+1}$</div>
+            <div class="paso"><span class="label">Simplificar den:</span> $1 + \dfrac{2}{s+1} = \dfrac{s+1+2}{s+1} = \dfrac{s+3}{s+1}$</div>
+            <div class="paso"><span class="label">Dividir:</span> $T(s) = \dfrac{2/(s+1)}{(s+3)/(s+1)} = \dfrac{2}{s+3}$</div>
+            <div class="paso"><span class="label">Valor final (TVF):</span> $y_{ss} = \lim_{s \to 0} s \cdot T(s) \cdot \dfrac{1}{s} = T(0) = \dfrac{2}{0+3} = \dfrac{2}{3}$</div>
+            <div class="result">y_ss = 2/3 ≈ 0.667</div>
+          </div>
+          <p><strong>Verificación por fórmula directa:</strong></p>
+          <div class="fdisp">$$y_{ss} = \frac{K_p \cdot K}{1 + K_p \cdot K} = \frac{2 \times 1}{1 + 2 \times 1} = \frac{2}{3}$$</div>
+          <p><strong>Offset resultante:</strong></p>
+          <div class="fdisp">$$\text{Offset} = r - y_{ss} = 1 - \frac{2}{3} = \frac{1}{3} \approx 33.3\%$$</div>
+          <p><strong>Polo del lazo cerrado:</strong> $s = -3$ → $\tau_{LC} = 1/3$ s → el sistema responde 3× más rápido que en lazo abierto ($\tau = 1$ s). El control proporcional <em>acelera</em> la respuesta a costa de introducir offset.</p>
+          <div class="highlight">✅ Valor final: $y_{ss} = \dfrac{2}{3} \approx 0.667$ · Offset = $\dfrac{1}{3} \approx 33.3\%$ · Polo LC: $s = -3$</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PROBLEMA 5
+  ════════════════════════════════════════════════════════════ -->
+  <div class="problema">
+    <div class="prob-header">
+      <h2>Problema 5 — Controlador PI: integral, offset y windup</h2>
+      <span class="prob-pts">20 pts</span>
+    </div>
+    <div class="prob-body">
+
+      <div class="enunciado">
+        <strong>Ley de control PI:</strong>
+        <div class="fdisp">$$u(t) = K_p e(t) + K_i \int_0^t e(\tau)\, d\tau$$</div>
+        Representación en Laplace: &nbsp;$C_{PI}(s) = \dfrac{K_p s + K_i}{s}$ &nbsp;→ polo en $s=0$
+      </div>
+
+      <!-- inciso a -->
+      <div class="inciso">
+        <div class="inc-q">a) ¿Qué hace la acción integral cuando el error es constante? <span class="pts">5 pts</span></div>
+        <div class="resp">
+          <p>La integral de una constante $e = e_0$ es:</p>
+          <div class="fdisp">$$\int_0^t e_0 \, d\tau = e_0 \cdot t$$</div>
+          <p>La acción integral crece <strong>linealmente en el tiempo</strong> mientras haya error constante. Esto significa que la señal de control $u(t)$ aumenta sin parar:</p>
+          <div class="fdisp-sm">$$u(t) = K_p e_0 + K_i \cdot e_0 \cdot t \xrightarrow{t\to\infty} \infty$$</div>
+          <div class="highlight">✅ La integral <em>acumula</em> el error. Fuerza al actuador a aplicar cada vez más esfuerzo hasta que el error se anule. Es una especie de "memoria del pasado".</div>
+        </div>
+      </div>
+
+      <!-- inciso b -->
+      <div class="inciso">
+        <div class="inc-q">b) ¿Por qué el PI elimina el offset? <span class="pts">10 pts</span></div>
+        <div class="resp">
+          <p><strong>Argumento por contradicción (la más elegante):</strong></p>
+          <div class="pasos">
+            <div class="paso"><span class="label">Suponer:</span> En estado estacionario existe offset → $e_{ss} \neq 0$ (constante)</div>
+            <div class="paso"><span class="label">Entonces:</span> La integral sigue creciendo: $K_i \int e \, dt \to \infty$</div>
+            <div class="paso"><span class="label">Pero:</span> Un actuador saturado o un sistema con $u \to \infty$ no puede tener $y$ constante</div>
+            <div class="paso"><span class="label">Contradicción:</span> Si el sistema está en estado estacionario, $u$ debe ser constante y finita</div>
+            <div class="result">Para que $u_{ss}$ sea constante y finita con el PI, la integral debe ser constante → su derivada debe ser 0 → $e_{ss} = 0$ ✓</div>
+          </div>
+          <p><strong>Interpretación desde la función de transferencia:</strong></p>
+          <div class="fdisp">$$C_{PI}(s) = \frac{K_p s + K_i}{s}$$</div>
+          <p>El polo en $s=0$ introduce un <strong>integrador puro</strong> en la cadena directa. Por el teorema del valor final, con un integrador en el lazo, el error de posición es cero para cualquier entrada escalón.</p>
+          <div class="highlight">✅ El PI elimina el offset porque el integrador "no descansa" hasta que el error sea cero. En estado estacionario $e_{ss}$ debe ser 0, de lo contrario $u$ no sería constante — lo cual es imposible en equilibrio.</div>
+        </div>
+      </div>
+
+      <!-- inciso c -->
+      <div class="inciso">
+        <div class="inc-q">c) ¿Qué es el "windup" y por qué es peligroso? <span class="pts">5 pts</span></div>
+        <div class="resp">
+          <p><strong>¿Qué es el windup?</strong></p>
+          <p>Ocurre cuando el actuador está <strong>saturado</strong> (ej: válvula 100% abierta, resistencia al máximo) pero el error sigue siendo positivo. El integrador <em>no sabe</em> que el actuador saturó — sigue acumulando error:</p>
+          <div class="fdisp-sm">$$\int e \, dt \to \text{valor muy grande}$$</div>
+          <div class="danger">
+            ⛔ <strong>¿Por qué es peligroso?</strong><br>
+            Cuando finalmente el proceso alcanza el setpoint (o lo supera), el integrador tiene acumulado un valor enorme. El controlador necesita tiempo para "desenrollar" esa integral → el sistema <strong>sobrepasa masivamente</strong> el setpoint y tarda mucho en estabilizarse.<br><br>
+            Ejemplo: Horno que tarda en arrancar → el integrador acumula error durante 10 minutos → cuando el horno finalmente calienta, llega muy por encima de la temperatura deseada → peligroso en procesos industriales.
+          </div>
+          <div class="pasos">
+            <div class="paso"><span class="label">Síntoma:</span> Grandes sobrepasos después de periodos de saturación del actuador</div>
+            <div class="paso"><span class="label">Causa:</span> Integral acumulada sin límite durante la saturación</div>
+            <div class="paso"><span class="label">Solución:</span> Anti-windup: congelar la integral cuando el actuador está saturado, o resetearla al límite</div>
+          </div>
+          <div class="highlight">✅ Windup = acumulación descontrolada del integrador durante saturación del actuador. Peligroso porque causa sobretiro enorme y tiempo de recuperación largo al volver al rango normal.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RESUMEN DE PUNTAJE -->
+  <div class="puntaje-total">
+    <h3>📊 Resumen del parcial</h3>
+    <p style="color:rgba(255,255,255,.8);font-size:.88rem">Todos los problemas tienen respuesta completa con desarrollo y resultado final</p>
+    <div class="pts-grid">
+      <div class="pts-item">P1<br>10 pts<br>On-Off</div>
+      <div class="pts-item">P2<br>20 pts<br>Tanques</div>
+      <div class="pts-item">P3<br>20 pts<br>G(s) polos</div>
+      <div class="pts-item">P4<br>30 pts<br>P vs On-Off</div>
+      <div class="pts-item">P5<br>20 pts<br>PI windup</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$',  right: '$',  display: false}
+      ],
+      ignoredTags: ['script','noscript','style','textarea','pre'],
+      throwOnError: false
+    });
+  });
+</script>
+</body>
+</html>

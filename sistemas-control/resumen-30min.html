@@ -292,14 +292,13 @@ footer{background:var(--main-bg);padding-bottom:1.2rem;border-top:1px solid var(
 
 <div class="step" style="margin-top:.9rem">
   <div class="step-title">Cómo despejar t de y(t) = y_ss·(1−e^(−t/τ)) — truco del compañero</div>
-  <p style="font-family:monospace;font-size:.85rem;line-height:2;color:var(--gray)">
-    $\dfrac{y_{\text{target}}}{y_{ss}} = 1 - e^{-t/\tau}$
-    &nbsp;→&nbsp;
-    $e^{-t/\tau} = 1 - \dfrac{y_{\text{target}}}{y_{ss}}$
-    &nbsp;→&nbsp;
-    $\boxed{t = -\tau \cdot \ln\!\left(1 - \dfrac{y_{\text{target}}}{y_{ss}}\right)}$
-    <b style="display:none">placeholder y<sub>ss</sub>)</b>
-  </p>
+  <div style="background:#181633;border-radius:10px;padding:.8rem 1.1rem;line-height:2.8;margin:.4rem 0">
+    <span style="color:#a5b4fc;font-size:.88rem">$\dfrac{y_{\text{target}}}{y_{ss}} = 1 - e^{-t/\tau}$</span><br>
+    <span style="color:#6b6fa0;font-size:.76rem">&nbsp;&nbsp;↓ &nbsp;despejamos $e^{-t/\tau}$</span><br>
+    <span style="color:#a5b4fc;font-size:.88rem">$e^{-t/\tau} = 1 - \dfrac{y_{\text{target}}}{y_{ss}}$</span><br>
+    <span style="color:#6b6fa0;font-size:.76rem">&nbsp;&nbsp;↓ &nbsp;$\ln()$ en ambos lados cancela el $e$</span><br>
+    <span style="color:#7ee8a2;font-size:.92rem;font-weight:700">$t = -\tau \cdot \ln\!\left(1 - \dfrac{y_{\text{target}}}{y_{ss}}\right)$</span>
+  </div>
   <p style="font-size:.83rem;color:var(--gray-lt)">ln() cancela el e. Si y_target = 63.2% → 1−0.632 = 0.368 = e<sup>−1</sup> → ln(0.368) = −1 → t = τ.</p>
 </div>
 

@@ -286,38 +286,81 @@ footer a{color:var(--main)}
     </div>
 
     <div class="diagram">
-      <svg viewBox="0 0 720 190" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 800 215" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:800px;display:block;margin:0 auto" aria-label="Diagrama de bloques PID Horno">
         <defs>
-          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/>
+          <marker id="arrowR" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto">
+            <path d="M0,0 L8,3.5 L0,7 z" fill="#c2410c"/>
+          </marker>
+          <marker id="arrowB" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto">
+            <path d="M0,0 L8,3.5 L0,7 z" fill="#1d4ed8"/>
+          </marker>
+          <marker id="arrowG" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto">
+            <path d="M0,0 L8,3.5 L0,7 z" fill="#374151"/>
           </marker>
         </defs>
-        <!-- setpoint -->
-        <text x="10" y="80" font-size="13" fill="#374151" font-weight="700">Setpoint</text>
-        <text x="10" y="96" font-size="11" fill="#6b7280">(180°C)</text>
-        <line x1="90" y1="85" x2="150" y2="85" stroke="#c2410c" stroke-width="2" marker-end="url(#arrow)"/>
-        <!-- sum -->
-        <circle cx="168" cy="85" r="18" fill="#fff" stroke="#c2410c" stroke-width="2"/>
-        <text x="168" y="90" font-size="16" fill="#c2410c" text-anchor="middle" font-weight="700">Σ</text>
-        <text x="168" y="118" font-size="10" fill="#6b7280" text-anchor="middle">error e(t)</text>
-        <line x1="186" y1="85" x2="250" y2="85" stroke="#c2410c" stroke-width="2" marker-end="url(#arrow)"/>
-        <!-- controller -->
-        <rect x="252" y="55" width="130" height="60" rx="8" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5"/>
-        <text x="317" y="80" font-size="13" fill="#7c2d12" text-anchor="middle" font-weight="700">Controlador</text>
-        <text x="317" y="98" font-size="12" fill="#7c2d12" text-anchor="middle">PID</text>
-        <line x1="382" y1="85" x2="446" y2="85" stroke="#c2410c" stroke-width="2" marker-end="url(#arrow)"/>
-        <text x="414" y="76" font-size="10" fill="#6b7280" text-anchor="middle">u(t) %</text>
-        <!-- plant -->
-        <rect x="448" y="55" width="130" height="60" rx="8" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.5"/>
-        <text x="513" y="80" font-size="13" fill="#7f1d1d" text-anchor="middle" font-weight="700">Horno</text>
-        <text x="513" y="98" font-size="12" fill="#7f1d1d" text-anchor="middle">(planta)</text>
-        <line x1="578" y1="85" x2="650" y2="85" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
-        <text x="655" y="80" font-size="13" fill="#374151" font-weight="700">T(t)</text>
-        <text x="655" y="96" font-size="11" fill="#6b7280">salida</text>
-        <!-- feedback -->
-        <path d="M650,85 V160 H168 V103" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
-        <rect x="330" y="140" width="90" height="34" rx="6" fill="#dbeafe" stroke="#1d4ed8"/>
-        <text x="375" y="161" font-size="11" fill="#1e3a8a" text-anchor="middle" font-weight="700">Sensor</text>
+
+        <!-- ── SETPOINT BOX ── -->
+        <rect x="8" y="62" width="92" height="48" rx="8" fill="#f0fdf4" stroke="#15803d" stroke-width="1.8"/>
+        <text x="54" y="83" font-size="11.5" fill="#15803d" text-anchor="middle" font-weight="800">Setpoint</text>
+        <text x="54" y="100" font-size="10" fill="#166534" text-anchor="middle">r(t) = 180°C</text>
+
+        <!-- Arrow Setpoint → Σ  (label r) -->
+        <line x1="100" y1="86" x2="138" y2="86" stroke="#c2410c" stroke-width="2" marker-end="url(#arrowR)"/>
+        <text x="119" y="78" font-size="9" fill="#c2410c" text-anchor="middle" font-weight="700">r(t)</text>
+
+        <!-- ── SUMADOR Σ ── -->
+        <circle cx="157" cy="86" r="19" fill="#fff" stroke="#c2410c" stroke-width="2"/>
+        <text x="157" y="92" font-size="17" fill="#c2410c" text-anchor="middle" font-weight="700">Σ</text>
+        <!-- signos -->
+        <text x="142" y="84" font-size="12" fill="#15803d" font-weight="800">+</text>
+        <text x="163" y="110" font-size="14" fill="#1d4ed8" font-weight="800">−</text>
+
+        <!-- Arrow Σ → Controlador  (label e(t)) -->
+        <line x1="176" y1="86" x2="228" y2="86" stroke="#c2410c" stroke-width="2" marker-end="url(#arrowR)"/>
+        <text x="202" y="78" font-size="9.5" fill="#c2410c" text-anchor="middle" font-weight="700">e(t)</text>
+
+        <!-- ── CONTROLADOR PID ── -->
+        <rect x="228" y="58" width="148" height="56" rx="8" fill="#ffedd5" stroke="#c2410c" stroke-width="2"/>
+        <text x="302" y="82" font-size="13" fill="#7c2d12" text-anchor="middle" font-weight="800">Controlador</text>
+        <text x="302" y="101" font-size="13" fill="#7c2d12" text-anchor="middle" font-weight="700">PID</text>
+
+        <!-- Arrow Controlador → Horno  (label u(t)%) -->
+        <line x1="376" y1="86" x2="424" y2="86" stroke="#c2410c" stroke-width="2" marker-end="url(#arrowR)"/>
+        <text x="400" y="78" font-size="9" fill="#6b7280" text-anchor="middle">u(t) %</text>
+
+        <!-- ── HORNO (PLANTA) ── -->
+        <rect x="424" y="58" width="148" height="56" rx="8" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+        <text x="498" y="82" font-size="13" fill="#7f1d1d" text-anchor="middle" font-weight="800">Horno</text>
+        <text x="498" y="101" font-size="12" fill="#7f1d1d" text-anchor="middle">(planta)</text>
+
+        <!-- Arrow Horno → Salida  (label T(t)) -->
+        <line x1="572" y1="86" x2="626" y2="86" stroke="#374151" stroke-width="2" marker-end="url(#arrowG)"/>
+        <text x="599" y="78" font-size="9" fill="#374151" text-anchor="middle">T(t)</text>
+
+        <!-- ── SALIDA BOX ── -->
+        <rect x="628" y="62" width="90" height="48" rx="8" fill="#f8fafc" stroke="#374151" stroke-width="1.8"/>
+        <text x="673" y="84" font-size="13" fill="#111827" text-anchor="middle" font-weight="800">T(t)</text>
+        <text x="673" y="100" font-size="10" fill="#6b7280" text-anchor="middle">salida</text>
+
+        <!-- ── FEEDBACK PATH ── -->
+        <!-- Down from output right edge -->
+        <polyline points="718,86 718,180 510,180" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-dasharray="5 3"/>
+        <!-- Arrow into Sensor (right side) -->
+        <line x1="513" y1="180" x2="496" y2="180" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arrowB)" stroke-dasharray="0"/>
+
+        <!-- ── SENSOR BOX ── -->
+        <rect x="360" y="160" width="136" height="40" rx="7" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.8"/>
+        <text x="428" y="178" font-size="12" fill="#1e3a8a" text-anchor="middle" font-weight="800">Sensor</text>
+        <text x="428" y="192" font-size="9" fill="#2563eb" text-anchor="middle">T(t) medida</text>
+
+        <!-- Arrow out of Sensor (left side) → left → up into Σ bottom -->
+        <line x1="363" y1="180" x2="340" y2="180" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arrowB)" stroke-dasharray="0"/>
+        <polyline points="340,180 157,180 157,105" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-dasharray="5 3"/>
+        <line x1="157" y1="108" x2="157" y2="106" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arrowB)"/>
+
+        <!-- Tap point circle on output line (fork to feedback) -->
+        <circle cx="718" cy="86" r="4" fill="#374151"/>
+
       </svg>
       <p class="dcap">El controlador nunca ve la temperatura "de verdad": ve el error. Todo lo que hace el PID nace de esa resta.</p>
     </div>

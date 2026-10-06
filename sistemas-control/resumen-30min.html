@@ -72,8 +72,9 @@ nav{position:sticky;top:0;z-index:200;background:var(--main);display:flex;align-
 .ftable th{background:var(--main);color:#fff;padding:.42rem .8rem;text-align:left;font-weight:700}
 .ftable td{padding:.38rem .8rem;border-bottom:1px solid var(--border);vertical-align:top}
 .ftable tr:nth-child(even){background:#f8f9fb}
-.ftable td:first-child code { background:transparent; color:inherit; padding:0; font-size:.85rem; }
-.ftable td:first-child { min-width:240px; }
+.ftable td:first-child { min-width:240px; padding:.5rem .8rem; }
+.fml { font-size:.9rem; color:var(--main); }
+.fml .katex { font-size:1rem; }
 .ftable code{background:#181633;color:#a5b4fc;padding:.05rem .4rem;border-radius:4px;font-size:.82rem}
 .tag{display:inline-block;font-size:.72rem;font-weight:700;border-radius:2rem;padding:.1rem .5rem;white-space:nowrap}
 .tag-1{background:var(--main-bg);color:var(--main)}
@@ -108,7 +109,7 @@ footer{background:var(--main-bg);padding-bottom:1.2rem;border-top:1px solid var(
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredTags:['script','noscript','style','textarea','pre'],throwOnError:false});"></script>
 
 </head>
 <body>
@@ -499,109 +500,109 @@ footer{background:var(--main-bg);padding-bottom:1.2rem;border-top:1px solid var(
   </thead>
   <tbody>
     <tr>
-      <td><code>$G(s) = \dfrac{K}{\tau s+1}$</code></td>
+      <td><span class="fml">$G(s) = \dfrac{K}{\tau s+1}$</span></td>
       <td>Función de transferencia de 1er orden</td>
       <td><span class="tag tag-1">1er orden</span></td>
       <td>RC, térmico, nivel de tanque</td>
     </tr>
     <tr>
-      <td><code>$\tau = RC$</code></td>
+      <td><span class="fml">$\tau = RC$</span></td>
       <td>Constante de tiempo — circuito RC</td>
       <td><span class="tag tag-1">1er orden</span></td>
       <td>R en Ω, C en F → τ en s</td>
     </tr>
     <tr>
-      <td><code>$y(t) = y_{ss}\!\left(1-e^{-t/\tau}\right)$</code></td>
+      <td><span class="fml">$y(t) = y_{ss}\!\left(1-e^{-t/\tau}\right)$</span></td>
       <td>Respuesta al escalón de 1er orden</td>
       <td><span class="tag tag-1">1er orden</span></td>
       <td>Sistema estable, entrada escalón</td>
     </tr>
     <tr>
-      <td><code>$t = -\tau\ln\!\left(1-\dfrac{y}{y_{ss}}\right)$</code></td>
+      <td><span class="fml">$t = -\tau\ln\!\left(1-\dfrac{y}{y_{ss}}\right)$</span></td>
       <td>Tiempo para llegar a un valor y</td>
       <td><span class="tag tag-1">1er orden</span></td>
       <td>Despejar t de la respuesta exponencial</td>
     </tr>
     <tr>
-      <td><code>$y_{ss} = \lim_{s\to 0} s\cdot G(s)\cdot R(s)$</code></td>
+      <td><span class="fml">$y_{ss} = \lim_{s\to 0} s\cdot G(s)\cdot R(s)$</span></td>
       <td>Teorema del valor final</td>
       <td><span class="tag tag-all">Cualquier orden</span></td>
       <td>Sistema estable, R(s) conocido</td>
     </tr>
     <tr>
-      <td><code>$y_{ss} = K\cdot U$</code></td>
+      <td><span class="fml">$y_{ss} = K\cdot U$</span></td>
       <td>Valor final con escalón amplitud U</td>
       <td><span class="tag tag-all">Cualquier orden</span></td>
       <td>Simplificación del teorema del VF</td>
     </tr>
     <tr>
-      <td><code>$t_s \approx 4\tau = \dfrac{4}{|\sigma|}$</code></td>
+      <td><span class="fml">$t_s \approx 4\tau = \dfrac{4}{|\sigma|}$</span></td>
       <td>Tiempo de establecimiento (±2%)</td>
       <td><span class="tag tag-all">Cualquier orden</span></td>
       <td>σ = parte real del polo dominante</td>
     </tr>
     <tr>
-      <td><code>$G(s) = \dfrac{\omega_n^2}{s^2+2\zeta\omega_n s+\omega_n^2}$</code></td>
+      <td><span class="fml">$G(s) = \dfrac{\omega_n^2}{s^2+2\zeta\omega_n s+\omega_n^2}$</span></td>
       <td>Forma estándar de 2do orden</td>
       <td><span class="tag tag-2">2do orden</span></td>
       <td>Masa-resorte, RLC, lazo cerrado con PI</td>
     </tr>
     <tr>
-      <td><code>$s = -\zeta\omega_n \pm j\omega_n\sqrt{1-\zeta^2}$</code></td>
+      <td><span class="fml">$s = -\zeta\omega_n \pm j\omega_n\sqrt{1-\zeta^2}$</span></td>
       <td>Polos del sistema de 2do orden</td>
       <td><span class="tag tag-2">2do orden</span></td>
       <td>ζ &lt; 1 → polos complejos conjugados</td>
     </tr>
     <tr>
-      <td><code>$\zeta = \dfrac{\sigma}{\omega_n} = \dfrac{\sigma}{\sqrt{\sigma^2+\omega_d^2}}$</code></td>
+      <td><span class="fml">$\zeta = \dfrac{\sigma}{\omega_n} = \dfrac{\sigma}{\sqrt{\sigma^2+\omega_d^2}}$</span></td>
       <td>Factor de amortiguamiento</td>
       <td><span class="tag tag-2">2do orden</span></td>
       <td>ζ&lt;1 oscila, ζ=1 crítico, ζ&gt;1 sin OS</td>
     </tr>
     <tr>
-      <td><code>$OS\% = e^{-\pi\zeta/\sqrt{1-\zeta^2}}\times 100$</code></td>
+      <td><span class="fml">$OS\% = e^{-\pi\zeta/\sqrt{1-\zeta^2}}\times 100$</span></td>
       <td>Porcentaje de sobrepaso</td>
       <td><span class="tag tag-2">2do orden</span></td>
       <td>Solo para ζ &lt; 1 (subamortiguado)</td>
     </tr>
     <tr>
-      <td><code>$T(s) = \dfrac{C(s)\cdot G(s)}{1+C(s)\cdot G(s)}$</code></td>
+      <td><span class="fml">$T(s) = \dfrac{C(s)\cdot G(s)}{1+C(s)\cdot G(s)}$</span></td>
       <td>Función de transferencia lazo cerrado</td>
       <td><span class="tag tag-cl">Lazo cerrado</span></td>
       <td>Realimentación unitaria, cualquier C y G</td>
     </tr>
     <tr>
-      <td><code>$T(s) = \dfrac{K_p G(s)}{1+K_p G(s)}$</code></td>
+      <td><span class="fml">$T(s) = \dfrac{K_p G(s)}{1+K_p G(s)}$</span></td>
       <td>Lazo cerrado con control proporcional</td>
       <td><span class="tag tag-cl">Lazo cerrado</span></td>
       <td>C(s) = Kp (constante)</td>
     </tr>
     <tr>
-      <td><code>$\text{Offset} = \dfrac{1}{1+K_p}$</code></td>
+      <td><span class="fml">$\text{Offset} = \dfrac{1}{1+K_p}$</span></td>
       <td>Error estacionario con control P</td>
       <td><span class="tag tag-cl">Lazo cerrado</span></td>
       <td>G(s)=1/(s+1), escalón unitario, C=Kp</td>
     </tr>
     <tr>
-      <td><code>$u = K_p\cdot e$</code></td>
+      <td><span class="fml">$u = K_p\cdot e$</span></td>
       <td>Ley de control Proporcional</td>
       <td><span class="tag tag-pid">Controladores</span></td>
       <td>Deja offset permanente</td>
     </tr>
     <tr>
-      <td><code>$u = K_p e + K_i\int e\,dt$</code></td>
+      <td><span class="fml">$u = K_p e + K_i\int e\,dt$</span></td>
       <td>Ley de control PI</td>
       <td><span class="tag tag-pid">Controladores</span></td>
       <td>Elimina offset — más usado en industria</td>
     </tr>
     <tr>
-      <td><code>$u = K_p e + K_i\int e\,dt + K_d\dfrac{de}{dt}$</code></td>
+      <td><span class="fml">$u = K_p e + K_i\int e\,dt + K_d\dfrac{de}{dt}$</span></td>
       <td>Ley de control PID</td>
       <td><span class="tag tag-pid">Controladores</span></td>
       <td>Elimina offset + reduce OS, amplifica ruido</td>
     </tr>
     <tr>
-      <td><code>$C_{PI}(s) = \dfrac{K_p s + K_i}{s}$</code></td>
+      <td><span class="fml">$C_{PI}(s) = \dfrac{K_p s + K_i}{s}$</span></td>
       <td>Transferencia controlador PI</td>
       <td><span class="tag tag-pid">Controladores</span></td>
       <td>Polo en s=0 garantiza y_ss=R</td>

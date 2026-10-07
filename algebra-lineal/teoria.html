@@ -270,6 +270,8 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
     <button class="tab-btn" id="tb-practica" onclick="showPage('practica',this)">✍️ Práctica guiada</button>
     <button class="tab-btn" id="tb-quiz" onclick="showPage('quiz',this)">🎓 Quiz</button>
     <button class="tab-btn" id="tb-cheat" onclick="showPage('cheat',this)">📋 Cheatsheet</button>
+    <button class="tab-btn" id="tb-parcial" onclick="showPage('parcial',this)">📝 Parcial</button>
+    <button class="tab-btn" id="tb-resumen" onclick="showPage('resumen',this)">⚡ Resumen 20 min</button>
   </div>
   <div class="nav-badges" id="nav-badges">🏅 0/8</div>
 </nav>
@@ -1491,6 +1493,364 @@ renderExercises();
 renderQuiz();
 drawVec2();
 </script>
+
+
+<!-- ════════════ PARCIAL ════════════ -->
+<div class="page" id="parcial">
+<div class="container">
+  <div class="stitle"><span class="ico">📝</span> Resolución del parcial — paso a paso</div>
+  <p style="margin-bottom:1.5rem;color:var(--gray-lt)">Cada ejercicio tiene el enunciado, el método y la solución completa explicada. Usá las pistas antes de ver la respuesta.</p>
+
+  <!-- ─── EJ 1 ─── -->
+  <details open>
+    <summary>Ejercicio 1 — Operaciones con vectores y módulo</summary>
+    <div class="dbody">
+      <div class="note">Sean $\vec{u} = (3, -4)$ y $\vec{v} = (-1, 2)$.
+        <br>a) Calculá $\vec{u} + \vec{v}$, $\vec{u} - \vec{v}$ y $3\vec{u} - 2\vec{v}$.
+        <br>b) Hallá $\|\vec{u}\|$, $\|\vec{v}\|$ y $\|\vec{u} + \vec{v}\|$.
+        <br>c) ¿Es $\|\vec{u} + \vec{v}\| = \|\vec{u}\| + \|\vec{v}\|$? ¿Qué propiedad es esa?
+      </div>
+      <p><strong>Método:</strong> Suma/resta componente a componente. Módulo = $\sqrt{x^2 + y^2}$.</p>
+      <div class="fbox">
+        <span class="big">$\|\vec{w}\| = \sqrt{w_x^2 + w_y^2}$</span>
+        <span class="sub">Norma euclidiana</span>
+      </div>
+      <details>
+        <summary style="background:var(--green-bg);color:var(--green)">▶ Ver solución completa</summary>
+        <div class="dbody">
+          <p><strong>a)</strong></p>
+          <p>$\vec{u} + \vec{v} = (3-1,\; -4+2) = (2, -2)$</p>
+          <p>$\vec{u} - \vec{v} = (3-(-1),\; -4-2) = (4, -6)$</p>
+          <p>$3\vec{u} - 2\vec{v} = (9,-12) - (-2,4) = (11, -16)$</p>
+          <p><strong>b)</strong></p>
+          <p>$\|\vec{u}\| = \sqrt{3^2 + (-4)^2} = \sqrt{9+16} = \sqrt{25} = 5$</p>
+          <p>$\|\vec{v}\| = \sqrt{(-1)^2 + 2^2} = \sqrt{1+4} = \sqrt{5} \approx 2.24$</p>
+          <p>$\|\vec{u}+\vec{v}\| = \|(2,-2)\| = \sqrt{4+4} = 2\sqrt{2} \approx 2.83$</p>
+          <p><strong>c)</strong> $\|\vec{u}\|+\|\vec{v}\| = 5 + \sqrt{5} \approx 7.24 \neq 2\sqrt{2}$. <br>Eso se llama <strong>desigualdad triangular</strong>: $\|\vec{u}+\vec{v}\| \leq \|\vec{u}\| + \|\vec{v}\|$. La igualdad solo se da si los vectores son paralelos y apuntan en el mismo sentido.</p>
+        </div>
+      </details>
+    </div>
+  </details>
+
+  <!-- ─── EJ 2 ─── -->
+  <details>
+    <summary>Ejercicio 2 — Producto escalar y ángulo</summary>
+    <div class="dbody">
+      <div class="note">Sean $\vec{a} = (2, 1, -2)$ y $\vec{b} = (1, -1, 1)$ en $\mathbb{R}^3$.
+        <br>a) Calculá $\vec{a} \cdot \vec{b}$.
+        <br>b) Hallá el ángulo $\alpha$ entre $\vec{a}$ y $\vec{b}$.
+        <br>c) ¿Son perpendiculares? ¿Por qué?
+        <br>d) Hallá la proyección escalar de $\vec{a}$ sobre $\vec{b}$.
+      </div>
+      <div class="fbox">
+        <span class="big">$\vec{a}\cdot\vec{b} = a_1 b_1 + a_2 b_2 + a_3 b_3$</span>
+        <span class="sub">$\cos\alpha = \dfrac{\vec{a}\cdot\vec{b}}{\|\vec{a}\|\,\|\vec{b}\|}$ &nbsp;·&nbsp; Proyección: $\text{proy}_{\vec{b}}\vec{a} = \dfrac{\vec{a}\cdot\vec{b}}{\|\vec{b}\|}$</span>
+      </div>
+      <details>
+        <summary style="background:var(--green-bg);color:var(--green)">▶ Ver solución completa</summary>
+        <div class="dbody">
+          <p><strong>a)</strong> $\vec{a}\cdot\vec{b} = (2)(1)+(1)(-1)+(-2)(1) = 2-1-2 = -1$</p>
+          <p><strong>b)</strong> $\|\vec{a}\| = \sqrt{4+1+4}=3$ &nbsp; y &nbsp; $\|\vec{b}\|=\sqrt{1+1+1}=\sqrt{3}$</p>
+          <p>$\cos\alpha = \dfrac{-1}{3\sqrt{3}} = \dfrac{-1}{3\sqrt{3}} \approx -0.192 \Rightarrow \alpha = \arccos(-0.192) \approx 101.1°$</p>
+          <p><strong>c)</strong> No son perpendiculares porque $\vec{a}\cdot\vec{b} = -1 \neq 0$. Para que sean perpendiculares el producto escalar debería ser exactamente 0.</p>
+          <p><strong>d)</strong> $\text{proy}_{\vec{b}}\vec{a} = \dfrac{-1}{\sqrt{3}} \approx -0.577$</p>
+          <p class="tip" style="font-size:.85rem">💡 El signo negativo indica que la proyección "apunta en sentido contrario" a $\vec{b}$, coherente con el ángulo obtuso ($>90°$).</p>
+        </div>
+      </details>
+    </div>
+  </details>
+
+  <!-- ─── EJ 3 ─── -->
+  <details>
+    <summary>Ejercicio 3 — Producto vectorial y área</summary>
+    <div class="dbody">
+      <div class="note">Sean $\vec{u} = (1, 2, 0)$ y $\vec{v} = (0, 1, 3)$.
+        <br>a) Calculá $\vec{u} \times \vec{v}$.
+        <br>b) Verificá que $\vec{u} \times \vec{v}$ es perpendicular a $\vec{u}$ y a $\vec{v}$.
+        <br>c) Hallá el área del paralelogramo que forman $\vec{u}$ y $\vec{v}$.
+        <br>d) ¿Cuánto vale el área del triángulo de esos mismos lados?
+      </div>
+      <div class="fbox">
+        <span class="big">$\vec{u}\times\vec{v} = \begin{vmatrix}\vec{i}&\vec{j}&\vec{k}\\ u_1&u_2&u_3\\ v_1&v_2&v_3\end{vmatrix}$</span>
+        <span class="sub">$A_{\text{paralelogramo}} = \|\vec{u}\times\vec{v}\|$ &nbsp;·&nbsp; $A_{\triangle} = \tfrac{1}{2}\|\vec{u}\times\vec{v}\|$</span>
+      </div>
+      <details>
+        <summary style="background:var(--green-bg);color:var(--green)">▶ Ver solución completa</summary>
+        <div class="dbody">
+          <p><strong>a)</strong> Desarrollando el determinante:<br>
+          $\vec{u}\times\vec{v} = \vec{i}(2\cdot3 - 0\cdot1) - \vec{j}(1\cdot3 - 0\cdot0) + \vec{k}(1\cdot1 - 2\cdot0)$<br>
+          $= \vec{i}(6) - \vec{j}(3) + \vec{k}(1) = (6, -3, 1)$</p>
+          <p><strong>b)</strong> Verificación:<br>
+          $(6,-3,1)\cdot(1,2,0) = 6-6+0 = 0$ ✅<br>
+          $(6,-3,1)\cdot(0,1,3) = 0-3+3 = 0$ ✅</p>
+          <p><strong>c)</strong> $\|(6,-3,1)\| = \sqrt{36+9+1} = \sqrt{46} \approx 6.78$</p>
+          <p><strong>d)</strong> $A_{\triangle} = \dfrac{\sqrt{46}}{2} \approx 3.39$</p>
+        </div>
+      </details>
+    </div>
+  </details>
+
+  <!-- ─── EJ 4 ─── -->
+  <details>
+    <summary>Ejercicio 4 — Las 5 formas de la recta en R²</summary>
+    <div class="dbody">
+      <div class="note">Hallá las 5 formas de la recta que pasa por $A=(2,1)$ y $B=(5,3)$.</div>
+      <div class="grid g2" style="margin:.8rem 0">
+        <div class="card pu">
+          <h3>Las 5 formas</h3>
+          <ul style="padding-left:1.2rem;font-size:.88rem;line-height:1.9">
+            <li><strong>Vectorial / Paramétrica vectorial</strong>: $(x,y) = P_0 + t\vec{d}$</li>
+            <li><strong>Cartesiana paramétrica</strong>: $x = x_0 + td_x,\; y = y_0 + td_y$</li>
+            <li><strong>Explícita</strong>: $y = mx + b$ (si no es vertical)</li>
+            <li><strong>Implícita / General</strong>: $ax + by + c = 0$</li>
+            <li><strong>Segmentaria</strong>: $\frac{x}{a} + \frac{y}{b} = 1$ (si no pasa por origen)</li>
+          </ul>
+        </div>
+        <div class="card bl">
+          <h3>Datos clave</h3>
+          <p style="font-size:.88rem">Director: $\vec{d} = B - A = (3,2)$<br>
+          Normal: $\vec{n} = (2,-3)$ (rotar director 90°)<br>
+          Pendiente: $m = \frac{2}{3}$<br>
+          Corte eje y: $b = y_0 - m\cdot x_0 = 1 - \frac{2}{3}\cdot2 = -\frac{1}{3}$</p>
+        </div>
+      </div>
+      <details>
+        <summary style="background:var(--green-bg);color:var(--green)">▶ Ver solución completa</summary>
+        <div class="dbody">
+          <p>$\vec{d} = B-A = (3,2)$ &nbsp; (vector director)</p>
+          <p><strong>1. Vectorial paramétrica:</strong><br>$(x,y) = (2,1) + t(3,2)$</p>
+          <p><strong>2. Cartesiana paramétrica:</strong><br>$x = 2+3t \quad y = 1+2t$</p>
+          <p><strong>3. Explícita:</strong><br>$m = \frac{2}{3}$, entonces $y = \frac{2}{3}x + b$. Reemplazando $A$: $1 = \frac{2}{3}\cdot2+b \Rightarrow b = -\frac{1}{3}$<br>$y = \frac{2}{3}x - \frac{1}{3}$</p>
+          <p><strong>4. Implícita:</strong><br>Despejando t de $x=2+3t$ → $t=\frac{x-2}{3}$. Reemplazando en $y$: $y = 1 + 2\cdot\frac{x-2}{3} = \frac{2x-1}{3}$ → $3y = 2x-1$ → $2x - 3y - 1 = 0$</p>
+          <p><strong>5. Segmentaria:</strong><br>De $2x-3y=1$: corte eje $x$ (y=0): $x=\frac{1}{2}$; corte eje $y$ (x=0): $y=-\frac{1}{3}$<br>$\dfrac{x}{1/2} + \dfrac{y}{-1/3} = 1 \quad \Rightarrow \quad 2x - 3y = 1$ ✅</p>
+          <div class="tip">💡 Verificación rápida: reemplazá A y B en la implícita. $2(2)-3(1)-1=0$ ✅ · $2(5)-3(3)-1=0$ ✅</div>
+        </div>
+      </details>
+    </div>
+  </details>
+
+  <!-- ─── EJ 5 ─── -->
+  <details>
+    <summary>Ejercicio 5 — Recta y plano en R³</summary>
+    <div class="dbody">
+      <div class="note">Dado el plano $\Pi: 2x - y + 3z = 6$.
+        <br>a) Hallá la ecuación paramétrica y simétrica de la recta que pasa por $P=(1,0,2)$ con dirección $\vec{d}=(1,-1,2)$.
+        <br>b) ¿La recta $L$ es paralela a $\Pi$? ¿Por qué?
+        <br>c) Hallá la distancia del punto $Q=(-1, 2, 0)$ al plano $\Pi$.
+        <br>d) ¿En qué punto corta la recta $L$ al plano $\Pi$?
+      </div>
+      <div class="fbox">
+        <span class="big">Paramétrica: $(x,y,z) = (x_0,y_0,z_0)+t(d_1,d_2,d_3)$</span>
+        <span class="sub">Simétrica: $\dfrac{x-x_0}{d_1}=\dfrac{y-y_0}{d_2}=\dfrac{z-z_0}{d_3}$ &nbsp;·&nbsp; Dist: $d = \dfrac{|Ax_0+By_0+Cz_0+D|}{\sqrt{A^2+B^2+C^2}}$</span>
+      </div>
+      <details>
+        <summary style="background:var(--green-bg);color:var(--green)">▶ Ver solución completa</summary>
+        <div class="dbody">
+          <p><strong>a) Recta L:</strong><br>
+          Paramétrica: $x = 1+t,\; y = -t,\; z = 2+2t$<br>
+          Simétrica: $\dfrac{x-1}{1} = \dfrac{y-0}{-1} = \dfrac{z-2}{2}$</p>
+          <p><strong>b) ¿$L$ es paralela a $\Pi$?</strong><br>
+          Normal del plano: $\vec{n} = (2,-1,3)$<br>
+          Producto escalar $\vec{d}\cdot\vec{n} = (1)(2)+(-1)(-1)+(2)(3) = 2+1+6 = 9 \neq 0$<br>
+          Como $\vec{d}\cdot\vec{n} \neq 0$, la recta <strong>NO es paralela</strong> al plano — la corta en algún punto.</p>
+          <p><strong>c) Distancia Q al plano:</strong><br>
+          Ecuación del plano: $2x - y + 3z - 6 = 0$ (D = −6)<br>
+          $d = \dfrac{|2(-1)+(-1)(2)+3(0)-6|}{\sqrt{4+1+9}} = \dfrac{|-2-2-6|}{\sqrt{14}} = \dfrac{10}{\sqrt{14}} \approx 2.67$</p>
+          <p><strong>d) Intersección L ∩ Π:</strong><br>
+          Sustituimos la paramétrica en la ecuación del plano:<br>
+          $2(1+t) - (-t) + 3(2+2t) = 6$<br>
+          $2+2t+t+6+6t = 6$<br>
+          $9t + 8 = 6$<br>
+          $t = -\frac{2}{9}$<br>
+          Punto de intersección: $x = 1-\frac{2}{9} = \frac{7}{9}$, $y = \frac{2}{9}$, $z = 2-\frac{4}{9} = \frac{14}{9}$<br>
+          $\Rightarrow P_{\cap} = \left(\frac{7}{9},\; \frac{2}{9},\; \frac{14}{9}\right)$</p>
+        </div>
+      </details>
+    </div>
+  </details>
+
+  <!-- ─── EJ 6 ─── -->
+  <details>
+    <summary>Ejercicio 6 — Posición relativa de rectas y planos</summary>
+    <div class="dbody">
+      <div class="note">Determiná la posición relativa entre:
+        <br>a) $L_1: \dfrac{x-1}{2}=\dfrac{y+1}{1}=\dfrac{z}{-1}$ &nbsp; y &nbsp; $L_2: \dfrac{x}{4}=\dfrac{y-3}{2}=\dfrac{z+2}{-2}$
+        <br>b) Los planos $\Pi_1: x+2y-z=4$ &nbsp; y &nbsp; $\Pi_2: 2x+4y-2z=10$
+        <br>c) Hallá el ángulo entre $\Pi_3: x-y+z=0$ y $\Pi_4: 2x+y-z=1$
+      </div>
+      <details>
+        <summary style="background:var(--green-bg);color:var(--green)">▶ Ver solución completa</summary>
+        <div class="dbody">
+          <p><strong>a) L₁ y L₂:</strong><br>
+          Directores: $\vec{d_1} = (2,1,-1)$ y $\vec{d_2} = (4,2,-2) = 2(2,1,-1) = 2\vec{d_1}$<br>
+          Los directores son proporcionales → <strong>L₁ y L₂ son paralelas</strong> (o coincidentes).<br>
+          Verificación: el punto $P_1=(1,-1,0)$ de $L_1$ sobre $L_2$: $\frac{1}{4}=0.25$, $\frac{-1-3}{2}=-2$ → No está en $L_2$.<br>
+          Conclusión: <strong>paralelas y distintas</strong>.</p>
+          <p><strong>b) Π₁ y Π₂:</strong><br>
+          Normales: $\vec{n_1}=(1,2,-1)$ y $\vec{n_2}=(2,4,-2)=2\vec{n_1}$ → proporcionales.<br>
+          Π₂ dividido por 2: $x+2y-z=5 \neq 4$ → distinto término independiente.<br>
+          Conclusión: <strong>paralelos y distintos</strong>.</p>
+          <p><strong>c) Ángulo entre Π₃ y Π₄:</strong><br>
+          $\cos\theta = \dfrac{|\vec{n_3}\cdot\vec{n_4}|}{\|\vec{n_3}\|\,\|\vec{n_4}\|}$<br>
+          $\vec{n_3}=(1,-1,1)$, $\vec{n_4}=(2,1,-1)$<br>
+          $\vec{n_3}\cdot\vec{n_4} = 2-1-1 = 0$<br>
+          $\theta = 90°$ → Los planos son <strong>perpendiculares</strong>.</p>
+        </div>
+      </details>
+    </div>
+  </details>
+
+  <div class="tip" style="margin-top:2rem">
+    💡 <strong>¿Tenés el parcial escaneado?</strong> Mandámelo y lo resuelvo con tus números exactos.
+  </div>
+</div>
+</div>
+
+
+<!-- ════════════ RESUMEN 20 MIN ════════════ -->
+<div class="page" id="resumen">
+<div class="container">
+  <div class="stitle"><span class="ico">⚡</span> Resumen para estudiar en 20 minutos</div>
+
+  <div class="tip">🎯 Leé cada bloque en orden. Tomá nota de las fórmulas que no tenés memorizadas. ¡Son exactamente los temas del parcial!</div>
+
+  <!-- BLOQUE 1: Vectores -->
+  <div class="stitle" style="font-size:1rem;margin-top:1.5rem"><span class="ico">➡️</span> 1. Vectores — operaciones base (3 min)</div>
+  <div class="grid g2">
+    <div class="card pu">
+      <h3>Suma/resta y escalar</h3>
+      <p>$(a,b,c) \pm (d,e,f) = (a\pm d,\; b\pm e,\; c\pm f)$</p>
+      <p>$k(a,b,c) = (ka,\;kb,\;kc)$</p>
+      <p style="margin-top:.5rem;font-size:.82rem">Ley de cierre: operar componente a componente, cuidado con signos.</p>
+    </div>
+    <div class="card bl">
+      <h3>Módulo (norma)</h3>
+      <p>$\|\vec{v}\| = \sqrt{v_1^2 + v_2^2}$ (en R²)</p>
+      <p>$\|\vec{v}\| = \sqrt{v_1^2 + v_2^2 + v_3^2}$ (en R³)</p>
+      <p style="margin-top:.5rem;font-size:.82rem">Vector unitario: $\hat{v} = \dfrac{\vec{v}}{\|\vec{v}\|}$</p>
+    </div>
+  </div>
+
+  <!-- BLOQUE 2: Producto escalar -->
+  <div class="stitle" style="font-size:1rem;margin-top:1.5rem"><span class="ico">📐</span> 2. Producto escalar y ángulo (3 min)</div>
+  <div class="cheat">
+    <div class="cgrid">
+      <div class="citem"><div class="lbl">Fórmula</div><div class="cf">$\vec{u}\cdot\vec{v} = u_1v_1+u_2v_2+u_3v_3$</div></div>
+      <div class="citem"><div class="lbl">Ángulo</div><div class="cf">$\cos\alpha = \dfrac{\vec{u}\cdot\vec{v}}{\|\vec{u}\|\|\vec{v}\|}$</div></div>
+      <div class="citem"><div class="lbl">Perpendiculares</div><div class="cf">$\vec{u}\perp\vec{v} \Leftrightarrow \vec{u}\cdot\vec{v} = 0$</div></div>
+      <div class="citem"><div class="lbl">Paralelos</div><div class="cf">$\vec{u}\parallel\vec{v} \Leftrightarrow \vec{u} = k\vec{v}$</div></div>
+      <div class="citem"><div class="lbl">Proyección</div><div class="cf">$\text{proy}_{\vec{v}}\vec{u} = \dfrac{\vec{u}\cdot\vec{v}}{\|\vec{v}\|}$</div></div>
+      <div class="citem"><div class="lbl">Truco</div><div class="cf">Si $\vec{u}\cdot\vec{v} &lt; 0$ → ángulo obtuso (&gt;90°)</div></div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 3: Producto vectorial -->
+  <div class="stitle" style="font-size:1rem;margin-top:1.5rem"><span class="ico">🔄</span> 3. Producto vectorial (solo R³) (3 min)</div>
+  <div class="fbox">
+    <span class="big">$\vec{u}\times\vec{v} = (u_2v_3-u_3v_2,\; u_3v_1-u_1v_3,\; u_1v_2-u_2v_1)$</span>
+    <span class="sub">Recordalo como el determinante con $\vec{i},\vec{j},\vec{k}$ en la primera fila</span>
+  </div>
+  <div class="grid g3">
+    <div class="card gr"><h3>Es perpendicular</h3><p>$\vec{u}\times\vec{v}\perp\vec{u}$ y $\vec{u}\times\vec{v}\perp\vec{v}$</p></div>
+    <div class="card or"><h3>Área paralelogramo</h3><p>$A = \|\vec{u}\times\vec{v}\|$</p></div>
+    <div class="card te"><h3>Área triángulo</h3><p>$A = \dfrac{1}{2}\|\vec{u}\times\vec{v}\|$</p></div>
+  </div>
+  <div class="note">Si $\vec{u}\times\vec{v} = \vec{0}$ → son <strong>paralelos</strong> (o alguno es el vector nulo).</div>
+
+  <!-- BLOQUE 4: Rectas en R² -->
+  <div class="stitle" style="font-size:1rem;margin-top:1.5rem"><span class="ico">📏</span> 4. Las 5 formas de la recta en R² (5 min)</div>
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Forma</th><th>Ecuación</th><th>Cuándo usarla</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Vectorial paramétrica</strong></td><td>$(x,y)=(x_0,y_0)+t(d_1,d_2)$</td><td>Tenés un punto y un director</td></tr>
+        <tr><td><strong>Cartesiana paramétrica</strong></td><td>$x=x_0+td_1\;;\ y=y_0+td_2$</td><td>Misma info, separada por componentes</td></tr>
+        <tr><td><strong>Explícita</strong></td><td>$y=mx+b$</td><td>No es vertical; $m=d_2/d_1$</td></tr>
+        <tr><td><strong>Implícita / General</strong></td><td>$ax+by+c=0$</td><td>Para calcular distancias, intersecciones</td></tr>
+        <tr><td><strong>Segmentaria</strong></td><td>$x/a+y/b=1$</td><td>Ver cortes con ejes rápido: $a$ corte en $x$, $b$ corte en $y$</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tip" style="margin-top:.7rem">💡 <strong>Para pasar de paramétrica a implícita:</strong> despejá $t$ en una ecuación y reemplazá en la otra. Reorganizá para que quede $ax+by+c=0$.</div>
+
+  <!-- BLOQUE 5: Rectas en R³ -->
+  <div class="stitle" style="font-size:1rem;margin-top:1.5rem"><span class="ico">🧊</span> 5. Rectas y planos en R³ (3 min)</div>
+  <div class="grid g2">
+    <div class="card bl">
+      <h3>Recta en R³</h3>
+      <p style="font-size:.87rem"><strong>Paramétrica:</strong> $(x,y,z)=P_0+t\vec{d}$</p>
+      <p style="font-size:.87rem"><strong>Simétrica:</strong> $\dfrac{x-x_0}{d_1}=\dfrac{y-y_0}{d_2}=\dfrac{z-z_0}{d_3}$</p>
+      <p style="font-size:.82rem;margin-top:.5rem;color:var(--gray-lt)">Posiciones: paralelas, secantes, alabeadas</p>
+    </div>
+    <div class="card pu">
+      <h3>Plano en R³</h3>
+      <p style="font-size:.87rem"><strong>General:</strong> $Ax+By+Cz+D=0$</p>
+      <p style="font-size:.87rem"><strong>Normal:</strong> $\vec{n}=(A,B,C)$ ⊥ al plano</p>
+      <p style="font-size:.87rem"><strong>Con punto:</strong> $A(x-x_0)+B(y-y_0)+C(z-z_0)=0$</p>
+    </div>
+  </div>
+
+  <!-- BLOQUE 6: Fórmulas de distancia -->
+  <div class="stitle" style="font-size:1rem;margin-top:1.5rem"><span class="ico">📍</span> 6. Distancias (1 min)</div>
+  <div class="cheat">
+    <div class="cgrid">
+      <div class="citem"><div class="lbl">Punto a recta (R²)</div><div class="cf">$d = \dfrac{|ax_0+by_0+c|}{\sqrt{a^2+b^2}}$</div></div>
+      <div class="citem"><div class="lbl">Punto a plano (R³)</div><div class="cf">$d = \dfrac{|Ax_0+By_0+Cz_0+D|}{\sqrt{A^2+B^2+C^2}}$</div></div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 7: Cuándo es qué -->
+  <div class="stitle" style="font-size:1rem;margin-top:1.5rem"><span class="ico">🔍</span> 7. Posiciones relativas — decisión rápida (2 min)</div>
+  <div class="grid g2">
+    <div class="card gr">
+      <h3>Dos rectas en R²</h3>
+      <p style="font-size:.85rem">Directores proporcionales y punto en común → <strong>coincidentes</strong></p>
+      <p style="font-size:.85rem">Directores proporcionales sin punto en común → <strong>paralelas</strong></p>
+      <p style="font-size:.85rem">Directores NO proporcionales → <strong>secantes</strong> (tienen un punto en común)</p>
+    </div>
+    <div class="card or">
+      <h3>Dos planos en R³</h3>
+      <p style="font-size:.85rem">Normales proporcionales y mismo D relativo → <strong>coincidentes</strong></p>
+      <p style="font-size:.85rem">Normales proporcionales, D distinto → <strong>paralelos</strong></p>
+      <p style="font-size:.85rem">Normales NO proporcionales → <strong>secantes</strong> (se cortan en una recta)</p>
+      <p style="font-size:.85rem">$\vec{n_1}\cdot\vec{n_2}=0$ → <strong>perpendiculares</strong></p>
+    </div>
+  </div>
+
+  <!-- RESUMEN ULTRA RÁPIDO -->
+  <div class="stitle" style="font-size:1rem;margin-top:1.5rem"><span class="ico">🏁</span> Repaso de 5 minutos — las 10 fórmulas que SÍ o SÍ tenés que saber</div>
+  <div class="grid g2">
+    <div class="card re">
+      <h3>Fórmulas de cálculo</h3>
+      <ol style="padding-left:1.3rem;font-size:.87rem;line-height:2.1">
+        <li>$\|\vec{v}\| = \sqrt{\sum v_i^2}$</li>
+        <li>$\vec{u}\cdot\vec{v} = \sum u_i v_i$</li>
+        <li>$\cos\alpha = \frac{\vec{u}\cdot\vec{v}}{\|\vec{u}\|\|\vec{v}\|}$</li>
+        <li>$\vec{u}\times\vec{v}$ = determinante $3\times3$</li>
+        <li>$A_{\text{paralelogr}} = \|\vec{u}\times\vec{v}\|$</li>
+      </ol>
+    </div>
+    <div class="card te">
+      <h3>Condiciones clave</h3>
+      <ol style="padding-left:1.3rem;font-size:.87rem;line-height:2.1">
+        <li>$\vec{u}\perp\vec{v} \Leftrightarrow \vec{u}\cdot\vec{v}=0$</li>
+        <li>$\vec{u}\parallel\vec{v} \Leftrightarrow \vec{u}=k\vec{v}$</li>
+        <li>Recta implícita: $ax+by+c=0$</li>
+        <li>Normal de plano: $(A,B,C)$ del $Ax+By+Cz+D=0$</li>
+        <li>Dist. $P$ a plano: $\frac{|Ax_0+By_0+Cz_0+D|}{\sqrt{A^2+B^2+C^2}}$</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:1.5rem;font-size:.95rem">
+    🎓 <strong>Estrategia para el parcial:</strong>
+    <br>1. Primero leé todo el parcial sin resolver nada.
+    <br>2. Empezá por lo que más seguro te sale (ganás puntos y confianza).
+    <br>3. En cada ejercicio, primero identificá qué fórmula corresponde, luego calculá.
+    <br>4. Siempre verificá: reemplazá el resultado en la ecuación original.
+  </div>
+</div>
+</div>
 
 <nav class="apuntes-footer-nav">
   <span class="apuntes-footer-nav__label">Más de esta materia:</span>

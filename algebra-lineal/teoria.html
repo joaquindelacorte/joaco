@@ -272,6 +272,7 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
     <button class="tab-btn" id="tb-cheat" onclick="showPage('cheat',this)">📋 Cheatsheet</button>
     <button class="tab-btn" id="tb-parcial" onclick="showPage('parcial',this)">📝 Parcial</button>
     <button class="tab-btn" id="tb-resumen" onclick="showPage('resumen',this)">⚡ Resumen 20 min</button>
+    <button class="tab-btn" id="tb-machete" onclick="showPage('machete',this)">📚 Machete</button>
   </div>
   <div class="nav-badges" id="nav-badges">🏅 0/8</div>
 </nav>
@@ -1849,6 +1850,464 @@ drawVec2();
     <br>3. En cada ejercicio, primero identificá qué fórmula corresponde, luego calculá.
     <br>4. Siempre verificá: reemplazá el resultado en la ecuación original.
   </div>
+</div>
+</div>
+
+
+<!-- ════════════ MACHETE ════════════ -->
+<div class="page" id="machete">
+<div class="container">
+  <div class="stitle"><span class="ico">📚</span> Machete completo &mdash; de cero al parcial</div>
+  <p style="margin-bottom:1.5rem;color:var(--gray-lt)">Todas las secciones del machete con fórmulas KaTeX y gráficos. Clic en cada sección para expandir.</p>
+
+  <!-- ─ 0. GLOSARIO ─ -->
+  <details open>
+    <summary>0. Ideas base — glosario</summary>
+    <div class="dbody">
+      <div class="twrap">
+        <table>
+          <thead><tr><th>Concepto</th><th>Qué es</th><th>Ejemplo</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Vector</strong></td><td>Flecha con dirección y tamaño; 3 componentes</td><td>$\vec{u} = (1,2,0)$</td></tr>
+            <tr><td><strong>Norma</strong> $\|\vec{u}\|$</td><td>El largo de la flecha</td><td>$\|(2,-1,-3)\| = \sqrt{14}$</td></tr>
+            <tr><td><strong>Vector director</strong> $\vec{v}$</td><td>Dirección en la que avanza una recta</td><td>$(2,-1,-3)$ en $X=(1,0,1)+t(2,-1,-3)$</td></tr>
+            <tr><td><strong>Vector normal</strong> $\vec{n}$</td><td>Perpendicular al plano; sus componentes son $a,b,c$</td><td>$2x-y-3z=2 \Rightarrow \vec{n}=(2,-1,-3)$</td></tr>
+            <tr><td><strong>rg$(A)$</strong></td><td>Filas linealmente independientes; se cuenta tras escalonar</td><td>Una fila de ceros en $3\times3 \Rightarrow$ rg = 2</td></tr>
+            <tr><td><strong>SCD / SCI / SI</strong></td><td>1 solución / infinitas / ninguna</td><td>Teorema de Rouché–Frobenius</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </details>
+
+  <!-- ─ 1. PRODUCTO ESCALAR ─ -->
+  <details>
+    <summary>1. Producto escalar</summary>
+    <div class="dbody">
+      <div class="grid g2" style="align-items:start">
+        <div>
+          <div class="fbox" style="margin-bottom:.8rem">
+            <span class="big">$\vec{u}\cdot\vec{v} = u_1 v_1 + u_2 v_2 + u_3 v_3$</span>
+            <span class="sub">Resultado: un <strong>número</strong>. &nbsp; $\vec{u}\cdot\vec{u} = \|\vec{u}\|^2$</span>
+          </div>
+          <div class="fbox">
+            <span class="big">$\cos\theta = \dfrac{\vec{u}\cdot\vec{v}}{\|\vec{u}\|\,\|\vec{v}\|}$</span>
+            <span class="sub">$\vec{u}\perp\vec{v} \Longleftrightarrow \vec{u}\cdot\vec{v} = 0$</span>
+          </div>
+        </div>
+        <div style="padding:.5rem 0"><svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:300px;height:auto;display:block;margin:0 auto">
+  <defs>
+    <marker id="ah1" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <path d="M0,0 L6,2.5 L0,5 z" fill="#6d28d9"/>
+    </marker>
+    <marker id="ah2" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <path d="M0,0 L6,2.5 L0,5 z" fill="#1d4ed8"/>
+    </marker>
+    <marker id="ah3" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <path d="M0,0 L6,2.5 L0,5 z" fill="#374151"/>
+    </marker>
+  </defs>
+  <!-- origin -->
+  <circle cx="60" cy="120" r="3" fill="#374151"/>
+  <text x="52" y="135" font-family="Segoe UI,sans-serif" font-size="11" fill="#374151">O</text>
+  <!-- u vector -->
+  <line x1="60" y1="120" x2="210" y2="50" stroke="#6d28d9" stroke-width="2.2" marker-end="url(#ah1)"/>
+  <text x="215" y="47" font-family="Segoe UI,sans-serif" font-size="12" font-weight="700" fill="#6d28d9">u&#x20D7;</text>
+  <!-- v vector -->
+  <line x1="60" y1="120" x2="230" y2="105" stroke="#1d4ed8" stroke-width="2.2" marker-end="url(#ah2)"/>
+  <text x="234" y="108" font-family="Segoe UI,sans-serif" font-size="12" font-weight="700" fill="#1d4ed8">v&#x20D7;</text>
+  <!-- angle arc -->
+  <path d="M 97 102 A 40 40 0 0 0 88 82" fill="none" stroke="#0d9488" stroke-width="1.5"/>
+  <text x="104" y="92" font-family="Segoe UI,sans-serif" font-size="12" fill="#0d9488" font-style="italic">&#x3B8;</text>
+  <!-- labels -->
+  <text x="60" y="165" font-family="Segoe UI,sans-serif" font-size="9.5" fill="#6b7280">u&#x20D7;&#xB7;v&#x20D7; = &#x2016;u&#x20D7;&#x2016;&#xB7;&#x2016;v&#x20D7;&#x2016;&#xB7;cos&#x3B8;</text>
+  <text x="60" y="178" font-family="Segoe UI,sans-serif" font-size="9.5" fill="#6b7280">u&#x20D7;&#x22A5;v&#x20D7; &#x27FA; u&#x20D7;&#xB7;v&#x20D7; = 0</text>
+</svg></div>
+      </div>
+      <div class="twrap" style="margin-top:.8rem">
+        <table>
+          <thead><tr><th>Propiedad</th><th>Fórmula</th><th>¿Qué significa?</th></tr></thead>
+          <tbody>
+            <tr><td>Conmutativo</td><td>$\vec{u}\cdot\vec{v} = \vec{v}\cdot\vec{u}$</td><td>El orden no importa.</td></tr>
+            <tr><td>Distributivo</td><td>$\vec{u}\cdot(\vec{v}+\vec{w}) = \vec{u}\cdot\vec{v} + \vec{u}\cdot\vec{w}$</td><td>Se puede repartir.</td></tr>
+            <tr><td>Homogéneo</td><td>$(\lambda\vec{u})\cdot\vec{v} = \lambda(\vec{u}\cdot\vec{v})$</td><td>Los escalares salen afuera.</td></tr>
+            <tr><td>Norma por escalar</td><td>$\|\lambda\vec{u}\| = |\lambda|\,\|\vec{u}\|$</td><td>Triplicar el vector triplica su largo.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note" style="margin-top:.7rem">💡 Signo de $\vec{u}\cdot\vec{v}$: positivo → ángulo agudo; negativo → obtuso; cero → perpendiculares.</div>
+    </div>
+  </details>
+
+  <!-- ─ 2. PRODUCTO VECTORIAL ─ -->
+  <details>
+    <summary>2. Producto vectorial (solo R³)</summary>
+    <div class="dbody">
+      <div class="grid g2" style="align-items:start">
+        <div>
+          <div class="fbox" style="margin-bottom:.8rem">
+            <span class="big">$\vec{u}\times\vec{v} = \begin{vmatrix}\vec{i}&amp;\vec{j}&amp;\vec{k}\\ u_1&amp;u_2&amp;u_3\\ v_1&amp;v_2&amp;v_3\end{vmatrix}$</span>
+            <span class="sub">Resultado: un <strong>vector</strong> perpendicular a $\vec{u}$ y $\vec{v}$</span>
+          </div>
+          <div class="fbox">
+            <span class="big">$\|\vec{u}\times\vec{v}\| = \|\vec{u}\|\,\|\vec{v}\|\sin\theta$</span>
+            <span class="sub">= Área del paralelogramo &nbsp;·&nbsp; $A_\triangle = \tfrac{1}{2}\|\vec{u}\times\vec{v}\|$</span>
+          </div>
+        </div>
+        <div style="padding:.5rem 0"><svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:300px;height:auto;display:block;margin:0 auto">
+  <defs>
+    <marker id="cu" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 z" fill="#6d28d9"/></marker>
+    <marker id="cv" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 z" fill="#1d4ed8"/></marker>
+    <marker id="cw" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 z" fill="#dc2626"/></marker>
+  </defs>
+  <!-- plano (parallelogram) -->
+  <polygon points="50,130 180,115 240,85 110,100" fill="rgba(196,181,253,0.22)" stroke="#c4b5fd" stroke-width="1"/>
+  <!-- u on plane -->
+  <line x1="115" y1="103" x2="235" y2="88" stroke="#6d28d9" stroke-width="2.2" marker-end="url(#cu)"/>
+  <text x="238" y="87" font-family="Segoe UI,sans-serif" font-size="12" font-weight="700" fill="#6d28d9">u&#x20D7;</text>
+  <!-- v on plane -->
+  <line x1="115" y1="103" x2="55" y2="132" stroke="#1d4ed8" stroke-width="2.2" marker-end="url(#cv)"/>
+  <text x="36" y="140" font-family="Segoe UI,sans-serif" font-size="12" font-weight="700" fill="#1d4ed8">v&#x20D7;</text>
+  <!-- uxv perpendicular -->
+  <line x1="115" y1="103" x2="115" y2="35" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="none" marker-end="url(#cw)"/>
+  <text x="118" y="28" font-family="Segoe UI,sans-serif" font-size="12" font-weight="700" fill="#dc2626">u&#x20D7;&#xD7;v&#x20D7;</text>
+  <!-- right angle mark -->
+  <path d="M 115 73 L 125 73 L 125 83" fill="none" stroke="#dc2626" stroke-width="1.2"/>
+  <!-- origin dot -->
+  <circle cx="115" cy="103" r="3" fill="#374151"/>
+  <text x="64" y="165" font-family="Segoe UI,sans-serif" font-size="9.5" fill="#6b7280">u&#x20D7;&#xD7;v&#x20D7; &#x22A5; u&#x20D7; y &#x22A5; v&#x20D7; &nbsp;&#xB7;&nbsp; &#x2016;u&#x20D7;&#xD7;v&#x20D7;&#x2016; = &#xC1;rea paralelogr.</text>
+</svg></div>
+      </div>
+      <div class="twrap" style="margin-top:.8rem">
+        <table>
+          <thead><tr><th>Propiedad</th><th>Fórmula</th><th>¿Qué significa?</th></tr></thead>
+          <tbody>
+            <tr><td>Ortogonal a ambos</td><td>$(\vec{u}\times\vec{v})\cdot\vec{u}=0$ y $\cdot\vec{v}=0$</td><td>Es la normal al plano de $\vec{u}$ y $\vec{v}$.</td></tr>
+            <tr><td>Anticonmutativo</td><td>$\vec{u}\times\vec{v} = -(\vec{v}\times\vec{u})$</td><td>Cambiar el orden invierte la flecha.</td></tr>
+            <tr><td>Paralelismo</td><td>$\vec{u}\times\vec{v} = \vec{0} \Leftrightarrow \vec{u}\parallel\vec{v}$</td><td>Área = 0; no forman paralelogramo.</td></tr>
+            <tr><td>No asociativo</td><td>$(\vec{u}\times\vec{v})\times\vec{w} \neq \vec{u}\times(\vec{v}\times\vec{w})$</td><td>Los paréntesis importan.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip">⚠️ La 2ª componente del producto vectorial <strong>siempre lleva el signo "−" adelante</strong>: es la trampa clásica del parcial.</div>
+    </div>
+  </details>
+
+  <!-- ─ 3. RECTAS Y PLANOS ─ -->
+  <details>
+    <summary>3. Rectas y planos en R³</summary>
+    <div class="dbody">
+      <div class="grid g2">
+        <div class="card pu">
+          <h3>Recta paramétrica</h3>
+          <p>$X = P + t\cdot\vec{v}$</p>
+          <p style="font-size:.83rem">Arrancar en $P$ y avanzar $t$ veces en la dirección $\vec{v}$.</p>
+        </div>
+        <div class="card bl">
+          <h3>Plano general</h3>
+          <p>$ax + by + cz = d$ &rarr; $\vec{n} = (a,b,c)$</p>
+          <p style="font-size:.83rem">Paramétrico → general: $\vec{n} = \vec{u}\times\vec{v}$, luego $d = \vec{n}\cdot P$.</p>
+        </div>
+      </div>
+
+      <div class="stitle" style="font-size:.97rem;margin-top:1.2rem"><span class="ico">📋</span> Posición relativa plano–plano</div>
+      <div style="overflow-x:auto;margin:.5rem 0"><svg viewBox="0 0 480 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;display:block;margin:0 auto">
+  <defs>
+    <marker id="nr" markerWidth="5" markerHeight="4" refX="4" refY="2" orient="auto"><path d="M0,0 L5,2 L0,4 z" fill="#dc2626"/></marker>
+  </defs>
+  <!-- CASO 1: Coincidentes -->
+  <text x="20" y="14" font-family="Segoe UI,sans-serif" font-size="9" font-weight="700" fill="#6d28d9">COINCIDENTES</text>
+  <polygon points="15,80 95,50 95,100 15,130" fill="rgba(196,181,253,.35)" stroke="#6d28d9" stroke-width="1.5"/>
+  <polygon points="15,80 95,50 95,100 15,130" fill="rgba(196,181,253,.15)" stroke="#a78bfa" stroke-width="1" stroke-dasharray="4,2"/>
+  <line x1="55" y1="90" x2="55" y2="35" stroke="#dc2626" stroke-width="1.8" marker-end="url(#nr)"/>
+  <line x1="55" y1="90" x2="55" y2="35" stroke="#dc2626" stroke-width="1.8" marker-end="url(#nr)"/>
+  <text x="25" y="148" font-family="Segoe UI,sans-serif" font-size="8.5" fill="#374151">n&#x2081;&#x2225;n&#x2082;, d proporcional</text>
+  <!-- CASO 2: Paralelos -->
+  <text x="130" y="14" font-family="Segoe UI,sans-serif" font-size="9" font-weight="700" fill="#c2410c">PARALELOS</text>
+  <polygon points="125,65 205,35 205,75 125,105" fill="rgba(196,181,253,.35)" stroke="#6d28d9" stroke-width="1.5"/>
+  <polygon points="125,95 205,65 205,105 125,135" fill="rgba(147,197,253,.35)" stroke="#1d4ed8" stroke-width="1.5"/>
+  <line x1="165" y1="75" x2="165" y2="20" stroke="#dc2626" stroke-width="1.8" marker-end="url(#nr)"/>
+  <line x1="165" y1="105" x2="165" y2="50" stroke="#dc2626" stroke-width="1.8" marker-end="url(#nr)"/>
+  <text x="130" y="148" font-family="Segoe UI,sans-serif" font-size="8.5" fill="#374151">n&#x2081;&#x2225;n&#x2082;, d distinto</text>
+  <!-- CASO 3: Secantes -->
+  <text x="245" y="14" font-family="Segoe UI,sans-serif" font-size="9" font-weight="700" fill="#15803d">SECANTES</text>
+  <polygon points="240,60 310,35 330,75 260,100" fill="rgba(196,181,253,.35)" stroke="#6d28d9" stroke-width="1.5"/>
+  <polygon points="240,100 340,80 330,125 230,145" fill="rgba(147,197,253,.35)" stroke="#1d4ed8" stroke-width="1.5"/>
+  <line x1="270" y1="85" x2="320" y2="85" stroke="#15803d" stroke-width="2.5"/>
+  <text x="243" y="148" font-family="Segoe UI,sans-serif" font-size="8.5" fill="#374151">n&#x2081;&#x2226;n&#x2082; → corte = recta</text>
+  <!-- CASO 4: Perpendiculares -->
+  <text x="360" y="14" font-family="Segoe UI,sans-serif" font-size="9" font-weight="700" fill="#d97706">PERP.</text>
+  <polygon points="355,50 430,30 430,90 355,110" fill="rgba(196,181,253,.35)" stroke="#6d28d9" stroke-width="1.5"/>
+  <polygon points="355,120 465,60 465,100 355,160" fill="rgba(147,197,253,.35)" stroke="#1d4ed8" stroke-width="1.5"/>
+  <path d="M 395 83 L 395 93 L 405 93" fill="none" stroke="#d97706" stroke-width="1.5"/>
+  <text x="358" y="148" font-family="Segoe UI,sans-serif" font-size="8.5" fill="#374151">n&#x2081;&#xB7;n&#x2082; = 0</text>
+</svg></div>
+      <div class="twrap">
+        <table>
+          <thead><tr><th>Condición</th><th>Posición</th></tr></thead>
+          <tbody>
+            <tr><td>$\vec{n_1}\parallel\vec{n_2}$ y ecuaciones proporcionales</td><td><strong>Coincidentes</strong></td></tr>
+            <tr><td>$\vec{n_1}\parallel\vec{n_2}$ y ecuaciones no proporcionales</td><td><strong>Paralelos distintos</strong></td></tr>
+            <tr><td>$\vec{n_1}\not\parallel\vec{n_2}$</td><td><strong>Secantes</strong> (corte = recta)</td></tr>
+            <tr><td>$\vec{n_1}\cdot\vec{n_2}=0$</td><td><strong>Perpendiculares</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="stitle" style="font-size:.97rem;margin-top:1.2rem"><span class="ico">📋</span> Posición relativa recta–plano</div>
+      <div style="overflow-x:auto;margin:.5rem 0"><svg viewBox="0 0 480 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;display:block;margin:0 auto">
+  <defs>
+    <marker id="rl" markerWidth="5" markerHeight="4" refX="4" refY="2" orient="auto"><path d="M0,0 L5,2 L0,4 z" fill="#6d28d9"/></marker>
+    <marker id="rb" markerWidth="5" markerHeight="4" refX="4" refY="2" orient="auto"><path d="M0,0 L5,2 L0,4 z" fill="#1d4ed8"/></marker>
+  </defs>
+  <!-- SECANTE -->
+  <text x="15" y="13" font-family="Segoe UI,sans-serif" font-size="9" font-weight="700" fill="#15803d">SECANTE</text>
+  <polygon points="10,75 100,55 100,105 10,125" fill="rgba(147,197,253,.3)" stroke="#1d4ed8" stroke-width="1.2"/>
+  <line x1="55" y1="30" x2="55" y2="140" stroke="#6d28d9" stroke-width="2" marker-end="url(#rl)"/>
+  <circle cx="55" cy="90" r="3.5" fill="#dc2626"/>
+  <text x="10" y="150" font-family="Segoe UI,sans-serif" font-size="8" fill="#374151">v&#xB7;n&#x2260;0 → un punto</text>
+  <!-- PARALELA -->
+  <text x="125" y="13" font-family="Segoe UI,sans-serif" font-size="9" font-weight="700" fill="#c2410c">PARALELA</text>
+  <polygon points="120,80 210,60 210,110 120,130" fill="rgba(147,197,253,.3)" stroke="#1d4ed8" stroke-width="1.2"/>
+  <line x1="120" y1="45" x2="210" y2="45" stroke="#6d28d9" stroke-width="2" marker-end="url(#rl)"/>
+  <text x="120" y="150" font-family="Segoe UI,sans-serif" font-size="8" fill="#374151">v&#xB7;n=0, P&#x2209;&#x3A0;</text>
+  <!-- CONTENIDA -->
+  <text x="232" y="13" font-family="Segoe UI,sans-serif" font-size="9" font-weight="700" fill="#6d28d9">CONTENIDA</text>
+  <polygon points="225,70 335,50 335,110 225,130" fill="rgba(147,197,253,.3)" stroke="#1d4ed8" stroke-width="1.2"/>
+  <line x1="235" y1="95" x2="325" y2="78" stroke="#6d28d9" stroke-width="2.5" marker-end="url(#rl)"/>
+  <text x="232" y="150" font-family="Segoe UI,sans-serif" font-size="8" fill="#374151">v&#xB7;n=0, P&#x2208;&#x3A0;</text>
+  <!-- PERPENDICULAR -->
+  <text x="358" y="13" font-family="Segoe UI,sans-serif" font-size="9" font-weight="700" fill="#d97706">PERPEND.</text>
+  <polygon points="350,85 460,65 460,115 350,135" fill="rgba(147,197,253,.3)" stroke="#1d4ed8" stroke-width="1.2"/>
+  <line x1="405" y1="35" x2="405" y2="145" stroke="#6d28d9" stroke-width="2" marker-end="url(#rl)"/>
+  <path d="M 405 95 L 415 95 L 415 105" fill="none" stroke="#d97706" stroke-width="1.5"/>
+  <text x="355" y="150" font-family="Segoe UI,sans-serif" font-size="8" fill="#374151">v&#x2225;n (v=&#x3BB;n)</text>
+</svg></div>
+      <div class="twrap">
+        <table>
+          <thead><tr><th>Condición</th><th>Posición</th></tr></thead>
+          <tbody>
+            <tr><td>$\vec{v}\cdot\vec{n} \neq 0$</td><td><strong>Secante</strong> — cruza en un punto</td></tr>
+            <tr><td>$\vec{v}\cdot\vec{n} = 0$ y $P\notin\Pi$</td><td><strong>Paralela</strong></td></tr>
+            <tr><td>$\vec{v}\cdot\vec{n} = 0$ y $P\in\Pi$</td><td><strong>Contenida</strong></td></tr>
+            <tr><td>$\vec{v}\parallel\vec{n}$</td><td><strong>Perpendicular</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="stitle" style="font-size:.97rem;margin-top:1.2rem"><span class="ico">📐</span> Distancias</div>
+      <div class="cheat" style="margin-top:.5rem">
+        <div class="cgrid">
+          <div class="citem"><div class="lbl">Punto → plano</div>
+            <div class="cf">$d = \dfrac{|ax_0+by_0+cz_0-d|}{\|\vec{n}\|}$</div></div>
+          <div class="citem"><div class="lbl">Plano → plano (paralelos)</div>
+            <div class="cf">$d = \dfrac{|d_2-d_1|}{\|\vec{n}\|}$ &nbsp; (mismos $a,b,c$)</div></div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- ─ 4. MATRICES ─ -->
+  <details>
+    <summary>4. Álgebra de matrices</summary>
+    <div class="dbody">
+      <div class="twrap">
+        <table>
+          <thead><tr><th>Propiedad</th><th>Fórmula</th><th>¿Qué significa?</th></tr></thead>
+          <tbody>
+            <tr><td>Producto</td><td>$c_{ij}=$ fila $i$ de $A$ · col. $j$ de $B$</td><td>Cada casilla = producto escalar fila × columna.</td></tr>
+            <tr><td>No conmutativa</td><td>$AB \neq BA$ en general</td><td>El <strong>orden importa</strong>.</td></tr>
+            <tr><td>Identidad</td><td>$AI = IA = A$</td><td>$I$ es el "1" de las matrices.</td></tr>
+            <tr><td>Transpuesta</td><td>$(AB)^T = B^T A^T$</td><td>Transponer un producto invierte el orden.</td></tr>
+            <tr><td>Dimensiones</td><td>$(m\times n)\cdot(n\times p) \to m\times p$</td><td>Columnas de $A$ = filas de $B$.</td></tr>
+            <tr><td>Potencia</td><td>$A^2 = A\cdot A$</td><td>No es elevar cada elemento al cuadrado.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </details>
+
+  <!-- ─ 5. DETERMINANTES ─ -->
+  <details>
+    <summary>5. Determinantes</summary>
+    <div class="dbody">
+      <div class="grid g2" style="align-items:start">
+        <div>
+          <div class="note" style="margin-bottom:.8rem">$\det(A)\neq 0$ → "sana" (invertible, rg = n). $\det(A)=0$ → "degenerada".</div>
+          <div class="twrap">
+            <table>
+              <thead><tr><th>Propiedad</th><th>Fórmula</th></tr></thead>
+              <tbody>
+                <tr><td>Escalar</td><td>$\det(\lambda A) = \lambda^n\det(A)$</td></tr>
+                <tr><td>Producto</td><td>$\det(AB) = \det(A)\cdot\det(B)$</td></tr>
+                <tr><td>Potencia</td><td>$\det(A^k) = \det(A)^k$</td></tr>
+                <tr><td>Transpuesta</td><td>$\det(A^T) = \det(A)$</td></tr>
+                <tr><td>Inversa</td><td>$\det(A^{-1}) = 1/\det(A)$</td></tr>
+                <tr><td>Suma</td><td>$\det(A+B) \neq \det(A)+\det(B)$</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div style="padding:.5rem 0"><svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:200px;height:auto;display:block;margin:0 auto">
+  <text x="100" y="14" font-family="Segoe UI,sans-serif" font-size="10" font-weight="700" fill="#374151" text-anchor="middle">Tabla de signos cofactores</text>
+  <!-- grid 3x3 -->
+  <rect x="20" y="20" width="50" height="35" rx="4" fill="rgba(196,181,253,.5)" stroke="#6d28d9" stroke-width="1"/>
+  <text x="45" y="42" font-family="Segoe UI,sans-serif" font-size="18" font-weight="900" fill="#6d28d9" text-anchor="middle">+</text>
+  <rect x="75" y="20" width="50" height="35" rx="4" fill="rgba(254,202,202,.5)" stroke="#dc2626" stroke-width="1"/>
+  <text x="100" y="42" font-family="Segoe UI,sans-serif" font-size="18" font-weight="900" fill="#dc2626" text-anchor="middle">&#8722;</text>
+  <rect x="130" y="20" width="50" height="35" rx="4" fill="rgba(196,181,253,.5)" stroke="#6d28d9" stroke-width="1"/>
+  <text x="155" y="42" font-family="Segoe UI,sans-serif" font-size="18" font-weight="900" fill="#6d28d9" text-anchor="middle">+</text>
+  <rect x="20" y="60" width="50" height="35" rx="4" fill="rgba(254,202,202,.5)" stroke="#dc2626" stroke-width="1"/>
+  <text x="45" y="82" font-family="Segoe UI,sans-serif" font-size="18" font-weight="900" fill="#dc2626" text-anchor="middle">&#8722;</text>
+  <rect x="75" y="60" width="50" height="35" rx="4" fill="rgba(196,181,253,.5)" stroke="#6d28d9" stroke-width="1"/>
+  <text x="100" y="82" font-family="Segoe UI,sans-serif" font-size="18" font-weight="900" fill="#6d28d9" text-anchor="middle">+</text>
+  <rect x="130" y="60" width="50" height="35" rx="4" fill="rgba(254,202,202,.5)" stroke="#dc2626" stroke-width="1"/>
+  <text x="155" y="82" font-family="Segoe UI,sans-serif" font-size="18" font-weight="900" fill="#dc2626" text-anchor="middle">&#8722;</text>
+  <rect x="20" y="100" width="50" height="35" rx="4" fill="rgba(196,181,253,.5)" stroke="#6d28d9" stroke-width="1"/>
+  <text x="45" y="122" font-family="Segoe UI,sans-serif" font-size="18" font-weight="900" fill="#6d28d9" text-anchor="middle">+</text>
+  <rect x="75" y="100" width="50" height="35" rx="4" fill="rgba(254,202,202,.5)" stroke="#dc2626" stroke-width="1"/>
+  <text x="100" y="122" font-family="Segoe UI,sans-serif" font-size="18" font-weight="900" fill="#dc2626" text-anchor="middle">&#8722;</text>
+  <rect x="130" y="100" width="50" height="35" rx="4" fill="rgba(196,181,253,.5)" stroke="#6d28d9" stroke-width="1"/>
+  <text x="155" y="122" font-family="Segoe UI,sans-serif" font-size="18" font-weight="900" fill="#6d28d9" text-anchor="middle">+</text>
+</svg>
+          <p style="font-size:.8rem;color:var(--gray-lt);text-align:center;margin-top:.4rem">Elegir fila/columna con más ceros</p>
+        </div>
+      </div>
+      <div class="twrap" style="margin-top:.8rem">
+        <table>
+          <thead><tr><th>Operación de fila</th><th>Efecto en det</th></tr></thead>
+          <tbody>
+            <tr><td>Intercambiar dos filas</td><td>Cambia el signo</td></tr>
+            <tr><td>Multiplicar una fila por $\lambda$</td><td>Se multiplica por $\lambda$</td></tr>
+            <tr><td>$F_i \leftarrow F_i + c\cdot F_j$</td><td><strong>No cambia</strong> — operación de Gauss</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card re" style="margin-top:.8rem">
+        <h3>Det = 0 sin calcular</h3>
+        <ul style="padding-left:1.2rem;font-size:.88rem;line-height:1.9">
+          <li>Fila (o columna) de ceros</li>
+          <li>Dos filas iguales o proporcionales</li>
+          <li>Una fila es combinación lineal de otras</li>
+          <li>Matriz triangular con un 0 en la diagonal</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+
+  <!-- ─ 6. RANGO ─ -->
+  <details>
+    <summary>6. Rango e invertibilidad</summary>
+    <div class="dbody">
+      <div class="fbox">
+        <span class="big" style="font-size:.97rem">$\det(A)\neq 0 \Leftrightarrow A$ invertible $\Leftrightarrow$ rg$(A)=n \Leftrightarrow$ filas independientes</span>
+        <span class="sub">$\Leftrightarrow A\cdot X=\vec{0}$ solo tiene $X=\vec{0}$ &nbsp; $\Leftrightarrow$ &nbsp; $A\cdot X=\vec{b}$ tiene solución única para todo $\vec{b}$</span>
+      </div>
+      <div class="note" style="margin-top:.7rem">rg$(A)$ = filas no nulas tras escalonar. &nbsp; rg$(A)$ = rg$(A^T)$. &nbsp; Las operaciones de fila no cambian el rango.</div>
+    </div>
+  </details>
+
+  <!-- ─ 7. SISTEMAS ─ -->
+  <details>
+    <summary>7. Sistemas — Rouché–Frobenius</summary>
+    <div class="dbody">
+      <div class="twrap">
+        <table>
+          <thead><tr><th>Condición ($n$ = incógnitas)</th><th>Resultado</th><th>¿Qué pasa?</th></tr></thead>
+          <tbody>
+            <tr><td>rg$(A)=$ rg$(A|\vec{b})=n$</td><td><strong>SCD</strong></td><td>1 sola solución.</td></tr>
+            <tr><td>rg$(A)=$ rg$(A|\vec{b}) &lt; n$</td><td><strong>SCI</strong></td><td>$n-$rg incógnitas libres; infinitas soluciones.</td></tr>
+            <tr><td>rg$(A) \neq$ rg$(A|\vec{b})$</td><td><strong>SI</strong></td><td>Aparece $0=k\neq0$ al escalonar. Sin solución.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="grid g2" style="margin-top:.8rem">
+        <div class="card gr">
+          <h3>Homogéneo ($A\cdot X=\vec{0}$)</h3>
+          <p style="font-size:.87rem">Siempre compatible ($X=\vec{0}$ es solución).<br>
+          SCD $\Leftrightarrow \det(A)\neq 0$<br>
+          SCI $\Leftrightarrow \det(A) = 0$<br>
+          Solución: $X = t\cdot\vec{v}$, $t\in\mathbb{R}$</p>
+        </div>
+        <div class="card or">
+          <h3>No homogéneo ($A\cdot X=\vec{b}$)</h3>
+          <p style="font-size:.87rem">$X = X_p + X_h$ (particular + homogénea)<br>
+          Si $\det(A)\neq 0$ → SCD para todo $\vec{b}$.<br>
+          Cramer: $x_i = \dfrac{\det(A_i)}{\det(A)}$ &nbsp;($\det(A)\neq 0$)</p>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- ─ 8. GUÍAS ─ -->
+  <details>
+    <summary>8. Guías paso a paso</summary>
+    <div class="dbody">
+      <div class="grid g2">
+        <div>
+          <div class="ex-card">
+            <div class="ex-num">G1 — Producto vectorial</div>
+            <ol style="padding-left:1.2rem;font-size:.87rem;line-height:2">
+              <li>Escribí $\vec{u}$ arriba y $\vec{v}$ abajo.</li>
+              <li>1ª comp.: tapa col. 1 → $u_2 v_3 - u_3 v_2$</li>
+              <li>2ª comp.: tapa col. 2 → $\mathbf{-(u_1 v_3 - u_3 v_1)}$ ⚠️</li>
+              <li>3ª comp.: tapa col. 3 → $u_1 v_2 - u_2 v_1$</li>
+            </ol>
+            <div class="note" style="margin-top:.5rem">Verificación: $(\vec{u}\times\vec{v})\cdot\vec{u}=0$ y $\cdot\vec{v}=0$</div>
+          </div>
+          <div class="ex-card" style="margin-top:.8rem">
+            <div class="ex-num">G2 — Plano paramétrico → general</div>
+            <ol style="padding-left:1.2rem;font-size:.87rem;line-height:2">
+              <li>Identificar $P$, $\vec{u}$, $\vec{v}$.</li>
+              <li>$\vec{n} = \vec{u}\times\vec{v}$ → son $a,b,c$.</li>
+              <li>$d = \vec{n}\cdot P$.</li>
+              <li>Verificar con otro punto del plano.</li>
+            </ol>
+          </div>
+        </div>
+        <div>
+          <div class="ex-card">
+            <div class="ex-num">G5 — Det 3×3 por cofactores</div>
+            <ol style="padding-left:1.2rem;font-size:.87rem;line-height:2">
+              <li>Elegir la fila/col. con más ceros.</li>
+              <li>Para cada elemento: tapar fila y columna → menor $2\times2$.</li>
+              <li>Menor $2\times2$: $ad-bc$.</li>
+              <li>Aplicar signo de la tabla.</li>
+              <li>Multiplicar por el elemento y sumar todo.</li>
+            </ol>
+          </div>
+          <div class="ex-card" style="margin-top:.8rem">
+            <div class="ex-num">G6 — Gauss (escalonar)</div>
+            <ol style="padding-left:1.2rem;font-size:.87rem;line-height:2">
+              <li>Poner un 1 arriba a la izquierda.</li>
+              <li>$F_i \leftarrow F_i - (\text{coef})\cdot F_1$ para hacer ceros debajo.</li>
+              <li>Repetir con la fila 2.</li>
+              <li>rg = filas no nulas.</li>
+              <li>Si aparece $0\;0\;0\;|\;k\neq0$ → SI.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- ─ 9. TRAMPAS ─ -->
+  <details>
+    <summary>9. Trampas típicas — revisá antes de entregar</summary>
+    <div class="dbody">
+      <div class="grid g2">
+        <div class="card re"><h3>⚠️ Producto vectorial</h3><p style="font-size:.87rem">La 2ª componente <strong>siempre lleva "−"</strong>: $-(u_1v_3-u_3v_1)$.</p></div>
+        <div class="card re"><h3>⚠️ $\det(\tfrac{1}{2}A^2)$</h3><p style="font-size:.87rem">$= (\tfrac{1}{2})^3\cdot\det(A)^2$, <strong>no</strong> $\tfrac{1}{2}\det(A)^2$. El $\tfrac{1}{2}$ afecta las 3 filas.</p></div>
+        <div class="card or"><h3>⚠️ Planos paralelos</h3><p style="font-size:.87rem">Primero igualá los $a,b,c$. Sin eso la fórmula de distancia no aplica.</p></div>
+        <div class="card or"><h3>⚠️ Homogéneo ≠ SI</h3><p style="font-size:.87rem">$X=\vec{0}$ siempre es solución → jamás puede ser incompatible.</p></div>
+        <div class="card or"><h3>⚠️ Paralelos vs. coincidentes</h3><p style="font-size:.87rem">Descartar "coincidentes" mostrando que $d$ es distinto.</p></div>
+        <div class="card or"><h3>⚠️ Gauss en ampliada</h3><p style="font-size:.87rem">Cada operación de fila se aplica <strong>también</strong> a la columna $\vec{b}$.</p></div>
+        <div class="card re"><h3>⚠️ Recta contenida</h3><p style="font-size:.87rem">Verificar: $P\in\Pi$ <strong>y</strong> $\vec{v}\cdot\vec{n}=0$. Las dos.</p></div>
+        <div class="card re"><h3>⚠️ $A^2 \neq$ elevar al cuadrado</h3><p style="font-size:.87rem">$A^2 = A\cdot A$ (producto de matrices, no potencia elemento a elemento).</p></div>
+      </div>
+    </div>
+  </details>
+
 </div>
 </div>
 

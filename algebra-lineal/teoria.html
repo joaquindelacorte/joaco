@@ -540,7 +540,34 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
     </div>
 
     <details>
-      <summary>📝 Ejercicios de la guía relacionados (Práctica 1, ej. 13, 14, 16, 17, 20)</summary>
+      <summary>
+    <div class="stitle"><span class="ico">🎯</span> Proyección de un vector sobre otro</div>
+    <div class="grid g2">
+      <div class="card pu">
+        <h3>Proyección escalar</h3>
+        <p>Es el "largo" con signo de $\vec u$ en la dirección de $\vec v$: la componente de $\vec u$ que "cae" sobre $\vec v$.</p>
+        <div class="fbox" style="margin-top:.6rem"><span class="big" style="font-size:1rem">$\text{proy}_{\vec v}\vec u = \dfrac{\vec u\cdot\vec v}{|\vec v|}$</span></div>
+      </div>
+      <div class="card bl">
+        <h3>Proyección vectorial</h3>
+        <p>Es el <strong>vector</strong> en la dirección de $\vec v$ con módulo igual a la proyección escalar. Es la "sombra" de $\vec u$ sobre la recta de $\vec v$.</p>
+        <div class="fbox" style="margin-top:.6rem"><span class="big" style="font-size:1rem">$\text{proy}_{\vec v}\vec u = \dfrac{\vec u\cdot\vec v}{|\vec v|^2}\,\vec v$</span></div>
+      </div>
+    </div>
+    <div class="tip">💡 <div><strong>Interpretación geométrica</strong>: imaginá una luz perpendicular a $\vec v$ iluminando $\vec u$ — la sombra que cae sobre la recta de $\vec v$ es exactamente la proyección vectorial. Si el ángulo entre ellos supera 90°, la sombra apunta en sentido contrario a $\vec v$ (proyección negativa).</div></div>
+
+    <div class="stitle"><span class="ico">🎮</span> Simulador: proyección de u sobre v</div>
+    <div class="sim">
+      <div class="sim-controls">
+        <label>u = ( <input type="number" id="pru_x" value="3" step="0.5"> , <input type="number" id="pru_y" value="2" step="0.5"> )</label>
+        <label>v = ( <input type="number" id="prv_x" value="4" step="0.5"> , <input type="number" id="prv_y" value="0" step="0.5"> )</label>
+        <button class="sim-btn" onclick="calcProj()">Calcular proyección</button>
+      </div>
+      <div id="projplot" class="plot short"></div>
+      <div class="result-box" id="projresult">Ingresá dos vectores y presioná «Calcular proyección».</div>
+    </div>
+
+📝 Ejercicios de la guía relacionados (Práctica 1, ej. 13, 14, 16, 17, 20)</summary>
       <div class="dbody">
         Ej. 13/14: calculá productos escalares entre pares de vectores y decidí cuáles son perpendiculares.<br><br>
         Ej. 16: hallá el área del paralelogramo entre $u=(3,0,4)$ y $v=(1,2,0)$ con el simulador de producto vectorial.<br><br>
@@ -696,7 +723,31 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
     </div>
     <div class="tip">💡 <div>Un vector $\vec w$ es <strong>paralelo</strong> a un plano de normal $\vec n$ si y solo si $\vec w\cdot\vec n=0$ (es perpendicular a la normal, por eso "está acostado" sobre el plano).</div></div>
 
-    <div class="stitle"><span class="ico">🧭</span> Posiciones relativas entre rectas y planos <span class="lvl-chip">Clase 3</span></div>
+    
+    <div class="stitle"><span class="ico">📐</span> Plano determinado por tres puntos <span class="lvl-chip">Clase 3</span></div>
+    <div class="card pu">
+      <h3>Procedimiento concreto</h3>
+      <p>Dados $P$, $Q$, $R$ no colineales, tomamos $Q$ como punto base y construimos dos vectores directores del plano: $\vec{v}_1=P-Q$ y $\vec{v}_2=R-Q$. La normal se obtiene con el producto vectorial.</p>
+    </div>
+    <div class="fbox">
+      <span class="big">$\vec{n} = (P-Q)\times(R-Q)$</span>
+      <span class="sub">Paramétrica: $X = \alpha(P-Q)+\beta(R-Q)+Q$ &nbsp;·&nbsp; Implícita: $\vec{n}\cdot(X-Q)=0$</span>
+    </div>
+    <div class="tip">💡 <div>Si el producto vectorial da $\vec 0$, los tres puntos son <strong>colineales</strong> y no determinan un plano único — hay infinitos planos que los contienen.</div></div>
+
+    <div class="stitle"><span class="ico">🎮</span> Simulador: plano por tres puntos</div>
+    <div class="sim">
+      <div class="sim-controls">
+        <label>P = ( <input type="number" id="tp_px" value="1" step="0.5"> , <input type="number" id="tp_py" value="0" step="0.5"> , <input type="number" id="tp_pz" value="0" step="0.5"> )</label>
+        <label>Q = ( <input type="number" id="tp_qx" value="0" step="0.5"> , <input type="number" id="tp_qy" value="1" step="0.5"> , <input type="number" id="tp_qz" value="0" step="0.5"> )</label>
+        <label>R = ( <input type="number" id="tp_rx" value="0" step="0.5"> , <input type="number" id="tp_ry" value="0" step="0.5"> , <input type="number" id="tp_rz" value="1" step="0.5"> )</label>
+        <button class="sim-btn" onclick="calcPlaneThreePoints()">Hallar plano</button>
+      </div>
+      <div id="tp_plot" class="plot" style="margin-top:1rem"></div>
+      <div class="result-box" id="tp_result">Ingresá tres puntos no colineales y presioná «Hallar plano».</div>
+    </div>
+
+<div class="stitle"><span class="ico">🧭</span> Posiciones relativas entre rectas y planos <span class="lvl-chip">Clase 3</span></div>
     <div class="grid g3">
       <div class="card pu">
         <h3>Dos rectas en R³</h3>
@@ -739,7 +790,56 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
     </div>
 
     <details>
-      <summary>📝 Ejercicios de la guía relacionados (Práctica 1, ej. 9, 10, 11, 12, 21, 22)</summary>
+      <summary>
+    <div class="stitle"><span class="ico">📏</span> Distancia de un punto a una recta en R³</div>
+    <div class="card pu">
+      <h3>Fórmula con producto vectorial</h3>
+      <p>Dada la recta $L$ con punto de paso $P$ y director $\vec v$, y un punto $A$ externo, $\overrightarrow{PA}=A-P$:</p>
+    </div>
+    <div class="fbox">
+      <span class="big">$d(A,L) = \dfrac{|\overrightarrow{PA}\times\vec{v}|}{|\vec{v}|}$</span>
+      <span class="sub">$|\overrightarrow{PA}\times\vec{v}|$ = área del paralelogramo formado por $\overrightarrow{PA}$ y $\vec v$ &nbsp;·&nbsp; Dividir por la base $|\vec v|$ da la altura = distancia mínima</span>
+    </div>
+
+    <div class="stitle"><span class="ico">🎮</span> Simulador: distancia punto-recta en R³</div>
+    <div class="sim">
+      <div class="sim-controls">
+        <label>A = ( <input type="number" id="dlr_ax" value="2" step="0.5"> , <input type="number" id="dlr_ay" value="3" step="0.5"> , <input type="number" id="dlr_az" value="1" step="0.5"> )</label>
+      </div>
+      <div class="sim-controls">
+        <label>P (punto en recta) = ( <input type="number" id="dlr_px" value="0" step="0.5"> , <input type="number" id="dlr_py" value="0" step="0.5"> , <input type="number" id="dlr_pz" value="0" step="0.5"> )</label>
+        <label>v (director) = ( <input type="number" id="dlr_vx" value="1" step="0.5"> , <input type="number" id="dlr_vy" value="0" step="0.5"> , <input type="number" id="dlr_vz" value="0" step="0.5"> )</label>
+        <button class="sim-btn" onclick="calcDistLineR3()">Calcular distancia</button>
+      </div>
+      <div id="dlr_plot" class="plot" style="margin-top:1rem"></div>
+      <div class="result-box" id="dlr_result">Ingresá punto A, un punto P de la recta y su vector director v, luego presioná «Calcular distancia».</div>
+    </div>
+
+    <div class="stitle"><span class="ico">↔️</span> Distancia entre dos planos paralelos</div>
+    <div class="card gr">
+      <h3>Solo aplica si los planos son paralelos (misma normal)</h3>
+      <p>Si $\Pi_1: Ax+By+Cz+D_1=0$ y $\Pi_2: Ax+By+Cz+D_2=0$ con la <strong>misma</strong> normal $(A,B,C)$:</p>
+    </div>
+    <div class="fbox">
+      <span class="big">$d(\Pi_1,\Pi_2) = \dfrac{|D_1-D_2|}{\sqrt{A^2+B^2+C^2}}$</span>
+      <span class="sub">Si las ecuaciones tienen normales proporcionales pero distintos coeficientes, primero normalizá (dividí una ecuación para igualar la normal)</span>
+    </div>
+    <div class="note">📌 Si los planos no son paralelos ($\vec n_1\times\vec n_2\neq\vec 0$), la fórmula no aplica — la distancia mínima entre planos secantes es 0 (se tocan en la recta de intersección).</div>
+
+    <div class="stitle"><span class="ico">🎮</span> Simulador: distancia entre planos paralelos</div>
+    <div class="sim">
+      <div class="sim-controls">
+        <label>Π₁: <input type="number" id="dpp_A1" value="1" step="0.5"> x + <input type="number" id="dpp_B1" value="2" step="0.5"> y + <input type="number" id="dpp_C1" value="2" step="0.5"> z + <input type="number" id="dpp_D1" value="1" step="0.5"> = 0</label>
+      </div>
+      <div class="sim-controls">
+        <label>Π₂: <input type="number" id="dpp_A2" value="2" step="0.5"> x + <input type="number" id="dpp_B2" value="4" step="0.5"> y + <input type="number" id="dpp_C2" value="4" step="0.5"> z + <input type="number" id="dpp_D2" value="8" step="0.5"> = 0</label>
+        <button class="sim-btn" onclick="calcDistParallelPlanes()">Calcular distancia</button>
+      </div>
+      <div id="dpp_plot" class="plot" style="margin-top:1rem"></div>
+      <div class="result-box" id="dpp_result">Ingresá dos planos paralelos y presioná «Calcular distancia». (Π₂ se normaliza automáticamente si tiene otra escala.)</div>
+    </div>
+
+📝 Ejercicios de la guía relacionados (Práctica 1, ej. 9, 10, 11, 12, 21, 22)</summary>
       <div class="dbody">
         Ej. 9: verificá con el simulador si $A=(1,1,1)$, $B=(-2,0,1)$, $C=(3,2,0)$ están alineados (spoiler: no lo están).<br><br>
         Ej. 22: el plano $\Pi:2x-3y+z=8$ y $P=(-1,0,2)$ ya están cargados por defecto en el simulador de distancia — solo presioná «Calcular».<br><br>
@@ -787,6 +887,8 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
         <div class="citem"><div class="lbl">Perpendicularidad</div><div class="cf">$\vec u\perp\vec v \iff \vec u\cdot\vec v=0$</div></div>
         <div class="citem"><div class="lbl">Producto vectorial (R³)</div><div class="cf">$\vec u\times\vec v=(u_2v_3-u_3v_2,u_3v_1-u_1v_3,u_1v_2-u_2v_1)$</div></div>
         <div class="citem"><div class="lbl">Área paralelogramo</div><div class="cf">$\|\vec u\times\vec v\|$</div></div>
+        <div class="citem"><div class="lbl">Proyección escalar</div><div class="cf">$\text{proy}_{\vec v}\vec u=\dfrac{\vec u\cdot\vec v}{|\vec v|}$</div></div>
+        <div class="citem"><div class="lbl">Proyección vectorial</div><div class="cf">$\text{proy}_{\vec v}\vec u=\dfrac{\vec u\cdot\vec v}{|\vec v|^2}\,\vec v$</div></div>
         <div class="citem"><div class="lbl">Vectores paralelos</div><div class="cf">$\vec u\parallel\vec v \iff \vec u\times\vec v=\vec 0$ (o $\vec u=k\vec v$)</div></div>
       </div>
     </div>
@@ -816,6 +918,9 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
         <div class="citem"><div class="lbl">Planos secantes</div><div class="cf">$\vec n_1\neq k\vec n_2$ → se cortan en una recta de dirección $\vec n_1\times\vec n_2$</div></div>
         <div class="citem"><div class="lbl">Recta paralela/contenida en plano</div><div class="cf">$\vec v\cdot\vec n=0$ (contenida si el punto de paso está en el plano)</div></div>
         <div class="citem"><div class="lbl">Rectas alabeadas (R³)</div><div class="cf">No paralelas y sin punto en común</div></div>
+        <div class="citem"><div class="lbl">Distancia punto-recta (R³)</div><div class="cf">$d=\dfrac{|\overrightarrow{PA}\times\vec{v}|}{|\vec{v}|}$</div></div>
+        <div class="citem"><div class="lbl">Dist. planos paralelos</div><div class="cf">$d=\dfrac{|D_1-D_2|}{\sqrt{A^2+B^2+C^2}}$ (misma normal)</div></div>
+        <div class="citem"><div class="lbl">Plano por 3 puntos P,Q,R</div><div class="cf">$\vec{n}=(P-Q)\times(R-Q)$, luego $\vec{n}\cdot(X-Q)=0$</div></div>
       </div>
     </div>
   </div>
@@ -887,8 +992,8 @@ function showPage(id, btn){
     if(id==='vec2') drawVec2();
     if(id==='vec3') drawVec3();
     if(id==='rectas'){ calcRecta(false); calcParPerp(); }
-    if(id==='r3'){ calcAlign(); calcPlanesRel(false); calcPlaneDist(false); }
-    if(id==='prod'){ calcScalar(false); calcCross(false); }
+    if(id==='r3'){ calcAlign(); calcPlanesRel(false); calcPlaneDist(false); calcPlaneThreePoints(false); calcDistLineR3(false); calcDistParallelPlanes(false); }
+    if(id==='prod'){ calcScalar(false); calcCross(false); calcProj(false); }
   },30);
 }
 function mathRender(el){
@@ -1489,6 +1594,124 @@ function launchConfetti(){
 // ════════════════════════════
 //  INIT
 // ════════════════════════════
+
+// ════════════════════════════
+//  PROYECCIÓN VECTORIAL
+// ════════════════════════════
+function calcProj(fromUser){
+  if(fromUser===undefined) fromUser=true;
+  const ux=parseFloat(document.getElementById('pru_x').value)||0, uy=parseFloat(document.getElementById('pru_y').value)||0;
+  const vx=parseFloat(document.getElementById('prv_x').value)||0, vy=parseFloat(document.getElementById('prv_y').value)||0;
+  const dot=ux*vx+uy*vy, nv2=vx*vx+vy*vy, nv=Math.sqrt(nv2);
+  const box=document.getElementById('projresult');
+  if(nv<1e-9){box.className='result-box no';box.innerHTML='v no puede ser el vector nulo.';return;}
+  const scalar=dot/nv, t=dot/nv2, px=t*vx, py=t*vy;
+  box.className='result-box';
+  box.innerHTML='<strong>Proyección escalar</strong>: $\\text{proy}_{\\vec v}\\vec u = \\dfrac{\\vec u\\cdot\\vec v}{|\\vec v|} = \\dfrac{'+dot.toFixed(2)+'}{'+nv.toFixed(2)+'} \\approx '+scalar.toFixed(3)+'$<br>'+
+    '<strong>Proyección vectorial</strong>: $('+px.toFixed(3)+',\\,'+py.toFixed(3)+')$<br>'+
+    (Math.abs(scalar)<1e-9?'✅ Proyección nula → $\\vec u\\perp\\vec v$':scalar>0?'➡️ Ángulo agudo entre $\\vec u$ y $\\vec v$':'➡️ Ángulo obtuso — proyección apunta contrario a $\\vec v$');
+  mathRender(box);
+  const extra=[
+    {x:[0,px],y:[0,py],type:'scatter',mode:'lines',line:{color:'#ea580c',width:3,dash:'dash'},showlegend:false,name:'proy'},
+    {x:[ux,px],y:[uy,py],type:'scatter',mode:'lines',line:{color:'#94a3b8',width:1.5,dash:'dot'},showlegend:false,name:'perp'}
+  ];
+  plotVectors2D('projplot',[{x:ux,y:uy,color:'#6d28d9',label:'u'},{x:vx,y:vy,color:'#059669',label:'v'},{x:px,y:py,color:'#ea580c',label:'proy'}],extra);
+}
+
+// ════════════════════════════
+//  PLANO POR TRES PUNTOS
+// ════════════════════════════
+function calcPlaneThreePoints(fromUser){
+  if(fromUser===undefined) fromUser=true;
+  const px=parseFloat(document.getElementById('tp_px').value)||0,py=parseFloat(document.getElementById('tp_py').value)||0,pz=parseFloat(document.getElementById('tp_pz').value)||0;
+  const qx=parseFloat(document.getElementById('tp_qx').value)||0,qy=parseFloat(document.getElementById('tp_qy').value)||0,qz=parseFloat(document.getElementById('tp_qz').value)||0;
+  const rx=parseFloat(document.getElementById('tp_rx').value)||0,ry=parseFloat(document.getElementById('tp_ry').value)||0,rz=parseFloat(document.getElementById('tp_rz').value)||0;
+  const v1x=px-qx,v1y=py-qy,v1z=pz-qz;
+  const v2x=rx-qx,v2y=ry-qy,v2z=rz-qz;
+  const nx=v1y*v2z-v1z*v2y,ny=v1z*v2x-v1x*v2z,nz=v1x*v2y-v1y*v2x;
+  const nmag=Math.sqrt(nx*nx+ny*ny+nz*nz);
+  const box=document.getElementById('tp_result');
+  if(nmag<1e-9){box.className='result-box no';box.innerHTML='Los tres puntos son <strong>colineales</strong> — no determinan un plano único.';return;}
+  const D=nx*qx+ny*qy+nz*qz;
+  const sg=(c)=>c>=0?'+'+c.toFixed(2):''+c.toFixed(2);
+  box.className='result-box ok';
+  box.innerHTML='$\\vec{v}_1=P-Q=('+v1x.toFixed(2)+','+v1y.toFixed(2)+','+v1z.toFixed(2)+')$ &nbsp; $\\vec{v}_2=R-Q=('+v2x.toFixed(2)+','+v2y.toFixed(2)+','+v2z.toFixed(2)+')$<br>'+
+    'Normal: $\\vec{n}=\\vec{v}_1\\times\\vec{v}_2=('+nx.toFixed(2)+','+ny.toFixed(2)+','+nz.toFixed(2)+')$<br>'+
+    'Implícita: $'+nx.toFixed(2)+'x'+sg(ny)+'y'+sg(nz)+'z='+D.toFixed(2)+'$<br>'+
+    'Paramétrica: $X=\\alpha(P-Q)+\\beta(R-Q)+Q$';
+  mathRender(box);
+  const tArr=[
+    {type:'scatter3d',mode:'markers+text',x:[px,qx,rx],y:[py,qy,ry],z:[pz,qz,rz],text:['P','Q','R'],textposition:'top center',marker:{size:5,color:['#6d28d9','#059669','#dc2626']},showlegend:false},
+    {type:'scatter3d',mode:'lines',x:[px,qx,rx,px],y:[py,qy,ry,py],z:[pz,qz,rz,pz],line:{color:'#94a3b8',width:2,dash:'dot'},showlegend:false}
+  ];
+  const surf=planeSurfaceTrace(nx,ny,nz,-D,[[0,'#c4b5fd'],[1,'#6d28d9']]);
+  if(surf) tArr.push(surf);
+  Plotly.react('tp_plot',tArr,{scene:{aspectmode:'cube'},margin:{t:10,r:10,b:10,l:10},paper_bgcolor:'#fff'},{displayModeBar:false,responsive:true});
+}
+
+// ════════════════════════════
+//  DISTANCIA PUNTO-RECTA R³
+// ════════════════════════════
+function calcDistLineR3(fromUser){
+  if(fromUser===undefined) fromUser=true;
+  const ax=parseFloat(document.getElementById('dlr_ax').value)||0,ay=parseFloat(document.getElementById('dlr_ay').value)||0,az=parseFloat(document.getElementById('dlr_az').value)||0;
+  const px=parseFloat(document.getElementById('dlr_px').value)||0,py=parseFloat(document.getElementById('dlr_py').value)||0,pz=parseFloat(document.getElementById('dlr_pz').value)||0;
+  const vx=parseFloat(document.getElementById('dlr_vx').value)||0,vy=parseFloat(document.getElementById('dlr_vy').value)||0,vz=parseFloat(document.getElementById('dlr_vz').value)||0;
+  const nv=Math.sqrt(vx*vx+vy*vy+vz*vz);
+  const box=document.getElementById('dlr_result');
+  if(nv<1e-9){box.className='result-box no';box.innerHTML='El vector director v no puede ser nulo.';return;}
+  const apx=ax-px,apy=ay-py,apz=az-pz;
+  const cx=apy*vz-apz*vy,cy=apz*vx-apx*vz,cz=apx*vy-apy*vx;
+  const crossMag=Math.sqrt(cx*cx+cy*cy+cz*cz);
+  const dist=crossMag/nv;
+  const tFoot=(apx*vx+apy*vy+apz*vz)/(nv*nv);
+  const fx=px+tFoot*vx,fy=py+tFoot*vy,fz=pz+tFoot*vz;
+  box.className='result-box ok';
+  box.innerHTML='$\\overrightarrow{PA}=('+apx.toFixed(2)+','+apy.toFixed(2)+','+apz.toFixed(2)+')$<br>'+
+    '$\\overrightarrow{PA}\\times\\vec{v}=('+cx.toFixed(2)+','+cy.toFixed(2)+','+cz.toFixed(2)+')$, $|\\cdot|='+crossMag.toFixed(3)+'$, $|\\vec{v}|='+nv.toFixed(3)+'$<br>'+
+    '$d=\\dfrac{|\\overrightarrow{PA}\\times\\vec{v}|}{|\\vec{v}|}=$ <strong>'+dist.toFixed(3)+'</strong><br>'+
+    'Pie de perpendicular: $F\\approx('+fx.toFixed(2)+','+fy.toFixed(2)+','+fz.toFixed(2)+')$';
+  mathRender(box);
+  const sc=Math.max(2,Math.abs(vx),Math.abs(vy),Math.abs(vz))*1.5;
+  Plotly.react('dlr_plot',[
+    {type:'scatter3d',mode:'lines',x:[px-sc*vx/nv,px+sc*vx/nv],y:[py-sc*vy/nv,py+sc*vy/nv],z:[pz-sc*vz/nv,pz+sc*vz/nv],line:{color:'#6d28d9',width:5},showlegend:false},
+    {type:'scatter3d',mode:'markers+text',x:[ax],y:[ay],z:[az],marker:{size:5,color:'#dc2626'},text:['A'],textposition:'top center',showlegend:false},
+    {type:'scatter3d',mode:'markers+text',x:[fx],y:[fy],z:[fz],marker:{size:4,color:'#059669'},text:['F'],textposition:'top center',showlegend:false},
+    {type:'scatter3d',mode:'lines',x:[ax,fx],y:[ay,fy],z:[az,fz],line:{color:'#dc2626',width:4,dash:'dot'},showlegend:false}
+  ],{scene:{aspectmode:'cube'},margin:{t:10,r:10,b:10,l:10},paper_bgcolor:'#fff'},{displayModeBar:false,responsive:true});
+}
+
+// ════════════════════════════
+//  DISTANCIA PLANOS PARALELOS
+// ════════════════════════════
+function calcDistParallelPlanes(fromUser){
+  if(fromUser===undefined) fromUser=true;
+  const A1=parseFloat(document.getElementById('dpp_A1').value)||0,B1=parseFloat(document.getElementById('dpp_B1').value)||0,C1=parseFloat(document.getElementById('dpp_C1').value)||0,D1=parseFloat(document.getElementById('dpp_D1').value)||0;
+  const A2=parseFloat(document.getElementById('dpp_A2').value)||0,B2=parseFloat(document.getElementById('dpp_B2').value)||0,C2=parseFloat(document.getElementById('dpp_C2').value)||0,D2=parseFloat(document.getElementById('dpp_D2').value)||0;
+  const box=document.getElementById('dpp_result');
+  const mag1=Math.sqrt(A1*A1+B1*B1+C1*C1);
+  if(mag1<1e-9||(Math.abs(A2)+Math.abs(B2)+Math.abs(C2))<1e-9){box.className='result-box no';box.innerHTML='A,B,C no pueden ser todos cero.';return;}
+  const crossX=B1*C2-C1*B2,crossY=C1*A2-A1*C2,crossZ=A1*B2-B1*A2;
+  if(Math.abs(crossX)+Math.abs(crossY)+Math.abs(crossZ)>1e-6*Math.max(mag1,1)){
+    box.className='result-box no';
+    box.innerHTML='Los planos <strong>no son paralelos</strong> — sus normales no son proporcionales. La fórmula $d=|D_1-D_2|/\\sqrt{A^2+B^2+C^2}$ solo aplica para planos con la misma normal.';
+    mathRender(box);return;
+  }
+  let k;
+  if(Math.abs(A1)>1e-9) k=A2/A1; else if(Math.abs(B1)>1e-9) k=B2/B1; else k=C2/C1;
+  const D2n=D2/k;
+  const dist=Math.abs(D1-D2n)/mag1;
+  if(dist<1e-9){box.className='result-box ok';box.innerHTML='⚠️ Los planos son <strong>coincidentes</strong>. Distancia = 0.';return;}
+  box.className='result-box ok';
+  box.innerHTML='Normalizando: $\\Pi_1: '+A1+'x+'+B1+'y+'+C1+'z+'+D1+'=0$ &nbsp; $\\Pi_2: '+A1+'x+'+B1+'y+'+C1+'z+'+D2n.toFixed(2)+'=0$<br>'+
+    '$d=\\dfrac{|D_1-D_2|}{\\sqrt{A^2+B^2+C^2}}=\\dfrac{|'+D1+'-('+D2n.toFixed(2)+')|}{'+mag1.toFixed(2)+'} \\approx$ <strong>'+dist.toFixed(3)+'</strong>';
+  mathRender(box);
+  const t1=planeSurfaceTrace(A1,B1,C1,D1,[[0,'#c4b5fd'],[1,'#6d28d9']]);
+  const t2=planeSurfaceTrace(A1,B1,C1,D2n,[[0,'#a7f3d0'],[1,'#059669']]);
+  const trs=[t1,t2].filter(Boolean);
+  if(trs.length>0) Plotly.react('dpp_plot',trs,{scene:{aspectmode:'cube'},margin:{t:10,r:10,b:10,l:10},paper_bgcolor:'#fff'},{displayModeBar:false,responsive:true});
+}
+
 renderBadges();
 renderExercises();
 renderQuiz();
@@ -1797,6 +2020,8 @@ drawVec2();
     <div class="cgrid">
       <div class="citem"><div class="lbl">Punto a recta (R²)</div><div class="cf">$d = \dfrac{|ax_0+by_0+c|}{\sqrt{a^2+b^2}}$</div></div>
       <div class="citem"><div class="lbl">Punto a plano (R³)</div><div class="cf">$d = \dfrac{|Ax_0+By_0+Cz_0+D|}{\sqrt{A^2+B^2+C^2}}$</div></div>
+      <div class="citem"><div class="lbl">Punto a recta (R³)</div><div class="cf">$d = \dfrac{|\overrightarrow{PA}\times\vec{v}|}{|\vec{v}|}$</div></div>
+      <div class="citem"><div class="lbl">Planos paralelos</div><div class="cf">$d = \dfrac{|D_1-D_2|}{\sqrt{A^2+B^2+C^2}}$</div></div>
     </div>
   </div>
 
@@ -2102,6 +2327,8 @@ drawVec2();
             <div class="cf">$d = \dfrac{|ax_0+by_0+cz_0-d|}{\|\vec{n}\|}$</div></div>
           <div class="citem"><div class="lbl">Plano → plano (paralelos)</div>
             <div class="cf">$d = \dfrac{|d_2-d_1|}{\|\vec{n}\|}$ &nbsp; (mismos $a,b,c$)</div></div>
+          <div class="citem"><div class="lbl">Punto → recta (R³)</div>
+            <div class="cf">$d = \dfrac{|\overrightarrow{PA}\times\vec{v}|}{|\vec{v}|}$</div></div>
         </div>
       </div>
     </div>

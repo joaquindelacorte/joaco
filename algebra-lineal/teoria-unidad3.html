@@ -252,6 +252,7 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
   <div class="brand">🧮 Álgebra I</div>
   <div class="tabs">
     <button class="tab-btn active" id="tb-inicio" onclick="showPage('inicio',this)">🏠 Inicio</button>
+    <button class="tab-btn" id="tb-conceptos" onclick="showPage('conceptos',this)">🧩 Conceptos Básicos</button>
     <button class="tab-btn" id="tb-sub" onclick="showPage('sub',this)">📐 Subespacios</button>
     <button class="tab-btn" id="tb-suma" onclick="showPage('suma',this)">➕ Suma y ⊥</button>
     <button class="tab-btn" id="tb-coord" onclick="showPage('coord',this)">📌 Coordenadas</button>
@@ -292,6 +293,11 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
     <div class="stitle"><span class="ico">🗺️</span> Mapa de la unidad</div>
     <p style="margin-bottom:1.2rem;color:var(--gray-lt)">Basado en la Práctica 5 y los simulacros de 2º Parcial — Prof. Sebastián Domínguez (UNaP). Recorrés los 4 temas del parcial, con ejercicios resueltos paso a paso y simuladores.</p>
     <div class="map-grid">
+      <div class="map-card" onclick="showPage('conceptos',document.getElementById('tb-conceptos'))">
+        <span class="mic">🧩</span>
+        <div class="mstep">Teoría</div>
+        <div class="mname">Conceptos Básicos</div>
+      </div>
       <div class="map-card" onclick="showPage('sub',document.getElementById('tb-sub'))">
         <span class="mic">📐</span>
         <div class="mstep">Ejercicio 1</div>
@@ -340,6 +346,226 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
     <div class="note" style="margin-top:2rem">
       💾 Tu progreso (insignias y mejor puntaje del quiz) se guarda automáticamente en este navegador.
     </div>
+  </div>
+</div>
+
+<!-- ═══════════════ CONCEPTOS BÁSICOS ═══════════════ -->
+<div class="page" id="conceptos">
+  <div class="container">
+    <p style="margin-bottom:1rem"><a href="#" onclick="showPage('inicio',document.getElementById('tb-inicio'));return false" style="color:var(--pur);font-weight:700">← Volver al inicio</a></p>
+    <div class="stitle"><span class="ico">🧩</span> Conceptos fundamentales — desde cero</div>
+    <div class="tip">📖 <div>Repaso base de la unidad. Si ya te acordás de todo, saltá directo a la pestaña que necesités. Si no, leelo de punta a punta antes de entrar a los ejercicios.</div></div>
+
+    <!-- 1. ESPACIO VECTORIAL -->
+    <div class="stitle"><span class="ico">🌐</span> 1. Espacio vectorial</div>
+    <div class="grid g2">
+      <div class="card pu">
+        <h3>¿Qué es un espacio vectorial?</h3>
+        <p>Es un conjunto $V$ con dos operaciones (suma de vectores y producto por escalar) que cumplen 8 axiomas. El ejemplo más concreto: $\mathbb{R}^n$ con la suma y el producto habituales.</p>
+        <p style="margin-top:.5rem">En la práctica, los espacios de esta materia <strong>siempre son subespacios de $\mathbb{R}^n$</strong>, así que no hace falta re-verificar los 8 axiomas cada vez.</p>
+      </div>
+      <div class="card bl">
+        <h3>Los 8 axiomas en $\mathbb{R}^n$ (garantizados por el espacio ambiente)</h3>
+        <ul style="margin-left:1.2rem;line-height:1.9;font-size:.88rem">
+          <li>Suma conmutativa: $u+v=v+u$</li>
+          <li>Suma asociativa: $(u+v)+w = u+(v+w)$</li>
+          <li>Elemento neutro: $\exists\,\vec{0}$ tal que $v+\vec{0}=v$</li>
+          <li>Elemento opuesto: $\exists\,{-v}$ tal que $v+(-v)=\vec{0}$</li>
+          <li>Distributiva escalar-vector: $\alpha(u+v)=\alpha u+\alpha v$</li>
+          <li>Distributiva escalar-escalar: $(\alpha+\beta)v=\alpha v+\beta v$</li>
+          <li>Asociativa escalar: $(\alpha\beta)v=\alpha(\beta v)$</li>
+          <li>Neutro multiplicativo: $1\cdot v=v$</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note">📌 <strong>Ejemplo concreto:</strong> $\mathbb{R}^2 = \{(x,y) : x,y\in\mathbb{R}\}$ con suma $(x_1,y_1)+(x_2,y_2)=(x_1+x_2,y_1+y_2)$ y producto $\alpha(x,y)=(\alpha x,\alpha y)$ es un espacio vectorial. El vector nulo es $(0,0)$.</div>
+
+    <!-- 2. SUBESPACIO -->
+    <div class="stitle"><span class="ico">📐</span> 2. Subespacio vectorial</div>
+    <div class="grid g2">
+      <div class="card pu">
+        <h3>¿Qué es un subespacio?</h3>
+        <p>$S \subseteq \mathbb{R}^n$ es subespacio si cumple <strong>tres condiciones</strong>:</p>
+        <ol style="margin:.5rem 0 0 1.2rem;line-height:2">
+          <li>$\vec{0} \in S$ (contiene al vector nulo)</li>
+          <li>$u,v \in S \Rightarrow u+v \in S$ (cerrado bajo suma)</li>
+          <li>$u \in S,\, \alpha\in\mathbb{R} \Rightarrow \alpha u \in S$ (cerrado bajo producto escalar)</li>
+        </ol>
+        <p style="margin-top:.5rem;font-size:.88rem">Las condiciones 2 y 3 juntas equivalen a: $\alpha u + \beta v \in S$ para todo $\alpha,\beta\in\mathbb{R}$.</p>
+      </div>
+      <div class="card gr">
+        <h3>Ejemplo: ¿es $S$ subespacio?</h3>
+        <p style="font-size:.9rem">$S = \{(x,y)\in\mathbb{R}^2 : 2x - y = 0\}$</p>
+        <ul style="margin-left:1.2rem;line-height:1.9;font-size:.88rem;margin-top:.4rem">
+          <li>¿$\vec{0}\in S$? $2(0)-0=0$ ✅</li>
+          <li>¿Cerrado suma? Si $2x_1-y_1=0$ y $2x_2-y_2=0$, entonces $2(x_1+x_2)-(y_1+y_2)=0$ ✅</li>
+          <li>¿Cerrado escalar? $2(\alpha x)-(\alpha y)=\alpha(2x-y)=0$ ✅</li>
+        </ul>
+        <p style="margin-top:.4rem;font-size:.88rem"><strong>→ S es subespacio</strong> (es la recta $y=2x$, que pasa por el origen).</p>
+      </div>
+    </div>
+    <div class="card re" style="margin-top:.8rem">
+      <h3>Contraejemplo: NO es subespacio</h3>
+      <p style="font-size:.9rem">$T = \{(x,y)\in\mathbb{R}^2 : 2x - y = 1\}$</p>
+      <p style="font-size:.88rem;margin-top:.4rem">¿$\vec{0}\in T$? $2(0)-0=0 \neq 1$ ❌ — Falla la condición 1 de entrada. No es subespacio porque es la recta $y=2x-1$, que <strong>no pasa por el origen</strong>. Regla rápida: si la ecuación tiene término independiente no nulo, no puede ser subespacio.</p>
+    </div>
+
+    <!-- 3. COMBINACIÓN LINEAL -->
+    <div class="stitle"><span class="ico">🔗</span> 3. Combinación lineal</div>
+    <div class="grid g2">
+      <div class="card pu">
+        <h3>Definición</h3>
+        <p>Un vector $w$ es <strong>combinación lineal</strong> de $v_1,\ldots,v_k$ si existen escalares $\alpha_1,\ldots,\alpha_k$ tales que:</p>
+        <div class="fbox" style="margin:.5rem 0"><span class="big" style="font-size:1rem">$w = \alpha_1 v_1 + \alpha_2 v_2 + \cdots + \alpha_k v_k$</span></div>
+        <p style="font-size:.88rem">Los $\alpha_i$ se llaman <em>coeficientes</em>. Encontrarlos es simplemente resolver un sistema de ecuaciones.</p>
+      </div>
+      <div class="card gr">
+        <h3>Ejemplo</h3>
+        <p style="font-size:.9rem">¿Es $(5,1)$ combinación lineal de $(2,1)$ y $(1,-1)$?</p>
+        <p style="font-size:.88rem;margin-top:.4rem">Plantear: $\alpha(2,1)+\beta(1,-1)=(5,1)$</p>
+        <ul style="margin-left:1.2rem;line-height:1.9;font-size:.88rem">
+          <li>$2\alpha+\beta=5$</li>
+          <li>$\alpha-\beta=1$</li>
+        </ul>
+        <p style="font-size:.88rem">Sumando: $3\alpha=6\Rightarrow\alpha=2,\;\beta=1$</p>
+        <p style="font-size:.88rem"><strong>Sí:</strong> $(5,1) = 2(2,1)+1(1,-1)$ ✅</p>
+      </div>
+    </div>
+
+    <!-- 4. SPAN -->
+    <div class="stitle"><span class="ico">🌀</span> 4. Span (conjunto generador)</div>
+    <div class="grid g2">
+      <div class="card pu">
+        <h3>Definición</h3>
+        <p>El <strong>span</strong> de $\{v_1,\ldots,v_k\}$ es el conjunto de <em>todas</em> las combinaciones lineales posibles:</p>
+        <div class="fbox" style="margin:.5rem 0"><span class="big" style="font-size:.88rem">$\text{span}\{v_1,\ldots,v_k\} = \{\alpha_1 v_1+\cdots+\alpha_k v_k : \alpha_i\in\mathbb{R}\}$</span></div>
+        <p style="font-size:.88rem">Es el subespacio más chico que contiene a todos los $v_i$. También se escribe $\text{Gen}\{v_1,\ldots,v_k\}$.</p>
+      </div>
+      <div class="card bl">
+        <h3>Ejemplos en $\mathbb{R}^3$</h3>
+        <ul style="margin-left:1.2rem;line-height:1.9;font-size:.88rem">
+          <li>$\text{span}\{(1,0,0)\}$ = eje $x$ (dimensión 1 — una recta)</li>
+          <li>$\text{span}\{(1,0,0),(0,1,0)\}$ = plano $z=0$ (dimensión 2)</li>
+          <li>$\text{span}\{e_1,e_2,e_3\}=\mathbb{R}^3$ (dimensión 3 — todo el espacio)</li>
+          <li>$\text{span}\{(1,0,0),(2,0,0)\}$ = eje $x$ (el 2º es redundante — mismo dim 1)</li>
+        </ul>
+        <p style="font-size:.88rem;margin-top:.4rem">Agregar un vector paralelo a los que ya están no amplía el span.</p>
+      </div>
+    </div>
+
+    <!-- 5. INDEPENDENCIA LINEAL -->
+    <div class="stitle"><span class="ico">⚖️</span> 5. Independencia lineal</div>
+    <div class="grid g2">
+      <div class="card pu">
+        <h3>Definición</h3>
+        <p>$\{v_1,\ldots,v_k\}$ son <strong>linealmente independientes (LI)</strong> si la única forma de que $\alpha_1 v_1+\cdots+\alpha_k v_k = \vec{0}$ es con todos los $\alpha_i = 0$.</p>
+        <p style="margin-top:.5rem">Si algún $\alpha_i \neq 0$ funciona, son <strong>linealmente dependientes (LD)</strong> — alguno "sobra" porque se puede escribir como combinación de los demás.</p>
+      </div>
+      <div class="card or">
+        <h3>Interpretación visual</h3>
+        <ul style="margin-left:1.2rem;line-height:1.9;font-size:.88rem">
+          <li>Dos vectores LI en $\mathbb{R}^2$: no son paralelos (apuntan en direcciones distintas)</li>
+          <li>Dos vectores LD: uno es múltiplo del otro</li>
+          <li>Tres vectores LI en $\mathbb{R}^3$: no coplanares (no "caben" en un plano)</li>
+          <li>Tres vectores LD en $\mathbb{R}^3$: alguno está en el plano de los otros dos</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card gr" style="margin-top:.8rem">
+      <h3>Cómo testear — determinante y rango</h3>
+      <p style="font-size:.9rem">Armá la matriz con los vectores como <strong>filas</strong> y escalonala:</p>
+      <ul style="margin-left:1.2rem;line-height:1.9;font-size:.88rem;margin-top:.4rem">
+        <li><strong>$n$ vectores en $\mathbb{R}^n$ (matriz cuadrada):</strong> calculá el determinante. $\det\neq 0 \Rightarrow$ LI. $\det=0 \Rightarrow$ LD.</li>
+        <li><strong>Caso general:</strong> escalonás y contás pivotes. Si $\text{Rg} = k$ (todos) → LI. Si $\text{Rg} &lt; k$ → LD.</li>
+      </ul>
+      <p style="font-size:.88rem;margin-top:.5rem"><strong>Ejemplo:</strong> $\{(1,2,0),\,(0,1,1),\,(1,3,1)\}$ — armás la matriz 3×3, escalonás: $F_3 \to F_3-F_1$ da $(0,1,1)$, que es igual a $F_2$ → $\text{Rg}=2 &lt; 3$ → LD (el tercero es suma de los dos primeros).</p>
+    </div>
+
+    <!-- 6. BASE Y DIMENSIÓN -->
+    <div class="stitle"><span class="ico">🏛️</span> 6. Base y dimensión</div>
+    <div class="grid g2">
+      <div class="card pu">
+        <h3>Base</h3>
+        <p>$B = \{v_1,\ldots,v_k\}$ es <strong>base</strong> de un espacio $V$ si cumple las dos cosas a la vez:</p>
+        <ol style="margin:.5rem 0 0 1.2rem;line-height:2">
+          <li>Es <strong>LI</strong> (ninguno sobra)</li>
+          <li>$\text{span}(B) = V$ (generan todo el espacio)</li>
+        </ol>
+        <p style="margin-top:.5rem;font-size:.88rem">Equivalente: todo vector de $V$ se escribe de forma <strong>única</strong> como combinación lineal de los vectores de $B$. Esa unicidad es la que define las coordenadas.</p>
+      </div>
+      <div class="card bl">
+        <h3>Dimensión</h3>
+        <p>La <strong>dimensión</strong> de $V$ es la cantidad de vectores en cualquier base de $V$. Todas las bases tienen el mismo tamaño.</p>
+        <ul style="margin-left:1.2rem;line-height:1.9;font-size:.88rem;margin-top:.5rem">
+          <li>$\dim(\mathbb{R}^n) = n$</li>
+          <li>$\dim(\{\vec{0}\}) = 0$</li>
+          <li>Una recta por el origen en $\mathbb{R}^3$: dimensión 1</li>
+          <li>Un plano por el origen en $\mathbb{R}^3$: dimensión 2</li>
+          <li>Base canónica de $\mathbb{R}^3 = \{(1,0,0),(0,1,0),(0,0,1)\}$</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tip">💡 <div><strong>Truco del parcial:</strong> para un subespacio definido por $Ax=0$, la dimensión es directamente $\dim(S) = n - \text{Rg}(A)$, y la base se lee de las variables libres. Esto se usa en <em>todos</em> los ejercicios de subespacios.</div></div>
+
+    <!-- 7. TRANSFORMACIÓN LINEAL -->
+    <div class="stitle"><span class="ico">🔁</span> 7. Transformación lineal</div>
+    <div class="grid g2">
+      <div class="card pu">
+        <h3>Definición</h3>
+        <p>$T:\mathbb{R}^n\to\mathbb{R}^m$ es <strong>transformación lineal</strong> si para todo $u,v\in\mathbb{R}^n$ y $k\in\mathbb{R}$:</p>
+        <div class="fbox" style="margin:.5rem 0">
+          <span class="big" style="font-size:.95rem">$T(u+v) = T(u)+T(v)$</span>
+          <span class="big" style="font-size:.95rem">$T(ku) = k\,T(u)$</span>
+        </div>
+        <p style="font-size:.88rem">Consecuencia inmediata: $T(\vec{0})=\vec{0}$ siempre. Si $T(0)\neq 0$, ya sabés que no es lineal.</p>
+      </div>
+      <div class="card bl">
+        <h3>Consecuencia clave para el parcial</h3>
+        <p style="font-size:.9rem">Si $T$ es lineal y conocés los valores en una base $\{v_1,\ldots,v_n\}$, ya sabés $T$ en <em>todo punto</em>:</p>
+        <div class="fbox" style="margin:.5rem 0"><span class="big" style="font-size:.85rem">$T(\alpha_1 v_1+\cdots+\alpha_n v_n) = \alpha_1 T(v_1)+\cdots+\alpha_n T(v_n)$</span></div>
+        <p style="font-size:.88rem">Esto es exactamente la técnica del Ejercicio 4: te dan $T$ en una base, vos encontrás los $T(e_i)$ y armás la fórmula general.</p>
+      </div>
+    </div>
+
+    <div class="stitle" style="font-size:1rem;color:var(--green);border-bottom-color:var(--green-bg);margin-top:1.5rem"><span class="ico">✅</span> Funciones que SÍ son transformaciones lineales</div>
+    <div class="grid g2">
+      <div class="card gr">
+        <h3>$T(x,y) = (2x+y,\; x-3y)$</h3>
+        <p style="font-size:.88rem;margin-top:.3rem"><strong>Verificar $T(u+v)=T(u)+T(v)$:</strong></p>
+        <p style="font-size:.85rem">$T(x_1+x_2,y_1+y_2) = (2(x_1+x_2)+(y_1+y_2),\;(x_1+x_2)-3(y_1+y_2))$<br/>$= (2x_1+y_1,x_1-3y_1) + (2x_2+y_2,x_2-3y_2) = T(u)+T(v)$ ✅</p>
+        <p style="font-size:.85rem;margin-top:.4rem"><strong>Verificar $T(ku)=kT(u)$:</strong> $T(kx,ky)=(2kx+ky,kx-3ky)=k(2x+y,x-3y)$ ✅</p>
+        <p style="font-size:.85rem;margin-top:.4rem"><strong>Regla:</strong> toda función de la forma $T(x)=Ax$ (multiplicar un vector por una matriz) es lineal. Esto incluye rotaciones, reflexiones y proyecciones.</p>
+      </div>
+      <div class="card gr">
+        <h3>$T(x,y,z) = (x+z,\; 2y)$</h3>
+        <p style="font-size:.88rem;margin-top:.3rem">Matriz asociada (columnas = imágenes de $e_1,e_2,e_3$):</p>
+        <div class="mat-display" style="display:inline-block;margin:.3rem 0">
+          <table>
+            <tr><td>1</td><td>0</td><td>1</td></tr>
+            <tr><td>0</td><td>2</td><td>0</td></tr>
+          </table>
+        </div>
+        <p style="font-size:.85rem">$T(x,y,z) = \begin{pmatrix}1&amp;0&amp;1\\0&amp;2&amp;0\end{pmatrix}\begin{pmatrix}x\\y\\z\end{pmatrix}$ ✅</p>
+        <p style="font-size:.85rem;margin-top:.4rem">Siempre que la fórmula sea "lineal" en las variables (sin productos entre variables, sin constantes sueltas, sin potencias), es transformación lineal.</p>
+      </div>
+    </div>
+
+    <div class="stitle" style="font-size:1rem;color:var(--red);border-bottom-color:var(--red-bg);margin-top:1.5rem"><span class="ico">❌</span> Funciones que NO son transformaciones lineales</div>
+    <div class="grid g2">
+      <div class="card re">
+        <h3>$T(x,y) = (x+1,\; y)$ — término constante</h3>
+        <p style="font-size:.88rem;margin-top:.3rem">$T(\vec{0}) = T(0,0) = (0+1,0) = (1,0) \neq \vec{0}$</p>
+        <p style="font-size:.88rem;margin-top:.4rem"><strong>Falla:</strong> toda TL debe mandar el vector nulo al vector nulo. Cualquier función con término independiente no nulo rompe esto en el primer chequeo.</p>
+      </div>
+      <div class="card re">
+        <h3>$T(x,y) = (x^2,\; y)$ — término cuadrático</h3>
+        <p style="font-size:.88rem;margin-top:.3rem">$T(2\cdot(1,0)) = T(2,0) = (4,0)$</p>
+        <p style="font-size:.88rem">$2\cdot T(1,0) = 2\cdot(1,0) = (2,0)$</p>
+        <p style="font-size:.88rem;margin-top:.4rem"><strong>Falla:</strong> $T(ku)\neq kT(u)$ porque $(kx)^2 = k^2 x^2 \neq k x^2$. Cualquier potencia, producto de variables, valor absoluto, $\sin$, $\cos$ o $e^x$ rompe la linealidad.</p>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:1.5rem">🗺️ <strong>¿Y ahora qué?</strong> Con estos conceptos claros, entrá a las pestañas de ejercicios: <strong>📐 Subespacios</strong> (base y dimensión de $Ax=0$), <strong>➕ Suma y ⊥</strong> (suma de subespacios y complemento ortogonal), <strong>📌 Coordenadas</strong> (cambio de base) y <strong>🔁 Trans. Lineales</strong> (EJ4 del parcial).</div>
   </div>
 </div>
 

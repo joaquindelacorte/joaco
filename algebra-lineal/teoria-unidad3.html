@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Álgebra Lineal I — Unidad 3-4: Espacios Vectoriales y Transformaciones Lineales</title>
+<meta name="description" content="Subespacios, complemento ortogonal, coordenadas en una base y transformaciones lineales — con simuladores interactivos, insignias y quiz.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
+<style>
+:root{
+  --pur:#6d28d9;--pur-lt:#8b5cf6;--pur-bg:#ede9fe;
+  --blue:#1d4ed8;--blue-bg:#dbeafe;
+  --green:#15803d;--green-bg:#dcfce7;
+  --orange:#c2410c;--orange-bg:#fff3e0;
+  --red:#b91c1c;--red-bg:#fee2e2;
+  --teal:#0d9488;--teal-bg:#ccfbf1;
+  --yellow:#d97706;--yellow-bg:#fef9c3;
+  --gray:#374151;--gray-lt:#6b7280;
+  --bg:#f8f7fc;--card:#fff;--border:#e5e2f0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:var(--pur);display:flex;align-items:center;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.brand{color:#fff;font-size:1.05rem;font-weight:800;padding:.8rem 1.2rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.2)}
+.tabs{display:flex;overflow-x:auto;flex:1}
+.tab-btn{padding:.75rem 1.05rem;border:none;background:transparent;color:rgba(255,255,255,.75);font-size:.83rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tab-btn.active{color:#fff;border-bottom-color:#c4b5fd}
+.nav-badges{color:#fff;font-weight:700;font-size:.82rem;padding:.6rem 1.1rem;white-space:nowrap;background:rgba(255,255,255,.12)}
+
+/* GLOBAL PROGRESS */
+.global-progress-wrap{height:5px;background:rgba(0,0,0,.15)}
+.global-progress{height:100%;background:linear-gradient(90deg,#facc15,#fb923c);transition:width .4s ease;width:0}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#2e1065 0%,var(--pur) 60%,var(--pur-lt) 100%);color:#fff;text-align:center;padding:2.5rem 1rem 2rem}
+.hero h1{font-size:2.2rem;font-weight:900;letter-spacing:-.5px}
+.hero p{opacity:.88;margin-top:.4rem}
+.badges{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.25rem .85rem;font-size:.78rem;font-weight:700}
+
+/* LAYOUT */
+.page{display:none}.page.active{display:block}
+.container{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+
+/* SECTION TITLE */
+.stitle{display:flex;align-items:center;gap:.6rem;font-size:1.25rem;font-weight:800;color:var(--pur);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid var(--pur-bg)}
+.stitle:first-of-type{margin-top:.5rem}
+.stitle .ico{font-size:1.2rem}
+.lvl-chip{display:inline-block;background:var(--pur);color:#fff;font-size:.7rem;font-weight:700;padding:.2rem .65rem;border-radius:2rem;margin-left:.6rem;vertical-align:middle}
+
+/* CARDS */
+.grid{display:grid;gap:1.1rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;box-shadow:0 1px 4px rgba(0,0,0,.05);transition:.2s}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.card h3{font-size:.97rem;font-weight:700;margin-bottom:.5rem;color:var(--pur)}
+.card p,.card li{font-size:.9rem;color:var(--gray)}
+.card.pu{border-left:4px solid var(--pur);background:var(--pur-bg)}
+.card.bl{border-left:4px solid var(--blue);background:var(--blue-bg)}
+.card.gr{border-left:4px solid var(--green);background:var(--green-bg)}
+.card.or{border-left:4px solid var(--orange);background:var(--orange-bg)}
+.card.re{border-left:4px solid var(--red);background:var(--red-bg)}
+.card.te{border-left:4px solid var(--teal);background:var(--teal-bg)}
+
+/* FORMULA / CODE */
+.fbox{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1rem 1.3rem;text-align:center;margin:.7rem 0;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.fbox .big{font-size:1.25rem;font-weight:700;color:#c4b5fd;display:block;margin-bottom:.25rem}
+.fbox .sub{font-size:.82rem;color:#94a3b8;display:block;margin-top:.35rem}
+
+/* MATRIX DISPLAY */
+.mat-display{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1rem;font-family:'Courier New',monospace;margin:.7rem 0;overflow-x:auto}
+.mat-display table{border-collapse:collapse;margin:0 auto}
+.mat-display td{padding:.25rem .55rem;text-align:center;font-size:.95rem;min-width:2rem}
+.mat-display .pivot{color:#fbbf24;font-weight:700}
+.mat-display .highlight-row{background:rgba(139,92,246,.2)}
+.mat-display .zero{color:#64748b}
+.mat-display .bar{border-left:2px solid #94a3b8;padding-left:.7rem}
+.mat-display .ann{color:#94a3b8;font-size:.8rem;padding-left:.7rem}
+
+/* TABLE */
+.twrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border)}
+table.std{width:100%;border-collapse:collapse;font-size:.88rem}
+table.std th{background:var(--pur);color:#fff;padding:.65rem 1rem;text-align:left;font-weight:600}
+table.std td{padding:.6rem 1rem;border-bottom:1px solid var(--border)}
+table.std tr:last-child td{border:none}
+table.std tr:nth-child(even) td{background:var(--pur-bg)}
+
+/* TIP / NOTE */
+.tip{display:flex;gap:.7rem;align-items:flex-start;background:#fffbeb;border:1px solid #fbbf24;border-radius:10px;padding:.85rem 1.1rem;margin:.7rem 0;font-size:.88rem}
+.note{background:var(--pur-bg);border-left:4px solid var(--pur);border-radius:0 8px 8px 0;padding:.75rem 1rem;font-size:.9rem;margin:.7rem 0;color:#4c1d95}
+
+/* ACCORDION */
+details{border:1px solid var(--border);border-radius:10px;margin-bottom:.7rem;overflow:hidden}
+details summary{padding:.9rem 1.1rem;cursor:pointer;font-weight:600;font-size:.92rem;background:var(--card);list-style:none;display:flex;justify-content:space-between;align-items:center;user-select:none}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:'＋';color:var(--pur-lt)}
+details[open] summary::after{content:'－'}
+details[open] summary{background:var(--pur-bg);color:var(--pur)}
+.dbody{padding:1.1rem;background:var(--card);border-top:1px solid var(--border);font-size:.9rem;line-height:1.7}
+
+/* CHEAT DARK */
+.cheat{background:linear-gradient(135deg,#2e1065 0%,#6d28d9 100%);color:#e2e8f0;border-radius:14px;padding:1.8rem;margin:1rem 0}
+.cheat h2{color:#c4b5fd;font-size:1.1rem;margin-bottom:1.1rem;text-align:center}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.9rem}
+.citem{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:.85rem}
+.citem .lbl{font-size:.78rem;color:#c4b5fd;font-weight:700;margin-bottom:.3rem}
+.citem .cf{font-size:.85rem;color:#e2e8f0;line-height:1.6}
+
+/* BADGES / GAMIFICACIÓN */
+.badges-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem}
+.badge-card{border-radius:12px;padding:1.1rem;border:2px solid var(--border);text-align:center;transition:.25s}
+.badge-card.locked{opacity:.45;filter:grayscale(1)}
+.badge-card.unlocked{border-color:var(--green);background:var(--green-bg)}
+.badge-card .bic{font-size:2.1rem;display:block;margin-bottom:.4rem}
+.badge-card .bname{font-weight:700;font-size:.9rem}
+.badge-card .bdesc{font-size:.78rem;color:var(--gray-lt);margin-top:.3rem}
+.badge-toast{position:fixed;bottom:20px;right:20px;background:linear-gradient(135deg,#6d28d9,#4338ca);color:#fff;z-index:9999;padding:1rem 1.3rem;border-radius:12px;display:flex;gap:.8rem;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,.35);transform:translateX(140%);transition:transform .4s cubic-bezier(.34,1.56,.64,1);max-width:300px}
+.badge-toast.show{transform:translateX(0)}
+
+.map-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.9rem}
+.map-card{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:1.1rem;text-align:center;cursor:pointer;transition:.2s}
+.map-card:hover{border-color:var(--pur-lt);transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.map-card .mic{font-size:1.8rem;display:block;margin-bottom:.4rem}
+.map-card .mname{font-weight:700;font-size:.85rem;color:var(--pur)}
+.map-card .mstep{font-size:.7rem;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem}
+
+/* EXP BAR */
+.exp-bar-wrap{background:var(--pur-bg);border-radius:2rem;height:14px;overflow:hidden;margin:.4rem 0}
+.exp-bar{height:100%;background:linear-gradient(90deg,var(--pur),var(--pur-lt));border-radius:2rem;transition:width .5s ease}
+.exp-label{font-size:.78rem;color:var(--pur);font-weight:700;margin-top:.2rem}
+
+/* SIM SHELL */
+.sim{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;margin:1rem 0}
+.sim-controls{display:flex;flex-wrap:wrap;gap:1.1rem;align-items:center;margin-top:.8rem}
+.sim-controls label{font-size:.85rem;font-weight:600;color:var(--gray);display:flex;align-items:center;gap:.35rem}
+.sim-controls input[type=number]{width:60px;padding:.35rem .4rem;border-radius:6px;border:1px solid var(--border);font-size:.9rem;text-align:center;font-family:'Courier New',monospace}
+.sim-btn{padding:.65rem 1.2rem;background:var(--pur);color:#fff;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;transition:.2s}
+.sim-btn:hover:not(:disabled){background:var(--pur-lt)}
+.sim-btn:disabled{opacity:.4;cursor:default}
+.sim-btn.ghost{background:transparent;color:var(--pur);border:2px solid var(--pur)}
+.sim-btn.green{background:var(--green)}
+.result-box{background:var(--pur-bg);border-radius:10px;padding:1rem 1.2rem;margin-top:1rem;font-size:.92rem;color:#4c1d95}
+.result-box.ok{background:var(--green-bg);color:#14532d}
+.result-box.no{background:var(--red-bg);color:#7f1d1d}
+.result-box.warn{background:var(--yellow-bg);color:#78350f}
+
+/* Matrix input */
+.mat-input-wrap{display:inline-block;margin:.5rem .3rem}
+.mat-input-wrap .mat-label{font-size:.8rem;font-weight:700;color:var(--pur);display:block;margin-bottom:.3rem;text-align:center}
+.mat-input-grid{display:grid;gap:.35rem;width:fit-content}
+.mat-input-grid input{width:52px;padding:.3rem;text-align:center;border:1px solid var(--border);border-radius:6px;font-size:.9rem;font-family:'Courier New',monospace}
+.mat-inputs-row{display:flex;flex-wrap:wrap;gap:.8rem;align-items:flex-start;margin:.8rem 0}
+
+/* PRACTICE */
+.ex-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;margin-bottom:1.1rem}
+.ex-num{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--pur-lt)}
+.ex-statement{font-size:.94rem;margin:.4rem 0 .9rem;color:var(--gray)}
+.ex-btns{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.6rem}
+.ex-hint{background:var(--yellow-bg);border-left:4px solid var(--yellow);border-radius:0 8px 8px 0;padding:.7rem 1rem;font-size:.86rem;margin-top:.5rem;color:#78350f;display:none}
+.ex-hint.show{display:block}
+.ex-sol{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:1rem 1.2rem;margin-top:.7rem;font-size:.87rem;line-height:1.8;display:none}
+.ex-sol.show{display:block}
+.ex-card.solved{border-color:var(--green);background:var(--green-bg)}
+.ex-check{font-weight:700;color:var(--green);font-size:.85rem}
+
+/* QUIZ */
+#quiz-container{max-width:720px;margin:0 auto}
+.quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:.5rem}
+.quiz-score-display{font-weight:700;font-size:1rem;color:var(--pur)}
+.progress-bar-wrap{background:var(--border);border-radius:2rem;height:8px;margin-bottom:1.5rem;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--pur-lt),#c4b5fd);border-radius:2rem;transition:width .4s ease}
+.quiz-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.quiz-card .q-num{font-size:.8rem;font-weight:700;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem}
+.quiz-card .q-text{font-size:1.05rem;font-weight:600;color:var(--gray);margin-bottom:1.3rem;line-height:1.5}
+.options{display:grid;gap:.65rem}
+.opt-btn{padding:.85rem 1.1rem;border:2px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;font-size:.9rem;text-align:left;transition:.2s;font-weight:500;color:var(--gray)}
+.opt-btn:hover:not(:disabled){border-color:var(--pur-lt);background:var(--pur-bg);color:var(--pur)}
+.opt-btn.correct{border-color:var(--green);background:var(--green-bg);color:var(--green);font-weight:700}
+.opt-btn.wrong{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+.feedback-box{margin-top:1.1rem;padding:.9rem 1.1rem;border-radius:10px;font-size:.9rem;line-height:1.6;display:none}
+.feedback-box.show{display:block}
+.feedback-box.ok{background:var(--green-bg);border:1px solid var(--green);color:var(--green)}
+.feedback-box.ko{background:var(--red-bg);border:1px solid var(--red);color:var(--red)}
+.quiz-nav{display:flex;justify-content:flex-end;margin-top:1.2rem}
+.btn-next{padding:.75rem 1.8rem;background:var(--pur);color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:700;cursor:pointer;transition:.2s}
+.btn-next:hover{background:var(--pur-lt)}
+.btn-next:disabled{opacity:.4;cursor:default}
+.result-card{background:var(--card);border-radius:16px;padding:2.5rem;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+.result-card .emoji{font-size:4rem;display:block;margin-bottom:.8rem}
+.result-card h2{font-size:1.6rem;font-weight:800;color:var(--pur);margin-bottom:.5rem}
+.result-card .score-big{font-size:3rem;font-weight:900;color:var(--pur);display:block;margin:.5rem 0}
+.result-card p{color:var(--gray-lt);font-size:.95rem;margin-bottom:1.3rem}
+.result-detail{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1.3rem}
+.rstat{border-radius:10px;padding:.8rem;font-weight:700;font-size:1rem}
+.rstat.ok{background:var(--green-bg);color:var(--green)}
+.rstat.ko{background:var(--red-bg);color:var(--red)}
+.btn-retry{padding:.8rem 2rem;background:var(--pur);color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:.5rem}
+
+/* CONFETTI */
+.confetti-piece{position:fixed;width:10px;height:10px;border-radius:2px;animation:fall linear forwards;pointer-events:none;z-index:9999}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
+
+@media(max-width:640px){
+  .hero h1{font-size:1.7rem}
+  nav{flex-direction:column}
+  .brand{text-align:center;border:none;border-bottom:1px solid rgba(255,255,255,.2)}
+  .nav-badges{text-align:center}
+}
+</style>
+
+<style>
+.apuntes-nav{position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:.5rem;padding:.45rem .9rem;background:rgba(10,10,18,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.07);font-family:'Segoe UI',system-ui,sans-serif;font-size:.82rem;flex-wrap:wrap}
+.apuntes-nav a{color:#94a3b8;text-decoration:none;padding:.2rem .55rem;border-radius:5px;transition:.15s;white-space:nowrap}
+.apuntes-nav a:hover{background:rgba(255,255,255,.08);color:#e2e8f0}
+.apuntes-nav .an-hub{color:#38bdf8!important}
+.apuntes-nav .an-cur{color:#e2e8f0;font-weight:700;background:rgba(255,255,255,.08);padding:.2rem .55rem;border-radius:5px;white-space:nowrap}
+.apuntes-nav .an-sep{color:rgba(255,255,255,.2);pointer-events:none}
+@media(max-width:480px){.apuntes-nav .an-long{display:none}}
+.apuntes-footer-nav{margin-top:3rem;padding:1rem 1.25rem;background:rgba(255,255,255,.04);border-top:1px solid rgba(255,255,255,.08);display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;font-family:'Inter',sans-serif;font-size:.83rem}
+.apuntes-footer-nav__label{color:#64748b;margin-right:.25rem}
+.apuntes-footer-nav a{color:#94a3b8;text-decoration:none;padding:.2rem .6rem;border-radius:4px;background:rgba(255,255,255,.06)}
+.apuntes-footer-nav a:hover{background:rgba(255,255,255,.12);color:#e2e8f0}
+</style>
+</head>
+<body>
+<div class="apuntes-nav">
+  <a href="https://joacodelacorte.netlify.app/#apuntes">&#x2190; Portafolio</a>
+  <span class="an-sep">/</span>
+  <a href="../apuntes/" class="an-hub">Hub</a>
+  <span class="an-sep">/</span>
+  <a href="teoria.html">Unidad 1</a>
+  <span class="an-sep">&middot;</span>
+  <a href="teoria-unidad2.html">Unidad 2</a>
+  <span class="an-sep">&middot;</span>
+  <span class="an-cur">&#x1F9EE; Unidad 3-4</span>
+  <span class="an-sep">&middot;</span>
+  <a href="juegos.html">&#x1F3AE; Juegos</a>
+</div>
+
+<nav>
+  <div class="brand">🧮 Álgebra I</div>
+  <div class="tabs">
+    <button class="tab-btn active" id="tb-inicio" onclick="showPage('inicio',this)">🏠 Inicio</button>
+    <button class="tab-btn" id="tb-sub" onclick="showPage('sub',this)">📐 Subespacios</button>
+    <button class="tab-btn" id="tb-suma" onclick="showPage('suma',this)">➕ Suma y ⊥</button>
+    <button class="tab-btn" id="tb-coord" onclick="showPage('coord',this)">📌 Coordenadas</button>
+    <button class="tab-btn" id="tb-tl" onclick="showPage('tl',this)">🔁 Trans. Lineales</button>
+    <button class="tab-btn" id="tb-cheat" onclick="showPage('cheat',this)">📋 Cheatsheet</button>
+    <button class="tab-btn" id="tb-resumen" onclick="showPage('resumen',this)">⚡ Resumen 20min</button>
+    <button class="tab-btn" id="tb-machete" onclick="showPage('machete',this)">📚 Machete</button>
+    <button class="tab-btn" id="tb-quiz" onclick="showPage('quiz',this)">🎓 Quiz</button>
+  </div>
+  <div class="nav-badges" id="nav-badges">🏅 0/8</div>
+</nav>
+<div class="global-progress-wrap"><div class="global-progress" id="global-progress"></div></div>
+
+<!-- BADGE TOAST -->
+<div class="badge-toast" id="badge-toast">
+  <span id="toast-ico" style="font-size:2rem">🏅</span>
+  <div><div style="font-weight:800;font-size:.95rem">¡Insignia desbloqueada!</div><div id="toast-name" style="font-size:.85rem;opacity:.85"></div></div>
+</div>
+
+<!-- ═══════════════ INICIO ═══════════════ -->
+<div class="page active" id="inicio">
+  <div class="hero">
+    <h1>Álgebra Lineal I — Unidades 3-4</h1>
+    <p>Espacios vectoriales, subespacios, complemento ortogonal y transformaciones lineales — Segundo Parcial</p>
+    <div class="badges">
+      <span class="badge">🎮 8 insignias por desbloquear</span>
+      <span class="badge">🔢 2 simuladores interactivos</span>
+      <span class="badge">✍️ Ejercicios inspirados en simulacro real</span>
+    </div>
+  </div>
+  <div class="container">
+    <p style="margin-bottom:.8rem"><a href="teoria-unidad2.html" style="color:var(--pur);font-weight:700">← Unidad 2: Sistemas, Matrices y Determinantes</a></p>
+
+    <div class="stitle"><span class="ico">⚡</span> Tu EXP de la unidad</div>
+    <div class="exp-bar-wrap"><div class="exp-bar" id="exp-bar" style="width:0%"></div></div>
+    <div class="exp-label" id="exp-label">0 / 800 EXP — completá secciones para subir</div>
+
+    <div class="stitle"><span class="ico">🗺️</span> Mapa de la unidad</div>
+    <p style="margin-bottom:1.2rem;color:var(--gray-lt)">Basado en la Práctica 5 y los simulacros de 2º Parcial — Prof. Sebastián Domínguez (UNaP). Recorrés los 4 temas del parcial, con ejercicios resueltos paso a paso y simuladores.</p>
+    <div class="map-grid">
+      <div class="map-card" onclick="showPage('sub',document.getElementById('tb-sub'))">
+        <span class="mic">📐</span>
+        <div class="mstep">Ejercicio 1</div>
+        <div class="mname">Subespacios</div>
+      </div>
+      <div class="map-card" onclick="showPage('suma',document.getElementById('tb-suma'))">
+        <span class="mic">➕</span>
+        <div class="mstep">Ejercicio 2</div>
+        <div class="mname">Suma y ⊥</div>
+      </div>
+      <div class="map-card" onclick="showPage('coord',document.getElementById('tb-coord'))">
+        <span class="mic">📌</span>
+        <div class="mstep">Ejercicio 3</div>
+        <div class="mname">Coordenadas</div>
+      </div>
+      <div class="map-card" onclick="showPage('tl',document.getElementById('tb-tl'))">
+        <span class="mic">🔁</span>
+        <div class="mstep">Ejercicio 4</div>
+        <div class="mname">Trans. Lineales</div>
+      </div>
+      <div class="map-card" onclick="showPage('cheat',document.getElementById('tb-cheat'))">
+        <span class="mic">📋</span>
+        <div class="mstep">Extra</div>
+        <div class="mname">Cheatsheet</div>
+      </div>
+      <div class="map-card" onclick="showPage('resumen',document.getElementById('tb-resumen'))">
+        <span class="mic">⚡</span>
+        <div class="mstep">Extra</div>
+        <div class="mname">Resumen 20min</div>
+      </div>
+      <div class="map-card" onclick="showPage('machete',document.getElementById('tb-machete'))">
+        <span class="mic">📚</span>
+        <div class="mstep">Extra</div>
+        <div class="mname">Machete</div>
+      </div>
+      <div class="map-card" onclick="showPage('quiz',document.getElementById('tb-quiz'))">
+        <span class="mic">🎓</span>
+        <div class="mstep">Final</div>
+        <div class="mname">Quiz</div>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">🏅</span> Tus insignias <span class="lvl-chip" id="badge-count-chip">0/8</span></div>
+    <div class="badges-grid" id="badges-grid"></div>
+
+    <div class="note" style="margin-top:2rem">
+      💾 Tu progreso (insignias y mejor puntaje del quiz) se guarda automáticamente en este navegador.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SUBESPACIOS ═══════════════ -->
+<div class="page" id="sub">
+  <div class="container">
+    <p style="margin-bottom:1rem"><a href="#" onclick="showPage('inicio',document.getElementById('tb-inicio'));return false" style="color:var(--pur);font-weight:700">← Volver al inicio</a></p>
+    <div class="stitle"><span class="ico">📐</span> Subespacios vectoriales</div>
+
+    <div class="grid g2">
+      <div class="card pu">
+        <h3>Definición — Subespacio de $\mathbb{R}^n$</h3>
+        <p>Un subconjunto $S \subseteq \mathbb{R}^n$ es un <strong>subespacio vectorial</strong> si y solo si:</p>
+        <ol style="margin:.5rem 0 0 1.2rem;line-height:2">
+          <li>$\vec{0} \in S$ (contiene al vector nulo)</li>
+          <li>$\forall\, u,v \in S \Rightarrow u+v \in S$ (cerrado bajo suma)</li>
+          <li>$\forall\, u \in S,\, \alpha \in \mathbb{R} \Rightarrow \alpha u \in S$ (cerrado bajo producto escalar)</li>
+        </ol>
+      </div>
+      <div class="card bl">
+        <h3>Subespacio como solución de $Ax=0$</h3>
+        <p>El conjunto solución $S = \{x \in \mathbb{R}^n : Ax = 0\}$ de un sistema <strong>homogéneo</strong> siempre es un subespacio de $\mathbb{R}^n$. Se llama <strong>espacio nulo</strong> o <em>núcleo</em> de $A$.</p>
+        <p style="margin-top:.5rem">Los subespacios más comunes en los parciales vienen dados por ecuaciones homogéneas.</p>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">📏</span> Dimensión de un subespacio — Rouché aplicado</div>
+    <div class="fbox">
+      <span class="big">$\dim(S) = n - \text{Rg}(A)$</span>
+      <span class="sub">$n$ = número de incógnitas · $A$ = matriz del sistema homogéneo · $\text{Rg}(A)$ = rango de $A$</span>
+    </div>
+
+    <div class="grid g2" style="margin-top:1rem">
+      <div class="card gr">
+        <h3>¿Cómo hallar la base?</h3>
+        <ol style="margin-left:1.2rem;line-height:2;font-size:.9rem">
+          <li>Escribir la matriz $A$ del sistema homogéneo</li>
+          <li>Escalonar $A$ con operaciones elementales por filas</li>
+          <li>Identificar variables <strong>pivote</strong> y variables <strong>libres</strong></li>
+          <li>Parametrizar las libres: $x_{k_1}=s,\; x_{k_2}=t,\;\ldots$</li>
+          <li>Expresar el vector solución general como c.l. de vectores fijos → esos son la base</li>
+        </ol>
+      </div>
+      <div class="card or">
+        <h3>¿S = T? — igualdad de subespacios</h3>
+        <p style="font-size:.9rem;margin-bottom:.5rem">Dados $S$ y $T$ con las mismas dimensiones:</p>
+        <ol style="margin-left:1.2rem;line-height:1.9;font-size:.9rem">
+          <li>Verificar $\dim(S) = \dim(T)$</li>
+          <li>Armar una matriz $M$ juntando los generadores de ambos</li>
+          <li>Si $\text{Rg}(M) = \dim(S) = \dim(T)$ → $S = T$</li>
+          <li>Si $\text{Rg}(M) > \dim(S)$ → $S \neq T$</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">🧪</span> Ejemplo resuelto — Ejercicio 1 estilo parcial</div>
+    <div class="card" style="margin-bottom:1rem">
+      <h3>Enunciado</h3>
+      <p>Sea $S_1 = \{(x_1,x_2,x_3,x_4)\in\mathbb{R}^4 : x_1+2x_2+x_4=0,\; x_2+x_3+2x_4=0,\; x_1+3x_2+x_3+3x_4=0\}$. Hallar una base y la dimensión de $S_1$.</p>
+    </div>
+
+    <details>
+      <summary>Paso 1 — Armar la matriz del sistema homogéneo</summary>
+      <div class="dbody">
+        <p>Escribimos los coeficientes de las ecuaciones como filas:</p>
+        <div class="mat-display">
+          <table>
+            <tr><td>$A$</td><td>=</td>
+              <td class="pivot">1</td><td>2</td><td>0</td><td>1</td>
+            </tr>
+            <tr><td></td><td></td>
+              <td class="zero">0</td><td class="pivot">1</td><td>1</td><td>2</td>
+            </tr>
+            <tr><td></td><td></td>
+              <td>1</td><td>3</td><td>1</td><td>3</td>
+            </tr>
+          </table>
+        </div>
+        <p>Columnas: coeficientes de $x_1, x_2, x_3, x_4$ respectivamente.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Paso 2 — Escalonar por operaciones de fila</summary>
+      <div class="dbody">
+        <p><strong>$F_3 \to F_3 - F_1$:</strong></p>
+        <div class="mat-display">
+          <table>
+            <tr><td class="pivot">1</td><td>2</td><td>0</td><td>1</td></tr>
+            <tr><td class="zero">0</td><td class="pivot">1</td><td>1</td><td>2</td></tr>
+            <tr><td class="zero">0</td><td>1</td><td>1</td><td>2</td></tr>
+          </table>
+        </div>
+        <p><strong>$F_3 \to F_3 - F_2$:</strong></p>
+        <div class="mat-display">
+          <table>
+            <tr><td class="pivot">1</td><td>2</td><td>0</td><td>1</td></tr>
+            <tr><td class="zero">0</td><td class="pivot">1</td><td>1</td><td>2</td></tr>
+            <tr><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td></tr>
+          </table>
+        </div>
+        <p>✅ Forma escalonada con <strong>2 pivotes</strong> → $\text{Rg}(A) = 2$</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Paso 3 — Dimensión y variables libres</summary>
+      <div class="dbody">
+        <p>$$\dim(S_1) = n - \text{Rg}(A) = 4 - 2 = 2$$</p>
+        <p>Las variables <strong>pivote</strong> son $x_1$ y $x_2$. Las <strong>libres</strong> son $x_3 = s$ y $x_4 = t$.</p>
+        <p>Del sistema escalonado (con $b=0$):</p>
+        <ul style="margin-left:1.2rem;line-height:2">
+          <li>$F_2: x_2 + x_3 + 2x_4 = 0 \Rightarrow x_2 = -s - 2t$</li>
+          <li>$F_1: x_1 + 2x_2 + x_4 = 0 \Rightarrow x_1 = -2x_2 - x_4 = 2s+4t-t = 2s+3t$</li>
+        </ul>
+        <p>Vector solución general:</p>
+        <p>$(x_1,x_2,x_3,x_4) = s(2,-1,1,0) + t(3,-2,0,1)$</p>
+      </div>
+    </details>
+
+    <details open>
+      <summary>Resultado final</summary>
+      <div class="dbody">
+        <p>$$\text{Base de }S_1 = \{v_1,v_2\} = \{(2,-1,1,0),\;(3,-2,0,1)\}$$</p>
+        <p>$$\dim(S_1) = 2$$</p>
+        <div class="tip">💡 <div><strong>Verificación rápida:</strong> sustituí $v_1$ y $v_2$ en las ecuaciones originales → todos dan cero ✓. Los vectores son LI porque ninguno es múltiplo del otro ✓.</div></div>
+      </div>
+    </details>
+
+    <div class="stitle"><span class="ico">✍️</span> Práctica guiada</div>
+    <div class="ex-card" id="ex-sub1">
+      <div class="ex-num">Ejercicio A</div>
+      <div class="ex-statement">Sea $S = \{(x_1,x_2,x_3) \in \mathbb{R}^3 : x_1 + x_2 - x_3 = 0,\; 2x_1 - x_2 = 0\}$. Encontrá base y dimensión.</div>
+      <div class="ex-btns">
+        <button class="sim-btn ghost" onclick="toggleHint('ex-sub1')">💡 Pista</button>
+        <button class="sim-btn ghost" onclick="toggleSol('ex-sub1')">👁 Solución</button>
+        <button class="sim-btn green" onclick="markDone('ex-sub1','sub')">✅ Lo resolví</button>
+      </div>
+      <div class="ex-hint" id="hint-ex-sub1">Armá la matriz 2×3, escalonala. Los pivotes son 2 → Rg=2 → dim=1. Variable libre: $x_3=t$.</div>
+      <div class="ex-sol" id="sol-ex-sub1">
+        A = [[1,1,-1],[2,-1,0]]. F2→F2-2F1: [0,-3,2]. Rg(A)=2. dim=3-2=1.
+        x3=t: -3x2+2t=0 → x2=2t/3... ojo, tomamos t=3: x2=2, luego x1=-x2+x3=-2+3=1. Gen: {(1,2,3)}. Base={(1,2,3)}, dim=1.
+      </div>
+      <div id="done-ex-sub1"></div>
+    </div>
+
+    <div class="note">🏅 <strong>Pista para la insignia:</strong> completá el ejercicio A para desbloquear "📐 Maestro de Subespacios".</div>
+  </div>
+</div>
+
+<!-- ═══════════════ SUMA Y ORTOGONAL ═══════════════ -->
+<div class="page" id="suma">
+  <div class="container">
+    <p style="margin-bottom:1rem"><a href="#" onclick="showPage('inicio',document.getElementById('tb-inicio'));return false" style="color:var(--pur);font-weight:700">← Volver al inicio</a></p>
+    <div class="stitle"><span class="ico">➕</span> Suma de subespacios</div>
+
+    <div class="grid g2">
+      <div class="card pu">
+        <h3>Definición — Suma $S+T$</h3>
+        <p>$$S + T = \{s + t : s \in S,\; t \in T\}$$</p>
+        <p style="margin-top:.5rem">Es el subespacio más pequeño que contiene a $S$ y a $T$.</p>
+        <p style="margin-top:.5rem"><strong>Criterio práctico:</strong> Armá una matriz con todos los vectores generadores de $S$ y de $T$. Si $\text{Rg} = n$ → $S+T=\mathbb{R}^n$.</p>
+      </div>
+      <div class="card bl">
+        <h3>Teorema de la dimensión</h3>
+        <div class="fbox" style="margin:.5rem 0">
+          <span class="big" style="font-size:1rem">$\dim(S+T) = \dim(S) + \dim(T) - \dim(S\cap T)$</span>
+        </div>
+        <p>Permite calcular la dimensión de la intersección sin hallarla explícitamente, o verificar si la suma es directa.</p>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:1rem">
+      <div class="card gr">
+        <h3>Suma directa $S \oplus T$</h3>
+        <p>La suma es <strong>directa</strong> si $S \cap T = \{0\}$. Equivalentemente:</p>
+        <p style="margin-top:.4rem">$$\dim(S \oplus T) = \dim(S) + \dim(T)$$</p>
+        <p style="margin-top:.4rem">Todo vector de $S+T$ se escribe de <strong>forma única</strong> como $s+t$.</p>
+      </div>
+      <div class="card te">
+        <h3>Complemento ortogonal $S^\perp$</h3>
+        <p>$$S^\perp = \{v \in \mathbb{R}^n : \langle v, s \rangle = 0 \;\forall s \in S\}$$</p>
+        <p style="margin-top:.4rem"><strong>Propiedades:</strong></p>
+        <ul style="margin-left:1.2rem;line-height:1.8;font-size:.9rem">
+          <li>$\dim(S^\perp) = n - \dim(S)$</li>
+          <li>$S \oplus S^\perp = \mathbb{R}^n$ (siempre)</li>
+          <li>$(S^\perp)^\perp = S$</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">🧪</span> Ejemplo resuelto — Ejercicio 2 estilo parcial</div>
+    <div class="card" style="margin-bottom:1rem">
+      <h3>Enunciado</h3>
+      <p>En $\mathbb{R}^3$, sean $S_1 = \{(x,y,z): x+y-z=0\}$ y $S_2 = \{(x,y,z): x-y+z=0\}$. Hallar generadores de $S_1$ y $S_2$. Verificar si $S_1+S_2=\mathbb{R}^3$. Hallar $S_1 \cap S_2$ y decidir si la suma es directa. Hallar $S_1^\perp$ y verificar $S_1 \oplus S_1^\perp = \mathbb{R}^3$.</p>
+    </div>
+
+    <details>
+      <summary>Parte A — Generadores de $S_1$ y $S_2$</summary>
+      <div class="dbody">
+        <p><strong>$S_1$: $x+y-z=0 \Rightarrow x = z-y$</strong></p>
+        <p>$(x,y,z) = (z-y,y,z) = y(-1,1,0) + z(1,0,1)$</p>
+        <p>$\text{Gen}(S_1) = \{(-1,1,0),\;(1,0,1)\},\quad \dim(S_1)=2$</p>
+        <br/>
+        <p><strong>$S_2$: $x-y+z=0 \Rightarrow x = y-z$</strong></p>
+        <p>$(x,y,z) = (y-z,y,z) = y(1,1,0) + z(-1,0,1)$</p>
+        <p>$\text{Gen}(S_2) = \{(1,1,0),\;(-1,0,1)\},\quad \dim(S_2)=2$</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Parte B — ¿$S_1+S_2 = \mathbb{R}^3$?</summary>
+      <div class="dbody">
+        <p>Armamos la matriz con los 4 generadores como filas:</p>
+        <div class="mat-display">
+          <table>
+            <tr><td>-1</td><td>1</td><td>0</td><td class="ann">$\leftarrow v_1^{(S_1)}$</td></tr>
+            <tr><td>1</td><td>0</td><td>1</td><td class="ann">$\leftarrow v_2^{(S_1)}$</td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td class="ann">$\leftarrow v_1^{(S_2)}$</td></tr>
+            <tr><td>-1</td><td>0</td><td>1</td><td class="ann">$\leftarrow v_2^{(S_2)}$</td></tr>
+          </table>
+        </div>
+        <p>Escalonando, el rango de esta matriz es <strong>3</strong> (hay 3 vectores LI entre los 4). Por lo tanto $\text{Rg}=3=\dim(\mathbb{R}^3)$ → $S_1+S_2 = \mathbb{R}^3$ ✅</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Parte C — $S_1 \cap S_2$ y suma directa</summary>
+      <div class="dbody">
+        <p>Resolvemos el sistema combinado $x+y-z=0$ y $x-y+z=0$:</p>
+        <ul style="margin-left:1.2rem;line-height:2">
+          <li>Sumando: $2x=0 \Rightarrow x=0$</li>
+          <li>Sustituyendo: $y-z=0 \Rightarrow y=z$</li>
+        </ul>
+        <p>$S_1 \cap S_2 = \{(0,y,y): y\in\mathbb{R}\} = \text{span}\{(0,1,1)\}$</p>
+        <p>$\dim(S_1 \cap S_2) = 1$</p>
+        <p><strong>Teorema de la dimensión:</strong> $\dim(S_1+S_2) = 2+2-1 = 3$ ✓</p>
+        <p>Como $S_1 \cap S_2 \neq \{0\}$, la suma <strong>NO es directa</strong>.</p>
+      </div>
+    </details>
+
+    <details open>
+      <summary>Parte D — Complemento ortogonal $S_1^\perp$</summary>
+      <div class="dbody">
+        <p>Buscamos $w=(w_1,w_2,w_3)$ tal que $w \perp (-1,1,0)$ y $w \perp (1,0,1)$:</p>
+        <p>$\langle w, (-1,1,0)\rangle = 0 \Rightarrow -w_1+w_2=0 \Rightarrow w_1=w_2$</p>
+        <p>$\langle w, (1,0,1)\rangle = 0 \Rightarrow w_1+w_3=0 \Rightarrow w_3=-w_1$</p>
+        <p>Tomando $w_1=1$: $w = (1,1,-1)$</p>
+        <p>$$S_1^\perp = \text{span}\{(1,1,-1)\},\quad \dim(S_1^\perp) = 1$$</p>
+        <p><strong>Verificación $S_1 \oplus S_1^\perp = \mathbb{R}^3$:</strong></p>
+        <ul style="margin-left:1.2rem;line-height:1.8">
+          <li>$\dim(S_1) + \dim(S_1^\perp) = 2+1 = 3 = \dim(\mathbb{R}^3)$ ✓</li>
+          <li>$S_1 \cap S_1^\perp = \{0\}$ (un vector perpendicular a sí mismo tiene norma 0) ✓</li>
+          <li>Por tanto $S_1 \oplus S_1^\perp = \mathbb{R}^3$ ✅</li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="stitle"><span class="ico">🎮</span> Simulador — Complemento ortogonal en $\mathbb{R}^3$</div>
+    <div class="tip">💡 <div>Ingresá dos vectores generadores de un subespacio $S$ en $\mathbb{R}^3$. El simulador calcula $S^\perp$ como el producto vectorial y verifica la ortogonalidad.</div></div>
+    <div class="sim">
+      <p style="font-size:.88rem;font-weight:700;color:var(--pur);margin-bottom:.6rem">$S = \text{span}\{g_1,\, g_2\} \subset \mathbb{R}^3$. Calculá $S^\perp$.</p>
+      <div class="mat-inputs-row">
+        <div class="mat-input-wrap">
+          <span class="mat-label">$g_1 = $</span>
+          <div class="mat-input-grid" style="grid-template-columns:1fr 1fr 1fr">
+            <input type="number" id="g1x" value="-1"><input type="number" id="g1y" value="1"><input type="number" id="g1z" value="0">
+          </div>
+        </div>
+        <div class="mat-input-wrap">
+          <span class="mat-label">$g_2 = $</span>
+          <div class="mat-input-grid" style="grid-template-columns:1fr 1fr 1fr">
+            <input type="number" id="g2x" value="1"><input type="number" id="g2y" value="0"><input type="number" id="g2z" value="1">
+          </div>
+        </div>
+        <div class="mat-input-wrap">
+          <span class="mat-label">$v$ a verificar (opcional)</span>
+          <div class="mat-input-grid" style="grid-template-columns:1fr 1fr 1fr">
+            <input type="number" id="vox" value="1"><input type="number" id="voy" value="1"><input type="number" id="voz" value="-1">
+          </div>
+        </div>
+      </div>
+      <div class="sim-controls">
+        <button class="sim-btn" onclick="calcOrtogonal()">Calcular $S^\perp$</button>
+        <button class="sim-btn ghost" onclick="simOrtPreset('ej2')">Cargar EJ2</button>
+        <button class="sim-btn ghost" onclick="simOrtPreset('xy')">Plano XY</button>
+      </div>
+      <div class="result-box" id="ort-result">Ingresá los vectores y hacé click en "Calcular".</div>
+      <div style="margin-top:.8rem;font-size:.85rem;color:var(--gray-lt)">🏅 Calculá 3 complementos distintos para la insignia.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ COORDENADAS ═══════════════ -->
+<div class="page" id="coord">
+  <div class="container">
+    <p style="margin-bottom:1rem"><a href="#" onclick="showPage('inicio',document.getElementById('tb-inicio'));return false" style="color:var(--pur);font-weight:700">← Volver al inicio</a></p>
+    <div class="stitle"><span class="ico">📌</span> Coordenadas en una base</div>
+
+    <div class="grid g2">
+      <div class="card pu">
+        <h3>Definición — Coordenadas $[v]_B$</h3>
+        <p>Si $B=\{b_1,\ldots,b_n\}$ es base de $\mathbb{R}^n$, todo $v\in\mathbb{R}^n$ se escribe de forma <strong>única</strong> como:</p>
+        <p style="text-align:center;margin:.5rem 0">$v = \alpha_1 b_1 + \alpha_2 b_2 + \cdots + \alpha_n b_n$</p>
+        <p>Los escalares $(\alpha_1,\ldots,\alpha_n)$ se llaman <strong>coordenadas de $v$ en la base $B$</strong>, escritas $[v]_B$.</p>
+      </div>
+      <div class="card bl">
+        <h3>Proceso — cómo calcular $[v]_B$</h3>
+        <ol style="margin-left:1.2rem;line-height:2;font-size:.9rem">
+          <li>Plantear $\alpha_1 b_1 + \cdots + \alpha_n b_n = v$</li>
+          <li>Armar la matriz ampliada $[B\,|\,v]$ donde las columnas de $B$ son los vectores de la base</li>
+          <li>Resolver el sistema por Gauss-Jordan</li>
+          <li>Las soluciones son $[v]_B = (\alpha_1,\ldots,\alpha_n)$</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tip" style="margin-top:1rem">💡 <div>Si la base es la canónica $E = \{e_1,\ldots,e_n\}$, entonces $[v]_E = v$ (las coordenadas son las componentes habituales). La gracia aparece con bases no canónicas.</div></div>
+
+    <div class="stitle"><span class="ico">🧪</span> Ejemplo resuelto — Ejercicio 3 estilo parcial</div>
+    <div class="card" style="margin-bottom:1rem">
+      <h3>Enunciado</h3>
+      <p>Sea $B=\{b_1=(1,1,0),\; b_2=(0,1,1),\; b_3=(1,0,1)\}$ base de $\mathbb{R}^3$. Hallar las coordenadas de $v=(2,4,4)$ en la base $B$.</p>
+    </div>
+
+    <details>
+      <summary>Paso 1 — Plantear el sistema</summary>
+      <div class="dbody">
+        <p>Queremos $\alpha b_1 + \beta b_2 + \gamma b_3 = v$, es decir:</p>
+        <p>$\alpha(1,1,0) + \beta(0,1,1) + \gamma(1,0,1) = (2,4,4)$</p>
+        <p>Por componentes:</p>
+        <ul style="margin-left:1.2rem;line-height:2">
+          <li>$\alpha + \gamma = 2$ &nbsp;&nbsp; (I)</li>
+          <li>$\alpha + \beta = 4$ &nbsp;&nbsp; (II)</li>
+          <li>$\beta + \gamma = 4$ &nbsp;&nbsp; (III)</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary>Paso 2 — Resolver con matriz ampliada</summary>
+      <div class="dbody">
+        <div class="mat-display">
+          <table>
+            <tr><td class="pivot">1</td><td>0</td><td>1</td><td class="bar">2</td></tr>
+            <tr><td>1</td><td class="pivot">1</td><td>0</td><td class="bar">4</td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td class="bar">4</td></tr>
+          </table>
+        </div>
+        <p>$F_2 \to F_2 - F_1$:</p>
+        <div class="mat-display">
+          <table>
+            <tr><td class="pivot">1</td><td>0</td><td>1</td><td class="bar">2</td></tr>
+            <tr><td>0</td><td class="pivot">1</td><td>-1</td><td class="bar">2</td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td class="bar">4</td></tr>
+          </table>
+        </div>
+        <p>$F_3 \to F_3 - F_2$:</p>
+        <div class="mat-display">
+          <table>
+            <tr><td class="pivot">1</td><td>0</td><td>1</td><td class="bar">2</td></tr>
+            <tr><td>0</td><td class="pivot">1</td><td>-1</td><td class="bar">2</td></tr>
+            <tr><td>0</td><td>0</td><td class="pivot">2</td><td class="bar">2</td></tr>
+          </table>
+        </div>
+      </div>
+    </details>
+
+    <details open>
+      <summary>Paso 3 — Sustitución hacia atrás y resultado</summary>
+      <div class="dbody">
+        <p>$2\gamma = 2 \Rightarrow \gamma = 1$</p>
+        <p>$\beta - \gamma = 2 \Rightarrow \beta = 3$</p>
+        <p>$\alpha + \gamma = 2 \Rightarrow \alpha = 1$</p>
+        <p>$$[v]_B = (1,\, 3,\, 1)$$</p>
+        <div class="tip">✅ <div><strong>Verificación:</strong> $1\cdot(1,1,0) + 3\cdot(0,1,1) + 1\cdot(1,0,1) = (1+0+1,\, 1+3+0,\, 0+3+1) = (2,4,4)$ ✓</div></div>
+      </div>
+    </details>
+
+    <div class="stitle"><span class="ico">🎮</span> Simulador — Coordenadas en una base de $\mathbb{R}^3$</div>
+    <div class="tip">💡 <div>Ingresá los vectores de la base $B$ (cada fila = un vector) y el vector $v$. El simulador arma el sistema y lo resuelve paso a paso.</div></div>
+    <div class="sim">
+      <p style="font-size:.88rem;font-weight:700;color:var(--pur);margin-bottom:.6rem">Hallar $[v]_B$ resolviendo $\alpha_1 b_1 + \alpha_2 b_2 + \alpha_3 b_3 = v$.</p>
+      <div class="mat-inputs-row">
+        <div class="mat-input-wrap">
+          <span class="mat-label">Base $B$ (filas = vectores $b_1, b_2, b_3$)</span>
+          <div class="mat-input-grid" style="grid-template-columns:1fr 1fr 1fr">
+            <input type="number" id="b11" value="1"><input type="number" id="b12" value="1"><input type="number" id="b13" value="0">
+            <input type="number" id="b21" value="0"><input type="number" id="b22" value="1"><input type="number" id="b23" value="1">
+            <input type="number" id="b31" value="1"><input type="number" id="b32" value="0"><input type="number" id="b33" value="1">
+          </div>
+        </div>
+        <div class="mat-input-wrap">
+          <span class="mat-label">Vector $v$</span>
+          <div class="mat-input-grid" style="grid-template-columns:1fr">
+            <input type="number" id="vx" value="2">
+            <input type="number" id="vy" value="4">
+            <input type="number" id="vz" value="4">
+          </div>
+        </div>
+      </div>
+      <div class="sim-controls">
+        <button class="sim-btn" onclick="calcCoordenadas()">Calcular $[v]_B$</button>
+        <button class="sim-btn ghost" onclick="coordPreset('ej3')">Cargar EJ3</button>
+        <button class="sim-btn ghost" onclick="coordPreset('canon')">Base canónica</button>
+        <button class="sim-btn ghost" onclick="coordPreset('otro')">Otro ejemplo</button>
+      </div>
+      <div id="coord-result" class="result-box">Ingresá los datos y hacé click en "Calcular".</div>
+      <div style="margin-top:.8rem;font-size:.85rem;color:var(--gray-lt)">🏅 Resolvé 3 problemas distintos para la insignia.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ TRANSFORMACIONES LINEALES ═══════════════ -->
+<div class="page" id="tl">
+  <div class="container">
+    <p style="margin-bottom:1rem"><a href="#" onclick="showPage('inicio',document.getElementById('tb-inicio'));return false" style="color:var(--pur);font-weight:700">← Volver al inicio</a></p>
+    <div class="stitle"><span class="ico">🔁</span> Transformaciones lineales</div>
+
+    <div class="grid g2">
+      <div class="card pu">
+        <h3>Definición — Transformación lineal</h3>
+        <p>$T:\mathbb{R}^n \to \mathbb{R}^m$ es <strong>transformación lineal</strong> si:</p>
+        <ul style="margin:.4rem 0 0 1.2rem;line-height:2">
+          <li>$T(u+v) = T(u) + T(v)$ para todo $u,v\in\mathbb{R}^n$</li>
+          <li>$T(\alpha u) = \alpha\, T(u)$ para todo $\alpha\in\mathbb{R}$, $u\in\mathbb{R}^n$</li>
+        </ul>
+        <p style="margin-top:.4rem">Equivalente: $T(\alpha u + \beta v) = \alpha T(u) + \beta T(v)$</p>
+      </div>
+      <div class="card bl">
+        <h3>Consecuencias inmediatas</h3>
+        <ul style="margin-left:1.2rem;line-height:2;font-size:.9rem">
+          <li>$T(\vec{0}) = \vec{0}$ (el nulo va al nulo)</li>
+          <li>$T(-v) = -T(v)$</li>
+          <li>$T\left(\sum \alpha_i v_i\right) = \sum \alpha_i T(v_i)$ (linearidad de c.l.)</li>
+        </ul>
+        <p style="margin-top:.4rem">Esta última propiedad es la clave para el Ejercicio 4 del parcial.</p>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">🔑</span> Existencia y unicidad</div>
+    <div class="card or" style="margin-bottom:1rem">
+      <h3>Teorema fundamental (Ejercicio 4 del parcial)</h3>
+      <p style="font-size:.9rem;margin-bottom:.5rem">Si $\{v_1,v_2,\ldots,v_n\}$ es <strong>base de $\mathbb{R}^n$</strong> y $w_1,\ldots,w_n \in \mathbb{R}^m$ son vectores cualesquiera del codominio, entonces <strong>existe una única</strong> transformación lineal $T:\mathbb{R}^n\to\mathbb{R}^m$ tal que $T(v_i)=w_i$ para todo $i$.</p>
+      <p style="font-size:.9rem"><strong>¿Cuándo forman base?</strong> Los $v_i$ forman base si $\det[v_1\mid v_2\mid\cdots\mid v_n] \neq 0$ (o equivalentemente, $\text{Rg}=n$).</p>
+    </div>
+
+    <div class="stitle"><span class="ico">🧪</span> Ejemplo resuelto — Ejercicio 4 estilo parcial</div>
+    <div class="card" style="margin-bottom:1rem">
+      <h3>Enunciado</h3>
+      <p>Sea $T:\mathbb{R}^3\to\mathbb{R}^3$ lineal tal que $T(1,0,1)=(1,1,0)$, $T(0,1,0)=(0,1,1)$ y $T(1,1,0)=(1,0,1)$. (a) Verificar que $\{v_1,v_2,v_3\}=\{(1,0,1),(0,1,0),(1,1,0)\}$ es base de $\mathbb{R}^3$. (b) Hallar $T(e_1), T(e_2), T(e_3)$. (c) Escribir la fórmula general de $T$.</p>
+    </div>
+
+    <details>
+      <summary>Parte (a) — Verificar que es base</summary>
+      <div class="dbody">
+        <p>Armamos la matriz con los vectores como filas y calculamos el determinante:</p>
+        <div class="mat-display">
+          <table>
+            <tr><td class="pivot">1</td><td>0</td><td>1</td></tr>
+            <tr><td>0</td><td class="pivot">1</td><td>0</td></tr>
+            <tr><td>1</td><td>1</td><td>0</td></tr>
+          </table>
+        </div>
+        <p>$\det = 1\cdot(1\cdot0-0\cdot1) - 0 + 1\cdot(0\cdot1-1\cdot1) = 0 + 0 + (0-1) = -1 \neq 0$</p>
+        <p>✅ Los tres vectores son LI → forman base de $\mathbb{R}^3$ → <strong>existe una única</strong> TL que los transforma en los valores dados.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Parte (b) — Hallar $T(e_1), T(e_2), T(e_3)$</summary>
+      <div class="dbody">
+        <p>Expresamos cada vector canónico en la base $\{v_1,v_2,v_3\}$. Para $e_j = \alpha v_1 + \beta v_2 + \gamma v_3$, necesitamos resolver:</p>
+        <div class="mat-display">
+          <table>
+            <tr>
+              <td>$\alpha(1,0,1)+\beta(0,1,0)+\gamma(1,1,0)=(x_1,x_2,x_3)$</td>
+            </tr>
+          </table>
+        </div>
+        <p>El sistema es: $\alpha+\gamma=x_1$; $\beta+\gamma=x_2$; $\alpha=x_3$</p>
+        <br/>
+        <p><strong>Para $e_1=(1,0,0)$:</strong> $\alpha=0$, $\alpha+\gamma=1\Rightarrow\gamma=1$, $\beta+\gamma=0\Rightarrow\beta=-1$</p>
+        <p>$T(e_1) = 0\cdot T(v_1) + (-1)\cdot T(v_2) + 1\cdot T(v_3) = 0-(0,1,1)+(1,0,1) = (1,-1,0)$</p>
+        <br/>
+        <p><strong>Para $e_2=(0,1,0)$:</strong> $\alpha=0$, $\alpha+\gamma=0\Rightarrow\gamma=0$, $\beta+\gamma=1\Rightarrow\beta=1$</p>
+        <p>$T(e_2) = 0\cdot T(v_1) + 1\cdot T(v_2) + 0\cdot T(v_3) = T(v_2) = (0,1,1)$</p>
+        <br/>
+        <p><strong>Para $e_3=(0,0,1)$:</strong> $\alpha=1$, $\alpha+\gamma=0\Rightarrow\gamma=-1$, $\beta+\gamma=0\Rightarrow\beta=1$</p>
+        <p>$T(e_3) = 1\cdot T(v_1) + 1\cdot T(v_2) + (-1)\cdot T(v_3) = (1,1,0)+(0,1,1)-(1,0,1) = (0,2,0)$</p>
+      </div>
+    </details>
+
+    <details open>
+      <summary>Parte (c) — Fórmula general de $T$</summary>
+      <div class="dbody">
+        <p>Usando linealidad: $T(x_1,x_2,x_3) = x_1 T(e_1) + x_2 T(e_2) + x_3 T(e_3)$</p>
+        <p>$= x_1(1,-1,0) + x_2(0,1,1) + x_3(0,2,0)$</p>
+        <p>$$\boxed{T(x_1,x_2,x_3) = \big(x_1,\; -x_1+x_2+2x_3,\; x_2\big)}$$</p>
+        <div class="tip">✅ <div><strong>Verificación:</strong>
+          $T(1,0,1)=(1,-1+0+2,0)=(1,1,0)$ ✓ &nbsp;|&nbsp;
+          $T(0,1,0)=(0,0+1+0,1)=(0,1,1)$ ✓ &nbsp;|&nbsp;
+          $T(1,1,0)=(1,-1+1+0,1)=(1,0,1)$ ✓
+        </div></div>
+        <p style="margin-top:.7rem">La <strong>matriz de la transformación</strong> (columnas = $T(e_i)$):</p>
+        <div class="mat-display">
+          <table>
+            <tr><td>1</td><td>0</td><td>0</td></tr>
+            <tr><td>-1</td><td>1</td><td>2</td></tr>
+            <tr><td>0</td><td>1</td><td>0</td></tr>
+          </table>
+        </div>
+      </div>
+    </details>
+
+    <div class="stitle"><span class="ico">📊</span> Núcleo e imagen</div>
+    <div class="grid g2">
+      <div class="card te">
+        <h3>Núcleo $\ker(T)$</h3>
+        <p>$\ker(T) = \{x \in \mathbb{R}^n : T(x) = 0\}$</p>
+        <p style="margin-top:.4rem">Es un <strong>subespacio de $\mathbb{R}^n$</strong>. Se halla resolviendo el sistema homogéneo con la matriz de $T$.</p>
+        <p style="margin-top:.4rem">$\dim(\ker T) = $ <em>nullidad</em> de $T$.</p>
+      </div>
+      <div class="card gr">
+        <h3>Imagen $\text{Im}(T)$</h3>
+        <p>$\text{Im}(T) = \{T(x) : x \in \mathbb{R}^n\}$</p>
+        <p style="margin-top:.4rem">Es un <strong>subespacio de $\mathbb{R}^m$</strong>. Generado por las columnas de la matriz de $T$.</p>
+        <p style="margin-top:.4rem"><strong>Teorema rango-nulidad:</strong> $\dim(\ker T) + \dim(\text{Im}\, T) = n$</p>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:1.5rem">🏅 <strong>Pista para la insignia:</strong> Verificá los datos del EJ4 (expandí los pasos y comprobá los resultados) para desbloquear "🔁 Maestro TL".</div>
+  </div>
+</div>
+
+<!-- ═══════════════ CHEATSHEET ═══════════════ -->
+<div class="page" id="cheat">
+  <div class="container">
+    <div class="stitle"><span class="ico">📋</span> Cheatsheet — Unidades 3-4</div>
+    <div class="cheat">
+      <h2>🔑 Fórmulas esenciales para el parcial</h2>
+      <div class="cgrid">
+        <div class="citem">
+          <div class="lbl">Dimensión de subespacio</div>
+          <div class="cf">dim(S) = n − Rg(A)<br/>A = matriz del sistema Ax=0</div>
+        </div>
+        <div class="citem">
+          <div class="lbl">Base del subespacio</div>
+          <div class="cf">Escalonar A → variables libres son los parámetros → cada parámetro da un vector de la base</div>
+        </div>
+        <div class="citem">
+          <div class="lbl">Teorema de la dimensión</div>
+          <div class="cf">dim(S+T) = dim(S) + dim(T) − dim(S∩T)</div>
+        </div>
+        <div class="citem">
+          <div class="lbl">Suma directa S⊕T</div>
+          <div class="cf">S∩T = {0} ⟺ dim(S+T) = dim(S) + dim(T)</div>
+        </div>
+        <div class="citem">
+          <div class="lbl">Complemento ortogonal</div>
+          <div class="cf">S⊥ = {v : ⟨v,s⟩=0 ∀s∈S}<br/>dim(S⊥) = n − dim(S)<br/>S ⊕ S⊥ = Rⁿ siempre</div>
+        </div>
+        <div class="citem">
+          <div class="lbl">Coordenadas [v]_B</div>
+          <div class="cf">Resolver: α₁b₁+⋯+αₙbₙ = v<br/>Equivale a [b₁|⋯|bₙ]·[v]_B = v</div>
+        </div>
+        <div class="citem">
+          <div class="lbl">Existencia y unicidad de TL</div>
+          <div class="cf">{v₁,…,vₙ} base de Rⁿ → ∃! T lineal con T(vᵢ)=wᵢ</div>
+        </div>
+        <div class="citem">
+          <div class="lbl">Fórmula general de T</div>
+          <div class="cf">T(x) = x₁T(e₁)+x₂T(e₂)+⋯+xₙT(eₙ)<br/>columnas de [T] = T(eᵢ)</div>
+        </div>
+        <div class="citem">
+          <div class="lbl">Rango-nulidad</div>
+          <div class="cf">dim(ker T) + dim(Im T) = n (dim del dominio)</div>
+        </div>
+        <div class="citem">
+          <div class="lbl">Verificar base</div>
+          <div class="cf">det[v₁|v₂|…|vₙ] ≠ 0 ⟺ son LI ⟺ forman base de Rⁿ</div>
+        </div>
+        <div class="citem">
+          <div class="lbl">S=T (igualdad de subespacios)</div>
+          <div class="cf">dim(S)=dim(T) y Rg([gen(S)|gen(T)]) = dim(S)</div>
+        </div>
+        <div class="citem">
+          <div class="lbl">S+T = Rⁿ</div>
+          <div class="cf">Rg([gen(S)|gen(T)]) = n (como matriz de columnas)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stitle"><span class="ico">⚠️</span> Errores frecuentes</div>
+    <div class="grid g2">
+      <div class="card re">
+        <h3>⚠️ No verificar que es base antes de concluir unicidad de TL</h3>
+        <p>Si los vectores del dominio NO son base, puede no existir o no ser única la TL. Siempre verificar det≠0.</p>
+      </div>
+      <div class="card re">
+        <h3>⚠️ Confundir dim(S+T) con dim(S)+dim(T)</h3>
+        <p>Esa fórmula solo vale si la suma es directa. En general hay que restar la dimensión de la intersección.</p>
+      </div>
+      <div class="card or">
+        <h3>⚠️ Al buscar S⊥, olvidar un generador</h3>
+        <p>Si S tiene 2 generadores, el sistema para S⊥ tiene 2 ecuaciones. Con 1 solo generador se puede pasar por alto la segunda condición.</p>
+      </div>
+      <div class="card or">
+        <h3>⚠️ Coordenadas: confundir filas con columnas</h3>
+        <p>En $[B|v]$, los vectores de la base van como <strong>columnas</strong> de $B$ (porque la ec. es $B\alpha=v$). Si ponés los vectores como filas transpuesta el sistema.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ RESUMEN 20MIN ═══════════════ -->
+<div class="page" id="resumen">
+  <div class="container">
+    <div class="stitle"><span class="ico">⚡</span> Resumen 20 minutos — 2º Parcial</div>
+    <div class="tip">⏱️ <div>Este resumen cubre todo lo que necesitás en 20 minutos antes del parcial. Foco en los 4 ejercicios tipo que entraron en el simulacro.</div></div>
+
+    <details open>
+      <summary>⚡ EJ1 — Subespacio como solución de Ax=0 (5 min)</summary>
+      <div class="dbody">
+        <p><strong>Qué te piden:</strong> base y dim de $S=\{x\in\mathbb{R}^n: Ax=0\}$.</p>
+        <p><strong>Receta:</strong></p>
+        <ol style="margin-left:1.2rem;line-height:2">
+          <li>Escalonar $A$ con operaciones de fila.</li>
+          <li>Contar pivotes → eso es Rg(A).</li>
+          <li>$\dim(S) = n - \text{Rg}(A)$ → esa es la cantidad de vectores en la base.</li>
+          <li>Las variables libres son los parámetros $s, t, \ldots$. Despejar las pivote en función de las libres.</li>
+          <li>Escribir el vector solución general: cada parámetro da un vector de la base.</li>
+        </ol>
+        <p><strong>Pitfall:</strong> no olvides que el sistema es homogéneo (término independiente = 0). No hace falta armar la columna b.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>⚡ EJ2 — Suma y complemento ortogonal (5 min)</summary>
+      <div class="dbody">
+        <p><strong>Generadores de un subespacio definido por ecuaciones:</strong> despejá una variable en función de las otras (variables libres) → cada variable libre da un generador.</p>
+        <p><strong>¿S+T = Rⁿ?</strong> Armá una matriz con todos los generadores. Si el rango es $n$ → sí.</p>
+        <p><strong>Suma directa:</strong> usar Teorema de la dim para hallar dim(S∩T). Si es 0 → suma directa.</p>
+        <p><strong>Complemento ortogonal $S^\perp$:</strong> plantear sistema de productos internos = 0 con cada generador de S. Las soluciones (variables libres) generan $S^\perp$. Verificar $\dim(S)+\dim(S^\perp)=n$.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>⚡ EJ3 — Coordenadas en una base (5 min)</summary>
+      <div class="dbody">
+        <p><strong>Sistema a resolver:</strong> $\alpha_1 b_1 + \cdots + \alpha_n b_n = v$ → matriz $[B|v]$ donde <em>columnas de B = vectores de la base</em>.</p>
+        <p><strong>Gauss-Jordan</strong> → solución única (B es base → det≠0 → siempre única solución).</p>
+        <p><strong>Verificación rápida:</strong> $\alpha_1 b_1 + \alpha_2 b_2 + \alpha_3 b_3$ tiene que dar exactamente $v$. No saltees este paso en el parcial.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>⚡ EJ4 — Transformación lineal (5 min)</summary>
+      <div class="dbody">
+        <p><strong>Paso 1:</strong> armar la matriz con $\{v_1,v_2,v_3\}$ como filas (o columnas) y calcular el determinante. Si det≠0 → única TL. <em>Siempre escribir "por lo tanto existe una única TL".</em></p>
+        <p><strong>Paso 2:</strong> para cada $e_j$ resolver $\alpha_1 v_1 + \alpha_2 v_2 + \alpha_3 v_3 = e_j$ (mismo sistema 3×3, solo cambia el lado derecho). Usar linealidad: $T(e_j) = \alpha_1 T(v_1) + \alpha_2 T(v_2) + \alpha_3 T(v_3)$.</p>
+        <p><strong>Paso 3:</strong> $T(x_1,x_2,x_3) = x_1 T(e_1) + x_2 T(e_2) + x_3 T(e_3)$. Expandir y simplificar.</p>
+        <p><strong>Verificación:</strong> sustituir $v_1, v_2, v_3$ en la fórmula y chequear que da los valores dados.</p>
+      </div>
+    </details>
+
+    <div class="note" style="margin-top:1.5rem">🏅 Leé todo el resumen para desbloquear la insignia "⚡ Listo para el parcial".</div>
+    <button class="sim-btn green" style="margin-top:1rem" onclick="unlockBadge('resumen');addExp(100);this.textContent='✅ Insignia desbloqueada'">✅ Leí el resumen completo</button>
+  </div>
+</div>
+
+<!-- ═══════════════ MACHETE ═══════════════ -->
+<div class="page" id="machete">
+  <div class="container">
+    <div class="stitle"><span class="ico">📚</span> Machete visual — 2º Parcial</div>
+
+    <div class="cheat" style="background:linear-gradient(135deg,#1e3a5f 0%,#1d4ed8 100%)">
+      <h2>📐 SUBESPACIOS (EJ1)</h2>
+      <div class="cgrid">
+        <div class="citem">
+          <div class="lbl">Pasos</div>
+          <div class="cf">1. Escribir A del sistema Ax=0<br/>2. Escalonar A<br/>3. Contar pivotes = Rg(A)<br/>4. dim(S) = n − Rg(A)<br/>5. Parametrizar variables libres<br/>6. Leer la base del vector solución</div>
+        </div>
+        <div class="citem">
+          <div class="lbl">Fórmula clave</div>
+          <div class="cf">dim(S) = n − Rg(A)<br/>——<br/>n = #incógnitas<br/>Rg = #pivotes tras escalonar</div>
+        </div>
+        <div class="citem">
+          <div class="lbl">¿S=T?</div>
+          <div class="cf">1. dim(S)=dim(T)?<br/>2. Rg([gen(S) | gen(T)]) = dim?<br/>Si sí → S=T ✓</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cheat" style="background:linear-gradient(135deg,#064e3b 0%,#0d9488 100%)">
+      <h2>➕ SUMA Y ORTOGONAL (EJ2)</h2>
+      <div class="cgrid">
+        <div class="citem">
+          <div class="lbl">S+T = Rⁿ?</div>
+          <div class="cf">Rg( todos los generadores ) = n → SÍ<br/>dim(S+T) = dim(S)+dim(T)−dim(S∩T)</div>
+        </div>
+        <div class="citem">
+          <div class="lbl">Suma directa</div>
+          <div class="cf">S∩T={0} → S⊕T<br/>⟺ dim(S+T)=dim(S)+dim(T)</div>
+        </div>
+        <div class="citem">
+          <div class="lbl">Complemento S⊥</div>
+          <div class="cf">Sistema: ⟨w,gᵢ⟩=0 para cada generador gᵢ de S.<br/>Resolver → variables libres generan S⊥<br/>S ⊕ S⊥ = Rⁿ siempre</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cheat" style="background:linear-gradient(135deg,#4a1942 0%,#9d174d 100%)">
+      <h2>📌 COORDENADAS (EJ3)</h2>
+      <div class="cgrid">
+        <div class="citem">
+          <div class="lbl">Pasos</div>
+          <div class="cf">1. Plantear α₁b₁+⋯+αₙbₙ=v<br/>2. Armar [B|v] (cols. de B = bᵢ)<br/>3. Gauss-Jordan<br/>4. [v]_B = (α₁,…,αₙ)<br/>5. Verificar: reconstruir v</div>
+        </div>
+        <div class="citem">
+          <div class="lbl">Recordá</div>
+          <div class="cf">Sistema siempre tiene única solución si B es base (det≠0)<br/>Si la base es la canónica: [v]_E = v</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cheat" style="background:linear-gradient(135deg,#431407 0%,#c2410c 100%)">
+      <h2>🔁 TRANS. LINEALES (EJ4)</h2>
+      <div class="cgrid">
+        <div class="citem">
+          <div class="lbl">Pasos</div>
+          <div class="cf">1. det[v₁|v₂|v₃] ≠ 0 → ∃! T<br/>2. Para cada eⱼ: resolver α₁v₁+…+αₙvₙ=eⱼ<br/>3. T(eⱼ) = α₁T(v₁)+⋯+αₙT(vₙ)<br/>4. T(x) = Σxᵢ·T(eᵢ)<br/>5. Verificar con los datos originales</div>
+        </div>
+        <div class="citem">
+          <div class="lbl">Matriz de T</div>
+          <div class="cf">Columna j = T(eⱼ)<br/>T(x) = [T] · x</div>
+        </div>
+        <div class="citem">
+          <div class="lbl">Rango-nulidad</div>
+          <div class="cf">dim(ker T)+dim(Im T)=n<br/>ker T: resolver Tx=0<br/>Im T: columnas de [T]</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:1.5rem">🏅 Revisá el machete completo para la insignia "📚 Repasaste todo".</div>
+    <button class="sim-btn green" style="margin-top:1rem" onclick="unlockBadge('machete');addExp(100);this.textContent='✅ Insignia desbloqueada'">✅ Revisé el machete</button>
+  </div>
+</div>
+
+<!-- ═══════════════ QUIZ ═══════════════ -->
+<div class="page" id="quiz">
+  <div class="container">
+    <div class="stitle"><span class="ico">🎓</span> Quiz — Unidades 3-4</div>
+    <div id="quiz-container"></div>
+  </div>
+</div>
+
+<nav class="apuntes-footer-nav">
+  <span class="apuntes-footer-nav__label">Más de esta materia:</span>
+  <a href="teoria.html">Unidad 1</a>
+  <a href="teoria-unidad2.html">Unidad 2</a>
+  <a href="juegos.html">🎮 Juegos</a>
+</nav>
+
+<script>
+// ═══════════════════════════════════════════════════
+// CONSTANTES Y ESTADO
+// ═══════════════════════════════════════════════════
+const LS_KEY = 'alu3_v1';
+const LS_QUIZ = 'alu3_quiz_v1';
+
+const BADGE_DEF = [
+  {id:'sub',    ico:'📐', name:'Maestro de Subespacios', desc:'Completaste el EJ1'},
+  {id:'suma',   ico:'➕', name:'Suma Directa',           desc:'Calculaste el complemento ortogonal'},
+  {id:'coord',  ico:'📌', name:'Coordenadas Pro',        desc:'Usaste el simulador de coordenadas'},
+  {id:'tl',     ico:'🔁', name:'Maestro TL',             desc:'Verificaste el EJ4 de TL'},
+  {id:'quiz',   ico:'🎓', name:'Examinado',              desc:'Aprobaste el quiz (≥9/12)'},
+  {id:'master', ico:'🏆', name:'Perfecto',               desc:'12/12 en el quiz'},
+  {id:'resumen',ico:'⚡', name:'Listo para el parcial',  desc:'Leíste el resumen completo'},
+  {id:'machete',ico:'📚', name:'Repasaste todo',         desc:'Revisaste el machete completo'},
+];
+
+let unlockedBadges = JSON.parse(localStorage.getItem(LS_KEY)||'[]');
+let expTotal = unlockedBadges.length * 100;
+
+// ═══════════════════════════════════════════════════
+// NAVEGACIÓN POR TABS
+// ═══════════════════════════════════════════════════
+function showPage(id, btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  window.scrollTo(0,0);
+  // Re-render math in dynamically generated content
+  if(typeof renderMathInElement !== 'undefined'){
+    renderMathInElement(document.getElementById(id),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// BADGES & EXP
+// ═══════════════════════════════════════════════════
+function unlockBadge(id){
+  if(unlockedBadges.includes(id)) return;
+  unlockedBadges.push(id);
+  localStorage.setItem(LS_KEY, JSON.stringify(unlockedBadges));
+  addExp(100);
+  const def = BADGE_DEF.find(b=>b.id===id);
+  if(def){
+    document.getElementById('toast-ico').textContent = def.ico;
+    document.getElementById('toast-name').textContent = def.name;
+    const toast = document.getElementById('badge-toast');
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'), 3200);
+  }
+  refreshUI();
+}
+
+function addExp(n){
+  expTotal = Math.min(800, expTotal + n);
+  refreshExp();
+}
+
+function refreshExp(){
+  const pct = Math.round(expTotal/800*100);
+  document.getElementById('exp-bar').style.width = pct+'%';
+  document.getElementById('exp-label').textContent = expTotal+' / 800 EXP — '+
+    (expTotal>=800?'¡Unidad completada! 🎉':(800-expTotal)+' EXP restantes');
+}
+
+function refreshUI(){
+  const count = unlockedBadges.length;
+  document.getElementById('nav-badges').textContent = '🏅 '+count+'/8';
+  document.getElementById('badge-count-chip').textContent = count+'/8';
+  document.getElementById('global-progress').style.width = Math.round(count/8*100)+'%';
+
+  const grid = document.getElementById('badges-grid');
+  grid.innerHTML = BADGE_DEF.map(b=>{
+    const unlocked = unlockedBadges.includes(b.id);
+    return '<div class="badge-card '+(unlocked?'unlocked':'locked')+'"><span class="bic">'+b.ico+'</span><div class="bname">'+b.name+'</div><div class="bdesc">'+b.desc+'</div></div>';
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// PRÁCTICA GUIADA (acordeón manual)
+// ═══════════════════════════════════════════════════
+function toggleHint(cardId){
+  const el = document.getElementById('hint-'+cardId);
+  el.classList.toggle('show');
+}
+function toggleSol(cardId){
+  const el = document.getElementById('sol-'+cardId);
+  el.classList.toggle('show');
+}
+function markDone(cardId, badgeId){
+  const card = document.getElementById(cardId);
+  card.classList.add('solved');
+  document.getElementById('done-'+cardId).innerHTML = '<p class="ex-check">✅ ¡Ejercicio completado! +100 EXP</p>';
+  unlockBadge(badgeId);
+  addExp(100);
+}
+
+// ═══════════════════════════════════════════════════
+// SIMULADOR COMPLEMENTO ORTOGONAL
+// ═══════════════════════════════════════════════════
+let ortCount = 0;
+
+function simOrtPreset(key){
+  const presets = {
+    ej2:  {g1:[-1,1,0], g2:[1,0,1], vo:[1,1,-1]},
+    xy:   {g1:[1,0,0],  g2:[0,1,0], vo:[0,0,1]},
+  };
+  const p = presets[key];
+  if(!p) return;
+  document.getElementById('g1x').value=p.g1[0]; document.getElementById('g1y').value=p.g1[1]; document.getElementById('g1z').value=p.g1[2];
+  document.getElementById('g2x').value=p.g2[0]; document.getElementById('g2y').value=p.g2[1]; document.getElementById('g2z').value=p.g2[2];
+  document.getElementById('vox').value=p.vo[0]; document.getElementById('voy').value=p.vo[1]; document.getElementById('voz').value=p.vo[2];
+  calcOrtogonal();
+}
+
+function crossProduct(u,v){
+  return [u[1]*v[2]-u[2]*v[1], u[2]*v[0]-u[0]*v[2], u[0]*v[1]-u[1]*v[0]];
+}
+function dot(u,v){ return u[0]*v[0]+u[1]*v[1]+u[2]*v[2]; }
+function norm2(u){ return Math.sqrt(dot(u,u)); }
+function fmt(x){ const r=Math.round(x*1e6)/1e6; return Object.is(r,-0)?0:r; }
+
+function calcOrtogonal(){
+  const g1 = [parseFloat(document.getElementById('g1x').value)||0,
+               parseFloat(document.getElementById('g1y').value)||0,
+               parseFloat(document.getElementById('g1z').value)||0];
+  const g2 = [parseFloat(document.getElementById('g2x').value)||0,
+               parseFloat(document.getElementById('g2y').value)||0,
+               parseFloat(document.getElementById('g2z').value)||0];
+  const vo = [parseFloat(document.getElementById('vox').value)||0,
+               parseFloat(document.getElementById('voy').value)||0,
+               parseFloat(document.getElementById('voz').value)||0];
+
+  const cp = crossProduct(g1,g2);
+  const n = norm2(cp);
+  const resEl = document.getElementById('ort-result');
+
+  if(n < 1e-10){
+    resEl.className='result-box no';
+    resEl.textContent='⚠️ g₁ y g₂ son paralelos (o alguno es el vector nulo). No generan un subespacio 2D — el complemento ortogonal no está bien definido con este método.';
+    return;
+  }
+
+  // Verificar si vo está en S⊥
+  const d1 = fmt(dot(vo,g1)), d2 = fmt(dot(vo,g2));
+  const ortOk = Math.abs(d1)<1e-9 && Math.abs(d2)<1e-9;
+
+  let html = '✅ <strong>Resultado:</strong><br/>';
+  html += 'g₁ = ('+g1.join(', ')+'), g₂ = ('+g2.join(', ')+')<br/>';
+  html += '<strong>n = g₁ × g₂ = ('+cp.map(fmt).join(', ')+')</strong><br/>';
+  html += '→ S⊥ = span{('+cp.map(fmt).join(', ')+')}, dim(S⊥) = 1<br/><br/>';
+  html += '<strong>Verificación de ortogonalidad:</strong><br/>';
+  html += '⟨n, g₁⟩ = '+fmt(dot(cp,g1))+' '+(Math.abs(dot(cp,g1))<1e-9?'✓':'✗')+'<br/>';
+  html += '⟨n, g₂⟩ = '+fmt(dot(cp,g2))+' '+(Math.abs(dot(cp,g2))<1e-9?'✓':'✗')+'<br/><br/>';
+  html += '<strong>¿v=('+vo.join(', ')+') ∈ S⊥?</strong> ';
+  html += '⟨v,g₁⟩='+d1+' · ⟨v,g₂⟩='+d2+' → '+(ortOk?'✅ SÍ':'❌ NO');
+
+  resEl.className = 'result-box ok';
+  resEl.innerHTML = html;
+
+  ortCount++;
+  if(ortCount>=3){ unlockBadge('suma'); addExp(50); }
+  if(typeof renderMathInElement!=='undefined') renderMathInElement(resEl,{delimiters:[{left:'$',right:'$',display:false}],throwOnError:false});
+}
+
+// ═══════════════════════════════════════════════════
+// SIMULADOR COORDENADAS
+// ═══════════════════════════════════════════════════
+let coordCount = 0;
+
+function coordPreset(key){
+  const p = {
+    ej3:   {B:[[1,1,0],[0,1,1],[1,0,1]],v:[2,4,4]},
+    canon: {B:[[1,0,0],[0,1,0],[0,0,1]],v:[3,5,2]},
+    otro:  {B:[[2,1,0],[1,2,1],[0,1,2]],v:[5,7,6]},
+  }[key];
+  if(!p) return;
+  ['b11','b12','b13'].forEach((id,i)=>document.getElementById(id).value=p.B[0][i]);
+  ['b21','b22','b23'].forEach((id,i)=>document.getElementById(id).value=p.B[1][i]);
+  ['b31','b32','b33'].forEach((id,i)=>document.getElementById(id).value=p.B[2][i]);
+  ['vx','vy','vz'].forEach((id,i)=>document.getElementById(id).value=p.v[i]);
+  calcCoordenadas();
+}
+
+function gauss3x3(M){
+  // M is 3x4 augmented matrix [A|b], solve by partial pivoting
+  // Returns [x1,x2,x3] or null if singular
+  const A = M.map(r=>[...r]);
+  for(let col=0;col<3;col++){
+    let pivRow=-1, pivVal=0;
+    for(let r=col;r<3;r++){ if(Math.abs(A[r][col])>Math.abs(pivVal)){pivVal=A[r][col];pivRow=r;} }
+    if(Math.abs(pivVal)<1e-10) return null;
+    if(pivRow!==col){ const tmp=A[col]; A[col]=A[pivRow]; A[pivRow]=tmp; }
+    const piv=A[col][col];
+    for(let c=col;c<=3;c++) A[col][c]/=piv;
+    for(let r=0;r<3;r++){
+      if(r!==col){
+        const f=A[r][col];
+        for(let c=col;c<=3;c++) A[r][c]-=f*A[col][c];
+      }
+    }
+  }
+  return [fmt(A[0][3]),fmt(A[1][3]),fmt(A[2][3])];
+}
+
+function calcCoordenadas(){
+  const B = [
+    [parseFloat(document.getElementById('b11').value)||0, parseFloat(document.getElementById('b12').value)||0, parseFloat(document.getElementById('b13').value)||0],
+    [parseFloat(document.getElementById('b21').value)||0, parseFloat(document.getElementById('b22').value)||0, parseFloat(document.getElementById('b23').value)||0],
+    [parseFloat(document.getElementById('b31').value)||0, parseFloat(document.getElementById('b32').value)||0, parseFloat(document.getElementById('b33').value)||0],
+  ];
+  const v = [
+    parseFloat(document.getElementById('vx').value)||0,
+    parseFloat(document.getElementById('vy').value)||0,
+    parseFloat(document.getElementById('vz').value)||0,
+  ];
+
+  // Build matrix M[i][j] = B[j][i] (column j of system = vector b_{j+1})
+  const M = [
+    [B[0][0], B[1][0], B[2][0], v[0]],
+    [B[0][1], B[1][1], B[2][1], v[1]],
+    [B[0][2], B[1][2], B[2][2], v[2]],
+  ];
+
+  const resEl = document.getElementById('coord-result');
+  const sol = gauss3x3(M);
+
+  if(!sol){
+    resEl.className='result-box no';
+    resEl.textContent='⚠️ Los vectores de la base NO son linealmente independientes (det=0). No forman base → el problema no tiene solución única.';
+    return;
+  }
+
+  const [a,b2,g] = sol;
+  // Verify
+  const check = [
+    fmt(a*B[0][0]+b2*B[1][0]+g*B[2][0]),
+    fmt(a*B[0][1]+b2*B[1][1]+g*B[2][1]),
+    fmt(a*B[0][2]+b2*B[1][2]+g*B[2][2]),
+  ];
+  const ok = check.every((c,i)=>Math.abs(c-v[i])<1e-7);
+
+  let html = '✅ <strong>Solución:</strong><br/>';
+  html += 'b₁=('+B[0].join(', ')+'), b₂=('+B[1].join(', ')+'), b₃=('+B[2].join(', ')+')<br/>';
+  html += 'v = ('+v.join(', ')+')<br/><br/>';
+  html += '<strong>[v]_B = ('+a+', '+b2+', '+g+')</strong><br/><br/>';
+  html += '<strong>Verificación:</strong> '+a+'·('+B[0].join(',')+') + '+b2+'·('+B[1].join(',')+') + '+g+'·('+B[2].join(',')+')<br/>';
+  html += '= ('+check.join(', ')+') '+(ok?'= ('+v.join(', ')+') ✓':'≠ ('+v.join(', ')+') ✗');
+
+  resEl.className = ok?'result-box ok':'result-box no';
+  resEl.innerHTML = html;
+
+  coordCount++;
+  if(coordCount>=3){ unlockBadge('coord'); addExp(50); }
+}
+
+// ═══════════════════════════════════════════════════
+// QUIZ
+// ═══════════════════════════════════════════════════
+const PREGUNTAS = [
+  // Fácil (4)
+  {q:'¿Qué condiciones debe cumplir $S\\subseteq\\mathbb{R}^n$ para ser subespacio vectorial?',
+   opts:['Contener al $\\vec{0}$ y ser cerrado bajo suma y producto escalar','Solo contener vectores no nulos','Ser un plano que pase por el origen','Contener exactamente $n$ vectores LI'],
+   correct:0, fb:'Las tres condiciones equivalentes: 0∈S, cerrado bajo suma, cerrado bajo producto escalar.'},
+  {q:'Para $A\\in\\mathbb{R}^{3\\times 4}$ con $\\text{Rg}(A)=2$, ¿cuál es $\\dim(S)$ donde $S=\\{x:Ax=0\\}$?',
+   opts:['2','1','3','4'],
+   correct:0, fb:'dim(S) = n − Rg(A) = 4 − 2 = 2.'},
+  {q:'$T:\\mathbb{R}^n\\to\\mathbb{R}^m$ es transformación lineal cuando:',
+   opts:['$T(u+v)=T(u)+T(v)$ y $T(\\alpha u)=\\alpha T(u)$','$T$ preserva normas','$T$ es invertible','$T$ lleva bases en bases'],
+   correct:0, fb:'La definición exacta: linealidad bajo suma y escalares. Las demás son propiedades adicionales que no implican linealidad en general.'},
+  {q:'¿Qué son las coordenadas $[v]_B$ de $v$ en la base $B=\\{b_1,\\ldots,b_n\\}$?',
+   opts:['Los escalares $(\\alpha_1,\\ldots,\\alpha_n)$ tales que $v=\\sum\\alpha_i b_i$','Las componentes de $v$ en la base canónica','Las normas $\\|v-b_i\\|$','El rango de la matriz con columnas $b_i$'],
+   correct:0, fb:'Las coordenadas son los coeficientes únicos de la combinación lineal de v en la base B.'},
+  // Medio (4)
+  {q:'$S_1,S_2\\subset\\mathbb{R}^3$ con $\\dim(S_1)=\\dim(S_2)=2$ y $\\dim(S_1\\cap S_2)=1$. ¿Cuánto vale $\\dim(S_1+S_2)$?',
+   opts:['3','2','4','1'],
+   correct:0, fb:'dim(S₁+S₂) = dim(S₁) + dim(S₂) − dim(S₁∩S₂) = 2+2−1 = 3.'},
+  {q:'$S_1=\\{(x,y,z):\\,x+y-z=0\\}\\subset\\mathbb{R}^3$. ¿Cuál de los siguientes genera $S_1^\\perp$?',
+   opts:['$(1,1,-1)$','$(1,-1,0)$','$(0,0,1)$','$(1,1,1)$'],
+   correct:0, fb:'S₁ tiene ecuación x+y−z=0, cuyo vector normal es (1,1,−1). Ese normal genera S₁⊥. Verificar: (1,1,−1)·(−1,1,0)=0 ✓ y (1,1,−1)·(1,0,1)=0 ✓.'},
+  {q:'$B=\\{(1,1),(1,2)\\}$ base de $\\mathbb{R}^2$, $v=(3,5)$. ¿Cuáles son $[v]_B$?',
+   opts:['$(1,2)$','$(3,5)$','$(2,1)$','$(1,1)$'],
+   correct:0, fb:'α(1,1)+β(1,2)=(3,5) → α+β=3, α+2β=5. Restando: β=2, α=1 → [v]_B=(1,2).'},
+  {q:'Para que exista <strong>única</strong> TL $T:\\mathbb{R}^3\\to\\mathbb{R}^3$ con $T(v_i)=w_i$ dados, ¿qué condición deben cumplir $v_1,v_2,v_3$?',
+   opts:['Ser base de $\\mathbb{R}^3$ ($\\det\\neq 0$)','Ser ortogonales entre sí','Que los $w_i$ sean distintos','Que $\\|T\\|=1$'],
+   correct:0, fb:'El teorema de existencia y unicidad de TL dice: si {v₁,…,vₙ} es BASE del dominio, existe única T con T(vᵢ)=wᵢ.'},
+  // Difícil (4)
+  {q:'$S_1,S_2\\subset\\mathbb{R}^3$ con $\\dim(S_1)=\\dim(S_2)=2$. ¿Es posible que $S_1\\cap S_2=\\{0\\}$?',
+   opts:['No, siempre $\\dim(S_1\\cap S_2)\\geq 1$','Sí, si son perpendiculares','Sí, siempre que tengan ecuaciones distintas','No hay información suficiente'],
+   correct:0, fb:'dim(S₁+S₂) ≤ dim(R³) = 3. Por teorema: dim(S₁∩S₂) = dim(S₁)+dim(S₂)−dim(S₁+S₂) ≥ 2+2−3 = 1. Nunca puede ser {0}.'},
+  {q:'$T:\\mathbb{R}^2\\to\\mathbb{R}^2$ lineal con $T(1,0)=(2,1)$ y $T(0,1)=(1,3)$. ¿Cuánto vale $T(3,-1)$?',
+   opts:['$(5,0)$','$(7,2)$','$(3,-1)$','$(5,3)$'],
+   correct:0, fb:'T(3,−1) = 3T(1,0) − T(0,1) = 3(2,1)−(1,3) = (6,3)−(1,3) = (5,0).'},
+  {q:'Sea $A=\\begin{pmatrix}1&2&0\\\\0&1&1\\\\1&3&1\\end{pmatrix}$. ¿Cuál es la base de $\\ker(A)=\\{x:Ax=0\\}$?',
+   opts:['$\\{(2,-1,1)\\}$','$\\{(1,0,-1)\\}$','$\\{(0,1,-1)\\}$','El núcleo es solo $\\{0\\}$'],
+   correct:0, fb:'F3→F3−F1: [0,1,1]. Como F3 = F2, Rg=2. dim(ker)=3−2=1. Variable libre x3=t: x2=−t, x1=2t. Base: {(2,−1,1)}.'},
+  {q:'$T:\\mathbb{R}^3\\to\\mathbb{R}^3$ lineal con $T(e_1)=(1,0,0)$, $T(e_2)=(0,1,0)$, $T(e_3)=(0,0,0)$. ¿Cuál es $\\ker(T)$?',
+   opts:['$\\text{span}\\{(0,0,1)\\}$','$\\{0\\}$','$\\text{span}\\{e_1,e_2\\}$','$\\mathbb{R}^3$'],
+   correct:0, fb:'T(x₁,x₂,x₃) = (x₁,x₂,0). ker(T) = {(x₁,x₂,x₃): x₁=0, x₂=0} = span{(0,0,1)} = span{e₃}.'},
+];
+
+let quizCur=0, quizScore=0, quizAnswered=false;
+
+function buildQuiz(){
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = '<div class="quiz-header"><div class="quiz-score-display">Puntaje: <span id="q-score">0</span>/12</div><div style="font-size:.85rem;color:var(--gray-lt)">Mínimo 9/12 para insignia</div></div><div class="progress-bar-wrap"><div class="progress-bar" id="q-pbar" style="width:0%"></div></div><div id="q-card"></div>';
+  renderQuestion(0);
+}
+
+function renderQuestion(idx){
+  if(idx>=PREGUNTAS.length){ showQuizResult(); return; }
+  const p=PREGUNTAS[idx];
+  const lvl = idx<4?'🟢 Fácil':idx<8?'🟡 Medio':'🔴 Difícil';
+  let html='<div class="quiz-card"><div class="q-num">Pregunta '+(idx+1)+'/12 · '+lvl+'</div><div class="q-text">'+p.q+'</div><div class="options">';
+  p.opts.forEach((o,i)=>{ html+='<button class="opt-btn" id="opt-'+i+'" onclick="quizAnswer('+i+')">'+o+'</button>'; });
+  html+='</div><div class="feedback-box" id="q-fb"></div><div class="quiz-nav"><button class="btn-next" id="q-next" onclick="quizNext()" disabled>Siguiente →</button></div></div>';
+  document.getElementById('q-card').innerHTML=html;
+  document.getElementById('q-pbar').style.width=(idx/12*100)+'%';
+  quizAnswered=false;
+  if(typeof renderMathInElement!=='undefined'){
+    renderMathInElement(document.getElementById('q-card'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+  }
+}
+
+function quizAnswer(optIdx){
+  if(quizAnswered) return;
+  quizAnswered=true;
+  const p=PREGUNTAS[quizCur];
+  const isCorrect=optIdx===p.correct;
+  if(isCorrect) quizScore++;
+  document.getElementById('q-score').textContent=quizScore;
+  document.querySelectorAll('.opt-btn').forEach((b,i)=>{
+    b.disabled=true;
+    if(i===p.correct) b.classList.add('correct');
+    if(i===optIdx && !isCorrect) b.classList.add('wrong');
+  });
+  const fb=document.getElementById('q-fb');
+  fb.className='feedback-box show '+(isCorrect?'ok':'ko');
+  fb.textContent=(isCorrect?'✅ Correcto! ':'❌ Incorrecto. ')+p.fb;
+  document.getElementById('q-next').disabled=false;
+}
+
+function quizNext(){
+  quizCur++;
+  if(quizCur>=PREGUNTAS.length){ showQuizResult(); return; }
+  renderQuestion(quizCur);
+}
+
+function showQuizResult(){
+  const best=Math.max(quizScore,parseInt(localStorage.getItem(LS_QUIZ)||'0',10));
+  localStorage.setItem(LS_QUIZ,best);
+  const pct=Math.round(quizScore/12*100);
+  const emoji=quizScore>=11?'🏆':quizScore>=9?'🎉':quizScore>=6?'😅':'😢';
+  document.getElementById('quiz-container').innerHTML='<div class="result-card"><span class="emoji">'+emoji+'</span><h2>Quiz completado</h2><span class="score-big">'+quizScore+'/12</span><div class="result-detail"><div class="rstat ok">✅ Correctas: '+quizScore+'</div><div class="rstat ko">❌ Incorrectas: '+(12-quizScore)+'</div></div><p>Mejor puntaje histórico: '+best+'/12</p><button class="btn-retry" onclick="quizRetry()">Intentar de nuevo</button></div>';
+  if(quizScore>=9){ unlockBadge('quiz'); addExp(200); }
+  if(quizScore>=12){ unlockBadge('master'); addExp(200); confetti(); }
+}
+
+function quizRetry(){ quizCur=0; quizScore=0; buildQuiz(); }
+
+function confetti(){
+  const colors=['#6d28d9','#8b5cf6','#facc15','#34d399','#f472b6'];
+  for(let i=0;i<60;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.cssText='left:'+Math.random()*100+'vw;top:-10px;background:'+colors[i%5]+';animation-duration:'+(1+Math.random()*2)+'s;animation-delay:'+Math.random()*.5+'s;width:'+(6+Math.random()*10)+'px;height:'+(6+Math.random()*10)+'px';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),3000);
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  refreshUI();
+  refreshExp();
+  buildQuiz();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Automatización Industrial — Segundo Parcial</title>
+<style>
+:root{
+  --blue:#0369a1;--blue-lt:#0284c7;--blue-bg:#e0f2fe;
+  --teal:#0d9488;--teal-bg:#ccfbf1;
+  --green:#15803d;--green-bg:#dcfce7;
+  --orange:#c05c00;--orange-bg:#fff3e0;
+  --purple:#7c3aed;--purple-bg:#ede9fe;
+  --red:#b91c1c;--red-bg:#fee2e2;
+  --gray:#374151;--gray-lt:#6b7280;
+  --bg:#f0f9ff;--card:#fff;--border:#e2e8f0;
+  --yellow:#92400e;--yellow-bg:#fef9c3;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--gray);line-height:1.65;overflow-x:hidden}
+button,input{min-height:44px}
+code{font-family:'Courier New',monospace;background:#f1f5f9;border-radius:4px;padding:.1em .35em;font-size:.9em}
+
+/* NAV */
+nav.topnav{position:sticky;top:0;z-index:200;background:var(--blue);display:flex;align-items:center;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.brand{color:#fff;font-size:1rem;font-weight:800;padding:.75rem 1.2rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.2);text-decoration:none}
+.tabs{display:flex;overflow-x:auto;flex:1;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{padding:.7rem .95rem;border:none;background:transparent;color:rgba(255,255,255,.75);font-size:.8rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s;font-family:inherit}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tab-btn.active{color:#fff;border-bottom-color:#7dd3fc;background:rgba(255,255,255,.08)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#0c2444 0%,#0369a1 100%);color:#fff;text-align:center;padding:2.5rem 1rem 2rem}
+.hero h1{font-size:1.9rem;font-weight:900;letter-spacing:-.5px}
+.hero p{opacity:.88;margin-top:.4rem;max-width:640px;margin-left:auto;margin-right:auto;font-size:.95rem}
+.hero-badges{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.hero-badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.25rem .85rem;font-size:.78rem;font-weight:700;cursor:pointer;transition:.15s;color:#fff;text-decoration:none}
+.hero-badge:hover{background:rgba(255,255,255,.25)}
+
+/* PAGE */
+.page{display:none}.page.active{display:block}
+.container{max-width:1000px;margin:0 auto;padding:2rem 1.25rem}
+
+/* TITLES */
+.stitle{display:flex;align-items:center;gap:.6rem;font-size:1.2rem;font-weight:800;color:var(--blue);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid var(--blue-bg)}
+.stitle:first-child{margin-top:0}
+.stitle .ico{font-size:1.4rem}
+
+/* CARDS */
+.card{background:var(--card);border-radius:12px;padding:1.4rem 1.5rem;margin-bottom:1rem;border:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.card h4{font-size:1rem;font-weight:700;margin-bottom:.5rem}
+.card p,.card li{font-size:.93rem;color:#374151}
+.card ul,.card ol{padding-left:1.3rem;margin-top:.4rem}
+.card li{margin-bottom:.3rem}
+
+/* COLOR VARIANTS */
+.card-blue{border-left:4px solid var(--blue);background:#f0f9ff}
+.card-teal{border-left:4px solid var(--teal);background:#f0fdfa}
+.card-green{border-left:4px solid var(--green);background:#f0fdf4}
+.card-orange{border-left:4px solid #d97706;background:#fffbeb}
+.card-red{border-left:4px solid var(--red);background:#fff5f5}
+.card-purple{border-left:4px solid var(--purple);background:#faf5ff}
+.card-yellow{border-left:4px solid #ca8a04;background:#fefce8}
+
+/* GRID 2 */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+@media(max-width:620px){.grid2{grid-template-columns:1fr}}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;margin:1rem 0}
+table{width:100%;border-collapse:collapse;font-size:.87rem}
+th{background:var(--blue);color:#fff;padding:.5rem .8rem;text-align:left}
+td{padding:.45rem .8rem;border-bottom:1px solid var(--border)}
+tr:nth-child(even) td{background:#f8fafc}
+
+/* KEY-VALUE pills */
+.kv{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.6rem}
+.kv-item{background:#e0f2fe;border-radius:6px;padding:.2rem .7rem;font-size:.82rem;font-weight:600;color:#0369a1}
+.kv-item.g{background:#dcfce7;color:#166534}
+.kv-item.o{background:#fff7ed;color:#c2410c}
+.kv-item.p{background:#ede9fe;color:#6d28d9}
+.kv-item.r{background:#fee2e2;color:#991b1b}
+
+/* CANVAS WRAPPER */
+.canvas-wrap{background:#fff;border-radius:12px;border:1px solid var(--border);padding:1rem;margin:1rem 0;text-align:center}
+.canvas-wrap canvas{max-width:100%;border-radius:8px}
+.canvas-wrap p{font-size:.8rem;color:var(--gray-lt);margin-top:.4rem}
+
+/* ANIMATION CONTROLS */
+.anim-ctrl{display:flex;gap:.5rem;justify-content:center;margin-top:.6rem;flex-wrap:wrap}
+.btn{padding:.45rem 1.1rem;border:none;border-radius:8px;font-weight:700;font-size:.85rem;cursor:pointer;transition:.15s;font-family:inherit}
+.btn-blue{background:var(--blue);color:#fff}.btn-blue:hover{background:#0284c7}
+.btn-green{background:#16a34a;color:#fff}.btn-green:hover{background:#15803d}
+.btn-gray{background:#e5e7eb;color:#374151}.btn-gray:hover{background:#d1d5db}
+.btn-orange{background:#d97706;color:#fff}.btn-orange:hover{background:#b45309}
+.btn-purple{background:#7c3aed;color:#fff}.btn-purple:hover{background:#6d28d9}
+
+/* GAME STYLES */
+.game-box{background:#fff;border-radius:12px;border:2px solid var(--border);padding:1.4rem;margin:1rem 0}
+.game-box h4{font-size:1rem;font-weight:800;margin-bottom:1rem;color:var(--blue)}
+.drag-items{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+.draggable{padding:.4rem .9rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:grab;border:2px solid;user-select:none;transition:.15s}
+.draggable:hover{opacity:.85;transform:scale(1.03)}
+.drop-zones{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.6rem}
+.drop-zone{border:2px dashed #cbd5e1;border-radius:8px;padding:.7rem;min-height:60px;display:flex;flex-direction:column;gap:.3rem;background:#f8fafc}
+.drop-zone .zone-label{font-size:.78rem;font-weight:700;color:var(--gray-lt);text-transform:uppercase}
+.drop-zone.over{border-color:var(--blue);background:#eff6ff}
+.drop-zone .dropped{padding:.3rem .6rem;border-radius:6px;font-size:.82rem;font-weight:600;cursor:pointer}
+.feedback-ok{color:#16a34a;font-weight:700;font-size:.9rem;margin-top:.5rem}
+.feedback-err{color:#dc2626;font-weight:700;font-size:.9rem;margin-top:.5rem}
+
+/* QUIZ */
+.quiz-q{background:var(--card);border-radius:12px;padding:1.4rem 1.5rem;margin-bottom:1rem;border:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.quiz-q h4{font-size:.95rem;font-weight:700;margin-bottom:.8rem;color:#1e293b}
+.quiz-opts{display:flex;flex-direction:column;gap:.4rem}
+.quiz-opt{display:flex;align-items:flex-start;gap:.6rem;padding:.5rem .7rem;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:.15s;font-size:.88rem}
+.quiz-opt:hover{background:#f1f5f9;border-color:#cbd5e1}
+.quiz-opt.selected{border-color:var(--blue);background:#eff6ff}
+.quiz-opt.correct{border-color:#16a34a;background:#f0fdf4;font-weight:700}
+.quiz-opt.wrong{border-color:#dc2626;background:#fef2f2}
+.quiz-opt input[type=radio]{display:none}
+.quiz-actions{margin-top:1.5rem;display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
+.score-box{text-align:center;background:linear-gradient(135deg,#0c2444,#0369a1);color:#fff;border-radius:16px;padding:2rem;margin-top:1.5rem}
+.score-box h3{font-size:2rem;font-weight:900}
+.score-box p{opacity:.88;margin-top:.5rem}
+.score-emoji{font-size:3rem;margin-bottom:.5rem}
+
+/* BADGE ALERTA */
+.alert{border-radius:8px;padding:.75rem 1rem;font-size:.88rem;margin:.6rem 0;display:flex;gap:.6rem;align-items:flex-start}
+.alert-warn{background:#fef9c3;border:1px solid #fde047;color:#713f12}
+.alert-info{background:#e0f2fe;border:1px solid #7dd3fc;color:#0c4a6e}
+.alert-danger{background:#fee2e2;border:1px solid #fca5a5;color:#7f1d1d}
+.alert-green{background:#dcfce7;border:1px solid #86efac;color:#14532d}
+.alert .ico{font-size:1.1rem;flex-shrink:0;margin-top:.05rem}
+
+/* M12 CONNECTOR VISUAL */
+.m12-diagram{display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap;padding:.5rem 0}
+.m12-pin{display:flex;align-items:center;gap:.5rem;padding:.4rem .8rem;border-radius:8px;font-size:.88rem;font-weight:700;border:2px solid #000;width:fit-content}
+
+/* PROGRESS BAR */
+.progress-wrap{background:#e2e8f0;border-radius:999px;height:10px;margin:1rem 0}
+.progress-bar{height:10px;border-radius:999px;background:var(--blue);transition:width .4s}
+
+/* SECTION BADGE */
+.ex-badge{display:inline-block;background:var(--blue);color:#fff;border-radius:6px;font-size:.75rem;font-weight:800;padding:.15rem .6rem;margin-bottom:.5rem;letter-spacing:.03em}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <a class="brand" href="../apuntes/index.html">← Apuntes</a>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showPage('p1',this)">📡 Instrumentación</button>
+    <button class="tab-btn" onclick="showPage('p2',this)">🔍 Sensores & HART</button>
+    <button class="tab-btn" onclick="showPage('p3',this)">⚡ Motores & Arranque</button>
+    <button class="tab-btn" onclick="showPage('p4',this)">🔄 VFD & Servo</button>
+    <button class="tab-btn" onclick="showPage('p5',this)">🎮 Juegos & Quiz</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>⚙️ Automatización Industrial</h1>
+  <p>Segundo Parcial — Unidades 3 y 4 · Prof. Lic. Dario R. González · UNP 2026</p>
+  <div class="hero-badges">
+    <span class="hero-badge" onclick="showPage('p1',document.querySelectorAll('.tab-btn')[0])">4-20 mA</span>
+    <span class="hero-badge" onclick="showPage('p1',document.querySelectorAll('.tab-btn')[0])">Zero Vivo</span>
+    <span class="hero-badge" onclick="showPage('p2',document.querySelectorAll('.tab-btn')[1])">HART Bell 202</span>
+    <span class="hero-badge" onclick="showPage('p3',document.querySelectorAll('.tab-btn')[2])">Motor Asíncrono</span>
+    <span class="hero-badge" onclick="showPage('p3',document.querySelectorAll('.tab-btn')[2])">Soft-Starter</span>
+    <span class="hero-badge" onclick="showPage('p4',document.querySelectorAll('.tab-btn')[3])">VFD & IGBT</span>
+    <span class="hero-badge" onclick="showPage('p4',document.querySelectorAll('.tab-btn')[3])">FOC</span>
+    <span class="hero-badge" onclick="showPage('p5',document.querySelectorAll('.tab-btn')[4])">🎮 Quiz</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PÁGINA 1: INSTRUMENTACIÓN & APARAMENTA
+══════════════════════════════════════════════════ -->
+<div id="p1" class="page active">
+<div class="container">
+
+  <span class="ex-badge">EJERCICIO 1 — Presentación 1 · Unidad 3</span>
+
+  <!-- 1.1 LAZO 4-20mA -->
+  <div class="stitle"><span class="ico">📡</span> 1.1 — Lazo 4-20 mA vs 0-10 V</div>
+
+  <div class="grid2">
+    <div class="card card-blue">
+      <h4>🟢 Zero Vivo (4 mA) — Estándar 4-20 mA</h4>
+      <ul>
+        <li>0 % de escala = <strong>4.00 mA</strong> (nunca cero)</li>
+        <li>Rotura de cable → corriente cae a 0 mA (&lt; 3.6 mA, NAMUR NE 43)</li>
+        <li>PLC detecta <strong>alarma "Falla de Lazo Abierto"</strong> de forma inequívoca</li>
+        <li>Inmune a EMI: la corriente es igual en todo el bucle (Kirchhoff)</li>
+        <li>Funciona a 300 m sin error por caída de tensión en el cable</li>
+      </ul>
+    </div>
+    <div class="card card-red">
+      <h4>🔴 Zero Muerto (0 V) — Lazo 0-10 V</h4>
+      <ul>
+        <li>0 % de escala = <strong>0 V</strong> — ambiguo</li>
+        <li>No distingue "variable en cero" de "cable cortado" ⚠️</li>
+        <li>Sensible a caídas de tensión en cable largo</li>
+        <li>Ruido EMI deforma la lectura (alta impedancia)</li>
+        <li>Riesgo operativo en procesos críticos</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ANIMACIÓN 4-20mA -->
+  <div class="canvas-wrap">
+    <canvas id="loopCanvas" width="680" height="200"></canvas>
+    <p>Animación lazo 4-20 mA — el transmisor modula la corriente según el nivel del proceso</p>
+    <div class="anim-ctrl">
+      <button class="btn btn-blue" onclick="setLoop(0)">0 % → 4 mA (1 V)</button>
+      <button class="btn btn-green" onclick="setLoop(0.5)">50 % → 12 mA (3 V)</button>
+      <button class="btn btn-orange" onclick="setLoop(1)">100 % → 20 mA (5 V)</button>
+      <button class="btn btn-gray" id="loopFaultBtn" onclick="toggleLoopFault()">⚡ Simular Rotura</button>
+    </div>
+  </div>
+
+  <div class="card card-teal">
+    <h4>🔧 Resistor Shunt 250 Ω — Conversión I→V en la entrada del PLC</h4>
+    <ul>
+      <li>Ubicado en la bornera de entrada analógica del PLC</li>
+      <li>Convierte corriente → tensión: <code>V = I × 250 Ω</code></li>
+      <li>4 mA → <strong>1.00 Vcc</strong> | 20 mA → <strong>5.00 Vcc</strong></li>
+      <li>Rango 1-5 V procesado por el ADC del módulo analógico</li>
+    </ul>
+  </div>
+
+  <div class="card card-purple">
+    <h4>🔌 Topología a 2 hilos (Loop-Powered)</h4>
+    <ul>
+      <li>Solo 2 conductores: alimentación <strong>y</strong> señal en el mismo par</li>
+      <li>El transmisor extrae su alimentación del mismo lazo (mínimo 3.6 mA)</li>
+      <li>Modulación de señal: varía la impedancia interna para regular la corriente 4-20 mA</li>
+      <li>Fuente: 24 Vcc en el panel → Transmisor (campo) → Shunt 250 Ω → PLC → retorno 0 V</li>
+    </ul>
+  </div>
+
+  <!-- 1.2 INSTRUMENTACIÓN DE NIVEL Y CAUDAL -->
+  <div class="stitle"><span class="ico">🌊</span> 1.2 — Medición de Nivel y Caudalímetro Electromagnético</div>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Tecnología</th><th>Principio Físico</th><th>Tipo</th><th>Uso típico</th></tr>
+      <tr><td><strong>Horquilla vibratoria (Tuning Fork)</strong></td><td>Resonancia piezoeléctrica ~1 kHz; el fluido amortigua la vibración → conmuta relé</td><td>Puntual (todo-o-nada)</td><td>Alarma rebalse / marcha en seco de bombas</td></tr>
+      <tr><td><strong>Sonda hidrostática sumergible</strong></td><td>Mide presión de columna: P = ρ·g·h</td><td>Continua</td><td>Tanques abiertos, líquidos limpios</td></tr>
+      <tr><td><strong>Radar 80 GHz (emisión libre)</strong></td><td>Time of Flight: pulso microondas → superficie → retorno</td><td>Continua sin contacto</td><td>Vapores, polvo, alta presión/temperatura</td></tr>
+    </table>
+  </div>
+
+  <div class="card card-blue">
+    <h4>📐 Caudalímetro Electromagnético (Ley de Faraday)</h4>
+    <ul>
+      <li><strong>Principio:</strong> E = B · v · D — FEM inducida proporcional a la velocidad del fluido conductor</li>
+      <li><strong>Componentes:</strong> tubo recto con revestimiento PTFE/elastómero, bobinas inductoras externas, electrodos rasantes</li>
+      <li><strong>Condición indispensable:</strong> fluido CONDUCTOR (σ ≥ 5 µS/cm) — agua, ácidos, lodos; NO apto para hidrocarburos ni gases</li>
+      <li><strong>Ventaja 1:</strong> Pérdida de carga cero (sección recta sin obstáculos)</li>
+      <li><strong>Ventaja 2:</strong> Turndown &gt; 20:1 a 50:1 (vs placa orificio: 3:1 cuadrático)</li>
+    </ul>
+  </div>
+
+  <!-- 1.3 SEGURIDAD DE MÁQUINAS -->
+  <div class="stitle"><span class="ico">🚨</span> 1.3 — Parada de Emergencia y Seguridad de Máquinas</div>
+
+  <div class="grid2">
+    <div class="card card-red">
+      <h4>🔴 Seta de Emergencia — ISO 13850 / EN 60204-1</h4>
+      <ul>
+        <li>Actuador en forma de <strong>hongo rojo</strong> sobre fondo <strong>amarillo</strong> de contraste</li>
+        <li>Retención mecánica obligatoria (latching) → permanece trabado al pulsarlo</li>
+        <li>Rearme: acción voluntaria deliberada (giro/tracción/llave)</li>
+        <li>Rearme <strong>NO</strong> debe poner en marcha la máquina — solo rearma el lazo</li>
+        <li>Contactos: <strong>NC (normalmente cerrado)</strong> — lógica fail-safe</li>
+      </ul>
+    </div>
+    <div class="card card-orange">
+      <h4>⚡ Apertura Positiva Forzada (IEC 60947-5-1)</h4>
+      <ul>
+        <li>Símbolo: flecha dentro de un círculo en el esquema eléctrico</li>
+        <li>El movimiento del botón actúa <strong>mecánicamente y de forma directa</strong> sobre los contactos</li>
+        <li>Funciona aunque los contactos estén <strong>micro-soldados</strong> por sobrecorriente</li>
+        <li>Prohíbe contactos NA: si el cable se corta, el circuito no cierra → máquina no para ⚠️</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Categoría</th><th>Mecanismo</th><th>Ejemplo industrial</th><th>¿Por qué no Categoría 0?</th></tr>
+      <tr><td><strong>Cat. 0 — Paro No Controlado</strong></td><td>Corte instantáneo de energía → motor frena por inercia o freno mecánico</td><td>Sierra circular, amoladora, transportador de baja inercia</td><td>—</td></tr>
+      <tr><td><strong>Cat. 1 — Paro Controlado</strong></td><td>Mantiene energía → rampa de desaceleración activa hasta cero → corta</td><td>Centrífuga industrial, bobinadora de papel, grúa puente</td><td>Cat.0 dejaría el rotor girando minutos o rompería la carga por descontrol mecánico</td></tr>
+    </table>
+  </div>
+
+  <div class="alert alert-danger">
+    <span class="ico">⛔</span>
+    <span><strong>Regla fundamental:</strong> JAMÁS usar contacto NA en circuitos de parada de emergencia. Un contacto NC garantiza "seguridad positiva": cualquier corte de conductor detiene la máquina.</span>
+  </div>
+
+</div>
+</div><!-- /p1 -->
+
+<!-- ═══════════════════════════════════════════════
+     PÁGINA 2: SENSORES, HART, METROLOGÍA
+══════════════════════════════════════════════════ -->
+<div id="p2" class="page">
+<div class="container">
+
+  <span class="ex-badge">EJERCICIO 2 — Presentación 2 · Unidad 3</span>
+
+  <!-- 2.1 SENSORES DE PROXIMIDAD -->
+  <div class="stitle"><span class="ico">🔍</span> 2.1 — Sensores de Proximidad: Inductivo vs Capacitivo</div>
+
+  <div class="grid2">
+    <div class="card card-blue">
+      <h4>🧲 Sensor Inductivo</h4>
+      <ul>
+        <li>Bobina + núcleo ferrita → campo electromagnético alterno (100 kHz – 1 MHz)</li>
+        <li>Metal cercano → <strong>corrientes de Foucault (Eddy)</strong> → disipa energía del oscilador</li>
+        <li>Circuito Schmitt detecta la caída de amplitud y conmuta</li>
+        <li><strong>Solo detecta metales conductores</strong></li>
+        <li>Ciego a plásticos, agua, vidrio (no inducen Foucault)</li>
+      </ul>
+    </div>
+    <div class="card card-teal">
+      <h4>⚡ Sensor Capacitivo</h4>
+      <ul>
+        <li>Dos electrodos concéntricos = placas de condensador abierto</li>
+        <li>Material con ε_r &gt; 1 → aumenta capacitancia → activa oscilador RC</li>
+        <li>Agua: ε_r ≈ 80 | PVC: ε_r ≈ 2.2 → detecta agua <strong>a través de paredes plásticas</strong></li>
+        <li>Detecta <strong>cualquier material</strong> con permitividad dieléctrica suficiente</li>
+        <li>Ajuste con potenciómetro multi-vuelta para ignorar el recipiente vacío</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CONECTOR M12 -->
+  <div class="stitle"><span class="ico">🔌</span> Conector M12 — PNP vs NPN y Código de Colores IEC</div>
+
+  <div class="card card-green">
+    <h4>M12 — 4 Pines según IEC 60947-5-2</h4>
+    <div class="m12-diagram">
+      <div class="m12-pin" style="background:#8B4513;color:#fff;border-color:#5a2d0c">Pin 1 — MARRÓN (BN) — +24 Vcc</div>
+      <div class="m12-pin" style="background:#f0f0f0;color:#333;border-color:#ccc">Pin 2 — BLANCO (WH) — Salida NC / diagnóstico</div>
+      <div class="m12-pin" style="background:#3b82f6;color:#fff;border-color:#1d4ed8">Pin 3 — AZUL (BU) — 0 Vcc (GND)</div>
+      <div class="m12-pin" style="background:#111;color:#fff;border-color:#374151">Pin 4 — NEGRO (BK) — Señal NO → entrada PLC</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card card-blue">
+      <h4>PNP — "Sinking Input" (Estándar europeo)</h4>
+      <ul>
+        <li>Transistor conmuta <strong>+24 Vcc</strong> hacia la carga (Pin 4)</li>
+        <li>Entrada PLC tipo <strong>Sinking</strong> (retorno a 0 V común)</li>
+        <li>Estándar en industria europea y latinoamericana</li>
+        <li>Mayor seguridad ante derivaciones a masa del cable de señal</li>
+      </ul>
+    </div>
+    <div class="card card-orange">
+      <h4>NPN — "Sourcing Input" (Maquinaria asiática)</h4>
+      <ul>
+        <li>Transistor conmuta <strong>0 Vcc</strong> hacia la carga (Pin 4)</li>
+        <li>Entrada PLC tipo <strong>Sourcing</strong> (alimenta internamente +24 V)</li>
+        <li>Común en equipamiento japonés/coreano</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 2.2 PROTOCOLO HART -->
+  <div class="stitle"><span class="ico">📶</span> 2.2 — Protocolo HART sobre Lazo 4-20 mA</div>
+
+  <div class="card card-purple">
+    <h4>Modulación FSK Bell 202</h4>
+    <ul>
+      <li>Comunicación digital a <strong>1200 bps</strong> superpuesta sobre el lazo analógico 4-20 mA</li>
+      <li>Bit '1' (Mark): <strong>1200 Hz</strong> | Bit '0' (Space): <strong>2200 Hz</strong></li>
+      <li>Amplitud: onda senoidal de <strong>±0.5 mA</strong> — valor medio DC = 0 (integral nula)</li>
+      <li>PLC lee solo componente DC gracias a filtro pasabajos hardware (&lt;25 Hz) → sin interferencia</li>
+    </ul>
+  </div>
+
+  <!-- ANIMACIÓN HART -->
+  <div class="canvas-wrap">
+    <canvas id="hartCanvas" width="680" height="160"></canvas>
+    <p>Modulación FSK Bell 202: señal HART de ±0.5 mA superpuesta sobre los 12 mA DC del transmisor</p>
+    <div class="anim-ctrl">
+      <button class="btn btn-purple" onclick="toggleHart()" id="hartBtn">▶ Animar</button>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card card-blue">
+      <h4>¿Por qué 250 Ω mínimo en el lazo?</h4>
+      <ul>
+        <li>Los comunicadores HART miden caídas de tensión en CA</li>
+        <li>V = 0.0005 A × 250 Ω = <strong>125 mV</strong> (mínimo para decodificar)</li>
+        <li>Sin 250 Ω → señal se disipa a masa → comunicación perdida</li>
+        <li>El shunt del PLC suele ser exactamente 250 Ω ✔️</li>
+      </ul>
+    </div>
+    <div class="card card-teal">
+      <h4>Topología Multipunto (Multidrop)</h4>
+      <ul>
+        <li>Hasta 15 transmisores (HART 5) o 64 (HART 7) en un solo par de cables</li>
+        <li>Cada instrumento fija su corriente analógica en <strong>4.00 mA fijos</strong></li>
+        <li>Señal 4-20 mA queda anulada → adquisición 100% digital</li>
+        <li>Maestro interroga cada transmisor por su dirección (polling 1-63)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 2.3 METROLOGÍA -->
+  <div class="stitle"><span class="ico">📏</span> 2.3 — Metrología Industrial y Rutinas de Trim</div>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Término</th><th>Definición (VIM / ISO/IEC 17025)</th><th>¿Modifica el instrumento?</th></tr>
+      <tr><td><strong>Calibración</strong></td><td>Establece relación entre indicación del instrumento y patrón trazable. Medir y comparar para conocer el error.</td><td><strong>NO</strong> — solo documentar</td></tr>
+      <tr><td><strong>Ajuste</strong></td><td>Intervención física/electrónica para corregir errores detectados en la calibración.</td><td><strong>SÍ</strong> — modifica el instrumento</td></tr>
+      <tr><td><strong>Verificación</strong></td><td>Comparación del error vs tolerancia EMP → dictamen "Apto / No Apto".</td><td>NO — solo emite dictamen legal</td></tr>
+    </table>
+  </div>
+
+  <div class="card card-blue">
+    <h4>📊 Parámetros de Rango en Transmisores Inteligentes</h4>
+    <div class="kv">
+      <span class="kv-item r">LRL / URL — Límites físicos de fábrica de la celda (no modificables)</span>
+      <span class="kv-item g">LRV / URV — Valores calibrados: LRV = 4 mA (0%) | URV = 20 mA (100%)</span>
+      <span class="kv-item">Span = URV − LRV (amplitud de trabajo en unidades físicas)</span>
+      <span class="kv-item p">Turndown = URL / Span_mín · Un alto turndown (100:1) → flexibilidad sin cambiar hardware</span>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Rutina</th><th>¿Qué ajusta?</th><th>Acción requerida</th></tr>
+      <tr><td><strong>Re-Ranging</strong></td><td>Cambia LRV/URV por software (escalado matemático)</td><td>Solo configuración — NO calibra la celda</td></tr>
+      <tr><td><strong>Zero Trim</strong></td><td>Offset estático de montaje (inclinación, columna hidrostática)</td><td>Sin presión patrón — corrige el cero</td></tr>
+      <tr><td><strong>Sensor Trim (Low/High)</strong></td><td>Curva de conversión física de la celda A/D</td><td>Aplicar presión patrón exacta en 2 puntos</td></tr>
+      <tr><td><strong>D/A Trim (DAC Trim)</strong></td><td>Etapa final analógica de salida (DAC)</td><td>Medir corriente real con multímetro patrón e ingresar valor</td></tr>
+    </table>
+  </div>
+
+  <div class="alert alert-info">
+    <span class="ico">ℹ️</span>
+    <span><strong>Recuerda:</strong> "Calibrar" no implica tocar el instrumento. Solo se modifica cuando se hace un "Ajuste". Un transmisor puede estar perfectamente calibrado (documentado) y sin embargo no estar ajustado.</span>
+  </div>
+
+</div>
+</div><!-- /p2 -->
+
+<!-- ═══════════════════════════════════════════════
+     PÁGINA 3: MOTORES & ARRANCADORES
+══════════════════════════════════════════════════ -->
+<div id="p3" class="page">
+<div class="container">
+
+  <span class="ex-badge">EJERCICIO 3 — Presentación 3 · Unidad 4 Parte 1</span>
+
+  <!-- 3.1 MOTOR ASÍNCRONO -->
+  <div class="stitle"><span class="ico">⚡</span> 3.1 — Motor Asíncrono Trifásico y Teorema de Ferraris</div>
+
+  <div class="grid2">
+    <div class="card card-blue">
+      <h4>🏗️ Estructura Interna</h4>
+      <ul>
+        <li><strong>Estator:</strong> láminas de acero al silicio barnizadas (reduce Foucault) + 3 bobinados desfasados 120° espacialmente</li>
+        <li><strong>Rotor jaula de ardilla:</strong> barras de Al/Cu en cortocircuito por anillos macizos + aletas de refrigeración</li>
+        <li><strong>Entrehierro:</strong> 0.3 a 1.5 mm — separación entre estator y rotor</li>
+      </ul>
+    </div>
+    <div class="card card-teal">
+      <h4>🌀 Teorema de Ferraris (1885)</h4>
+      <ul>
+        <li>3 corrientes senoidales desfasadas 120° en el tiempo + 3 bobinas desfasadas 120° en el espacio</li>
+        <li>Resultado: Campo Magnético Giratorio (CMG) de <strong>amplitud constante</strong></li>
+        <li>B_total = <strong>1.5 · B_max</strong> (siempre, en todo instante)</li>
+        <li>Velocidad síncrona: <code>ns = 120·f / p</code> (rpm) donde p = número de polos</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ANIMACIÓN CMG -->
+  <div class="canvas-wrap">
+    <canvas id="cmgCanvas" width="560" height="280"></canvas>
+    <p>Campo Magnético Giratorio (CMG) — las 3 fases generan un vector rotante de amplitud constante B = 1.5·Bmax</p>
+    <div class="anim-ctrl">
+      <button class="btn btn-blue" onclick="toggleCMG()" id="cmgBtn">▶ Animar CMG</button>
+    </div>
+  </div>
+
+  <div class="card card-orange">
+    <h4>📐 Deslizamiento Relativo (s)</h4>
+    <ul>
+      <li><code>s = (ns − n) / ns</code> — mide el retraso del rotor respecto al CMG</li>
+      <li><strong>Imposible que n = ns:</strong> si el rotor alcanzara ns → v_rel = 0 → no hay variación de flujo → FEM = 0 → corriente = 0 → par = 0 → rozamiento frena el rotor</li>
+    </ul>
+    <div class="tbl-wrap" style="margin-top:.6rem">
+      <table>
+        <tr><th>Régimen</th><th>s</th><th>Condición</th><th>Comportamiento</th></tr>
+        <tr><td><strong>Motor</strong></td><td>0 &lt; s &lt; 1</td><td>n &lt; ns</td><td>Convierte potencia eléctrica → mecánica</td></tr>
+        <tr><td><strong>Generador Asíncrono</strong></td><td>s &lt; 0</td><td>n &gt; ns (máquina exterior acelera)</td><td>Inyecta potencia a la red — aerogeneradores</td></tr>
+        <tr><td><strong>Freno Contracorriente</strong></td><td>s &gt; 1</td><td>Rotor girando sentido opuesto al CMG</td><td>Frenado violento con alta disipación térmica</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 3.2 BORNERA Y ARRANQUE Y-Δ -->
+  <div class="stitle"><span class="ico">🔧</span> 3.2 — Bornera de 6 Bornes, Estrella-Triángulo y Enclavamientos</div>
+
+  <div class="grid2">
+    <div class="card card-blue">
+      <h4>🔩 Pletinas en Bornera IEC (U1/V1/W1 | W2/U2/V2)</h4>
+      <ul>
+        <li><strong>Estrella (Y):</strong> pletina horizontal uniendo W2–U2–V2 (punto neutro). Tensión por bobina = V_L / √3</li>
+        <li><strong>Triángulo (Δ):</strong> 3 pletinas verticales: U1↔W2, V1↔U2, W1↔V2. Tensión por bobina = V_L</li>
+        <li>Placa "230/400V": motor dimensionado 230 V/bobina → <strong>SOLO Estrella en red 400 V</strong></li>
+        <li>Placa "400/690V": puede conectarse en Δ a 400 V (230V/bobina en Δ... ¡NO! Δ=400V bobina)</li>
+      </ul>
+      <div class="alert alert-danger" style="margin-top:.6rem">
+        <span class="ico">🔥</span><span>Si motor 230V bobina se conecta en Δ a 400V: 73% sobretensión → saturación magnética → corriente destructiva → funde el bobinado en segundos</span>
+      </div>
+    </div>
+    <div class="card card-teal">
+      <h4>🌟 Arranque Estrella-Triángulo (Y-Δ)</h4>
+      <ol>
+        <li>Cierra <strong>KM1</strong> (línea) + <strong>KM3</strong> (estrella) → arranque</li>
+        <li>En Y: I_arr = (1/3)·I_DOL | T_arr = (1/3)·T_DOL</li>
+        <li>Al 80-85% de ns: temporizador desconecta KM3</li>
+        <li>Pausa 30-50 ms (extingue arco) → conecta <strong>KM2</strong> (triángulo)</li>
+        <li>Pico transitorio en la conmutación (flujo remanente del rotor)</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ANIMACIÓN Y-Delta -->
+  <div class="canvas-wrap">
+    <canvas id="ydCanvas" width="600" height="240"></canvas>
+    <p>Maniobra Estrella-Triángulo: secuencia de contactores y evolución de la corriente</p>
+    <div class="anim-ctrl">
+      <button class="btn btn-blue" onclick="startYDelta()">▶ Simular Arranque Y-Δ</button>
+      <button class="btn btn-gray" onclick="resetYDelta()">↺ Reset</button>
+    </div>
+  </div>
+
+  <div class="card card-red">
+    <h4>🔒 Enclavamientos en Inversor de Giro (obligatorios)</h4>
+    <ul>
+      <li><strong>Eléctrico Cruzado:</strong> contactos auxiliares NC (21-22) cruzados en serie con las bobinas opuestas (KM1 pasa por NC de KM2 y viceversa)</li>
+      <li><strong>Mecánico:</strong> traba física basculante entre contactores — bloquea la armadura de uno mientras el otro está activado</li>
+      <li>Sin enclavamiento: si KM1 y KM2 cierran simultáneamente → <strong>cortocircuito bifásico franco</strong> → daño catastrófico</li>
+    </ul>
+  </div>
+
+  <!-- 3.3 SOFT-STARTER -->
+  <div class="stitle"><span class="ico">🌡️</span> 3.3 — Arrancadores Suaves (Soft-Starters)</div>
+
+  <div class="card card-purple">
+    <h4>⚡ Topología: 6 Tiristores SCR en Antiparalelo</h4>
+    <ul>
+      <li>2 SCR por fase (uno para semiciclo positivo, otro para negativo)</li>
+      <li>Control por <strong>ángulo de disparo α</strong>: retarda el pulso de encendido respecto al cruce por cero</li>
+      <li>α 150° → 0° → V_rms varía de mínimo a máximo (a 50 Hz constantes)</li>
+      <li>T ∝ V² → modular tensión = controlar el par suavemente</li>
+    </ul>
+    <div class="kv" style="margin-top:.6rem">
+      <span class="kv-item">Tensión inicial (Pedestal): 30-40% Vn — vence fricción estática</span>
+      <span class="kv-item p">Kick-start: pulso 80-100% por 100-500ms — cargas pesadas trabadas</span>
+      <span class="kv-item g">Límite de corriente: umbral 2.5-4.0 In — frena la rampa si se supera</span>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card card-orange">
+      <h4>💧 Golpe de Ariete (Water Hammer)</h4>
+      <ul>
+        <li>Corte súbito de bomba centrífuga → columna de agua se detiene bruscamente e invierte</li>
+        <li>Golpea la válvula de retención → onda de sobrepresión hasta <strong>15-20 bar</strong></li>
+        <li>Fractura cañerías, revienta sellos, desajusta bridas</li>
+        <li><strong>Soft Stop:</strong> rampa de desaceleración 15-45 s → caudal decae lentamente → válvula se asienta suave</li>
+      </ul>
+    </div>
+    <div class="card card-teal">
+      <h4>🔀 Contactor de Bypass</h4>
+      <ul>
+        <li>Paralelo a los tiristores SCR</li>
+        <li>Cierra al 100% de V_nominal — deriva corriente por cobre macizo</li>
+        <li><strong>Beneficio 1:</strong> elimina pérdidas térmicas de SCR (1.2-1.5 V / &gt;400 W a 100 A)</li>
+        <li><strong>Beneficio 2:</strong> alimentación directa desde senoide pura → cero armónicos EMI/RFI</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+</div><!-- /p3 -->
+
+<!-- ═══════════════════════════════════════════════
+     PÁGINA 4: VFD, SERVOMOTORES Y STEPPERS
+══════════════════════════════════════════════════ -->
+<div id="p4" class="page">
+<div class="container">
+
+  <span class="ex-badge">EJERCICIO 4 — Presentación 4 · Unidad 4 Parte 2</span>
+
+  <!-- 4.1 VFD -->
+  <div class="stitle"><span class="ico">🔄</span> 4.1 — Variador de Frecuencia (VFD) — 3 Etapas</div>
+
+  <!-- ANIMACIÓN VFD BLOQUES -->
+  <div class="canvas-wrap">
+    <canvas id="vfdCanvas" width="700" height="200"></canvas>
+    <p>Arquitectura interna del VFD: Rectificador → Bus DC → Inversor IGBT (clic en cada etapa para más info)</p>
+    <div id="vfdInfo" class="alert alert-info" style="text-align:left;margin-top:.6rem;display:none">
+      <span class="ico">ℹ️</span><span id="vfdInfoText"></span>
+    </div>
+  </div>
+
+  <div class="card card-blue">
+    <h4>① Etapa Rectificadora</h4>
+    <ul>
+      <li>Puente de Graetz trifásico: 6 diodos ultrarrápidos → CA 400V @ 50Hz → CC pulsante</li>
+      <li><strong>Circuito precarga inrush:</strong> resistencia en serie limita corriente inicial (condensadores descargados ≈ cortocircuito)</li>
+      <li>Relé/tiristor de bypass puentea la resistencia cuando el bus llega al 80-85% Vn</li>
+    </ul>
+  </div>
+
+  <div class="card card-teal">
+    <h4>② Etapa Bus DC Link</h4>
+    <ul>
+      <li>Banco de condensadores electrolíticos filtra rizado 300 Hz</li>
+      <li>Tensión: V_dc ≈ √2 · 400V = <strong>565 Vcc</strong></li>
+      <li><strong>Ride-Through:</strong> inmunidad a microcortes de red hasta 15-20 ms</li>
+      <li>Bobina DC choke: reduce armónicos de red</li>
+      <li>Resistencias bleeder: descargan capacitores a &lt;50V al cortar alimentación</li>
+    </ul>
+  </div>
+
+  <div class="card card-purple">
+    <h4>③ Etapa Inversora IGBT + SPWM</h4>
+    <ul>
+      <li>Puente de 6 transistores IGBT + diodos freewheeling en antiparalelo</li>
+      <li>Modulación <strong>SPWM</strong>: compara portadora triangular (2-16 kHz) con moduladora senoidal</li>
+      <li>Genera CA de cualquier frecuencia y tensión en las 3 fases del motor</li>
+    </ul>
+  </div>
+
+  <div class="grid2">
+    <div class="card card-orange">
+      <h4>🔋 Chopper de Frenado y Regeneración</h4>
+      <ul>
+        <li>Desaceleración rápida de carga con alta inercia → motor pasa a modo generador</li>
+        <li>Energía cinética → carga los condensadores del bus → V_bus sube a &gt;750-800 Vcc</li>
+        <li>Sin control → <strong>Overvoltage Trip</strong> (falla del variador)</li>
+        <li>Transistor Chopper: al superar ~750 Vcc, deriva exceso a <strong>resistencia externa disipadora</strong></li>
+      </ul>
+    </div>
+    <div class="card card-red">
+      <h4>⚡ Ondas Reflejadas dv/dt — Cables Largos (&gt;20-30 m)</h4>
+      <ul>
+        <li>IGBT conmuta en nanosegundos → dv/dt &gt;5000 V/µs</li>
+        <li>Desajuste de impedancia cable/motor → reflexión de onda</li>
+        <li>Pico de tensión hasta <strong>1200-1600 V</strong> en las primeras espiras → perfora esmalte</li>
+        <li>Corrientes por rodamientos → micro-arcos → fluting (estriado en la pista)</li>
+        <li><strong>Soluciones:</strong> reactancia de salida (3%) | filtros dv/dt (&lt;500 V/µs) | filtros senoidales LC</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4.2 CONTROL V/f vs FOC -->
+  <div class="stitle"><span class="ico">📊</span> 4.2 — Control Escalar V/f vs Control Vectorial FOC</div>
+
+  <div class="grid2">
+    <div class="card card-blue">
+      <h4>📈 Control Escalar V/f (Constante)</h4>
+      <ul>
+        <li>Φ ∝ V / (4.44·f·N) → mantener V/f = cte para conservar flujo constante</li>
+        <li>Ej.: 400V @ 50Hz → K = 8.0 V/Hz (siempre constante)</li>
+        <li>⚠️ A &lt;10-15 Hz: X_L ≈ 0, R1 domina → caída I1·R1 → flujo cae → par cae</li>
+        <li><strong>Torque Boost:</strong> pedestal de tensión a 0 Hz para compensar resistencia del cobre</li>
+        <li>Ideal: bombas, ventiladores, accionamientos multimotor</li>
+      </ul>
+    </div>
+    <div class="card card-purple">
+      <h4>🎯 Control Vectorial FOC (Field Oriented Control)</h4>
+      <ul>
+        <li>Emula un motor DC desacoplando flujo y par</li>
+        <li><strong>Clarke:</strong> abc → sistema bifásico ortogonal fijo en estator (α-β)</li>
+        <li><strong>Park:</strong> (α-β) → sistema d-q sincronizado con el vector de flujo del rotor</li>
+        <li>Id controla el <strong>flujo magnético</strong> | Iq controla el <strong>par</strong> (independientes)</li>
+        <li>Respuesta &lt;5 ms, par nominal pleno a <strong>0 RPM</strong></li>
+        <li>Aplicaciones: grúas, elevadores, bobinadoras</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card card-orange">
+    <h4>📉 Debilitamiento de Campo (Field Weakening) — f &gt; 50 Hz</h4>
+    <ul>
+      <li>Al superar 50 Hz: tensión ya llegó al límite (400 V) — no puede aumentar más</li>
+      <li>Φ ∝ 1/f → el flujo decae al aumentar f con V constante</li>
+      <li>Potencia se mantiene constante (P = T·ω = cte)</li>
+      <li>Par nominal: decae con <strong>1/f</strong> | Par máximo de vuelco: decae con <strong>1/f²</strong></li>
+    </ul>
+  </div>
+
+  <!-- 4.3 STEPPERS Y SERVOMOTORES -->
+  <div class="stitle"><span class="ico">🤖</span> 4.3 — Steppers, Servomotores AC y Encoders</div>
+
+  <div class="card card-blue">
+    <h4>🔢 Motor Paso a Paso — Modos de Excitación</h4>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Modo</th><th>Fases activas</th><th>Par</th><th>Resolución</th></tr>
+        <tr><td>Wave Drive</td><td>1 fase a la vez</td><td>~70% nominal</td><td>Paso completo</td></tr>
+        <tr><td>Full-Step</td><td>2 fases simultáneas</td><td>100% nominal</td><td>Paso completo (saltos bruscos)</td></tr>
+        <tr><td>Half-Step</td><td>Alterna 1 y 2 fases (8 estados)</td><td>Intermedio</td><td>Medio paso — doble resolución</td></tr>
+        <tr><td><strong>Microstepping</strong></td><td>Modulación senoidal en cuadratura PWM</td><td>Continuo suave</td><td>Hasta 1/256 de paso</td></tr>
+      </table>
+    </div>
+    <div class="kv" style="margin-top:.6rem">
+      <span class="kv-item g">Ventaja microstepping 1: supresión total de resonancias mecánicas (100-300 PPS)</span>
+      <span class="kv-item p">Ventaja microstepping 2: marcha ultra silenciosa (StealthChop) — sin marcas de faceteado</span>
+    </div>
+  </div>
+
+  <!-- ANIMACIÓN MICROSTEPPING -->
+  <div class="canvas-wrap">
+    <canvas id="stepperCanvas" width="640" height="200"></canvas>
+    <p>Comparación Full-Step vs Microstepping: posición angular del vector de campo</p>
+    <div class="anim-ctrl">
+      <button class="btn btn-blue" onclick="toggleStepper()" id="stepperBtn">▶ Animar Stepper</button>
+      <button class="btn btn-gray" onclick="toggleMicro()" id="microBtn">Cambiar: Full-Step</button>
+    </div>
+  </div>
+
+  <div class="card card-teal">
+    <h4>⚙️ Servomotor AC Brushless — 3 Lazos PID en Cascada</h4>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Lazo</th><th>Variable controlada</th><th>Frecuencia de muestreo</th><th>Función</th></tr>
+        <tr><td><strong>Interno — Corriente/Par</strong></td><td>Corriente de fase / torque</td><td>10-20 kHz (ciclo 50-100 µs)</td><td>Controla vector de corriente → comanda IGBTs</td></tr>
+        <tr><td><strong>Intermedio — Velocidad</strong></td><td>RPM</td><td>1-4 kHz (ciclo 250 µs–1 ms)</td><td>Compara velocidad real vs consigna; filtros Notch anti-resonancia</td></tr>
+        <tr><td><strong>Externo — Posición</strong></td><td>Posición angular (grados/pulsos)</td><td>500-1000 Hz (ciclo 1-2 ms)</td><td>Compara posición real vs trayectoria CNC/PLC</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card card-blue">
+      <h4>📡 Encoder Incremental (A/B/Z)</h4>
+      <ul>
+        <li>Canales A y B: trenes de pulsos en cuadratura (90° desfase) → determina sentido de giro</li>
+        <li>Canal Z (índice): 1 pulso por vuelta → referencia para homing</li>
+        <li>⚠️ Pierde posición al cortar energía → requiere rutina de Homing al reiniciar</li>
+      </ul>
+    </div>
+    <div class="card card-green">
+      <h4>📡 Encoder Absoluto (Código Gray)</h4>
+      <ul>
+        <li>Disco con múltiples pistas concéntricas → cada posición angular = palabra digital única</li>
+        <li>Conoce su posición exacta <strong>al instante de encender</strong> — sin homing</li>
+        <li><strong>Código Gray:</strong> entre dos posiciones adyacentes solo cambia 1 bit → sin glitches</li>
+        <li>Imprescindible en ejes robóticos y prensas (evita colisiones por falsas lecturas)</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+</div><!-- /p4 -->
+
+<!-- ═══════════════════════════════════════════════
+     PÁGINA 5: JUEGOS & QUIZ
+══════════════════════════════════════════════════ -->
+<div id="p5" class="page">
+<div class="container">
+
+  <div class="stitle"><span class="ico">🎮</span> Juego 1 — Identificá el Sensor</div>
+  <p style="margin-bottom:1rem;color:var(--gray-lt);font-size:.92rem">Para cada escenario, seleccioná el sensor correcto.</p>
+
+  <div id="sensorGame"></div>
+  <div class="anim-ctrl" style="margin-top:.5rem">
+    <button class="btn btn-green" onclick="checkSensorGame()">✅ Verificar</button>
+    <button class="btn btn-gray" onclick="resetSensorGame()">↺ Reiniciar</button>
+  </div>
+  <div id="sensorFeedback" style="margin-top:.6rem;font-weight:700;font-size:.95rem"></div>
+
+  <div class="stitle" style="margin-top:2.5rem"><span class="ico">🔌</span> Juego 2 — Conector M12: Pines y Colores</div>
+  <p style="margin-bottom:1rem;color:var(--gray-lt);font-size:.92rem">Hacé clic en el color correcto para cada pin del conector M12.</p>
+
+  <div id="m12Game"></div>
+  <div class="anim-ctrl" style="margin-top:.5rem">
+    <button class="btn btn-green" onclick="checkM12()">✅ Verificar</button>
+    <button class="btn btn-gray" onclick="resetM12()">↺ Reiniciar</button>
+  </div>
+  <div id="m12Feedback" style="margin-top:.6rem;font-weight:700;font-size:.95rem"></div>
+
+  <div class="stitle" style="margin-top:2.5rem"><span class="ico">🏆</span> Quiz Final — 15 Preguntas</div>
+  <p style="margin-bottom:1rem;color:var(--gray-lt);font-size:.92rem">Cubriendo todos los ejercicios del parcial. Respondé todas y hacé clic en "Ver resultados".</p>
+
+  <div id="quizContainer"></div>
+  <div class="quiz-actions">
+    <button class="btn btn-blue" onclick="submitQuiz()" id="quizSubmitBtn">📋 Ver resultados</button>
+    <button class="btn btn-gray" onclick="resetQuiz()" id="quizResetBtn" style="display:none">↺ Reiniciar quiz</button>
+    <span id="quizProgress" style="font-size:.85rem;color:var(--gray-lt)"></span>
+  </div>
+  <div id="quizScore"></div>
+
+</div>
+</div><!-- /p5 -->
+
+<footer style="text-align:center;padding:2rem 1rem;border-top:1px solid var(--border);color:var(--gray-lt);font-size:.82rem">
+  <p>Automatización Industrial — Segundo Parcial 2026 · <a href="../apuntes/index.html" style="color:var(--blue)">← Volver a Apuntes</a></p>
+</footer>
+
+<script>
+// ════════════════════ NAVEGACIÓN ════════════════════
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'p5') {
+    setTimeout(() => { buildSensorGame(); buildM12Game(); buildQuiz(); }, 100);
+  }
+}
+
+// ════════════════════ ANIMACIÓN 1: LAZO 4-20mA ════════════════════
+const loopC = document.getElementById('loopCanvas');
+const loopCtx = loopC ? loopC.getContext('2d') : null;
+let loopPct = 0, loopFault = false;
+
+function setLoop(pct) { loopFault = false; loopPct = pct; drawLoop(); }
+function toggleLoopFault() {
+  loopFault = !loopFault;
+  document.getElementById('loopFaultBtn').textContent = loopFault ? '⚡ Cable Cortado (simulado)' : '⚡ Simular Rotura';
+  drawLoop();
+}
+
+function drawLoop() {
+  if (!loopCtx) return;
+  const W = loopC.width, H = loopC.height;
+  loopCtx.clearRect(0, 0, W, H);
+
+  const mA = loopFault ? 0 : (4 + loopPct * 16);
+  const V = mA * 250 / 1000;
+  const pct100 = loopFault ? 'FALLA' : Math.round(loopPct * 100) + '%';
+
+  // Background
+  loopCtx.fillStyle = '#f8fafc';
+  loopCtx.fillRect(0, 0, W, H);
+
+  // Wire line
+  const wireY = H / 2;
+  loopCtx.strokeStyle = loopFault ? '#dc2626' : '#0369a1';
+  loopCtx.lineWidth = 3;
+  loopCtx.setLineDash(loopFault ? [8, 6] : []);
+  loopCtx.beginPath(); loopCtx.moveTo(30, wireY); loopCtx.lineTo(W - 30, wireY);
+  loopCtx.stroke(); loopCtx.setLineDash([]);
+
+  // Fuente DC (izquierda)
+  drawBox(loopCtx, 30, wireY - 40, 90, 80, '#1d4ed8', '#eff6ff', '24 Vcc', 'Fuente');
+
+  // Transmisor (centro-izq)
+  drawBox(loopCtx, 180, wireY - 40, 110, 80, '#7c3aed', '#faf5ff', 'TX', loopFault ? '!! FALLA !!' : (Math.round(loopPct * 100) + '% → ' + mA.toFixed(1) + ' mA'));
+
+  // Shunt 250Ω (centro-der)
+  drawBox(loopCtx, 360, wireY - 40, 110, 80, '#d97706', '#fffbeb', '250 Ω', loopFault ? '0.00 V' : V.toFixed(2) + ' V');
+
+  // PLC (derecha)
+  drawBox(loopCtx, 540, wireY - 40, 110, 80, '#16a34a', '#f0fdf4', 'PLC', loopFault ? '⚠ LAZO ROTO' : 'OK ' + pct100);
+
+  // Flechita de corriente animada
+  if (!loopFault && mA > 0) {
+    loopCtx.fillStyle = '#0369a1';
+    for (let x of [140, 300, 480]) {
+      loopCtx.beginPath();
+      loopCtx.moveTo(x, wireY - 6);
+      loopCtx.lineTo(x + 14, wireY);
+      loopCtx.lineTo(x, wireY + 6);
+      loopCtx.fill();
+    }
+  }
+
+  // Label mA arriba
+  loopCtx.fillStyle = loopFault ? '#dc2626' : '#0369a1';
+  loopCtx.font = 'bold 14px Segoe UI';
+  loopCtx.textAlign = 'center';
+  loopCtx.fillText(loopFault ? '⚠ 0 mA — FALLA DETECTADA' : mA.toFixed(2) + ' mA', W / 2, 22);
+}
+
+function drawBox(ctx, x, y, w, h, stroke, fill, title, sub) {
+  ctx.strokeStyle = stroke; ctx.fillStyle = fill; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.roundRect(x, y, w, h, 8); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = stroke; ctx.font = 'bold 11px Segoe UI'; ctx.textAlign = 'center';
+  ctx.fillText(title, x + w / 2, y + 22);
+  ctx.fillStyle = '#374151'; ctx.font = '10px Segoe UI';
+  ctx.fillText(sub, x + w / 2, y + 42);
+}
+
+// ════════════════════ ANIMACIÓN 2: HART FSK ════════════════════
+const hartC = document.getElementById('hartCanvas');
+const hartCtx = hartC ? hartC.getContext('2d') : null;
+let hartAnim = null, hartPhase = 0, hartBit = 0, hartBits = [1,0,1,1,0,0,1,0,1,1,0,1,0,0,1];
+
+function toggleHart() {
+  if (hartAnim) { cancelAnimationFrame(hartAnim); hartAnim = null; document.getElementById('hartBtn').textContent = '▶ Animar'; }
+  else { document.getElementById('hartBtn').textContent = '⏸ Pausar'; animateHart(); }
+}
+
+function animateHart() {
+  if (!hartCtx) return;
+  const W = hartC.width, H = hartC.height;
+  hartCtx.clearRect(0, 0, W, H);
+  hartCtx.fillStyle = '#f8fafc'; hartCtx.fillRect(0, 0, W, H);
+
+  // DC baseline
+  hartCtx.strokeStyle = '#0369a1'; hartCtx.lineWidth = 2.5; hartCtx.setLineDash([4,3]);
+  hartCtx.beginPath(); hartCtx.moveTo(20, H/2); hartCtx.lineTo(W-20, H/2); hartCtx.stroke();
+  hartCtx.setLineDash([]);
+  hartCtx.fillStyle = '#0369a1'; hartCtx.font = '11px Segoe UI'; hartCtx.textAlign = 'left';
+  hartCtx.fillText('12 mA DC (componente analógica)', 24, H/2 - 8);
+
+  // HART wave overlay
+  const totalBits = hartBits.length;
+  const pxPerBit = (W - 40) / totalBits;
+  hartCtx.strokeStyle = '#7c3aed'; hartCtx.lineWidth = 2;
+  hartCtx.beginPath();
+  for (let i = 0; i < totalBits; i++) {
+    const freq = hartBits[i] === 1 ? 1200 : 2200;
+    const cycles = freq / 1200;
+    const pxPerCycle = pxPerBit / cycles;
+    for (let px = 0; px <= pxPerBit; px += 1) {
+      const angle = (px / pxPerCycle) * 2 * Math.PI + (i === 0 ? 0 : 0);
+      const amplitude = 30;
+      const x = 20 + i * pxPerBit + px;
+      const y = H/2 - amplitude * Math.sin(angle + hartPhase * (hartBits[i] === 1 ? 1 : 2));
+      if (i === 0 && px === 0) hartCtx.moveTo(x, y);
+      else hartCtx.lineTo(x, y);
+    }
+  }
+  hartCtx.stroke();
+
+  // Labels
+  for (let i = 0; i < totalBits; i++) {
+    const x = 20 + (i + 0.5) * pxPerBit;
+    hartCtx.fillStyle = hartBits[i] === 1 ? '#7c3aed' : '#d97706';
+    hartCtx.font = 'bold 10px Segoe UI'; hartCtx.textAlign = 'center';
+    hartCtx.fillText(hartBits[i] === 1 ? '1\n1200Hz' : '0\n2200Hz', x, H - 10);
+    hartCtx.fillText(hartBits[i] === 1 ? '1' : '0', x, H - 20);
+    hartCtx.font = '9px Segoe UI';
+    hartCtx.fillText(hartBits[i] === 1 ? '1200Hz' : '2200Hz', x, H - 8);
+  }
+
+  hartCtx.fillStyle = '#7c3aed'; hartCtx.font = 'bold 12px Segoe UI'; hartCtx.textAlign = 'right';
+  hartCtx.fillText('HART FSK ±0.5 mA', W - 20, 20);
+
+  hartPhase += 0.08;
+  hartAnim = requestAnimationFrame(animateHart);
+}
+
+// Dibujar loop inicial al cargar
+setTimeout(drawLoop, 100);
+
+// ════════════════════ ANIMACIÓN 3: CMG (Ferraris) ════════════════════
+const cmgC = document.getElementById('cmgCanvas');
+const cmgCtx = cmgC ? cmgC.getContext('2d') : null;
+let cmgAnim = null, cmgAngle = 0;
+
+function toggleCMG() {
+  if (cmgAnim) { cancelAnimationFrame(cmgAnim); cmgAnim = null; document.getElementById('cmgBtn').textContent = '▶ Animar CMG'; }
+  else { document.getElementById('cmgBtn').textContent = '⏸ Pausar'; animateCMG(); }
+}
+
+function animateCMG() {
+  if (!cmgCtx) return;
+  const W = cmgC.width, H = cmgC.height;
+  cmgCtx.clearRect(0, 0, W, H);
+
+  const cx = 170, cy = H/2, R = 100;
+  const plotX = 350, plotW = W - plotX - 20;
+  const t = cmgAngle;
+
+  // === Izquierda: diagrama vectorial del CMG ===
+  cmgCtx.fillStyle = '#1e293b';
+  cmgCtx.beginPath(); cmgCtx.arc(cx, cy, R + 10, 0, 2*Math.PI); cmgCtx.fill();
+
+  // Círculo
+  cmgCtx.strokeStyle = '#334155'; cmgCtx.lineWidth = 1;
+  cmgCtx.beginPath(); cmgCtx.arc(cx, cy, R, 0, 2*Math.PI); cmgCtx.stroke();
+
+  // Bobinas (3 ejes desfasados 120°)
+  const phases = [{color:'#ef4444',angle:0},{color:'#22c55e',angle:2*Math.PI/3},{color:'#3b82f6',angle:4*Math.PI/3}];
+  phases.forEach(ph => {
+    cmgCtx.strokeStyle = ph.color; cmgCtx.lineWidth = 1; cmgCtx.globalAlpha = .4;
+    cmgCtx.beginPath();
+    cmgCtx.moveTo(cx - Math.cos(ph.angle)*R, cy - Math.sin(ph.angle)*R);
+    cmgCtx.lineTo(cx + Math.cos(ph.angle)*R, cy + Math.sin(ph.angle)*R);
+    cmgCtx.stroke(); cmgCtx.globalAlpha = 1;
+  });
+
+  // Vectores de campo de cada fase
+  phases.forEach((ph, i) => {
+    const amp = Math.cos(t - i * 2*Math.PI/3);
+    const vx = Math.cos(ph.angle) * amp * R * 0.9;
+    const vy = Math.sin(ph.angle) * amp * R * 0.9;
+    cmgCtx.strokeStyle = ph.color; cmgCtx.lineWidth = 2.5;
+    cmgCtx.beginPath(); cmgCtx.moveTo(cx, cy); cmgCtx.lineTo(cx + vx, cy + vy); cmgCtx.stroke();
+  });
+
+  // Vector resultante CMG (B_total = 1.5 Bmax, siempre igual magnitud, rota)
+  const bx = Math.cos(t) * R * 0.75;
+  const by = Math.sin(t) * R * 0.75;
+  cmgCtx.strokeStyle = '#fbbf24'; cmgCtx.lineWidth = 4;
+  cmgCtx.beginPath(); cmgCtx.moveTo(cx, cy); cmgCtx.lineTo(cx + bx, cy + by); cmgCtx.stroke();
+  // Punta
+  const ang = Math.atan2(by, bx);
+  cmgCtx.fillStyle = '#fbbf24';
+  cmgCtx.beginPath();
+  cmgCtx.moveTo(cx + bx + Math.cos(ang)*8, cy + by + Math.sin(ang)*8);
+  cmgCtx.lineTo(cx + bx + Math.cos(ang+2.5)*6, cy + by + Math.sin(ang+2.5)*6);
+  cmgCtx.lineTo(cx + bx + Math.cos(ang-2.5)*6, cy + by + Math.sin(ang-2.5)*6);
+  cmgCtx.fill();
+
+  cmgCtx.fillStyle = '#fbbf24'; cmgCtx.font = 'bold 11px Segoe UI'; cmgCtx.textAlign = 'center';
+  cmgCtx.fillText('B_total = 1.5·Bmax', cx, cy + R + 24);
+
+  // === Derecha: curvas sinusoidales ===
+  cmgCtx.fillStyle = '#f8fafc';
+  cmgCtx.fillRect(plotX - 5, 10, plotW + 5, H - 20);
+
+  const plotCy = H / 2, amp2 = 55;
+  cmgCtx.strokeStyle = '#e2e8f0'; cmgCtx.lineWidth = 1;
+  cmgCtx.beginPath(); cmgCtx.moveTo(plotX, plotCy); cmgCtx.lineTo(plotX + plotW, plotCy); cmgCtx.stroke();
+
+  phases.forEach((ph, i) => {
+    cmgCtx.strokeStyle = ph.color; cmgCtx.lineWidth = 2;
+    cmgCtx.beginPath();
+    for (let x = 0; x <= plotW; x++) {
+      const tt = (x / plotW) * 4 * Math.PI + t - 4*Math.PI;
+      const y = plotCy - Math.cos(tt - i * 2*Math.PI/3) * amp2;
+      x === 0 ? cmgCtx.moveTo(plotX + x, y) : cmgCtx.lineTo(plotX + x, y);
+    }
+    cmgCtx.stroke();
+    // Label
+    cmgCtx.fillStyle = ph.color; cmgCtx.font = 'bold 10px Segoe UI'; cmgCtx.textAlign = 'left';
+    cmgCtx.fillText(['L1 (R)','L2 (S)','L3 (T)'][i], plotX + 4, plotCy - amp2 + 14 + i * 14);
+  });
+
+  // Línea de tiempo actual
+  cmgCtx.strokeStyle = '#fbbf24'; cmgCtx.lineWidth = 1.5; cmgCtx.setLineDash([4,3]);
+  cmgCtx.beginPath(); cmgCtx.moveTo(plotX + plotW, 10); cmgCtx.lineTo(plotX + plotW, H-10);
+  cmgCtx.stroke(); cmgCtx.setLineDash([]);
+
+  cmgCtx.fillStyle = '#374151'; cmgCtx.font = 'bold 11px Segoe UI'; cmgCtx.textAlign = 'center';
+  cmgCtx.fillText('3 fases en el tiempo →', plotX + plotW/2, H - 6);
+
+  cmgAngle += 0.025;
+  cmgAnim = requestAnimationFrame(animateCMG);
+}
+
+// ════════════════════ ANIMACIÓN 4: Y-DELTA ════════════════════
+const ydC = document.getElementById('ydCanvas');
+const ydCtx = ydC ? ydC.getContext('2d') : null;
+let ydState = 'idle', ydTime = 0, ydAnim = null;
+
+function startYDelta() {
+  if (ydAnim) { cancelAnimationFrame(ydAnim); ydAnim = null; }
+  ydState = 'star'; ydTime = 0; animateYD();
+}
+
+function resetYDelta() {
+  if (ydAnim) { cancelAnimationFrame(ydAnim); ydAnim = null; }
+  ydState = 'idle'; ydTime = 0;
+  if (ydCtx) { ydCtx.clearRect(0, 0, ydC.width, ydC.height); drawYDIdle(); }
+}
+
+function animateYD() {
+  if (!ydCtx) return;
+  const W = ydC.width, H = ydC.height;
+  ydCtx.clearRect(0, 0, W, H);
+
+  // Fondo
+  ydCtx.fillStyle = '#f8fafc'; ydCtx.fillRect(0, 0, W, H);
+
+  const totalT = 300;
+  const switchT = 180;
+
+  if (ydState === 'star') {
+    if (ydTime > switchT - 10 && ydTime <= switchT + 10) ydState = 'switching';
+    else if (ydTime > switchT + 10) ydState = 'delta';
+  }
+
+  // Barra de tiempo
+  const pct = Math.min(ydTime / totalT, 1);
+  ydCtx.fillStyle = '#e2e8f0'; ydCtx.fillRect(20, H - 24, W - 40, 10);
+  ydCtx.fillStyle = ydState === 'switching' ? '#f59e0b' : (ydState === 'delta' ? '#16a34a' : '#0369a1');
+  ydCtx.fillRect(20, H - 24, (W - 40) * pct, 10);
+
+  // Estados de contactores
+  const states = {
+    KM1: ydState !== 'idle',
+    KM3: ydState === 'star',
+    KM2: ydState === 'delta'
+  };
+
+  const cols = [{k:'KM1',label:'KM1\nLínea',x:60},{k:'KM3',label:'KM3\nEstrella',x:200},{k:'KM2',label:'KM2\nTriángulo',x:340}];
+  cols.forEach(c => {
+    const on = states[c.k];
+    ydCtx.strokeStyle = on ? '#16a34a' : '#94a3b8';
+    ydCtx.fillStyle = on ? '#dcfce7' : '#f1f5f9';
+    ydCtx.lineWidth = 2;
+    ydCtx.beginPath(); ydCtx.roundRect(c.x, 20, 110, 70, 8); ydCtx.fill(); ydCtx.stroke();
+    ydCtx.fillStyle = on ? '#15803d' : '#6b7280';
+    ydCtx.font = 'bold 13px Segoe UI'; ydCtx.textAlign = 'center';
+    ydCtx.fillText(c.k, c.x + 55, 55);
+    ydCtx.font = '11px Segoe UI'; ydCtx.fillText(c.label.split('\n')[1], c.x + 55, 72);
+    ydCtx.fillStyle = on ? '#16a34a' : '#94a3b8';
+    ydCtx.font = 'bold 20px Segoe UI';
+    ydCtx.fillText(on ? '✔' : '✗', c.x + 55, 42);
+  });
+
+  // Corriente
+  const normalI = 100;
+  let currentI;
+  if (!states.KM1) currentI = 0;
+  else if (ydState === 'star') currentI = normalI / 3;
+  else if (ydState === 'switching') currentI = normalI * 1.8 * Math.abs(Math.sin(ydTime * 0.3));
+  else currentI = normalI;
+
+  const barX = 490, barW = 30, barMaxH = 110, barY = 20;
+  ydCtx.fillStyle = '#e2e8f0'; ydCtx.fillRect(barX, barY, barW, barMaxH);
+  const barH = (currentI / (normalI * 2)) * barMaxH;
+  ydCtx.fillStyle = currentI > normalI ? '#dc2626' : (currentI < normalI * 0.5 ? '#3b82f6' : '#16a34a');
+  ydCtx.fillRect(barX, barY + barMaxH - barH, barW, barH);
+  ydCtx.fillStyle = '#374151'; ydCtx.font = '10px Segoe UI'; ydCtx.textAlign = 'center';
+  ydCtx.fillText('Corriente', barX + barW/2, barY + barMaxH + 14);
+  ydCtx.font = 'bold 11px Segoe UI';
+  ydCtx.fillText(Math.round(currentI) + '%', barX + barW/2, barY + barMaxH - barH - 4);
+
+  // Estado texto
+  ydCtx.fillStyle = '#0369a1'; ydCtx.font = 'bold 12px Segoe UI'; ydCtx.textAlign = 'left';
+  const labels = {idle:'Listo', star:'🌟 Arrancando en ESTRELLA (1/3 de I y T)', switching:'⚡ Conmutando (pico transitorio)', delta:'✅ Funcionando en TRIÁNGULO (régimen)'};
+  ydCtx.fillText(labels[ydState] || '', 20, H - 32);
+
+  if (ydState !== 'idle' && pct < 1) {
+    ydTime++;
+    ydAnim = requestAnimationFrame(animateYD);
+  } else if (pct >= 1) {
+    ydState = 'delta';
+    animateYD();
+  }
+}
+
+function drawYDIdle() {
+  if (!ydCtx) return;
+  const W = ydC.width, H = ydC.height;
+  ydCtx.fillStyle = '#f8fafc'; ydCtx.fillRect(0, 0, W, H);
+  ydCtx.fillStyle = '#94a3b8'; ydCtx.font = '14px Segoe UI'; ydCtx.textAlign = 'center';
+  ydCtx.fillText('Presioná "Simular Arranque Y-Δ" para ver la animación', W/2, H/2);
+}
+
+setTimeout(drawYDIdle, 200);
+
+// ════════════════════ ANIMACIÓN 5: VFD BLOQUES ════════════════════
+const vfdC = document.getElementById('vfdCanvas');
+const vfdCtx = vfdC ? vfdC.getContext('2d') : null;
+
+const vfdInfoMap = {
+  rect: 'RECTIFICADOR: Puente de Graetz de 6 diodos (CA 400V → CC pulsante). Incluye resistencia de precarga inrush para proteger los condensadores descargados.',
+  dc: 'BUS DC LINK: Condensadores electrolíticos (565 Vcc = √2 × 400V). Filtran rizado 300 Hz. DC Choke reduce armónicos. Bleeder resistors descargan a <50V al apagar.',
+  inv: 'INVERSOR IGBT + SPWM: Puente de 6 IGBTs con diodos freewheeling. Modulación SPWM (portadora triangular 2-16 kHz vs moduladora senoidal) genera CA variable en frecuencia y tensión.',
+  chop: 'CHOPPER DE FRENADO: Transistor Chopper desvía energía regenerativa hacia resistencia externa cuando el bus DC sube >750V por desaceleración de cargas con alta inercia.'
+};
+
+function drawVFD() {
+  if (!vfdCtx) return;
+  const W = vfdC.width, H = vfdC.height;
+  vfdCtx.clearRect(0, 0, W, H);
+  vfdCtx.fillStyle = '#f8fafc'; vfdCtx.fillRect(0, 0, W, H);
+
+  const blocks = [
+    {id:'rect', x:20, y:40, w:140, h:120, color:'#0369a1', fill:'#eff6ff', label:'① Rectificador', sub:'Puente Graetz\n6 diodos\n400Vac → 565Vcc'},
+    {id:'dc',   x:200, y:40, w:140, h:120, color:'#7c3aed', fill:'#faf5ff', label:'② Bus DC Link',   sub:'Condensadores\n565 Vcc\nRide-Through'},
+    {id:'inv',  x:380, y:40, w:140, h:120, color:'#16a34a', fill:'#f0fdf4', label:'③ Inversor IGBT', sub:'6 IGBTs + SPWM\nCA variable\nf, V ajustables'},
+    {id:'chop', x:560, y:40, w:120, h:120, color:'#dc2626', fill:'#fff5f5', label:'Chopper',          sub:'Frenado\ndinámico\n~750Vcc'}
+  ];
+
+  // Flechas de energía
+  [[160,100,'→'],[340,100,'→'],[520,100,'→']].forEach(([x,y,t]) => {
+    vfdCtx.fillStyle = '#94a3b8'; vfdCtx.font = 'bold 20px Segoe UI'; vfdCtx.textAlign = 'center';
+    vfdCtx.fillText(t, x, y + 10);
+  });
+
+  blocks.forEach(b => {
+    vfdCtx.strokeStyle = b.color; vfdCtx.fillStyle = b.fill; vfdCtx.lineWidth = 2.5;
+    vfdCtx.beginPath(); vfdCtx.roundRect(b.x, b.y, b.w, b.h, 10); vfdCtx.fill(); vfdCtx.stroke();
+    vfdCtx.fillStyle = b.color; vfdCtx.font = 'bold 11px Segoe UI'; vfdCtx.textAlign = 'center';
+    vfdCtx.fillText(b.label, b.x + b.w/2, b.y + 22);
+    b.sub.split('\n').forEach((line, i) => {
+      vfdCtx.fillStyle = '#374151'; vfdCtx.font = '10px Segoe UI';
+      vfdCtx.fillText(line, b.x + b.w/2, b.y + 42 + i * 16);
+    });
+  });
+
+  // Red izquierda
+  vfdCtx.fillStyle = '#6b7280'; vfdCtx.font = '10px Segoe UI'; vfdCtx.textAlign = 'center';
+  vfdCtx.fillText('Red 400V\n50Hz', 10, 108); vfdCtx.fillText('Motor', W-15, 108);
+}
+
+setTimeout(drawVFD, 300);
+
+// ════════════════════ ANIMACIÓN 6: STEPPER ════════════════════
+const stepC = document.getElementById('stepperCanvas');
+const stepCtx = stepC ? stepC.getContext('2d') : null;
+let stepAnim = null, stepAngle = 0, stepMicro = false, stepFull = true;
+
+function toggleStepper() {
+  if (stepAnim) { cancelAnimationFrame(stepAnim); stepAnim = null; document.getElementById('stepperBtn').textContent = '▶ Animar Stepper'; }
+  else { document.getElementById('stepperBtn').textContent = '⏸ Pausar'; animateStepper(); }
+}
+function toggleMicro() {
+  stepMicro = !stepMicro;
+  document.getElementById('microBtn').textContent = 'Cambiar: ' + (stepMicro ? 'Microstepping' : 'Full-Step');
+}
+
+function animateStepper() {
+  if (!stepCtx) return;
+  const W = stepC.width, H = stepC.height;
+  stepCtx.clearRect(0, 0, W, H);
+  stepCtx.fillStyle = '#f8fafc'; stepCtx.fillRect(0, 0, W, H);
+
+  // Si es full-step, el ángulo va en pasos discretos de 45°
+  const displayAngle = stepMicro ? stepAngle : (Math.round(stepAngle / (Math.PI/4)) * (Math.PI/4));
+
+  const cx1 = 100, cx2 = 380, cy = H/2, R = 65;
+
+  // === Motor izquierdo: vector campo ===
+  const labels1 = stepMicro ? 'Microstepping' : 'Full-Step';
+  drawStepperMotor(stepCtx, cx1, cy, R, displayAngle, labels1);
+
+  // === Motor derecho: comparación ===
+  drawStepperMotor(stepCtx, cx2, cy, R, stepMicro ? stepAngle * 1.0 : displayAngle, stepMicro ? 'Microstepping (suave)' : 'Full-Step (saltos 45°)');
+
+  // === Gráfico de posición ===
+  const plotX = 240, plotY = 20, plotW = 100, plotH = H - 40;
+  stepCtx.fillStyle = '#fff'; stepCtx.strokeStyle = '#e2e8f0'; stepCtx.lineWidth = 1;
+  stepCtx.fillRect(plotX, plotY, plotW, plotH); stepCtx.strokeRect(plotX, plotY, plotW, plotH);
+  stepCtx.fillStyle = '#94a3b8'; stepCtx.font = '9px Segoe UI'; stepCtx.textAlign = 'center';
+  stepCtx.fillText('Posición', plotX + plotW/2, plotY + plotH + 14);
+
+  // Traza posición
+  stepCtx.strokeStyle = stepMicro ? '#7c3aed' : '#0369a1'; stepCtx.lineWidth = 2;
+  stepCtx.beginPath();
+  for (let i = 0; i < 50; i++) {
+    const a = (stepAngle - i * 0.1);
+    const pa = stepMicro ? a : Math.round(a / (Math.PI/4)) * (Math.PI/4);
+    const x = plotX + plotW - i * (plotW/50);
+    const y = plotY + plotH/2 - Math.cos(pa) * (plotH/2 - 10);
+    i === 0 ? stepCtx.moveTo(x, y) : stepCtx.lineTo(x, y);
+  }
+  stepCtx.stroke();
+
+  stepAngle += stepMicro ? 0.03 : 0.025;
+  stepAnim = requestAnimationFrame(animateStepper);
+}
+
+function drawStepperMotor(ctx, cx, cy, R, angle, label) {
+  // Círculo del motor
+  ctx.strokeStyle = '#334155'; ctx.fillStyle = '#1e293b'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, 2*Math.PI); ctx.fill(); ctx.stroke();
+
+  // 4 polos del estátor
+  for (let i = 0; i < 4; i++) {
+    const a = i * Math.PI/2;
+    ctx.fillStyle = '#334155';
+    ctx.beginPath();
+    ctx.arc(cx + Math.cos(a)*(R-10), cy + Math.sin(a)*(R-10), 12, 0, 2*Math.PI);
+    ctx.fill();
+  }
+
+  // Rotor dentado simplificado
+  ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2;
+  for (let i = 0; i < 8; i++) {
+    const a = angle + i * Math.PI/4;
+    ctx.beginPath(); ctx.moveTo(cx + Math.cos(a)*20, cy + Math.sin(a)*20);
+    ctx.lineTo(cx + Math.cos(a)*32, cy + Math.sin(a)*32); ctx.stroke();
+  }
+
+  // Vector de campo
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(angle)*R*0.6, cy + Math.sin(angle)*R*0.6);
+  ctx.stroke();
+
+  ctx.fillStyle = '#94a3b8'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'center';
+  ctx.fillText(label, cx, cy + R + 18);
+}
+
+// ════════════════════ JUEGO 1: SENSOR ════════════════════
+const sensorScenarios = [
+  {q:'Detectar presencia de una pieza metálica (hierro) en una cinta transportadora', correct:'inductivo', opts:['inductivo','capacitivo']},
+  {q:'Detectar el nivel de agua dentro de un tanque plástico sin perforar el recipiente', correct:'capacitivo', opts:['inductivo','capacitivo']},
+  {q:'Detectar presencia de una moneda de aluminio a 5 mm de distancia', correct:'inductivo', opts:['inductivo','capacitivo']},
+  {q:'Detectar si un silo de cemento en polvo está lleno (a través de pared plástica)', correct:'capacitivo', opts:['inductivo','capacitivo']},
+  {q:'Contar piezas de acero en movimiento a alta velocidad en línea de producción', correct:'inductivo', opts:['inductivo','capacitivo']},
+  {q:'Verificar si una botella plástica contiene líquido (sin abrirla)', correct:'capacitivo', opts:['inductivo','capacitivo']}
+];
+let sensorAnswers = {};
+
+function buildSensorGame() {
+  const el = document.getElementById('sensorGame');
+  if (!el || el.children.length > 0) return;
+  sensorAnswers = {};
+  el.innerHTML = sensorScenarios.map((s, i) => `
+    <div class="game-box" id="sensorQ${i}">
+      <h4>Escenario ${i+1}: ${s.q}</h4>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        ${s.opts.map(o => `
+          <button class="btn ${o==='inductivo'?'btn-blue':'btn-purple'}" id="sSen_${i}_${o}"
+            onclick="selectSensor(${i},'${o}')">${o.charAt(0).toUpperCase()+o.slice(1)}</button>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectSensor(i, opt) {
+  sensorAnswers[i] = opt;
+  const q = document.getElementById('sensorQ' + i);
+  q.querySelectorAll('button').forEach(b => b.style.opacity = '.5');
+  document.getElementById('sSen_' + i + '_' + opt).style.opacity = '1';
+  document.getElementById('sSen_' + i + '_' + opt).style.transform = 'scale(1.07)';
+}
+
+function checkSensorGame() {
+  let ok = 0;
+  sensorScenarios.forEach((s, i) => {
+    const ans = sensorAnswers[i];
+    const q = document.getElementById('sensorQ' + i);
+    if (!q) return;
+    q.style.borderRadius = '12px';
+    if (ans === s.correct) {
+      ok++;
+      q.style.border = '2px solid #16a34a';
+      q.style.background = '#f0fdf4';
+    } else {
+      q.style.border = '2px solid #dc2626';
+      q.style.background = '#fff5f5';
+      const info = document.createElement('p');
+      info.style.cssText = 'color:#dc2626;font-size:.85rem;margin-top:.4rem;font-weight:600';
+      info.textContent = '✗ La respuesta correcta es: ' + s.correct.toUpperCase();
+      q.appendChild(info);
+    }
+  });
+  const fb = document.getElementById('sensorFeedback');
+  fb.textContent = `${ok}/${sensorScenarios.length} correctas ${ok === sensorScenarios.length ? '🏆 ¡Perfecto!' : ok >= 4 ? '👍 Muy bien' : '📖 Repasá los principios físicos'}`;
+  fb.style.color = ok === sensorScenarios.length ? '#16a34a' : ok >= 4 ? '#d97706' : '#dc2626';
+}
+
+function resetSensorGame() {
+  document.getElementById('sensorGame').innerHTML = '';
+  document.getElementById('sensorFeedback').textContent = '';
+  buildSensorGame();
+}
+
+// ════════════════════ JUEGO 2: M12 CONECTOR ════════════════════
+const m12Pins = [
+  {pin:1, correct:'marron', label:'Pin 1 — +24 Vcc (alimentación)', opts:['marron','blanco','azul','negro']},
+  {pin:2, correct:'blanco', label:'Pin 2 — Salida NC / diagnóstico', opts:['marron','blanco','azul','negro']},
+  {pin:3, correct:'azul',   label:'Pin 3 — 0 Vcc / GND', opts:['marron','blanco','azul','negro']},
+  {pin:4, correct:'negro',  label:'Pin 4 — Señal NO → PLC', opts:['marron','blanco','azul','negro']}
+];
+const colorBg = {marron:'#8B4513', blanco:'#f0f0f0', azul:'#3b82f6', negro:'#1e293b'};
+const colorFg = {marron:'#fff', blanco:'#333', azul:'#fff', negro:'#fff'};
+let m12Answers = {};
+
+function buildM12Game() {
+  const el = document.getElementById('m12Game');
+  if (!el || el.children.length > 0) return;
+  m12Answers = {};
+  el.innerHTML = m12Pins.map((p, i) => `
+    <div class="game-box" id="m12Q${i}">
+      <h4>${p.label}</h4>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        ${p.opts.map(o => `
+          <button id="m12b_${i}_${o}"
+            style="padding:.4rem .9rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;border:2px solid #000;
+                   background:${colorBg[o]};color:${colorFg[o]}"
+            onclick="selectM12(${i},'${o}')">${o.charAt(0).toUpperCase()+o.slice(1)}</button>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectM12(i, opt) {
+  m12Answers[i] = opt;
+  document.querySelectorAll(`[id^=m12b_${i}_]`).forEach(b => b.style.outline = 'none');
+  document.getElementById(`m12b_${i}_${opt}`).style.outline = '3px solid #0369a1';
+}
+
+function checkM12() {
+  let ok = 0;
+  m12Pins.forEach((p, i) => {
+    const ans = m12Answers[i];
+    const q = document.getElementById('m12Q' + i);
+    if (!q) return;
+    if (ans === p.correct) {
+      ok++; q.style.border = '2px solid #16a34a'; q.style.background = '#f0fdf4';
+    } else {
+      q.style.border = '2px solid #dc2626'; q.style.background = '#fff5f5';
+      const info = document.createElement('p');
+      info.style.cssText = 'color:#dc2626;font-size:.85rem;margin-top:.4rem;font-weight:600';
+      info.textContent = '✗ Correcto: ' + p.correct.toUpperCase();
+      q.appendChild(info);
+    }
+  });
+  const fb = document.getElementById('m12Feedback');
+  fb.textContent = `${ok}/${m12Pins.length} correctas ${ok === 4 ? '🏆 ¡Código de colores memorizado!' : '📖 Repasá IEC 60947-5-2'}`;
+  fb.style.color = ok === 4 ? '#16a34a' : '#dc2626';
+}
+
+function resetM12() {
+  document.getElementById('m12Game').innerHTML = '';
+  document.getElementById('m12Feedback').textContent = '';
+  buildM12Game();
+}
+
+// ════════════════════ QUIZ ════════════════════
+const quizData = [
+  {q:'¿Cuál es el valor de corriente que representa el 0% de escala en el estándar 4-20 mA?', opts:['0 mA','4 mA','2 mA','10 mA'], correct:1, ex:'1.1'},
+  {q:'Un PLC detecta 0 mA en la entrada analógica. ¿Qué indica según NAMUR NE 43?', opts:['Variable en 0%','Variable al 100%','Falla de lazo abierto / rotura de cable','Saturación del transmisor'], correct:2, ex:'1.1'},
+  {q:'¿Cuál es la tensión generada por el resistor Shunt de 250 Ω cuando la corriente es 20 mA?', opts:['1 V','3 V','5 V','10 V'], correct:2, ex:'1.1'},
+  {q:'¿Qué principio físico usa el caudalímetro electromagnético?', opts:['Efecto Coriolis','Ley de Faraday (E = B·v·D)','Principio de Arquímedes','Efecto Doppler'], correct:1, ex:'1.2'},
+  {q:'¿Por qué NO se puede usar un contacto NA (normalmente abierto) en un circuito de parada de emergencia?', opts:['Es más caro','Si el cable se corta, la máquina no para (fail-danger)','Genera ruido eléctrico','La norma ISO prohíbe el color rojo'], correct:1, ex:'1.3'},
+  {q:'Un sensor inductivo detecta una botella plástica llena de agua. ¿Qué ocurre?', opts:['La detecta, el agua induce Foucault','No la detecta, el plástico y el agua no inducen corrientes de Foucault','Solo detecta el agua','Depende del tamaño de la botella'], correct:1, ex:'2.1'},
+  {q:'¿Qué frecuencias usa el protocolo HART Bell 202 para los bits "1" y "0"?', opts:['440 Hz y 880 Hz','1200 Hz y 2200 Hz','2400 Hz y 4800 Hz','50 Hz y 100 Hz'], correct:1, ex:'2.2'},
+  {q:'¿Qué ocurre con la corriente analógica de cada transmisor en modo Multidrop HART?', opts:['Varía entre 4 y 20 mA normalmente','Se fija en 4.00 mA fijos (solo digital)','Se fija en 20 mA fijos','Se deshabilita el instrumento'], correct:1, ex:'2.2'},
+  {q:'Según el Teorema de Ferraris, ¿cuál es la amplitud del campo magnético giratorio resultante?', opts:['B_max','B_max / 2','1.5 · B_max','3 · B_max'], correct:2, ex:'3.1'},
+  {q:'¿Por qué es físicamente imposible que un motor asíncrono alcance la velocidad de sincronismo en régimen motor?', opts:['Por la resistencia mecánica de los rodamientos','Si n=ns no hay variación de flujo → FEM=0 → I=0 → par=0','La norma IEC lo prohíbe','Por la resistencia eléctrica del rotor'], correct:1, ex:'3.1'},
+  {q:'En un arranque Estrella-Triángulo, ¿en qué fracción queda la corriente de arranque respecto al arranque directo (DOL)?', opts:['1/2','1/3','1/√3','2/3'], correct:1, ex:'3.2'},
+  {q:'¿Cuál es la función del contactor de Bypass en un Soft-Starter durante el régimen permanente?', opts:['Protección contra sobretensión','Derivar la corriente por cobre macizo eliminando pérdidas SCR y armónicos','Limitar la corriente máxima','Desconectar el motor en emergencia'], correct:1, ex:'3.3'},
+  {q:'¿Cuál es la tensión del Bus DC Link de un VFD alimentado por red de 400 Vca trifásica?', opts:['400 Vcc','480 Vcc','565 Vcc','750 Vcc'], correct:2, ex:'4.1'},
+  {q:'¿Qué característica diferencia al Control Vectorial FOC del Control Escalar V/f?', opts:['FOC es más económico','FOC puede entregar par nominal pleno a 0 RPM desacoplando flujo (Id) y par (Iq)','FOC no requiere encoder','FOC aplica solo a motores de CC'], correct:1, ex:'4.2'},
+  {q:'¿Qué ventaja tiene el encoder absoluto de código Gray sobre el incremental?', opts:['Es más económico','Tiene más pulsos por vuelta','Conoce su posición exacta al encender sin necesidad de homing','Funciona a mayor velocidad'], correct:2, ex:'4.3'}
+];
+
+let quizAnswers = {}, quizDone = false;
+
+function buildQuiz() {
+  const el = document.getElementById('quizContainer');
+  if (!el || el.children.length > 0) return;
+  quizAnswers = {}; quizDone = false;
+  el.innerHTML = quizData.map((q, i) => `
+    <div class="quiz-q" id="qq${i}">
+      <h4>${i+1}. [Ej.${q.ex}] ${q.q}</h4>
+      <div class="quiz-opts">
+        ${q.opts.map((o, j) => `
+          <label class="quiz-opt" id="qo${i}_${j}" onclick="selectQ(${i},${j})">
+            <input type="radio" name="q${i}" value="${j}"/>
+            <span>${String.fromCharCode(65+j)}) ${o}</span>
+          </label>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+  updateQuizProgress();
+}
+
+function selectQ(qi, oi) {
+  if (quizDone) return;
+  quizAnswers[qi] = oi;
+  document.querySelectorAll(`[id^=qo${qi}_]`).forEach(el => el.classList.remove('selected'));
+  document.getElementById(`qo${qi}_${oi}`).classList.add('selected');
+  updateQuizProgress();
+}
+
+function updateQuizProgress() {
+  const answered = Object.keys(quizAnswers).length;
+  document.getElementById('quizProgress').textContent = `${answered} / ${quizData.length} respondidas`;
+}
+
+function submitQuiz() {
+  if (Object.keys(quizAnswers).length < quizData.length) {
+    alert('Respondé todas las preguntas antes de ver los resultados.');
+    return;
+  }
+  quizDone = true;
+  let score = 0;
+  quizData.forEach((q, i) => {
+    const ans = quizAnswers[i];
+    const qEl = document.getElementById(`qq${i}`);
+    for (let j = 0; j < q.opts.length; j++) {
+      const optEl = document.getElementById(`qo${i}_${j}`);
+      optEl.classList.remove('selected');
+      if (j === q.correct) optEl.classList.add('correct');
+      else if (j === ans && ans !== q.correct) optEl.classList.add('wrong');
+    }
+    if (ans === q.correct) { score++; qEl.style.borderLeft = '4px solid #16a34a'; }
+    else qEl.style.borderLeft = '4px solid #dc2626';
+  });
+
+  const pct = Math.round(score / quizData.length * 100);
+  const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '😊' : pct >= 50 ? '📖' : '💪';
+  const msg = pct >= 90 ? '¡Excelente! Estás listo para el parcial.' : pct >= 70 ? 'Muy bien, repasá los errores.' : pct >= 50 ? 'Bien encaminado, seguí estudiando.' : 'Dedicale más tiempo a los temas que fallaste.';
+
+  document.getElementById('quizScore').innerHTML = `
+    <div class="score-box">
+      <div class="score-emoji">${emoji}</div>
+      <h3>${score} / ${quizData.length} — ${pct}%</h3>
+      <p>${msg}</p>
+    </div>
+  `;
+
+  document.getElementById('quizSubmitBtn').style.display = 'none';
+  document.getElementById('quizResetBtn').style.display = 'inline-block';
+  document.getElementById('quizProgress').textContent = `Resultado: ${score}/${quizData.length}`;
+}
+
+function resetQuiz() {
+  document.getElementById('quizContainer').innerHTML = '';
+  document.getElementById('quizScore').innerHTML = '';
+  document.getElementById('quizSubmitBtn').style.display = 'inline-block';
+  document.getElementById('quizResetBtn').style.display = 'none';
+  buildQuiz();
+}
+
+// VFD click info
+if (vfdC) {
+  vfdC.addEventListener('click', e => {
+    const rect = vfdC.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (vfdC.width / rect.width);
+    let info = null;
+    if (x < 160) info = vfdInfoMap.rect;
+    else if (x < 340) info = vfdInfoMap.dc;
+    else if (x < 520) info = vfdInfoMap.inv;
+    else info = vfdInfoMap.chop;
+    if (info) {
+      const el = document.getElementById('vfdInfo');
+      document.getElementById('vfdInfoText').textContent = info;
+      el.style.display = 'flex';
+    }
+  });
+}
+</script>
+</body>
+</html>

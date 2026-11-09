@@ -2864,7 +2864,7 @@ const simDataBlocks = [
   }
 ];
 
-let simAnswers = {}, simDone = false;
+let _legAnswers = {}, _legDone = false;
 
 function buildSimulacro() {
   simDataBlocks.forEach(block => {
@@ -2898,21 +2898,21 @@ function buildSimulacro() {
       }
     }).join('');
   });
-  updateSimProgress();
+  _legUpdateProgress();
 }
 
 function selectSimQ(globalIdx, oi) {
-  if (simDone) return;
-  simAnswers[globalIdx] = oi;
+  if (_legDone) return;
+  _legAnswers[globalIdx] = oi;
   document.querySelectorAll(`[id^="simQO_${globalIdx}_"]`).forEach(el => el.classList.remove('selected'));
   const el = document.getElementById(`simQO_${globalIdx}_${oi}`);
   if (el) el.classList.add('selected');
-  updateSimProgress();
+  _legUpdateProgress();
 }
 
-function updateSimProgress() {
+function _legUpdateProgress() {
   const totalMC = simDataBlocks.reduce((acc, b) => acc + b.questions.filter(q => q.type === 'mc').length, 0);
-  const answered = Object.keys(simAnswers).length;
+  const answered = Object.keys(_legAnswers).length;
   const txt = `${answered} / ${totalMC} preguntas objetivas respondidas`;
   const el = document.getElementById('simProgress');
   const el2 = document.getElementById('simProgressInline');
@@ -2920,8 +2920,8 @@ function updateSimProgress() {
   if (el2) el2.textContent = txt;
 }
 
-function submitSimulacro() {
-  simDone = true;
+function _legSubmitSim() {
+  _legDone = true;
   let scoreOK = 0, scoreTot = 0;
   const reviewTopics = [];
   simDataBlocks.forEach(block => {
@@ -2931,7 +2931,7 @@ function submitSimulacro() {
       if (!qEl) return;
       if (q.type === 'mc') {
         scoreTot++;
-        const ans = simAnswers[globalIdx];
+        const ans = _legAnswers[globalIdx];
         for (let oi = 0; oi < q.opts.length; oi++) {
           const optEl = document.getElementById('simQO_' + globalIdx + '_' + oi);
           if (!optEl) continue;
@@ -3007,8 +3007,8 @@ function calcRubricScore(globalIdx, total, pts) {
   if (el) el.textContent = `Autoevaluación: ${checked}/${total} criterios cumplidos ≈ ${(checked/total*pts).toFixed(1)} pts estimados`;
 }
 
-function resetSimulacro() {
-  simAnswers = {}; simDone = false;
+function _legResetSim() {
+  _legAnswers = {}; _legDone = false;
   simDataBlocks.forEach(b => { const el = document.getElementById(b.id); if (el) el.innerHTML = ''; });
   document.getElementById('simScore').innerHTML = '';
   document.getElementById('simSubmitBtn').style.display = 'inline-block';
@@ -3913,7 +3913,7 @@ document.addEventListener('DOMContentLoaded',() => { addPriorityChips(); buildIn
     <div class="sim-q-text">¿Cuál es el valor de corriente que representa el <strong>0% de escala</strong> en el estándar 4-20 mA?</div>
     <div class="sim-opts" id="simOpts1">
       <label class="sim-opt" onclick="simSelect(1,0)"><input type="radio" name="simq1"/><span>A) 0 mA</span></label>
-      <label class="sim-opt" onclick="simSelect(1,1)"><input type="radio" name="simq1"/><span>B) 4 mA ✓</span></label>
+      <label class="sim-opt" onclick="simSelect(1,1)"><input type="radio" name="simq1"/><span>B) 4 mA</span></label>
       <label class="sim-opt" onclick="simSelect(1,2)"><input type="radio" name="simq1"/><span>C) 2 mA</span></label>
       <label class="sim-opt" onclick="simSelect(1,3)"><input type="radio" name="simq1"/><span>D) 10 mA</span></label>
     </div>
@@ -3948,7 +3948,7 @@ document.addEventListener('DOMContentLoaded',() => { addPriorityChips(); buildIn
     <div class="sim-opts" id="simOpts3">
       <label class="sim-opt" onclick="simSelect(3,0)"><input type="radio" name="simq3"/><span>A) 1 V</span></label>
       <label class="sim-opt" onclick="simSelect(3,1)"><input type="radio" name="simq3"/><span>B) 3 V</span></label>
-      <label class="sim-opt" onclick="simSelect(3,2)"><input type="radio" name="simq3"/><span>C) 5 V ✓</span></label>
+      <label class="sim-opt" onclick="simSelect(3,2)"><input type="radio" name="simq3"/><span>C) 5 V</span></label>
       <label class="sim-opt" onclick="simSelect(3,3)"><input type="radio" name="simq3"/><span>D) 10 V</span></label>
     </div>
     <div class="sim-explanation" id="simExp3">✅ <strong>Correcto: C) 5 V.</strong> Por Ley de Ohm: V = I·R = 0.020 A × 250 Ω = 5.00 V. Con 4 mA → 1.00 V; con 20 mA → 5.00 V. El PLC lee el rango 1-5 V en su ADC.</div>
@@ -3982,7 +3982,7 @@ document.addEventListener('DOMContentLoaded',() => { addPriorityChips(); buildIn
     <div class="sim-opts" id="simOpts5">
       <label class="sim-opt" onclick="simSelect(5,0)"><input type="radio" name="simq5"/><span>A) Es más caro que el NC</span></label>
       <label class="sim-opt" onclick="simSelect(5,1)"><input type="radio" name="simq5"/><span>B) Genera ruido EMI en el circuito</span></label>
-      <label class="sim-opt" onclick="simSelect(5,2)"><input type="radio" name="simq5"/><span>C) Si el cable se corta, la máquina no para (fail-danger) ✓</span></label>
+      <label class="sim-opt" onclick="simSelect(5,2)"><input type="radio" name="simq5"/><span>C) Si el cable se corta, la máquina no para (fail-danger)</span></label>
       <label class="sim-opt" onclick="simSelect(5,3)"><input type="radio" name="simq5"/><span>D) La norma ISO prohíbe el color rojo en NA</span></label>
     </div>
     <div class="sim-explanation" id="simExp5">✅ <strong>Correcto: C).</strong> Un contacto NA es fail-danger: si el cable se rompe o el borne se suelta, el circuito queda abierto y al presionar la seta la máquina NO se detiene. El contacto NC garantiza seguridad positiva: cualquier corte desenergiza el contactor de forma segura.</div>
@@ -4005,7 +4005,7 @@ document.addEventListener('DOMContentLoaded',() => { addPriorityChips(); buildIn
     <div class="sim-q-text">Un sensor inductivo se acerca a una botella plástica llena de agua. ¿Qué ocurre?</div>
     <div class="sim-opts" id="simOpts6">
       <label class="sim-opt" onclick="simSelect(6,0)"><input type="radio" name="simq6"/><span>A) La detecta; el agua induce corrientes de Foucault</span></label>
-      <label class="sim-opt" onclick="simSelect(6,1)"><input type="radio" name="simq6"/><span>B) No la detecta; plástico y agua no inducen corrientes de Foucault ✓</span></label>
+      <label class="sim-opt" onclick="simSelect(6,1)"><input type="radio" name="simq6"/><span>B) No la detecta; plástico y agua no inducen corrientes de Foucault</span></label>
       <label class="sim-opt" onclick="simSelect(6,2)"><input type="radio" name="simq6"/><span>C) Solo detecta el agua, no el plástico</span></label>
       <label class="sim-opt" onclick="simSelect(6,3)"><input type="radio" name="simq6"/><span>D) Depende del tamaño de la botella</span></label>
     </div>
@@ -4039,7 +4039,7 @@ document.addEventListener('DOMContentLoaded',() => { addPriorityChips(); buildIn
     <div class="sim-q-text">¿Qué frecuencias usa el protocolo <strong>HART Bell 202</strong> para bit '1' y bit '0'?</div>
     <div class="sim-opts" id="simOpts8">
       <label class="sim-opt" onclick="simSelect(8,0)"><input type="radio" name="simq8"/><span>A) 440 Hz / 880 Hz</span></label>
-      <label class="sim-opt" onclick="simSelect(8,1)"><input type="radio" name="simq8"/><span>B) 1200 Hz / 2200 Hz ✓</span></label>
+      <label class="sim-opt" onclick="simSelect(8,1)"><input type="radio" name="simq8"/><span>B) 1200 Hz / 2200 Hz</span></label>
       <label class="sim-opt" onclick="simSelect(8,2)"><input type="radio" name="simq8"/><span>C) 2400 Hz / 4800 Hz</span></label>
       <label class="sim-opt" onclick="simSelect(8,3)"><input type="radio" name="simq8"/><span>D) 50 Hz / 100 Hz</span></label>
     </div>
@@ -4079,7 +4079,7 @@ document.addEventListener('DOMContentLoaded',() => { addPriorityChips(); buildIn
     <div class="sim-q-text">¿Por qué es físicamente imposible que un motor asíncrono alcance la <strong>velocidad de sincronismo</strong> en régimen motor?</div>
     <div class="sim-opts" id="simOpts10">
       <label class="sim-opt" onclick="simSelect(10,0)"><input type="radio" name="simq10"/><span>A) Por la resistencia mecánica de los rodamientos</span></label>
-      <label class="sim-opt" onclick="simSelect(10,1)"><input type="radio" name="simq10"/><span>B) Si n = ns → FEM = 0 → I_rotor = 0 → par = 0 ✓</span></label>
+      <label class="sim-opt" onclick="simSelect(10,1)"><input type="radio" name="simq10"/><span>B) Si n = ns → FEM = 0 → I_rotor = 0 → par = 0</span></label>
       <label class="sim-opt" onclick="simSelect(10,2)"><input type="radio" name="simq10"/><span>C) Lo prohíbe expresamente la norma IEC</span></label>
       <label class="sim-opt" onclick="simSelect(10,3)"><input type="radio" name="simq10"/><span>D) Por la resistencia eléctrica del rotor</span></label>
     </div>
@@ -4113,7 +4113,7 @@ document.addEventListener('DOMContentLoaded',() => { addPriorityChips(); buildIn
     <div class="sim-q-text">¿Cuál es la función del contactor de <strong>Bypass</strong> del Soft-Starter en régimen permanente?</div>
     <div class="sim-opts" id="simOpts12">
       <label class="sim-opt" onclick="simSelect(12,0)"><input type="radio" name="simq12"/><span>A) Proteger contra sobretensión en la red</span></label>
-      <label class="sim-opt" onclick="simSelect(12,1)"><input type="radio" name="simq12"/><span>B) Derivar la corriente por cobre macizo eliminando pérdidas SCR y armónicos ✓</span></label>
+      <label class="sim-opt" onclick="simSelect(12,1)"><input type="radio" name="simq12"/><span>B) Derivar la corriente por cobre macizo eliminando pérdidas SCR y armónicos</span></label>
       <label class="sim-opt" onclick="simSelect(12,2)"><input type="radio" name="simq12"/><span>C) Limitar la corriente máxima de arranque</span></label>
       <label class="sim-opt" onclick="simSelect(12,3)"><input type="radio" name="simq12"/><span>D) Desconectar el motor en emergencia</span></label>
     </div>
@@ -4138,7 +4138,7 @@ document.addEventListener('DOMContentLoaded',() => { addPriorityChips(); buildIn
     <div class="sim-opts" id="simOpts13">
       <label class="sim-opt" onclick="simSelect(13,0)"><input type="radio" name="simq13"/><span>A) 400 Vcc</span></label>
       <label class="sim-opt" onclick="simSelect(13,1)"><input type="radio" name="simq13"/><span>B) 480 Vcc</span></label>
-      <label class="sim-opt" onclick="simSelect(13,2)"><input type="radio" name="simq13"/><span>C) 565 Vcc ✓</span></label>
+      <label class="sim-opt" onclick="simSelect(13,2)"><input type="radio" name="simq13"/><span>C) 565 Vcc</span></label>
       <label class="sim-opt" onclick="simSelect(13,3)"><input type="radio" name="simq13"/><span>D) 750 Vcc</span></label>
     </div>
     <div class="sim-explanation" id="simExp13">✅ <strong>Correcto: C) 565 Vcc.</strong> El puente rectificador Graetz convierte V_AC en V_DC = √2 × V_L = 1.414 × 400 V ≈ 565 Vcc. Si durante frenado regenerativo sube &gt; 750 Vcc, el Chopper actúa derivando energía a la resistencia de frenado.</div>
@@ -4172,7 +4172,7 @@ document.addEventListener('DOMContentLoaded',() => { addPriorityChips(); buildIn
     <div class="sim-opts" id="simOpts15">
       <label class="sim-opt" onclick="simSelect(15,0)"><input type="radio" name="simq15"/><span>A) Es más económico que el incremental</span></label>
       <label class="sim-opt" onclick="simSelect(15,1)"><input type="radio" name="simq15"/><span>B) Tiene más pulsos por vuelta</span></label>
-      <label class="sim-opt" onclick="simSelect(15,2)"><input type="radio" name="simq15"/><span>C) Conoce su posición exacta al encender sin rutina de homing ✓</span></label>
+      <label class="sim-opt" onclick="simSelect(15,2)"><input type="radio" name="simq15"/><span>C) Conoce su posición exacta al encender sin rutina de homing</span></label>
       <label class="sim-opt" onclick="simSelect(15,3)"><input type="radio" name="simq15"/><span>D) Funciona a mayor velocidad de rotación</span></label>
     </div>
     <div class="sim-explanation" id="simExp15">✅ <strong>Correcto: C).</strong> El encoder absoluto tiene pistas codificadas en código Gray con palabra digital única por ángulo. Al encender la máquina, el servodrive conoce la posición exacta sin homing. El código Gray garantiza que solo cambia 1 bit entre posiciones adyacentes, previniendo glitches (falsas lecturas transitorias).</div>

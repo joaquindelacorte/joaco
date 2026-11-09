@@ -217,6 +217,42 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
   .brand{text-align:center;border:none;border-bottom:1px solid rgba(255,255,255,.2)}
   .nav-badges{text-align:center}
 }
+
+/* SEGUNDO PARCIAL: GAUSS, DETERMINANTES, INVERSA Y SIMULACRO */
+.priority-row{display:flex;flex-wrap:wrap;gap:.5rem;margin:.7rem 0 1rem}
+.priority-chip{display:inline-flex;align-items:center;border-radius:2rem;padding:.3rem .75rem;font-size:.76rem;font-weight:800}
+.priority-chip.must{background:var(--red-bg);color:var(--red)}
+.priority-chip.justify{background:var(--blue-bg);color:var(--blue)}
+.priority-chip.deep{background:var(--teal-bg);color:var(--teal)}
+.rank-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:1rem}
+.rank-example{border-top:4px solid var(--pur-lt)}
+.rank-example.si{border-top-color:var(--red)}
+.rank-example.sci{border-top-color:var(--orange)}
+.classify-options{display:flex;gap:.45rem;flex-wrap:wrap;margin:.8rem 0}
+.classify-options label{border:2px solid var(--border);background:#fff;border-radius:8px;padding:.45rem .7rem;font-size:.84rem;font-weight:700;cursor:pointer}
+.classification-procedure{display:none;margin-top:.75rem}
+.classification-solution{display:none;margin-top:.75rem}
+.classification-procedure.show,.classification-solution.show{display:block}
+.det-row{transition:transform .55s ease,background .35s ease}
+.det-row.moving{background:rgba(251,191,36,.25);transform:translateX(8px)}
+.det-value{font-weight:800;color:#c4b5fd;text-align:center;margin-top:.55rem}
+.range-values{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.range-values input[type=range]{accent-color:var(--pur);min-width:180px}
+.inverse-switch{display:flex;gap:.55rem;flex-wrap:wrap;margin-bottom:.8rem}
+.mock-toolbar{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:#1e1b4b;color:#fff;border-radius:12px;padding:1rem}
+.mock-toolbar label{display:flex;align-items:center;gap:.35rem;font-size:.85rem;font-weight:700}
+.timer{font:900 1.5rem 'Courier New',monospace;color:#fde68a;min-width:5.5rem;text-align:center}
+.paper-sheet{background:#fffdf7;border:1px solid #d6d3d1;border-radius:5px;padding:clamp(1rem,4vw,2.2rem);margin:1rem auto;max-width:820px;box-shadow:0 4px 18px rgba(50,40,20,.1);background-image:linear-gradient(#e7e5e4 1px,transparent 1px);background-size:100% 2rem}
+.paper-step{background:rgba(255,255,255,.93);padding:.8rem;border-left:4px solid var(--pur);margin:.85rem 0}
+.paper-step.locked{opacity:.48;pointer-events:none}
+.paper-step textarea,.paper-step input[type=text]{width:100%;padding:.7rem;border:1px solid var(--border);border-radius:8px;margin:.5rem 0;background:#fff}
+.hide-support .tip,.hide-support .note,.hide-support .fbox.solution-content,.hide-support .ex-sol{display:none!important}
+.recovery-grid{display:grid;gap:.8rem}
+.recovery-item{border:1px solid var(--border);background:#fff;border-radius:10px;padding:1rem}
+.review-empty{color:var(--gray-lt);font-size:.9rem;padding:.8rem 0}
+.alg3-errors-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9000;display:none;align-items:center;justify-content:center}
+.alg3-errors-modal-bg.open{display:flex}
+.alg3-errors-modal{background:#fff;border-radius:16px;padding:2rem;max-width:600px;width:95%;max-height:85vh;overflow-y:auto}
 </style>
 
 <style>
@@ -260,7 +296,9 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
     <button class="tab-btn" id="tb-cheat" onclick="showPage('cheat',this)">📋 Cheatsheet</button>
     <button class="tab-btn" id="tb-resumen" onclick="showPage('resumen',this)">⚡ Resumen 20min</button>
     <button class="tab-btn" id="tb-machete" onclick="showPage('machete',this)">📚 Machete</button>
+    <button class="tab-btn" id="tb-simulacro" onclick="showPage('simulacro',this)">📝 Simulacro papel</button>
     <button class="tab-btn" id="tb-quiz" onclick="showPage('quiz',this)">🎓 Quiz</button>
+    <button class="tab-btn" onclick="openAlg3ErrorsModal()" style="border-bottom-color:#ef4444">🔁 Repasar errores</button>
   </div>
   <div class="nav-badges" id="nav-badges">🏅 0/8</div>
 </nav>
@@ -353,6 +391,111 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
 <div class="page" id="conceptos">
   <div class="container">
     <p style="margin-bottom:1rem"><a href="#" onclick="showPage('inicio',document.getElementById('tb-inicio'));return false" style="color:var(--pur);font-weight:700">← Volver al inicio</a></p>
+
+<!-- GAUSS AMPLIADO -->
+<div class="priority-row">
+  <span class="priority-chip must">🎯 Imprescindible para aprobar</span>
+</div>
+<div class="stitle"><span class="ico">📐</span> Matriz Ampliada [A|b] y Criterio de Consistencia</div>
+<p style="margin-bottom:.8rem">Para clasificar un sistema $Ax=b$: armar la matriz ampliada $[A|b]$ y escalonar por eliminación gaussiana.</p>
+<div class="fbox" style="margin-bottom:1rem">
+  <div>Fila $[0 \; 0 \cdots 0 \mid c]$ con $c \neq 0 \Rightarrow$ <strong>Sistema Incompatible (SI)</strong> — sin solución.</div>
+  <div style="margin-top:.5rem">$\text{rg}(A) \neq \text{rg}([A|b]) \Rightarrow$ SI</div>
+  <div>$\text{rg}(A) = \text{rg}([A|b]) = n \Rightarrow$ <strong>SCD</strong> (solución única)</div>
+  <div>$\text{rg}(A) = \text{rg}([A|b]) < n \Rightarrow$ <strong>SCI</strong> (infinitas soluciones)</div>
+</div>
+<div class="rank-grid">
+  <div class="card rank-example">
+    <strong>SCD — solución única</strong>
+    <div class="mat-display" style="margin:.5rem 0">
+      $$\left[\begin{array}{cc|c}1&2&3\\0&1&1\end{array}\right]$$
+    </div>
+    <div class="note">rg(A)=2 = n=2 → SCD → $x=1, y=1$</div>
+  </div>
+  <div class="card rank-example sci">
+    <strong>SCI — infinitas soluciones</strong>
+    <div class="mat-display" style="margin:.5rem 0">
+      $$\left[\begin{array}{cc|c}1&2&3\\0&0&0\end{array}\right]$$
+    </div>
+    <div class="note">rg=1 &lt; n=2 → SCI</div>
+  </div>
+  <div class="card rank-example si">
+    <strong>SI — sin solución</strong>
+    <div class="mat-display" style="margin:.5rem 0">
+      $$\left[\begin{array}{cc|c}1&2&3\\0&0&1\end{array}\right]$$
+    </div>
+    <div class="note" style="color:var(--red)">Fila [0 0 | 1] → SI</div>
+  </div>
+</div>
+
+<!-- EJERCICIOS CLASIFICAR -->
+<div class="priority-row" style="margin-top:1.5rem">
+  <span class="priority-chip must">🎯 Imprescindible para aprobar</span>
+</div>
+<div class="stitle"><span class="ico">✏️</span> Ejercicios: clasificá antes de resolver</div>
+
+<!-- Ejercicio 1: SCD -->
+<div class="card" id="classify-system-1" style="margin-bottom:1rem">
+  <strong>Sistema 1 — Clasificá primero:</strong>
+  <div class="mat-display" style="margin:.5rem 0">$$2x + y = 5 \quad\quad x - y = 1$$</div>
+  <div class="classify-options">
+    <label><input type="radio" name="cls1" value="SCD"/> SCD</label>
+    <label><input type="radio" name="cls1" value="SCI"/> SCI</label>
+    <label><input type="radio" name="cls1" value="SI"/> SI</label>
+  </div>
+  <button onclick="verifySystemClassification('cls1','SCD','classify-system-1')" style="padding:.4rem 1rem;background:var(--pur);color:#fff;border:none;border-radius:7px;cursor:pointer">Verificar clasificación</button>
+  <div class="classification-procedure" id="cls1-proc">
+    <strong>Procedimiento:</strong>
+    <div class="mat-display">$$[A|b]=\left[\begin{array}{cc|c}2&1&5\\1&-1&1\end{array}\right]\xrightarrow{F_2\leftarrow F_2-\frac{1}{2}F_1}\left[\begin{array}{cc|c}2&1&5\\0&-3/2&-3/2\end{array}\right]$$</div>
+    <div class="note">rg(A) = 2 = n = 2 → <strong>SCD</strong></div>
+  </div>
+  <div class="classification-solution" id="cls1-sol">
+    <strong>Solución:</strong> de la segunda fila: $y=1$. Sustituyendo: $2x+1=5 \Rightarrow x=2$.<br/>
+    <span class="fbox" style="display:inline-block;margin-top:.4rem">$x=2, \; y=1$</span>
+  </div>
+</div>
+
+<!-- Ejercicio 2: SCI -->
+<div class="card" id="classify-system-2" style="margin-bottom:1rem">
+  <strong>Sistema 2 — Clasificá primero:</strong>
+  <div class="mat-display" style="margin:.5rem 0">$$x + y - z = 1 \quad\quad 2x + 2y - 2z = 2$$</div>
+  <div class="classify-options">
+    <label><input type="radio" name="cls2" value="SCD"/> SCD</label>
+    <label><input type="radio" name="cls2" value="SCI"/> SCI</label>
+    <label><input type="radio" name="cls2" value="SI"/> SI</label>
+  </div>
+  <button onclick="verifySystemClassification('cls2','SCI','classify-system-2')" style="padding:.4rem 1rem;background:var(--pur);color:#fff;border:none;border-radius:7px;cursor:pointer">Verificar clasificación</button>
+  <div class="classification-procedure" id="cls2-proc">
+    <strong>Procedimiento:</strong>
+    <div class="mat-display">$$[A|b]=\left[\begin{array}{ccc|c}1&1&-1&1\\2&2&-2&2\end{array}\right]\xrightarrow{F_2-2F_1}\left[\begin{array}{ccc|c}1&1&-1&1\\0&0&0&0\end{array}\right]$$</div>
+    <div class="note">rg(A) = 1 &lt; n = 3 → <strong>SCI</strong> (infinitas soluciones: 2 parámetros libres)</div>
+  </div>
+  <div class="classification-solution" id="cls2-sol">
+    <strong>Solución general:</strong> Sea $y=s, z=t$ libres: $x = 1 - s + t$.<br/>
+    <span class="fbox" style="display:inline-block;margin-top:.4rem">$\{(1-s+t,\, s,\, t) : s,t \in \mathbb{R}\}$</span>
+  </div>
+</div>
+
+<!-- Ejercicio 3: SI -->
+<div class="card" id="classify-system-3" style="margin-bottom:1rem">
+  <strong>Sistema 3 — Clasificá primero:</strong>
+  <div class="mat-display" style="margin:.5rem 0">$$x + y = 1 \quad\quad x + y = 3$$</div>
+  <div class="classify-options">
+    <label><input type="radio" name="cls3" value="SCD"/> SCD</label>
+    <label><input type="radio" name="cls3" value="SCI"/> SCI</label>
+    <label><input type="radio" name="cls3" value="SI"/> SI</label>
+  </div>
+  <button onclick="verifySystemClassification('cls3','SI','classify-system-3')" style="padding:.4rem 1rem;background:var(--pur);color:#fff;border:none;border-radius:7px;cursor:pointer">Verificar clasificación</button>
+  <div class="classification-procedure" id="cls3-proc">
+    <strong>Procedimiento:</strong>
+    <div class="mat-display">$$[A|b]=\left[\begin{array}{cc|c}1&1&1\\1&1&3\end{array}\right]\xrightarrow{F_2-F_1}\left[\begin{array}{cc|c}1&1&1\\0&0&2\end{array}\right]$$</div>
+    <div class="note" style="color:var(--red)">Fila $[0 \; 0 \mid 2]$ con $c=2\neq 0$ → <strong>SI</strong> (sin solución)</div>
+  </div>
+  <div class="classification-solution" id="cls3-sol">
+    <strong>Conclusión:</strong> Las dos ecuaciones representan rectas paralelas distintas — no se intersectan.
+  </div>
+</div>
+
     <div class="stitle"><span class="ico">🧩</span> Conceptos fundamentales — desde cero</div>
     <div class="tip">📖 <div>Repaso base de la unidad. Si ya te acordás de todo, saltá directo a la pestaña que necesités. Si no, leelo de punta a punta antes de entrar a los ejercicios.</div></div>
 
@@ -1178,6 +1321,56 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
         <p>En $[B|v]$, los vectores de la base van como <strong>columnas</strong> de $B$ (porque la ec. es $B\alpha=v$). Si ponés los vectores como filas transpuesta el sistema.</p>
       </div>
     </div>
+
+<div class="priority-row" style="margin-top:1.5rem">
+  <span class="priority-chip justify">💡 Sirve para justificar</span>
+</div>
+<div class="stitle"><span class="ico">🔢</span> Efectos de operaciones por filas en el determinante</div>
+
+<div class="rank-grid">
+  <!-- Card 1: swap -->
+  <div class="card">
+    <strong>Intercambio de filas → cambia signo</strong>
+    <div class="fbox" style="margin:.5rem 0">$\det(F_i \leftrightarrow F_j) = -\det(A)$</div>
+    <div id="det-swap-matrix" style="font-family:monospace;padding:.5rem;background:#1e1b4b;color:#e9d5ff;border-radius:8px;margin:.5rem 0">
+      <div class="det-row" id="dsr1">F1: [ 1,  2,  3]</div>
+      <div class="det-row" id="dsr2">F2: [ 4,  5,  6]</div>
+      <div class="det-row" id="dsr3">F3: [ 7,  8,  0]</div>
+    </div>
+    <div class="det-value" id="det-swap-val">det = 27</div>
+    <button onclick="applyDetSwap()" style="margin-top:.5rem;padding:.35rem .9rem;background:var(--pur);color:#fff;border:none;border-radius:7px;cursor:pointer">Intercambiar F1 ↔ F2</button>
+  </div>
+  <!-- Card 2: scale -->
+  <div class="card">
+    <strong>Multiplicar fila por k → det × k</strong>
+    <div class="fbox" style="margin:.5rem 0">$\det(k \cdot F_i) = k \cdot \det(A)$</div>
+    <div class="range-values" style="margin:.5rem 0">
+      <label>k = </label>
+      <input type="range" id="det-scale-k" min="-3" max="3" step="1" value="2" oninput="document.getElementById('det-scale-kval').textContent=this.value"/>
+      <span id="det-scale-kval">2</span>
+    </div>
+    <div id="det-scale-matrix" style="font-family:monospace;padding:.5rem;background:#1e1b4b;color:#e9d5ff;border-radius:8px;margin:.5rem 0">
+      <div class="det-row" id="dsm1">F1: [ 1,  0,  2]</div>
+      <div class="det-row" id="dsm2">F2: [ 0,  1,  3]</div>
+      <div class="det-row" id="dsm3">F3: [ 1,  2,  0]</div>
+    </div>
+    <div class="det-value" id="det-scale-val">det = -7</div>
+    <button onclick="applyDetScale()" style="margin-top:.5rem;padding:.35rem .9rem;background:var(--pur);color:#fff;border:none;border-radius:7px;cursor:pointer">Multiplicar F1 por k</button>
+  </div>
+  <!-- Card 3: add row -->
+  <div class="card">
+    <strong>Sumar múltiplo de fila → det no cambia</strong>
+    <div class="fbox" style="margin:.5rem 0">$\det(F_i + k F_j) = \det(A)$</div>
+    <div id="det-add-matrix" style="font-family:monospace;padding:.5rem;background:#1e1b4b;color:#e9d5ff;border-radius:8px;margin:.5rem 0">
+      <div class="det-row" id="dam1">F1: [ 2,  1,  0]</div>
+      <div class="det-row" id="dam2">F2: [ 1,  3,  1]</div>
+      <div class="det-row" id="dam3">F3: [ 0,  1,  2]</div>
+    </div>
+    <div class="det-value" id="det-add-val">det = 9</div>
+    <button onclick="applyDetAdd()" style="margin-top:.5rem;padding:.35rem .9rem;background:var(--pur);color:#fff;border:none;border-radius:7px;cursor:pointer">Sumar 2·F1 a F2</button>
+  </div>
+</div>
+
   </div>
 </div>
 
@@ -1312,7 +1505,87 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
 
     <div class="note" style="margin-top:1.5rem">🏅 Revisá el machete completo para la insignia "📚 Repasaste todo".</div>
     <button class="sim-btn green" style="margin-top:1rem" onclick="unlockBadge('machete');addExp(100);this.textContent='✅ Insignia desbloqueada'">✅ Revisé el machete</button>
+
+<div class="priority-row" style="margin-top:1.5rem">
+  <span class="priority-chip justify">💡 Sirve para justificar</span>
+</div>
+<div class="stitle"><span class="ico">🔄</span> Matriz Inversa: validación $A \cdot A^{-1} = I$</div>
+<div class="inverse-switch">
+  <button onclick="setInverseExample('inv')" style="padding:.35rem 1rem;background:var(--pur);color:#fff;border:none;border-radius:7px;cursor:pointer">Ejemplo invertible</button>
+  <button onclick="setInverseExample('sing')" style="padding:.35rem 1rem;background:#ef4444;color:#fff;border:none;border-radius:7px;cursor:pointer">Matriz singular (det=0)</button>
+</div>
+<div id="inverse-demo" style="margin:.5rem 0">
+  <!-- renderizado por JS -->
+</div>
+<div class="fbox" style="margin-top:.8rem">
+  $\det(A) \neq 0 \Longleftrightarrow A$ es invertible $\Longleftrightarrow \text{rg}(A) = n \Longleftrightarrow Ax=b$ tiene solución única
+</div>
+
   </div>
+</div>
+
+<!-- ═══════════════ SIMULACRO PAPEL ═══════════════ -->
+<div class="page" id="simulacro">
+<div class="hero">
+  <h1>📝 Simulacro de Papel</h1>
+  <p>Modo examen real: cronómetro, sin pistas. Clasificá antes de resolver.</p>
+</div>
+<div class="container">
+  <div class="mock-toolbar">
+    <label>⏱ Tiempo:
+      <select id="mock-time-sel" style="background:#312e81;color:#fff;border:1px solid #4c1d95;border-radius:5px;padding:.2rem .4rem;margin-left:.3rem">
+        <option value="480">8 min</option>
+        <option value="600" selected>10 min</option>
+        <option value="720">12 min</option>
+      </select>
+    </label>
+    <div class="timer" id="mock-timer">10:00</div>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+      <button onclick="startMockTimer()" style="padding:.35rem .9rem;background:#7c3aed;color:#fff;border:none;border-radius:7px;cursor:pointer">▶ Iniciar</button>
+      <button onclick="resetMockTimer()" style="padding:.35rem .9rem;background:#374151;color:#fff;border:none;border-radius:7px;cursor:pointer">↺ Reiniciar</button>
+      <button onclick="toggleHideSupport()" id="hide-support-btn" style="padding:.35rem .9rem;background:#1d4ed8;color:#fff;border:none;border-radius:7px;cursor:pointer">🙈 Ocultar pistas</button>
+    </div>
+  </div>
+
+  <div class="paper-sheet" id="mock-paper">
+    <!-- Ejercicio 1 -->
+    <div class="paper-step" id="ps-1">
+      <strong>Ejercicio 1.</strong> Dado el sistema: $2x + y = 5$, $x - y = 1$<br/>
+      <em style="font-size:.88rem;color:#78716c">Paso 1: Clasificá el sistema antes de resolver.</em>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin:.5rem 0">
+        <label><input type="radio" name="mock-cls1" value="SCD"/> SCD</label>
+        <label><input type="radio" name="mock-cls1" value="SCI"/> SCI</label>
+        <label><input type="radio" name="mock-cls1" value="SI"/> SI</label>
+      </div>
+      <button onclick="verifyMockClassification(1,'SCD')" style="padding:.3rem .8rem;background:var(--pur);color:#fff;border:none;border-radius:6px;cursor:pointer">Verificar clasificación</button>
+      <div id="mock-cls1-fb" style="display:none;margin:.5rem 0;padding:.5rem;border-radius:7px"></div>
+      <div class="paper-step locked" id="ps-1-b">
+        <em style="font-size:.88rem">Paso 2: Resolvé el sistema.</em>
+        <textarea placeholder="Escribí tu procedimiento aquí..." style="margin-top:.5rem"></textarea>
+      </div>
+    </div>
+
+    <!-- Ejercicio 2 -->
+    <div class="paper-step" id="ps-2">
+      <strong>Ejercicio 2.</strong> ¿La siguiente matriz es invertible? $A = \begin{pmatrix}2&4\\1&2\end{pmatrix}$<br/>
+      <em style="font-size:.88rem;color:#78716c">Calculá el determinante y justificá.</em>
+      <textarea placeholder="det(A) = ..."></textarea>
+    </div>
+
+    <!-- Ejercicio 3 -->
+    <div class="paper-step" id="ps-3">
+      <strong>Ejercicio 3.</strong> Calculá el determinante expandiendo por la primera fila:
+      $$A = \begin{pmatrix}3&1&0\\2&-1&4\\0&2&1\end{pmatrix}$$
+      <textarea placeholder="det(A) = ..."></textarea>
+    </div>
+
+    <!-- Resultado -->
+    <div style="margin-top:1.5rem;text-align:center">
+      <button onclick="finishMock()" style="padding:.6rem 1.6rem;background:#15803d;color:#fff;border:none;border-radius:9px;font-size:.95rem;font-weight:700;cursor:pointer">✅ Finalizar simulacro</button>
+      <div id="mock-result" style="margin-top:1rem;font-size:1rem;font-weight:700"></div>
+    </div>
+  </div>
+</div>
 </div>
 
 <!-- ═══════════════ QUIZ ═══════════════ -->
@@ -1320,6 +1593,13 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
   <div class="container">
     <div class="stitle"><span class="ico">🎓</span> Quiz — Unidades 3-4</div>
     <div id="quiz-container"></div>
+
+<div class="priority-row" style="margin-top:2rem">
+  <span class="priority-chip must">🎯 Recuperación activa — 5 preguntas</span>
+</div>
+<div class="stitle"><span class="ico">🔁</span> Quiz de recuperación — 5 preguntas</div>
+<div id="quiz5-alg3-container"></div>
+
   </div>
 </div>
 
@@ -1711,6 +1991,221 @@ document.addEventListener('DOMContentLoaded',()=>{
   refreshExp();
   buildQuiz();
 });
+
+// ═══════════════ NUEVO CÓDIGO: GAUSS, DET, INVERSA, SIMULACRO ═══════════════
+
+function verifySystemClassification(name, correct, cardId) {
+  const sel = document.querySelector(`input[name="${name}"]:checked`);
+  if (!sel) { alert('Elegí una opción primero.'); return; }
+  const chosen = sel.value;
+  const card = document.getElementById(cardId);
+  const proc = document.getElementById(`${name}-proc`);
+  const sol = document.getElementById(`${name}-sol`);
+  if (chosen === correct) {
+    if (proc) { proc.classList.add('show'); }
+    setTimeout(() => { if (sol) sol.classList.add('show'); }, 600);
+    const exp = card.querySelector('button');
+    if (exp) exp.style.background = '#15803d';
+  } else {
+    alert(`Incorrecto. Revisá la matriz ampliada. Respuesta: ${correct}`);
+    const errors = JSON.parse(localStorage.getItem('alg3-errores') || '[]');
+    if (!errors.find(e => e.id === cardId)) {
+      errors.push({id: cardId, q: `Clasificar sistema: ${name}`, given: chosen, correct});
+      localStorage.setItem('alg3-errores', JSON.stringify(errors));
+    }
+  }
+}
+
+// Determinant 3x3
+function determinant3(m) {
+  return m[0][0]*(m[1][1]*m[2][2]-m[1][2]*m[2][1])
+       - m[0][1]*(m[1][0]*m[2][2]-m[1][2]*m[2][0])
+       + m[0][2]*(m[1][0]*m[2][1]-m[1][1]*m[2][0]);
+}
+
+let swapMatrix = [[1,2,3],[4,5,6],[7,8,0]];
+let swapCount = 0;
+function applyDetSwap() {
+  [swapMatrix[0], swapMatrix[1]] = [swapMatrix[1], swapMatrix[0]];
+  swapCount++;
+  const rows = ['dsr1','dsr2','dsr3'];
+  ['F1','F2','F3'].forEach((f,i) => {
+    const el = document.getElementById(rows[i]);
+    el.classList.add('moving');
+    el.textContent = `${f}: [${swapMatrix[i].map(v=>String(v).padStart(2)).join(', ')}]`;
+    setTimeout(() => el.classList.remove('moving'), 600);
+  });
+  const d = determinant3(swapMatrix);
+  document.getElementById('det-swap-val').textContent = `det = ${d} (signo ${swapCount%2===0?'restaurado':'invertido'})`;
+}
+
+let scaleMatrix = [[1,0,2],[0,1,3],[1,2,0]];
+let scaleOrigDet = -7;
+function applyDetScale() {
+  const k = parseInt(document.getElementById('det-scale-k').value);
+  const scaled = [scaleMatrix[0].map(v=>v*k), scaleMatrix[1], scaleMatrix[2]];
+  const rows = ['dsm1','dsm2','dsm3'];
+  ['F1','F2','F3'].forEach((f,i) => {
+    document.getElementById(rows[i]).textContent = `${f}: [${scaled[i].map(v=>String(v).padStart(2)).join(', ')}]`;
+  });
+  const d = determinant3(scaled);
+  document.getElementById('det-scale-val').textContent = `det = ${d} = ${k}×${scaleOrigDet}`;
+}
+
+let addMatrix = [[2,1,0],[1,3,1],[0,1,2]];
+let addOrigDet = 9;
+function applyDetAdd() {
+  const added = [addMatrix[0], [addMatrix[1][0]+2*addMatrix[0][0], addMatrix[1][1]+2*addMatrix[0][1], addMatrix[1][2]+2*addMatrix[0][2]], addMatrix[2]];
+  const rows = ['dam1','dam2','dam3'];
+  ['F1','F2','F3'].forEach((f,i) => {
+    document.getElementById(rows[i]).textContent = `${f}: [${added[i].map(v=>String(v).padStart(2)).join(', ')}]`;
+  });
+  const d = determinant3(added);
+  document.getElementById('det-add-val').textContent = `det = ${d} (igual a original: ${addOrigDet}) ✅`;
+}
+
+// Matrix inverse 2x2
+function setInverseExample(type) {
+  const div = document.getElementById('inverse-demo');
+  if (!div) return;
+  if (type === 'inv') {
+    div.innerHTML = `
+      <p>$A = \\begin{pmatrix}3&1\\\\2&1\\end{pmatrix}$, $\\det(A)=1\\neq 0$ → <strong>Invertible</strong></p>
+      <p style="margin:.4rem 0">$[A|I] = \\left[\\begin{array}{cc|cc}3&1&1&0\\\\2&1&0&1\\end{array}\\right] \\to \\left[\\begin{array}{cc|cc}1&0&1&-1\\\\0&1&-2&3\\end{array}\\right]$</p>
+      <p>$A^{-1} = \\begin{pmatrix}1&-1\\\\-2&3\\end{pmatrix}$</p>
+      <p style="margin-top:.5rem">Verificación $A\\,A^{-1}=I$:</p>
+      <div class="mat-display">$$\\begin{pmatrix}3&1\\\\2&1\\end{pmatrix}\\begin{pmatrix}1&-1\\\\-2&3\\end{pmatrix}=\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}\\checkmark$$</div>`;
+  } else {
+    div.innerHTML = `
+      <p>$A = \\begin{pmatrix}2&4\\\\1&2\\end{pmatrix}$, $\\det(A)=2\\cdot2-4\\cdot1=0$</p>
+      <p style="color:var(--red);font-weight:700">Matriz singular — NO es invertible</p>
+      <div class="note">Las filas son proporcionales: F2 = ½F1. No existe $A^{-1}$.</div>`;
+  }
+  if (window.renderMathInElement) {
+    renderMathInElement(div, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+  }
+}
+
+// Mock timer
+let mockTimerInterval = null;
+let mockTimeLeft = 600;
+function startMockTimer() {
+  if (mockTimerInterval) return;
+  mockTimeLeft = parseInt(document.getElementById('mock-time-sel').value);
+  mockTimerInterval = setInterval(() => {
+    mockTimeLeft--;
+    const m = Math.floor(mockTimeLeft/60), s = mockTimeLeft%60;
+    document.getElementById('mock-timer').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+    if (mockTimeLeft <= 60) document.getElementById('mock-timer').style.color = '#f87171';
+    if (mockTimeLeft <= 0) { clearInterval(mockTimerInterval); mockTimerInterval=null; alert('⏱ Tiempo terminado.'); }
+  }, 1000);
+}
+function resetMockTimer() {
+  clearInterval(mockTimerInterval);
+  mockTimerInterval = null;
+  const sel = parseInt(document.getElementById('mock-time-sel').value);
+  document.getElementById('mock-timer').textContent = Math.floor(sel/60)+':'+(sel%60).toString().padStart(2,'0');
+  document.getElementById('mock-timer').style.color = '#fde68a';
+}
+function toggleHideSupport() {
+  const paper = document.getElementById('mock-paper');
+  paper.classList.toggle('hide-support');
+  document.getElementById('hide-support-btn').textContent = paper.classList.contains('hide-support') ? '👁 Mostrar pistas' : '🙈 Ocultar pistas';
+}
+function verifyMockClassification(n, correct) {
+  const sel = document.querySelector(`input[name="mock-cls${n}"]:checked`);
+  if (!sel) { alert('Elegí una opción.'); return; }
+  const fb = document.getElementById(`mock-cls${n}-fb`);
+  fb.style.display = 'block';
+  if (sel.value === correct) {
+    fb.style.background = '#f0fdf4'; fb.style.color = '#15803d';
+    fb.textContent = '✅ Correcto. Ahora resolvé el sistema.';
+    const locked = document.getElementById(`ps-${n}-b`);
+    if (locked) locked.classList.remove('locked');
+  } else {
+    fb.style.background = '#fff5f5'; fb.style.color = '#dc2626';
+    fb.textContent = `❌ Incorrecto. Respuesta: ${correct}. Revisá la matriz ampliada [A|b].`;
+  }
+}
+function finishMock() {
+  clearInterval(mockTimerInterval);
+  mockTimerInterval = null;
+  document.getElementById('mock-result').textContent = '✅ Simulacro finalizado. Revisá tus respuestas comparando con las soluciones en la pestaña Conceptos.';
+  if (typeof addExp === 'function') addExp(80);
+}
+
+// Quiz de 5
+(function(){
+  const q5alg = [
+    {q:'¿Qué condición indica que un sistema $Ax=b$ es Incompatible (SI)?',opts:['rg(A) = rg([A|b]) = n','rg(A) = rg([A|b]) < n','rg(A) ≠ rg([A|b])','det(A) = 0'],correct:2,exp:'SI: rg(A) ≠ rg([A|b]). En la forma escalonada aparece fila [0 0 ... | c] con c≠0.'},
+    {q:'¿Cuántas soluciones tiene un sistema con rg(A) = rg([A|b]) = n?',opts:['Ninguna','Exactamente una','Infinitas','Depende del rango'],correct:1,exp:'SCD: rg = n (rango completo) → solución única.'},
+    {q:'¿Qué le pasa al determinante si se intercambian dos filas de una matriz?',opts:['No cambia','Se multiplica por -1','Se multiplica por 2','Se divide por 2'],correct:1,exp:'Intercambio de filas → el determinante cambia de signo (se multiplica por -1).'},
+    {q:'$A$ es invertible si y solo si...',opts:['det(A) = 0','rg(A) < n','det(A) ≠ 0','A es cuadrada y tiene filas repetidas'],correct:2,exp:'A invertible ⟺ det(A)≠0 ⟺ rg(A)=n ⟺ Ax=b tiene solución única.'},
+    {q:'Para calcular $A^{-1}$ por Gauss-Jordan se escala...',opts:['Solo la matriz A hasta la forma escalonada','La matriz ampliada [A|A] hasta I','La matriz ampliada [A|I] hasta obtener [I|A⁻¹]','Se invierte columna por columna'],correct:2,exp:'[A|I] → operaciones elementales → [I|A⁻¹]. Verificar A·A⁻¹=I.'}
+  ];
+  document.addEventListener('DOMContentLoaded', function() {
+    const cont = document.getElementById('quiz5-alg3-container');
+    if (!cont) return;
+    let ans5 = JSON.parse(localStorage.getItem('quiz5-alg3-answers') || '{}');
+    q5alg.forEach((q,i) => {
+      const div = document.createElement('div');
+      div.className = 'card';
+      div.style.marginBottom = '1rem';
+      div.innerHTML = `<p style="font-weight:700;margin-bottom:.5rem">${i+1}. ${q.q}</p>
+        ${q.opts.map((o,j)=>`<label style="display:block;padding:.4rem .6rem;margin:.2rem 0;border:2px solid var(--border);border-radius:7px;cursor:pointer;font-size:.87rem">
+          <input type="radio" name="q5alg-${i}" value="${j}" ${ans5[i]==j?'checked':''}/> ${o}
+        </label>`).join('')}
+        <button onclick="checkQ5Alg(${i},${q.correct})" style="margin-top:.4rem;padding:.35rem .9rem;background:var(--pur);color:#fff;border:none;border-radius:7px;font-size:.84rem;cursor:pointer">Verificar</button>
+        <div id="q5alg-exp-${i}" style="display:none;margin-top:.5rem;padding:.6rem;background:#f0fdf4;border:1px solid #86efac;border-radius:7px;font-size:.85rem"></div>`;
+      cont.appendChild(div);
+    });
+    if (window.renderMathInElement) renderMathInElement(cont, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+  });
+  window.checkQ5Alg = function(i, correct) {
+    const sel = document.querySelector(`input[name="q5alg-${i}"]:checked`);
+    if (!sel) { alert('Elegí una opción.'); return; }
+    const chosen = parseInt(sel.value);
+    let ans5 = JSON.parse(localStorage.getItem('quiz5-alg3-answers') || '{}');
+    ans5[i] = chosen;
+    localStorage.setItem('quiz5-alg3-answers', JSON.stringify(ans5));
+    const expDiv = document.getElementById(`q5alg-exp-${i}`);
+    expDiv.style.display = 'block';
+    expDiv.innerHTML = chosen===correct ? `✅ <strong>Correcto.</strong> ${q5alg[i].exp}` : `❌ <strong>Incorrecto.</strong> Correcta: <strong>${q5alg[i].opts[correct]}</strong>. ${q5alg[i].exp}`;
+    if (chosen !== correct) {
+      const errors = JSON.parse(localStorage.getItem('alg3-errores') || '[]');
+      if (!errors.find(e=>e.id===`q5alg-${i}`)) {
+        errors.push({id:`q5alg-${i}`, q:q5alg[i].q, given:q5alg[i].opts[chosen], correct:q5alg[i].opts[correct]});
+        localStorage.setItem('alg3-errores', JSON.stringify(errors));
+      }
+    }
+    if (window.renderMathInElement) renderMathInElement(expDiv, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+  };
+})();
+
+function openAlg3ErrorsModal() {
+  const errors = JSON.parse(localStorage.getItem('alg3-errores') || '[]');
+  let html = errors.length ? errors.map(e=>`<div style="padding:.8rem;border:1px solid #fca5a5;border-radius:8px;margin-bottom:.6rem;background:#fff5f5"><div style="font-weight:700">${e.q}</div><div style="color:#dc2626">Respuesta dada: ${e.given}</div><div style="color:#15803d">Correcta: ${e.correct}</div></div>`).join('') : '<p style="color:#64748b">No tenés errores registrados todavía.</p>';
+  document.getElementById('alg3-errors-modal-content').innerHTML = html;
+  document.getElementById('alg3-errors-modal-bg').classList.add('open');
+}
+function closeAlg3ErrorsModal() {
+  document.getElementById('alg3-errors-modal-bg').classList.remove('open');
+}
+
+// Initialize inverse demo on page load
+document.addEventListener('DOMContentLoaded', function() {
+  setInverseExample('inv');
+});
 </script>
+<!-- ERRORS MODAL ALGEBRA -->
+<div class="alg3-errors-modal-bg" id="alg3-errors-modal-bg" onclick="if(event.target===this)closeAlg3ErrorsModal()">
+  <div class="alg3-errors-modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+      <h3 style="font-size:1.1rem;font-weight:800">🔁 Mis errores — Álgebra Unidad 3</h3>
+      <button onclick="closeAlg3ErrorsModal()" style="background:none;border:none;font-size:1.3rem;cursor:pointer">✕</button>
+    </div>
+    <div id="alg3-errors-modal-content">Cargando...</div>
+  </div>
+</div>
 </body>
 </html>

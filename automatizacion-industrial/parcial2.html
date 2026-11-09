@@ -152,6 +152,25 @@ tr:nth-child(even) td{background:#f8fafc}
 .anim-ctrl input[type=range]{width:min(320px,100%);min-height:36px}
 .chart-readout{margin:.55rem auto 0;padding:.4rem .7rem;border-radius:7px;background:#f1f5f9;color:#334155;font-size:.82rem;font-weight:700;max-width:680px}
 @media(max-width:620px){.canvas-wrap{padding:.65rem}.canvas-wrap canvas{height:auto}.control-label{width:100%;justify-content:center}}
+
+/* ═══════════════ PEDAGOGICAL ADDITIONS ═══════════════ */
+.schematic-wrap{background:#fff;border-radius:12px;border:2px solid #cbd5e1;padding:1.2rem;margin:1rem 0;overflow-x:auto}
+.schematic-wrap h4{font-size:.95rem;font-weight:800;color:#1e293b;margin-bottom:.8rem}
+.schematic-wrap svg{display:block;max-width:100%;margin:0 auto}
+.sch-legend{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.8rem;padding-top:.7rem;border-top:1px solid #e2e8f0}
+.sch-legend-item{display:flex;align-items:center;gap:.35rem;font-size:.8rem;font-weight:600;color:#374151}
+.sch-title{font-size:.82rem;font-style:italic;color:#64748b;margin-top:.5rem;text-align:center}
+.how-to-read{background:#fafafa;border-left:3px solid #7dd3fc;border-radius:0 8px 8px 0;padding:.75rem 1rem;margin:.6rem 0;font-size:.88rem;color:#374151}
+.how-to-read strong{color:#0369a1}
+.deep-block{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:1.2rem;margin:.8rem 0}
+.deep-block h4{font-size:.95rem;font-weight:700;color:#1e293b;margin-bottom:.6rem}
+.deep-block p{font-size:.9rem;color:#374151;margin-bottom:.5rem}
+.deep-block p:last-child{margin-bottom:0}
+.deep-block ul{padding-left:1.3rem;margin-top:.4rem}
+.deep-block li{font-size:.9rem;color:#374151;margin-bottom:.3rem}
+.pedagogy-steps{counter-reset:steps;padding-left:0;list-style:none;margin-top:.6rem}
+.pedagogy-steps li{counter-increment:steps;display:flex;gap:.7rem;margin-bottom:.6rem;font-size:.9rem;color:#374151}
+.pedagogy-steps li::before{content:counter(steps);min-width:1.6rem;height:1.6rem;border-radius:50%;background:var(--blue);color:#fff;font-size:.75rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.05rem}
 </style>
 </head>
 <body>
@@ -195,10 +214,11 @@ tr:nth-child(even) td{background:#f8fafc}
   <!-- 1.1 LAZO 4-20mA -->
   <div class="stitle"><span class="ico">📡</span> 1.1 — Lazo 4-20 mA vs 0-10 V</div>
 
-  <div class="card card-blue foundation-card" data-foundations="1.1">
-    <h4>🔎 Fundamentos</h4>
-    <p>En industria se transmite la variable como <strong>corriente</strong> porque la misma corriente circula por todos los elementos en serie (Ley de Kirchhoff), resiste mejor la interferencia EMI y no cambia por la resistencia del cable mientras la fuente conserve tensión suficiente. El estándar 4-20 mA modernizó al antiguo 10-50 mA: consume menos energía y conserva un cero vivo capaz de distinguir proceso en mínimo de cable roto.</p>
-    <p><strong>Analogía:</strong> un transmisor <em>loop-powered</em> se comporta como un reóstato inteligente en serie: usa los mismos dos cables para alimentarse y regula su resistencia interna para dejar circular exactamente la corriente que representa la medición.</p>
+
+  <div class="card card-yellow fundamentos-block">
+    <h4>🔎 Conceptos Previos — ¿Por qué importa esto?</h4>
+    <p>El problema de medir variables industriales (temperatura, presión, nivel) a cientos de metros del panel de control es transmitirlas sin que el ruido eléctrico distorsione la señal. La solución industrial es transmitir la señal como corriente (amperios) en lugar de tensión (voltios): la corriente es la misma en TODA la serie de un circuito (Ley de Kirchhoff), sin importar la resistencia del cable.</p>
+    <p><strong>Analogía:</strong> Pensá en una manguera de agua: el caudal (corriente) es igual al principio y al final, aunque la presión (tensión) caiga por la fricción del tubo. Con 4-20 mA, el 'caudal de electrones' llega intacto al PLC aunque el cable tenga kilómetros.</p>
   </div>
 
   <div class="grid2">
@@ -258,22 +278,98 @@ tr:nth-child(even) td{background:#f8fafc}
     </ul>
   </div>
 
-  <div class="card card-yellow" data-errors="1.1">
-    <h4>⚠️ Errores comunes</h4>
-    <ul>
-      <li>4 mA representa 0% de proceso; 0 mA no es un mínimo válido sino una falla de lazo.</li>
-      <li>El shunt de 250 Ω pertenece a la entrada del PLC, no al transmisor.</li>
-      <li>Loop-powered usa dos cables para alimentación y señal, no cuatro.</li>
-    </ul>
+
+  <div class="alert alert-warn">
+    <span class="ico">⚠️</span>
+    <div><strong>Errores comunes en el parcial:</strong><ul><li>0 mA NO es el 0% del proceso — es una FALLA. El mínimo válido es 4 mA. Si ves 0 mA, el cable está cortado o el transmisor sin alimentación (NAMUR NE 43: umbral &lt; 3.6 mA = alarma de lazo abierto).</li><li>El resistor Shunt 250 Ω está en el PLC (en la bornera de entrada analógica), NO en el transmisor ni en el campo.</li><li>Loop-powered usa 2 conductores (alimentación Y señal en el mismo par). No necesita 4 cables.</li></ul></div>
+  </div>
+
+  <!-- DESARROLLO TÉCNICO 1.1 -->
+  <div class="deep-block">
+    <h4>🧪 Desarrollo técnico: por qué corriente y no tensión</h4>
+    <p>La ley de Kirchhoff de corrientes (KCL) establece que la misma corriente circula por todos los elementos de un lazo serie. Cuando el transmisor se aleja del PLC 300 metros, la resistencia del cobre del cable (<code>R_cable = ρ·L/A</code>) puede ser varios ohmios. En un lazo de <strong>tensión 0-10 V</strong>, esa resistencia de cable genera una caída <code>ΔV = I·R_cable</code> que distorsiona la lectura. En un lazo de <strong>corriente 4-20 mA</strong>, mientras la fuente tenga suficiente tensión de compliance (mínimo 12-20 Vcc en la mayoría de los transmisores), la corriente es idéntica en cada punto del bucle — el cable puede tener 50 Ω de resistencia sin modificar la corriente que llega al PLC.</p>
+    <p>El <strong>transmisor loop-powered a 2 hilos</strong> actúa como una fuente de corriente controlada: contiene internamente un regulador que detecta la corriente del lazo y la ajusta continuamente para que coincida con la variable medida. La electrónica interna (micro, sensor, A/D) se alimenta de los propios 4 mA mínimos que circulan; eso explica por qué la norma establece ese piso de 4 mA como mínimo funcional.</p>
+    <p><strong>Inmunidad EMI:</strong> Los campos electromagnéticos parásitos (motores, variadores, transformadores) inducen tensiones en los conductores. En un lazo de alta impedancia (tensión), esas tensiones inducidas representan errores significativos. En el lazo de corriente de baja impedancia dinámica (~50-250 Ω), la tensión inducida apenas modifica la corriente: <code>ΔI = ΔV_ruido / R_total_lazo</code>. Con R_lazo = 300 Ω y un pico de ruido inducido de 300 mV, el error es solo 1 mA, dentro de la escala detectada como sub-normal por NAMUR NE 43.</p>
+  </div>
+
+  <!-- SVG CIRCUITO LAZO 4-20 mA (IEC 60617 / CADe_SIMU style) -->
+  <div class="schematic-wrap">
+    <h4>⚡ Esquema eléctrico — Lazo 4-20 mA topología 2 hilos (IEC 60617)</h4>
+    <svg viewBox="0 0 720 190" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" font-size="11" width="720" height="190">
+      <rect width="720" height="190" fill="#f8fafc" rx="8"/>
+      <!-- Rail positivo (top) -->
+      <line x1="40" y1="52" x2="680" y2="52" stroke="#1d4ed8" stroke-width="2.5"/>
+      <!-- Rail negativo (bottom) -->
+      <line x1="40" y1="138" x2="680" y2="138" stroke="#374151" stroke-width="2"/>
+      <!-- Flechas de corriente -->
+      <polygon points="148,47 164,52 148,57" fill="#1d4ed8"/>
+      <polygon points="318,47 334,52 318,57" fill="#1d4ed8"/>
+      <polygon points="508,47 524,52 508,57" fill="#1d4ed8"/>
+      <!-- FUENTE 24 Vcc (IEC: rectángulo con +/-) -->
+      <rect x="20" y="52" width="52" height="86" rx="6" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+      <line x1="46" y1="65" x2="46" y2="77" stroke="#1d4ed8" stroke-width="2"/>
+      <line x1="40" y1="71" x2="52" y2="71" stroke="#1d4ed8" stroke-width="2"/>
+      <line x1="41" y1="84" x2="51" y2="84" stroke="#374151" stroke-width="2"/>
+      <text x="46" y="99" text-anchor="middle" font-weight="bold" fill="#1d4ed8" font-size="10">24 Vcc</text>
+      <text x="46" y="111" text-anchor="middle" fill="#374151" font-size="9">PS</text>
+      <text x="46" y="155" text-anchor="middle" fill="#374151" font-size="9.5">Fuente</text>
+      <!-- Cable R_cable1 label -->
+      <text x="210" y="43" text-anchor="middle" fill="#64748b" font-size="9">R_cable (Ω)</text>
+      <!-- TRANSMISOR TX (IEC: círculo+T o caja) -->
+      <rect x="145" y="32" width="115" height="105" rx="8" fill="#faf5ff" stroke="#7c3aed" stroke-width="2"/>
+      <circle cx="202" cy="77" r="22" fill="none" stroke="#7c3aed" stroke-width="1.5"/>
+      <text x="202" y="72" text-anchor="middle" font-weight="bold" fill="#7c3aed" font-size="12">TX</text>
+      <text x="202" y="85" text-anchor="middle" fill="#374151" font-size="8.5">4-20 mA</text>
+      <text x="202" y="118" text-anchor="middle" fill="#7c3aed" font-size="8.5" font-style="italic">loop-powered</text>
+      <text x="202" y="22" text-anchor="middle" fill="#7c3aed" font-size="8.5">↑ Proceso (p, T, h…)</text>
+      <!-- RESISTOR SHUNT 250 Ω (IEC: rectángulo) -->
+      <rect x="318" y="32" width="115" height="105" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="2"/>
+      <rect x="346" y="62" width="60" height="22" rx="3" fill="none" stroke="#d97706" stroke-width="2"/>
+      <text x="376" y="77" text-anchor="middle" font-weight="bold" fill="#d97706" font-size="11">250 Ω</text>
+      <text x="376" y="97" text-anchor="middle" fill="#374151" font-size="9">0.1% tol.</text>
+      <text x="376" y="118" text-anchor="middle" fill="#d97706" font-size="8.5" font-style="italic">1-5 Vcc</text>
+      <line x1="376" y1="52" x2="376" y2="62" stroke="#d97706" stroke-width="1.5"/>
+      <line x1="376" y1="84" x2="376" y2="138" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4,2"/>
+      <!-- PLC AI -->
+      <rect x="502" y="32" width="115" height="105" rx="8" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+      <text x="560" y="68" text-anchor="middle" font-weight="bold" fill="#15803d" font-size="12">PLC</text>
+      <text x="560" y="84" text-anchor="middle" fill="#374151" font-size="9">Entrada AI</text>
+      <text x="560" y="97" text-anchor="middle" fill="#374151" font-size="9">1-5 Vcc</text>
+      <text x="560" y="110" text-anchor="middle" fill="#15803d" font-size="8.5" font-style="italic">0…100 %</text>
+      <!-- Conexion vertical fuente top/bottom -->
+      <line x1="46" y1="52" x2="46" y2="52" stroke="#1d4ed8" stroke-width="2"/>
+      <line x1="46" y1="138" x2="46" y2="138" stroke="#374151" stroke-width="2"/>
+      <!-- Conexión cierre lazo derecha -->
+      <line x1="617" y1="52" x2="680" y2="52" stroke="#1d4ed8" stroke-width="2"/>
+      <line x1="680" y1="52" x2="680" y2="138" stroke="#374151" stroke-width="2"/>
+      <line x1="617" y1="138" x2="680" y2="138" stroke="#374151" stroke-width="2"/>
+      <!-- Anotaciones V_shunt -->
+      <text x="376" y="168" text-anchor="middle" fill="#d97706" font-size="9" font-weight="bold">V = I × 250 Ω</text>
+      <text x="376" y="178" text-anchor="middle" fill="#d97706" font-size="8.5">4mA→1V · 20mA→5V</text>
+      <!-- NAMUR warning -->
+      <text x="560" y="168" text-anchor="middle" fill="#dc2626" font-size="8.5" font-weight="bold">⚠ 0 mA = FALLA (NAMUR NE 43)</text>
+    </svg>
+    <div class="sch-legend">
+      <span class="sch-legend-item"><svg width="14" height="8"><rect x="1" y="1" width="12" height="6" rx="2" fill="none" stroke="#7c3aed" stroke-width="1.5"/></svg> TX — Transmisor loop-powered</span>
+      <span class="sch-legend-item"><svg width="14" height="8"><rect x="1" y="1" width="12" height="6" rx="2" fill="none" stroke="#d97706" stroke-width="1.5"/></svg> Shunt 250 Ω (IEC: rectángulo)</span>
+      <span class="sch-legend-item"><svg width="14" height="8"><line x1="0" y1="4" x2="14" y2="4" stroke="#1d4ed8" stroke-width="2"/><polygon points="8,1 14,4 8,7" fill="#1d4ed8"/></svg> Sentido convencional de corriente</span>
+      <span class="sch-legend-item"><svg width="14" height="8"><line x1="0" y1="4" x2="14" y2="4" stroke="#d97706" stroke-width="1.5" stroke-dasharray="3,2"/></svg> Punto de medición tensión</span>
+    </div>
+    <p class="sch-title">Lazo serie: fuente → cable → transmisor → cable → shunt → PLC. La corriente es idéntica en TODOS los elementos (Kirchhoff). El cable puede tener hasta ~600 Ω sin afectar la lectura mientras la fuente mantenga compliance.</p>
+  </div>
+
+  <div class="how-to-read">
+    <strong>🔎 Cómo leer la animación del lazo:</strong> Los tres botones fijan el porcentaje de proceso (0 %, 50 %, 100 %). Observá que al aumentar el porcentaje, la corriente sube de 4 a 20 mA y la tensión en el shunt sube de 1 a 5 V proporcionalmente. Al simular rotura: la corriente cae a 0 mA — el PLC ve 0 V, que está por debajo del límite NAMUR NE 43 (3,6 mA), y dispara la alarma de <em>Lazo Abierto</em>. En la curva de transferencia abajo, el punto azul se mueve sobre la recta I-V; al romper el cable, el punto salta a 0 mA (esquina inferior izquierda) marcado en rojo.
   </div>
 
   <!-- 1.2 INSTRUMENTACIÓN DE NIVEL Y CAUDAL -->
   <div class="stitle"><span class="ico">🌊</span> 1.2 — Medición de Nivel y Caudalímetro Electromagnético</div>
 
-  <div class="card card-blue foundation-card" data-foundations="1.2">
-    <h4>🔎 Fundamentos</h4>
-    <p>Detectar nivel no siempre significa medirlo: un interruptor discreto responde solo <strong>ON/OFF</strong>, mientras un transmisor continuo entrega todo el recorrido de 0 a 100%. En una sonda hidrostática, <code>P = ρ·g·h</code>: cuanto más alta es la columna, mayor es el peso del líquido sobre el sensor.</p>
-    <p><strong>Analogía:</strong> la horquilla es como el aviso de “vaso lleno”; la sonda es una regla que indica cuánto hay. El radar de 80 GHz usa una longitud de onda pequeña, como una regla con divisiones más finas, para localizar la superficie con mayor precisión.</p>
+
+  <div class="card card-yellow fundamentos-block">
+    <h4>🔎 Conceptos Previos — ¿Por qué importa esto?</h4>
+    <p>Medir el nivel en un tanque puede ser tan simple como una alarma de 'lleno/vacío' (todo o nada) o tan sofisticado como saber exactamente qué porcentaje está lleno (medición continua). Para el caudal, el caudalímetro electromagnético aprovecha la Ley de Faraday: igual que un generador eléctrico convierte movimiento en electricidad, el fluido conductor que se mueve en un campo magnético genera una tensión proporcional a su velocidad.</p>
+    <p><strong>Analogía:</strong> El nivel hidrostático es como medir la profundidad del agua sintiendo la presión en el fondo del vaso: más agua arriba = más presión abajo (P = ρ·g·h). El radar es como un murciélago: lanza pulsos de microondas y mide cuánto tarda el eco en volver desde la superficie.</p>
   </div>
 
   <div class="tbl-wrap">
@@ -296,22 +392,20 @@ tr:nth-child(even) td{background:#f8fafc}
     </ul>
   </div>
 
-  <div class="card card-yellow" data-errors="1.2">
-    <h4>⚠️ Errores comunes</h4>
-    <ul>
-      <li>Un caudalímetro electromagnético no mide aceite: necesita un fluido conductor.</li>
-      <li>La placa orificio obtiene caudal desde ΔP y tiene turndown cuadrático cercano a 3:1; el electromagnético es lineal y puede llegar a 50:1.</li>
-      <li>Sin conductividad σ ≥ 5 µS/cm no hay FEM útil en los electrodos.</li>
-    </ul>
+
+  <div class="alert alert-warn">
+    <span class="ico">⚠️</span>
+    <div><strong>Errores comunes en el parcial:</strong><ul><li>El caudalímetro electromagnético NO sirve para aceite, gasoil ni gases. Requiere que el fluido sea conductor eléctrico (conductividad mínima σ ≥ 5 µS/cm). El agua potable sí, el aceite no.</li><li>La placa orificio tiene rangeabilidad (turndown) solo 3:1 cuadrático (ΔP ∝ Q²), mientras el caudalímetro electromagnético tiene 20:1 a 50:1 lineal.</li><li>Horquilla vibratoria = detección PUNTUAL (solo sabe si está cubierta o no). Sonda hidrostática y radar = medición CONTINUA (% de llenado).</li></ul></div>
   </div>
 
   <!-- 1.3 SEGURIDAD DE MÁQUINAS -->
   <div class="stitle"><span class="ico">🚨</span> 1.3 — Parada de Emergencia y Seguridad de Máquinas</div>
 
-  <div class="card card-blue foundation-card" data-foundations="1.3">
-    <h4>🔎 Fundamentos</h4>
-    <p><strong>Fail-safe</strong> significa que una falla lleva al estado seguro; <strong>fail-danger</strong>, que la falla puede dejar el peligro activo. Como energía implica movimiento y el movimiento puede dañar, la lógica segura debe detener la máquina ante cable cortado, pérdida de alimentación o contacto defectuoso.</p>
-    <p><strong>Analogía:</strong> el contacto NC es una cuerda tensa que mantiene habilitada la máquina: pulsar la seta o cortar la cuerda produce la misma señal de parada. Un contacto NA no avisaría si su cable se rompe.</p>
+
+  <div class="card card-yellow fundamentos-block">
+    <h4>🔎 Conceptos Previos — ¿Por qué importa esto?</h4>
+    <p>El principio de la seguridad en máquinas es 'fail-safe': cuando algo falla (cable cortado, contactor pegado, operario desmayado), la máquina debe detenerse por sí sola. Por eso los circuitos de emergencia usan contactos NC (normalmente cerrados): la corriente circulando = máquina habilitada. Si algo falla, la corriente cae y la máquina para. Es el reverso de lo intuitivo: sin energía = seguro.</p>
+    <p><strong>Analogía:</strong> Es como el 'hombre muerto' de los trenes: el conductor debe sostener un pedal para que el tren avance. Si suelta (se duerme, se desmaya), el tren frena solo. El contacto NC funciona igual: si el cable se corta, el sistema frena automáticamente.</p>
   </div>
 
   <div class="grid2">
@@ -349,13 +443,10 @@ tr:nth-child(even) td{background:#f8fafc}
     <span><strong>Regla fundamental:</strong> JAMÁS usar contacto NA en circuitos de parada de emergencia. Un contacto NC garantiza "seguridad positiva": cualquier corte de conductor detiene la máquina.</span>
   </div>
 
-  <div class="card card-yellow" data-errors="1.3">
-    <h4>⚠️ Errores comunes</h4>
-    <ul>
-      <li>Categoría 0 corta energía de inmediato; Categoría 1 desacelera de forma controlada y luego corta.</li>
-      <li>Rearmar la seta solo restablece el lazo de seguridad: nunca debe arrancar la máquina.</li>
-      <li>Elegir un contacto NA deja una rotura de cable sin detectar y crea una condición fail-danger.</li>
-    </ul>
+
+  <div class="alert alert-warn">
+    <span class="ico">⚠️</span>
+    <div><strong>Errores comunes en el parcial:</strong><ul><li>Categoría 0 = corte INSTANTÁNEO (el motor para por inercia). Categoría 1 = rampa de desaceleración CONTROLADA antes de cortar. No son lo contrario, son dos estrategias diferentes según la inercia y peligrosidad de la carga.</li><li>El rearme de la seta de emergencia (giro/tracción) solo REARMA el lazo eléctrico. NO arranca la máquina. El arranque requiere una acción deliberada adicional (pulsar el botón de marcha).</li><li>La Apertura Positiva Forzada no es un lujo: si los contactos quedan micro-soldados por una sobrecorriente y no hay APF, pulsar la seta no abre el circuito y la máquina NO para.</li></ul></div>
   </div>
 
 </div>
@@ -372,10 +463,11 @@ tr:nth-child(even) td{background:#f8fafc}
   <!-- 2.1 SENSORES DE PROXIMIDAD -->
   <div class="stitle"><span class="ico">🔍</span> 2.1 — Sensores de Proximidad: Inductivo vs Capacitivo</div>
 
-  <div class="card card-blue foundation-card" data-foundations="2.1">
-    <h4>🔎 Fundamentos</h4>
-    <p>El inductivo crea un campo magnético y reconoce las corrientes inducidas en un metal, como un <strong>detector de metales de playa</strong>. El capacitivo observa cambios del campo eléctrico, como una puerta automática que percibe una presencia incluso a través de ciertos materiales.</p>
-    <p>PNP entrega +24 V al PLC y es habitual en Europa porque una derivación del cable de señal a masa no provoca una activación fantasma. NPN hace lo opuesto: conmuta la señal a 0 V.</p>
+
+  <div class="card card-yellow fundamentos-block">
+    <h4>🔎 Conceptos Previos — ¿Por qué importa esto?</h4>
+    <p>Dos tecnologías para detectar presencia sin contacto: el sensor inductivo crea un campo magnético que las masas metálicas 'perturban' (como el detector de metales del aeropuerto), y el sensor capacitivo crea un campo eléctrico que cualquier material dieléctrico (plástico, agua, polvo) perturba (como la pantalla táctil del celular). La diferencia clave: el inductivo solo ve metales; el capacitivo ve casi todo.</p>
+    <p><strong>Analogía:</strong> El inductivo es como un detector de metales: solo reacciona a objetos metálicos, es ciego al plástico y agua. El capacitivo es como la pantalla táctil de tu celular: detecta el dedo a través del vidrio porque el dedo (conductor) perturba el campo eléctrico.</p>
   </div>
 
   <div class="grid2">
@@ -434,22 +526,20 @@ tr:nth-child(even) td{background:#f8fafc}
     </div>
   </div>
 
-  <div class="card card-yellow" data-errors="2.1">
-    <h4>⚠️ Errores comunes</h4>
-    <ul>
-      <li>El inductivo necesita metal; que un plástico sea antiestático o algo conductor no lo convierte en un blanco metálico adecuado.</li>
-      <li>PNP entrega +24 V al PLC; NPN conmuta la señal a 0 V.</li>
-      <li>El pin 4 negro es la salida conmutada y por defecto se usa NO, no siempre NC.</li>
-    </ul>
+
+  <div class="alert alert-warn">
+    <span class="ico">⚠️</span>
+    <div><strong>Errores comunes en el parcial:</strong><ul><li>Un sensor inductivo NO detecta agua, plástico ni vidrio, aunque sean objetos grandes y estén a 2 mm. Solo detecta materiales metálicos conductores que inducen corrientes de Foucault.</li><li>PNP da +24V en la señal (Pin 4) cuando detecta. NPN da 0V. Las entradas del PLC deben ser del tipo opuesto: PNP → PLC Sinking; NPN → PLC Sourcing.</li><li>El pin 4 negro (señal) es siempre la salida conmutada NO (normalmente abierta). El pin 2 blanco es NC o diagnóstico. No confundir.</li></ul></div>
   </div>
 
   <!-- 2.2 PROTOCOLO HART -->
   <div class="stitle"><span class="ico">📶</span> 2.2 — Protocolo HART sobre Lazo 4-20 mA</div>
 
-  <div class="card card-blue foundation-card" data-foundations="2.2">
-    <h4>🔎 Fundamentos</h4>
-    <p>HART hace viajar dos mensajes por el mismo par: la corriente continua 4-20 mA lleva la variable principal y una pequeña señal FSK lleva datos digitales. Es como recibir AM y FM por una misma antena sin que una emisora borre a la otra.</p>
-    <p>Sus 1200 bps alcanzan porque configura y diagnostica, no controla en tiempo real. Además de la variable analógica permite leer temperatura del sensor, horas de servicio, rangos de calibración, alarmas, diagnóstico y número de serie.</p>
+
+  <div class="card card-yellow fundamentos-block">
+    <h4>🔎 Conceptos Previos — ¿Por qué importa esto?</h4>
+    <p>HART permite hablar digitalmente con un sensor inteligente usando el mismo cable que ya transmite la señal analógica 4-20 mA. Es como tener en el mismo cable de audio la música (señal analógica DC) y una conversación de mantenimiento (señal digital FSK). La clave es que la señal digital es una onda AC de alta frecuencia (1200/2200 Hz) mientras que el PLC lee solo la componente DC con un filtro pasabajos: las dos señales coexisten sin interferirse.</p>
+    <p><strong>Analogía:</strong> HART sobre 4-20 mA es como la señal AM/FM de la radio: en la misma antena conviven la señal de voz (baja frecuencia, es la señal analógica DC) y los datos digitales (alta frecuencia, es el FSK). Un filtro separa lo que le corresponde a cada receptor.</p>
   </div>
 
   <div class="card card-purple">
@@ -492,22 +582,20 @@ tr:nth-child(even) td{background:#f8fafc}
     </div>
   </div>
 
-  <div class="card card-yellow" data-errors="2.2">
-    <h4>⚠️ Errores comunes</h4>
-    <ul>
-      <li>La FSK no altera la lectura analógica: el filtro pasabajos del PLC la elimina.</li>
-      <li>En multidrop cada equipo queda en 4 mA fijos y la variable 4-20 mA deja de funcionar.</li>
-      <li>La dirección HART identifica el instrumento; no es un valor de corriente.</li>
-    </ul>
+
+  <div class="alert alert-warn">
+    <span class="ico">⚠️</span>
+    <div><strong>Errores comunes en el parcial:</strong><ul><li>La señal HART NO perturba la lectura del PLC. El filtro pasabajos hardware del PLC (f_corte &lt; 25 Hz) elimina completamente las frecuencias HART (1200/2200 Hz). El PLC ve solo el valor DC de 4-20 mA.</li><li>En modo Multidrop la corriente analógica de cada instrumento se FIJA en 4.00 mA (no varía entre 4-20 mA). La adquisición pasa a ser 100% digital. No se puede usar la señal 4-20 mA para medir el proceso en Multidrop.</li><li>La resistencia mínima de 250 Ω NO es opcional: sin ella, la señal HART de ±0.5 mA no genera suficiente tensión para ser decodificada (necesita al menos 125 mV).</li></ul></div>
   </div>
 
   <!-- 2.3 METROLOGÍA -->
   <div class="stitle"><span class="ico">📏</span> 2.3 — Metrología Industrial y Rutinas de Trim</div>
 
-  <div class="card card-blue foundation-card" data-foundations="2.3">
-    <h4>🔎 Fundamentos</h4>
-    <p>Según el VIM, <strong>calibrar</strong> es comparar y documentar; <strong>ajustar</strong> es intervenir para corregir. La trazabilidad forma una cadena demostrable: patrón de laboratorio → patrón de trabajo → instrumento de campo.</p>
-    <p><strong>Analogía:</strong> calibrar es pesarse para conocer lo que marca la balanza; ajustar es corregir la balanza para que marque el peso de referencia. Medir el error no equivale a tocar el instrumento.</p>
+
+  <div class="card card-yellow fundamentos-block">
+    <h4>🔎 Conceptos Previos — ¿Por qué importa esto?</h4>
+    <p>Calibración, ajuste y verificación son tres conceptos distintos que se confunden frecuentemente. Calibrar es MEDIR y COMPARAR con un patrón para CONOCER el error (no implica tocar el instrumento). Ajustar es CORREGIR el error (sí implica intervenir el instrumento). Verificar es DECIDIR si el error está dentro de lo aceptable (emite un dictamen 'Apto/No Apto').</p>
+    <p><strong>Analogía:</strong> Calibración es pesarse en la balanza y anotar que marca 72 kg cuando el peso real es 70 kg (hay 2 kg de error). Ajuste es darle vuelta al tornillo a la balanza hasta que marque 70 kg exactos. Verificación es decidir si el error de ±2 kg está dentro de la tolerancia aceptada (EMP) para ese proceso.</p>
   </div>
 
   <div class="tbl-wrap">
@@ -553,13 +641,10 @@ tr:nth-child(even) td{background:#f8fafc}
     <span><strong>Recuerda:</strong> "Calibrar" no implica tocar el instrumento. Solo se modifica cuando se hace un "Ajuste". Un transmisor puede estar perfectamente calibrado (documentado) y sin embargo no estar ajustado.</span>
   </div>
 
-  <div class="card card-yellow" data-errors="2.3">
-    <h4>⚠️ Errores comunes</h4>
-    <ul>
-      <li>Calibración y ajuste no son sinónimos: calibrar compara, ajustar modifica.</li>
-      <li>Una calibración no incluye tocar parámetros o tornillos del instrumento.</li>
-      <li>LRL es el límite físico de fábrica; LRV es el límite inferior configurado por el usuario.</li>
-    </ul>
+
+  <div class="alert alert-warn">
+    <span class="ico">⚠️</span>
+    <div><strong>Errores comunes en el parcial:</strong><ul><li>CALIBRAR NO implica tocar el instrumento. Solo se documenta el error. El ajuste es lo que modifica el instrumento.</li><li>LRL y URL son límites FÍSICOS de FÁBRICA del sensor (no modificables por software). LRV y URV son los límites CONFIGURADOS por el usuario para 4 mA y 20 mA (modificables).</li><li>Re-Ranging solo cambia los valores LRV/URV en la memoria del transmisor (escalado matemático). NO calibra ni modifica la celda física. Sensor Trim sí calibra la celda aplicando presión patrón.</li></ul></div>
   </div>
 
 </div>
@@ -576,10 +661,11 @@ tr:nth-child(even) td{background:#f8fafc}
   <!-- 3.1 MOTOR ASÍNCRONO -->
   <div class="stitle"><span class="ico">⚡</span> 3.1 — Motor Asíncrono Trifásico y Teorema de Ferraris</div>
 
-  <div class="card card-blue foundation-card" data-foundations="3.1">
-    <h4>🔎 Fundamentos</h4>
-    <p>El rotor es un “seguidor de campo”: intenta alcanzar al campo giratorio, pero necesita quedarse algo atrás para inducir corriente y producir par. En un motor de 4 polos y 50 Hz, <code>ns = 1500 rpm</code>; si gira a 1450 rpm, <code>s = (1500-1450)/1500 = 0.033</code>, es decir 3.3%.</p>
-    <p><strong>Modelo mental:</strong> el circuito equivalente reúne <code>R1, X1</code> en el estator y <code>R2/s, X2</code> en el rotor referido. El término R2/s muestra por qué el comportamiento eléctrico cambia con el deslizamiento.</p>
+
+  <div class="card card-yellow fundamentos-block">
+    <h4>🔎 Conceptos Previos — ¿Por qué importa esto?</h4>
+    <p>El motor asíncrono es el motor más robusto y económico de la industria. Funciona porque el campo magnético del estator 'rota' a velocidad síncrona ns, y el rotor intenta seguirlo: al estar rezagado, las barras del rotor 'ven' un campo variable que les induce corriente, y esa corriente en el campo crea la fuerza (par) que hace girar el rotor. El rotor SIEMPRE va un poco más lento que el campo (deslizamiento positivo): si lo igualara, no habría campo variable, no habría corriente, no habría par, y el rozamiento lo frenaría.</p>
+    <p><strong>Analogía:</strong> Imaginá que el campo magnético giratorio es un imán permanente rotando a 1500 rpm. El rotor de aluminio 'persigue' ese imán sin poder alcanzarlo: mientras más lento va, más intensa es la tracción, hasta que el par motor iguala el par de carga. Ese retraso permanente es el deslizamiento (s).</p>
   </div>
 
   <div class="grid2">
@@ -628,22 +714,20 @@ tr:nth-child(even) td{background:#f8fafc}
     </div>
   </div>
 
-  <div class="card card-yellow" data-errors="3.1">
-    <h4>⚠️ Errores comunes</h4>
-    <ul>
-      <li>ns es la velocidad del campo; n es la velocidad mecánica real del rotor.</li>
-      <li>Con s = 0 no se induce corriente y el par es cero, no máximo.</li>
-      <li>A igual frecuencia, un motor de 2 polos sí tiene el doble de ns que uno de 4 polos: 3000 vs 1500 rpm a 50 Hz.</li>
-    </ul>
+
+  <div class="alert alert-warn">
+    <span class="ico">⚠️</span>
+    <div><strong>Errores comunes en el parcial:</strong><ul><li>n_s es la velocidad del CAMPO (síncrona), no del rotor. El rotor siempre va más lento (n &lt; n_s). En régimen motor s está entre 0 y 1 (típicamente 2-5% a plena carga).</li><li>Cambiar dos fases para invertir el giro invierte el sentido del campo magnético giratorio (el campo gira al revés), no simplemente invierte la polaridad del motor como en un motor DC.</li><li>Un motor de 2 polos a 50 Hz: n_s = 120×50/2 = 3000 rpm. De 4 polos: n_s = 1500 rpm. De 6 polos: n_s = 1000 rpm. La velocidad síncrona siempre es un divisor de 3000 rpm (para 50 Hz).</li></ul></div>
   </div>
 
   <!-- 3.2 BORNERA Y ARRANQUE Y-Δ -->
   <div class="stitle"><span class="ico">🔧</span> 3.2 — Bornera de 6 Bornes, Estrella-Triángulo y Enclavamientos</div>
 
-  <div class="card card-blue foundation-card" data-foundations="3.2">
-    <h4>🔎 Fundamentos</h4>
-    <p>Un arranque directo DOL puede pedir 5 a 7 veces la corriente nominal, causar caída de tensión y producir flicker en instalaciones vecinas. Estrella-triángulo reduce el esfuerzo inicial antes de conectar cada bobina a la tensión de línea.</p>
-    <p><strong>Mnemotecnia:</strong> “W2-U2-V2 en HORIZONTAL = ESTRELLA”; esa pletina común forma el neutro. Si la placa dice <strong>230Δ/400Y</strong> y la red es 400 V, el motor trabaja siempre en estrella.</p>
+
+  <div class="card card-yellow fundamentos-block">
+    <h4>🔎 Conceptos Previos — ¿Por qué importa esto?</h4>
+    <p>Un motor de inducción trifásico arrancado directamente (DOL = Direct On Line) demanda al principio una corriente de 5 a 7 veces la nominal. Este pico solo dura segundos, pero puede causar caídas de tensión en la red (flicker en luminarias vecinas) y poner en riesgo al motor. El arranque estrella-triángulo reduce este pico a 1/3 conectando primero las bobinas en estrella (tensión reducida) y luego en triángulo (tensión nominal).</p>
+    <p><strong>Analogía:</strong> Es como salir de estacionado en una cuesta: arrancás en 1ra marcha (menos fuerza, pero suficiente para mover el auto desde cero = Estrella), y cuando ya ganaste velocidad cambias a 2da/3ra (Triángulo). No salís en 3ra porque el motor lucharía demasiado.</p>
   </div>
 
   <div class="grid2">
@@ -692,22 +776,20 @@ tr:nth-child(even) td{background:#f8fafc}
     </ul>
   </div>
 
-  <div class="card card-yellow" data-errors="3.2">
-    <h4>⚠️ Errores comunes</h4>
-    <ul>
-      <li>En Y, la tensión por bobina baja a 1/√3, mientras la corriente de línea de arranque queda en 1/3 de DOL.</li>
-      <li>KM2 (Δ) y KM3 (Y) jamás pueden cerrar juntos: provocarían un cortocircuito interno.</li>
-      <li>La pausa abierta de 30-50 ms es necesaria para extinguir el arco antes de pasar de Y a Δ.</li>
-    </ul>
+
+  <div class="alert alert-warn">
+    <span class="ico">⚠️</span>
+    <div><strong>Errores comunes en el parcial:</strong><ul><li>La reducción de corriente en Estrella es 1/3 (no 1/√3). Esto es porque en Y cada bobina recibe V/√3 de tensión, y como I ∝ V, la corriente por bobina es también √3 veces menor. En total (desde la línea) la corriente baja a 1/3.</li><li>Si un motor tiene placa '230Δ/400Y', en una red de 400V SOLO puede conectarse en ESTRELLA. Conectarlo en Triángulo a 400V aplica 400V a bobinas dimensionadas para 230V: sobretensión del 73% → funde el bobinado en segundos.</li><li>KM2 (triángulo) y KM3 (estrella) NUNCA pueden estar cerrados simultáneamente: causarían un cortocircuito interno al bobinado del motor. Los enclavamientos eléctrico cruzado y mecánico previenen esto.</li></ul></div>
   </div>
 
   <!-- 3.3 SOFT-STARTER -->
   <div class="stitle"><span class="ico">🌡️</span> 3.3 — Arrancadores Suaves (Soft-Starters)</div>
 
-  <div class="card card-blue foundation-card" data-foundations="3.3">
-    <h4>🔎 Fundamentos</h4>
-    <p>El ángulo de disparo α recorta cada semiciclo, como un dimmer electrónico con TRIAC pero aplicado a un motor de 400 V. Como <code>T ∝ V²</code>, bajar la tensión al 70% reduce el par aproximadamente al 49%.</p>
-    <p>Un soft-starter suaviza arranque y parada, pero no regula la velocidad permanente. Para variar velocidad en régimen se necesita un VFD, que además modifica la frecuencia.</p>
+
+  <div class="card card-yellow fundamentos-block">
+    <h4>🔎 Conceptos Previos — ¿Por qué importa esto?</h4>
+    <p>Un soft-starter es básicamente un regulador de tensión AC por tiristores SCR. Al variar el ángulo de disparo α (el instante dentro del ciclo AC en que el SCR empieza a conducir), controla qué porción de la senoide de 400V llega al motor. Como el par del motor es proporcional al cuadrado de la tensión (T ∝ V²), bajar la tensión al 50% reduce el par al 25% — suficiente para arrancar suave sin sacudidas.</p>
+    <p><strong>Analogía:</strong> El SCR es como un interruptor ultra-rápido que se abre y cierra miles de veces por segundo dentro de cada ciclo de la senoide. El ángulo α define 'qué parte del ciclo' se deja pasar: α=0° = toda la senoide (100% tensión); α=90° = solo la mitad del ciclo positivo; α=150° = casi nada (mínima tensión).</p>
   </div>
 
   <div class="card card-purple">
@@ -757,13 +839,10 @@ tr:nth-child(even) td{background:#f8fafc}
     </div>
   </div>
 
-  <div class="card card-yellow" data-errors="3.3">
-    <h4>⚠️ Errores comunes</h4>
-    <ul>
-      <li>El soft-starter no permite variar velocidad de forma continua; solo controla rampas de tensión.</li>
-      <li>El bypass cierra únicamente cuando la tensión llega al 100% nominal.</li>
-      <li>El golpe de ariete típico aparece al parar bruscamente el caudal, no al iniciar una rampa suave.</li>
-    </ul>
+
+  <div class="alert alert-warn">
+    <span class="ico">⚠️</span>
+    <div><strong>Errores comunes en el parcial:</strong><ul><li>El soft-starter NO permite control de velocidad en régimen permanente. Solo controla la rampa de ARRANQUE y de PARADA. Para velocidad variable hay que usar un VFD.</li><li>El contactor de Bypass cierra SOLO cuando la tensión llegó al 100% de la tensión nominal (fin de la rampa de arranque). No está cerrado durante la rampa.</li><li>El golpe de ariete ocurre al PARAR una bomba bruscamente, NO al arrancarla. La rampa Soft Stop (15-45 s) previene el golpe de ariete al parar.</li></ul></div>
   </div>
 
 </div>
@@ -780,10 +859,11 @@ tr:nth-child(even) td{background:#f8fafc}
   <!-- 4.1 VFD -->
   <div class="stitle"><span class="ico">🔄</span> 4.1 — Variador de Frecuencia (VFD) — 3 Etapas</div>
 
-  <div class="card card-blue foundation-card" data-foundations="4.1">
-    <h4>🔎 Fundamentos</h4>
-    <p>El VFD primero convierte AC→DC, guarda energía en un “depósito” (bus DC) y vuelve a fabricar AC a medida con el inversor. En una red de 400 V, el bus ideal alcanza <code>√2 × 400 ≈ 565 Vcc</code>, el valor de pico de la senoide rectificada.</p>
-    <p>Los IGBT conmutan muy rápido para formar SPWM. La contrapartida de subir la frecuencia de conmutación es aumentar pérdidas de switching, EMI y calor, aunque el motor recibe una corriente más suave.</p>
+
+  <div class="card card-yellow fundamentos-block">
+    <h4>🔎 Conceptos Previos — ¿Por qué importa esto?</h4>
+    <p>Un variador de frecuencia (VFD) permite controlar la velocidad del motor asíncrono cambiando la frecuencia de la tensión de alimentación. Para hacerlo, primero convierte la AC de red a DC (rectificador), luego almacena esa energía en condensadores (bus DC), y finalmente reconstruye una AC de la frecuencia y tensión deseadas mediante transistores IGBT que conmutan muy rápido (modulación SPWM).</p>
+    <p><strong>Analogía:</strong> Es como un adaptador de enchufes de viaje súper inteligente: convierte la corriente alterna de la pared (400V/50Hz) en corriente continua (como una batería de 565V), y luego la 'reinventa' como corriente alterna de cualquier frecuencia y tensión que el motor necesite.</p>
   </div>
 
   <!-- ANIMACIÓN VFD BLOQUES -->
@@ -857,22 +937,20 @@ tr:nth-child(even) td{background:#f8fafc}
     </div>
   </div>
 
-  <div class="card card-yellow" data-errors="4.1">
-    <h4>⚠️ Errores comunes</h4>
-    <ul>
-      <li>La salida SPWM es pulsada y contiene armónicos; no es una senoide de tensión pura.</li>
-      <li>El chopper estándar disipa frenado en una resistencia; solo una topología regenerativa activa devuelve energía a la red.</li>
-      <li>dv/dt describe reflexiones y sobrepicos en cables largos, no todo el ruido EMI del variador.</li>
-    </ul>
+
+  <div class="alert alert-warn">
+    <span class="ico">⚠️</span>
+    <div><strong>Errores comunes en el parcial:</strong><ul><li>V_bus DC = √2 × 400V ≈ 565 Vcc (el pico de la senoide rectificada, no la tensión RMS). No es 400 V.</li><li>Al frenar bruscamente una carga de alta inercia, el motor funciona como GENERADOR y devuelve energía al bus DC. Sin Chopper o regeneración activa, el bus sube hasta ~750-800 Vcc y el variador dispara 'Overvoltage Trip'.</li><li>Cables largos (&gt;20-30 m) entre el VFD y el motor producen reflexión de onda por el dv/dt de los IGBT: la tensión en las primeras espiras del motor puede llegar a 1200-1600V y perforar el esmalte aislante. Solución: reactancias de salida, filtros dv/dt o filtros senoidales LC.</li></ul></div>
   </div>
 
   <!-- 4.2 CONTROL V/f vs FOC -->
   <div class="stitle"><span class="ico">📊</span> 4.2 — Control Escalar V/f vs Control Vectorial FOC</div>
 
-  <div class="card card-blue foundation-card" data-foundations="4.2">
-    <h4>🔎 Fundamentos</h4>
-    <p>El par disponible depende del flujo: <code>T ∝ Φ·I_rotor</code>. Por eso V/f eleva tensión y frecuencia juntas para conservar Φ. FOC cambia el “idioma” trifásico AC mediante Clarke y Park a coordenadas casi continuas: Id es el “flujo” e Iq el “músculo” que produce par.</p>
-    <p>V/f suele trabajar en lazo abierto y resulta económico; FOC usa realimentación de encoder para regular con precisión. No siempre conviene pagar esa complejidad: bombas y ventiladores suelen funcionar bien con V/f.</p>
+
+  <div class="card card-yellow fundamentos-block">
+    <h4>🔎 Conceptos Previos — ¿Por qué importa esto?</h4>
+    <p>Para controlar la velocidad del motor sin que el par se degrade, hay que mantener constante el flujo magnético en el entrehierro (Φ). Como Φ ∝ V/f, si bajamos la frecuencia (reducimos velocidad) debemos bajar la tensión proporcionalmente para mantener Φ constante. Esto es el control escalar V/f. El control vectorial FOC va más allá: separando matemáticamente el 'componente de flujo' (Id) del 'componente de par' (Iq) de la corriente, puede controlar cada uno independientemente, logrando respuesta dinámica ultrarrápida incluso a 0 rpm.</p>
+    <p><strong>Analogía:</strong> V/f es como conducir un auto con control de crucero básico: mantiene una relación fija velocidad/marcha que funciona bien en ruta (bombas, ventiladores). FOC es como el control de tracción activo de un auto deportivo: sabe exactamente cuánta fuerza aplica cada rueda y la ajusta en milisegundos para máxima performance.</p>
   </div>
 
   <div class="grid2">
@@ -909,13 +987,10 @@ tr:nth-child(even) td{background:#f8fafc}
     </ul>
   </div>
 
-  <div class="card card-yellow" data-errors="4.2">
-    <h4>⚠️ Errores comunes</h4>
-    <ul>
-      <li>A 100 Hz no hay doble par: con tensión limitada a 400 V, el par nominal cae aproximadamente al 50%.</li>
-      <li>Torque Boost es un pequeño pedestal para compensar R1 a baja frecuencia, no una sobretensión arbitraria.</li>
-      <li>FOC no es siempre mejor: V/f suele ser suficiente y más económico para bombas y ventiladores.</li>
-    </ul>
+
+  <div class="alert alert-warn">
+    <span class="ico">⚠️</span>
+    <div><strong>Errores comunes en el parcial:</strong><ul><li>Encima de 50 Hz (campo de debilitamiento), el par nominal cae con 1/f (no 1/f²). El par máximo de vuelco sí cae con 1/f². La potencia se mantiene constante (P = T·ω = cte).</li><li>El Torque Boost no es 'subir la tensión a 0 Hz para siempre': solo aplica un pequeño pedestal de tensión en bajas frecuencias para compensar la caída óhmica en R1 del estator. No satura el núcleo.</li><li>V/f no funciona bien con grúas o bobinadoras (par variable a baja velocidad) porque no tiene feedback. FOC con encoder es necesario cuando se requiere par nominal a 0 rpm.</li></ul></div>
   </div>
 
   <div class="canvas-wrap">
@@ -931,10 +1006,11 @@ tr:nth-child(even) td{background:#f8fafc}
   <!-- 4.3 STEPPERS Y SERVOMOTORES -->
   <div class="stitle"><span class="ico">🤖</span> 4.3 — Steppers, Servomotores AC y Encoders</div>
 
-  <div class="card card-blue foundation-card" data-foundations="4.3">
-    <h4>🔎 Fundamentos</h4>
-    <p>El stepper trabaja normalmente en lazo abierto: ordena pasos y supone que ocurrieron. El servo cierra el lazo con encoder y conoce la posición real. En microstepping se interpolan posiciones con corrientes proporcionales, como el <em>fade</em> entre colores de una pantalla.</p>
-    <p>Los tres PID se anidan por velocidad: corriente/par es el más rápido e interno, luego velocidad y finalmente posición. Cada lazo entrega la consigna al siguiente para corregir desde adentro hacia afuera.</p>
+
+  <div class="card card-yellow fundamentos-block">
+    <h4>🔎 Conceptos Previos — ¿Por qué importa esto?</h4>
+    <p>El motor paso a paso mueve en pasos discretos controlados digitalmente (lazo abierto: se asume que no pierde pasos). Es simple y económico para movimientos lentos y precisos. El servomotor AC tiene un encoder que siempre mide la posición real, cerrando el lazo: nunca pierde pasos y puede corregir errores en microsegundos. Los 3 lazos PID en cascada funcionan como supervisores anidados: el más interno (corriente) reacciona más rápido, el externo (posición) más lento, pero usa la información del interno.</p>
+    <p><strong>Analogía:</strong> El stepper es como un reloj analógico: el mecanismo avanza paso a paso de forma predecible (si funciona bien). El servomotor es como un reloj atómico con GPS: constantemente compara su posición real con la esperada y se corrige en nanosegundos.</p>
   </div>
 
   <div class="card card-blue">
@@ -1005,13 +1081,10 @@ tr:nth-child(even) td{background:#f8fafc}
     </div>
   </div>
 
-  <div class="card card-yellow" data-errors="4.3">
-    <h4>⚠️ Errores comunes</h4>
-    <ul>
-      <li>Más microsteps mejoran suavidad y resolución de mando, pero no aumentan el par disponible.</li>
-      <li>El encoder incremental pierde referencia y requiere homing; el absoluto conserva una palabra de posición.</li>
-      <li>Gray evita lecturas ambiguas porque cambia un solo bit por transición, no porque tenga mayor precisión geométrica.</li>
-    </ul>
+
+  <div class="alert alert-warn">
+    <span class="ico">⚠️</span>
+    <div><strong>Errores comunes en el parcial:</strong><ul><li>El encoder incremental PIERDE la posición al cortar energía. Al reiniciar el sistema, el servo no sabe dónde está hasta completar una rutina de Homing (ir al sensor de inicio para calibrar el cero). El encoder absoluto no necesita Homing.</li><li>El Código Gray no hace el encoder 'más preciso' — lo hace 'sin glitches': entre dos posiciones adyacentes SOLO cambia 1 bit, evitando que durante la transición se lea una posición errónea momentáneamente.</li><li>Más resolución de microstepping (1/32, 1/64, 1/256) no garantiza más par: el par se distribuye sinusoidalmente entre los micropasos, y el par por micropaso cae. Para aplicaciones de alta carga, Full-Step puede ser mejor.</li></ul></div>
   </div>
 
 </div>

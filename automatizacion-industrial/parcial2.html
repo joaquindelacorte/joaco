@@ -398,6 +398,49 @@ tr:nth-child(even) td{background:#f8fafc}
     <div><strong>Errores comunes en el parcial:</strong><ul><li>El caudalímetro electromagnético NO sirve para aceite, gasoil ni gases. Requiere que el fluido sea conductor eléctrico (conductividad mínima σ ≥ 5 µS/cm). El agua potable sí, el aceite no.</li><li>La placa orificio tiene rangeabilidad (turndown) solo 3:1 cuadrático (ΔP ∝ Q²), mientras el caudalímetro electromagnético tiene 20:1 a 50:1 lineal.</li><li>Horquilla vibratoria = detección PUNTUAL (solo sabe si está cubierta o no). Sonda hidrostática y radar = medición CONTINUA (% de llenado).</li></ul></div>
   </div>
 
+  <!-- DESARROLLO TÉCNICO 1.2 -->
+  <div class="deep-block">
+    <h4>🧪 Profundización: Faraday en campo y por qué el turndown lineal importa</h4>
+    <p>La FEM de Faraday <code>E = B·v·D</code> es <em>lineal</em> con la velocidad del fluido. Esto contrasta con la placa orificio, donde <code>ΔP ∝ v²</code>: medir caudales pequeños produce un ΔP muy pequeño que el sensor difícilmente distingue del ruido. Con turndown cuadrático ~3:1, si el rango nominal es 100-300 m³/h solo medís con precisión por encima de 100 m³/h. El caudalímetro electromagnético, siendo lineal, llega a 50:1 en el mismo tubo sin cambiar hardware ni recalibrar.</p>
+    <p><strong>Excitación de baja frecuencia (6-12 Hz) en lugar de CC:</strong> Si se excitara la bobina con CC continua, el electrodo actuaría como semipila electroquímica generando un potencial de polarización de varios mV — mayor que la señal útil de 0.1-1 mV. Con excitación pulsada de baja frecuencia (6.25 Hz), el potencial de polarización es simétrico y el amplificador diferencial lo cancela por rechazo de modo común.</p>
+    <p><strong>Requisito de llenado completo:</strong> El tubo DEBE estar lleno de fluido conductor. Si hay burbujas de gas en la parte superior, los electrodos quedan parcialmente en contacto con la fase gaseosa no conductora y la señal cae. Por eso los caudalímetros electromagnéticos se montan en posición vertical ascendente o en el punto más bajo de la tubería horizontal.</p>
+  </div>
+  <div class="schematic-wrap">
+    <h4>🌊 Caudalímetro Electromagnético — Principio Faraday (IEC 60617)</h4>
+    <svg viewBox="0 0 660 155" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" font-size="11" width="660" height="155">
+      <rect width="660" height="155" fill="#f8fafc" rx="8"/>
+      <rect x="75" y="48" width="370" height="60" rx="4" fill="#e0f2fe" stroke="#0369a1" stroke-width="2.5"/>
+      <rect x="77" y="51" width="366" height="54" rx="2" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="260" y="38" text-anchor="middle" fill="#64748b" font-size="8.5" font-style="italic">revestimiento PTFE (aislante)</text>
+      <polygon points="115,76 135,78 115,80" fill="#0369a1" opacity=".7"/>
+      <polygon points="185,76 205,78 185,80" fill="#0369a1" opacity=".7"/>
+      <polygon points="260,76 280,78 260,80" fill="#0369a1" opacity=".7"/>
+      <polygon points="335,76 355,78 335,80" fill="#0369a1" opacity=".7"/>
+      <text x="260" y="84" text-anchor="middle" font-weight="bold" fill="#0369a1">→ fluido conductor → v (m/s)</text>
+      <line x1="260" y1="6" x2="260" y2="48" stroke="#7c3aed" stroke-width="2.5"/>
+      <polygon points="254,48 260,60 266,48" fill="#7c3aed"/>
+      <text x="260" y="4" text-anchor="middle" font-weight="bold" fill="#7c3aed" font-size="9">↓ B (bobina superior)</text>
+      <line x1="260" y1="108" x2="260" y2="145" stroke="#7c3aed" stroke-width="2.5"/>
+      <polygon points="254,108 260,96 266,108" fill="#7c3aed"/>
+      <text x="260" y="153" text-anchor="middle" font-weight="bold" fill="#7c3aed" font-size="9">↑ B (bobina inferior)</text>
+      <circle cx="75" cy="78" r="10" fill="#fffbeb" stroke="#d97706" stroke-width="2"/>
+      <text x="75" y="82" text-anchor="middle" fill="#d97706" font-weight="bold" font-size="9.5">E1</text>
+      <circle cx="445" cy="78" r="10" fill="#fffbeb" stroke="#d97706" stroke-width="2"/>
+      <text x="445" y="82" text-anchor="middle" fill="#d97706" font-weight="bold" font-size="9.5">E2</text>
+      <line x1="65" y1="78" x2="38" y2="78" stroke="#d97706" stroke-width="1.5"/>
+      <line x1="455" y1="78" x2="485" y2="78" stroke="#d97706" stroke-width="1.5"/>
+      <line x1="38" y1="78" x2="38" y2="125" stroke="#d97706" stroke-width="1.5"/>
+      <line x1="485" y1="78" x2="485" y2="125" stroke="#d97706" stroke-width="1.5"/>
+      <rect x="38" y="125" width="447" height="22" rx="4" fill="#f0fdf4" stroke="#15803d" stroke-width="1.5"/>
+      <text x="260" y="140" text-anchor="middle" font-weight="bold" fill="#15803d" font-size="10">Amp. diferencial → E=B·v·D → Q=v·π·D²/4 → 4-20 mA</text>
+      <text x="560" y="58" fill="#374151" font-size="9" font-weight="bold">E = B · v · D</text>
+      <text x="560" y="70" fill="#374151" font-size="8.5">Turndown: 50:1</text>
+      <text x="560" y="82" fill="#374151" font-size="8.5">σ ≥ 5 µS/cm</text>
+      <text x="560" y="94" fill="#374151" font-size="8.5">ΔP ≈ 0 (sin obs.)</text>
+    </svg>
+    <p class="sch-title">FEM lineal con v → Turndown 50:1. Fluido conductor obligatorio. Tubo sin obstáculos → pérdida de carga ≈ 0. Excitación pulsada 6 Hz elimina polarización electroquímica.</p>
+  </div>
+
   <!-- 1.3 SEGURIDAD DE MÁQUINAS -->
   <div class="stitle"><span class="ico">🚨</span> 1.3 — Parada de Emergencia y Seguridad de Máquinas</div>
 
@@ -447,6 +490,74 @@ tr:nth-child(even) td{background:#f8fafc}
   <div class="alert alert-warn">
     <span class="ico">⚠️</span>
     <div><strong>Errores comunes en el parcial:</strong><ul><li>Categoría 0 = corte INSTANTÁNEO (el motor para por inercia). Categoría 1 = rampa de desaceleración CONTROLADA antes de cortar. No son lo contrario, son dos estrategias diferentes según la inercia y peligrosidad de la carga.</li><li>El rearme de la seta de emergencia (giro/tracción) solo REARMA el lazo eléctrico. NO arranca la máquina. El arranque requiere una acción deliberada adicional (pulsar el botón de marcha).</li><li>La Apertura Positiva Forzada no es un lujo: si los contactos quedan micro-soldados por una sobrecorriente y no hay APF, pulsar la seta no abre el circuito y la máquina NO para.</li></ul></div>
+  </div>
+  <!-- DESARROLLO TÉCNICO 1.3 -->
+  <div class="deep-block">
+    <h4>🧪 Profundización: Fail-Safe, apertura positiva y categorías de parada</h4>
+    <p>El principio <strong>fail-safe</strong> exige que cualquier falla simple del sistema de control — cable cortado, bobina quemada, contactor pegado — resulte en un estado seguro (máquina parada). La lógica con contacto <strong>NC</strong> cumple esto: mientras la corriente circula, la máquina está habilitada; si el cable se corta, la corriente cesa y la máquina para por sí sola. Un contacto <strong>NA</strong> invierte esta lógica: la máquina para solo cuando llega la señal de parada — si la señal falla (cable cortado), la máquina sigue corriendo. Esto se llama condición <em>fail-danger</em>.</p>
+    <p><strong>Apertura Positiva Forzada (IEC 60947-5-1):</strong> Un contacto convencional puede quedar micro-soldado si una corriente de cortocircuito lo atraviesa. En ese estado, aunque el actuador se mueva, el contacto no se abre. La APF garantiza que el movimiento mecánico del botón se transmite <em>directamente y sin posibilidad de fallo</em> a los contactos: si el actuador se mueve, los contactos se abren — sin excepción. El símbolo normativo (flecha dentro de un círculo) debe aparecer en el esquema eléctrico del circuito de seguridad.</p>
+    <p><strong>Categorías de parada según IEC 60204-1:</strong> La elección depende de la inercia y el peligro. Una sierra circular (baja inercia) puede detenerse por corte instantáneo (Cat. 0); una centrífuga industrial con rotor de 500 kg a 3000 rpm almacena tanta energía cinética que el corte brusco generaría vibraciones destructivas y el rotor tardaría 10-15 minutos en detenerse por rozamiento solo — necesita Cat. 1 para que el VFD o freno activo lo desacelere de forma controlada.</p>
+  </div>
+  <!-- SVG: Circuito Seguridad NC vs NA (IEC 60617) -->
+  <div class="schematic-wrap">
+    <h4>🚨 Circuito de Parada de Emergencia — NC (Fail-Safe) vs NA (Fail-Danger) — IEC 60617</h4>
+    <svg viewBox="0 0 680 170" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" font-size="11" width="680" height="170">
+      <rect width="680" height="170" fill="#f8fafc" rx="8"/>
+      <!-- === Circuito NC (izquierda, correcto) === -->
+      <text x="170" y="16" text-anchor="middle" font-weight="bold" fill="#15803d" font-size="12">✅ CORRECTO: NC (Fail-Safe)</text>
+      <!-- Rail +24V -->
+      <line x1="30" y1="35" x2="310" y2="35" stroke="#1d4ed8" stroke-width="2"/>
+      <!-- Rail 0V -->
+      <line x1="30" y1="145" x2="310" y2="145" stroke="#374151" stroke-width="2"/>
+      <!-- Connexión vertical izquierda -->
+      <line x1="30" y1="35" x2="30" y2="145" stroke="#1d4ed8" stroke-width="2"/>
+      <!-- Seta NC (contacto normalmente cerrado — línea horizontal con pequeño círculo = IEC NC) -->
+      <line x1="80" y1="35" x2="80" y2="65" stroke="#1d4ed8" stroke-width="2"/>
+      <line x1="65" y1="65" x2="95" y2="65" stroke="#15803d" stroke-width="2.5"/>
+      <line x1="65" y1="78" x2="95" y2="78" stroke="#15803d" stroke-width="2.5"/>
+      <line x1="80" y1="78" x2="80" y2="100" stroke="#1d4ed8" stroke-width="2"/>
+      <text x="80" y="93" text-anchor="middle" fill="#15803d" font-size="8.5" font-weight="bold">NC</text>
+      <text x="80" y="58" text-anchor="middle" fill="#15803d" font-size="8.5">S1 (seta)</text>
+      <!-- Bobina contactor K1 (IEC: rectángulo) -->
+      <rect x="140" y="88" width="40" height="20" rx="3" fill="none" stroke="#0369a1" stroke-width="2"/>
+      <text x="160" y="102" text-anchor="middle" fill="#0369a1" font-size="10" font-weight="bold">K1</text>
+      <line x1="80" y1="100" x2="140" y2="100" stroke="#1d4ed8" stroke-width="2"/>
+      <line x1="180" y1="100" x2="310" y2="100" stroke="#1d4ed8" stroke-width="2"/>
+      <line x1="310" y1="35" x2="310" y2="100" stroke="#1d4ed8" stroke-width="2"/>
+      <line x1="310" y1="100" x2="310" y2="145" stroke="#374151" stroke-width="2"/>
+      <!-- Flecha de corriente continua -->
+      <polygon points="250,96 265,100 250,104" fill="#1d4ed8"/>
+      <text x="170" y="128" text-anchor="middle" fill="#15803d" font-size="8.5">Cable cortado → K1 abre → Máquina PARA ✅</text>
+      <!-- === Circuito NA (derecha, incorrecto) === -->
+      <text x="510" y="16" text-anchor="middle" font-weight="bold" fill="#dc2626" font-size="12">⛔ INCORRECTO: NA (Fail-Danger)</text>
+      <!-- Rail +24V -->
+      <line x1="370" y1="35" x2="650" y2="35" stroke="#1d4ed8" stroke-width="2"/>
+      <!-- Rail 0V -->
+      <line x1="370" y1="145" x2="650" y2="145" stroke="#374151" stroke-width="2"/>
+      <line x1="370" y1="35" x2="370" y2="145" stroke="#1d4ed8" stroke-width="2"/>
+      <!-- Contacto NA (IEC: línea horizontal con espacio abierto) -->
+      <line x1="420" y1="35" x2="420" y2="62" stroke="#dc2626" stroke-width="2"/>
+      <line x1="405" y1="62" x2="435" y2="62" stroke="#dc2626" stroke-width="2.5"/>
+      <!-- Espacio abierto = NA -->
+      <line x1="405" y1="78" x2="435" y2="78" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="4,3"/>
+      <line x1="420" y1="78" x2="420" y2="100" stroke="#dc2626" stroke-width="2"/>
+      <text x="420" y="90" text-anchor="middle" fill="#dc2626" font-size="8.5" font-weight="bold">NA</text>
+      <text x="420" y="56" text-anchor="middle" fill="#dc2626" font-size="8.5">S2 (seta)</text>
+      <!-- Bobina K2 -->
+      <rect x="480" y="88" width="40" height="20" rx="3" fill="none" stroke="#dc2626" stroke-width="2"/>
+      <text x="500" y="102" text-anchor="middle" fill="#dc2626" font-size="10" font-weight="bold">K2</text>
+      <line x1="420" y1="100" x2="480" y2="100" stroke="#dc2626" stroke-width="2"/>
+      <line x1="520" y1="100" x2="650" y2="100" stroke="#dc2626" stroke-width="2"/>
+      <line x1="650" y1="35" x2="650" y2="100" stroke="#dc2626" stroke-width="2"/>
+      <line x1="650" y1="100" x2="650" y2="145" stroke="#374151" stroke-width="2"/>
+      <text x="510" y="128" text-anchor="middle" fill="#dc2626" font-size="8.5">Cable cortado → K2 permanece abierto → Máquina NO para ⛔</text>
+    </svg>
+    <div class="sch-legend">
+      <span class="sch-legend-item"><svg width="22" height="12"><line x1="11" y1="0" x2="11" y2="4" stroke="#15803d" stroke-width="1.5"/><line x1="2" y1="4" x2="20" y2="4" stroke="#15803d" stroke-width="2"/><line x1="2" y1="8" x2="20" y2="8" stroke="#15803d" stroke-width="2"/><line x1="11" y1="8" x2="11" y2="12" stroke="#15803d" stroke-width="1.5"/></svg> Contacto NC (IEC 60617)</span>
+      <span class="sch-legend-item"><svg width="22" height="12"><line x1="11" y1="0" x2="11" y2="4" stroke="#dc2626" stroke-width="1.5"/><line x1="2" y1="4" x2="20" y2="4" stroke="#dc2626" stroke-width="2"/><line x1="2" y1="8" x2="20" y2="8" stroke="#dc2626" stroke-width="2" stroke-dasharray="3,2"/><line x1="11" y1="8" x2="11" y2="12" stroke="#dc2626" stroke-width="1.5"/></svg> Contacto NA (IEC 60617) — prohibido en circuitos E-Stop</span>
+      <span class="sch-legend-item"><svg width="22" height="12"><rect x="2" y="2" width="18" height="8" rx="2" fill="none" stroke="#0369a1" stroke-width="1.5"/></svg> Bobina contactor (IEC 60617)</span>
+    </div>
+    <p class="sch-title">En el circuito NC: si el cable se corta, la corriente cesa, K1 no excita y el motor para (fail-safe). En el circuito NA: si el cable se corta, K2 ya estaba sin excitar y el motor sigue corriendo (fail-danger).</p>
   </div>
 
 </div>
@@ -532,6 +643,64 @@ tr:nth-child(even) td{background:#f8fafc}
     <div><strong>Errores comunes en el parcial:</strong><ul><li>Un sensor inductivo NO detecta agua, plástico ni vidrio, aunque sean objetos grandes y estén a 2 mm. Solo detecta materiales metálicos conductores que inducen corrientes de Foucault.</li><li>PNP da +24V en la señal (Pin 4) cuando detecta. NPN da 0V. Las entradas del PLC deben ser del tipo opuesto: PNP → PLC Sinking; NPN → PLC Sourcing.</li><li>El pin 4 negro (señal) es siempre la salida conmutada NO (normalmente abierta). El pin 2 blanco es NC o diagnóstico. No confundir.</li></ul></div>
   </div>
 
+  <!-- DESARROLLO TÉCNICO 2.1 -->
+  <div class="deep-block">
+    <h4>🧪 Profundización: corrientes de Foucault, permitividad dieléctrica y lógica PNP/NPN</h4>
+    <p>El sensor inductivo genera un campo magnético alterno de alta frecuencia (100 kHz – 1 MHz). Cuando un conductor metálico entra en ese campo, la variación del flujo induce corrientes circulares en la masa del metal (corrientes de Foucault o Eddy). Esas corrientes disipan energía del oscilador LC del sensor: la amplitud de oscilación cae. Un circuito Schmitt-trigger detecta esa caída y conmuta la salida. <strong>El plástico, el agua y el vidrio no inducen corrientes de Foucault</strong> porque no son conductores eléctricos.</p>
+    <p>El sensor capacitivo mide la capacitancia entre sus dos electrodos concéntricos. La capacitancia es <code>C = ε₀·εᵣ·A/d</code>. Cuando un material con εᵣ &gt; 1 se acerca (cualquier sólido o líquido), la capacitancia aumenta: el oscilador RC sube de frecuencia y un discriminador de frecuencia conmuta la salida. El agua tiene εᵣ ≈ 80 — una permitividad altísima que el capacitivo detecta <em>incluso a través de paredes plásticas de varios mm</em>. El potenciómetro de ajuste permite ignorar el recipiente vacío (εᵣ_plástico ≈ 2-4) y solo disparar al llenarse (εᵣ_agua ≈ 80).</p>
+    <p><strong>Lógica PNP vs NPN en detalle:</strong> En PNP, el transistor interno conecta el colector (pin 4) a +24 V cuando detecta. La entrada del PLC ve +24 V = 1 lógico. En NPN, el transistor conecta el pin 4 a 0 V cuando detecta; la entrada del PLC sourcing ve 0 V = 1 lógico. Conectar un sensor PNP a una entrada sourcing (NPN) o viceversa produce que la entrada nunca reconozca el estado — una falla silenciosa muy difícil de diagnosticar en campo.</p>
+  </div>
+  <!-- SVG: PNP vs NPN output circuit (IEC style) -->
+  <div class="schematic-wrap">
+    <h4>🔌 Circuito de salida PNP vs NPN — IEC 60947-5-2 / M12 color code</h4>
+    <svg viewBox="0 0 680 165" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" font-size="11" width="680" height="165">
+      <rect width="680" height="165" fill="#f8fafc" rx="8"/>
+      <!-- === PNP (izquierda) === -->
+      <text x="170" y="15" text-anchor="middle" font-weight="bold" fill="#0369a1" font-size="12">PNP — Estándar Europeo</text>
+      <!-- +24V rail (marrón) -->
+      <line x1="30" y1="38" x2="310" y2="38" stroke="#8B4513" stroke-width="3"/>
+      <text x="30" y="30" fill="#8B4513" font-size="9" font-weight="bold">BN +24V</text>
+      <!-- 0V rail (azul) -->
+      <line x1="30" y1="145" x2="310" y2="145" stroke="#3b82f6" stroke-width="3"/>
+      <text x="30" y="158" fill="#3b82f6" font-size="9" font-weight="bold">BU 0V</text>
+      <!-- Sensor box -->
+      <rect x="80" y="50" width="90" height="60" rx="6" fill="#eff6ff" stroke="#0369a1" stroke-width="2"/>
+      <text x="125" y="82" text-anchor="middle" fill="#0369a1" font-size="10" font-weight="bold">Sensor</text>
+      <text x="125" y="94" text-anchor="middle" fill="#374151" font-size="8.5">PNP</text>
+      <!-- Pin 4 (negro) — conecta a +24V cuando activo -->
+      <line x1="170" y1="80" x2="220" y2="80" stroke="#111" stroke-width="2.5"/>
+      <text x="168" y="75" fill="#111" font-size="8.5" font-weight="bold">BK</text>
+      <!-- Load / entrada PLC -->
+      <rect x="220" y="66" width="50" height="28" rx="4" fill="#f0fdf4" stroke="#15803d" stroke-width="1.5"/>
+      <text x="245" y="82" text-anchor="middle" fill="#15803d" font-size="9" font-weight="bold">PLC AI</text>
+      <line x1="270" y1="80" x2="310" y2="80" stroke="#111" stroke-width="1.5"/>
+      <line x1="310" y1="38" x2="310" y2="80" stroke="#8B4513" stroke-width="1.5"/>
+      <line x1="310" y1="80" x2="310" y2="145" stroke="#3b82f6" stroke-width="1.5"/>
+      <!-- Active: +24V flows into PLC input (sinking) -->
+      <polygon points="195,76 210,80 195,84" fill="#0369a1"/>
+      <text x="170" y="128" text-anchor="middle" fill="#0369a1" font-size="8.5">Activo: Pin4 = +24V → PLC Sinking</text>
+      <!-- === NPN (derecha) === -->
+      <text x="510" y="15" text-anchor="middle" font-weight="bold" fill="#d97706" font-size="12">NPN — Maquinaria Asiática</text>
+      <line x1="370" y1="38" x2="650" y2="38" stroke="#8B4513" stroke-width="3"/>
+      <text x="370" y="30" fill="#8B4513" font-size="9" font-weight="bold">BN +24V</text>
+      <line x1="370" y1="145" x2="650" y2="145" stroke="#3b82f6" stroke-width="3"/>
+      <text x="370" y="158" fill="#3b82f6" font-size="9" font-weight="bold">BU 0V</text>
+      <rect x="420" y="50" width="90" height="60" rx="6" fill="#fffbeb" stroke="#d97706" stroke-width="2"/>
+      <text x="465" y="82" text-anchor="middle" fill="#d97706" font-size="10" font-weight="bold">Sensor</text>
+      <text x="465" y="94" text-anchor="middle" fill="#374151" font-size="8.5">NPN</text>
+      <line x1="510" y1="80" x2="560" y2="80" stroke="#111" stroke-width="2.5"/>
+      <text x="508" y="75" fill="#111" font-size="8.5" font-weight="bold">BK</text>
+      <rect x="560" y="66" width="50" height="28" rx="4" fill="#f0fdf4" stroke="#15803d" stroke-width="1.5"/>
+      <text x="585" y="82" text-anchor="middle" fill="#15803d" font-size="9" font-weight="bold">PLC AI</text>
+      <line x1="610" y1="80" x2="650" y2="80" stroke="#111" stroke-width="1.5"/>
+      <line x1="650" y1="38" x2="650" y2="80" stroke="#8B4513" stroke-width="1.5"/>
+      <line x1="650" y1="80" x2="650" y2="145" stroke="#3b82f6" stroke-width="1.5"/>
+      <polygon points="535,76 550,80 535,84" fill="#d97706"/>
+      <text x="510" y="128" text-anchor="middle" fill="#d97706" font-size="8.5">Activo: Pin4 = 0V → PLC Sourcing</text>
+    </svg>
+    <p class="sch-title">BN=Marrón +24V · BU=Azul 0V · BK=Negro señal (Pin4). PNP entrega +24V al detectar (PLC Sinking). NPN conecta señal a 0V al detectar (PLC Sourcing). Nunca mezclar tipos sin adaptador.</p>
+  </div>
+
   <!-- 2.2 PROTOCOLO HART -->
   <div class="stitle"><span class="ico">📶</span> 2.2 — Protocolo HART sobre Lazo 4-20 mA</div>
 
@@ -586,6 +755,17 @@ tr:nth-child(even) td{background:#f8fafc}
   <div class="alert alert-warn">
     <span class="ico">⚠️</span>
     <div><strong>Errores comunes en el parcial:</strong><ul><li>La señal HART NO perturba la lectura del PLC. El filtro pasabajos hardware del PLC (f_corte &lt; 25 Hz) elimina completamente las frecuencias HART (1200/2200 Hz). El PLC ve solo el valor DC de 4-20 mA.</li><li>En modo Multidrop la corriente analógica de cada instrumento se FIJA en 4.00 mA (no varía entre 4-20 mA). La adquisición pasa a ser 100% digital. No se puede usar la señal 4-20 mA para medir el proceso en Multidrop.</li><li>La resistencia mínima de 250 Ω NO es opcional: sin ella, la señal HART de ±0.5 mA no genera suficiente tensión para ser decodificada (necesita al menos 125 mV).</li></ul></div>
+  </div>
+
+  <!-- DESARROLLO TÉCNICO 2.2 -->
+  <div class="deep-block">
+    <h4>🧪 Profundización: por qué 1200/2200 Hz, por qué ±0.5 mA y el filtro del PLC</h4>
+    <p>El estándar Bell 202 FSK fue elegido por HART porque sus frecuencias (1200 Hz y 2200 Hz) están muy por encima del ancho de banda de la señal analógica del proceso (típicamente 0-25 Hz en variables industriales como presión, temperatura y nivel). La señal HART tiene valor medio de <em>cero</em>: cada bit '1' es una senoide completa a 1200 Hz y cada bit '0' es una senoide completa a 2200 Hz, siempre con amplitud ±0.5 mA. La integral de cada senoide en un ciclo completo es exactamente cero, por lo que el valor DC de la corriente de lazo no se modifica.</p>
+    <p><strong>¿Por qué ±0.5 mA y no más?</strong> Incrementar la amplitud mejoraría el margen de señal, pero introduciría variaciones en la corriente DC que el PLC interpretaría como cambios del proceso. Con ±0.5 mA, la variación máxima sobre los 4-20 mA es 0.5/16 ≈ 3.1%, dentro del ruido típico de los módulos analógicos industriales (12 bits → 0.024% de resolución). Los filtros pasabajos hardware del módulo AI del PLC (fc &lt; 25 Hz) atenúan el FSK en más de 40 dB; el PLC ve solo el promedio DC.</p>
+    <p><strong>HART 7 y WirelessHART:</strong> HART 7 introduce la Tabla de Comandos Universal, direccionamiento de hasta 63 instrumentos, y el soporte para topología mesh WirelessHART (IEEE 802.15.4g, 2.4 GHz). En WirelessHART cada nodo actúa como router; la latencia típica es 100-250 ms, suficiente para monitoreo y configuración remota pero no para control de lazo cerrado rápido (que requiere &lt;100 ms).</p>
+  </div>
+  <div class="how-to-read">
+    <strong>🔎 Cómo leer la animación HART:</strong> Los bits '1' aparecen como oscilaciones densas (1200 Hz = más ciclos por bit-time) en color violeta. Los bits '0' como oscilaciones más espaciadas (2200 Hz). La línea punteada azul es la componente DC 4-20 mA. El filtro del PLC solo ve esta línea — el FSK es invisible para él. Fijate que la integral de la señal FSK sobre un tiempo largo es siempre cero.
   </div>
 
   <!-- 2.3 METROLOGÍA -->
@@ -646,6 +826,19 @@ tr:nth-child(even) td{background:#f8fafc}
     <span class="ico">⚠️</span>
     <div><strong>Errores comunes en el parcial:</strong><ul><li>CALIBRAR NO implica tocar el instrumento. Solo se documenta el error. El ajuste es lo que modifica el instrumento.</li><li>LRL y URL son límites FÍSICOS de FÁBRICA del sensor (no modificables por software). LRV y URV son los límites CONFIGURADOS por el usuario para 4 mA y 20 mA (modificables).</li><li>Re-Ranging solo cambia los valores LRV/URV en la memoria del transmisor (escalado matemático). NO calibra ni modifica la celda física. Sensor Trim sí calibra la celda aplicando presión patrón.</li></ul></div>
   </div>
+  <!-- DESARROLLO TÉCNICO 2.3 -->
+  <div class="deep-block">
+    <h4>🧪 Profundización: cadena metrológica, trazabilidad e incertidumbre</h4>
+    <p>La <strong>trazabilidad metrológica</strong> (VIM 2.41) exige que cada medición pueda vincularse a patrones nacionales o internacionales a través de una cadena ininterrumpida de comparaciones con incertidumbre declarada. En la práctica, el transmisor de campo se calibra contra un patrón de trabajo (multímetro calibrado o fuente de presión); ese patrón se calibra contra un patrón de referencia del laboratorio; ese patrón se calibra contra un patrón nacional del INTI o CENAM, que a su vez se calibra contra el BIPM. Cortar cualquier eslabón de esta cadena invalida la trazabilidad de todas las mediciones downstream.</p>
+    <p><strong>Sensor Trim (Low/High) vs Re-Ranging:</strong> Re-Ranging solo escribe nuevos valores de LRV y URV en la tabla de configuración del microcontrolador del transmisor. No toca la curva de respuesta del sensor. Si el sensor está desviado (p.ej., por deriva térmica o envejecimiento), Re-Ranging compensa el problema matemáticamente pero la celda sigue dando lecturas incorrectas. El Sensor Trim aplica presiones patrón exactas en dos puntos (Low=0% y High=100%) y fuerza al firmware a corregir la curva de conversión A/D interna, calibrando la celda física.</p>
+    <p><strong>Incertidumbre de medición vs error:</strong> El error es la diferencia entre la indicación y el valor verdadero (que no se conoce con exactitud). La incertidumbre es un intervalo probabilístico que contiene el valor verdadero con cierto nivel de confianza (típicamente 95%, ±2σ). Un transmisor puede tener error de 0.1% (dentro del EMP) pero incertidumbre de ±0.3% si el patrón de calibración es poco preciso.</p>
+  </div>
+  <ul class="pedagogy-steps">
+    <li>Verificar → comparar indicación del transmisor con patrón trazable y anotar el error medido (sin tocar el instrumento)</li>
+    <li>Decidir → el error medido está dentro del EMP (Error Máximo Permitido)? Si SÍ: instrumento apto, certificado. Si NO: ajustar.</li>
+    <li>Ajustar (si es necesario) → Zero Trim (si el error es constante en todo el rango) o Sensor Trim Low+High (si hay desviación de pendiente)</li>
+    <li>Verificar nuevamente → confirmar que el error post-ajuste está dentro del EMP antes de emitir el certificado</li>
+  </ul>
 
 </div>
 </div><!-- /p2 -->
@@ -720,6 +913,17 @@ tr:nth-child(even) td{background:#f8fafc}
     <div><strong>Errores comunes en el parcial:</strong><ul><li>n_s es la velocidad del CAMPO (síncrona), no del rotor. El rotor siempre va más lento (n &lt; n_s). En régimen motor s está entre 0 y 1 (típicamente 2-5% a plena carga).</li><li>Cambiar dos fases para invertir el giro invierte el sentido del campo magnético giratorio (el campo gira al revés), no simplemente invierte la polaridad del motor como en un motor DC.</li><li>Un motor de 2 polos a 50 Hz: n_s = 120×50/2 = 3000 rpm. De 4 polos: n_s = 1500 rpm. De 6 polos: n_s = 1000 rpm. La velocidad síncrona siempre es un divisor de 3000 rpm (para 50 Hz).</li></ul></div>
   </div>
 
+  <!-- DESARROLLO TÉCNICO 3.1 -->
+  <div class="deep-block">
+    <h4>🧪 Profundización: por qué el CMG tiene amplitud constante y el deslizamiento es inevitable</h4>
+    <p>La demostración del Teorema de Ferraris muestra que si <code>i_A = I_m·cos(ωt)</code>, <code>i_B = I_m·cos(ωt-120°)</code>, <code>i_C = I_m·cos(ωt-240°)</code>, y las bobinas están a 120° entre sí, el vector suma resultante <code>B_total = B_A + B_B + B_C</code> tiene módulo constante <code>= 1.5·B_max</code> para cualquier valor de t. No hay "pulsaciones" de amplitud — el campo es perfectamente circular. Esto es lo que lo diferencia de un campo monofásico (que oscila) y es la clave del funcionamiento suave del motor.</p>
+    <p><strong>¿Por qué el deslizamiento es inevitable en régimen motor?</strong> Si el rotor girara exactamente a ns (velocidad síncrona), la velocidad relativa entre el rotor y el CMG sería cero. Sin velocidad relativa, el flujo no varía para las barras del rotor, no se induce FEM, no circula corriente en el rotor, y por lo tanto no hay par electromagnético. El rozamiento mecánico frenaría el rotor hasta que el deslizamiento volviera a generar suficiente corriente para producir el par necesario. El deslizamiento típico a plena carga es 2-5%; a vacío puede ser tan bajo como 0.5%.</p>
+    <p><strong>Número de polos y velocidades síncronas a 50 Hz:</strong> <code>ns = 60·f / (p/2)</code> donde p es el número total de polos. Con 2 polos → 3000 rpm; 4 polos → 1500 rpm; 6 polos → 1000 rpm; 8 polos → 750 rpm. Cambiar polos requiere un bobinado diferente; no se puede ajustar electrónicamente en un motor estándar (a diferencia de un VFD que modifica f).</p>
+  </div>
+  <div class="how-to-read">
+    <strong>🔎 Cómo leer la animación CMG:</strong> El círculo oscuro a la izquierda muestra el diagrama vectorial. Las tres flechas de colores (roja=L1, verde=L2, azul=L3) son los vectores de campo de cada fase; su longitud varía con el coseno de la fase. La flecha <strong>amarilla</strong> es el vector resultante <strong>B_total = 1.5·Bmax</strong> — observá que rota con módulo constante. Las curvas a la derecha son las tres senoides en el tiempo; la línea amarilla vertical indica el instante actual.
+  </div>
+
   <!-- 3.2 BORNERA Y ARRANQUE Y-Δ -->
   <div class="stitle"><span class="ico">🔧</span> 3.2 — Bornera de 6 Bornes, Estrella-Triángulo y Enclavamientos</div>
 
@@ -780,6 +984,73 @@ tr:nth-child(even) td{background:#f8fafc}
   <div class="alert alert-warn">
     <span class="ico">⚠️</span>
     <div><strong>Errores comunes en el parcial:</strong><ul><li>La reducción de corriente en Estrella es 1/3 (no 1/√3). Esto es porque en Y cada bobina recibe V/√3 de tensión, y como I ∝ V, la corriente por bobina es también √3 veces menor. En total (desde la línea) la corriente baja a 1/3.</li><li>Si un motor tiene placa '230Δ/400Y', en una red de 400V SOLO puede conectarse en ESTRELLA. Conectarlo en Triángulo a 400V aplica 400V a bobinas dimensionadas para 230V: sobretensión del 73% → funde el bobinado en segundos.</li><li>KM2 (triángulo) y KM3 (estrella) NUNCA pueden estar cerrados simultáneamente: causarían un cortocircuito interno al bobinado del motor. Los enclavamientos eléctrico cruzado y mecánico previenen esto.</li></ul></div>
+  </div>
+
+  <!-- DESARROLLO TÉCNICO 3.2 -->
+  <div class="deep-block">
+    <h4>🧪 Profundización: tensiones por bobina, enclavamientos y pico de conmutación</h4>
+    <p>En conexión <strong>Estrella (Y)</strong>, la tensión que ve cada bobina es <code>V_bobina = V_línea / √3 = 400/1.73 ≈ 231 V</code>. Como <code>T ∝ V²</code> y el par de arranque baja proporcionalmente al cuadrado de la tensión, en Y el par es <code>(1/√3)² = 1/3</code> del par en Δ. La corriente de línea de arranque baja por la misma razón a 1/3 de la corriente DOL — esto es lo que protege la red. El motor elige y triángulo cuando la tensión DOL es la tensión de línea: placa 400/690 V en red de 400 V significa que sus bobinas soportan 400 V en conexión Δ y 690 V en Y.</p>
+    <p><strong>Pico transitorio en la conmutación Y→Δ:</strong> Al abrir KM3 (estrella), el rotor sigue girando con un flujo remanente que genera una FEM de rotor. Si se cierra KM2 (triángulo) sin pausa, la diferencia de fase entre la tensión de red y la FEM del rotor puede producir una corriente de cortocircuito transitoria hasta 10–20 veces la nominal. La pausa de 30-50 ms (open transition) permite que la FEM del rotor decaiga antes de conectar KM2. Algunos soft-starters o arrancadores avanzados usan "closed transition" con un resistor en serie para eliminar este pico.</p>
+    <p><strong>Enclavamiento eléctrico cruzado (obligatorio per IEC 60947):</strong> El bobinado de KM2 (Δ) se conecta en serie con el contacto auxiliar NC de KM3 (Y). El bobinado de KM3 se conecta en serie con el NC de KM2. Si por error ambas bobinas reciben orden de activación simultánea, la NC del otro contactor interrumpe la corriente antes de que las potencias puedan cerrarse. El enclavamiento mecánico es un refuerzo físico adicional que previene incluso el caso de fallo del enclavamiento eléctrico por contactos pegados.</p>
+  </div>
+  <!-- SVG: Y-Delta power circuit (IEC 60617 / CADe_SIMU) -->
+  <div class="schematic-wrap">
+    <h4>🔧 Circuito de Potencia Arranque Y-Δ — IEC 60617 / CADe_SIMU (3 contactores)</h4>
+    <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" font-size="11" width="700" height="200">
+      <rect width="700" height="200" fill="#f8fafc" rx="8"/>
+      <!-- 3 fases de red -->
+      <line x1="60" y1="20" x2="60" y2="60" stroke="#ef4444" stroke-width="2.5"/>
+      <line x1="130" y1="20" x2="130" y2="60" stroke="#22c55e" stroke-width="2.5"/>
+      <line x1="200" y1="20" x2="200" y2="60" stroke="#3b82f6" stroke-width="2.5"/>
+      <text x="60" y="14" text-anchor="middle" fill="#ef4444" font-weight="bold" font-size="10">L1</text>
+      <text x="130" y="14" text-anchor="middle" fill="#22c55e" font-weight="bold" font-size="10">L2</text>
+      <text x="200" y="14" text-anchor="middle" fill="#3b82f6" font-weight="bold" font-size="10">L3</text>
+      <!-- KM1 (línea) — 3 contactos en paralelo (IEC: NO contact = line with gap) -->
+      <rect x="40" y="60" width="180" height="30" rx="4" fill="#eff6ff" stroke="#0369a1" stroke-width="2"/>
+      <text x="130" y="80" text-anchor="middle" fill="#0369a1" font-weight="bold" font-size="11">KM1 — Línea (3 NO)</text>
+      <!-- Cables después de KM1 -->
+      <line x1="60" y1="90" x2="60" y2="115" stroke="#ef4444" stroke-width="2"/>
+      <line x1="130" y1="90" x2="130" y2="115" stroke="#22c55e" stroke-width="2"/>
+      <line x1="200" y1="90" x2="200" y2="115" stroke="#3b82f6" stroke-width="2"/>
+      <!-- Junction points (nodos) -->
+      <circle cx="60" cy="115" r="3" fill="#374151"/>
+      <circle cx="130" cy="115" r="3" fill="#374151"/>
+      <circle cx="200" cy="115" r="3" fill="#374151"/>
+      <!-- Derivación a KM3 (estrella) y KM2 (triángulo) -->
+      <!-- KM3 (estrella) -->
+      <line x1="60" y1="115" x2="60" y2="130" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="5,2"/>
+      <line x1="130" y1="115" x2="130" y2="130" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="5,2"/>
+      <line x1="200" y1="115" x2="200" y2="130" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5,2"/>
+      <rect x="40" y="130" width="180" height="24" rx="4" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.5"/>
+      <text x="130" y="146" text-anchor="middle" fill="#7c3aed" font-weight="bold" font-size="10">KM3 — Estrella (Neutro W2-U2-V2)</text>
+      <!-- Puente neutro estrella -->
+      <line x1="60" y1="154" x2="200" y2="154" stroke="#7c3aed" stroke-width="1.5"/>
+      <line x1="130" y1="154" x2="130" y2="168" stroke="#7c3aed" stroke-width="1.5"/>
+      <circle cx="130" cy="168" r="5" fill="none" stroke="#7c3aed" stroke-width="1.5"/>
+      <text x="130" y="182" text-anchor="middle" fill="#7c3aed" font-size="9">Neutro (★ Y)</text>
+      <!-- Motor -->
+      <circle cx="490" cy="115" r="38" fill="#f8fafc" stroke="#374151" stroke-width="2"/>
+      <text x="490" y="112" text-anchor="middle" font-weight="bold" fill="#374151" font-size="13">M</text>
+      <text x="490" y="126" text-anchor="middle" fill="#374151" font-size="9">3~</text>
+      <!-- Motor terminals U1/V1/W1 -->
+      <text x="456" y="85" fill="#374151" font-size="8.5">U1</text>
+      <text x="488" y="80" fill="#374151" font-size="8.5">V1</text>
+      <text x="516" y="85" fill="#374151" font-size="8.5">W1</text>
+      <!-- Cables U1/V1/W1 to junction -->
+      <line x1="460" y1="88" x2="440" y2="115" stroke="#ef4444" stroke-width="1.5"/>
+      <line x1="490" y1="82" x2="490" y2="115" stroke="#22c55e" stroke-width="1.5"/>
+      <line x1="520" y1="88" x2="540" y2="115" stroke="#3b82f6" stroke-width="1.5"/>
+      <!-- Cables fases a motor -->
+      <line x1="60" y1="115" x2="440" y2="115" stroke="#ef4444" stroke-width="1.5"/>
+      <line x1="130" y1="115" x2="490" y2="82" stroke="#22c55e" stroke-width="1.5"/>
+      <line x1="200" y1="115" x2="540" y2="115" stroke="#3b82f6" stroke-width="1.5"/>
+      <!-- KM2 (triángulo) label -->
+      <rect x="380" y="150" width="220" height="22" rx="4" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+      <text x="490" y="165" text-anchor="middle" fill="#d97706" font-weight="bold" font-size="10">KM2 — Triángulo (3 NO: U1↔W2, V1↔U2, W1↔V2)</text>
+      <!-- Enclavamiento note -->
+      <text x="350" y="195" fill="#dc2626" font-size="8.5" font-weight="bold">⚡ KM2 y KM3: enclavamiento cruzado eléctrico + mecánico — NUNCA deben cerrar juntos</text>
+    </svg>
+    <p class="sch-title">KM1 siempre cierra primero (línea). KM3 cierra para arranque en Y (1/3 I_DOL). Tras temporizador: KM3 abre → pausa 30-50 ms → KM2 cierra para régimen Δ. Enclavamiento cruzado en ambos sentidos obligatorio.</p>
   </div>
 
   <!-- 3.3 SOFT-STARTER -->
@@ -843,6 +1114,16 @@ tr:nth-child(even) td{background:#f8fafc}
   <div class="alert alert-warn">
     <span class="ico">⚠️</span>
     <div><strong>Errores comunes en el parcial:</strong><ul><li>El soft-starter NO permite control de velocidad en régimen permanente. Solo controla la rampa de ARRANQUE y de PARADA. Para velocidad variable hay que usar un VFD.</li><li>El contactor de Bypass cierra SOLO cuando la tensión llegó al 100% de la tensión nominal (fin de la rampa de arranque). No está cerrado durante la rampa.</li><li>El golpe de ariete ocurre al PARAR una bomba bruscamente, NO al arrancarla. La rampa Soft Stop (15-45 s) previene el golpe de ariete al parar.</li></ul></div>
+  </div>
+  <!-- DESARROLLO TÉCNICO 3.3 -->
+  <div class="deep-block">
+    <h4>🧪 Profundización: SCR, ángulo de disparo y la fórmula RMS</h4>
+    <p>El SCR (Silicon Controlled Rectifier) es un tiristor de 4 capas PNPN. Una vez encendido por un pulso de gate, conduce hasta que la corriente cae a cero (en CA, eso ocurre en cada cruce por cero del ciclo). En antiparalelo, un par de SCR por fase controla ambos semiciclos. El ángulo de disparo α define cuánto del semiciclo se deja pasar. La tensión RMS entregada al motor es: <code>V_rms = V_pico · √( (π−α + sin(2α)/2) / (2π) )</code>. A α=0° se pasa el semiciclo completo (V_rms = 230 V). A α=150° se recorta casi todo y la tensión cae a ~40 V.</p>
+    <p><strong>T ∝ V² — consecuencias prácticas:</strong> Si V cae al 60% (α≈75°), el par cae al 36%. Esto es suficiente para arrancar cargas de bajo par estático (bombas centrifugas, ventiladores), pero puede ser insuficiente para compresores de tornillo o cintas transportadoras cargadas que necesitan par de arranque alto. Para esos casos el parámetro "Kick-Start" aplica 80-100% de tensión durante 100-500 ms antes de iniciar la rampa, venciendo la fricción estática inicial.</p>
+    <p><strong>Pérdidas de los SCR en régimen permanente:</strong> Cada SCR tiene una caída de conducción de ~1.2-1.5 V. Con corriente de 100 A por fase, la potencia disipada en 6 SCR es ~720-900 W. Esta energía no llega al motor y se convierte en calor en el disipador del arrancador. El contactor de bypass elimina este calor en régimen permanente al derivar la corriente por una trayectoria puramente conductora (contactos de plata-cadmio), reduciendo pérdidas a &lt;10 W.</p>
+  </div>
+  <div class="how-to-read">
+    <strong>🔎 Cómo leer la animación del SCR:</strong> El slider ajusta el ángulo α (0° a 150°). La zona gris a la izquierda de α es la zona bloqueada (SCR apagado); la zona azul a la derecha es la zona conductora. La curva gris fina es la senoide completa de referencia; la curva azul gruesa es la tensión recortada que llega al motor. El readout inferior muestra V_rms calculado con la fórmula exacta y el par estimado como (V_rms/400)²×100%.
   </div>
 
 </div>
@@ -943,6 +1224,17 @@ tr:nth-child(even) td{background:#f8fafc}
     <div><strong>Errores comunes en el parcial:</strong><ul><li>V_bus DC = √2 × 400V ≈ 565 Vcc (el pico de la senoide rectificada, no la tensión RMS). No es 400 V.</li><li>Al frenar bruscamente una carga de alta inercia, el motor funciona como GENERADOR y devuelve energía al bus DC. Sin Chopper o regeneración activa, el bus sube hasta ~750-800 Vcc y el variador dispara 'Overvoltage Trip'.</li><li>Cables largos (&gt;20-30 m) entre el VFD y el motor producen reflexión de onda por el dv/dt de los IGBT: la tensión en las primeras espiras del motor puede llegar a 1200-1600V y perforar el esmalte aislante. Solución: reactancias de salida, filtros dv/dt o filtros senoidales LC.</li></ul></div>
   </div>
 
+  <!-- DESARROLLO TÉCNICO 4.1 -->
+  <div class="deep-block">
+    <h4>🧪 Profundización: rectificador, bus DC, IGBT y por qué 565 Vcc</h4>
+    <p>El puente rectificador trifásico de 6 diodos (topología de Graetz) produce una corriente DC con rizado de 300 Hz (6 pulsaciones por ciclo de 50 Hz). La tensión de pico del rectificado es <code>V_pico = √2 × 400 ≈ 565 Vcc</code>. Los condensadores electrolíticos del bus DC almacenan energía suficiente para sostener la operación durante microcortes de red de hasta 15-20 ms (ride-through). La resistencia de precarga inrush es crítica al encender: los condensadores completamente descargados se comportan como un cortocircuito, y sin esa resistencia la corriente de carga inicial podría destruir los diodos o disparar el interruptor diferencial.</p>
+    <p><strong>IGBT y SPWM en detalle:</strong> Cada IGBT conmuta en 100-200 ns (rise time), lo que produce un dv/dt &gt; 5000 V/µs en la salida. La portadora triangular tipicamente corre a 2-16 kHz; la frecuencia de conmutación es un compromiso: más alta → corriente de salida más suave, más parecida a senoide → pero más pérdidas de switching en los IGBT (Esw ∝ f_sw) y más EMI radiada. Los diodos freewheeling en antiparalelo con cada IGBT permiten que la corriente inductiva del motor (que siempre quiere continuar) circule cuando el IGBT está apagado, evitando picos de tensión destructivos.</p>
+    <p><strong>Comparación: chopper de frenado vs regeneración activa:</strong> El chopper disipa la energía de frenado como calor en una resistencia (solución económica para frenadas ocasionales). Un rectificador activo (topología AFE, Active Front End) reemplaza los diodos del rectificador por IGBTs y puede devolver la energía de frenado a la red eléctrica (regeneración activa), reduciendo el consumo energético total del sistema. Es obligatorio en aplicaciones con frenadas frecuentes y potencias altas (ascensores, grúas, centrifugadoras).</p>
+  </div>
+  <div class="how-to-read">
+    <strong>🔎 Cómo leer la animación VFD:</strong> Hacé clic en cada bloque del diagrama de bloques para ver su descripción. El panel de ondas abajo muestra las tres señales: Entrada CA 400V/50Hz (rojo/verde/azul), Bus DC con rizado 300 Hz (violeta), y Salida SPWM al motor (verde). Al mover el slider de frecuencia, observá cómo cambia la densidad de los pulsos SPWM y la amplitud de la salida.
+  </div>
+
   <!-- 4.2 CONTROL V/f vs FOC -->
   <div class="stitle"><span class="ico">📊</span> 4.2 — Control Escalar V/f vs Control Vectorial FOC</div>
 
@@ -1001,6 +1293,17 @@ tr:nth-child(even) td{background:#f8fafc}
       <input id="vfFrequency" type="range" min="0" max="100" value="35" oninput="drawVFCurve(Number(this.value))"/>
     </div>
     <div id="vfReadout" class="chart-readout">f = 35 Hz | V = 280 V | Par nominal = 100%</div>
+  </div>
+
+  <!-- DESARROLLO TÉCNICO 4.2 -->
+  <div class="deep-block">
+    <h4>🧪 Profundización: transformada de Clarke, transformada de Park y los lazos PID</h4>
+    <p>La <strong>Transformada de Clarke</strong> convierte las tres corrientes de fase del motor (i_a, i_b, i_c) en dos corrientes ortogonales fijas en el estator (i_α, i_β). Esta transformación reduce el problema de 3 variables dependientes a 2 variables independientes. La <strong>Transformada de Park</strong> rota el sistema de referencia (α-β) al sistema (d-q) que gira sincrónicamente con el flujo del rotor (a velocidad ωr). En el sistema d-q, las corrientes AC del motor aparecen como valores DC cuando el motor gira a velocidad constante — igual que en un motor CC con excitación separada. El componente d controla el flujo (Id); el componente q controla el par (Iq).</p>
+    <p><strong>Field Weakening matemáticamente:</strong> En la zona base (f &lt; 50 Hz), la tensión sube linealmente con f para mantener Φ = cte. Cuando se alcanza la tensión máxima del inversor (~400 V), no es posible aumentar más V. Si seguimos subiendo f, el flujo Φ cae como 1/f. Como el par <code>T = k·Φ·Iq</code> y el flujo cayó, el par nominal cae con 1/f. El par máximo de vuelco (pull-out torque) depende del cuadrado de la tensión y del cuadrado del flujo, cayendo más rápido: con 1/f². La potencia mecánica <code>P = T·ω = cte</code> porque T·(1/f) × f = P_nominal = constante.</p>
+    <p><strong>¿Cuándo usar V/f vs FOC?</strong> V/f es suficiente para bombas, ventiladores y compresores (par cuadrático ∝ n²) donde la precisión dinámica no es crítica. FOC con encoder es obligatorio para: grúas (par nominal a 0 rpm para retener la carga), bobinadoras (control de tensión de banda con par activo), ejes CNC (trayectoria interpolada con servo coordinado), y cualquier aplicación donde se requiera mantener par pleno a bajas o nulas velocidades.</p>
+  </div>
+  <div class="how-to-read">
+    <strong>🔎 Cómo leer la curva V/f:</strong> La zona azul (0-50 Hz) es la zona de flujo constante: la curva V sube linealmente (8 V/Hz). La zona naranja (50-100 Hz) es Field Weakening: V se queda en 400 V mientras f sigue subiendo. Observá las curvas roja (par nominal 1/f) y roja punteada (par máximo 1/f²). Al mover el slider al punto de trabajo, el readout muestra V, f y par normalizado instantáneos.
   </div>
 
   <!-- 4.3 STEPPERS Y SERVOMOTORES -->
@@ -1085,6 +1388,16 @@ tr:nth-child(even) td{background:#f8fafc}
   <div class="alert alert-warn">
     <span class="ico">⚠️</span>
     <div><strong>Errores comunes en el parcial:</strong><ul><li>El encoder incremental PIERDE la posición al cortar energía. Al reiniciar el sistema, el servo no sabe dónde está hasta completar una rutina de Homing (ir al sensor de inicio para calibrar el cero). El encoder absoluto no necesita Homing.</li><li>El Código Gray no hace el encoder 'más preciso' — lo hace 'sin glitches': entre dos posiciones adyacentes SOLO cambia 1 bit, evitando que durante la transición se lea una posición errónea momentáneamente.</li><li>Más resolución de microstepping (1/32, 1/64, 1/256) no garantiza más par: el par se distribuye sinusoidalmente entre los micropasos, y el par por micropaso cae. Para aplicaciones de alta carga, Full-Step puede ser mejor.</li></ul></div>
+  </div>
+  <!-- DESARROLLO TÉCNICO 4.3 -->
+  <div class="deep-block">
+    <h4>🧪 Profundización: resonancia del stepper, Código Gray y los 3 lazos PID del servo</h4>
+    <p>El motor paso a paso tiene una frecuencia de resonancia natural en torno a 100-300 PPS (pasos por segundo) dependiendo del momento de inercia de la carga. A esa frecuencia, la respuesta dinámica amplifica las oscilaciones angulares: el rotor overshoots cada paso y el sistema puede perder pasos o generar ruido mecánico severo. El <strong>microstepping</strong> resuelve esto inyectando corrientes senoidales en cuadratura (I_A = I_max·sin(θ), I_B = I_max·cos(θ)) que crean un campo casi continuo: el rotor se mueve suavemente sin la resonancia del campo discreto. El modo StealthChop (TMC2130/2208) lleva esto al extremo usando interpolación de 256 micropasos y detección de fuerza contraelectromotriz para regulación de corriente casi silenciosa.</p>
+    <p><strong>Código Gray y por qué evita glitches:</strong> En binario puro, al pasar de 7 (0111) a 8 (1000) cambian 4 bits simultáneamente. Durante la transición, si los bits no cambian exactamente al mismo tiempo (skew mecánico entre pistas del disco), se leen valores espurios como 0000, 0001, 0010... El Código Gray garantiza que entre dos posiciones adyacentes SOLO cambia 1 bit. Del 7 (0100 en Gray) al 8 (1100 en Gray) cambia un solo bit — no hay estados intermedios erróneos posibles.</p>
+    <p><strong>Los 3 lazos PID en cascada del servo:</strong> El lazo de corriente es el más interno (10-20 kHz), controla el vector de corriente para producir el par ordenado — su ancho de banda define cuán rápido puede cambiar el par. El lazo de velocidad (1-4 kHz) usa la señal del encoder para regular la velocidad real; ajusta la referencia de corriente (par) del lazo interno. El lazo de posición (500-1000 Hz) compara la posición deseada (trayectoria del CNC/PLC) con la posición real del encoder; ajusta la referencia de velocidad del lazo intermedio. El lazo externo siempre debe ser más lento que el interno para evitar inestabilidad.</p>
+  </div>
+  <div class="how-to-read">
+    <strong>🔎 Cómo leer la animación del Encoder:</strong> Los tres canales A (azul), B (verde) y Z (rojo) se muestran como señales de onda cuadrada. Con giro horario, el canal A <em>adelanta</em> 90° al canal B. Con giro antihorario, B adelanta a A. El canal Z produce 1 pulso por vuelta completa (referencia de homing). Probá el botón "Invertir giro" y observá cómo cambia la cuadratura A-B.
   </div>
 
 </div>

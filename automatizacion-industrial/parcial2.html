@@ -145,6 +145,13 @@ tr:nth-child(even) td{background:#f8fafc}
 
 /* SECTION BADGE */
 .ex-badge{display:inline-block;background:var(--blue);color:#fff;border-radius:6px;font-size:.75rem;font-weight:800;padding:.15rem .6rem;margin-bottom:.5rem;letter-spacing:.03em}
+.foundation-card{border-top:1px solid #bae6fd}.foundation-card p+p{margin-top:.65rem}
+.control-label{display:flex;align-items:center;gap:.4rem;font-size:.84rem;font-weight:700;color:var(--gray)}
+.control-label select,input[type=range]{font:inherit;accent-color:var(--blue)}
+.control-label select{min-height:36px;border:1px solid var(--border);border-radius:7px;background:#fff;padding:.25rem .45rem}
+.anim-ctrl input[type=range]{width:min(320px,100%);min-height:36px}
+.chart-readout{margin:.55rem auto 0;padding:.4rem .7rem;border-radius:7px;background:#f1f5f9;color:#334155;font-size:.82rem;font-weight:700;max-width:680px}
+@media(max-width:620px){.canvas-wrap{padding:.65rem}.canvas-wrap canvas{height:auto}.control-label{width:100%;justify-content:center}}
 </style>
 </head>
 <body>
@@ -188,6 +195,12 @@ tr:nth-child(even) td{background:#f8fafc}
   <!-- 1.1 LAZO 4-20mA -->
   <div class="stitle"><span class="ico">📡</span> 1.1 — Lazo 4-20 mA vs 0-10 V</div>
 
+  <div class="card card-blue foundation-card" data-foundations="1.1">
+    <h4>🔎 Fundamentos</h4>
+    <p>En industria se transmite la variable como <strong>corriente</strong> porque la misma corriente circula por todos los elementos en serie (Ley de Kirchhoff), resiste mejor la interferencia EMI y no cambia por la resistencia del cable mientras la fuente conserve tensión suficiente. El estándar 4-20 mA modernizó al antiguo 10-50 mA: consume menos energía y conserva un cero vivo capaz de distinguir proceso en mínimo de cable roto.</p>
+    <p><strong>Analogía:</strong> un transmisor <em>loop-powered</em> se comporta como un reóstato inteligente en serie: usa los mismos dos cables para alimentarse y regula su resistencia interna para dejar circular exactamente la corriente que representa la medición.</p>
+  </div>
+
   <div class="grid2">
     <div class="card card-blue">
       <h4>🟢 Zero Vivo (4 mA) — Estándar 4-20 mA</h4>
@@ -215,6 +228,8 @@ tr:nth-child(even) td{background:#f8fafc}
   <div class="canvas-wrap">
     <canvas id="loopCanvas" width="680" height="200"></canvas>
     <p>Animación lazo 4-20 mA — el transmisor modula la corriente según el nivel del proceso</p>
+    <canvas id="loopGraphCanvas" width="680" height="120" aria-label="Curva de transferencia del lazo"></canvas>
+    <p>Curva de transferencia I-V del lazo 4-20 mA: I (mA), V_shunt (V) y % Proceso.</p>
     <div class="anim-ctrl">
       <button class="btn btn-blue" onclick="setLoop(0)">0 % → 4 mA (1 V)</button>
       <button class="btn btn-green" onclick="setLoop(0.5)">50 % → 12 mA (3 V)</button>
@@ -243,8 +258,23 @@ tr:nth-child(even) td{background:#f8fafc}
     </ul>
   </div>
 
+  <div class="card card-yellow" data-errors="1.1">
+    <h4>⚠️ Errores comunes</h4>
+    <ul>
+      <li>4 mA representa 0% de proceso; 0 mA no es un mínimo válido sino una falla de lazo.</li>
+      <li>El shunt de 250 Ω pertenece a la entrada del PLC, no al transmisor.</li>
+      <li>Loop-powered usa dos cables para alimentación y señal, no cuatro.</li>
+    </ul>
+  </div>
+
   <!-- 1.2 INSTRUMENTACIÓN DE NIVEL Y CAUDAL -->
   <div class="stitle"><span class="ico">🌊</span> 1.2 — Medición de Nivel y Caudalímetro Electromagnético</div>
+
+  <div class="card card-blue foundation-card" data-foundations="1.2">
+    <h4>🔎 Fundamentos</h4>
+    <p>Detectar nivel no siempre significa medirlo: un interruptor discreto responde solo <strong>ON/OFF</strong>, mientras un transmisor continuo entrega todo el recorrido de 0 a 100%. En una sonda hidrostática, <code>P = ρ·g·h</code>: cuanto más alta es la columna, mayor es el peso del líquido sobre el sensor.</p>
+    <p><strong>Analogía:</strong> la horquilla es como el aviso de “vaso lleno”; la sonda es una regla que indica cuánto hay. El radar de 80 GHz usa una longitud de onda pequeña, como una regla con divisiones más finas, para localizar la superficie con mayor precisión.</p>
+  </div>
 
   <div class="tbl-wrap">
     <table>
@@ -266,8 +296,23 @@ tr:nth-child(even) td{background:#f8fafc}
     </ul>
   </div>
 
+  <div class="card card-yellow" data-errors="1.2">
+    <h4>⚠️ Errores comunes</h4>
+    <ul>
+      <li>Un caudalímetro electromagnético no mide aceite: necesita un fluido conductor.</li>
+      <li>La placa orificio obtiene caudal desde ΔP y tiene turndown cuadrático cercano a 3:1; el electromagnético es lineal y puede llegar a 50:1.</li>
+      <li>Sin conductividad σ ≥ 5 µS/cm no hay FEM útil en los electrodos.</li>
+    </ul>
+  </div>
+
   <!-- 1.3 SEGURIDAD DE MÁQUINAS -->
   <div class="stitle"><span class="ico">🚨</span> 1.3 — Parada de Emergencia y Seguridad de Máquinas</div>
+
+  <div class="card card-blue foundation-card" data-foundations="1.3">
+    <h4>🔎 Fundamentos</h4>
+    <p><strong>Fail-safe</strong> significa que una falla lleva al estado seguro; <strong>fail-danger</strong>, que la falla puede dejar el peligro activo. Como energía implica movimiento y el movimiento puede dañar, la lógica segura debe detener la máquina ante cable cortado, pérdida de alimentación o contacto defectuoso.</p>
+    <p><strong>Analogía:</strong> el contacto NC es una cuerda tensa que mantiene habilitada la máquina: pulsar la seta o cortar la cuerda produce la misma señal de parada. Un contacto NA no avisaría si su cable se rompe.</p>
+  </div>
 
   <div class="grid2">
     <div class="card card-red">
@@ -304,6 +349,15 @@ tr:nth-child(even) td{background:#f8fafc}
     <span><strong>Regla fundamental:</strong> JAMÁS usar contacto NA en circuitos de parada de emergencia. Un contacto NC garantiza "seguridad positiva": cualquier corte de conductor detiene la máquina.</span>
   </div>
 
+  <div class="card card-yellow" data-errors="1.3">
+    <h4>⚠️ Errores comunes</h4>
+    <ul>
+      <li>Categoría 0 corta energía de inmediato; Categoría 1 desacelera de forma controlada y luego corta.</li>
+      <li>Rearmar la seta solo restablece el lazo de seguridad: nunca debe arrancar la máquina.</li>
+      <li>Elegir un contacto NA deja una rotura de cable sin detectar y crea una condición fail-danger.</li>
+    </ul>
+  </div>
+
 </div>
 </div><!-- /p1 -->
 
@@ -317,6 +371,12 @@ tr:nth-child(even) td{background:#f8fafc}
 
   <!-- 2.1 SENSORES DE PROXIMIDAD -->
   <div class="stitle"><span class="ico">🔍</span> 2.1 — Sensores de Proximidad: Inductivo vs Capacitivo</div>
+
+  <div class="card card-blue foundation-card" data-foundations="2.1">
+    <h4>🔎 Fundamentos</h4>
+    <p>El inductivo crea un campo magnético y reconoce las corrientes inducidas en un metal, como un <strong>detector de metales de playa</strong>. El capacitivo observa cambios del campo eléctrico, como una puerta automática que percibe una presencia incluso a través de ciertos materiales.</p>
+    <p>PNP entrega +24 V al PLC y es habitual en Europa porque una derivación del cable de señal a masa no provoca una activación fantasma. NPN hace lo opuesto: conmuta la señal a 0 V.</p>
+  </div>
 
   <div class="grid2">
     <div class="card card-blue">
@@ -374,8 +434,23 @@ tr:nth-child(even) td{background:#f8fafc}
     </div>
   </div>
 
+  <div class="card card-yellow" data-errors="2.1">
+    <h4>⚠️ Errores comunes</h4>
+    <ul>
+      <li>El inductivo necesita metal; que un plástico sea antiestático o algo conductor no lo convierte en un blanco metálico adecuado.</li>
+      <li>PNP entrega +24 V al PLC; NPN conmuta la señal a 0 V.</li>
+      <li>El pin 4 negro es la salida conmutada y por defecto se usa NO, no siempre NC.</li>
+    </ul>
+  </div>
+
   <!-- 2.2 PROTOCOLO HART -->
   <div class="stitle"><span class="ico">📶</span> 2.2 — Protocolo HART sobre Lazo 4-20 mA</div>
+
+  <div class="card card-blue foundation-card" data-foundations="2.2">
+    <h4>🔎 Fundamentos</h4>
+    <p>HART hace viajar dos mensajes por el mismo par: la corriente continua 4-20 mA lleva la variable principal y una pequeña señal FSK lleva datos digitales. Es como recibir AM y FM por una misma antena sin que una emisora borre a la otra.</p>
+    <p>Sus 1200 bps alcanzan porque configura y diagnostica, no controla en tiempo real. Además de la variable analógica permite leer temperatura del sensor, horas de servicio, rangos de calibración, alarmas, diagnóstico y número de serie.</p>
+  </div>
 
   <div class="card card-purple">
     <h4>Modulación FSK Bell 202</h4>
@@ -417,8 +492,23 @@ tr:nth-child(even) td{background:#f8fafc}
     </div>
   </div>
 
+  <div class="card card-yellow" data-errors="2.2">
+    <h4>⚠️ Errores comunes</h4>
+    <ul>
+      <li>La FSK no altera la lectura analógica: el filtro pasabajos del PLC la elimina.</li>
+      <li>En multidrop cada equipo queda en 4 mA fijos y la variable 4-20 mA deja de funcionar.</li>
+      <li>La dirección HART identifica el instrumento; no es un valor de corriente.</li>
+    </ul>
+  </div>
+
   <!-- 2.3 METROLOGÍA -->
   <div class="stitle"><span class="ico">📏</span> 2.3 — Metrología Industrial y Rutinas de Trim</div>
+
+  <div class="card card-blue foundation-card" data-foundations="2.3">
+    <h4>🔎 Fundamentos</h4>
+    <p>Según el VIM, <strong>calibrar</strong> es comparar y documentar; <strong>ajustar</strong> es intervenir para corregir. La trazabilidad forma una cadena demostrable: patrón de laboratorio → patrón de trabajo → instrumento de campo.</p>
+    <p><strong>Analogía:</strong> calibrar es pesarse para conocer lo que marca la balanza; ajustar es corregir la balanza para que marque el peso de referencia. Medir el error no equivale a tocar el instrumento.</p>
+  </div>
 
   <div class="tbl-wrap">
     <table>
@@ -439,6 +529,15 @@ tr:nth-child(even) td{background:#f8fafc}
     </div>
   </div>
 
+  <div class="canvas-wrap">
+    <canvas id="rangeCanvas" width="680" height="180" aria-label="Rango físico y rango calibrado"></canvas>
+    <p>LRL/URL son límites físicos; LRV/URV definen el rango calibrado y el Span. Ejemplo: LRL = 0 bar, URL = 10 bar y Span = URV - LRV = 6 bar.</p>
+    <div class="anim-ctrl">
+      <button class="btn btn-blue" onclick="setRangeExample('pressure')">Ejemplo Presión</button>
+      <button class="btn btn-purple" onclick="setRangeExample('temperature')">Ejemplo Temperatura</button>
+    </div>
+  </div>
+
   <div class="tbl-wrap">
     <table>
       <tr><th>Rutina</th><th>¿Qué ajusta?</th><th>Acción requerida</th></tr>
@@ -454,6 +553,15 @@ tr:nth-child(even) td{background:#f8fafc}
     <span><strong>Recuerda:</strong> "Calibrar" no implica tocar el instrumento. Solo se modifica cuando se hace un "Ajuste". Un transmisor puede estar perfectamente calibrado (documentado) y sin embargo no estar ajustado.</span>
   </div>
 
+  <div class="card card-yellow" data-errors="2.3">
+    <h4>⚠️ Errores comunes</h4>
+    <ul>
+      <li>Calibración y ajuste no son sinónimos: calibrar compara, ajustar modifica.</li>
+      <li>Una calibración no incluye tocar parámetros o tornillos del instrumento.</li>
+      <li>LRL es el límite físico de fábrica; LRV es el límite inferior configurado por el usuario.</li>
+    </ul>
+  </div>
+
 </div>
 </div><!-- /p2 -->
 
@@ -467,6 +575,12 @@ tr:nth-child(even) td{background:#f8fafc}
 
   <!-- 3.1 MOTOR ASÍNCRONO -->
   <div class="stitle"><span class="ico">⚡</span> 3.1 — Motor Asíncrono Trifásico y Teorema de Ferraris</div>
+
+  <div class="card card-blue foundation-card" data-foundations="3.1">
+    <h4>🔎 Fundamentos</h4>
+    <p>El rotor es un “seguidor de campo”: intenta alcanzar al campo giratorio, pero necesita quedarse algo atrás para inducir corriente y producir par. En un motor de 4 polos y 50 Hz, <code>ns = 1500 rpm</code>; si gira a 1450 rpm, <code>s = (1500-1450)/1500 = 0.033</code>, es decir 3.3%.</p>
+    <p><strong>Modelo mental:</strong> el circuito equivalente reúne <code>R1, X1</code> en el estator y <code>R2/s, X2</code> en el rotor referido. El término R2/s muestra por qué el comportamiento eléctrico cambia con el deslizamiento.</p>
+  </div>
 
   <div class="grid2">
     <div class="card card-blue">
@@ -494,6 +608,7 @@ tr:nth-child(even) td{background:#f8fafc}
     <p>Campo Magnético Giratorio (CMG) — las 3 fases generan un vector rotante de amplitud constante B = 1.5·Bmax</p>
     <div class="anim-ctrl">
       <button class="btn btn-blue" onclick="toggleCMG()" id="cmgBtn">▶ Animar CMG</button>
+      <label class="control-label">Frecuencia <select id="cmgFrequency" onchange="setCMGFrequency(this.value)"><option value="50">50 Hz (ns=1500 rpm)</option><option value="60">60 Hz (ns=1800 rpm)</option></select></label>
     </div>
   </div>
 
@@ -513,8 +628,23 @@ tr:nth-child(even) td{background:#f8fafc}
     </div>
   </div>
 
+  <div class="card card-yellow" data-errors="3.1">
+    <h4>⚠️ Errores comunes</h4>
+    <ul>
+      <li>ns es la velocidad del campo; n es la velocidad mecánica real del rotor.</li>
+      <li>Con s = 0 no se induce corriente y el par es cero, no máximo.</li>
+      <li>A igual frecuencia, un motor de 2 polos sí tiene el doble de ns que uno de 4 polos: 3000 vs 1500 rpm a 50 Hz.</li>
+    </ul>
+  </div>
+
   <!-- 3.2 BORNERA Y ARRANQUE Y-Δ -->
   <div class="stitle"><span class="ico">🔧</span> 3.2 — Bornera de 6 Bornes, Estrella-Triángulo y Enclavamientos</div>
+
+  <div class="card card-blue foundation-card" data-foundations="3.2">
+    <h4>🔎 Fundamentos</h4>
+    <p>Un arranque directo DOL puede pedir 5 a 7 veces la corriente nominal, causar caída de tensión y producir flicker en instalaciones vecinas. Estrella-triángulo reduce el esfuerzo inicial antes de conectar cada bobina a la tensión de línea.</p>
+    <p><strong>Mnemotecnia:</strong> “W2-U2-V2 en HORIZONTAL = ESTRELLA”; esa pletina común forma el neutro. Si la placa dice <strong>230Δ/400Y</strong> y la red es 400 V, el motor trabaja siempre en estrella.</p>
+  </div>
 
   <div class="grid2">
     <div class="card card-blue">
@@ -545,6 +675,8 @@ tr:nth-child(even) td{background:#f8fafc}
   <div class="canvas-wrap">
     <canvas id="ydCanvas" width="600" height="240"></canvas>
     <p>Maniobra Estrella-Triángulo: secuencia de contactores y evolución de la corriente</p>
+    <canvas id="ydCurveCanvas" width="600" height="140" aria-label="Curva temporal de corriente estrella triángulo"></canvas>
+    <p>Corriente normalizada I / I_DOL (%) durante Y, conmutación y Δ.</p>
     <div class="anim-ctrl">
       <button class="btn btn-blue" onclick="startYDelta()">▶ Simular Arranque Y-Δ</button>
       <button class="btn btn-gray" onclick="resetYDelta()">↺ Reset</button>
@@ -560,8 +692,23 @@ tr:nth-child(even) td{background:#f8fafc}
     </ul>
   </div>
 
+  <div class="card card-yellow" data-errors="3.2">
+    <h4>⚠️ Errores comunes</h4>
+    <ul>
+      <li>En Y, la tensión por bobina baja a 1/√3, mientras la corriente de línea de arranque queda en 1/3 de DOL.</li>
+      <li>KM2 (Δ) y KM3 (Y) jamás pueden cerrar juntos: provocarían un cortocircuito interno.</li>
+      <li>La pausa abierta de 30-50 ms es necesaria para extinguir el arco antes de pasar de Y a Δ.</li>
+    </ul>
+  </div>
+
   <!-- 3.3 SOFT-STARTER -->
   <div class="stitle"><span class="ico">🌡️</span> 3.3 — Arrancadores Suaves (Soft-Starters)</div>
+
+  <div class="card card-blue foundation-card" data-foundations="3.3">
+    <h4>🔎 Fundamentos</h4>
+    <p>El ángulo de disparo α recorta cada semiciclo, como un dimmer electrónico con TRIAC pero aplicado a un motor de 400 V. Como <code>T ∝ V²</code>, bajar la tensión al 70% reduce el par aproximadamente al 49%.</p>
+    <p>Un soft-starter suaviza arranque y parada, pero no regula la velocidad permanente. Para variar velocidad en régimen se necesita un VFD, que además modifica la frecuencia.</p>
+  </div>
 
   <div class="card card-purple">
     <h4>⚡ Topología: 6 Tiristores SCR en Antiparalelo</h4>
@@ -576,6 +723,17 @@ tr:nth-child(even) td{background:#f8fafc}
       <span class="kv-item p">Kick-start: pulso 80-100% por 100-500ms — cargas pesadas trabadas</span>
       <span class="kv-item g">Límite de corriente: umbral 2.5-4.0 In — frena la rampa si se supera</span>
     </div>
+  </div>
+
+  <div class="canvas-wrap">
+    <canvas id="scrCanvas" width="680" height="200" aria-label="Ángulo de disparo de los SCR"></canvas>
+    <p>Ángulo de disparo α: zonas bloqueada y conductora para los dos SCR en antiparalelo.</p>
+    <div class="anim-ctrl">
+      <label class="control-label" for="scrAngle">α = <output id="scrAngleOut">120°</output></label>
+      <input id="scrAngle" type="range" min="0" max="150" value="120" step="5" oninput="drawSCR(Number(this.value))"/>
+    </div>
+    <div id="scrReadout" class="chart-readout">V_rms = — | Par estimado ~ —</div>
+    <p><code>V_rms = V_pico · √((π - α + sin(2α)/2) / (2π))</code> · Arranque: α 150°→0° | Soft Stop: α 0°→150°</p>
   </div>
 
   <div class="grid2">
@@ -599,6 +757,15 @@ tr:nth-child(even) td{background:#f8fafc}
     </div>
   </div>
 
+  <div class="card card-yellow" data-errors="3.3">
+    <h4>⚠️ Errores comunes</h4>
+    <ul>
+      <li>El soft-starter no permite variar velocidad de forma continua; solo controla rampas de tensión.</li>
+      <li>El bypass cierra únicamente cuando la tensión llega al 100% nominal.</li>
+      <li>El golpe de ariete típico aparece al parar bruscamente el caudal, no al iniciar una rampa suave.</li>
+    </ul>
+  </div>
+
 </div>
 </div><!-- /p3 -->
 
@@ -613,6 +780,12 @@ tr:nth-child(even) td{background:#f8fafc}
   <!-- 4.1 VFD -->
   <div class="stitle"><span class="ico">🔄</span> 4.1 — Variador de Frecuencia (VFD) — 3 Etapas</div>
 
+  <div class="card card-blue foundation-card" data-foundations="4.1">
+    <h4>🔎 Fundamentos</h4>
+    <p>El VFD primero convierte AC→DC, guarda energía en un “depósito” (bus DC) y vuelve a fabricar AC a medida con el inversor. En una red de 400 V, el bus ideal alcanza <code>√2 × 400 ≈ 565 Vcc</code>, el valor de pico de la senoide rectificada.</p>
+    <p>Los IGBT conmutan muy rápido para formar SPWM. La contrapartida de subir la frecuencia de conmutación es aumentar pérdidas de switching, EMI y calor, aunque el motor recibe una corriente más suave.</p>
+  </div>
+
   <!-- ANIMACIÓN VFD BLOQUES -->
   <div class="canvas-wrap">
     <canvas id="vfdCanvas" width="700" height="200"></canvas>
@@ -620,6 +793,17 @@ tr:nth-child(even) td{background:#f8fafc}
     <div id="vfdInfo" class="alert alert-info" style="text-align:left;margin-top:.6rem;display:none">
       <span class="ico">ℹ️</span><span id="vfdInfoText"></span>
     </div>
+  </div>
+
+  <div class="canvas-wrap">
+    <canvas id="vfdWaveCanvas" width="700" height="160" aria-label="Formas de onda internas del VFD"></canvas>
+    <p>Entrada trifásica, Bus DC con rizado y salida SPWM hacia el motor.</p>
+    <div class="anim-ctrl">
+      <label class="control-label" for="vfdFrequency">Frecuencia de salida: <output id="vfdFrequencyOut">35 Hz</output></label>
+      <input id="vfdFrequency" type="range" min="5" max="60" value="35" oninput="setVFDFrequency(Number(this.value))"/>
+      <button class="btn btn-blue" id="vfdWaveBtn" onclick="toggleVFDWave()">⏸ Pausar ondas</button>
+    </div>
+    <div id="vfdWaveReadout" class="chart-readout">f_salida = 35 Hz | V_salida = 280 V (V/f = 8.0 V/Hz)</div>
   </div>
 
   <div class="card card-blue">
@@ -673,8 +857,23 @@ tr:nth-child(even) td{background:#f8fafc}
     </div>
   </div>
 
+  <div class="card card-yellow" data-errors="4.1">
+    <h4>⚠️ Errores comunes</h4>
+    <ul>
+      <li>La salida SPWM es pulsada y contiene armónicos; no es una senoide de tensión pura.</li>
+      <li>El chopper estándar disipa frenado en una resistencia; solo una topología regenerativa activa devuelve energía a la red.</li>
+      <li>dv/dt describe reflexiones y sobrepicos en cables largos, no todo el ruido EMI del variador.</li>
+    </ul>
+  </div>
+
   <!-- 4.2 CONTROL V/f vs FOC -->
   <div class="stitle"><span class="ico">📊</span> 4.2 — Control Escalar V/f vs Control Vectorial FOC</div>
+
+  <div class="card card-blue foundation-card" data-foundations="4.2">
+    <h4>🔎 Fundamentos</h4>
+    <p>El par disponible depende del flujo: <code>T ∝ Φ·I_rotor</code>. Por eso V/f eleva tensión y frecuencia juntas para conservar Φ. FOC cambia el “idioma” trifásico AC mediante Clarke y Park a coordenadas casi continuas: Id es el “flujo” e Iq el “músculo” que produce par.</p>
+    <p>V/f suele trabajar en lazo abierto y resulta económico; FOC usa realimentación de encoder para regular con precisión. No siempre conviene pagar esa complejidad: bombas y ventiladores suelen funcionar bien con V/f.</p>
+  </div>
 
   <div class="grid2">
     <div class="card card-blue">
@@ -710,8 +909,33 @@ tr:nth-child(even) td{background:#f8fafc}
     </ul>
   </div>
 
+  <div class="card card-yellow" data-errors="4.2">
+    <h4>⚠️ Errores comunes</h4>
+    <ul>
+      <li>A 100 Hz no hay doble par: con tensión limitada a 400 V, el par nominal cae aproximadamente al 50%.</li>
+      <li>Torque Boost es un pequeño pedestal para compensar R1 a baja frecuencia, no una sobretensión arbitraria.</li>
+      <li>FOC no es siempre mejor: V/f suele ser suficiente y más económico para bombas y ventiladores.</li>
+    </ul>
+  </div>
+
+  <div class="canvas-wrap">
+    <canvas id="vfCanvas" width="680" height="240" aria-label="Curva V sobre f y debilitamiento de campo"></canvas>
+    <p>Curva V/f con flujo constante hasta 50 Hz y Field Weakening de 50 a 100 Hz.</p>
+    <div class="anim-ctrl">
+      <label class="control-label" for="vfFrequency">Punto de trabajo: <output id="vfFrequencyOut">35 Hz</output></label>
+      <input id="vfFrequency" type="range" min="0" max="100" value="35" oninput="drawVFCurve(Number(this.value))"/>
+    </div>
+    <div id="vfReadout" class="chart-readout">f = 35 Hz | V = 280 V | Par nominal = 100%</div>
+  </div>
+
   <!-- 4.3 STEPPERS Y SERVOMOTORES -->
   <div class="stitle"><span class="ico">🤖</span> 4.3 — Steppers, Servomotores AC y Encoders</div>
+
+  <div class="card card-blue foundation-card" data-foundations="4.3">
+    <h4>🔎 Fundamentos</h4>
+    <p>El stepper trabaja normalmente en lazo abierto: ordena pasos y supone que ocurrieron. El servo cierra el lazo con encoder y conoce la posición real. En microstepping se interpolan posiciones con corrientes proporcionales, como el <em>fade</em> entre colores de una pantalla.</p>
+    <p>Los tres PID se anidan por velocidad: corriente/par es el más rápido e interno, luego velocidad y finalmente posición. Cada lazo entrega la consigna al siguiente para corregir desde adentro hacia afuera.</p>
+  </div>
 
   <div class="card card-blue">
     <h4>🔢 Motor Paso a Paso — Modos de Excitación</h4>
@@ -770,6 +994,24 @@ tr:nth-child(even) td{background:#f8fafc}
         <li>Imprescindible en ejes robóticos y prensas (evita colisiones por falsas lecturas)</li>
       </ul>
     </div>
+  </div>
+
+  <div class="canvas-wrap">
+    <canvas id="encoderCanvas" width="680" height="200" aria-label="Señales A B Z del encoder incremental"></canvas>
+    <p>Canal A, Canal B y Canal Z en dos vueltas. Sin energía pierde posición y requiere Homing al reiniciar.</p>
+    <div class="anim-ctrl">
+      <button class="btn btn-blue" id="encoderAnimateBtn" onclick="toggleEncoder()">▶ Animar</button>
+      <button class="btn btn-purple" id="encoderDirectionBtn" onclick="invertEncoderDirection()">↔ Invertir giro</button>
+    </div>
+  </div>
+
+  <div class="card card-yellow" data-errors="4.3">
+    <h4>⚠️ Errores comunes</h4>
+    <ul>
+      <li>Más microsteps mejoran suavidad y resolución de mando, pero no aumentan el par disponible.</li>
+      <li>El encoder incremental pierde referencia y requiere homing; el absoluto conserva una palabra de posición.</li>
+      <li>Gray evita lecturas ambiguas porque cambia un solo bit por transición, no porque tenga mayor precisión geométrica.</li>
+    </ul>
   </div>
 
 </div>
@@ -836,11 +1078,11 @@ const loopC = document.getElementById('loopCanvas');
 const loopCtx = loopC ? loopC.getContext('2d') : null;
 let loopPct = 0, loopFault = false;
 
-function setLoop(pct) { loopFault = false; loopPct = pct; drawLoop(); }
+function setLoop(pct) { loopFault = false; loopPct = pct; drawLoop(); drawLoopGraph(); }
 function toggleLoopFault() {
   loopFault = !loopFault;
   document.getElementById('loopFaultBtn').textContent = loopFault ? '⚡ Cable Cortado (simulado)' : '⚡ Simular Rotura';
-  drawLoop();
+  drawLoop(); drawLoopGraph();
 }
 
 function drawLoop() {
@@ -1078,7 +1320,7 @@ function startYDelta() {
 function resetYDelta() {
   if (ydAnim) { cancelAnimationFrame(ydAnim); ydAnim = null; }
   ydState = 'idle'; ydTime = 0;
-  if (ydCtx) { ydCtx.clearRect(0, 0, ydC.width, ydC.height); drawYDIdle(); }
+  if (ydCtx) { ydCtx.clearRect(0, 0, ydC.width, ydC.height); drawYDIdle(); drawYDCurve(0, 'idle'); }
 }
 
 function animateYD() {
@@ -1301,6 +1543,166 @@ function drawStepperMotor(ctx, cx, cy, R, angle, label) {
   ctx.fillStyle = '#94a3b8'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'center';
   ctx.fillText(label, cx, cy + R + 18);
 }
+
+// ════════════════════ GRÁFICOS PEDAGÓGICOS Y EJES ════════════════════
+const chartColors = {blue:'#0369a1', teal:'#0d9488', green:'#15803d', orange:'#d97706', purple:'#7c3aed', red:'#b91c1c', grid:'#e2e8f0', text:'#374151'};
+function chartText(ctx, text, x, y, align='center', color=chartColors.text, bold=false) {
+  ctx.fillStyle = color; ctx.font = `${bold ? 'bold ' : ''}11px Segoe UI`; ctx.textAlign = align; ctx.fillText(text, x, y);
+}
+function chartLine(ctx, x1, y1, x2, y2, color=chartColors.grid, width=1, dash=[]) {
+  ctx.strokeStyle = color; ctx.lineWidth = width; ctx.setLineDash(dash); ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.setLineDash([]);
+}
+function chartTitle(ctx, text, width) { chartText(ctx, text, width/2, 14, 'center', '#1e293b', true); }
+
+// Lazo 4-20 mA: transferencia corriente, tensión y falla NAMUR.
+const loopGraphC = document.getElementById('loopGraphCanvas');
+const loopGraphCtx = loopGraphC ? loopGraphC.getContext('2d') : null;
+function drawLoopGraph() {
+  if (!loopGraphCtx) return;
+  const ctx=loopGraphCtx,W=loopGraphC.width,H=loopGraphC.height,L=50,R=50,T=28,B=24,pw=W-L-R,ph=H-T-B;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#fff'; ctx.fillRect(0,0,W,H); chartTitle(ctx,'Curva de transferencia I-V del lazo 4-20 mA',W);
+  [0,25,50,75,100].forEach(v=>{const x=L+pw*v/100;chartLine(ctx,x,T,x,T+ph);chartText(ctx,v+'%',x,H-7)});
+  [0,4,12,20,24].forEach(v=>{const y=T+ph-ph*v/24;chartLine(ctx,L,y,L+pw,y,v===4||v===12||v===20?'#cbd5e1':chartColors.grid);chartText(ctx,String(v),L-7,y+3,'right')});
+  [0,1,3,5,6].forEach(v=>{const y=T+ph-ph*v/6;chartText(ctx,String(v),W-R+7,y+3,'left',chartColors.red)});
+  chartLine(ctx,L,T+ph,L+pw,T+ph,'#64748b'); chartLine(ctx,L,T,L,T+ph,'#64748b'); chartLine(ctx,L+pw,T,L+pw,T+ph,chartColors.red);
+  chartText(ctx,'I (mA)',6,T+8,'left',chartColors.blue,true); chartText(ctx,'V_shunt (V)',W-3,T+8,'right',chartColors.red,true); chartText(ctx,'% Proceso',L+pw/2,H-7,'center','#64748b',true);
+  // Ideal transfer curves.
+  ctx.strokeStyle=chartColors.blue;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(L,T+ph-ph*4/24);ctx.lineTo(L+pw,T+ph-ph*20/24);ctx.stroke();
+  ctx.strokeStyle=chartColors.red;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(L,T+ph-ph*1/6);ctx.lineTo(L+pw,T+ph-ph*5/6);ctx.stroke();
+  const mA=loopFault?0:4+16*loopPct,x=L+pw*loopPct,y=T+ph-ph*mA/24;
+  ctx.fillStyle=loopFault?chartColors.red:chartColors.blue;ctx.beginPath();ctx.arc(loopFault?L:x,y,5,0,Math.PI*2);ctx.fill();
+  chartText(ctx,loopFault?'NAMUR NE 43: < 3.6 mA = FALLA':`${Math.round(loopPct*100)}% · ${mA.toFixed(1)} mA · ${(mA*.25).toFixed(1)} V`,loopFault?L+8:Math.min(W-R-5,x+8),Math.max(T+10,y-7),loopFault?'left':'left',loopFault?chartColors.red:chartColors.blue,true);
+  chartText(ctx,'— I (mA)',L+4,T+9,'left',chartColors.blue); chartText(ctx,'— V_shunt (V)',L+82,T+9,'left',chartColors.red);
+}
+
+// HART con escalas físicas, bit time y leyenda.
+function animateHart() {
+  if (!hartCtx) return;
+  const W=hartC.width,H=hartC.height,L=58,R=24,T=45,B=30,pw=W-L-R,ph=H-T-B,mid=T+ph/2;
+  hartCtx.clearRect(0,0,W,H);hartCtx.fillStyle='#f8fafc';hartCtx.fillRect(0,0,W,H);
+  [-.5,0,.5].forEach(v=>{const y=mid-v*ph*.82;chartLine(hartCtx,L,y,W-R,y);chartText(hartCtx,(v>0?'+':'')+v.toFixed(1),L-8,y+3,'right')});
+  chartLine(hartCtx,L,T+ph,W-R,T+ph,'#64748b');chartLine(hartCtx,L,T,L,T+ph,'#64748b');
+  chartText(hartCtx,'i(t) [mA]',7,T+8,'left',chartColors.purple,true);chartText(hartCtx,'t [ms]',L+pw/2,H-5,'center','#64748b',true);
+  hartCtx.strokeStyle=chartColors.blue;hartCtx.lineWidth=2;hartCtx.setLineDash([5,3]);hartCtx.beginPath();hartCtx.moveTo(L,mid);hartCtx.lineTo(W-R,mid);hartCtx.stroke();hartCtx.setLineDash([]);
+  const pxBit=pw/hartBits.length;
+  // Draw bit markers before opening the waveform path; chartLine() begins its own path.
+  hartBits.forEach((bit,i)=>{chartLine(hartCtx,L+i*pxBit,T+ph,L+i*pxBit,T+ph+4,'#64748b');chartText(hartCtx,(i*.833).toFixed(1),L+i*pxBit,H-17,'center','#64748b');chartText(hartCtx,String(bit),L+(i+.5)*pxBit,T+10,'center',bit?chartColors.purple:chartColors.orange,true)});
+  hartCtx.strokeStyle=chartColors.purple;hartCtx.lineWidth=2;hartCtx.beginPath();
+  hartBits.forEach((bit,i)=>{const cycles=bit?1:2200/1200;for(let px=0;px<=pxBit;px++){const x=L+i*pxBit+px,y=mid-Math.sin(px/pxBit*cycles*Math.PI*2+hartPhase*(bit?1:2))*ph*.37;if(i===0&&px===0)hartCtx.moveTo(x,y);else hartCtx.lineTo(x,y)}});hartCtx.stroke();
+  chartText(hartCtx,'I_DC = 12 mA (componente analógica)',W-R,mid-7,'right',chartColors.blue,true);
+  chartText(hartCtx,'- - Señal DC 4-20 mA (PLC lee esto)',L+4,13,'left',chartColors.blue);chartText(hartCtx,'— FSK HART ±0.5 mA (filtrada por PLC)',L+210,13,'left',chartColors.purple);
+  chartText(hartCtx,"1200 Hz = bit '1' | 2200 Hz = bit '0'",L+4,28,'left','#475569');chartText(hartCtx,'Filtro pasabajos PLC: f_corte < 25 Hz — elimina FSK completamente',W-R,28,'right',chartColors.green,true);
+  hartPhase+=.08;hartAnim=requestAnimationFrame(animateHart);
+}
+
+// CMG: vector + senoides con ejes y frecuencia seleccionable.
+let cmgFrequency=50;
+function setCMGFrequency(value){cmgFrequency=Number(value);if(!cmgAnim){animateCMG();cancelAnimationFrame(cmgAnim);cmgAnim=null;}}
+function animateCMG(){
+  if(!cmgCtx)return;const W=cmgC.width,H=cmgC.height,cx=135,cy=132,R=82,plotX=285,plotY=43,plotW=W-plotX-25,plotH=165,t=cmgAngle;
+  cmgCtx.clearRect(0,0,W,H);cmgCtx.fillStyle='#fff';cmgCtx.fillRect(0,0,W,H);
+  cmgCtx.fillStyle='#1e293b';cmgCtx.beginPath();cmgCtx.arc(cx,cy,R+8,0,Math.PI*2);cmgCtx.fill();
+  const phases=[{c:'#ef4444',a:0,n:'L1 (R) - Fase A'},{c:'#22c55e',a:2*Math.PI/3,n:'L2 (S) - Fase B'},{c:'#3b82f6',a:4*Math.PI/3,n:'L3 (T) - Fase C'}];
+  phases.forEach((p,i)=>{const amp=Math.cos(t-i*2*Math.PI/3),vx=Math.cos(p.a)*amp*R*.85,vy=Math.sin(p.a)*amp*R*.85;chartLine(cmgCtx,cx-Math.cos(p.a)*R,cy-Math.sin(p.a)*R,cx+Math.cos(p.a)*R,cy+Math.sin(p.a)*R,'#475569');chartLine(cmgCtx,cx,cy,cx+vx,cy+vy,p.c,2)});
+  const bx=Math.cos(t)*R*.72,by=Math.sin(t)*R*.72;chartLine(cmgCtx,cx,cy,cx+bx,cy+by,'#fbbf24',4);chartText(cmgCtx,'B_total = 1.5·Bmax',cx,238,'center','#92400e',true);
+  cmgCtx.strokeStyle='#fbbf24';cmgCtx.lineWidth=2;cmgCtx.beginPath();cmgCtx.arc(cx,cy,R-13,-1.1,.2);cmgCtx.stroke();chartText(cmgCtx,`ns ↻ ${cmgFrequency===50?'1500':'1800'} rpm`,cx,22,'center',chartColors.blue,true);
+  cmgCtx.fillStyle='#f8fafc';cmgCtx.fillRect(plotX,plotY,plotW,plotH);
+  [-1,-.5,0,.5,1].forEach(v=>{const y=plotY+plotH/2-v*plotH*.42;chartLine(cmgCtx,plotX,y,plotX+plotW,y);chartText(cmgCtx,String(v),plotX-7,y+3,'right')});
+  const xt=[['0',0],['π/2',.25],['π',.5],['3π/2',.75],['2π',1]];xt.forEach(([n,q])=>{const x=plotX+plotW*q;chartLine(cmgCtx,x,plotY,x,plotY+plotH);chartText(cmgCtx,n,x,plotY+plotH+16)});
+  chartText(cmgCtx,'B/B_max',plotX-42,plotY+8,'left',chartColors.text,true);chartText(cmgCtx,'ωt (rad)',plotX+plotW/2,H-7,'center',chartColors.text,true);
+  phases.forEach((p,i)=>{cmgCtx.strokeStyle=p.c;cmgCtx.lineWidth=2;cmgCtx.beginPath();for(let x=0;x<=plotW;x++){const a=x/plotW*Math.PI*2+t,y=plotY+plotH/2-Math.cos(a-i*2*Math.PI/3)*plotH*.42;x?cmgCtx.lineTo(plotX+x,y):cmgCtx.moveTo(plotX,y)}cmgCtx.stroke();chartText(cmgCtx,'■ '+p.n,plotX+i*94,34,'left',p.c)});
+  cmgAngle+=.025*(cmgFrequency/50);cmgAnim=requestAnimationFrame(animateCMG);
+}
+
+// Curva temporal Y-Δ enlazada al estado de la maniobra.
+const ydCurveC=document.getElementById('ydCurveCanvas'),ydCurveCtx=ydCurveC?ydCurveC.getContext('2d'):null;
+function ydCurrentAt(t){if(t<=180)return 1/3;if(t<=200)return .33+1.47*Math.sin((t-180)/20*Math.PI);return 1;}
+function drawYDCurve(time=ydTime,state=ydState){
+  if(!ydCurveCtx)return;const ctx=ydCurveCtx,W=ydCurveC.width,H=ydCurveC.height,L=55,R=18,T=24,B=28,pw=W-L-R,ph=H-T-B;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.fillStyle='#e0f2fe';ctx.fillRect(L,T,pw*180/300,ph);ctx.fillStyle='#ffedd5';ctx.fillRect(L+pw*180/300,T,pw*20/300,ph);ctx.fillStyle='#dcfce7';ctx.fillRect(L+pw*200/300,T,pw*100/300,ph);
+  [[0,'0%'],[1/3,'33%'],[1,'100%'],[1.8,'180%']].forEach(([v,n])=>{const y=T+ph-ph*v/2;chartLine(ctx,L,y,W-R,y,v===1?'#64748b':chartColors.grid,1,v===1?[4,3]:[]);chartText(ctx,n,L-7,y+3,'right')});
+  [0,60,120,180,240,300].forEach(v=>{const x=L+pw*v/300;chartLine(ctx,x,T,x,T+ph);chartText(ctx,String(v),x,H-8)});chartText(ctx,'I / I_DOL (%)',5,T+8,'left',chartColors.text,true);chartText(ctx,'t [ciclos de red]',L+pw/2,H-7,'center',chartColors.text,true);
+  ctx.strokeStyle=chartColors.blue;ctx.lineWidth=2;ctx.beginPath();for(let t=0;t<=Math.min(time,300);t++){const x=L+pw*t/300,y=T+ph-ph*ydCurrentAt(t)/2;t?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke();
+  const ct=Math.min(time,300),cv=state==='idle'?0:ydCurrentAt(ct),x=L+pw*ct/300,y=T+ph-ph*cv/2;ctx.fillStyle=chartColors.red;ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();
+  chartText(ctx,'Y: I = 1/3 · I_DOL',L+pw*.16,T+13,'center',chartColors.blue,true);chartText(ctx,'Pico transitorio',L+pw*.633,T+13,'center',chartColors.orange,true);chartText(ctx,'Δ: I = I_DOL',L+pw*.83,T+13,'center',chartColors.green,true);
+}
+function animateYD(){
+  if(!ydCtx)return;const W=ydC.width,H=ydC.height,totalT=300,switchT=180;ydCtx.clearRect(0,0,W,H);ydCtx.fillStyle='#f8fafc';ydCtx.fillRect(0,0,W,H);
+  if(ydTime>200)ydState='delta';else if(ydTime>=180)ydState='switching';else if(ydState!=='idle')ydState='star';
+  const states={KM1:ydState!=='idle',KM3:ydState==='star',KM2:ydState==='delta'},cols=[{k:'KM1',s:'Línea',x:60},{k:'KM3',s:'Estrella',x:200},{k:'KM2',s:'Triángulo',x:340}];
+  cols.forEach(c=>{const on=states[c.k];ydCtx.strokeStyle=on?'#16a34a':'#94a3b8';ydCtx.fillStyle=on?'#dcfce7':'#f1f5f9';ydCtx.lineWidth=2;ydCtx.beginPath();ydCtx.roundRect(c.x,20,110,70,8);ydCtx.fill();ydCtx.stroke();chartText(ydCtx,c.k,c.x+55,52,'center',on?'#15803d':'#64748b',true);chartText(ydCtx,c.s,c.x+55,72,'center','#64748b')});
+  const current=ydState==='idle'?0:ydCurrentAt(ydTime)*100,barX=490,barY=20,barW=30,barH=110;ydCtx.fillStyle='#e2e8f0';ydCtx.fillRect(barX,barY,barW,barH);ydCtx.fillStyle=current>100?chartColors.red:current<50?chartColors.blue:chartColors.green;ydCtx.fillRect(barX,barY+barH-barH*current/200,barW,barH*current/200);chartText(ydCtx,Math.round(current)+'%',barX+15,barY+barH-barH*current/200-4,'center',chartColors.text,true);
+  const labels={idle:'Listo',star:'🌟 ESTRELLA: corriente y par reducidos',switching:'⚡ Pausa + pico transitorio',delta:'✅ TRIÁNGULO: régimen nominal'};chartText(ydCtx,labels[ydState],20,H-32,'left',chartColors.blue,true);const pct=Math.min(ydTime/totalT,1);ydCtx.fillStyle='#e2e8f0';ydCtx.fillRect(20,H-23,W-40,10);ydCtx.fillStyle=ydState==='switching'?chartColors.orange:ydState==='delta'?chartColors.green:chartColors.blue;ydCtx.fillRect(20,H-23,(W-40)*pct,10);drawYDCurve(ydTime,ydState);
+  if(ydState!=='idle'&&ydTime<totalT){ydTime++;ydAnim=requestAnimationFrame(animateYD)}else{ydAnim=null}
+}
+
+// Soft-starter: senoide recortada por α y estimación RMS/par.
+const scrC=document.getElementById('scrCanvas'),scrCtx=scrC?scrC.getContext('2d'):null;
+function drawSCR(degrees=120){
+  if(!scrCtx)return;const ctx=scrCtx,W=scrC.width,H=scrC.height,L=55,R=18,T=25,B=32,pw=W-L-R,ph=H-T-B,mid=T+ph/2,a=degrees*Math.PI/180;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);chartTitle(ctx,'Control de tensión por ángulo de disparo α',W);
+  [-400,-200,0,200,400].forEach(v=>{const y=mid-v/400*ph*.43;chartLine(ctx,L,y,W-R,y);chartText(ctx,String(v),L-7,y+3,'right')});[0,30,60,90,120,150,180].forEach(v=>{const x=L+pw*v/180;chartLine(ctx,x,T,x,T+ph);chartText(ctx,v+'°',x,H-10)});chartText(ctx,'V_AC (V)',5,T+8,'left',chartColors.text,true);chartText(ctx,'Ángulo de disparo α',L+pw/2,H-8,'center',chartColors.text,true);
+  const blockedX=L+pw*degrees/180;ctx.fillStyle='rgba(148,163,184,.22)';ctx.fillRect(L,T,blockedX-L,ph);ctx.fillStyle='rgba(2,132,199,.12)';ctx.fillRect(blockedX,T,W-R-blockedX,ph);chartText(ctx,'SCR bloqueado',L+(blockedX-L)/2,T+14,'center','#64748b',true);chartText(ctx,'SCR conduce',blockedX+(W-R-blockedX)/2,T+14,'center',chartColors.blue,true);
+  ctx.strokeStyle='#94a3b8';ctx.lineWidth=1.5;ctx.beginPath();for(let x=0;x<=pw;x++){const th=x/pw*Math.PI*2,y=mid-Math.sin(th)*ph*.43;x?ctx.lineTo(L+x,y):ctx.moveTo(L,y)}ctx.stroke();
+  ctx.strokeStyle=chartColors.blue;ctx.lineWidth=3;ctx.beginPath();let started=false;for(let x=0;x<=pw;x++){const th=x/pw*Math.PI*2,half=th<=Math.PI?th:th-Math.PI,conduct=half>=a,y=conduct?mid-Math.sin(th)*ph*.43:mid;if(!started){ctx.moveTo(L+x,y);started=true}else ctx.lineTo(L+x,y)}ctx.stroke();
+  const factor=Math.sqrt(Math.max(0,(Math.PI-a+Math.sin(2*a)/2)/(Math.PI))),vrms=400*factor,torque=factor*factor*100;document.getElementById('scrAngleOut').textContent=degrees+'°';document.getElementById('scrReadout').textContent=`V_rms = ${vrms.toFixed(0)} V | Par estimado ~ ${torque.toFixed(0)}%`;
+}
+
+// VFD: tres paneles de forma de onda.
+const vfdWaveC=document.getElementById('vfdWaveCanvas'),vfdWaveCtx=vfdWaveC?vfdWaveC.getContext('2d'):null;
+let vfdOutputFrequency=35,vfdWavePhase=0,vfdWaveAnim=null,vfdWaveRunning=true;
+function setVFDFrequency(value){vfdOutputFrequency=Number(value);document.getElementById('vfdFrequencyOut').textContent=value+' Hz';updateVFDReadout();if(!vfdWaveRunning)drawVFDWave();}
+function updateVFDReadout(){const volts=Math.min(400,vfdOutputFrequency*8),el=document.getElementById('vfdWaveReadout');el.textContent=`f_salida = ${vfdOutputFrequency} Hz | V_salida = ${volts.toFixed(0)} V (V/f = 8.0 V/Hz)`+(vfdOutputFrequency>50?' · ⚠ Field Weakening: Φ ↓ — Potencia constante':'')}
+function toggleVFDWave(){if(vfdWaveRunning){vfdWaveRunning=false;if(vfdWaveAnim)cancelAnimationFrame(vfdWaveAnim);vfdWaveAnim=null;document.getElementById('vfdWaveBtn').textContent='▶ Animar ondas'}else{vfdWaveRunning=true;document.getElementById('vfdWaveBtn').textContent='⏸ Pausar ondas';drawVFDWave()}}
+function drawVFDWave(){
+  if(!vfdWaveCtx)return;const ctx=vfdWaveCtx,W=vfdWaveC.width,H=vfdWaveC.height,gap=10,pw=(W-4*gap)/3,top=30,base=100,amp=35;ctx.clearRect(0,0,W,H);ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+  const titles=['Entrada: CA 400V / 50Hz','Bus DC: 565 Vcc','Salida SPWM → motor'];titles.forEach((t,i)=>{const x=gap+i*(pw+gap);ctx.fillStyle='#f8fafc';ctx.fillRect(x,top,pw,95);chartText(ctx,t,x+pw/2,18,'center','#1e293b',true);chartLine(ctx,x,base,x+pw,base)});
+  ['#ef4444','#22c55e','#3b82f6'].forEach((c,p)=>{ctx.strokeStyle=c;ctx.lineWidth=1.5;ctx.beginPath();for(let x=0;x<=pw;x++){const y=base-Math.sin(x/pw*Math.PI*4+vfdWavePhase-p*2*Math.PI/3)*amp;x?ctx.lineTo(gap+x,y):ctx.moveTo(gap,y)}ctx.stroke()});
+  const x2=2*gap+pw;ctx.strokeStyle=chartColors.purple;ctx.lineWidth=2;ctx.beginPath();for(let x=0;x<=pw;x++){const y=55+Math.sin(x/pw*Math.PI*12+vfdWavePhase)*2;x?ctx.lineTo(x2+x,y):ctx.moveTo(x2,y)}ctx.stroke();chartText(ctx,'565 Vcc + rizado 300 Hz',x2+pw/2,118,'center',chartColors.purple);
+  const x3=3*gap+2*pw,ratio=vfdOutputFrequency/50;ctx.strokeStyle=chartColors.green;ctx.lineWidth=1.5;ctx.beginPath();for(let x=0;x<=pw;x++){const carrier=Math.sin(x*.48+vfdWavePhase*5),mod=Math.sin(x/pw*Math.PI*4*ratio+vfdWavePhase),y=base-(carrier<mod?1:-1)*amp;x?ctx.lineTo(x3+x,y):ctx.moveTo(x3,y)}ctx.stroke();chartText(ctx,`${vfdOutputFrequency} Hz · ${Math.min(400,vfdOutputFrequency*8)} V`,x3+pw/2,118,'center',vfdOutputFrequency>50?chartColors.orange:chartColors.green,true);
+  vfdWavePhase+=.035;if(vfdWaveRunning)vfdWaveAnim=requestAnimationFrame(drawVFDWave);
+}
+
+// Curva V/f y debilitamiento de campo.
+const vfC=document.getElementById('vfCanvas'),vfCtx=vfC?vfC.getContext('2d'):null;
+function drawVFCurve(freq=35){
+  if(!vfCtx)return;const ctx=vfCtx,W=vfC.width,H=vfC.height,L=55,R=55,T=34,B=35,pw=W-L-R,ph=H-T-B;ctx.clearRect(0,0,W,H);ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.fillStyle='#eff6ff';ctx.fillRect(L,T,pw/2,ph);ctx.fillStyle='#fff7ed';ctx.fillRect(L+pw/2,T,pw/2,ph);chartTitle(ctx,'Curva V/f + Field Weakening',W);
+  for(let f=0;f<=100;f+=10){const x=L+pw*f/100;chartLine(ctx,x,T,x,T+ph);chartText(ctx,String(f),x,H-12)}for(let v=0;v<=500;v+=100){const y=T+ph-ph*v/500;chartLine(ctx,L,y,W-R,y);chartText(ctx,String(v),L-7,y+3,'right')}[0,50,100,120].forEach(v=>{const y=T+ph-ph*v/120;chartText(ctx,v+'%',W-R+7,y+3,'left',chartColors.red)});chartText(ctx,'Tensión V (V)',5,T+8,'left',chartColors.blue,true);chartText(ctx,'Par / Par_nominal (%)',W-3,T+8,'right',chartColors.red,true);chartText(ctx,'Frecuencia (Hz)',L+pw/2,H-7,'center',chartColors.text,true);
+  ctx.strokeStyle=chartColors.blue;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(L,T+ph-ph*15/500);ctx.lineTo(L+pw/2,T+ph-ph*400/500);ctx.lineTo(W-R,T+ph-ph*400/500);ctx.stroke();chartText(ctx,'Torque Boost ~ 15V (compensa R1)',L+6,T+ph-8,'left',chartColors.orange,true);
+  ctx.strokeStyle=chartColors.green;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(L,T+ph-ph*100/120);ctx.lineTo(L+pw/2,T+ph-ph*100/120);ctx.stroke();
+  ctx.strokeStyle=chartColors.red;ctx.lineWidth=2.5;ctx.beginPath();for(let f=50;f<=100;f++){const x=L+pw*f/100,torque=100*50/f,y=T+ph-ph*torque/120;f===50?ctx.moveTo(x,y):ctx.lineTo(x,y)}ctx.stroke();ctx.setLineDash([5,3]);ctx.beginPath();for(let f=50;f<=100;f++){const x=L+pw*f/100,torque=100*(50/f)**2,y=T+ph-ph*torque/120;f===50?ctx.moveTo(x,y):ctx.lineTo(x,y)}ctx.stroke();ctx.setLineDash([]);
+  chartText(ctx,'Zona Flujo Constante (Φ = cte)',L+pw*.25,T+15,'center',chartColors.blue,true);chartText(ctx,'Zona Field Weakening (Φ ↓)',L+pw*.75,T+15,'center',chartColors.orange,true);chartText(ctx,'— V/f = 8 V/Hz',L+5,29,'left',chartColors.blue);chartText(ctx,'— Par nominal 1/f',L+120,29,'left',chartColors.red);chartText(ctx,'- - Par máximo 1/f²',L+260,29,'left',chartColors.red);
+  const voltage=Math.min(400,Math.max(15,freq*8)),torque=freq<=50?100:5000/freq,x=L+pw*freq/100,y=T+ph-ph*voltage/500;ctx.fillStyle=chartColors.purple;ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fill();document.getElementById('vfFrequencyOut').textContent=freq+' Hz';document.getElementById('vfReadout').textContent=`f = ${freq} Hz | V = ${voltage.toFixed(0)} V | Par nominal = ${torque.toFixed(0)}%`;
+}
+
+// Rango físico, rango configurado y turndown.
+const rangeC=document.getElementById('rangeCanvas'),rangeCtx=rangeC?rangeC.getContext('2d'):null;let rangeExample='pressure';
+function setRangeExample(example){rangeExample=example;drawRange()}
+function drawRange(){
+  if(!rangeCtx)return;const ctx=rangeCtx,W=rangeC.width,L=72,R=105,y=80,pw=W-L-R,isP=rangeExample==='pressure';ctx.clearRect(0,0,W,rangeC.height);ctx.fillStyle='#fff';ctx.fillRect(0,0,W,rangeC.height);chartTitle(ctx,'LRL / URL · LRV / URV · Span · Turndown',W);const data=isP?{lrl:0,url:10,lrv:2,urv:8,u:'bar',td:'10 / 0.1 = 100:1'}:{lrl:-40,url:150,lrv:0,urv:100,u:'°C',td:'190 / 1.9 = 100:1'},scale=v=>(v-data.lrl)/(data.url-data.lrl);ctx.fillStyle='#e2e8f0';ctx.fillRect(L,y-12,pw,24);ctx.fillStyle='#fdba74';ctx.fillRect(L+pw*scale(data.lrv),y-12,pw*(scale(data.urv)-scale(data.lrv)),24);
+  chartText(ctx,`LRL = ${data.lrl} ${data.u}`,L,y-23,'center','#64748b',true);chartText(ctx,`URL = ${data.url} ${data.u}`,L+pw,y-23,'center','#64748b',true);chartText(ctx,`LRV = ${data.lrv} ${data.u} → 4 mA (0%)`,L+pw*scale(data.lrv),y+34,'center',chartColors.orange,true);chartText(ctx,`URV = ${data.urv} ${data.u} → 20 mA (100%)`,L+pw*scale(data.urv),y+50,'center',chartColors.orange,true);chartLine(ctx,L+pw*scale(data.lrv),y+65,L+pw*scale(data.urv),y+65,chartColors.orange,2);chartText(ctx,`↔ Span = URV - LRV = ${data.urv-data.lrv} ${data.u}`,L+pw*(scale(data.lrv)+scale(data.urv))/2,y+82,'center',chartColors.orange,true);chartText(ctx,`→ 4-20 mA → 1-5 V_PLC`,W-4,y+4,'right',chartColors.green,true);chartText(ctx,`Turndown = URL / Span_min = ${data.td}`,L,35,'left',chartColors.purple,true);
+}
+
+// Stepper con ejes y escalas de posición.
+function animateStepper(){
+  if(!stepCtx)return;const W=stepC.width,H=stepC.height;stepCtx.clearRect(0,0,W,H);stepCtx.fillStyle='#f8fafc';stepCtx.fillRect(0,0,W,H);const display=stepMicro?stepAngle:Math.round(stepAngle/(Math.PI/2))*(Math.PI/2),cx1=100,cx2=520,cy=H/2,R=58;drawStepperMotor(stepCtx,cx1,cy,R,display,stepMicro?'Microstepping':'Full-Step');drawStepperMotor(stepCtx,cx2,cy,R,display,stepMicro?'Microstepping: curva continua':'Full-Step: saltos discretos de 90°');
+  const x0=205,y0=22,pw=230,ph=140;stepCtx.fillStyle='#fff';stepCtx.fillRect(x0,y0,pw,ph);[0,Math.PI/2,Math.PI,3*Math.PI/2].forEach((v,i)=>{const y=y0+ph-i*ph/3;chartLine(stepCtx,x0,y,x0+pw,y,'#e2e8f0',1,stepMicro?[]:[3,3]);chartText(stepCtx,['0','π/2','π','3π/2'][i],x0-7,y+3,'right')});for(let i=0;i<=5;i++){const x=x0+pw*i/5;chartLine(stepCtx,x,y0,x,y0+ph);chartText(stepCtx,String(i*10),x,y0+ph+14)}chartText(stepCtx,'θ [rad]',x0-42,y0+8,'left',chartColors.text,true);chartText(stepCtx,'Pasos [t]',x0+pw/2,H-7,'center',chartColors.text,true);
+  stepCtx.strokeStyle=stepMicro?chartColors.purple:chartColors.blue;stepCtx.lineWidth=2;stepCtx.beginPath();for(let i=0;i<=50;i++){const a=stepAngle-(50-i)*.09,pa=stepMicro?a:Math.round(a/(Math.PI/2))*(Math.PI/2),norm=((pa%(Math.PI*2))+Math.PI*2)%(Math.PI*2),x=x0+pw*i/50,y=y0+ph-norm/(Math.PI*2)*ph;i?stepCtx.lineTo(x,y):stepCtx.moveTo(x,y)}stepCtx.stroke();chartText(stepCtx,stepMicro?'Microstepping: curva continua':'Full-Step: saltos discretos de 90°',x0+pw/2,17,'center',stepMicro?chartColors.purple:chartColors.blue,true);stepAngle+=stepMicro?.03:.025;stepAnim=requestAnimationFrame(animateStepper);
+}
+
+// Encoder incremental A/B/Z con dirección y animación pausables.
+const encoderC=document.getElementById('encoderCanvas'),encoderCtx=encoderC?encoderC.getContext('2d'):null;let encoderAnim=null,encoderOffset=0,encoderDirection=1;
+function toggleEncoder(){if(encoderAnim){cancelAnimationFrame(encoderAnim);encoderAnim=null;document.getElementById('encoderAnimateBtn').textContent='▶ Animar'}else{document.getElementById('encoderAnimateBtn').textContent='⏸ Pausar';animateEncoder()}}
+function invertEncoderDirection(){encoderDirection*=-1;document.getElementById('encoderDirectionBtn').textContent=encoderDirection===1?'↔ Invertir giro':'↔ Giro antihorario';drawEncoder()}
+function animateEncoder(){encoderOffset=(encoderOffset+encoderDirection*.7)%80;drawEncoder();encoderAnim=requestAnimationFrame(animateEncoder)}
+function drawEncoder(){
+  if(!encoderCtx)return;const ctx=encoderCtx,W=encoderC.width,H=encoderC.height,L=65,R=18,T=35,B=28,pw=W-L-R,rows=[65,110,155],colors=[chartColors.blue,chartColors.green,chartColors.red],names=['Canal A','Canal B','Canal Z'];ctx.clearRect(0,0,W,H);ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);chartTitle(ctx,encoderDirection===1?'Encoder incremental — Giro horario: A adelanta a B':'Encoder incremental — Giro antihorario: B adelanta a A',W);names.forEach((n,i)=>{chartLine(ctx,L,rows[i],W-R,rows[i]);chartText(ctx,n,L-8,rows[i]+3,'right',colors[i],true)});for(let p=0;p<=16;p++){const x=L+pw*p/16;chartLine(ctx,x,T,x,H-B);if(p%8===0)chartText(ctx,(p/8)+' vuelta',x,H-8)}chartText(ctx,'t [pulsos]',L+pw/2,H-7,'center',chartColors.text,true);
+  function square(row,color,shift,single=false){ctx.strokeStyle=color;ctx.lineWidth=2;ctx.beginPath();let last=null;for(let x=0;x<=pw;x++){const phase=((x+encoderOffset+shift)%pw+pw)%pw,value=single?(phase<14||(phase>pw/2&&phase<pw/2+14)?1:0):(Math.floor(phase/(pw/16))%2===0?1:0),y=row-value*18;if(last!==null&&last!==value)ctx.lineTo(L+x,row-last*18);x?ctx.lineTo(L+x,y):ctx.moveTo(L,y);last=value}ctx.stroke()}square(rows[0],colors[0],0);square(rows[1],colors[1],encoderDirection===1?pw/32:-pw/32);square(rows[2],colors[2],0,true);chartText(ctx,'↔ 90° de desfase → determina sentido de giro',L+pw*.45,45,'center',chartColors.purple,true);chartText(ctx,'1 pulso/vuelta → referencia de homing',W-R,148,'right',chartColors.red,true);
+}
+
+function redrawAllCharts(){drawLoopGraph();drawYDCurve();drawSCR(Number(document.getElementById('scrAngle')?.value||120));drawRange();drawVFCurve(Number(document.getElementById('vfFrequency')?.value||35));drawEncoder();if(!vfdWaveRunning)drawVFDWave()}
+window.addEventListener('resize',()=>requestAnimationFrame(redrawAllCharts));
+setTimeout(()=>{drawLoopGraph();drawYDCurve(0,'idle');drawSCR(120);drawRange();drawVFCurve(35);drawEncoder();updateVFDReadout();drawVFDWave()},250);
 
 // ════════════════════ JUEGO 1: SENSOR ════════════════════
 const sensorScenarios = [

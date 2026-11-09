@@ -195,7 +195,7 @@ tr:nth-child(even) td{background:#f8fafc}
         <li>0 % de escala = <strong>4.00 mA</strong> (nunca cero)</li>
         <li>Rotura de cable → corriente cae a 0 mA (&lt; 3.6 mA, NAMUR NE 43)</li>
         <li>PLC detecta <strong>alarma "Falla de Lazo Abierto"</strong> de forma inequívoca</li>
-        <li>Inmune a EMI: la corriente es igual en todo el bucle (Kirchhoff)</li>
+        <li>Inmune a EMI: la corriente es igual en todo el bucle (<strong>Ley de Kirchhoff</strong>)</li>
         <li>Funciona a 300 m sin error por caída de tensión en el cable</li>
       </ul>
     </div>
@@ -224,7 +224,7 @@ tr:nth-child(even) td{background:#f8fafc}
   </div>
 
   <div class="card card-teal">
-    <h4>🔧 Resistor Shunt 250 Ω — Conversión I→V en la entrada del PLC</h4>
+    <h4>🔧 Resistor Shunt 250 Ω (tolerancia ±0.1%) — Conversión I→V en la entrada del PLC</h4>
     <ul>
       <li>Ubicado en la bornera de entrada analógica del PLC</li>
       <li>Convierte corriente → tensión: <code>V = I × 250 Ω</code></li>
@@ -425,7 +425,7 @@ tr:nth-child(even) td{background:#f8fafc}
       <tr><th>Término</th><th>Definición (VIM / ISO/IEC 17025)</th><th>¿Modifica el instrumento?</th></tr>
       <tr><td><strong>Calibración</strong></td><td>Establece relación entre indicación del instrumento y patrón trazable. Medir y comparar para conocer el error.</td><td><strong>NO</strong> — solo documentar</td></tr>
       <tr><td><strong>Ajuste</strong></td><td>Intervención física/electrónica para corregir errores detectados en la calibración.</td><td><strong>SÍ</strong> — modifica el instrumento</td></tr>
-      <tr><td><strong>Verificación</strong></td><td>Comparación del error vs tolerancia EMP → dictamen "Apto / No Apto".</td><td>NO — solo emite dictamen legal</td></tr>
+      <tr><td><strong>Verificación</strong></td><td>Comparación del error vs tolerancia EMP (Error Máximo Permitido) → dictamen "Apto / No Apto".</td><td>NO — solo emite dictamen legal</td></tr>
     </table>
   </div>
 
@@ -694,7 +694,7 @@ tr:nth-child(even) td{background:#f8fafc}
         <li><strong>Clarke:</strong> abc → sistema bifásico ortogonal fijo en estator (α-β)</li>
         <li><strong>Park:</strong> (α-β) → sistema d-q sincronizado con el vector de flujo del rotor</li>
         <li>Id controla el <strong>flujo magnético</strong> | Iq controla el <strong>par</strong> (independientes)</li>
-        <li>Respuesta &lt;5 ms, par nominal pleno a <strong>0 RPM</strong></li>
+        <li>Respuesta &lt;5 ms, <strong>100-150% del par nominal</strong> a <strong>0 RPM</strong></li>
         <li>Aplicaciones: grúas, elevadores, bobinadoras</li>
       </ul>
     </div>

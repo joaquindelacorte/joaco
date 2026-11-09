@@ -171,6 +171,85 @@ tr:nth-child(even) td{background:#f8fafc}
 .pedagogy-steps{counter-reset:steps;padding-left:0;list-style:none;margin-top:.6rem}
 .pedagogy-steps li{counter-increment:steps;display:flex;gap:.7rem;margin-bottom:.6rem;font-size:.9rem;color:#374151}
 .pedagogy-steps li::before{content:counter(steps);min-width:1.6rem;height:1.6rem;border-radius:50%;background:var(--blue);color:#fff;font-size:.75rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.05rem}
+
+/* ══ GLOSARIO ══ */
+.glosario-section{margin-bottom:2rem}
+.glosario-letter{font-size:1.5rem;font-weight:900;color:var(--blue);padding:.5rem 1rem;background:var(--blue-bg);border-radius:8px;margin:1rem 0 .5rem;display:inline-block}
+.glosario-card{background:var(--card);border-radius:10px;border:1px solid var(--border);overflow:hidden;margin-bottom:.6rem;padding:.8rem 1rem;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.glosario-sigla{font-size:1rem;font-weight:800;color:var(--blue)}
+.glosario-nombre{font-size:.88rem;font-weight:600;color:#1e293b;margin-top:.15rem}
+.glosario-desc{font-size:.83rem;color:#64748b;margin-top:.2rem;line-height:1.5}
+.glosario-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:.6rem;margin-bottom:1rem}
+abbr[title]{text-decoration:underline dotted #0369a1;cursor:help;color:inherit;font-weight:inherit}
+.abbr-gl{color:var(--blue);font-weight:700;text-decoration:none;border-bottom:2px dotted var(--blue)}
+.abbr-gl:hover{background:var(--blue-bg);border-radius:3px}
+/* ══ SIMULACRO ══ */
+.sim-ex-header{background:linear-gradient(135deg,#0c2444,#0369a1);color:#fff;border-radius:12px;padding:1rem 1.5rem;margin:1.5rem 0 1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+.sim-ex-header h3{font-size:1.05rem;font-weight:800;margin:0}
+.sim-ex-header .pts{background:rgba(255,255,255,.2);border-radius:6px;padding:.2rem .7rem;font-size:.82rem;font-weight:700}
+.sim-q{background:var(--card);border-radius:12px;padding:1.4rem 1.5rem;margin-bottom:1rem;border:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.sim-q-header{display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem;flex-wrap:wrap}
+.sim-q-num{font-size:.95rem;font-weight:800;color:#1e293b}
+.sim-badge{border-radius:6px;padding:.15rem .6rem;font-size:.75rem;font-weight:700}
+.sim-badge-obj{background:#dcfce7;color:#15803d}
+.sim-badge-dis{background:#fff3e0;color:#c05c00}
+.sim-badge-pts{background:var(--blue-bg);color:var(--blue)}
+.sim-q-text{font-size:.93rem;color:#1e293b;line-height:1.6;margin-bottom:.9rem}
+.sim-opts{display:flex;flex-direction:column;gap:.4rem}
+.sim-opt{display:flex;align-items:flex-start;gap:.6rem;padding:.5rem .7rem;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:.15s;font-size:.88rem;user-select:none}
+.sim-opt:hover{background:#f1f5f9;border-color:#cbd5e1}
+.sim-opt.selected{border-color:var(--blue);background:#eff6ff}
+.sim-opt.correct{border-color:#16a34a;background:#f0fdf4;font-weight:700}
+.sim-opt.wrong{border-color:#dc2626;background:#fef2f2}
+.sim-opt.unanswered{border-color:#ca8a04;background:#fefce8}
+.sim-opt input[type=radio]{display:none}
+.sim-explanation{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:.75rem 1rem;margin-top:.7rem;font-size:.87rem;color:#14532d;display:none;line-height:1.5}
+.sim-explanation.show{display:block}
+.sim-repaso{background:#fff3e0;border:1px solid #fed7aa;border-radius:8px;padding:.5rem .9rem;margin-top:.4rem;font-size:.84rem;color:#9a3412;display:none}
+.sim-repaso.show{display:block}
+.sim-textarea{width:100%;min-height:110px;padding:.75rem;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:.9rem;resize:vertical;line-height:1.5;color:#1e293b;transition:.15s}
+.sim-textarea:focus{outline:none;border-color:var(--blue)}
+.sim-patron{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:1rem;margin-top:.7rem;display:none}
+.sim-patron.show{display:block}
+.sim-patron-header{color:#15803d;font-weight:700;font-size:.88rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.sim-patron-text{font-size:.86rem;color:#14532d;line-height:1.6}
+.sim-unanswered-warn{background:#fefce8;border:1px solid #fde047;border-radius:8px;padding:.5rem .9rem;margin-top:.5rem;font-size:.85rem;color:#713f12;display:none}
+.sim-unanswered-warn.show{display:block}
+.sim-score-final{background:linear-gradient(135deg,#0c2444,#0369a1);color:#fff;border-radius:16px;padding:2rem;margin-top:1.5rem;text-align:center}
+.sim-score-final h3{font-size:2rem;font-weight:900}
+.sim-score-final p{opacity:.88;margin-top:.5rem}
+.sim-manual-note{background:rgba(255,255,255,.12);border-radius:8px;padding:.6rem 1rem;margin-top:1rem;font-size:.85rem}
+.slip-calc{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem;margin:1rem 0}
+.slip-calc h4{font-size:.95rem;font-weight:700;margin-bottom:.8rem;color:var(--blue)}
+.slip-calc label{display:block;font-size:.85rem;font-weight:600;margin-bottom:.3rem;color:var(--gray)}
+.slip-calc input[type=number]{border:1px solid var(--border);border-radius:7px;padding:.4rem .7rem;font-size:.9rem;width:120px;min-height:36px}
+.slip-result{margin-top:.8rem;padding:.7rem 1rem;background:var(--blue-bg);border-radius:8px;font-size:.9rem;font-weight:700;color:var(--blue)}
+
+/* ══ EXCEPCIONES, PRIORIDADES Y PRÁCTICA ACTIVA ══ */
+.exception-card{border:1px solid #fde047;border-left:5px solid #ca8a04}
+.exception-card .ex-badge{background:#92400e}
+.priority-chip{display:inline-flex;align-items:center;width:fit-content;border-radius:999px;padding:.22rem .7rem;margin:.2rem 0 .75rem;font-size:.75rem;font-weight:800}
+.priority-must{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+.priority-justify{background:#e0f2fe;color:#075985;border:1px solid #7dd3fc}
+.priority-deep{background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd}
+.map-grid{display:grid;gap:1rem}
+.map-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:1.2rem;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.map-card h4{color:#1e293b;margin-bottom:.7rem}
+.map-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.5rem}
+.map-option{display:flex;align-items:center;gap:.5rem;padding:.65rem;border:2px solid #cbd5e1;border-radius:9px;cursor:pointer;font-size:.86rem;background:#f8fafc}
+.map-option:has(input:checked){border-color:var(--blue);background:#eff6ff}
+.map-option input{min-height:auto;accent-color:var(--blue)}
+.map-justification{width:100%;min-height:82px;margin-top:.7rem;padding:.7rem;border:2px solid #cbd5e1;border-radius:8px;font:inherit;resize:vertical}
+.map-result{display:none;margin-top:.7rem;padding:.75rem;border-radius:8px;font-size:.88rem}
+.map-result.show{display:block}.map-result.ok{background:#dcfce7;color:#14532d}.map-result.bad{background:#fee2e2;color:#7f1d1d}
+.review-modal{position:fixed;inset:0;z-index:1000;background:rgba(15,23,42,.72);display:none;align-items:center;justify-content:center;padding:1rem}
+.review-modal.show{display:flex}.review-dialog{width:min(680px,100%);max-height:85vh;overflow:auto;background:#fff;border-radius:14px;padding:1.25rem;box-shadow:0 24px 70px rgba(0,0,0,.35)}
+.review-dialog-header{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1rem}.review-dialog-header button{min-width:44px}
+.review-error{border-left:4px solid #dc2626;background:#fef2f2;border-radius:7px;padding:.7rem;margin:.6rem 0;font-size:.86rem}
+.block-result{display:inline-flex;margin:.35rem .3rem 0 0;padding:.25rem .6rem;border-radius:999px;background:#e0f2fe;color:#075985;font-weight:800;font-size:.78rem}
+.retrieval-feedback{margin-top:.7rem;font-weight:700;font-size:.9rem}
+@media(max-width:620px){.map-options{grid-template-columns:1fr}.review-dialog{padding:1rem}.priority-chip{font-size:.7rem}}
+
 </style>
 </head>
 <body>
@@ -180,13 +259,25 @@ tr:nth-child(even) td{background:#f8fafc}
   <a class="brand" href="../apuntes/index.html">← Apuntes</a>
   <div class="tabs">
     <button class="tab-btn active" onclick="showPage('p1',this)">📡 Instrumentación</button>
-    <button class="tab-btn" onclick="showPage('p2',this)">🔍 Sensores & HART</button>
+    <button class="tab-btn" onclick="showPage('p2',this)">🔍 Sensores & <abbr title="Highway Addressable Remote Transducer — protocolo digital sobre lazo 4-20 mA (FSK Bell 202)">HART</abbr></button>
     <button class="tab-btn" onclick="showPage('p3',this)">⚡ Motores & Arranque</button>
-    <button class="tab-btn" onclick="showPage('p4',this)">🔄 VFD & Servo</button>
+    <button class="tab-btn" onclick="showPage('p4',this)">🔄 <abbr title="Variable Frequency Drive — Variador de Frecuencia (controla velocidad de motores)">VFD</abbr> & Servo</button>
     <button class="tab-btn" onclick="showPage('p5',this)">🎮 Juegos & Quiz</button>
-    <button class="tab-btn" onclick="showPage('p6',this)">🧪 Simulacro</button>
+    <button class="tab-btn" onclick="showPage('p6',this)">📖 Glosario</button>
+    <button class="tab-btn" onclick="showPage('p7',this)">📝 Simulacro</button>
+    <button class="tab-btn" type="button" onclick="openErrorReview()">🔁 Repasar mis errores</button>
   </div>
 </nav>
+
+<div id="errorReviewModal" class="review-modal" role="dialog" aria-modal="true" aria-labelledby="errorReviewTitle" onclick="if(event.target===this)closeErrorReview()">
+  <div class="review-dialog">
+    <div class="review-dialog-header">
+      <h2 id="errorReviewTitle">🔁 Mis errores guardados</h2>
+      <button class="btn btn-gray" type="button" onclick="closeErrorReview()" aria-label="Cerrar">✕</button>
+    </div>
+    <div id="errorReviewContent"></div>
+  </div>
+</div>
 
 <!-- HERO -->
 <div class="hero">
@@ -195,11 +286,11 @@ tr:nth-child(even) td{background:#f8fafc}
   <div class="hero-badges">
     <span class="hero-badge" onclick="showPage('p1',document.querySelectorAll('.tab-btn')[0])">4-20 mA</span>
     <span class="hero-badge" onclick="showPage('p1',document.querySelectorAll('.tab-btn')[0])">Zero Vivo</span>
-    <span class="hero-badge" onclick="showPage('p2',document.querySelectorAll('.tab-btn')[1])">HART Bell 202</span>
+    <span class="hero-badge" onclick="showPage('p2',document.querySelectorAll('.tab-btn')[1])"><abbr title="Highway Addressable Remote Transducer — protocolo digital sobre lazo 4-20 mA (FSK Bell 202)">HART</abbr> Bell 202</span>
     <span class="hero-badge" onclick="showPage('p3',document.querySelectorAll('.tab-btn')[2])">Motor Asíncrono</span>
     <span class="hero-badge" onclick="showPage('p3',document.querySelectorAll('.tab-btn')[2])">Soft-Starter</span>
-    <span class="hero-badge" onclick="showPage('p4',document.querySelectorAll('.tab-btn')[3])">VFD & IGBT</span>
-    <span class="hero-badge" onclick="showPage('p4',document.querySelectorAll('.tab-btn')[3])">FOC</span>
+    <span class="hero-badge" onclick="showPage('p4',document.querySelectorAll('.tab-btn')[3])"><abbr title="Variable Frequency Drive — Variador de Frecuencia (controla velocidad de motores)">VFD</abbr> & <abbr title="Insulated Gate Bipolar Transistor — Conmutador de potencia del inversor VFD">IGBT</abbr></span>
+    <span class="hero-badge" onclick="showPage('p4',document.querySelectorAll('.tab-btn')[3])"><abbr title="Field Oriented Control — Control Vectorial: desacopla flujo (Id) y par (Iq), par pleno a 0 RPM">FOC</abbr></span>
     <span class="hero-badge" onclick="showPage('p5',document.querySelectorAll('.tab-btn')[4])">🎮 Quiz</span>
     <span class="hero-badge" onclick="showPage('p6',document.querySelectorAll('.tab-btn')[5])">🧪 Simulacro</span>
   </div>
@@ -220,7 +311,7 @@ tr:nth-child(even) td{background:#f8fafc}
   <div class="card card-yellow fundamentos-block">
     <h4>🔎 Conceptos Previos — ¿Por qué importa esto?</h4>
     <p>El problema de medir variables industriales (temperatura, presión, nivel) a cientos de metros del panel de control es transmitirlas sin que el ruido eléctrico distorsione la señal. La solución industrial es transmitir la señal como corriente (amperios) en lugar de tensión (voltios): la corriente es la misma en TODA la serie de un circuito (Ley de Kirchhoff), sin importar la resistencia del cable.</p>
-    <p><strong>Analogía:</strong> Pensá en una manguera de agua: el caudal (corriente) es igual al principio y al final, aunque la presión (tensión) caiga por la fricción del tubo. Con 4-20 mA, el 'caudal de electrones' llega intacto al PLC aunque el cable tenga kilómetros.</p>
+    <p><strong>Analogía:</strong> Pensá en una manguera de agua: el caudal (corriente) es igual al principio y al final, aunque la presión (tensión) caiga por la fricción del tubo. Con 4-20 mA, el 'caudal de electrones' llega intacto al <abbr title="Programmable Logic Controller — Controlador Lógico Programable">PLC</abbr> aunque el cable tenga kilómetros.</p>
   </div>
 
   <div class="grid2">
@@ -228,9 +319,9 @@ tr:nth-child(even) td{background:#f8fafc}
       <h4>🟢 Zero Vivo (4 mA) — Estándar 4-20 mA</h4>
       <ul>
         <li>0 % de escala = <strong>4.00 mA</strong> (nunca cero)</li>
-        <li>Rotura de cable → corriente cae a 0 mA (&lt; 3.6 mA, NAMUR NE 43)</li>
-        <li>PLC detecta <strong>alarma "Falla de Lazo Abierto"</strong> de forma inequívoca</li>
-        <li>Inmune a EMI: la corriente es igual en todo el bucle (<strong>Ley de Kirchhoff</strong>)</li>
+        <li>Rotura de cable → corriente cae a 0 mA (&lt; 3.6 mA, <abbr title="NAMUR NE 43: define umbrales de alarma 4-20 mA: &lt;3.6 mA = lazo abierto, &gt;21 mA = saturación">NAMUR NE 43</abbr>)</li>
+        <li><abbr title="Programmable Logic Controller — Controlador Lógico Programable">PLC</abbr> detecta <strong>alarma "Falla de Lazo Abierto"</strong> de forma inequívoca</li>
+        <li>Inmune a <abbr title="Electromagnetic Interference — Interferencia Electromagnética">EMI</abbr>: la corriente es igual en todo el bucle (<strong>Ley de Kirchhoff</strong>)</li>
         <li>Funciona a 300 m sin error por caída de tensión en el cable</li>
       </ul>
     </div>
@@ -240,7 +331,7 @@ tr:nth-child(even) td{background:#f8fafc}
         <li>0 % de escala = <strong>0 V</strong> — ambiguo</li>
         <li>No distingue "variable en cero" de "cable cortado" ⚠️</li>
         <li>Sensible a caídas de tensión en cable largo</li>
-        <li>Ruido EMI deforma la lectura (alta impedancia)</li>
+        <li>Ruido <abbr title="Electromagnetic Interference — Interferencia Electromagnética">EMI</abbr> deforma la lectura (alta impedancia)</li>
         <li>Riesgo operativo en procesos críticos</li>
       </ul>
     </div>
@@ -250,7 +341,7 @@ tr:nth-child(even) td{background:#f8fafc}
   <div class="canvas-wrap">
     <canvas id="loopCanvas" width="680" height="200"></canvas>
     <p>Animación lazo 4-20 mA — el transmisor modula la corriente según el nivel del proceso</p>
-    <canvas id="loopGraphCanvas" width="680" height="120" aria-label="Curva de transferencia del lazo"></canvas>
+    <canvas id="loopGraphCanvas" width="680" height="180" aria-label="Curva de transferencia del lazo"></canvas>
     <p>Curva de transferencia I-V del lazo 4-20 mA: I (mA), V_shunt (V) y % Proceso.</p>
     <div class="anim-ctrl">
       <button class="btn btn-blue" onclick="setLoop(0)">0 % → 4 mA (1 V)</button>
@@ -261,9 +352,9 @@ tr:nth-child(even) td{background:#f8fafc}
   </div>
 
   <div class="card card-teal">
-    <h4>🔧 Resistor Shunt 250 Ω (tolerancia ±0.1%) — Conversión I→V en la entrada del PLC</h4>
+    <h4>🔧 Resistor Shunt 250 Ω (tolerancia ±0.1%) — Conversión I→V en la entrada del <abbr title="Programmable Logic Controller — Controlador Lógico Programable">PLC</abbr></h4>
     <ul>
-      <li>Ubicado en la bornera de entrada analógica del PLC</li>
+      <li>Ubicado en la bornera de entrada analógica del <abbr title="Programmable Logic Controller — Controlador Lógico Programable">PLC</abbr></li>
       <li>Convierte corriente → tensión: <code>V = I × 250 Ω</code></li>
       <li>4 mA → <strong>1.00 Vcc</strong> | 20 mA → <strong>5.00 Vcc</strong></li>
       <li>Rango 1-5 V procesado por el ADC del módulo analógico</li>
@@ -283,7 +374,7 @@ tr:nth-child(even) td{background:#f8fafc}
 
   <div class="alert alert-warn">
     <span class="ico">⚠️</span>
-    <div><strong>Errores comunes en el parcial:</strong><ul><li>0 mA NO es el 0% del proceso — es una FALLA. El mínimo válido es 4 mA. Si ves 0 mA, el cable está cortado o el transmisor sin alimentación (NAMUR NE 43: umbral &lt; 3.6 mA = alarma de lazo abierto).</li><li>El resistor Shunt 250 Ω está en el PLC (en la bornera de entrada analógica), NO en el transmisor ni en el campo.</li><li>Loop-powered usa 2 conductores (alimentación Y señal en el mismo par). No necesita 4 cables.</li></ul></div>
+    <div><strong>Errores comunes en el parcial:</strong><ul><li>0 mA NO es el 0% del proceso — es una FALLA. El mínimo válido es 4 mA. Si ves 0 mA, el cable está cortado o el transmisor sin alimentación (<abbr title="NAMUR NE 43: define umbrales de alarma 4-20 mA: &lt;3.6 mA = lazo abierto, &gt;21 mA = saturación">NAMUR NE 43</abbr>: umbral &lt; 3.6 mA = alarma de lazo abierto).</li><li>El resistor Shunt 250 Ω está en el PLC (en la bornera de entrada analógica), NO en el transmisor ni en el campo.</li><li>Loop-powered usa 2 conductores (alimentación Y señal en el mismo par). No necesita 4 cables.</li></ul></div>
   </div>
 
   <!-- DESARROLLO TÉCNICO 1.1 -->
@@ -291,7 +382,7 @@ tr:nth-child(even) td{background:#f8fafc}
     <h4>🧪 Desarrollo técnico: por qué corriente y no tensión</h4>
     <p>La ley de Kirchhoff de corrientes (KCL) establece que la misma corriente circula por todos los elementos de un lazo serie. Cuando el transmisor se aleja del PLC 300 metros, la resistencia del cobre del cable (<code>R_cable = ρ·L/A</code>) puede ser varios ohmios. En un lazo de <strong>tensión 0-10 V</strong>, esa resistencia de cable genera una caída <code>ΔV = I·R_cable</code> que distorsiona la lectura. En un lazo de <strong>corriente 4-20 mA</strong>, mientras la fuente tenga suficiente tensión de compliance (mínimo 12-20 Vcc en la mayoría de los transmisores), la corriente es idéntica en cada punto del bucle — el cable puede tener 50 Ω de resistencia sin modificar la corriente que llega al PLC.</p>
     <p>El <strong>transmisor loop-powered a 2 hilos</strong> actúa como una fuente de corriente controlada: contiene internamente un regulador que detecta la corriente del lazo y la ajusta continuamente para que coincida con la variable medida. La electrónica interna (micro, sensor, A/D) se alimenta de los propios 4 mA mínimos que circulan; eso explica por qué la norma establece ese piso de 4 mA como mínimo funcional.</p>
-    <p><strong>Inmunidad EMI:</strong> Los campos electromagnéticos parásitos (motores, variadores, transformadores) inducen tensiones en los conductores. En un lazo de alta impedancia (tensión), esas tensiones inducidas representan errores significativos. En el lazo de corriente de baja impedancia dinámica (~50-250 Ω), la tensión inducida apenas modifica la corriente: <code>ΔI = ΔV_ruido / R_total_lazo</code>. Con R_lazo = 300 Ω y un pico de ruido inducido de 300 mV, el error es solo 1 mA, dentro de la escala detectada como sub-normal por NAMUR NE 43.</p>
+    <p><strong>Inmunidad <abbr title="Electromagnetic Interference — Interferencia Electromagnética">EMI</abbr>:</strong> Los campos electromagnéticos parásitos (motores, variadores, transformadores) inducen tensiones en los conductores. En un lazo de alta impedancia (tensión), esas tensiones inducidas representan errores significativos. En el lazo de corriente de baja impedancia dinámica (~50-250 Ω), la tensión inducida apenas modifica la corriente: <code>ΔI = ΔV_ruido / R_total_lazo</code>. Con R_lazo = 300 Ω y un pico de ruido inducido de 300 mV, el error es solo 1 mA, dentro de la escala detectada como sub-normal por <abbr title="NAMUR NE 43: define umbrales de alarma 4-20 mA: &lt;3.6 mA = lazo abierto, &gt;21 mA = saturación">NAMUR NE 43</abbr>.</p>
   </div>
 
   <!-- SVG CIRCUITO LAZO 4-20 mA (IEC 60617 / CADe_SIMU style) -->
@@ -349,7 +440,7 @@ tr:nth-child(even) td{background:#f8fafc}
       <text x="376" y="168" text-anchor="middle" fill="#d97706" font-size="9" font-weight="bold">V = I × 250 Ω</text>
       <text x="376" y="178" text-anchor="middle" fill="#d97706" font-size="8.5">4mA→1V · 20mA→5V</text>
       <!-- NAMUR warning -->
-      <text x="560" y="168" text-anchor="middle" fill="#dc2626" font-size="8.5" font-weight="bold">⚠ 0 mA = FALLA (NAMUR NE 43)</text>
+      <text x="560" y="168" text-anchor="middle" fill="#dc2626" font-size="8.5" font-weight="bold">⚠ 0 mA = FALLA (<abbr title="NAMUR NE 43: define umbrales de alarma 4-20 mA: &lt;3.6 mA = lazo abierto, &gt;21 mA = saturación">NAMUR NE 43</abbr>)</text>
     </svg>
     <div class="sch-legend">
       <span class="sch-legend-item"><svg width="14" height="8"><rect x="1" y="1" width="12" height="6" rx="2" fill="none" stroke="#7c3aed" stroke-width="1.5"/></svg> TX — Transmisor loop-powered</span>
@@ -362,6 +453,16 @@ tr:nth-child(even) td{background:#f8fafc}
 
   <div class="how-to-read">
     <strong>🔎 Cómo leer la animación del lazo:</strong> Los tres botones fijan el porcentaje de proceso (0 %, 50 %, 100 %). Observá que al aumentar el porcentaje, la corriente sube de 4 a 20 mA y la tensión en el shunt sube de 1 a 5 V proporcionalmente. Al simular rotura: la corriente cae a 0 mA — el PLC ve 0 V, que está por debajo del límite NAMUR NE 43 (3,6 mA), y dispara la alarma de <em>Lazo Abierto</em>. En la curva de transferencia abajo, el punto azul se mueve sobre la recta I-V; al romper el cable, el punto salta a 0 mA (esquina inferior izquierda) marcado en rojo.
+  </div>
+
+  <div class="card card-yellow exception-card">
+    <div class="ex-badge">⚠️ Excepciones del Lazo 4-20mA</div>
+    <ul>
+      <li><strong>Corriente serie, solo con tensión de cumplimiento:</strong> el lazo necesita ≥12V de tensión disponible (Vfuente - Vshunt - Vhilos); si no, el transmisor no regula a 20mA.</li>
+      <li><strong>0 mA = siempre falla:</strong> nunca es el 0% del proceso. NAMUR NE 43: umbral &lt;3.6 mA = lazo abierto.</li>
+      <li><strong>Shunt 250Ω:</strong> 4mA→1V, 20mA→5V. El shunt está en la bornera del PLC, no en campo.</li>
+      <li><strong>0-10V válido en cortas distancias e instalación adecuada:</strong> pero menos conveniente en cable largo (caída resistiva) y en ambientes de ruido EMI.</li>
+    </ul>
   </div>
 
   <!-- 1.2 INSTRUMENTACIÓN DE NIVEL Y CAUDAL -->
@@ -443,6 +544,31 @@ tr:nth-child(even) td{background:#f8fafc}
     <p class="sch-title">FEM lineal con v → Turndown 50:1. Fluido conductor obligatorio. Tubo sin obstáculos → pérdida de carga ≈ 0. Excitación pulsada 6 Hz elimina polarización electroquímica.</p>
   </div>
 
+  <div class="schematic-wrap">
+    <h4>🌊 Corte funcional del caudalímetro electromagnético</h4>
+    <svg viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="flowmeterTitle flowmeterDesc" style="width:100%;height:auto">
+      <title id="flowmeterTitle">Caudalímetro electromagnético IEC 60617 simplificado</title>
+      <desc id="flowmeterDesc">Tubo PTFE horizontal, flujo de izquierda a derecha, electrodos E1 y E2, campo magnético vertical y amplificador de salida 4-20mA.</desc>
+      <defs><marker id="flowArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0369a1"/></marker><marker id="fieldArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#7c3aed"/></marker></defs>
+      <rect width="500" height="220" rx="10" fill="#f8fafc"/>
+      <rect x="35" y="68" width="430" height="70" rx="22" fill="#bae6fd" stroke="#0369a1" stroke-width="4"/>
+      <rect x="48" y="81" width="404" height="44" rx="15" fill="#eff6ff" stroke="#64748b" stroke-width="2" stroke-dasharray="6 3"/>
+      <text x="70" y="62" fill="#475569" font-size="11" font-weight="700">PTFE</text>
+      <line x1="78" y1="103" x2="205" y2="103" stroke="#0369a1" stroke-width="4" marker-end="url(#flowArrow)"/>
+      <text x="120" y="96" fill="#0369a1" font-size="11" font-weight="700">Flujo v →</text>
+      <line x1="250" y1="18" x2="250" y2="66" stroke="#7c3aed" stroke-width="4" marker-end="url(#fieldArrow)"/>
+      <line x1="250" y1="188" x2="250" y2="140" stroke="#7c3aed" stroke-width="4" marker-end="url(#fieldArrow)"/>
+      <text x="264" y="31" fill="#7c3aed" font-size="11" font-weight="700">Campo B</text>
+      <circle cx="73" cy="103" r="12" fill="#ffedd5" stroke="#d97706" stroke-width="3"/><text x="73" y="107" text-anchor="middle" fill="#9a3412" font-size="10" font-weight="800">E1</text>
+      <circle cx="427" cy="103" r="12" fill="#ffedd5" stroke="#d97706" stroke-width="3"/><text x="427" y="107" text-anchor="middle" fill="#9a3412" font-size="10" font-weight="800">E2</text>
+      <path d="M73 115 V175 H185" fill="none" stroke="#d97706" stroke-width="2"/><path d="M427 115 V175 H315" fill="none" stroke="#d97706" stroke-width="2"/>
+      <rect x="185" y="158" width="130" height="38" rx="7" fill="#dcfce7" stroke="#15803d" stroke-width="3"/>
+      <text x="250" y="175" text-anchor="middle" fill="#166534" font-size="11" font-weight="800">Amplificador</text><text x="250" y="189" text-anchor="middle" fill="#166534" font-size="10">Salida 4-20mA</text>
+      <text x="338" y="157" fill="#1e293b" font-size="11" font-weight="800">E=BvD</text><text x="338" y="174" fill="#1e293b" font-size="11" font-weight="800">Q=vπD²/4</text>
+      <text x="18" y="211" fill="#374151" font-size="10">Conductividad mínima σ ≥ 5 μS/cm</text><text x="330" y="211" fill="#374151" font-size="10">Caída de presión ≈ 0</text>
+    </svg>
+  </div>
+
   <!-- 1.3 SEGURIDAD DE MÁQUINAS -->
   <div class="stitle"><span class="ico">🚨</span> 1.3 — Parada de Emergencia y Seguridad de Máquinas</div>
 
@@ -498,7 +624,7 @@ tr:nth-child(even) td{background:#f8fafc}
     <h4>🧪 Profundización: Fail-Safe, apertura positiva y categorías de parada</h4>
     <p>El principio <strong>fail-safe</strong> exige que cualquier falla simple del sistema de control — cable cortado, bobina quemada, contactor pegado — resulte en un estado seguro (máquina parada). La lógica con contacto <strong>NC</strong> cumple esto: mientras la corriente circula, la máquina está habilitada; si el cable se corta, la corriente cesa y la máquina para por sí sola. Un contacto <strong>NA</strong> invierte esta lógica: la máquina para solo cuando llega la señal de parada — si la señal falla (cable cortado), la máquina sigue corriendo. Esto se llama condición <em>fail-danger</em>.</p>
     <p><strong>Apertura Positiva Forzada (IEC 60947-5-1):</strong> Un contacto convencional puede quedar micro-soldado si una corriente de cortocircuito lo atraviesa. En ese estado, aunque el actuador se mueva, el contacto no se abre. La APF garantiza que el movimiento mecánico del botón se transmite <em>directamente y sin posibilidad de fallo</em> a los contactos: si el actuador se mueve, los contactos se abren — sin excepción. El símbolo normativo (flecha dentro de un círculo) debe aparecer en el esquema eléctrico del circuito de seguridad.</p>
-    <p><strong>Categorías de parada según IEC 60204-1:</strong> La elección depende de la inercia y el peligro. Una sierra circular (baja inercia) puede detenerse por corte instantáneo (Cat. 0); una centrífuga industrial con rotor de 500 kg a 3000 rpm almacena tanta energía cinética que el corte brusco generaría vibraciones destructivas y el rotor tardaría 10-15 minutos en detenerse por rozamiento solo — necesita Cat. 1 para que el VFD o freno activo lo desacelere de forma controlada.</p>
+    <p><strong>Categorías de parada según IEC 60204-1:</strong> La elección depende de la inercia y el peligro. Una sierra circular (baja inercia) puede detenerse por corte instantáneo (Cat. 0); una centrífuga industrial con rotor de 500 kg a 3000 rpm almacena tanta energía cinética que el corte brusco generaría vibraciones destructivas y el rotor tardaría 10-15 minutos en detenerse por rozamiento solo — necesita Cat. 1 para que el <abbr title="Variable Frequency Drive — Variador de Frecuencia (controla velocidad de motores)">VFD</abbr> o freno activo lo desacelere de forma controlada.</p>
   </div>
   <!-- SVG: Circuito Seguridad NC vs NA (IEC 60617) -->
   <div class="schematic-wrap">
@@ -562,6 +688,14 @@ tr:nth-child(even) td{background:#f8fafc}
     <p class="sch-title">En el circuito NC: si el cable se corta, la corriente cesa, K1 no excita y el motor para (fail-safe). En el circuito NA: si el cable se corta, K2 ya estaba sin excitar y el motor sigue corriendo (fail-danger).</p>
   </div>
 
+  <div class="card card-yellow exception-card">
+    <div class="ex-badge">⚠️ Excepciones Parada de Emergencia</div>
+    <ul>
+      <li><strong>Siempre NC (fail-safe):</strong> rotura de cable → desenergiza → detiene. Con NA: rotura = falla silenciosa = peligro.</li>
+      <li><strong>Rearme ≠ arranque:</strong> el rearme sólo habilita el lazo; la máquina no arranca sola.</li>
+      <li><strong>Cat.0 vs Cat.1:</strong> Cat.0 = corte inmediato (sierra circular, baja inercia). Cat.1 = frenado controlado luego corte (centrífuga, grúa, alta inercia).</li>
+    </ul>
+  </div>
 </div>
 </div><!-- /p1 -->
 
@@ -607,7 +741,7 @@ tr:nth-child(even) td{background:#f8fafc}
   </div>
 
   <!-- CONECTOR M12 -->
-  <div class="stitle"><span class="ico">🔌</span> Conector M12 — PNP vs NPN y Código de Colores IEC</div>
+  <div class="stitle"><span class="ico">🔌</span> Conector M12 — <abbr title="Transistor PNP: conmuta a +24V (Sinking en PLC), estándar europeo/latinoamericano">PNP</abbr> vs <abbr title="Transistor NPN: conmuta a 0V (Sourcing en PLC), común en maquinaria asiática">NPN</abbr> y Código de Colores IEC</div>
 
   <div class="card card-green">
     <h4>M12 — 4 Pines según IEC 60947-5-2</h4>
@@ -621,7 +755,7 @@ tr:nth-child(even) td{background:#f8fafc}
 
   <div class="grid2">
     <div class="card card-blue">
-      <h4>PNP — "Sinking Input" (Estándar europeo)</h4>
+      <h4><abbr title="Transistor PNP: conmuta a +24V (Sinking en PLC), estándar europeo/latinoamericano">PNP</abbr> — "Sinking Input" (Estándar europeo)</h4>
       <ul>
         <li>Transistor conmuta <strong>+24 Vcc</strong> hacia la carga (Pin 4)</li>
         <li>Entrada PLC tipo <strong>Sinking</strong> (retorno a 0 V común)</li>
@@ -630,7 +764,7 @@ tr:nth-child(even) td{background:#f8fafc}
       </ul>
     </div>
     <div class="card card-orange">
-      <h4>NPN — "Sourcing Input" (Maquinaria asiática)</h4>
+      <h4><abbr title="Transistor NPN: conmuta a 0V (Sourcing en PLC), común en maquinaria asiática">NPN</abbr> — "Sourcing Input" (Maquinaria asiática)</h4>
       <ul>
         <li>Transistor conmuta <strong>0 Vcc</strong> hacia la carga (Pin 4)</li>
         <li>Entrada PLC tipo <strong>Sourcing</strong> (alimenta internamente +24 V)</li>
@@ -642,7 +776,7 @@ tr:nth-child(even) td{background:#f8fafc}
 
   <div class="alert alert-warn">
     <span class="ico">⚠️</span>
-    <div><strong>Errores comunes en el parcial:</strong><ul><li>Un sensor inductivo NO detecta agua, plástico ni vidrio, aunque sean objetos grandes y estén a 2 mm. Solo detecta materiales metálicos conductores que inducen corrientes de Foucault.</li><li>PNP da +24V en la señal (Pin 4) cuando detecta. NPN da 0V. Las entradas del PLC deben ser del tipo opuesto: PNP → PLC Sinking; NPN → PLC Sourcing.</li><li>El pin 4 negro (señal) es siempre la salida conmutada NO (normalmente abierta). El pin 2 blanco es NC o diagnóstico. No confundir.</li></ul></div>
+    <div><strong>Errores comunes en el parcial:</strong><ul><li>Un sensor inductivo NO detecta agua, plástico ni vidrio, aunque sean objetos grandes y estén a 2 mm. Solo detecta materiales metálicos conductores que inducen corrientes de Foucault.</li><li><abbr title="Transistor PNP: conmuta a +24V (Sinking en PLC), estándar europeo/latinoamericano">PNP</abbr> da +24V en la señal (Pin 4) cuando detecta. <abbr title="Transistor NPN: conmuta a 0V (Sourcing en PLC), común en maquinaria asiática">NPN</abbr> da 0V. Las entradas del PLC deben ser del tipo opuesto: <abbr title="Transistor PNP: conmuta a +24V (Sinking en PLC), estándar europeo/latinoamericano">PNP</abbr> → PLC Sinking; <abbr title="Transistor NPN: conmuta a 0V (Sourcing en PLC), común en maquinaria asiática">NPN</abbr> → PLC Sourcing.</li><li>El pin 4 negro (señal) es siempre la salida conmutada NO (normalmente abierta). El pin 2 blanco es NC o diagnóstico. No confundir.</li></ul></div>
   </div>
 
   <!-- DESARROLLO TÉCNICO 2.1 -->
@@ -703,18 +837,27 @@ tr:nth-child(even) td{background:#f8fafc}
     <p class="sch-title">BN=Marrón +24V · BU=Azul 0V · BK=Negro señal (Pin4). PNP entrega +24V al detectar (PLC Sinking). NPN conecta señal a 0V al detectar (PLC Sourcing). Nunca mezclar tipos sin adaptador.</p>
   </div>
 
+  <div class="card card-yellow exception-card">
+    <div class="ex-badge">⚠️ Excepciones Sensores PNP/NPN</div>
+    <ul>
+      <li><strong>PNP entrega corriente (sourcing):</strong> conmuta +24V → entrada del PLC tipo Sinking.</li>
+      <li><strong>NPN absorbe corriente (sinking):</strong> conmuta 0V → entrada del PLC tipo Sourcing.</li>
+      <li><strong>Diagrama sensor→entrada siempre inequívoco:</strong> nunca conectar PNP a entrada Sourcing ni NPN a Sinking sin verificar; quema la tarjeta.</li>
+    </ul>
+  </div>
+
   <!-- 2.2 PROTOCOLO HART -->
-  <div class="stitle"><span class="ico">📶</span> 2.2 — Protocolo HART sobre Lazo 4-20 mA</div>
+  <div class="stitle"><span class="ico">📶</span> 2.2 — Protocolo <abbr title="Highway Addressable Remote Transducer — protocolo digital sobre lazo 4-20 mA (FSK Bell 202)">HART</abbr> sobre Lazo 4-20 mA</div>
 
 
   <div class="card card-yellow fundamentos-block">
     <h4>🔎 Conceptos Previos — ¿Por qué importa esto?</h4>
-    <p>HART permite hablar digitalmente con un sensor inteligente usando el mismo cable que ya transmite la señal analógica 4-20 mA. Es como tener en el mismo cable de audio la música (señal analógica DC) y una conversación de mantenimiento (señal digital FSK). La clave es que la señal digital es una onda AC de alta frecuencia (1200/2200 Hz) mientras que el PLC lee solo la componente DC con un filtro pasabajos: las dos señales coexisten sin interferirse.</p>
-    <p><strong>Analogía:</strong> HART sobre 4-20 mA es como la señal AM/FM de la radio: en la misma antena conviven la señal de voz (baja frecuencia, es la señal analógica DC) y los datos digitales (alta frecuencia, es el FSK). Un filtro separa lo que le corresponde a cada receptor.</p>
+    <p><abbr title="Highway Addressable Remote Transducer — protocolo digital sobre lazo 4-20 mA (FSK Bell 202)">HART</abbr> permite hablar digitalmente con un sensor inteligente usando el mismo cable que ya transmite la señal analógica 4-20 mA. Es como tener en el mismo cable de audio la música (señal analógica DC) y una conversación de mantenimiento (señal digital <abbr title="Frequency Shift Keying — Modulación por desplazamiento de frecuencia (1200/2200 Hz en HART)">FSK</abbr>). La clave es que la señal digital es una onda AC de alta frecuencia (1200/2200 Hz) mientras que el PLC lee solo la componente DC con un filtro pasabajos: las dos señales coexisten sin interferirse.</p>
+    <p><strong>Analogía:</strong> HART sobre 4-20 mA es como la señal AM/FM de la radio: en la misma antena conviven la señal de voz (baja frecuencia, es la señal analógica DC) y los datos digitales (alta frecuencia, es el <abbr title="Frequency Shift Keying — Modulación por desplazamiento de frecuencia (1200/2200 Hz en HART)">FSK</abbr>). Un filtro separa lo que le corresponde a cada receptor.</p>
   </div>
 
   <div class="card card-purple">
-    <h4>Modulación FSK Bell 202</h4>
+    <h4>Modulación <abbr title="Frequency Shift Keying — Modulación por desplazamiento de frecuencia (1200/2200 Hz en HART)">FSK</abbr> Bell 202</h4>
     <ul>
       <li>Comunicación digital a <strong>1200 bps</strong> superpuesta sobre el lazo analógico 4-20 mA</li>
       <li>Bit '1' (Mark): <strong>1200 Hz</strong> | Bit '0' (Space): <strong>2200 Hz</strong></li>
@@ -725,8 +868,8 @@ tr:nth-child(even) td{background:#f8fafc}
 
   <!-- ANIMACIÓN HART -->
   <div class="canvas-wrap">
-    <canvas id="hartCanvas" width="680" height="160"></canvas>
-    <p>Modulación FSK Bell 202: señal HART de ±0.5 mA superpuesta sobre los 12 mA DC del transmisor</p>
+    <canvas id="hartCanvas" width="680" height="190"></canvas>
+    <p>Modulación <abbr title="Frequency Shift Keying — Modulación por desplazamiento de frecuencia (1200/2200 Hz en HART)">FSK</abbr> Bell 202: señal HART de ±0.5 mA superpuesta sobre los 12 mA DC del transmisor</p>
     <div class="anim-ctrl">
       <button class="btn btn-purple" onclick="toggleHart()" id="hartBtn">▶ Animar</button>
     </div>
@@ -868,16 +1011,16 @@ tr:nth-child(even) td{background:#f8fafc}
   <div class="card card-blue">
     <h4>📊 Parámetros de Rango en Transmisores Inteligentes</h4>
     <div class="kv">
-      <span class="kv-item r">LRL / URL — Límites físicos de fábrica de la celda (no modificables)</span>
-      <span class="kv-item g">LRV / URV — Valores calibrados: LRV = 4 mA (0%) | URV = 20 mA (100%)</span>
-      <span class="kv-item">Span = URV − LRV (amplitud de trabajo en unidades físicas)</span>
-      <span class="kv-item p">Turndown = URL / Span_mín · Un alto turndown (100:1) → flexibilidad sin cambiar hardware</span>
+      <span class="kv-item r"><abbr title="Lower Range Limit — Límite físico mínimo absoluto de la celda del transmisor">LRL</abbr> / <abbr title="Upper Range Limit — Límite físico máximo absoluto de la celda del transmisor">URL</abbr> — Límites físicos de fábrica de la celda (no modificables)</span>
+      <span class="kv-item g"><abbr title="Lower Range Value — Valor de proceso configurado para la salida de 4 mA (0%)">LRV</abbr> / <abbr title="Upper Range Value — Valor de proceso configurado para la salida de 20 mA (100%)">URV</abbr> — Valores calibrados: <abbr title="Lower Range Value — Valor de proceso configurado para la salida de 4 mA (0%)">LRV</abbr> = 4 mA (0%) | <abbr title="Upper Range Value — Valor de proceso configurado para la salida de 20 mA (100%)">URV</abbr> = 20 mA (100%)</span>
+      <span class="kv-item">Span = <abbr title="Upper Range Value — Valor de proceso configurado para la salida de 20 mA (100%)">URV</abbr> − <abbr title="Lower Range Value — Valor de proceso configurado para la salida de 4 mA (0%)">LRV</abbr> (amplitud de trabajo en unidades físicas)</span>
+      <span class="kv-item p">Turndown = <abbr title="Upper Range Limit — Límite físico máximo absoluto de la celda del transmisor">URL</abbr> / Span_mín · Un alto turndown (100:1) → flexibilidad sin cambiar hardware</span>
     </div>
   </div>
 
   <div class="canvas-wrap">
     <canvas id="rangeCanvas" width="680" height="180" aria-label="Rango físico y rango calibrado"></canvas>
-    <p>LRL/URL son límites físicos; LRV/URV definen el rango calibrado y el Span. Ejemplo: LRL = 0 bar, URL = 10 bar y Span = URV - LRV = 6 bar.</p>
+    <p><abbr title="Lower Range Limit — Límite físico mínimo absoluto de la celda del transmisor">LRL</abbr>/<abbr title="Upper Range Limit — Límite físico máximo absoluto de la celda del transmisor">URL</abbr> son límites físicos; <abbr title="Lower Range Value — Valor de proceso configurado para la salida de 4 mA (0%)">LRV</abbr>/<abbr title="Upper Range Value — Valor de proceso configurado para la salida de 20 mA (100%)">URV</abbr> definen el rango calibrado y el Span. Ejemplo: <abbr title="Lower Range Limit — Límite físico mínimo absoluto de la celda del transmisor">LRL</abbr> = 0 bar, <abbr title="Upper Range Limit — Límite físico máximo absoluto de la celda del transmisor">URL</abbr> = 10 bar y Span = URV - LRV = 6 bar.</p>
     <div class="anim-ctrl">
       <button class="btn btn-blue" onclick="setRangeExample('pressure')">Ejemplo Presión</button>
       <button class="btn btn-purple" onclick="setRangeExample('temperature')">Ejemplo Temperatura</button>
@@ -902,7 +1045,7 @@ tr:nth-child(even) td{background:#f8fafc}
 
   <div class="alert alert-warn">
     <span class="ico">⚠️</span>
-    <div><strong>Errores comunes en el parcial:</strong><ul><li>CALIBRAR NO implica tocar el instrumento. Solo se documenta el error. El ajuste es lo que modifica el instrumento.</li><li>LRL y URL son límites FÍSICOS de FÁBRICA del sensor (no modificables por software). LRV y URV son los límites CONFIGURADOS por el usuario para 4 mA y 20 mA (modificables).</li><li>Re-Ranging solo cambia los valores LRV/URV en la memoria del transmisor (escalado matemático). NO calibra ni modifica la celda física. Sensor Trim sí calibra la celda aplicando presión patrón.</li></ul></div>
+    <div><strong>Errores comunes en el parcial:</strong><ul><li>CALIBRAR NO implica tocar el instrumento. Solo se documenta el error. El ajuste es lo que modifica el instrumento.</li><li><abbr title="Lower Range Limit — Límite físico mínimo absoluto de la celda del transmisor">LRL</abbr> y URL son límites FÍSICOS de FÁBRICA del sensor (no modificables por software). LRV y URV son los límites CONFIGURADOS por el usuario para 4 mA y 20 mA (modificables).</li><li>Re-Ranging solo cambia los valores LRV/URV en la memoria del transmisor (escalado matemático). NO calibra ni modifica la celda física. Sensor Trim sí calibra la celda aplicando presión patrón.</li></ul></div>
   </div>
   <!-- DESARROLLO TÉCNICO 2.3 -->
   <div class="deep-block">
@@ -952,7 +1095,7 @@ tr:nth-child(even) td{background:#f8fafc}
       <h4>🌀 Teorema de Ferraris (1885)</h4>
       <ul>
         <li>3 corrientes senoidales desfasadas 120° en el tiempo + 3 bobinas desfasadas 120° en el espacio</li>
-        <li>Resultado: Campo Magnético Giratorio (CMG) de <strong>amplitud constante</strong></li>
+        <li>Resultado: Campo Magnético Giratorio (<abbr title="Campo Magnético Giratorio — generado por el Teorema de Ferraris en el entrehierro del motor">CMG</abbr>) de <strong>amplitud constante</strong></li>
         <li>B_total = <strong>1.5 · B_max</strong> (siempre, en todo instante)</li>
         <li>Velocidad síncrona: <code>ns = 120·f / p</code> (rpm) donde p = número de polos</li>
       </ul>
@@ -962,9 +1105,9 @@ tr:nth-child(even) td{background:#f8fafc}
   <!-- ANIMACIÓN CMG -->
   <div class="canvas-wrap">
     <canvas id="cmgCanvas" width="560" height="280"></canvas>
-    <p>Campo Magnético Giratorio (CMG) — las 3 fases generan un vector rotante de amplitud constante B = 1.5·Bmax</p>
+    <p>Campo Magnético Giratorio (<abbr title="Campo Magnético Giratorio — generado por el Teorema de Ferraris en el entrehierro del motor">CMG</abbr>) — las 3 fases generan un vector rotante de amplitud constante B = 1.5·Bmax</p>
     <div class="anim-ctrl">
-      <button class="btn btn-blue" onclick="toggleCMG()" id="cmgBtn">▶ Animar CMG</button>
+      <button class="btn btn-blue" onclick="toggleCMG()" id="cmgBtn">▶ Animar <abbr title="Campo Magnético Giratorio — generado por el Teorema de Ferraris en el entrehierro del motor">CMG</abbr></button>
       <label class="control-label">Frecuencia <select id="cmgFrequency" onchange="setCMGFrequency(this.value)"><option value="50">50 Hz (ns=1500 rpm)</option><option value="60">60 Hz (ns=1800 rpm)</option></select></label>
     </div>
   </div>
@@ -972,7 +1115,7 @@ tr:nth-child(even) td{background:#f8fafc}
   <div class="card card-orange">
     <h4>📐 Deslizamiento Relativo (s)</h4>
     <ul>
-      <li><code>s = (ns − n) / ns</code> — mide el retraso del rotor respecto al CMG</li>
+      <li><code>s = (ns − n) / ns</code> — mide el retraso del rotor respecto al <abbr title="Campo Magnético Giratorio — generado por el Teorema de Ferraris en el entrehierro del motor">CMG</abbr></li>
       <li><strong>Imposible que n = ns:</strong> si el rotor alcanzara ns → v_rel = 0 → no hay variación de flujo → FEM = 0 → corriente = 0 → par = 0 → rozamiento frena el rotor</li>
     </ul>
     <div class="tbl-wrap" style="margin-top:.6rem">
@@ -996,7 +1139,7 @@ tr:nth-child(even) td{background:#f8fafc}
     <h4>🧪 Profundización: por qué el CMG tiene amplitud constante y el deslizamiento es inevitable</h4>
     <p>La demostración del Teorema de Ferraris muestra que si <code>i_A = I_m·cos(ωt)</code>, <code>i_B = I_m·cos(ωt-120°)</code>, <code>i_C = I_m·cos(ωt-240°)</code>, y las bobinas están a 120° entre sí, el vector suma resultante <code>B_total = B_A + B_B + B_C</code> tiene módulo constante <code>= 1.5·B_max</code> para cualquier valor de t. No hay "pulsaciones" de amplitud — el campo es perfectamente circular. Esto es lo que lo diferencia de un campo monofásico (que oscila) y es la clave del funcionamiento suave del motor.</p>
     <p><strong>¿Por qué el deslizamiento es inevitable en régimen motor?</strong> Si el rotor girara exactamente a ns (velocidad síncrona), la velocidad relativa entre el rotor y el CMG sería cero. Sin velocidad relativa, el flujo no varía para las barras del rotor, no se induce FEM, no circula corriente en el rotor, y por lo tanto no hay par electromagnético. El rozamiento mecánico frenaría el rotor hasta que el deslizamiento volviera a generar suficiente corriente para producir el par necesario. El deslizamiento típico a plena carga es 2-5%; a vacío puede ser tan bajo como 0.5%.</p>
-    <p><strong>Número de polos y velocidades síncronas a 50 Hz:</strong> <code>ns = 60·f / (p/2)</code> donde p es el número total de polos. Con 2 polos → 3000 rpm; 4 polos → 1500 rpm; 6 polos → 1000 rpm; 8 polos → 750 rpm. Cambiar polos requiere un bobinado diferente; no se puede ajustar electrónicamente en un motor estándar (a diferencia de un VFD que modifica f).</p>
+    <p><strong>Número de polos y velocidades síncronas a 50 Hz:</strong> <code>ns = 60·f / (p/2)</code> donde p es el número total de polos. Con 2 polos → 3000 rpm; 4 polos → 1500 rpm; 6 polos → 1000 rpm; 8 polos → 750 rpm. Cambiar polos requiere un bobinado diferente; no se puede ajustar electrónicamente en un motor estándar (a diferencia de un <abbr title="Variable Frequency Drive — Variador de Frecuencia (controla velocidad de motores)">VFD</abbr> que modifica f).</p>
   </div>
   <div class="how-to-read">
     <strong>🔎 Cómo leer la animación CMG:</strong> El círculo oscuro a la izquierda muestra el diagrama vectorial. Las tres flechas de colores (roja=L1, verde=L2, azul=L3) son los vectores de campo de cada fase; su longitud varía con el coseno de la fase. La flecha <strong>amarilla</strong> es el vector resultante <strong>B_total = 1.5·Bmax</strong> — observá que rota con módulo constante. Las curvas a la derecha son las tres senoides en el tiempo; la línea amarilla vertical indica el instante actual.
@@ -1008,7 +1151,7 @@ tr:nth-child(even) td{background:#f8fafc}
 
   <div class="card card-yellow fundamentos-block">
     <h4>🔎 Conceptos Previos — ¿Por qué importa esto?</h4>
-    <p>Un motor de inducción trifásico arrancado directamente (DOL = Direct On Line) demanda al principio una corriente de 5 a 7 veces la nominal. Este pico solo dura segundos, pero puede causar caídas de tensión en la red (flicker en luminarias vecinas) y poner en riesgo al motor. El arranque estrella-triángulo reduce este pico a 1/3 conectando primero las bobinas en estrella (tensión reducida) y luego en triángulo (tensión nominal).</p>
+    <p>Un motor de inducción trifásico arrancado directamente (<abbr title="Direct On-Line — Arranque Directo a la Red (sin reducción de tensión)">DOL</abbr> = Direct On Line) demanda al principio una corriente de 5 a 7 veces la nominal. Este pico solo dura segundos, pero puede causar caídas de tensión en la red (flicker en luminarias vecinas) y poner en riesgo al motor. El arranque estrella-triángulo reduce este pico a 1/3 conectando primero las bobinas en estrella (tensión reducida) y luego en triángulo (tensión nominal).</p>
     <p><strong>Analogía:</strong> Es como salir de estacionado en una cuesta: arrancás en 1ra marcha (menos fuerza, pero suficiente para mover el auto desde cero = Estrella), y cuando ya ganaste velocidad cambias a 2da/3ra (Triángulo). No salís en 3ra porque el motor lucharía demasiado.</p>
   </div>
 
@@ -1117,7 +1260,7 @@ tr:nth-child(even) td{background:#f8fafc}
   <div class="canvas-wrap">
     <canvas id="ydCanvas" width="600" height="240"></canvas>
     <p>Maniobra Estrella-Triángulo: secuencia de contactores y evolución de la corriente</p>
-    <canvas id="ydCurveCanvas" width="600" height="140" aria-label="Curva temporal de corriente estrella triángulo"></canvas>
+    <canvas id="ydCurveCanvas" width="600" height="170" aria-label="Curva temporal de corriente estrella triángulo"></canvas>
     <p>Corriente normalizada I / I_DOL (%) durante Y, conmutación y Δ.</p>
     <div class="anim-ctrl">
       <button class="btn btn-blue" onclick="startYDelta()">▶ Simular Arranque Y-Δ</button>
@@ -1143,7 +1286,7 @@ tr:nth-child(even) td{background:#f8fafc}
   <!-- DESARROLLO TÉCNICO 3.2 -->
   <div class="deep-block">
     <h4>🧪 Profundización: tensiones por bobina, enclavamientos y pico de conmutación</h4>
-    <p>En conexión <strong>Estrella (Y)</strong>, la tensión que ve cada bobina es <code>V_bobina = V_línea / √3 = 400/1.73 ≈ 231 V</code>. Como <code>T ∝ V²</code> y el par de arranque baja proporcionalmente al cuadrado de la tensión, en Y el par es <code>(1/√3)² = 1/3</code> del par en Δ. La corriente de línea de arranque baja por la misma razón a 1/3 de la corriente DOL — esto es lo que protege la red. El motor elige y triángulo cuando la tensión DOL es la tensión de línea: placa 400/690 V en red de 400 V significa que sus bobinas soportan 400 V en conexión Δ y 690 V en Y.</p>
+    <p>En conexión <strong>Estrella (Y)</strong>, la tensión que ve cada bobina es <code>V_bobina = V_línea / √3 = 400/1.73 ≈ 231 V</code>. Como <code>T ∝ V²</code> y el par de arranque baja proporcionalmente al cuadrado de la tensión, en Y el par es <code>(1/√3)² = 1/3</code> del par en Δ. La corriente de línea de arranque baja por la misma razón a 1/3 de la corriente <abbr title="Direct On-Line — Arranque Directo a la Red (sin reducción de tensión)">DOL</abbr> — esto es lo que protege la red. El motor elige y triángulo cuando la tensión <abbr title="Direct On-Line — Arranque Directo a la Red (sin reducción de tensión)">DOL</abbr> es la tensión de línea: placa 400/690 V en red de 400 V significa que sus bobinas soportan 400 V en conexión Δ y 690 V en Y.</p>
     <p><strong>Pico transitorio en la conmutación Y→Δ:</strong> Al abrir KM3 (estrella), el rotor sigue girando con un flujo remanente que genera una FEM de rotor. Si se cierra KM2 (triángulo) sin pausa, la diferencia de fase entre la tensión de red y la FEM del rotor puede producir una corriente de cortocircuito transitoria hasta 10–20 veces la nominal. La pausa de 30-50 ms (open transition) permite que la FEM del rotor decaiga antes de conectar KM2. Algunos soft-starters o arrancadores avanzados usan "closed transition" con un resistor en serie para eliminar este pico.</p>
     <p><strong>Enclavamiento eléctrico cruzado (obligatorio per IEC 60947):</strong> El bobinado de KM2 (Δ) se conecta en serie con el contacto auxiliar NC de KM3 (Y). El bobinado de KM3 se conecta en serie con el NC de KM2. Si por error ambas bobinas reciben orden de activación simultánea, la NC del otro contactor interrumpe la corriente antes de que las potencias puedan cerrarse. El enclavamiento mecánico es un refuerzo físico adicional que previene incluso el caso de fallo del enclavamiento eléctrico por contactos pegados.</p>
   </div>
@@ -1207,18 +1350,31 @@ tr:nth-child(even) td{background:#f8fafc}
     <p class="sch-title">KM1 siempre cierra primero (línea). KM3 cierra para arranque en Y (1/3 I_DOL). Tras temporizador: KM3 abre → pausa 30-50 ms → KM2 cierra para régimen Δ. Enclavamiento cruzado en ambos sentidos obligatorio.</p>
   </div>
 
+  <div class="card card-yellow exception-card">
+    <div class="ex-badge">⚠️ Excepciones Arranque Y-Δ</div>
+    <ul>
+      <li><strong>Depende de la placa del motor y la tensión de red:</strong>
+        <ul>
+          <li>Motor 230Δ/400Y en red 400V → <em>solo</em> Y (si se conecta Δ: 400V en bobina de 230V → quema)</li>
+          <li>Motor 400Δ/690Y en red 400V → puede Δ (bobina recibe 400V = nominal)</li>
+        </ul>
+      </li>
+      <li><strong>Baja tensión en Y:</strong> corriente y par a 1/3. No controla velocidad en régimen.</li>
+    </ul>
+  </div>
+
   <!-- 3.3 SOFT-STARTER -->
   <div class="stitle"><span class="ico">🌡️</span> 3.3 — Arrancadores Suaves (Soft-Starters)</div>
 
 
   <div class="card card-yellow fundamentos-block">
     <h4>🔎 Conceptos Previos — ¿Por qué importa esto?</h4>
-    <p>Un soft-starter es básicamente un regulador de tensión AC por tiristores SCR. Al variar el ángulo de disparo α (el instante dentro del ciclo AC en que el SCR empieza a conducir), controla qué porción de la senoide de 400V llega al motor. Como el par del motor es proporcional al cuadrado de la tensión (T ∝ V²), bajar la tensión al 50% reduce el par al 25% — suficiente para arrancar suave sin sacudidas.</p>
-    <p><strong>Analogía:</strong> El SCR es como un interruptor ultra-rápido que se abre y cierra miles de veces por segundo dentro de cada ciclo de la senoide. El ángulo α define 'qué parte del ciclo' se deja pasar: α=0° = toda la senoide (100% tensión); α=90° = solo la mitad del ciclo positivo; α=150° = casi nada (mínima tensión).</p>
+    <p>Un soft-starter es básicamente un regulador de tensión AC por tiristores <abbr title="Silicon Controlled Rectifier — Tiristor de potencia del Soft-Starter">SCR</abbr>. Al variar el ángulo de disparo α (el instante dentro del ciclo AC en que el <abbr title="Silicon Controlled Rectifier — Tiristor de potencia del Soft-Starter">SCR</abbr> empieza a conducir), controla qué porción de la senoide de 400V llega al motor. Como el par del motor es proporcional al cuadrado de la tensión (T ∝ V²), bajar la tensión al 50% reduce el par al 25% — suficiente para arrancar suave sin sacudidas.</p>
+    <p><strong>Analogía:</strong> El <abbr title="Silicon Controlled Rectifier — Tiristor de potencia del Soft-Starter">SCR</abbr> es como un interruptor ultra-rápido que se abre y cierra miles de veces por segundo dentro de cada ciclo de la senoide. El ángulo α define 'qué parte del ciclo' se deja pasar: α=0° = toda la senoide (100% tensión); α=90° = solo la mitad del ciclo positivo; α=150° = casi nada (mínima tensión).</p>
   </div>
 
   <div class="card card-purple">
-    <h4>⚡ Topología: 6 Tiristores SCR en Antiparalelo</h4>
+    <h4>⚡ Topología: 6 Tiristores <abbr title="Silicon Controlled Rectifier — Tiristor de potencia del Soft-Starter">SCR</abbr> en Antiparalelo</h4>
     <ul>
       <li>2 SCR por fase (uno para semiciclo positivo, otro para negativo)</li>
       <li>Control por <strong>ángulo de disparo α</strong>: retarda el pulso de encendido respecto al cruce por cero</li>
@@ -1259,7 +1415,7 @@ tr:nth-child(even) td{background:#f8fafc}
         <li>Paralelo a los tiristores SCR</li>
         <li>Cierra al 100% de V_nominal — deriva corriente por cobre macizo</li>
         <li><strong>Beneficio 1:</strong> elimina pérdidas térmicas de SCR (1.2-1.5 V / &gt;400 W a 100 A)</li>
-        <li><strong>Beneficio 2:</strong> alimentación directa desde senoide pura → cero armónicos EMI/RFI</li>
+        <li><strong>Beneficio 2:</strong> alimentación directa desde senoide pura → cero armónicos <abbr title="Electromagnetic Interference — Interferencia Electromagnética">EMI</abbr>/RFI</li>
       </ul>
     </div>
   </div>
@@ -1280,6 +1436,15 @@ tr:nth-child(even) td{background:#f8fafc}
     <strong>🔎 Cómo leer la animación del SCR:</strong> El slider ajusta el ángulo α (0° a 150°). La zona gris a la izquierda de α es la zona bloqueada (SCR apagado); la zona azul a la derecha es la zona conductora. La curva gris fina es la senoide completa de referencia; la curva azul gruesa es la tensión recortada que llega al motor. El readout inferior muestra V_rms calculado con la fórmula exacta y el par estimado como (V_rms/400)²×100%.
   </div>
 
+  <div class="card card-yellow exception-card">
+    <div class="ex-badge">⚠️ Soft Starter vs VFD</div>
+    <ul>
+      <li><strong>Soft starter:</strong> arranque/parada progresiva, tensión variable a 50Hz. No regula velocidad en régimen sostenido.</li>
+      <li><strong>VFD:</strong> frecuencia y tensión variables → control de velocidad y proceso continuo.</li>
+      <li><strong>V/f (escalar):</strong> bombas/ventiladores, multimotor. No requiere encoder.</li>
+      <li><strong>FOC (vectorial):</strong> dinámica rápida, par pleno a 0 RPM → grúas, elevadores, bobinadoras.</li>
+    </ul>
+  </div>
 </div>
 </div><!-- /p3 -->
 
@@ -1297,14 +1462,14 @@ tr:nth-child(even) td{background:#f8fafc}
 
   <div class="card card-yellow fundamentos-block">
     <h4>🔎 Conceptos Previos — ¿Por qué importa esto?</h4>
-    <p>Un variador de frecuencia (VFD) permite controlar la velocidad del motor asíncrono cambiando la frecuencia de la tensión de alimentación. Para hacerlo, primero convierte la AC de red a DC (rectificador), luego almacena esa energía en condensadores (bus DC), y finalmente reconstruye una AC de la frecuencia y tensión deseadas mediante transistores IGBT que conmutan muy rápido (modulación SPWM).</p>
+    <p>Un variador de frecuencia (VFD) permite controlar la velocidad del motor asíncrono cambiando la frecuencia de la tensión de alimentación. Para hacerlo, primero convierte la AC de red a DC (rectificador), luego almacena esa energía en condensadores (bus DC), y finalmente reconstruye una AC de la frecuencia y tensión deseadas mediante transistores <abbr title="Insulated Gate Bipolar Transistor — Conmutador de potencia del inversor VFD">IGBT</abbr> que conmutan muy rápido (modulación <abbr title="Sinusoidal Pulse Width Modulation — Modulación senoidal de los IGBT del VFD">SPWM</abbr>).</p>
     <p><strong>Analogía:</strong> Es como un adaptador de enchufes de viaje súper inteligente: convierte la corriente alterna de la pared (400V/50Hz) en corriente continua (como una batería de 565V), y luego la 'reinventa' como corriente alterna de cualquier frecuencia y tensión que el motor necesite.</p>
   </div>
 
   <!-- ANIMACIÓN VFD BLOQUES -->
   <div class="canvas-wrap">
     <canvas id="vfdCanvas" width="700" height="200"></canvas>
-    <p>Arquitectura interna del VFD: Rectificador → Bus DC → Inversor IGBT (clic en cada etapa para más info)</p>
+    <p>Arquitectura interna del VFD: Rectificador → Bus DC → Inversor <abbr title="Insulated Gate Bipolar Transistor — Conmutador de potencia del inversor VFD">IGBT</abbr> (clic en cada etapa para más info)</p>
     <div id="vfdInfo" class="alert alert-info" style="text-align:left;margin-top:.6rem;display:none">
       <span class="ico">ℹ️</span><span id="vfdInfoText"></span>
     </div>
@@ -1312,7 +1477,7 @@ tr:nth-child(even) td{background:#f8fafc}
 
   <div class="canvas-wrap">
     <canvas id="vfdWaveCanvas" width="700" height="160" aria-label="Formas de onda internas del VFD"></canvas>
-    <p>Entrada trifásica, Bus DC con rizado y salida SPWM hacia el motor.</p>
+    <p>Entrada trifásica, Bus DC con rizado y salida <abbr title="Sinusoidal Pulse Width Modulation — Modulación senoidal de los IGBT del VFD">SPWM</abbr> hacia el motor.</p>
     <div class="anim-ctrl">
       <label class="control-label" for="vfdFrequency">Frecuencia de salida: <output id="vfdFrequencyOut">35 Hz</output></label>
       <input id="vfdFrequency" type="range" min="5" max="60" value="35" oninput="setVFDFrequency(Number(this.value))"/>
@@ -1342,10 +1507,10 @@ tr:nth-child(even) td{background:#f8fafc}
   </div>
 
   <div class="card card-purple">
-    <h4>③ Etapa Inversora IGBT + SPWM</h4>
+    <h4>③ Etapa Inversora <abbr title="Insulated Gate Bipolar Transistor — Conmutador de potencia del inversor VFD">IGBT</abbr> + <abbr title="Sinusoidal Pulse Width Modulation — Modulación senoidal de los IGBT del VFD">SPWM</abbr></h4>
     <ul>
       <li>Puente de 6 transistores IGBT + diodos freewheeling en antiparalelo</li>
-      <li>Modulación <strong>SPWM</strong>: compara portadora triangular (2-16 kHz) con moduladora senoidal</li>
+      <li>Modulación <strong><abbr title="Sinusoidal Pulse Width Modulation — Modulación senoidal de los IGBT del VFD">SPWM</abbr></strong>: compara portadora triangular (2-16 kHz) con moduladora senoidal</li>
       <li>Genera CA de cualquier frecuencia y tensión en las 3 fases del motor</li>
     </ul>
   </div>
@@ -1390,13 +1555,13 @@ tr:nth-child(even) td{background:#f8fafc}
   </div>
 
   <!-- 4.2 CONTROL V/f vs FOC -->
-  <div class="stitle"><span class="ico">📊</span> 4.2 — Control Escalar V/f vs Control Vectorial FOC</div>
+  <div class="stitle"><span class="ico">📊</span> 4.2 — Control Escalar V/f vs Control Vectorial <abbr title="Field Oriented Control — Control Vectorial: desacopla flujo (Id) y par (Iq), par pleno a 0 RPM">FOC</abbr></div>
 
 
   <div class="card card-yellow fundamentos-block">
     <h4>🔎 Conceptos Previos — ¿Por qué importa esto?</h4>
-    <p>Para controlar la velocidad del motor sin que el par se degrade, hay que mantener constante el flujo magnético en el entrehierro (Φ). Como Φ ∝ V/f, si bajamos la frecuencia (reducimos velocidad) debemos bajar la tensión proporcionalmente para mantener Φ constante. Esto es el control escalar V/f. El control vectorial FOC va más allá: separando matemáticamente el 'componente de flujo' (Id) del 'componente de par' (Iq) de la corriente, puede controlar cada uno independientemente, logrando respuesta dinámica ultrarrápida incluso a 0 rpm.</p>
-    <p><strong>Analogía:</strong> V/f es como conducir un auto con control de crucero básico: mantiene una relación fija velocidad/marcha que funciona bien en ruta (bombas, ventiladores). FOC es como el control de tracción activo de un auto deportivo: sabe exactamente cuánta fuerza aplica cada rueda y la ajusta en milisegundos para máxima performance.</p>
+    <p>Para controlar la velocidad del motor sin que el par se degrade, hay que mantener constante el flujo magnético en el entrehierro (Φ). Como Φ ∝ V/f, si bajamos la frecuencia (reducimos velocidad) debemos bajar la tensión proporcionalmente para mantener Φ constante. Esto es el control escalar V/f. El control vectorial <abbr title="Field Oriented Control — Control Vectorial: desacopla flujo (Id) y par (Iq), par pleno a 0 RPM">FOC</abbr> va más allá: separando matemáticamente el 'componente de flujo' (Id) del 'componente de par' (Iq) de la corriente, puede controlar cada uno independientemente, logrando respuesta dinámica ultrarrápida incluso a 0 rpm.</p>
+    <p><strong>Analogía:</strong> V/f es como conducir un auto con control de crucero básico: mantiene una relación fija velocidad/marcha que funciona bien en ruta (bombas, ventiladores). <abbr title="Field Oriented Control — Control Vectorial: desacopla flujo (Id) y par (Iq), par pleno a 0 RPM">FOC</abbr> es como el control de tracción activo de un auto deportivo: sabe exactamente cuánta fuerza aplica cada rueda y la ajusta en milisegundos para máxima performance.</p>
   </div>
 
   <div class="grid2">
@@ -1451,7 +1616,7 @@ tr:nth-child(even) td{background:#f8fafc}
 
   <!-- DESARROLLO TÉCNICO 4.2 -->
   <div class="deep-block">
-    <h4>🧪 Profundización: transformada de Clarke, transformada de Park y los lazos PID</h4>
+    <h4>🧪 Profundización: transformada de Clarke, transformada de Park y los lazos <abbr title="Proporcional-Integral-Derivativo — algoritmo de control en cascada del servodrive">PID</abbr></h4>
     <p>La <strong>Transformada de Clarke</strong> convierte las tres corrientes de fase del motor (i_a, i_b, i_c) en dos corrientes ortogonales fijas en el estator (i_α, i_β). Esta transformación reduce el problema de 3 variables dependientes a 2 variables independientes. La <strong>Transformada de Park</strong> rota el sistema de referencia (α-β) al sistema (d-q) que gira sincrónicamente con el flujo del rotor (a velocidad ωr). En el sistema d-q, las corrientes AC del motor aparecen como valores DC cuando el motor gira a velocidad constante — igual que en un motor CC con excitación separada. El componente d controla el flujo (Id); el componente q controla el par (Iq).</p>
     <p><strong>Field Weakening matemáticamente:</strong> En la zona base (f &lt; 50 Hz), la tensión sube linealmente con f para mantener Φ = cte. Cuando se alcanza la tensión máxima del inversor (~400 V), no es posible aumentar más V. Si seguimos subiendo f, el flujo Φ cae como 1/f. Como el par <code>T = k·Φ·Iq</code> y el flujo cayó, el par nominal cae con 1/f. El par máximo de vuelco (pull-out torque) depende del cuadrado de la tensión y del cuadrado del flujo, cayendo más rápido: con 1/f². La potencia mecánica <code>P = T·ω = cte</code> porque T·(1/f) × f = P_nominal = constante.</p>
     <p><strong>¿Cuándo usar V/f vs FOC?</strong> V/f es suficiente para bombas, ventiladores y compresores (par cuadrático ∝ n²) donde la precisión dinámica no es crítica. FOC con encoder es obligatorio para: grúas (par nominal a 0 rpm para retener la carga), bobinadoras (control de tensión de banda con par activo), ejes CNC (trayectoria interpolada con servo coordinado), y cualquier aplicación donde se requiera mantener par pleno a bajas o nulas velocidades.</p>
@@ -1466,7 +1631,7 @@ tr:nth-child(even) td{background:#f8fafc}
 
   <div class="card card-yellow fundamentos-block">
     <h4>🔎 Conceptos Previos — ¿Por qué importa esto?</h4>
-    <p>El motor paso a paso mueve en pasos discretos controlados digitalmente (lazo abierto: se asume que no pierde pasos). Es simple y económico para movimientos lentos y precisos. El servomotor AC tiene un encoder que siempre mide la posición real, cerrando el lazo: nunca pierde pasos y puede corregir errores en microsegundos. Los 3 lazos PID en cascada funcionan como supervisores anidados: el más interno (corriente) reacciona más rápido, el externo (posición) más lento, pero usa la información del interno.</p>
+    <p>El motor paso a paso mueve en pasos discretos controlados digitalmente (lazo abierto: se asume que no pierde pasos). Es simple y económico para movimientos lentos y precisos. El servomotor AC tiene un encoder que siempre mide la posición real, cerrando el lazo: nunca pierde pasos y puede corregir errores en microsegundos. Los 3 lazos <abbr title="Proporcional-Integral-Derivativo — algoritmo de control en cascada del servodrive">PID</abbr> en cascada funcionan como supervisores anidados: el más interno (corriente) reacciona más rápido, el externo (posición) más lento, pero usa la información del interno.</p>
     <p><strong>Analogía:</strong> El stepper es como un reloj analógico: el mecanismo avanza paso a paso de forma predecible (si funciona bien). El servomotor es como un reloj atómico con GPS: constantemente compara su posición real con la esperada y se corrige en nanosegundos.</p>
   </div>
 
@@ -1478,7 +1643,7 @@ tr:nth-child(even) td{background:#f8fafc}
         <tr><td>Wave Drive</td><td>1 fase a la vez</td><td>~70% nominal</td><td>Paso completo</td></tr>
         <tr><td>Full-Step</td><td>2 fases simultáneas</td><td>100% nominal</td><td>Paso completo (saltos bruscos)</td></tr>
         <tr><td>Half-Step</td><td>Alterna 1 y 2 fases (8 estados)</td><td>Intermedio</td><td>Medio paso — doble resolución</td></tr>
-        <tr><td><strong>Microstepping</strong></td><td>Modulación senoidal en cuadratura PWM</td><td>Continuo suave</td><td>Hasta 1/256 de paso</td></tr>
+        <tr><td><strong>Microstepping</strong></td><td>Modulación senoidal en cuadratura <abbr title="Pulse Width Modulation — Modulación por Ancho de Pulso">PWM</abbr></td><td>Continuo suave</td><td>Hasta 1/256 de paso</td></tr>
       </table>
     </div>
     <div class="kv" style="margin-top:.6rem">
@@ -1498,7 +1663,7 @@ tr:nth-child(even) td{background:#f8fafc}
   </div>
 
   <div class="card card-teal">
-    <h4>⚙️ Servomotor AC Brushless — 3 Lazos PID en Cascada</h4>
+    <h4>⚙️ Servomotor AC Brushless — 3 Lazos <abbr title="Proporcional-Integral-Derivativo — algoritmo de control en cascada del servodrive">PID</abbr> en Cascada</h4>
     <div class="tbl-wrap">
       <table>
         <tr><th>Lazo</th><th>Variable controlada</th><th>Frecuencia de muestreo</th><th>Función</th></tr>
@@ -1545,7 +1710,7 @@ tr:nth-child(even) td{background:#f8fafc}
   </div>
   <!-- DESARROLLO TÉCNICO 4.3 -->
   <div class="deep-block">
-    <h4>🧪 Profundización: resonancia del stepper, Código Gray y los 3 lazos PID del servo</h4>
+    <h4>🧪 Profundización: resonancia del stepper, Código Gray y los 3 lazos <abbr title="Proporcional-Integral-Derivativo — algoritmo de control en cascada del servodrive">PID</abbr> del servo</h4>
     <p>El motor paso a paso tiene una frecuencia de resonancia natural en torno a 100-300 PPS (pasos por segundo) dependiendo del momento de inercia de la carga. A esa frecuencia, la respuesta dinámica amplifica las oscilaciones angulares: el rotor overshoots cada paso y el sistema puede perder pasos o generar ruido mecánico severo. El <strong>microstepping</strong> resuelve esto inyectando corrientes senoidales en cuadratura (I_A = I_max·sin(θ), I_B = I_max·cos(θ)) que crean un campo casi continuo: el rotor se mueve suavemente sin la resonancia del campo discreto. El modo StealthChop (TMC2130/2208) lleva esto al extremo usando interpolación de 256 micropasos y detección de fuerza contraelectromotriz para regulación de corriente casi silenciosa.</p>
     <p><strong>Código Gray y por qué evita glitches:</strong> En binario puro, al pasar de 7 (0111) a 8 (1000) cambian 4 bits simultáneamente. Durante la transición, si los bits no cambian exactamente al mismo tiempo (skew mecánico entre pistas del disco), se leen valores espurios como 0000, 0001, 0010... El Código Gray garantiza que entre dos posiciones adyacentes SOLO cambia 1 bit. Del 7 (0100 en Gray) al 8 (1100 en Gray) cambia un solo bit — no hay estados intermedios erróneos posibles.</p>
     <p><strong>Los 3 lazos PID en cascada del servo:</strong> El lazo de corriente es el más interno (10-20 kHz), controla el vector de corriente para producir el par ordenado — su ancho de banda define cuán rápido puede cambiar el par. El lazo de velocidad (1-4 kHz) usa la señal del encoder para regular la velocidad real; ajusta la referencia de corriente (par) del lazo interno. El lazo de posición (500-1000 Hz) compara la posición deseada (trayectoria del CNC/PLC) con la posición real del encoder; ajusta la referencia de velocidad del lazo intermedio. El lazo externo siempre debe ser más lento que el interno para evitar inestabilidad.</p>
@@ -1554,6 +1719,14 @@ tr:nth-child(even) td{background:#f8fafc}
     <strong>🔎 Cómo leer la animación del Encoder:</strong> Los tres canales A (azul), B (verde) y Z (rojo) se muestran como señales de onda cuadrada. Con giro horario, el canal A <em>adelanta</em> 90° al canal B. Con giro antihorario, B adelanta a A. El canal Z produce 1 pulso por vuelta completa (referencia de homing). Probá el botón "Invertir giro" y observá cómo cambia la cuadratura A-B.
   </div>
 
+  <div class="card card-yellow exception-card">
+    <div class="ex-badge">⚠️ Excepciones Encoders y Steppers</div>
+    <ul>
+      <li><strong>Encoder incremental:</strong> requiere homing al energizar; pierde posición si se corta la luz.</li>
+      <li><strong>Encoder absoluto:</strong> informa posición al encender. Multi-vuelta + batería conserva vueltas.</li>
+      <li><strong>Microstepping:</strong> reduce vibración y resonancias, NO garantiza exactitud mecánica absoluta (carga puede escorrerse un paso).</li>
+    </ul>
+  </div>
 </div>
 </div><!-- /p4 -->
 
@@ -1583,6 +1756,11 @@ tr:nth-child(even) td{background:#f8fafc}
   </div>
   <div id="m12Feedback" style="margin-top:.6rem;font-weight:700;font-size:.95rem"></div>
 
+  <div class="stitle" style="margin-top:2.5rem"><span class="ico">🗺️</span> Mapa Industrial Interactivo — Elegí y justificá</div>
+  <p style="margin-bottom:1rem;color:var(--gray-lt);font-size:.92rem">Resolvé los siete escenarios. La solución permanece oculta hasta que selecciones una tecnología y escribas una justificación.</p>
+  <div id="industrialMap" class="map-grid"></div>
+  <div id="industrialMapScore" class="chart-readout" aria-live="polite">Puntaje guardado: 0 / 7</div>
+
   <div class="stitle" style="margin-top:2.5rem"><span class="ico">🏆</span> Quiz Final — 15 Preguntas</div>
   <p style="margin-bottom:1rem;color:var(--gray-lt);font-size:.92rem">Cubriendo todos los ejercicios del parcial. Respondé todas y hacé clic en "Ver resultados".</p>
 
@@ -1594,13 +1772,22 @@ tr:nth-child(even) td{background:#f8fafc}
   </div>
   <div id="quizScore"></div>
 
+  <div class="stitle" style="margin-top:2.5rem"><span class="ico">🧠</span> Recuperación Activa — 5 preguntas clave</div>
+  <p style="margin-bottom:1rem;color:var(--gray-lt);font-size:.92rem">Una pregunta por módulo. Contestá sin mirar los apuntes y corregí al final.</p>
+  <div id="retrievalQuiz"></div>
+  <div class="quiz-actions">
+    <button class="btn btn-purple" type="button" onclick="submitRetrievalQuiz()">🧠 Corregir recuperación</button>
+    <button class="btn btn-gray" type="button" onclick="buildRetrievalQuiz(true)">↺ Reintentar</button>
+  </div>
+  <div id="retrievalFeedback" class="retrieval-feedback" aria-live="polite"></div>
+
 </div>
 </div><!-- /p5 -->
 
 <!-- ═══════════════════════════════════════════════
      PÁGINA 6: SIMULACRO INTERACTIVO
 ══════════════════════════════════════════════════ -->
-<div id="p6" class="page">
+<div id="p6-legacy" class="page">
 <div class="container">
 
   <div class="card card-blue" style="margin-bottom:1.5rem">
@@ -1654,7 +1841,7 @@ function showPage(id, btn) {
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
   if (id === 'p5') {
-    setTimeout(() => { buildSensorGame(); buildM12Game(); buildQuiz(); }, 100);
+    setTimeout(() => { buildSensorGame(); buildM12Game(); buildQuiz(); buildIndustrialMap(); buildRetrievalQuiz(); }, 100);
   }
 }
 
@@ -2126,13 +2313,26 @@ function drawStepperMotor(ctx, cx, cy, R, angle, label) {
   ctx.stroke();
 
   ctx.fillStyle = '#94a3b8'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'center';
-  ctx.fillText(label, cx, cy + R + 18);
+  boundedChartText(ctx,label,cx,cy + R + 18,'center','#94a3b8',false,Math.max(4,cx-R-22),Math.min(ctx.canvas.width-4,cx+R+22));
 }
 
 // ════════════════════ GRÁFICOS PEDAGÓGICOS Y EJES ════════════════════
 const chartColors = {blue:'#0369a1', teal:'#0d9488', green:'#15803d', orange:'#d97706', purple:'#7c3aed', red:'#b91c1c', grid:'#e2e8f0', text:'#374151'};
 function chartText(ctx, text, x, y, align='center', color=chartColors.text, bold=false) {
   ctx.fillStyle = color; ctx.font = `${bold ? 'bold ' : ''}11px Segoe UI`; ctx.textAlign = align; ctx.fillText(text, x, y);
+}
+function boundedChartText(ctx, text, x, y, align='center', color=chartColors.text, bold=false, minX=4, maxX=ctx.canvas.width-4, minY=12, maxY=ctx.canvas.height-4) {
+  ctx.save();
+  ctx.font = `${bold ? 'bold ' : ''}11px Segoe UI`;
+  const width = ctx.measureText(String(text)).width;
+  const half = align === 'center' ? width/2 : 0;
+  const left = align === 'right' ? width : half;
+  const right = align === 'left' ? width : half;
+  const safeX = Math.max(minX + left, Math.min(maxX - right, x));
+  const safeY = Math.max(minY, Math.min(maxY, y));
+  ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline = 'alphabetic';
+  ctx.fillText(String(text), safeX, safeY);
+  ctx.restore();
 }
 function chartLine(ctx, x1, y1, x2, y2, color=chartColors.grid, width=1, dash=[]) {
   ctx.strokeStyle = color; ctx.lineWidth = width; ctx.setLineDash(dash); ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.setLineDash([]);
@@ -2144,20 +2344,25 @@ const loopGraphC = document.getElementById('loopGraphCanvas');
 const loopGraphCtx = loopGraphC ? loopGraphC.getContext('2d') : null;
 function drawLoopGraph() {
   if (!loopGraphCtx) return;
-  const ctx=loopGraphCtx,W=loopGraphC.width,H=loopGraphC.height,L=50,R=50,T=28,B=24,pw=W-L-R,ph=H-T-B;
+  const ctx=loopGraphCtx,W=loopGraphC.width,H=loopGraphC.height,L=65,R=65,T=30,B=36,pw=W-L-R,ph=H-T-B;
   ctx.clearRect(0,0,W,H); ctx.fillStyle='#fff'; ctx.fillRect(0,0,W,H); chartTitle(ctx,'Curva de transferencia I-V del lazo 4-20 mA',W);
-  [0,25,50,75,100].forEach(v=>{const x=L+pw*v/100;chartLine(ctx,x,T,x,T+ph);chartText(ctx,v+'%',x,H-7)});
-  [0,4,12,20,24].forEach(v=>{const y=T+ph-ph*v/24;chartLine(ctx,L,y,L+pw,y,v===4||v===12||v===20?'#cbd5e1':chartColors.grid);chartText(ctx,String(v),L-7,y+3,'right')});
-  [0,1,3,5,6].forEach(v=>{const y=T+ph-ph*v/6;chartText(ctx,String(v),W-R+7,y+3,'left',chartColors.red)});
+  [0,25,50,75,100].forEach(v=>{const x=L+pw*v/100;chartLine(ctx,x,T,x,T+ph);boundedChartText(ctx,v+'%',x,T+ph+15,'center','#64748b',false,L,W-R)});
+  [0,4,12,20,24].forEach(v=>{const y=T+ph-ph*v/24;chartLine(ctx,L,y,L+pw,y,v===4||v===12||v===20?'#cbd5e1':chartColors.grid);boundedChartText(ctx,String(v),L-9,y+3,'right',chartColors.blue,false,3,L-4)});
+  [0,1,3,5,6].forEach(v=>{const y=T+ph-ph*v/6;boundedChartText(ctx,String(v),W-R+9,y+3,'left',chartColors.red,false,W-R+4,W-3)});
   chartLine(ctx,L,T+ph,L+pw,T+ph,'#64748b'); chartLine(ctx,L,T,L,T+ph,'#64748b'); chartLine(ctx,L+pw,T,L+pw,T+ph,chartColors.red);
-  chartText(ctx,'I (mA)',6,T+8,'left',chartColors.blue,true); chartText(ctx,'V_shunt (V)',W-3,T+8,'right',chartColors.red,true); chartText(ctx,'% Proceso',L+pw/2,H-7,'center','#64748b',true);
-  // Ideal transfer curves.
+  boundedChartText(ctx,'I (mA)',5,T+8,'left',chartColors.blue,true,4,L-8); boundedChartText(ctx,'V_shunt (V)',W-5,T+8,'right',chartColors.red,true,W-R+8,W-4);
+  boundedChartText(ctx,'% Proceso',L+pw/2,H-19,'center','#64748b',true,L,W-R);
+  ctx.save();
+  ctx.beginPath(); ctx.rect(L,T,pw,ph); ctx.clip();
   ctx.strokeStyle=chartColors.blue;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(L,T+ph-ph*4/24);ctx.lineTo(L+pw,T+ph-ph*20/24);ctx.stroke();
   ctx.strokeStyle=chartColors.red;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(L,T+ph-ph*1/6);ctx.lineTo(L+pw,T+ph-ph*5/6);ctx.stroke();
   const mA=loopFault?0:4+16*loopPct,x=L+pw*loopPct,y=T+ph-ph*mA/24;
   ctx.fillStyle=loopFault?chartColors.red:chartColors.blue;ctx.beginPath();ctx.arc(loopFault?L:x,y,5,0,Math.PI*2);ctx.fill();
-  chartText(ctx,loopFault?'NAMUR NE 43: < 3.6 mA = FALLA':`${Math.round(loopPct*100)}% · ${mA.toFixed(1)} mA · ${(mA*.25).toFixed(1)} V`,loopFault?L+8:Math.min(W-R-5,x+8),Math.max(T+10,y-7),loopFault?'left':'left',loopFault?chartColors.red:chartColors.blue,true);
-  chartText(ctx,'— I (mA)',L+4,T+9,'left',chartColors.blue); chartText(ctx,'— V_shunt (V)',L+82,T+9,'left',chartColors.red);
+  const rawAnnotation=loopFault?'NAMUR NE 43: < 3.6 mA = FALLA':`${Math.round(loopPct*100)}% · ${mA.toFixed(1)} mA · ${(mA*.25).toFixed(1)} V`;
+  const annotation=rawAnnotation.length>25?rawAnnotation.slice(0,22)+'...':rawAnnotation;
+  boundedChartText(ctx,annotation,loopFault?L+8:x+8,Math.max(T+14,y-8),'left',loopFault?chartColors.red:chartColors.blue,true,L+4,W-R-4,T+12,T+ph-4);
+  ctx.restore();
+  boundedChartText(ctx,'— I (mA)',L+8,H-5,'left',chartColors.blue,false,L,W-R); boundedChartText(ctx,'— V_shunt (V)',L+100,H-5,'left',chartColors.red,false,L,W-R);
 }
 
 // HART con escalas físicas, bit time y leyenda.
@@ -2167,16 +2372,16 @@ function animateHart() {
   hartCtx.clearRect(0,0,W,H);hartCtx.fillStyle='#f8fafc';hartCtx.fillRect(0,0,W,H);
   [-.5,0,.5].forEach(v=>{const y=mid-v*ph*.82;chartLine(hartCtx,L,y,W-R,y);chartText(hartCtx,(v>0?'+':'')+v.toFixed(1),L-8,y+3,'right')});
   chartLine(hartCtx,L,T+ph,W-R,T+ph,'#64748b');chartLine(hartCtx,L,T,L,T+ph,'#64748b');
-  chartText(hartCtx,'i(t) [mA]',7,T+8,'left',chartColors.purple,true);chartText(hartCtx,'t [ms]',L+pw/2,H-5,'center','#64748b',true);
+  boundedChartText(hartCtx,'i(t) [mA]',7,T+8,'left',chartColors.purple,true,4,L-7);boundedChartText(hartCtx,'t [ms]',L+pw/2,H-5,'center','#64748b',true,L,W-R);
   hartCtx.strokeStyle=chartColors.blue;hartCtx.lineWidth=2;hartCtx.setLineDash([5,3]);hartCtx.beginPath();hartCtx.moveTo(L,mid);hartCtx.lineTo(W-R,mid);hartCtx.stroke();hartCtx.setLineDash([]);
   const pxBit=pw/hartBits.length;
   // Draw bit markers before opening the waveform path; chartLine() begins its own path.
   hartBits.forEach((bit,i)=>{chartLine(hartCtx,L+i*pxBit,T+ph,L+i*pxBit,T+ph+4,'#64748b');chartText(hartCtx,(i*.833).toFixed(1),L+i*pxBit,H-17,'center','#64748b');chartText(hartCtx,String(bit),L+(i+.5)*pxBit,T+10,'center',bit?chartColors.purple:chartColors.orange,true)});
   hartCtx.strokeStyle=chartColors.purple;hartCtx.lineWidth=2;hartCtx.beginPath();
   hartBits.forEach((bit,i)=>{const cycles=bit?1:2200/1200;for(let px=0;px<=pxBit;px++){const x=L+i*pxBit+px,y=mid-Math.sin(px/pxBit*cycles*Math.PI*2+hartPhase*(bit?1:2))*ph*.37;if(i===0&&px===0)hartCtx.moveTo(x,y);else hartCtx.lineTo(x,y)}});hartCtx.stroke();
-  chartText(hartCtx,'I_DC = 12 mA (componente analógica)',W-R,mid-7,'right',chartColors.blue,true);
-  chartText(hartCtx,'- - Señal DC 4-20 mA (PLC lee esto)',L+4,13,'left',chartColors.blue);chartText(hartCtx,'— FSK HART ±0.5 mA (filtrada por PLC)',L+210,13,'left',chartColors.purple);
-  chartText(hartCtx,"1200 Hz = bit '1' | 2200 Hz = bit '0'",L+4,28,'left','#475569');chartText(hartCtx,'Filtro pasabajos PLC: f_corte < 25 Hz — elimina FSK completamente',W-R,28,'right',chartColors.green,true);
+  boundedChartText(hartCtx,'I_DC = 12 mA (componente analógica)',W-R,mid-7,'right',chartColors.blue,true,L,W-R);
+  boundedChartText(hartCtx,'- - Señal DC 4-20 mA (PLC lee esto)',L+4,13,'left',chartColors.blue,false,L,W-R);boundedChartText(hartCtx,'— FSK HART ±0.5 mA',W-R,13,'right',chartColors.purple,false,L,W-R);
+  boundedChartText(hartCtx,"1200 Hz = bit '1' | 2200 Hz = bit '0'",L+4,28,'left','#475569',false,L,W-R);boundedChartText(hartCtx,'Filtro PLC: f_corte < 25 Hz · elimina FSK',W-R,28,'right',chartColors.green,true,L,W-R);
   hartPhase+=.08;hartAnim=requestAnimationFrame(animateHart);
 }
 
@@ -2189,13 +2394,13 @@ function animateCMG(){
   cmgCtx.fillStyle='#1e293b';cmgCtx.beginPath();cmgCtx.arc(cx,cy,R+8,0,Math.PI*2);cmgCtx.fill();
   const phases=[{c:'#ef4444',a:0,n:'L1 (R) - Fase A'},{c:'#22c55e',a:2*Math.PI/3,n:'L2 (S) - Fase B'},{c:'#3b82f6',a:4*Math.PI/3,n:'L3 (T) - Fase C'}];
   phases.forEach((p,i)=>{const amp=Math.cos(t-i*2*Math.PI/3),vx=Math.cos(p.a)*amp*R*.85,vy=Math.sin(p.a)*amp*R*.85;chartLine(cmgCtx,cx-Math.cos(p.a)*R,cy-Math.sin(p.a)*R,cx+Math.cos(p.a)*R,cy+Math.sin(p.a)*R,'#475569');chartLine(cmgCtx,cx,cy,cx+vx,cy+vy,p.c,2)});
-  const bx=Math.cos(t)*R*.72,by=Math.sin(t)*R*.72;chartLine(cmgCtx,cx,cy,cx+bx,cy+by,'#fbbf24',4);chartText(cmgCtx,'B_total = 1.5·Bmax',cx,238,'center','#92400e',true);
-  cmgCtx.strokeStyle='#fbbf24';cmgCtx.lineWidth=2;cmgCtx.beginPath();cmgCtx.arc(cx,cy,R-13,-1.1,.2);cmgCtx.stroke();chartText(cmgCtx,`ns ↻ ${cmgFrequency===50?'1500':'1800'} rpm`,cx,22,'center',chartColors.blue,true);
+  const bx=Math.cos(t)*R*.72,by=Math.sin(t)*R*.72;chartLine(cmgCtx,cx,cy,cx+bx,cy+by,'#fbbf24',4);boundedChartText(cmgCtx,'B_total = 1.5·Bmax',cx,238,'center','#92400e',true,8,plotX-10);
+  cmgCtx.strokeStyle='#fbbf24';cmgCtx.lineWidth=2;cmgCtx.beginPath();cmgCtx.arc(cx,cy,R-13,-1.1,.2);cmgCtx.stroke();boundedChartText(cmgCtx,`ns ↻ ${cmgFrequency===50?'1500':'1800'} rpm`,cx,22,'center',chartColors.blue,true,8,plotX-10);
   cmgCtx.fillStyle='#f8fafc';cmgCtx.fillRect(plotX,plotY,plotW,plotH);
   [-1,-.5,0,.5,1].forEach(v=>{const y=plotY+plotH/2-v*plotH*.42;chartLine(cmgCtx,plotX,y,plotX+plotW,y);chartText(cmgCtx,String(v),plotX-7,y+3,'right')});
   const xt=[['0',0],['π/2',.25],['π',.5],['3π/2',.75],['2π',1]];xt.forEach(([n,q])=>{const x=plotX+plotW*q;chartLine(cmgCtx,x,plotY,x,plotY+plotH);chartText(cmgCtx,n,x,plotY+plotH+16)});
-  chartText(cmgCtx,'B/B_max',plotX-42,plotY+8,'left',chartColors.text,true);chartText(cmgCtx,'ωt (rad)',plotX+plotW/2,H-7,'center',chartColors.text,true);
-  phases.forEach((p,i)=>{cmgCtx.strokeStyle=p.c;cmgCtx.lineWidth=2;cmgCtx.beginPath();for(let x=0;x<=plotW;x++){const a=x/plotW*Math.PI*2+t,y=plotY+plotH/2-Math.cos(a-i*2*Math.PI/3)*plotH*.42;x?cmgCtx.lineTo(plotX+x,y):cmgCtx.moveTo(plotX,y)}cmgCtx.stroke();chartText(cmgCtx,'■ '+p.n,plotX+i*94,34,'left',p.c)});
+  boundedChartText(cmgCtx,'B/B_max',plotX-42,plotY+8,'left',chartColors.text,true,plotX-48,plotX-4);boundedChartText(cmgCtx,'ωt (rad)',plotX+plotW/2,H-7,'center',chartColors.text,true,plotX,W-8);
+  phases.forEach((p,i)=>{cmgCtx.strokeStyle=p.c;cmgCtx.lineWidth=2;cmgCtx.beginPath();for(let x=0;x<=plotW;x++){const a=x/plotW*Math.PI*2+t,y=plotY+plotH/2-Math.cos(a-i*2*Math.PI/3)*plotH*.42;x?cmgCtx.lineTo(plotX+x,y):cmgCtx.moveTo(plotX,y)}cmgCtx.stroke();boundedChartText(cmgCtx,'■ '+p.n,plotX+i*94,34,'left',p.c,false,plotX,W-5)});
   cmgAngle+=.025*(cmgFrequency/50);cmgAnim=requestAnimationFrame(animateCMG);
 }
 
@@ -2203,13 +2408,13 @@ function animateCMG(){
 const ydCurveC=document.getElementById('ydCurveCanvas'),ydCurveCtx=ydCurveC?ydCurveC.getContext('2d'):null;
 function ydCurrentAt(t){if(t<=180)return 1/3;if(t<=200)return .33+1.47*Math.sin((t-180)/20*Math.PI);return 1;}
 function drawYDCurve(time=ydTime,state=ydState){
-  if(!ydCurveCtx)return;const ctx=ydCurveCtx,W=ydCurveC.width,H=ydCurveC.height,L=55,R=18,T=24,B=28,pw=W-L-R,ph=H-T-B;
+  if(!ydCurveCtx)return;const ctx=ydCurveCtx,W=ydCurveC.width,H=ydCurveC.height,L=55,R=24,T=38,B=32,pw=W-L-R,ph=H-T-B;
   ctx.clearRect(0,0,W,H);ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.fillStyle='#e0f2fe';ctx.fillRect(L,T,pw*180/300,ph);ctx.fillStyle='#ffedd5';ctx.fillRect(L+pw*180/300,T,pw*20/300,ph);ctx.fillStyle='#dcfce7';ctx.fillRect(L+pw*200/300,T,pw*100/300,ph);
   [[0,'0%'],[1/3,'33%'],[1,'100%'],[1.8,'180%']].forEach(([v,n])=>{const y=T+ph-ph*v/2;chartLine(ctx,L,y,W-R,y,v===1?'#64748b':chartColors.grid,1,v===1?[4,3]:[]);chartText(ctx,n,L-7,y+3,'right')});
-  [0,60,120,180,240,300].forEach(v=>{const x=L+pw*v/300;chartLine(ctx,x,T,x,T+ph);chartText(ctx,String(v),x,H-8)});chartText(ctx,'I / I_DOL (%)',5,T+8,'left',chartColors.text,true);chartText(ctx,'t [ciclos de red]',L+pw/2,H-7,'center',chartColors.text,true);
+  [0,60,120,180,240,300].forEach(v=>{const x=L+pw*v/300;chartLine(ctx,x,T,x,T+ph);boundedChartText(ctx,String(v),x,H-17,'center','#64748b',false,L,W-R)});boundedChartText(ctx,'I / I_DOL (%)',5,T+8,'left',chartColors.text,true,4,L-7);boundedChartText(ctx,'t [ciclos de red]',L+pw/2,H-5,'center',chartColors.text,true,L,W-R);
   ctx.strokeStyle=chartColors.blue;ctx.lineWidth=2;ctx.beginPath();for(let t=0;t<=Math.min(time,300);t++){const x=L+pw*t/300,y=T+ph-ph*ydCurrentAt(t)/2;t?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke();
   const ct=Math.min(time,300),cv=state==='idle'?0:ydCurrentAt(ct),x=L+pw*ct/300,y=T+ph-ph*cv/2;ctx.fillStyle=chartColors.red;ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();
-  chartText(ctx,'Y: I = 1/3 · I_DOL',L+pw*.16,T+13,'center',chartColors.blue,true);chartText(ctx,'Pico transitorio',L+pw*.633,T+13,'center',chartColors.orange,true);chartText(ctx,'Δ: I = I_DOL',L+pw*.83,T+13,'center',chartColors.green,true);
+  boundedChartText(ctx,'Y: I = 1/3 · I_DOL',L+pw*.16,T-9,'center',chartColors.blue,true,L,L+pw*.58);boundedChartText(ctx,'Pico transitorio',L+pw*.633,T-9,'center',chartColors.orange,true,L+pw*.55,L+pw*.71);boundedChartText(ctx,'Δ: I = I_DOL',L+pw*.83,T-9,'center',chartColors.green,true,L+pw*.7,W-R);
 }
 function animateYD(){
   if(!ydCtx)return;const W=ydC.width,H=ydC.height,totalT=300,switchT=180;ydCtx.clearRect(0,0,W,H);ydCtx.fillStyle='#f8fafc';ydCtx.fillRect(0,0,W,H);
@@ -2224,10 +2429,10 @@ function animateYD(){
 // Soft-starter: senoide recortada por α y estimación RMS/par.
 const scrC=document.getElementById('scrCanvas'),scrCtx=scrC?scrC.getContext('2d'):null;
 function drawSCR(degrees=120){
-  if(!scrCtx)return;const ctx=scrCtx,W=scrC.width,H=scrC.height,L=55,R=18,T=25,B=32,pw=W-L-R,ph=H-T-B,mid=T+ph/2,a=degrees*Math.PI/180;
+  if(!scrCtx)return;const ctx=scrCtx,W=scrC.width,H=scrC.height,L=55,R=22,T=38,B=34,pw=W-L-R,ph=H-T-B,mid=T+ph/2,a=degrees*Math.PI/180;
   ctx.clearRect(0,0,W,H);ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);chartTitle(ctx,'Control de tensión por ángulo de disparo α',W);
   [-400,-200,0,200,400].forEach(v=>{const y=mid-v/400*ph*.43;chartLine(ctx,L,y,W-R,y);chartText(ctx,String(v),L-7,y+3,'right')});[0,30,60,90,120,150,180].forEach(v=>{const x=L+pw*v/180;chartLine(ctx,x,T,x,T+ph);chartText(ctx,v+'°',x,H-10)});chartText(ctx,'V_AC (V)',5,T+8,'left',chartColors.text,true);chartText(ctx,'Ángulo de disparo α',L+pw/2,H-8,'center',chartColors.text,true);
-  const blockedX=L+pw*degrees/180;ctx.fillStyle='rgba(148,163,184,.22)';ctx.fillRect(L,T,blockedX-L,ph);ctx.fillStyle='rgba(2,132,199,.12)';ctx.fillRect(blockedX,T,W-R-blockedX,ph);chartText(ctx,'SCR bloqueado',L+(blockedX-L)/2,T+14,'center','#64748b',true);chartText(ctx,'SCR conduce',blockedX+(W-R-blockedX)/2,T+14,'center',chartColors.blue,true);
+  const blockedX=L+pw*degrees/180;ctx.fillStyle='rgba(148,163,184,.22)';ctx.fillRect(L,T,blockedX-L,ph);ctx.fillStyle='rgba(2,132,199,.12)';ctx.fillRect(blockedX,T,W-R-blockedX,ph);if(blockedX-L>75)boundedChartText(ctx,'SCR bloqueado',L+(blockedX-L)/2,T+14,'center','#64748b',true,L+3,blockedX-3);if(W-R-blockedX>68)boundedChartText(ctx,'SCR conduce',blockedX+(W-R-blockedX)/2,T+14,'center',chartColors.blue,true,blockedX+3,W-R-3);
   ctx.strokeStyle='#94a3b8';ctx.lineWidth=1.5;ctx.beginPath();for(let x=0;x<=pw;x++){const th=x/pw*Math.PI*2,y=mid-Math.sin(th)*ph*.43;x?ctx.lineTo(L+x,y):ctx.moveTo(L,y)}ctx.stroke();
   ctx.strokeStyle=chartColors.blue;ctx.lineWidth=3;ctx.beginPath();let started=false;for(let x=0;x<=pw;x++){const th=x/pw*Math.PI*2,half=th<=Math.PI?th:th-Math.PI,conduct=half>=a,y=conduct?mid-Math.sin(th)*ph*.43:mid;if(!started){ctx.moveTo(L+x,y);started=true}else ctx.lineTo(L+x,y)}ctx.stroke();
   const factor=Math.sqrt(Math.max(0,(Math.PI-a+Math.sin(2*a)/2)/(Math.PI))),vrms=400*factor,torque=factor*factor*100;document.getElementById('scrAngleOut').textContent=degrees+'°';document.getElementById('scrReadout').textContent=`V_rms = ${vrms.toFixed(0)} V | Par estimado ~ ${torque.toFixed(0)}%`;
@@ -2241,9 +2446,9 @@ function updateVFDReadout(){const volts=Math.min(400,vfdOutputFrequency*8),el=do
 function toggleVFDWave(){if(vfdWaveRunning){vfdWaveRunning=false;if(vfdWaveAnim)cancelAnimationFrame(vfdWaveAnim);vfdWaveAnim=null;document.getElementById('vfdWaveBtn').textContent='▶ Animar ondas'}else{vfdWaveRunning=true;document.getElementById('vfdWaveBtn').textContent='⏸ Pausar ondas';drawVFDWave()}}
 function drawVFDWave(){
   if(!vfdWaveCtx)return;const ctx=vfdWaveCtx,W=vfdWaveC.width,H=vfdWaveC.height,gap=10,pw=(W-4*gap)/3,top=30,base=100,amp=35;ctx.clearRect(0,0,W,H);ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
-  const titles=['Entrada: CA 400V / 50Hz','Bus DC: 565 Vcc','Salida SPWM → motor'];titles.forEach((t,i)=>{const x=gap+i*(pw+gap);ctx.fillStyle='#f8fafc';ctx.fillRect(x,top,pw,95);chartText(ctx,t,x+pw/2,18,'center','#1e293b',true);chartLine(ctx,x,base,x+pw,base)});
+  const titles=['Entrada: CA 400V / 50Hz','Bus DC: 565 Vcc','Salida SPWM → motor'];titles.forEach((t,i)=>{const x=gap+i*(pw+gap);ctx.fillStyle='#f8fafc';ctx.fillRect(x,top,pw,95);boundedChartText(ctx,t,x+pw/2,18,'center','#1e293b',true,x+3,x+pw-3);chartLine(ctx,x,base,x+pw,base)});
   ['#ef4444','#22c55e','#3b82f6'].forEach((c,p)=>{ctx.strokeStyle=c;ctx.lineWidth=1.5;ctx.beginPath();for(let x=0;x<=pw;x++){const y=base-Math.sin(x/pw*Math.PI*4+vfdWavePhase-p*2*Math.PI/3)*amp;x?ctx.lineTo(gap+x,y):ctx.moveTo(gap,y)}ctx.stroke()});
-  const x2=2*gap+pw;ctx.strokeStyle=chartColors.purple;ctx.lineWidth=2;ctx.beginPath();for(let x=0;x<=pw;x++){const y=55+Math.sin(x/pw*Math.PI*12+vfdWavePhase)*2;x?ctx.lineTo(x2+x,y):ctx.moveTo(x2,y)}ctx.stroke();chartText(ctx,'565 Vcc + rizado 300 Hz',x2+pw/2,118,'center',chartColors.purple);
+  const x2=2*gap+pw;ctx.strokeStyle=chartColors.purple;ctx.lineWidth=2;ctx.beginPath();for(let x=0;x<=pw;x++){const y=55+Math.sin(x/pw*Math.PI*12+vfdWavePhase)*2;x?ctx.lineTo(x2+x,y):ctx.moveTo(x2,y)}ctx.stroke();boundedChartText(ctx,'565 Vcc + rizado 300 Hz',x2+pw/2,118,'center',chartColors.purple,false,x2+3,x2+pw-3);
   const x3=3*gap+2*pw,ratio=vfdOutputFrequency/50;ctx.strokeStyle=chartColors.green;ctx.lineWidth=1.5;ctx.beginPath();for(let x=0;x<=pw;x++){const carrier=Math.sin(x*.48+vfdWavePhase*5),mod=Math.sin(x/pw*Math.PI*4*ratio+vfdWavePhase),y=base-(carrier<mod?1:-1)*amp;x?ctx.lineTo(x3+x,y):ctx.moveTo(x3,y)}ctx.stroke();chartText(ctx,`${vfdOutputFrequency} Hz · ${Math.min(400,vfdOutputFrequency*8)} V`,x3+pw/2,118,'center',vfdOutputFrequency>50?chartColors.orange:chartColors.green,true);
   vfdWavePhase+=.035;if(vfdWaveRunning)vfdWaveAnim=requestAnimationFrame(drawVFDWave);
 }
@@ -2518,7 +2723,8 @@ function resetQuiz() {
   buildQuiz();
 }
 
-// ════════════════════ SIMULACRO ════════════════════
+// ════════════════════ SIMULACRO LEGACY (encapsulado) ════════════════════
+(function legacySimulacroScope(){
 const simDataBlocks = [
   {
     id: 'simBlock1',
@@ -2814,10 +3020,11 @@ function resetSimulacro() {
 const _origShowPage = showPage;
 window.showPage = function(id, btn) {
   _origShowPage(id, btn);
-  if (id === 'p6') {
+  if (id === 'p6-legacy') {
     setTimeout(() => buildSimulacro(), 100);
   }
 };
+})();
 
 // VFD click info
 if (vfdC) {
@@ -2836,6 +3043,1169 @@ if (vfdC) {
     }
   });
 }
+
+// ════════════════════ SIMULACRO ════════════════════
+const simObjQuestions = [1, 3, 5, 6, 8, 10, 12, 13, 15]; // Q numbers that are objective
+const simCorrect = {1:1, 3:2, 5:2, 6:1, 8:1, 10:1, 12:1, 13:2, 15:2}; // 0-indexed correct option
+let simAnswers = {}, simDone = false;
+
+function simSelect(qNum, optIdx) {
+  if (simDone) return;
+  simAnswers[qNum] = optIdx;
+  const opts = document.querySelectorAll(`#simOpts${qNum} .sim-opt`);
+  opts.forEach(o => o.classList.remove('selected'));
+  if (opts[optIdx]) opts[optIdx].classList.add('selected');
+  updateSimProgress();
+}
+
+function updateSimProgress() {
+  const answered = simObjQuestions.filter(q => simAnswers[q] !== undefined).length;
+  const el = document.getElementById('simProgressTxt');
+  if (el) el.textContent = `${answered} / ${simObjQuestions.length} objetivas respondidas`;
+}
+
+function submitSimulacro() {
+  simDone = true;
+  let score = 0;
+  const objQs = [1, 3, 5, 6, 8, 10, 12, 13, 15];
+  const failedErrors = [];
+  
+  objQs.forEach(qNum => {
+    const ans = simAnswers[qNum];
+    const correct = simCorrect[qNum];
+    const opts = document.querySelectorAll(`#simOpts${qNum} .sim-opt`);
+    opts.forEach((o, i) => {
+      o.classList.remove('selected', 'correct', 'wrong', 'unanswered');
+      if (i === correct) o.classList.add('correct');
+      else if (i === ans && ans !== correct) o.classList.add('wrong');
+    });
+    
+    const expEl = document.getElementById('simExp' + qNum);
+    const repEl = document.getElementById('simRep' + qNum);
+    
+    if (ans === correct) {
+      score++;
+      if (expEl) expEl.classList.add('show');
+    } else if (ans === undefined) {
+      if (opts[0]) opts[0].parentElement && opts.forEach(o => { if (!o.classList.contains('correct')) o.classList.add('unanswered') });
+      if (repEl) repEl.classList.add('show');
+    } else {
+      if (expEl) expEl.classList.add('show');
+      if (repEl) repEl.classList.add('show');
+    }
+    if (ans !== correct) {
+      failedErrors.push({
+        id:`sim-${qNum}`,
+        section:qNum <= 5 ? 'Instrumentación' : qNum <= 9 ? 'Seguridad y Sensores' : 'Motores y Drives',
+        question:(document.querySelector(`#simq${qNum} .sim-q-text`) || {}).textContent || `Pregunta ${qNum}`,
+        answer:ans === undefined ? 'Sin responder' : (opts[ans] || {}).textContent || 'Respuesta incorrecta',
+        correct:(opts[correct] || {}).textContent || 'Consultar respuesta correcta'
+      });
+    }
+  });
+  saveStudyErrors(failedErrors);
+
+  // Discursive questions
+  const discQs = [2, 4, 7, 9, 11, 14, 16];
+  discQs.forEach(qNum => {
+    const ta = document.getElementById('simTA' + qNum);
+    const warn = document.getElementById('simWarn' + qNum);
+    const pat = document.getElementById('simPat' + qNum);
+    if (!ta) return;
+    if (ta.value.trim().length < 10) {
+      if (warn) warn.classList.add('show');
+    } else {
+      if (pat) pat.classList.add('show');
+    }
+  });
+
+  const totalObj = objQs.length;
+  const pct = Math.round(score / totalObj * 100);
+  const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '😊' : pct >= 50 ? '📖' : '💪';
+  const msg = pct >= 90 ? '¡Excelente dominio! Listo para el parcial.' : pct >= 70 ? 'Muy bien — repasá los errores.' : pct >= 50 ? 'Bien encaminado, seguí practicando.' : 'Dedicá más tiempo a los temas fallados.';
+  const blockGroups = [
+    {name:'Bloque 1 · Instrumentación', qs:[1,3,5]},
+    {name:'Bloque 2 · Seguridad y Sensores', qs:[6,8]},
+    {name:'Bloque 3 · Motores y Drives', qs:[10,12,13,15]}
+  ];
+  const blockResults = blockGroups.map(block => ({...block, ok:block.qs.filter(q => simAnswers[q] === simCorrect[q]).length}));
+  const blockResultsEl = document.getElementById('simBlockResults');
+  if (blockResultsEl) blockResultsEl.innerHTML = '<strong>Resultado del bloque:</strong><br>' + blockResults.map(block => `<span class="block-result">${block.name}: ${block.ok}/${block.qs.length}</span>`).join('');
+
+  document.getElementById('simScoreBox').innerHTML = `
+    <div class="sim-score-final">
+      <div style="font-size:3rem">${emoji}</div>
+      <h3>${score} / ${totalObj} objetivas — ${pct}%</h3>
+      <p>${msg}</p>
+      <div class="sim-manual-note">✍️ Esta respuesta requiere revisión manual — anotá para revisar con el docente. Aplica a las 7 preguntas discursivas.</div>
+    </div>
+  `;
+
+  document.getElementById('simSubmitBtn').style.display = 'none';
+  document.getElementById('simResetBtn').style.display = 'inline-block';
+}
+
+function resetSimulacro() {
+  simAnswers = {}; simDone = false;
+  
+  // Reset objective questions
+  [1,3,5,6,8,10,12,13,15].forEach(qNum => {
+    const opts = document.querySelectorAll(`#simOpts${qNum} .sim-opt`);
+    opts.forEach(o => o.className = 'sim-opt');
+    const expEl = document.getElementById('simExp' + qNum);
+    const repEl = document.getElementById('simRep' + qNum);
+    if (expEl) expEl.classList.remove('show');
+    if (repEl) repEl.classList.remove('show');
+    const inputs = document.querySelectorAll(`[name="simq${qNum}"]`);
+    inputs.forEach(i => i.checked = false);
+  });
+
+  // Reset discursive questions
+  [2,4,7,9,11,14,16].forEach(qNum => {
+    const ta = document.getElementById('simTA' + qNum);
+    const warn = document.getElementById('simWarn' + qNum);
+    const pat = document.getElementById('simPat' + qNum);
+    if (ta) ta.value = '';
+    if (warn) warn.classList.remove('show');
+    if (pat) pat.classList.remove('show');
+  });
+
+  document.getElementById('simScoreBox').innerHTML = '';
+  document.getElementById('simSubmitBtn').style.display = 'inline-block';
+  document.getElementById('simResetBtn').style.display = 'none';
+  updateSimProgress();
+  document.getElementById('p7').scrollIntoView({behavior:'smooth'});
+}
+
+// ════════════════════ MAPA INDUSTRIAL INTERACTIVO ════════════════════
+const industrialScenarios = [
+  {id:'map-1',title:'Tanque de proceso a 250 m del panel, junto a variadores',prompt:'Elegí la señal de transmisión más robusta.',options:['0-10 V','4-20 mA','Señal directa de termocupla'],correct:1,answer:'4-20 mA',explanation:'La corriente se conserva en el lazo serie y resiste mejor las caídas de cable y el ruido EMI. 0-10 V es más sensible a ambos problemas.'},
+  {id:'map-2',title:'Alarma de tanque lleno en un punto fijo',prompt:'Elegí el sensor de nivel.',options:['Radar 80 GHz','Horquilla vibratoria','Sonda hidrostática'],correct:1,answer:'Horquilla vibratoria',explanation:'La alarma es puntual: la horquilla conmuta al quedar cubierta. Radar e hidrostática son tecnologías de medición continua.'},
+  {id:'map-3',title:'Nivel continuo sin contacto en tanque con vapor',prompt:'Elegí la tecnología.',options:['Capacitivo de proximidad','Radar de onda libre 80 GHz','Horquilla vibratoria'],correct:1,answer:'Radar de onda libre 80 GHz',explanation:'El radar mide tiempo de vuelo sin contacto y tolera vapor, presión y temperatura. La horquilla solo detecta un punto.'},
+  {id:'map-4',title:'Medición de caudal de aceite',prompt:'Elegí una solución compatible con fluido no conductor.',options:['Caudalímetro electromagnético','Placa orificio / Vortex / Coriolis','Horquilla vibratoria'],correct:1,answer:'Placa orificio / Vortex / Coriolis',explanation:'El electromagnético exige conductividad mínima; el aceite no cumple. Orificio, Vortex o Coriolis no dependen de conductividad eléctrica.'},
+  {id:'map-5',title:'Bomba centrífuga sin regulación de velocidad',prompt:'Solo se requiere limitar el arranque y el golpe de ariete.',options:['VFD vectorial','Soft-starter','Servo con encoder'],correct:1,answer:'Soft-starter',explanation:'El soft-starter entrega rampa de tensión a 50 Hz y soft-stop. Un VFD sería innecesario si no se regula velocidad en régimen.'},
+  {id:'map-6',title:'Control de velocidad de cinta transportadora',prompt:'Elegí el accionamiento.',options:['Arranque Y-Δ','Soft-starter','VFD'],correct:2,answer:'VFD',explanation:'El VFD modifica frecuencia y tensión durante el régimen, por eso regula velocidad. Y-Δ y soft-starter solo intervienen en arranque/parada.'},
+  {id:'map-7',title:'Posicionamiento con corrección real de posición',prompt:'Elegí el sistema de movimiento.',options:['Stepper en lazo abierto','Servo + encoder absoluto','Motor asíncrono DOL'],correct:1,answer:'Servo + encoder absoluto',explanation:'El servo cierra los lazos de posición, velocidad y corriente; el encoder absoluto informa la posición al encender y permite corregir el error.'}
+];
+
+function readIndustrialMapState() {
+  try { return JSON.parse(localStorage.getItem('industrial-map-score') || '{}'); } catch (_) { return {}; }
+}
+function buildIndustrialMap(force=false) {
+  const root = document.getElementById('industrialMap');
+  if (!root || (root.children.length && !force)) { updateIndustrialMapScore(); return; }
+  const saved = readIndustrialMapState();
+  root.innerHTML = industrialScenarios.map((scenario,index) => {
+    const prior = saved[scenario.id];
+    return `<article class="map-card" id="${scenario.id}">
+      <h4>${index+1}. ${scenario.title}</h4><p>${scenario.prompt}</p>
+      <div class="map-options">${scenario.options.map((option,optionIndex) => `<label class="map-option"><input type="radio" name="${scenario.id}-choice" value="${optionIndex}" ${prior && prior.selected===optionIndex?'checked':''}/> <span>${option}</span></label>`).join('')}</div>
+      <textarea class="map-justification" id="${scenario.id}-justification" placeholder="Justificá por qué la tecnología elegida aplica y por qué descartarías las otras...">${prior ? escapeHtml(prior.justification || '') : ''}</textarea>
+      <button class="btn btn-blue" type="button" onclick="confirmIndustrialScenario('${scenario.id}')">Confirmar elección</button>
+      <div class="map-result ${prior?'show '+(prior.correct?'ok':'bad'):''}" id="${scenario.id}-result">${prior ? industrialScenarioFeedback(scenario,prior.correct) : ''}</div>
+    </article>`;
+  }).join('');
+  updateIndustrialMapScore();
+}
+function industrialScenarioFeedback(scenario,isCorrect) {
+  return `<strong>${isCorrect?'✅ Correcto':'❌ A revisar'} — ${scenario.answer}.</strong><br>${scenario.explanation}`;
+}
+function confirmIndustrialScenario(id) {
+  const scenario = industrialScenarios.find(item => item.id === id);
+  const selectedInput = document.querySelector(`input[name="${id}-choice"]:checked`);
+  const selected = selectedInput ? Number(selectedInput.value) : null;
+  const justification = (document.getElementById(`${id}-justification`) || {}).value || '';
+  const result = document.getElementById(`${id}-result`);
+  if (selected === null || !justification.trim()) {
+    result.className = 'map-result show bad';
+    result.textContent = 'Elegí una tecnología y escribí una justificación antes de revelar la solución.';
+    return;
+  }
+  const state = readIndustrialMapState();
+  state[id] = {selected,justification:justification.trim(),correct:selected === scenario.correct};
+  localStorage.setItem('industrial-map-score',JSON.stringify(state));
+  result.className = `map-result show ${state[id].correct?'ok':'bad'}`;
+  result.innerHTML = industrialScenarioFeedback(scenario,state[id].correct);
+  if (!state[id].correct) saveStudyErrors([{id,section:'Mapa industrial',question:scenario.title,answer:scenario.options[selected],correct:scenario.answer}]);
+  updateIndustrialMapScore();
+}
+function updateIndustrialMapScore() {
+  const state = readIndustrialMapState();
+  const completed = industrialScenarios.filter(item => state[item.id]).length;
+  const score = industrialScenarios.filter(item => state[item.id] && state[item.id].correct).length;
+  const output = document.getElementById('industrialMapScore');
+  if (output) output.textContent = `Puntaje guardado: ${score} / 7 · Completados: ${completed} / 7`;
+}
+
+// ════════════════════ RECUPERACIÓN ACTIVA ════════════════════
+const retrievalQuestions = [
+  {id:'retrieval-1',q:'¿Qué valor representa 0% en un lazo 4-20 mA?',options:['0 mA','4 mA','10 mA'],correct:1,section:'Instrumentación'},
+  {id:'retrieval-2',q:'¿Qué combinación es correcta para un sensor PNP?',options:['PNP → PLC Sinking','PNP → PLC Sourcing','PNP → entrada analógica 0-10 V'],correct:0,section:'Sensores'},
+  {id:'retrieval-3',q:'¿Qué conexión admite un motor 230Δ/400Y sobre una red de 400 V?',options:['Solo Δ','Solo Y','Y-Δ para régimen en Δ'],correct:1,section:'Motores'},
+  {id:'retrieval-4',q:'¿Qué equipo regula velocidad durante el régimen?',options:['Soft-starter','Arranque Y-Δ','VFD'],correct:2,section:'Drives'},
+  {id:'retrieval-5',q:'¿Qué encoder informa posición apenas se energiza?',options:['Incremental A/B/Z','Absoluto','Tacogenerador'],correct:1,section:'Encoders'}
+];
+function buildRetrievalQuiz(force=false) {
+  const root = document.getElementById('retrievalQuiz');
+  if (!root || (root.children.length && !force)) return;
+  root.innerHTML = retrievalQuestions.map((item,index) => `<div class="quiz-q" id="${item.id}"><h4>${index+1}. ${item.q}</h4><div class="quiz-opts">${item.options.map((option,optionIndex) => `<label class="quiz-opt"><input type="radio" name="${item.id}-choice" value="${optionIndex}"/><span>${option}</span></label>`).join('')}</div></div>`).join('');
+  const feedback = document.getElementById('retrievalFeedback'); if (feedback) feedback.textContent = '';
+}
+function submitRetrievalQuiz() {
+  let score=0; const errors=[];
+  retrievalQuestions.forEach(item => {
+    const selected = document.querySelector(`input[name="${item.id}-choice"]:checked`);
+    const answer = selected ? Number(selected.value) : null;
+    const card = document.getElementById(item.id);
+    card.querySelectorAll('.quiz-opt').forEach((option,index) => { option.classList.remove('correct','wrong'); if(index===item.correct) option.classList.add('correct'); else if(index===answer) option.classList.add('wrong'); });
+    if (answer === item.correct) score++; else errors.push({id:item.id,section:item.section,question:item.q,answer:answer===null?'Sin responder':item.options[answer],correct:item.options[item.correct]});
+  });
+  saveStudyErrors(errors);
+  document.getElementById('retrievalFeedback').textContent = `Resultado: ${score} / ${retrievalQuestions.length}. ${errors.length?'Los errores quedaron guardados para repaso.':'Sin errores pendientes.'}`;
+}
+
+// ════════════════════ PRIORIDADES Y REPASO PERSISTENTE ════════════════════
+function addPriorityChips() {
+  document.querySelectorAll('.stitle').forEach((title,index) => {
+    if (title.nextElementSibling && title.nextElementSibling.classList.contains('priority-chip')) return;
+    const text = title.textContent.toLowerCase();
+    const deep = /metrología|glosario|juego|mapa/.test(text);
+    const justify = /hart|seguridad|v\/f|servo|caudal|sensor/.test(text);
+    const chip = document.createElement('span');
+    chip.className = `priority-chip ${deep?'priority-deep':justify?'priority-justify':'priority-must'}`;
+    chip.textContent = deep ? '🔬 Profundización opcional' : justify ? '💡 Sirve para justificar' : '🎯 Imprescindible para aprobar';
+    title.insertAdjacentElement('afterend',chip);
+  });
+}
+function readStudyErrors() {
+  try { const value=JSON.parse(localStorage.getItem('parcial2-errores') || '[]'); return Array.isArray(value)?value:[]; } catch (_) { return []; }
+}
+function saveStudyErrors(errors) {
+  if (!errors.length) return;
+  const merged = new Map(readStudyErrors().map(item => [item.id,item]));
+  errors.forEach(item => merged.set(item.id,{...item,savedAt:new Date().toISOString()}));
+  localStorage.setItem('parcial2-errores',JSON.stringify([...merged.values()]));
+}
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g,char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
+}
+function openErrorReview() {
+  const modal=document.getElementById('errorReviewModal'),content=document.getElementById('errorReviewContent'),errors=readStudyErrors();
+  content.innerHTML = errors.length ? errors.map(item => `<div class="review-error"><strong>${escapeHtml(item.section || 'Repaso')}</strong><br>${escapeHtml(item.question)}<br><span>Tu respuesta: ${escapeHtml(item.answer)}</span><br><strong>Correcta: ${escapeHtml(item.correct)}</strong></div>`).join('') : '<p>✅ Todavía no hay preguntas falladas guardadas.</p>';
+  modal.classList.add('show'); document.body.style.overflow='hidden';
+}
+function closeErrorReview() { document.getElementById('errorReviewModal').classList.remove('show'); document.body.style.overflow=''; }
+document.addEventListener('keydown',event => { if(event.key==='Escape') closeErrorReview(); });
+document.addEventListener('DOMContentLoaded',() => { addPriorityChips(); buildIndustrialMap(); buildRetrievalQuiz(); drawLoopGraph(); });
+
 </script>
+
+<!-- ═══════════════════════════════════════════════
+     PÁGINA 6: GLOSARIO DE ACRÓNIMOS
+══════════════════════════════════════════════════ -->
+<div id="p6" class="page">
+<div class="container">
+
+  <span class="ex-badge">GLOSARIO COMPLETO — Acrónimos y Siglas Industriales</span>
+
+  <div class="stitle"><span class="ico">📖</span> Glosario de Acrónimos</div>
+
+  <div class="card card-blue">
+    <h4>ℹ️ Cómo usar este glosario</h4>
+    <p>Cada entrada muestra la sigla en azul, el nombre completo y una descripción técnica breve. Las siglas marcadas con <span style="color:var(--blue);font-weight:700">azul</span> en el texto del apunte son enlaces que llevan directo aquí. Usá Ctrl+F para buscar una sigla específica.</p>
+  </div>
+
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-0-9">0-9</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-4-20-mA">
+        <div class="glosario-sigla">4-20 mA</div>
+        <div class="glosario-nombre">Señal analógica de corriente (4 a 20 miliamperios)</div>
+        <div class="glosario-desc">Estándar industrial de transmisión con Zero Vivo. 4 mA = 0 % de escala, 20 mA = 100 %. La diferencia respecto a 0 mA permite detectar fallas de lazo abierto (NAMUR NE 43: &lt; 3.6 mA = alarma).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-A">A</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-AC---CA">
+        <div class="glosario-sigla">AC / CA</div>
+        <div class="glosario-nombre">Alternating Current / Corriente Alterna</div>
+        <div class="glosario-desc">Tensión que oscila sinusoidalmente alrededor de cero. Red industrial trifásica: 400 V / 50 Hz.</div>
+      </div>
+      <div class="glosario-card" id="gl-ADC-A-D">
+        <div class="glosario-sigla">ADC (A/D)</div>
+        <div class="glosario-nombre">Analog-to-Digital Converter / Conversor Analógico-Digital</div>
+        <div class="glosario-desc">Circuito que convierte una señal analógica continua en un número digital discreto. Presente en la celda del transmisor inteligente; se calibra con la rutina Sensor Trim.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-B">B</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-B_max">
+        <div class="glosario-sigla">B_max</div>
+        <div class="glosario-nombre">Amplitud máxima del campo magnético del estator (Tesla)</div>
+        <div class="glosario-desc">Pico de cada una de las tres componentes pulsantes del campo del estator en el motor asíncrono trifásico.</div>
+      </div>
+      <div class="glosario-card" id="gl-B_total">
+        <div class="glosario-sigla">B_total</div>
+        <div class="glosario-nombre">Campo Magnético Giratorio resultante = 1.5 · B_max (Teorema de Ferraris)</div>
+        <div class="glosario-desc">Por el Teorema de Ferraris (1885), la suma de los tres campos pulsantes de 120° genera un CMG de amplitud constante igual a 1.5 · B_max.</div>
+      </div>
+      <div class="glosario-card" id="gl-Bell-202">
+        <div class="glosario-sigla">Bell 202</div>
+        <div class="glosario-nombre">Estándar de módem Bell Labs — modulación FSK de HART (1200/2200 Hz)</div>
+        <div class="glosario-desc">Define 1200 Hz = bit '1' (Mark) y 2200 Hz = bit '0' (Space). La señal CA de ±0.5 mA tiene promedio temporal cero, por lo que coexiste con la señal DC 4-20 mA sin perturbación.</div>
+      </div>
+      <div class="glosario-card" id="gl-bleeder">
+        <div class="glosario-sigla">bleeder</div>
+        <div class="glosario-nombre">Resistencias de descarga del bus DC del VFD</div>
+        <div class="glosario-desc">Descargan los condensadores electrolíticos del Bus DC a menos de 50 V en pocos segundos tras cortar la alimentación, garantizando seguridad en mantenimiento.</div>
+      </div>
+      <div class="glosario-card" id="gl-bypass">
+        <div class="glosario-sigla">bypass</div>
+        <div class="glosario-nombre">Contactor que deriva la corriente del motor evitando los SCR del Soft-Starter</div>
+        <div class="glosario-desc">Una vez finalizada la rampa de arranque, el bypass conduce toda la corriente por cobre macizo, eliminando las pérdidas térmicas (1.2-1.5 V caída × corriente) y los armónicos EMI/RFI generados por los tiristores.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-C">C</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-CADe_SIMU">
+        <div class="glosario-sigla">CADe_SIMU</div>
+        <div class="glosario-nombre">Software de simulación de circuitos de automatización (estilo IEC 60617)</div>
+        <div class="glosario-desc">No es sigla; nombre propio de una herramienta gratuita para simular esquemas eléctricos de mando y potencia.</div>
+      </div>
+      <div class="glosario-card" id="gl-CMG">
+        <div class="glosario-sigla">CMG</div>
+        <div class="glosario-nombre">Campo Magnético Giratorio</div>
+        <div class="glosario-desc">Generado por el Teorema de Ferraris en el entrehierro del motor. Rota a ns = 120·f/p RPM. El rotor jaula sigue al CMG con un deslizamiento s.</div>
+      </div>
+      <div class="glosario-card" id="gl-CNC">
+        <div class="glosario-sigla">CNC</div>
+        <div class="glosario-nombre">Computerized Numerical Control / Control Numérico Computarizado</div>
+        <div class="glosario-desc">Sistema de control de máquinas herramienta que ejecuta movimientos de precisión mediante coordenadas numéricas; usa servomotores con encoder absoluto.</div>
+      </div>
+      <div class="glosario-card" id="gl-CPU">
+        <div class="glosario-sigla">CPU</div>
+        <div class="glosario-nombre">Central Processing Unit / Unidad Central de Procesamiento</div>
+        <div class="glosario-desc">Componente principal del PLC y del servodrive que ejecuta el programa de control.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-D">D</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-D-A-DAC">
+        <div class="glosario-sigla">D/A (DAC)</div>
+        <div class="glosario-nombre">Digital-to-Analog Converter / Conversor Digital-Analógico</div>
+        <div class="glosario-desc">Convierte el valor digital calculado por el CPU del transmisor en la señal de corriente 4-20 mA de salida. Se calibra con la rutina D/A Trim.</div>
+      </div>
+      <div class="glosario-card" id="gl-DAC-Trim-D-A-Trim">
+        <div class="glosario-sigla">DAC Trim (D/A Trim)</div>
+        <div class="glosario-nombre">Calibración del conversor de salida analógica del transmisor inteligente</div>
+        <div class="glosario-desc">El CPU fuerza 4.000 mA y 20.000 mA; el técnico mide con multímetro patrón y ajusta la ganancia del DAC para eliminar error en la etapa de salida.</div>
+      </div>
+      <div class="glosario-card" id="gl-DC---CC">
+        <div class="glosario-sigla">DC / CC</div>
+        <div class="glosario-nombre">Direct Current / Corriente Continua</div>
+        <div class="glosario-desc">Tensión o corriente constante en el tiempo. El Bus DC del VFD opera a ≈ 565 Vcc para red de 400 Vca.</div>
+      </div>
+      <div class="glosario-card" id="gl-DOL">
+        <div class="glosario-sigla">DOL</div>
+        <div class="glosario-nombre">Direct On-Line / Arranque Directo a la Red</div>
+        <div class="glosario-desc">Arranque sin reducción de tensión. Genera la corriente de arranque máxima (5-8 × I_nominal) y el par de arranque máximo. Referencia de comparación para Y-Δ y Soft-Starter.</div>
+      </div>
+      <div class="glosario-card" id="gl-dv-dt">
+        <div class="glosario-sigla">dv/dt</div>
+        <div class="glosario-nombre">Tasa de cambio de tensión (Voltios por microsegundo) — ondas reflejadas en VFD</div>
+        <div class="glosario-desc">Los IGBT conmutan en nanosegundos generando dv/dt > 5000 V/μs. En cables > 20-30 m produce reflexión de onda que superpone picos de 1200-1600 V en el bobinado del motor. Soluciones: reactancias de salida, filtros dv/dt, filtros senoidales L-C.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-E">E</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-EMI">
+        <div class="glosario-sigla">EMI</div>
+        <div class="glosario-nombre">Electromagnetic Interference / Interferencia Electromagnética</div>
+        <div class="glosario-desc">Perturbación electromagnética generada por conmutación de potencia (SCR, IGBT). El bypass del Soft-Starter y los filtros del VFD la reducen.</div>
+      </div>
+      <div class="glosario-card" id="gl-EMP">
+        <div class="glosario-sigla">EMP</div>
+        <div class="glosario-nombre">Error Máximo Permitido</div>
+        <div class="glosario-desc">Tolerancia de calibración aceptable en la verificación metrológica. Si el instrumento cae dentro del EMP, el dictamen es 'Apto'; si lo supera, 'No Apto'.</div>
+      </div>
+      <div class="glosario-card" id="gl-EN-60204-1---IEC-60204-1">
+        <div class="glosario-sigla">EN 60204-1 / IEC 60204-1</div>
+        <div class="glosario-nombre">Norma de seguridad eléctrica de máquinas</div>
+        <div class="glosario-desc">Define requisitos de Parada de Emergencia, categorías de parada (Cat.0, Cat.1, Cat.2), uso de contactos NC en circuitos de seguridad y Apertura Positiva Forzada.</div>
+      </div>
+      <div class="glosario-card" id="gl-EN-IEC-60947-5-1">
+        <div class="glosario-sigla">EN/IEC 60947-5-1</div>
+        <div class="glosario-nombre">Norma de aparatos de baja tensión — Apertura Positiva Forzada</div>
+        <div class="glosario-desc">Define el requisito de que el contacto NC del botón de emergencia sea 'forzado mecánicamente' a abrirse: incluso si los contactos están soldados por arco, la presión mecánica los separa.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-F">F</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-f.e.m.-FEM">
+        <div class="glosario-sigla">f.e.m. (FEM)</div>
+        <div class="glosario-nombre">Fuerza Electromotriz — tensión inducida por variación de flujo magnético</div>
+        <div class="glosario-desc">En el caudalímetro electromagnético: E = B·v·D. En el motor asíncrono: la FEM inducida en el rotor es proporcional al deslizamiento s.</div>
+      </div>
+      <div class="glosario-card" id="gl-Field-Weakening">
+        <div class="glosario-sigla">Field Weakening</div>
+        <div class="glosario-nombre">Debilitamiento de Campo — operación del VFD por encima de 50 Hz</div>
+        <div class="glosario-desc">Con V ya fija en 400 V, aumentar f reduce el flujo Φ ∝ 1/f. La potencia permanece constante, T_nominal ∝ 1/f y T_máximo ∝ 1/f². Permite sobre-velocidad a potencia constante en bombas, ventiladores y husillos CNC.</div>
+      </div>
+      <div class="glosario-card" id="gl-FOC">
+        <div class="glosario-sigla">FOC</div>
+        <div class="glosario-nombre">Field Oriented Control / Control Vectorial</div>
+        <div class="glosario-desc">Desacopla el control de flujo magnético (Id) y par electromecánico (Iq) mediante las transformadas de Clarke (abc→αβ) y Park (αβ→dq). Permite par nominal pleno (100-150 %) a 0 RPM. Respuesta dinámica < 5 ms.</div>
+      </div>
+      <div class="glosario-card" id="gl-freewheeling">
+        <div class="glosario-sigla">freewheeling</div>
+        <div class="glosario-nombre">Diodos de libre circulación en el inversor IGBT del VFD</div>
+        <div class="glosario-desc">Permiten que la energía inductiva almacenada en las bobinas del motor circule de regreso al Bus DC cuando el IGBT apaga, evitando picos de tensión que destruirían el transistor.</div>
+      </div>
+      <div class="glosario-card" id="gl-FSK">
+        <div class="glosario-sigla">FSK</div>
+        <div class="glosario-nombre">Frequency Shift Keying / Modulación por Desplazamiento de Frecuencia</div>
+        <div class="glosario-desc">Técnica de modulación digital donde cada bit se codifica como una frecuencia distinta. HART Bell 202: 1200 Hz = '1', 2200 Hz = '0'.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-G">G</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-GHz">
+        <div class="glosario-sigla">GHz</div>
+        <div class="glosario-nombre">Gigahertz (10⁹ Hz)</div>
+        <div class="glosario-desc">Frecuencia del radar de nivel de emisión libre (ej. 80 GHz). Mayor frecuencia → haz más estrecho → mejor resolución en tanques con obstáculos internos.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-H">H</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-HART">
+        <div class="glosario-sigla">HART</div>
+        <div class="glosario-nombre">Highway Addressable Remote Transducer</div>
+        <div class="glosario-desc">Protocolo de comunicación digital que superpone señal FSK Bell 202 sobre el lazo 4-20 mA. Permite configuración remota, diagnóstico y hasta 64 instrumentos en modo Multidrop (HART7).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-I">I</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-IEC-60947-5-2">
+        <div class="glosario-sigla">IEC 60947-5-2</div>
+        <div class="glosario-nombre">Norma del conector M12 y código de colores de sensores industriales</div>
+        <div class="glosario-desc">Estandariza el conector M12 de 4 pines: Pin1 Marrón (+24V), Pin2 Blanco (NC/diagnóstico), Pin3 Azul (0V GND), Pin4 Negro (señal NO). Permite intercambiabilidad entre fabricantes.</div>
+      </div>
+      <div class="glosario-card" id="gl-Id">
+        <div class="glosario-sigla">Id</div>
+        <div class="glosario-nombre">Corriente de eje directo en FOC</div>
+        <div class="glosario-desc">En el Control Vectorial, controla exclusivamente el flujo magnético del motor. Análogo a la corriente de excitación del motor DC de excitación separada.</div>
+      </div>
+      <div class="glosario-card" id="gl-IGBT">
+        <div class="glosario-sigla">IGBT</div>
+        <div class="glosario-nombre">Insulated Gate Bipolar Transistor / Transistor Bipolar de Compuerta Aislada</div>
+        <div class="glosario-desc">Conmutador de potencia del inversor VFD. Combina la alta impedancia de entrada del MOSFET con la baja saturación del BJT. Opera a 2-16 kHz en SPWM, generando ondas senoidales de baja distorsión armónica.</div>
+      </div>
+      <div class="glosario-card" id="gl-inrush">
+        <div class="glosario-sigla">inrush</div>
+        <div class="glosario-nombre">Corriente de irrupción / precarga inicial del VFD</div>
+        <div class="glosario-desc">Pico de corriente al energizar los condensadores descargados del Bus DC. Limitado por una resistencia de precarga; un relé o tiristor la cortocircuita cuando el Bus alcanza tensión nominal.</div>
+      </div>
+      <div class="glosario-card" id="gl-Iq">
+        <div class="glosario-sigla">Iq</div>
+        <div class="glosario-nombre">Corriente de eje en cuadratura en FOC</div>
+        <div class="glosario-desc">En el Control Vectorial, controla exclusivamente el par electromecánico. Análogo a la corriente de armadura del motor DC de excitación separada.</div>
+      </div>
+      <div class="glosario-card" id="gl-ISO-13850">
+        <div class="glosario-sigla">ISO 13850</div>
+        <div class="glosario-nombre">Norma internacional de Parada de Emergencia para seguridad de máquinas</div>
+        <div class="glosario-desc">Especifica requisitos de diseño del dispositivo de parada de emergencia: color rojo sobre fondo amarillo, retención mecánica (latching), liberación manual, contacto NC con apertura positiva forzada.</div>
+      </div>
+      <div class="glosario-card" id="gl-ISO-IEC-17025">
+        <div class="glosario-sigla">ISO/IEC 17025</div>
+        <div class="glosario-nombre">Norma de competencia de laboratorios de calibración y ensayo (metrología)</div>
+        <div class="glosario-desc">Define los requisitos de gestión y técnicos para que un laboratorio demuestre competencia para calibrar instrumentos con trazabilidad al SI.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-K">K</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-KCL">
+        <div class="glosario-sigla">KCL</div>
+        <div class="glosario-nombre">Kirchhoff's Current Law / Ley de Corrientes de Kirchhoff</div>
+        <div class="glosario-desc">La misma corriente circula en todo el lazo serie del 4-20 mA; elimina el error por resistencia del cable que afecta a las señales de tensión.</div>
+      </div>
+      <div class="glosario-card" id="gl-Kick-start">
+        <div class="glosario-sigla">Kick-start</div>
+        <div class="glosario-nombre">Parámetro del Soft-Starter — pulso breve de tensión plena</div>
+        <div class="glosario-desc">Aplica 80-100% de V_nominal durante 100-500 ms para 'despegar' cargas con alta inercia estática o fricciones (prensas, trituradoras). Después continúa la rampa normal.</div>
+      </div>
+      <div class="glosario-card" id="gl-KM">
+        <div class="glosario-sigla">KM</div>
+        <div class="glosario-nombre">Designación IEC para Contactor</div>
+        <div class="glosario-desc">KM1 = contactor de línea (alimenta el motor), KM2 = contactor de triángulo, KM3 = contactor de estrella en el arranque Y-Δ. Los enclavamientos cruzados NC 21-22 impiden que KM2 y KM3 cierren simultáneamente.</div>
+      </div>
+      <div class="glosario-card" id="gl-kHz">
+        <div class="glosario-sigla">kHz</div>
+        <div class="glosario-nombre">Kilohertz (10³ Hz)</div>
+        <div class="glosario-desc">Frecuencia de conmutación de los IGBT del VFD (2-16 kHz) y frecuencia de oscilación de las horquillas vibratorias (Tuning Fork ~1 kHz).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-L">L</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-L-C">
+        <div class="glosario-sigla">L-C</div>
+        <div class="glosario-nombre">Filtro inductivo-capacitivo (filtro senoidal de salida del VFD)</div>
+        <div class="glosario-desc">Combinación de inductor y capacitor que convierte la señal SPWM del VFD en una onda senoidal pura, eliminando dv/dt y picos de tensión en cables hasta 1000 m.</div>
+      </div>
+      <div class="glosario-card" id="gl-LC">
+        <div class="glosario-sigla">LC</div>
+        <div class="glosario-nombre">Circuito oscilador inductivo-capacitivo (sensor inductivo)</div>
+        <div class="glosario-desc">El sensor inductivo contiene un oscilador LC que genera un campo magnético alterno. La proximidad de un metal conductor genera corrientes de Foucault que absorben energía del oscilador, amortiguando la oscilación y activando la salida.</div>
+      </div>
+      <div class="glosario-card" id="gl-latching">
+        <div class="glosario-sigla">latching</div>
+        <div class="glosario-nombre">Enclavamiento mecánico (retención) del Botón Hongo de Emergencia</div>
+        <div class="glosario-desc">El Botón Hongo queda bloqueado en posición pulsada (circuito abierto) hasta que el operador lo libera manualmente (giro o extracción). Impide reactivación involuntaria.</div>
+      </div>
+      <div class="glosario-card" id="gl-LRL">
+        <div class="glosario-sigla">LRL</div>
+        <div class="glosario-nombre">Lower Range Limit / Límite Inferior de Rango — límite físico mínimo de la celda</div>
+        <div class="glosario-desc">Valor mínimo absoluto que puede medir la celda del transmisor (determinado por diseño de fábrica). El LRV no puede ser menor que el LRL.</div>
+      </div>
+      <div class="glosario-card" id="gl-LRV">
+        <div class="glosario-sigla">LRV</div>
+        <div class="glosario-nombre">Lower Range Value / Valor de Rango Inferior — valor configurado para 4 mA</div>
+        <div class="glosario-desc">Valor de la variable de proceso (presión, temperatura, nivel) que corresponde exactamente a 4.00 mA de salida (0 % de escala). Configurable por el usuario dentro de los límites LRL-URL.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-M">M</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-M12">
+        <div class="glosario-sigla">M12</div>
+        <div class="glosario-nombre">Conector circular métrico de 12 mm para sensores industriales (IEC 60947-5-2)</div>
+        <div class="glosario-desc">Conector circular de 4 pines con rosca M12 × 1. Pin1 Marrón (+24V), Pin2 Blanco (NC/diag), Pin3 Azul (GND), Pin4 Negro (señal NO). Sellado IP67/IP69K estándar industrial.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-N">N</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-NAMUR-NE-43">
+        <div class="glosario-sigla">NAMUR NE 43</div>
+        <div class="glosario-nombre">Recomendación NAMUR — umbrales de alarma del lazo 4-20 mA</div>
+        <div class="glosario-desc">Define: 3.6-4.0 mA = zona de advertencia bajo; 20.0-21.0 mA = zona de advertencia alto; < 3.6 mA = lazo abierto (rotura de cable); > 21.0 mA = saturación (falla del transmisor). Permite al PLC distinguir alarmas de proceso de fallas de instrumento.</div>
+      </div>
+      <div class="glosario-card" id="gl-NA">
+        <div class="glosario-sigla">NA</div>
+        <div class="glosario-nombre">Normalmente Abierto (contacto de relé o pulsador abierto en reposo)</div>
+        <div class="glosario-desc">Fail-danger: si el cable se corta, el circuito queda abierto como si se hubiera accionado. PROHIBIDO en circuitos de seguridad (parada de emergencia).</div>
+      </div>
+      <div class="glosario-card" id="gl-NC">
+        <div class="glosario-sigla">NC</div>
+        <div class="glosario-nombre">Normalmente Cerrado (contacto de relé o pulsador cerrado en reposo)</div>
+        <div class="glosario-desc">Fail-safe (seguridad positiva): cualquier corte del cable o falla mecánica abre el circuito, desenergizando el contactor de forma segura. OBLIGATORIO en circuitos de emergencia.</div>
+      </div>
+      <div class="glosario-card" id="gl-NdFeB">
+        <div class="glosario-sigla">NdFeB</div>
+        <div class="glosario-nombre">Neodimio-Hierro-Boro — imanes del servomotor PMSM</div>
+        <div class="glosario-desc">Material magnético de alta coercitividad y alta remanencia. Permite construir rotores compactos con campo magnético intenso para los servomotores PMSM Brushless AC.</div>
+      </div>
+      <div class="glosario-card" id="gl-NPN">
+        <div class="glosario-sigla">NPN</div>
+        <div class="glosario-nombre">Transistor NPN — salida Sourcing (conmuta a 0V / GND)</div>
+        <div class="glosario-desc">El transistor NPN en el sensor conduce corriente desde la carga hacia GND cuando se activa. Requiere PLC con entrada tipo Sourcing (+24V externo). Común en equipamiento japonés y asiático.</div>
+      </div>
+      <div class="glosario-card" id="gl-ns">
+        <div class="glosario-sigla">ns</div>
+        <div class="glosario-nombre">Velocidad de sincronismo del motor asíncrono (RPM)</div>
+        <div class="glosario-desc">ns = 120 · f / p, donde f = frecuencia de red (50 Hz) y p = número de polos. Ejemplos: 2 polos → 3000 RPM; 4 polos → 1500 RPM; 6 polos → 1000 RPM.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-P">P</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-PID">
+        <div class="glosario-sigla">PID</div>
+        <div class="glosario-nombre">Proporcional-Integral-Derivativo — algoritmo de control en cascada del servodrive</div>
+        <div class="glosario-desc">El servodrive AC implementa 3 lazos PID en cascada: corriente/par (10-20 kHz), velocidad (1-4 kHz) y posición (500-1000 Hz). El lazo más rápido (corriente) está al interior.</div>
+      </div>
+      <div class="glosario-card" id="gl-PLC">
+        <div class="glosario-sigla">PLC</div>
+        <div class="glosario-nombre">Programmable Logic Controller / Controlador Lógico Programable</div>
+        <div class="glosario-desc">Computadora industrial de tiempo real con entradas/salidas discretas y analógicas. Lee señales de sensores (4-20 mA, NPN, PNP) y actúa sobre actuadores según el programa de control.</div>
+      </div>
+      <div class="glosario-card" id="gl-PMSM">
+        <div class="glosario-sigla">PMSM</div>
+        <div class="glosario-nombre">Permanent Magnet Synchronous Motor / Motor Síncrono de Imanes Permanentes</div>
+        <div class="glosario-desc">Servomotor AC Brushless con rotor de imanes NdFeB. Requiere encoder y servodrive con FOC. Par nominal a 0 RPM, alta densidad de potencia, eficiencia clase IE4+.</div>
+      </div>
+      <div class="glosario-card" id="gl-PNP">
+        <div class="glosario-sigla">PNP</div>
+        <div class="glosario-nombre">Transistor PNP — salida Sinking (conmuta a +24V)</div>
+        <div class="glosario-desc">El transistor PNP en el sensor conduce corriente desde +24V hacia la carga cuando se activa. Requiere PLC con entrada tipo Sinking (referencia a GND). Estándar en Europa y Latinoamérica.</div>
+      </div>
+      <div class="glosario-card" id="gl-polling-address">
+        <div class="glosario-sigla">polling address</div>
+        <div class="glosario-nombre">Dirección de sondeo HART en modo Multidrop (1 a 63)</div>
+        <div class="glosario-desc">En Multidrop HART, cada instrumento tiene una dirección única (1-15 en HART5; 1-63 en HART7). El maestro los interroga secuencialmente. La corriente analógica se fija en 4 mA (100 % digital).</div>
+      </div>
+      <div class="glosario-card" id="gl-PPS">
+        <div class="glosario-sigla">PPS</div>
+        <div class="glosario-nombre">Pulses Per Second / Pulsos Por Segundo (motores stepper)</div>
+        <div class="glosario-desc">Frecuencia de paso en motores paso a paso. La resonancia mecánica ocurre típicamente entre 100-300 PPS; el microstepping la elimina suavizando la corriente.</div>
+      </div>
+      <div class="glosario-card" id="gl-PTFE">
+        <div class="glosario-sigla">PTFE</div>
+        <div class="glosario-nombre">Polytetrafluoroethylene / Politetrafluoroetileno (Teflón)</div>
+        <div class="glosario-desc">Revestimiento aislante interior del tubo del caudalímetro electromagnético. Alta resistencia química, baja rugosidad (no acumula incrustaciones), temperatura hasta 200 °C.</div>
+      </div>
+      <div class="glosario-card" id="gl-PWM">
+        <div class="glosario-sigla">PWM</div>
+        <div class="glosario-nombre">Pulse Width Modulation / Modulación por Ancho de Pulso</div>
+        <div class="glosario-desc">Control de potencia variando el tiempo de conducción (duty cycle) de un transistor. SPWM en VFD, control de corriente en microstepping de steppers.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-R">R</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-RFI">
+        <div class="glosario-sigla">RFI</div>
+        <div class="glosario-nombre">Radio Frequency Interference / Interferencia de Radiofrecuencia</div>
+        <div class="glosario-desc">Perturbación de alta frecuencia (> 100 kHz) generada por la conmutación de IGBTs y SCRs. Filtros de entrada y salida del VFD la mitigan para cumplir directiva EMC.</div>
+      </div>
+      <div class="glosario-card" id="gl-RPM">
+        <div class="glosario-sigla">RPM</div>
+        <div class="glosario-nombre">Revolutions Per Minute / Revoluciones Por Minuto</div>
+        <div class="glosario-desc">Unidad de velocidad angular. Velocidad de sincronismo: ns = 120·f/p. Velocidad nominal del motor: n = ns·(1 − s), donde s ≈ 0.02-0.05.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-S">S</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-s">
+        <div class="glosario-sigla">s</div>
+        <div class="glosario-nombre">Deslizamiento relativo del motor asíncrono</div>
+        <div class="glosario-desc">s = (ns − n) / ns. Motor: 0 < s < 1. Generador asíncrono: s < 0 (n > ns, inyecta potencia a la red). Freno por contracorriente: s > 1 (dos fases conmutadas).</div>
+      </div>
+      <div class="glosario-card" id="gl-SCR">
+        <div class="glosario-sigla">SCR</div>
+        <div class="glosario-nombre">Silicon Controlled Rectifier / Tiristor de potencia del Soft-Starter</div>
+        <div class="glosario-desc">El Soft-Starter usa 6 SCR antiparalelo (2 por fase). El ángulo de disparo α controla cuánto de la semiciclo pasa al motor, regulando V_rms (y por tanto el par T ∝ V²). α va de ~150° (arranque) a 0° (plena tensión).</div>
+      </div>
+      <div class="glosario-card" id="gl-Sensor-Trim">
+        <div class="glosario-sigla">Sensor Trim</div>
+        <div class="glosario-nombre">Calibración de la celda A/D del transmisor (aplica presión patrón en 2 puntos)</div>
+        <div class="glosario-desc">Procedimiento: (1) aplicar presión patrón 'Low' exacta → tecla Low Trim; (2) aplicar presión patrón 'High' exacta → tecla High Trim. Corrige la curva de conversión del ADC de la celda física.</div>
+      </div>
+      <div class="glosario-card" id="gl-Shunt">
+        <div class="glosario-sigla">Shunt</div>
+        <div class="glosario-nombre">Resistor de precisión 250 Ω ±0.1% en la entrada del PLC</div>
+        <div class="glosario-desc">Convierte la señal de corriente 4-20 mA en tensión 1-5 V para el ADC del módulo analógico del PLC. Ubicado en la bornera de entrada del PLC, no en el transmisor ni en el campo.</div>
+      </div>
+      <div class="glosario-card" id="gl-Soft-Starter">
+        <div class="glosario-sigla">Soft-Starter</div>
+        <div class="glosario-nombre">Arrancador Suave de Estado Sólido — controla V_rms mediante SCR</div>
+        <div class="glosario-desc">Rampa de arranque suave (pedestal + rampa), límite de corriente (2.5-4 × In) y rampa de paro (Soft Stop) para evitar golpe de ariete. No puede controlar velocidad en régimen permanente; para eso se usa VFD.</div>
+      </div>
+      <div class="glosario-card" id="gl-Soft-Stop">
+        <div class="glosario-sigla">Soft Stop</div>
+        <div class="glosario-nombre">Rampa de desaceleración del Soft-Starter para evitar golpe de ariete</div>
+        <div class="glosario-desc">Desaceleración controlada de 15-45 s para bombas centrifugas. Elimina la sobrepresión hidráulica de 15-20 bar del Water Hammer al cerrar gradualmente el caudal.</div>
+      </div>
+      <div class="glosario-card" id="gl-Span">
+        <div class="glosario-sigla">Span</div>
+        <div class="glosario-nombre">Amplitud de trabajo calibrada del transmisor; Span = URV − LRV</div>
+        <div class="glosario-desc">Rango activo del transmisor. Un Span muy pequeño (Span_min) reduce la resolución. El Turndown = URL / Span_min indica la flexibilidad máxima de rango.</div>
+      </div>
+      <div class="glosario-card" id="gl-SPWM">
+        <div class="glosario-sigla">SPWM</div>
+        <div class="glosario-nombre">Sinusoidal Pulse Width Modulation / Modulación por Ancho de Pulso Senoidal</div>
+        <div class="glosario-desc">Los 6 IGBTs del inversor se conmutan con una portadora de 2-16 kHz cuya amplitud se modula por una referencia senoidal, generando corrientes sinusoidales de baja distorsión armónica en el motor.</div>
+      </div>
+      <div class="glosario-card" id="gl-StealthChop">
+        <div class="glosario-sigla">StealthChop</div>
+        <div class="glosario-nombre">Tecnología de microstepping ultra-silencioso (Trinamic/TMC)</div>
+        <div class="glosario-desc">Algoritmo propietario de los drivers TMC que predice la corriente necesaria y la suministra sin detectar la posición real del rotor, logrando un nivel de ruido < 20 dB en el motor paso a paso.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-T">T</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-Torque-Boost">
+        <div class="glosario-sigla">Torque Boost</div>
+        <div class="glosario-nombre">Parámetro del VFD que eleva la tensión a baja frecuencia</div>
+        <div class="glosario-desc">Compensa la caída resistiva R1 del estator a bajas velocidades (< 10-15 Hz) donde el bobinado R1 domina sobre la reactancia X1. Sin Torque Boost el par cae a bajas velocidades y el motor puede no arrancar con carga.</div>
+      </div>
+      <div class="glosario-card" id="gl-Tuning-Fork">
+        <div class="glosario-sigla">Tuning Fork</div>
+        <div class="glosario-nombre">Horquilla Vibratoria — sensor de nivel puntual piezoeléctrico</div>
+        <div class="glosario-desc">Oscila a ~1 kHz en el aire. Cuando el líquido cubre las púas, la frecuencia de resonancia baja (efecto de masa) y el circuito electrónico conmuta la salida de NO a NC. No tiene partes móviles; inmune a espumas.</div>
+      </div>
+      <div class="glosario-card" id="gl-Turndown">
+        <div class="glosario-sigla">Turndown</div>
+        <div class="glosario-nombre">Cociente URL / Span_min — flexibilidad de rango del transmisor</div>
+        <div class="glosario-desc">Indica cuánto puede reducirse el span sin degradar la exactitud. Un transmisor de presión con URL = 10 bar y Span_min = 0.1 bar tiene Turndown = 100:1. Mayor Turndown = mayor versatilidad de instalación.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-U">U</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-URL">
+        <div class="glosario-sigla">URL</div>
+        <div class="glosario-nombre">Upper Range Limit / Límite Superior de Rango — límite físico máximo de la celda</div>
+        <div class="glosario-desc">Valor máximo absoluto que puede medir la celda (determinado en fábrica). El URV no puede superar el URL. La relación URL / LRL define los modelos de celda disponibles.</div>
+      </div>
+      <div class="glosario-card" id="gl-URV">
+        <div class="glosario-sigla">URV</div>
+        <div class="glosario-nombre">Upper Range Value / Valor de Rango Superior — valor configurado para 20 mA</div>
+        <div class="glosario-desc">Valor de la variable de proceso que corresponde exactamente a 20.00 mA (100 % de escala). Configurable por el usuario.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-V">V</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-V-f">
+        <div class="glosario-sigla">V/f</div>
+        <div class="glosario-nombre">Relación Tensión/Frecuencia — ley del control escalar del VFD (K = V/f = cte)</div>
+        <div class="glosario-desc">K = V/f = constante garantiza flujo magnético constante. Ejemplo: K = 8 V/Hz → a 50 Hz → V = 400 V; a 25 Hz → V = 200 V. Ideal para bombas y ventiladores de par cuadrático.</div>
+      </div>
+      <div class="glosario-card" id="gl-VFD">
+        <div class="glosario-sigla">VFD</div>
+        <div class="glosario-nombre">Variable Frequency Drive / Variador de Frecuencia (Inverter)</div>
+        <div class="glosario-desc">Controla velocidad de motores CA variando frecuencia y tensión. Tres etapas: rectificador Graetz → Bus DC (565 Vcc) → inversor IGBT con SPWM. Ahorro energético hasta 50 % en cargas de par cuadrático (ley de affinity de bombas: P ∝ n³).</div>
+      </div>
+      <div class="glosario-card" id="gl-VIM">
+        <div class="glosario-sigla">VIM</div>
+        <div class="glosario-nombre">Vocabulario Internacional de Metrología — documento BIPM</div>
+        <div class="glosario-desc">Define con precisión los términos metrológicos: mensurando, exactitud, precisión, incertidumbre, calibración, ajuste, verificación, trazabilidad, etc. Base de la norma ISO/IEC 17025.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-W">W</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-Water-Hammer-Golpe-de-Ariete">
+        <div class="glosario-sigla">Water Hammer (Golpe de Ariete)</div>
+        <div class="glosario-nombre">Sobrepresión hidráulica destructiva al parar bruscamente una bomba</div>
+        <div class="glosario-desc">Al cerrar una bomba centrífuga instantáneamente, la inercia del fluido genera una onda de presión de 15-20 bar que puede romper tuberías. Se previene con el Soft Stop del Soft-Starter (rampa 15-45 s).</div>
+      </div>
+      <div class="glosario-card" id="gl-Wave-Drive">
+        <div class="glosario-sigla">Wave Drive</div>
+        <div class="glosario-nombre">Modo de excitación de motor stepper con 1 sola fase activa (70 % del par nominal)</div>
+        <div class="glosario-desc">Uno de los 3 modos básicos de excitación: Wave Drive (1 fase), Full-Step (2 fases, 100 % par), Half-Step (alternancia 1-2 fases, 50 % del ángulo). El Microstepping subdivide el paso hasta 1/256 con corrientes sinusoidales en cuadratura.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-Y">Y</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-Y-Δ-Estrella-Triángulo">
+        <div class="glosario-sigla">Y-Δ (Estrella-Triángulo)</div>
+        <div class="glosario-nombre">Maniobra de arranque — reduce I y T a 1/3 del valor DOL</div>
+        <div class="glosario-desc">Secuencia: KM1 + KM3 (estrella) → temporización → pausa 30-50 ms → KM2 (triángulo). En Y: cada bobina recibe V_L/√3; I_arranque_Y = 1/3 · I_DOL; T_arranque_Y = 1/3 · T_DOL. Enclavamiento cruzado NC impide cortocircuito si KM2 y KM3 cierran juntos.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glosario-section">
+    <div class="glosario-letter" id="gl-Z">Z</div>
+    <div class="glosario-grid">
+      <div class="glosario-card" id="gl-Zero-Trim">
+        <div class="glosario-sigla">Zero Trim</div>
+        <div class="glosario-nombre">Ajuste de offset estático del transmisor por inclinación o gravedad</div>
+        <div class="glosario-desc">Cuando el transmisor se monta inclinado o con columna de líquido sobre la celda, existe una presión estática en la celda aunque el proceso esté en cero. Zero Trim corrige ese offset sin usar patrón externo.</div>
+      </div>
+      <div class="glosario-card" id="gl-Zero-Vivo">
+        <div class="glosario-sigla">Zero Vivo</div>
+        <div class="glosario-nombre">Característica del estándar 4-20 mA; el 0% de escala = 4 mA (nunca 0 mA)</div>
+        <div class="glosario-desc">El 'zero vivo' permite distinguir un proceso en su mínimo (4 mA) de una falla de lazo (0 mA). Es la característica de seguridad fundamental del estándar 4-20 mA industrial.</div>
+      </div>
+      <div class="glosario-card" id="gl-Zero-Muerto">
+        <div class="glosario-sigla">Zero Muerto</div>
+        <div class="glosario-nombre">Lazo 0-10 V donde 0 V representa el 0% — ambiguo ante fallas</div>
+        <div class="glosario-desc">En señales 0-10 V, el 0 V puede significar proceso en mínimo O cable cortado. Esta ambigüedad hace que sea inseguro para procesos críticos donde una señal en cero deba disparar alarma.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PÁGINA 7: SIMULACRO INTERACTIVO
+══════════════════════════════════════════════════ -->
+<div id="p7" class="page">
+<div class="container">
+
+  <span class="ex-badge">SIMULACRO — Réplica Exacta del Parcial Oficial</span>
+
+  <div class="stitle"><span class="ico">📝</span> Simulacro Interactivo — Parcial 2</div>
+
+  <div class="card card-blue">
+    <h4>📋 Instrucciones</h4>
+    <p>Este simulacro replica la estructura exacta del parcial oficial: 4 ejercicios, 16 preguntas (8 objetivas con autocorrección + 8 discursivas con patrón de respuesta).</p>
+    <ul>
+      <li><span class="sim-badge sim-badge-obj">✅ OBJETIVA</span> — 4 opciones, autocorrección automática con explicación detallada.</li>
+      <li><span class="sim-badge sim-badge-dis">✍️ DISCURSIVA</span> — Escribí tu respuesta; al enviar se muestra el patrón oficial para que te compares.</li>
+      <li>El puntaje final cuenta solo las objetivas. Las discursivas quedan marcadas como "Revisión manual".</li>
+    </ul>
+  </div>
+
+  <!-- ─── EJERCICIO 1 ─── -->
+  <div class="sim-ex-header">
+    <h3>📡 Bloque 1 — Instrumentación</h3>
+    <span class="pts">33 pts</span>
+  </div>
+
+  <!-- Q1 OBJETIVA -->
+  <div class="sim-q" id="simq1">
+    <div class="sim-q-header">
+      <span class="sim-q-num">Q1 — Ref. 1.1a</span>
+      <span class="sim-badge sim-badge-obj">✅ OBJETIVA</span>
+      <span class="sim-badge sim-badge-pts">~2 pts</span>
+    </div>
+    <div class="sim-q-text">¿Cuál es el valor de corriente que representa el <strong>0% de escala</strong> en el estándar 4-20 mA?</div>
+    <div class="sim-opts" id="simOpts1">
+      <label class="sim-opt" onclick="simSelect(1,0)"><input type="radio" name="simq1"/><span>A) 0 mA</span></label>
+      <label class="sim-opt" onclick="simSelect(1,1)"><input type="radio" name="simq1"/><span>B) 4 mA ✓</span></label>
+      <label class="sim-opt" onclick="simSelect(1,2)"><input type="radio" name="simq1"/><span>C) 2 mA</span></label>
+      <label class="sim-opt" onclick="simSelect(1,3)"><input type="radio" name="simq1"/><span>D) 10 mA</span></label>
+    </div>
+    <div class="sim-explanation" id="simExp1">✅ <strong>Correcto: B) 4 mA.</strong> El estándar 4-20 mA usa Zero Vivo: el 0% de escala se codifica como 4.00 mA. Si el cable se rompe, la corriente cae a 0 mA (&lt; 3.6 mA según NAMUR NE 43), lo que permite distinguir una falla de un proceso en mínimo.</div>
+    <div class="sim-repaso" id="simRep1">📖 <strong>Repasar:</strong> 1.1 — Lazo 4-20 mA, Zero Vivo, NAMUR NE 43.</div>
+  </div>
+
+  <!-- Q2 DISCURSIVA -->
+  <div class="sim-q" id="simq2">
+    <div class="sim-q-header">
+      <span class="sim-q-num">Q2 — Ref. 1.1b</span>
+      <span class="sim-badge sim-badge-dis">✍️ DISCURSIVA</span>
+      <span class="sim-badge sim-badge-pts">~5 pts</span>
+    </div>
+    <div class="sim-q-text">Explicar el principio del <strong>Zero Vivo (4 mA)</strong> frente al Zero Muerto (0 V). ¿Cómo detecta el PLC la rotura de cable?</div>
+    <textarea class="sim-textarea" id="simTA2" placeholder="Escribí tu respuesta aquí..."></textarea>
+    <div class="sim-unanswered-warn" id="simWarn2">⚠️ No respondida — repasar este tema antes del parcial.</div>
+    <div class="sim-patron" id="simPat2">
+      <div class="sim-patron-header">✅ Respuesta patrón — Comparate</div>
+      <div class="sim-patron-text">En 4-20 mA, el 0% de escala = 4.00 mA. Si el cable se corta, la corriente cae a 0 mA (&lt; 3.6 mA). El PLC detecta esta caída como alarma de "Falla de Lazo Abierto / Rotura de Conductor", diferenciándola de un proceso en cero. En 0-10 V (Zero Muerto), 0 V es ambiguo: no distingue proceso en mínimo de cable cortado — riesgo operativo en procesos críticos.</div>
+    </div>
+  </div>
+
+  <!-- Q3 OBJETIVA -->
+  <div class="sim-q" id="simq3">
+    <div class="sim-q-header">
+      <span class="sim-q-num">Q3 — Ref. 1.1c</span>
+      <span class="sim-badge sim-badge-obj">✅ OBJETIVA</span>
+      <span class="sim-badge sim-badge-pts">~2 pts</span>
+    </div>
+    <div class="sim-q-text">¿Cuál es la tensión generada en el <strong>Shunt de 250 Ω</strong> cuando la corriente es 20 mA?</div>
+    <div class="sim-opts" id="simOpts3">
+      <label class="sim-opt" onclick="simSelect(3,0)"><input type="radio" name="simq3"/><span>A) 1 V</span></label>
+      <label class="sim-opt" onclick="simSelect(3,1)"><input type="radio" name="simq3"/><span>B) 3 V</span></label>
+      <label class="sim-opt" onclick="simSelect(3,2)"><input type="radio" name="simq3"/><span>C) 5 V ✓</span></label>
+      <label class="sim-opt" onclick="simSelect(3,3)"><input type="radio" name="simq3"/><span>D) 10 V</span></label>
+    </div>
+    <div class="sim-explanation" id="simExp3">✅ <strong>Correcto: C) 5 V.</strong> Por Ley de Ohm: V = I·R = 0.020 A × 250 Ω = 5.00 V. Con 4 mA → 1.00 V; con 20 mA → 5.00 V. El PLC lee el rango 1-5 V en su ADC.</div>
+    <div class="sim-repaso" id="simRep3">📖 <strong>Repasar:</strong> 1.1 — Resistor Shunt 250 Ω, Ley de Ohm aplicada al lazo.</div>
+  </div>
+
+  <!-- Q4 DISCURSIVA -->
+  <div class="sim-q" id="simq4">
+    <div class="sim-q-header">
+      <span class="sim-q-num">Q4 — Ref. 1.2b</span>
+      <span class="sim-badge sim-badge-dis">✍️ DISCURSIVA</span>
+      <span class="sim-badge sim-badge-pts">~8 pts</span>
+    </div>
+    <div class="sim-q-text">Describir la arquitectura del <strong>Caudalímetro Electromagnético</strong> y el principio de la Ley de Faraday (E = B·v·D). ¿Qué propiedad del fluido es indispensable?</div>
+    <textarea class="sim-textarea" id="simTA4" placeholder="Describí la arquitectura, el principio físico y el requisito del fluido..."></textarea>
+    <div class="sim-unanswered-warn" id="simWarn4">⚠️ No respondida — repasar este tema antes del parcial.</div>
+    <div class="sim-patron" id="simPat4">
+      <div class="sim-patron-header">✅ Respuesta patrón — Comparate</div>
+      <div class="sim-patron-text">Constituido por tubo recto aislado con PTFE, bobinas externas que generan campo magnético B alterno, y electrodos rasantes. Por la Ley de Faraday (E = B·v·D), el fluido conductor en movimiento genera una FEM proporcional a su velocidad. Requiere conductividad σ ≥ 5.0 μS/cm. Ventajas: sin pérdida de carga hidráulica (tubo sin obstrucciones) y amplísima rangeabilidad/turndown (&gt;20:1 lineal, vs 3:1 cuadrático de la placa orificio).</div>
+    </div>
+  </div>
+
+  <!-- Q5 OBJETIVA -->
+  <div class="sim-q" id="simq5">
+    <div class="sim-q-header">
+      <span class="sim-q-num">Q5 — Ref. 1.3a</span>
+      <span class="sim-badge sim-badge-obj">✅ OBJETIVA</span>
+      <span class="sim-badge sim-badge-pts">~2 pts</span>
+    </div>
+    <div class="sim-q-text">¿Por qué <strong>NO</strong> se puede usar un contacto <strong>NA</strong> (normalmente abierto) en un circuito de Parada de Emergencia?</div>
+    <div class="sim-opts" id="simOpts5">
+      <label class="sim-opt" onclick="simSelect(5,0)"><input type="radio" name="simq5"/><span>A) Es más caro que el NC</span></label>
+      <label class="sim-opt" onclick="simSelect(5,1)"><input type="radio" name="simq5"/><span>B) Genera ruido EMI en el circuito</span></label>
+      <label class="sim-opt" onclick="simSelect(5,2)"><input type="radio" name="simq5"/><span>C) Si el cable se corta, la máquina no para (fail-danger) ✓</span></label>
+      <label class="sim-opt" onclick="simSelect(5,3)"><input type="radio" name="simq5"/><span>D) La norma ISO prohíbe el color rojo en NA</span></label>
+    </div>
+    <div class="sim-explanation" id="simExp5">✅ <strong>Correcto: C).</strong> Un contacto NA es fail-danger: si el cable se rompe o el borne se suelta, el circuito queda abierto y al presionar la seta la máquina NO se detiene. El contacto NC garantiza seguridad positiva: cualquier corte desenergiza el contactor de forma segura.</div>
+    <div class="sim-repaso" id="simRep5">📖 <strong>Repasar:</strong> 1.3 — Seguridad de máquinas, Apertura Positiva Forzada IEC 60947-5-1, ISO 13850.</div>
+  </div>
+
+  <!-- ─── EJERCICIO 2 ─── -->
+  <div class="sim-ex-header">
+    <h3>🛡️ Bloque 2 — Seguridad y Sensores</h3>
+    <span class="pts">33 pts</span>
+  </div>
+
+  <!-- Q6 OBJETIVA -->
+  <div class="sim-q" id="simq6">
+    <div class="sim-q-header">
+      <span class="sim-q-num">Q6 — Ref. 2.1a</span>
+      <span class="sim-badge sim-badge-obj">✅ OBJETIVA</span>
+      <span class="sim-badge sim-badge-pts">~2 pts</span>
+    </div>
+    <div class="sim-q-text">Un sensor inductivo se acerca a una botella plástica llena de agua. ¿Qué ocurre?</div>
+    <div class="sim-opts" id="simOpts6">
+      <label class="sim-opt" onclick="simSelect(6,0)"><input type="radio" name="simq6"/><span>A) La detecta; el agua induce corrientes de Foucault</span></label>
+      <label class="sim-opt" onclick="simSelect(6,1)"><input type="radio" name="simq6"/><span>B) No la detecta; plástico y agua no inducen corrientes de Foucault ✓</span></label>
+      <label class="sim-opt" onclick="simSelect(6,2)"><input type="radio" name="simq6"/><span>C) Solo detecta el agua, no el plástico</span></label>
+      <label class="sim-opt" onclick="simSelect(6,3)"><input type="radio" name="simq6"/><span>D) Depende del tamaño de la botella</span></label>
+    </div>
+    <div class="sim-explanation" id="simExp6">✅ <strong>Correcto: B).</strong> El sensor inductivo requiere un material metálico conductor que genere corrientes de Foucault. El plástico y el agua no tienen conductividad eléctrica suficiente. Para detectar líquidos a través de paredes plásticas se usa el sensor capacitivo (εr agua ≈ 80 >> εr plástico ≈ 2.2).</div>
+    <div class="sim-repaso" id="simRep6">📖 <strong>Repasar:</strong> 2.1 — Sensor inductivo (oscilador LC, corrientes de Foucault) vs capacitivo (permitividad εr).</div>
+  </div>
+
+  <!-- Q7 DISCURSIVA -->
+  <div class="sim-q" id="simq7">
+    <div class="sim-q-header">
+      <span class="sim-q-num">Q7 — Ref. 2.1b</span>
+      <span class="sim-badge sim-badge-dis">✍️ DISCURSIVA</span>
+      <span class="sim-badge sim-badge-pts">~8 pts</span>
+    </div>
+    <div class="sim-q-text">Explicar la diferencia entre salida <strong>PNP</strong> y <strong>NPN</strong> en sensores de 3 hilos. Describir el conector M12 (pines y colores IEC 60947-5-2).</div>
+    <textarea class="sim-textarea" id="simTA7" placeholder="PNP vs NPN: qué conmutan, cómo conectan al PLC... M12: pin 1=?, pin 2=?, pin 3=?, pin 4=?"></textarea>
+    <div class="sim-unanswered-warn" id="simWarn7">⚠️ No respondida — repasar este tema antes del parcial.</div>
+    <div class="sim-patron" id="simPat7">
+      <div class="sim-patron-header">✅ Respuesta patrón — Comparate</div>
+      <div class="sim-patron-text">PNP conmuta +24V a la carga (entrada PLC tipo Sinking a GND), estándar europeo/latinoamericano, mayor seguridad ante derivaciones. NPN conmuta 0V (entrada PLC tipo Sourcing desde +24V), común en maquinaria asiática. M12 (IEC 60947-5-2): Pin1 Marrón (+24Vcc), Pin2 Blanco (NC/diagnóstico), Pin3 Azul (0V GND), Pin4 Negro (señal conmutada NO → PLC).</div>
+    </div>
+  </div>
+
+  <!-- Q8 OBJETIVA -->
+  <div class="sim-q" id="simq8">
+    <div class="sim-q-header">
+      <span class="sim-q-num">Q8 — Ref. 2.2a</span>
+      <span class="sim-badge sim-badge-obj">✅ OBJETIVA</span>
+      <span class="sim-badge sim-badge-pts">~2 pts</span>
+    </div>
+    <div class="sim-q-text">¿Qué frecuencias usa el protocolo <strong>HART Bell 202</strong> para bit '1' y bit '0'?</div>
+    <div class="sim-opts" id="simOpts8">
+      <label class="sim-opt" onclick="simSelect(8,0)"><input type="radio" name="simq8"/><span>A) 440 Hz / 880 Hz</span></label>
+      <label class="sim-opt" onclick="simSelect(8,1)"><input type="radio" name="simq8"/><span>B) 1200 Hz / 2200 Hz ✓</span></label>
+      <label class="sim-opt" onclick="simSelect(8,2)"><input type="radio" name="simq8"/><span>C) 2400 Hz / 4800 Hz</span></label>
+      <label class="sim-opt" onclick="simSelect(8,3)"><input type="radio" name="simq8"/><span>D) 50 Hz / 100 Hz</span></label>
+    </div>
+    <div class="sim-explanation" id="simExp8">✅ <strong>Correcto: B) 1200 Hz / 2200 Hz.</strong> HART Bell 202 usa FSK con 1200 Hz = bit '1' (Mark) y 2200 Hz = bit '0' (Space). La señal CA de ±0.5 mA tiene promedio temporal cero, por lo que no perturba la lectura analógica DC del PLC.</div>
+    <div class="sim-repaso" id="simRep8">📖 <strong>Repasar:</strong> 2.2 — Protocolo HART, FSK Bell 202, coexistencia con 4-20 mA.</div>
+  </div>
+
+  <!-- Q9 DISCURSIVA -->
+  <div class="sim-q" id="simq9">
+    <div class="sim-q-header">
+      <span class="sim-q-num">Q9 — Ref. 2.3c</span>
+      <span class="sim-badge sim-badge-dis">✍️ DISCURSIVA</span>
+      <span class="sim-badge sim-badge-pts">~9 pts</span>
+    </div>
+    <div class="sim-q-text">Describir y diferenciar las rutinas <strong>Zero Trim, Sensor Trim y D/A Trim</strong> en un transmisor inteligente. Contrastarlas con Re-Ranging.</div>
+    <textarea class="sim-textarea" id="simTA9" placeholder="Re-Ranging: cambio por software sin calibrar... Zero Trim: corrige offset por montaje... Sensor Trim: aplica patrón físico... D/A Trim: calibra la salida analógica..."></textarea>
+    <div class="sim-unanswered-warn" id="simWarn9">⚠️ No respondida — repasar este tema antes del parcial.</div>
+    <div class="sim-patron" id="simPat9">
+      <div class="sim-patron-header">✅ Respuesta patrón — Comparate</div>
+      <div class="sim-patron-text">Re-Ranging: cambio de LRV/URV por software (escalado matemático sin calibrar). Zero Trim: ajusta el offset estático por inclinación/gravedad del cabezal. Sensor Trim (Calibración A/D): aplica presión patrón exacta en Low Trim y High Trim, corrigiendo la curva de conversión del ADC. D/A Trim (DAC Trim): calibra la etapa analógica de salida; el CPU fija 4.000 mA y 20.000 mA; el técnico mide con multímetro patrón y ajusta la ganancia del DAC.</div>
+    </div>
+  </div>
+
+  <!-- ─── EJERCICIO 3 ─── -->
+  <div class="sim-ex-header">
+    <h3>⚡ Bloque 3 — Motores y Drives</h3>
+    <span class="pts">33 pts</span>
+  </div>
+
+  <!-- Q10 OBJETIVA -->
+  <div class="sim-q" id="simq10">
+    <div class="sim-q-header">
+      <span class="sim-q-num">Q10 — Ref. 3.1b</span>
+      <span class="sim-badge sim-badge-obj">✅ OBJETIVA</span>
+      <span class="sim-badge sim-badge-pts">~2 pts</span>
+    </div>
+    <div class="sim-q-text">¿Por qué es físicamente imposible que un motor asíncrono alcance la <strong>velocidad de sincronismo</strong> en régimen motor?</div>
+    <div class="sim-opts" id="simOpts10">
+      <label class="sim-opt" onclick="simSelect(10,0)"><input type="radio" name="simq10"/><span>A) Por la resistencia mecánica de los rodamientos</span></label>
+      <label class="sim-opt" onclick="simSelect(10,1)"><input type="radio" name="simq10"/><span>B) Si n = ns → FEM = 0 → I_rotor = 0 → par = 0 ✓</span></label>
+      <label class="sim-opt" onclick="simSelect(10,2)"><input type="radio" name="simq10"/><span>C) Lo prohíbe expresamente la norma IEC</span></label>
+      <label class="sim-opt" onclick="simSelect(10,3)"><input type="radio" name="simq10"/><span>D) Por la resistencia eléctrica del rotor</span></label>
+    </div>
+    <div class="sim-explanation" id="simExp10">✅ <strong>Correcto: B).</strong> Si el rotor alcanzara n = ns, la velocidad relativa entre las barras y el CMG sería cero; sin variación de flujo no se induce FEM, sin FEM no circula corriente rotórica, sin corriente no hay par electromagnético (Lorentz). El rozamiento frenaría el rotor reinstaurando el deslizamiento s &gt; 0.</div>
+    <div class="sim-repaso" id="simRep10">📖 <strong>Repasar:</strong> 3.1 — Deslizamiento, Teorema de Ferraris, inducción mutua en motor asíncrono.</div>
+  </div>
+
+  <!-- Q11 DISCURSIVA -->
+  <div class="sim-q" id="simq11">
+    <div class="sim-q-header">
+      <span class="sim-q-num">Q11 — Ref. 3.2b</span>
+      <span class="sim-badge sim-badge-dis">✍️ DISCURSIVA</span>
+      <span class="sim-badge sim-badge-pts">~9 pts</span>
+    </div>
+    <div class="sim-q-text">Describir la secuencia de la maniobra <strong>Estrella-Triángulo (Y-Δ)</strong>. Explicar por qué reduce la corriente y el par a 1/3. ¿Por qué es obligatorio el enclavamiento eléctrico cruzado?</div>
+    <textarea class="sim-textarea" id="simTA11" placeholder="Secuencia KM1+KM3... temporizador... pausa... KM2... razón matemática 1/3... enclavamiento cruzado por qué..."></textarea>
+    <div class="sim-unanswered-warn" id="simWarn11">⚠️ No respondida — repasar este tema antes del parcial.</div>
+    <div class="sim-patron" id="simPat11">
+      <div class="sim-patron-header">✅ Respuesta patrón — Comparate</div>
+      <div class="sim-patron-text">Secuencia: cierra KM1 (línea) + KM3 (estrella) → motor arranca en Y: cada bobina recibe V_L/√3 → I_arr_Y = 1/3·I_DOL, T_arr_Y = 1/3·T_DOL (par ∝ V²). Al ~80-85% ns: temporizador abre KM3, pausa 30-50 ms (extingue arco), cierra KM2 (triángulo). Enclavamiento cruzado NC 21-22: si KM2 y KM3 cierran simultáneamente se produce cortocircuito bifásico directo. Se cruzan los contactos NC en serie con la bobina opuesta + enclavamiento mecánico físico.</div>
+    </div>
+  </div>
+
+  <!-- Q12 OBJETIVA -->
+  <div class="sim-q" id="simq12">
+    <div class="sim-q-header">
+      <span class="sim-q-num">Q12 — Ref. 3.3a</span>
+      <span class="sim-badge sim-badge-obj">✅ OBJETIVA</span>
+      <span class="sim-badge sim-badge-pts">~2 pts</span>
+    </div>
+    <div class="sim-q-text">¿Cuál es la función del contactor de <strong>Bypass</strong> del Soft-Starter en régimen permanente?</div>
+    <div class="sim-opts" id="simOpts12">
+      <label class="sim-opt" onclick="simSelect(12,0)"><input type="radio" name="simq12"/><span>A) Proteger contra sobretensión en la red</span></label>
+      <label class="sim-opt" onclick="simSelect(12,1)"><input type="radio" name="simq12"/><span>B) Derivar la corriente por cobre macizo eliminando pérdidas SCR y armónicos ✓</span></label>
+      <label class="sim-opt" onclick="simSelect(12,2)"><input type="radio" name="simq12"/><span>C) Limitar la corriente máxima de arranque</span></label>
+      <label class="sim-opt" onclick="simSelect(12,3)"><input type="radio" name="simq12"/><span>D) Desconectar el motor en emergencia</span></label>
+    </div>
+    <div class="sim-explanation" id="simExp12">✅ <strong>Correcto: B).</strong> Una vez finalizada la rampa de arranque, el Bypass deriva toda la corriente por cobre macizo, eliminando las pérdidas térmicas de los SCR (1.2-1.5 V de caída = &gt;400 W a 100 A) y la generación de armónicos EMI/RFI que producen los tiristores durante la conmutación.</div>
+    <div class="sim-repaso" id="simRep12">📖 <strong>Repasar:</strong> 3.3 — Soft-Starter, Bypass, pérdidas en SCR, armónicos.</div>
+  </div>
+
+  <!-- ─── EJERCICIO 4 ─── -->
+  <div class="sim-ex-header">
+    <h3>🔄 Continuación Bloque 3 — VFD, Servomotores y Steppers</h3>
+    <span class="pts">33 pts</span>
+  </div>
+
+  <!-- Q13 OBJETIVA -->
+  <div class="sim-q" id="simq13">
+    <div class="sim-q-header">
+      <span class="sim-q-num">Q13 — Ref. 4.1a</span>
+      <span class="sim-badge sim-badge-obj">✅ OBJETIVA</span>
+      <span class="sim-badge sim-badge-pts">~2 pts</span>
+    </div>
+    <div class="sim-q-text">¿Cuál es la tensión del <strong>Bus DC Link</strong> de un VFD alimentado con red trifásica de 400 Vca?</div>
+    <div class="sim-opts" id="simOpts13">
+      <label class="sim-opt" onclick="simSelect(13,0)"><input type="radio" name="simq13"/><span>A) 400 Vcc</span></label>
+      <label class="sim-opt" onclick="simSelect(13,1)"><input type="radio" name="simq13"/><span>B) 480 Vcc</span></label>
+      <label class="sim-opt" onclick="simSelect(13,2)"><input type="radio" name="simq13"/><span>C) 565 Vcc ✓</span></label>
+      <label class="sim-opt" onclick="simSelect(13,3)"><input type="radio" name="simq13"/><span>D) 750 Vcc</span></label>
+    </div>
+    <div class="sim-explanation" id="simExp13">✅ <strong>Correcto: C) 565 Vcc.</strong> El puente rectificador Graetz convierte V_AC en V_DC = √2 × V_L = 1.414 × 400 V ≈ 565 Vcc. Si durante frenado regenerativo sube &gt; 750 Vcc, el Chopper actúa derivando energía a la resistencia de frenado.</div>
+    <div class="sim-repaso" id="simRep13">📖 <strong>Repasar:</strong> 4.1 — Etapas del VFD: rectificador Graetz, Bus DC Link, fórmula V_DC = √2 · V_L.</div>
+  </div>
+
+  <!-- Q14 DISCURSIVA -->
+  <div class="sim-q" id="simq14">
+    <div class="sim-q-header">
+      <span class="sim-q-num">Q14 — Ref. 4.2b</span>
+      <span class="sim-badge sim-badge-dis">✍️ DISCURSIVA</span>
+      <span class="sim-badge sim-badge-pts">~8 pts</span>
+    </div>
+    <div class="sim-q-text">Describir el <strong>Control Vectorial FOC</strong>. Explicar las transformadas de Clarke y Park y el desacoplamiento Id/Iq. ¿Qué ocurre en la zona de Debilitamiento de Campo (f &gt; 50 Hz)?</div>
+    <textarea class="sim-textarea" id="simTA14" placeholder="FOC = emula motor DC... Clarke: abc→αβ... Park: αβ→dq... Id controla flujo... Iq controla par... Field Weakening: Φ ∝ 1/f..."></textarea>
+    <div class="sim-unanswered-warn" id="simWarn14">⚠️ No respondida — repasar este tema antes del parcial.</div>
+    <div class="sim-patron" id="simPat14">
+      <div class="sim-patron-header">✅ Respuesta patrón — Comparate</div>
+      <div class="sim-patron-text">FOC emula un motor DC con escobillas. Clarke convierte sistema trifásico abc → bifásico ortogonal fijo αβ. Park proyecta αβ → sistema rotante dq sincronizado con el flujo del rotor. Desacoplamiento: Id controla exclusivamente el Flujo Magnético; Iq controla el Par Electromecánico. Respuesta dinámica &lt; 5 ms, par nominal pleno (100-150%) a 0 RPM. Field Weakening f &gt; 50 Hz: V ya es máximo (400V), flujo Φ ∝ 1/f, Potencia constante, T_nom ∝ 1/f, T_max ∝ 1/f².</div>
+    </div>
+  </div>
+
+  <!-- Q15 OBJETIVA -->
+  <div class="sim-q" id="simq15">
+    <div class="sim-q-header">
+      <span class="sim-q-num">Q15 — Ref. 4.3b</span>
+      <span class="sim-badge sim-badge-obj">✅ OBJETIVA</span>
+      <span class="sim-badge sim-badge-pts">~2 pts</span>
+    </div>
+    <div class="sim-q-text">¿Qué ventaja principal tiene el <strong>encoder absoluto de código Gray</strong> sobre el incremental?</div>
+    <div class="sim-opts" id="simOpts15">
+      <label class="sim-opt" onclick="simSelect(15,0)"><input type="radio" name="simq15"/><span>A) Es más económico que el incremental</span></label>
+      <label class="sim-opt" onclick="simSelect(15,1)"><input type="radio" name="simq15"/><span>B) Tiene más pulsos por vuelta</span></label>
+      <label class="sim-opt" onclick="simSelect(15,2)"><input type="radio" name="simq15"/><span>C) Conoce su posición exacta al encender sin rutina de homing ✓</span></label>
+      <label class="sim-opt" onclick="simSelect(15,3)"><input type="radio" name="simq15"/><span>D) Funciona a mayor velocidad de rotación</span></label>
+    </div>
+    <div class="sim-explanation" id="simExp15">✅ <strong>Correcto: C).</strong> El encoder absoluto tiene pistas codificadas en código Gray con palabra digital única por ángulo. Al encender la máquina, el servodrive conoce la posición exacta sin homing. El código Gray garantiza que solo cambia 1 bit entre posiciones adyacentes, previniendo glitches (falsas lecturas transitorias).</div>
+    <div class="sim-repaso" id="simRep15">📖 <strong>Repasar:</strong> 4.3 — Encoders: incremental A/B/Z vs absoluto código Gray, homing, glitches.</div>
+  </div>
+
+  <!-- Q16 DISCURSIVA -->
+  <div class="sim-q" id="simq16">
+    <div class="sim-q-header">
+      <span class="sim-q-num">Q16 — Ref. 4.1b</span>
+      <span class="sim-badge sim-badge-dis">✍️ DISCURSIVA</span>
+      <span class="sim-badge sim-badge-pts">~8 pts</span>
+    </div>
+    <div class="sim-q-text">Describir el fenómeno de las <strong>ondas reflejadas por dv/dt</strong> en cables largos (&gt; 20-30 m). ¿Qué daños produce y qué soluciones industriales existen?</div>
+    <textarea class="sim-textarea" id="simTA16" placeholder="IGBT conmutan en nanosegundos → dv/dt > 5000 V/μs → reflexión de onda → picos 1200-1600 V → daños bobinado y rodamientos → soluciones: reactancias, filtros dv/dt, filtros L-C senoidales..."></textarea>
+    <div class="sim-unanswered-warn" id="simWarn16">⚠️ No respondida — repasar este tema antes del parcial.</div>
+    <div class="sim-patron" id="simPat16">
+      <div class="sim-patron-header">✅ Respuesta patrón — Comparate</div>
+      <div class="sim-patron-text">Los IGBT conmutan en nanosegundos generando dv/dt &gt; 5000 V/μs. En cables &gt; 20-30 m, el desajuste de impedancia característica entre cable y motor produce reflexión electromagnética. La onda reflejada superpuesta a la incidente genera picos de 1200-1600 V en las primeras espiras del bobinado, perforando el esmalte dieléctrico. Además causa micro-arcos en rodamientos (bearing currents / fluting). Soluciones: reactancias de salida (choque 3 %), filtros dv/dt (&lt; 500 V/μs, hasta 150 m), filtros senoidales L-C (onda pura, hasta 1000 m).</div>
+    </div>
+  </div>
+
+  <!-- ACCIONES DEL SIMULACRO -->
+  <div class="quiz-actions" id="simActions">
+    <button class="btn btn-blue" id="simSubmitBtn" onclick="submitSimulacro()">📊 Ver resultados</button>
+    <button class="btn btn-gray" id="simResetBtn" onclick="resetSimulacro()" style="display:none">🔄 Reintentar todo</button>
+    <span id="simProgressTxt" style="font-size:.88rem;color:var(--gray-lt);font-weight:600">0 / 8 objetivas respondidas</span>
+  </div>
+  <div id="simBlockResults" aria-live="polite"><strong>Resultado del bloque:</strong> se calcula al corregir.</div>
+  <div class="alert alert-info" style="margin-top:1rem"><span class="ico">✍️</span><span><strong>Esta respuesta requiere revisión manual — anotá para revisar con el docente.</strong> Aplica a todas las consignas discursivas.</span></div>
+  <div id="simScoreBox"></div>
+
+</div>
+</div>
 </body>
 </html>

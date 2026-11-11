@@ -764,6 +764,21 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
       </div>
     </div>
 
+    <details style="margin-bottom:1.2rem">
+      <summary>🔎 Método alternativo para S=T cuando T está dado por ecuaciones</summary>
+      <div class="dbody">
+        <p>Cuando $T$ viene definido por ecuaciones homogéneas (y no por generadores), el método más directo es:</p>
+        <ol style="margin-left:1.2rem;line-height:2;font-size:.9rem">
+          <li><strong>Comparar dimensiones.</strong> Si $\dim(S)\neq\dim(T)$ → no son iguales; terminás acá.</li>
+          <li><strong>Verificar $S\subseteq T$:</strong> tomá cada vector de una base de $S$ y sustituilos en las ecuaciones que definen $T$. Si todos satisfacen las ecuaciones → $S\subseteq T$.</li>
+          <li>Como $\dim(S)=\dim(T)$ y $S\subseteq T$, se concluye $S=T$.</li>
+        </ol>
+        <div class="tip">💡 <div><strong>¿Por qué alcanza con verificar S⊆T?</strong> Si $S\subseteq T$ y $\dim(S)=\dim(T)&lt;\infty$, entonces cualquier base de $S$ es también base de $T$ → $S=T$. Es el argumento estándar: dos subespacios finito-dimensionales son iguales si uno contiene al otro y tienen la misma dimensión.</div></div>
+        <p style="margin-top:.7rem;font-size:.9rem"><strong>Ejemplo:</strong> Sea $S=\text{span}\{(1,-1,2)\}$ y $T=\{(x,y,z): x+y=0,\; x-z=0\}$. Verificamos $\dim(T)=3-\text{Rg}(A_T)$. Luego sustituimos $(1,-1,2)$ en las ecuaciones de $T$: $1+(-1)=0$ ✓ y $1-2=-1\neq 0$ ✗ → $S\not\subseteq T$ → $S\neq T$.</p>
+        <div class="note">📌 El método de Rg (armar matriz con generadores de ambos y contar rango) aplica cuando <em>ambos</em> subespacios vienen dados por spans. Cuando uno tiene ecuaciones, la sustitución directa es más económica.</div>
+      </div>
+    </details>
+
     <div class="stitle"><span class="ico">🧪</span> Ejemplo resuelto — Ejercicio 1 estilo parcial</div>
     <div class="card" style="margin-bottom:1rem">
       <h3>Enunciado</h3>
@@ -898,7 +913,23 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
           <li>$(S^\perp)^\perp = S$</li>
         </ul>
       </div>
-    </div>
+    <details style="margin:1rem 0 1.5rem">
+      <summary>🧮 Algoritmo general para calcular $S^\perp$</summary>
+      <div class="dbody">
+        <p>Este método funciona para cualquier subespacio definido por generadores en $\mathbb{R}^n$:</p>
+        <ol style="margin-left:1.2rem;line-height:2;font-size:.9rem">
+          <li>Obtené una base $\{g_1,\ldots,g_k\}$ de $S$ (si aún no la tenés, calculala por Gauss-Jordan a partir de las ecuaciones o generadores dados).</li>
+          <li>Armá la matriz $B \in \mathbb{R}^{k\times n}$ poniendo cada $g_i$ como <strong>fila</strong>:
+            $$B = \begin{pmatrix} -\;g_1\;- \\ \vdots \\ -\;g_k\;- \end{pmatrix}$$
+          </li>
+          <li>Resolvé el sistema homogéneo $Bx = 0$.</li>
+          <li>Los vectores de la base del espacio solución de $Bx=0$ son la <strong>base de $S^\perp$</strong>.</li>
+        </ol>
+        <div class="tip">💡 <div><strong>¿Por qué funciona?</strong> La ecuación $Bx=0$ exige $g_i\cdot x=0$ para cada $i$. Eso es exactamente la condición $\langle x,g\rangle=0\;\forall g\in S$, que define $S^\perp$. Los generadores de $S$ como filas de $B$ codifican todas las condiciones de ortogonalidad de una vez.</div></div>
+        <p style="margin-top:.7rem;font-size:.9rem"><strong>Verificación de dimensión:</strong> como los $g_i$ son LI, $\text{Rg}(B)=k$, y por la fórmula $\dim(\ker B)=n-k$ se confirma $\dim(S^\perp)=n-\dim(S)$ ✓.</p>
+        <div class="note">📌 <strong>Resumen:</strong> base de $S$ → filas de $B$ → resolver $Bx=0$ → base de $S^\perp$. Es la secuencia estándar para el parcial.</div>
+      </div>
+    </details>
 
     <div class="stitle"><span class="ico">🧪</span> Ejemplo resuelto — Ejercicio 2 estilo parcial</div>
     <div class="card" style="margin-bottom:1rem">
@@ -1154,7 +1185,18 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
       <h3>Teorema fundamental (Ejercicio 4 del parcial)</h3>
       <p style="font-size:.9rem;margin-bottom:.5rem">Si $\{v_1,v_2,\ldots,v_n\}$ es <strong>base de $\mathbb{R}^n$</strong> y $w_1,\ldots,w_n \in \mathbb{R}^m$ son vectores cualesquiera del codominio, entonces <strong>existe una única</strong> transformación lineal $T:\mathbb{R}^n\to\mathbb{R}^m$ tal que $T(v_i)=w_i$ para todo $i$.</p>
       <p style="font-size:.9rem"><strong>¿Cuándo forman base?</strong> Los $v_i$ forman base si $\det[v_1\mid v_2\mid\cdots\mid v_n] \neq 0$ (o equivalentemente, $\text{Rg}=n$).</p>
-    </div>
+    <details style="margin-bottom:1.2rem">
+      <summary>⚠️ ¿Qué pasa si los vectores de entrada NO forman base?</summary>
+      <div class="dbody">
+        <p>Si los vectores de entrada $\{v_1,\ldots,v_k\}$ son <strong>linealmente dependientes</strong> o no abarcan todo el dominio, la situación cambia respecto al caso "base":</p>
+        <ul style="margin-left:1.2rem;line-height:2;font-size:.9rem">
+          <li><strong>Existencia:</strong> solo está garantizada si toda relación lineal entre las entradas se cumple también entre las imágenes propuestas. Si $\alpha_1 v_1+\cdots+\alpha_k v_k=0$ pero $\alpha_1 w_1+\cdots+\alpha_k w_k\neq 0$, no existe ninguna TL con esos valores (viola la linealidad).</li>
+          <li><strong>Unicidad:</strong> aunque los datos sean consistentes, si $\{v_i\}$ no abarca el dominio, la transformación no queda determinada de forma única porque hay vectores del dominio que no están expresados como c.l. de los $v_i$.</li>
+        </ul>
+        <div class="tip">💡 <div><strong>Criterio compacto:</strong> una TL está determinada de forma única cuando y solo cuando los vectores de entrada forman una base del dominio (det≠0 / Rg=n). En cualquier otro caso: verificar consistencia (y aun así la determinación es incompleta).</div></div>
+        <p style="margin-top:.7rem;font-size:.9rem"><strong>Ejemplo conceptual:</strong> si $T:\mathbb{R}^2\to\mathbb{R}^2$ y sabemos $T(1,0)=(1,1)$ y $T(2,0)=(2,2)$, la segunda condición ya está implícita en la primera por linealidad: $T(2,0)=2T(1,0)=(2,2)$ ✓. Los datos son consistentes, existe una TL, pero $T(0,1)$ queda libre — hay infinitas TL que satisfacen esos dos datos.</p>
+      </div>
+    </details>
 
     <div class="stitle"><span class="ico">🧪</span> Ejemplo resuelto — Ejercicio 4 estilo parcial</div>
     <div class="card" style="margin-bottom:1rem">
@@ -1237,6 +1279,19 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
         <p>$\text{Im}(T) = \{T(x) : x \in \mathbb{R}^n\}$</p>
         <p style="margin-top:.4rem">Es un <strong>subespacio de $\mathbb{R}^m$</strong>. Generado por las columnas de la matriz de $T$.</p>
         <p style="margin-top:.4rem"><strong>Teorema rango-nulidad:</strong> $\dim(\ker T) + \dim(\text{Im}\, T) = n$</p>
+      </div>
+    <div class="grid g2" style="margin-top:1rem">
+      <div class="card or">
+        <h3>Inyectividad — $T$ uno a uno</h3>
+        <p>$T$ es <strong>inyectiva</strong> si y solo si $\ker(T)=\{\vec{0}\}$.</p>
+        <p style="margin-top:.4rem">Por rango-nulidad: $\ker T=\{0\}$ implica $\dim(\ker T)=0$, luego $\dim(\text{Im}\,T)=n$.</p>
+        <p style="margin-top:.4rem"><em>Cómo detectarlo:</em> resolvé $Tx=0$. Si la única solución es $x=0$ → $T$ es inyectiva. Para $T:\mathbb{R}^n\to\mathbb{R}^n$: equivale a det$([T])\neq 0$.</p>
+      </div>
+      <div class="card bl">
+        <h3>Sobreyectividad — $T$ sobre</h3>
+        <p>$T:\mathbb{R}^n\to\mathbb{R}^m$ es <strong>sobreyectiva</strong> si y solo si $\text{Im}(T)=\mathbb{R}^m$.</p>
+        <p style="margin-top:.4rem">Equivalentemente: $\dim(\text{Im}\,T)=m$, es decir, $\text{Rg}([T])=m$ (la matriz de $T$ tiene rango igual a la cantidad de filas).</p>
+        <p style="margin-top:.4rem"><em>Cómo detectarlo:</em> si $n=m$ y det$\neq 0$, $T$ es biyectiva (inyectiva y sobreyectiva a la vez).</p>
       </div>
     </div>
 

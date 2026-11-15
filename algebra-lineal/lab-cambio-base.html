@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Laboratorio interactivo 3D con GeoGebra: visualizá el cambio de base y coordenadas en R³. Ejercicio guiado paso a paso y modo libre con retos aleatorios. Álgebra Lineal I.">
+    <title>Lab 3D: Cambio de Base en R³ · Álgebra Lineal I</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fuente Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- GeoGebra Deploy API -->
+    <script src="https://www.geogebra.org/apps/deployggb.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        /* Navegación apuntes */
+        .apuntes-nav{position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:.5rem;padding:.45rem .9rem;background:rgba(10,10,18,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.07);font-family:'Segoe UI',system-ui,sans-serif;font-size:.82rem;flex-wrap:wrap}
+        .apuntes-nav a{color:#94a3b8;text-decoration:none;padding:.2rem .55rem;border-radius:5px;transition:.15s;white-space:nowrap}
+        .apuntes-nav a:hover{background:rgba(255,255,255,.08);color:#e2e8f0}
+        .apuntes-nav .an-hub{color:#38bdf8!important}
+        .apuntes-nav .an-cur{color:#e2e8f0;font-weight:700;background:rgba(255,255,255,.08);padding:.2rem .55rem;border-radius:5px;white-space:nowrap}
+        .apuntes-nav .an-sep{color:rgba(255,255,255,.2);pointer-events:none}
+        @media(max-width:480px){.apuntes-nav .an-long{display:none}}
+
+        /* Estilos personalizados para sliders y scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+            height: 6px;
+            border-radius: 999px;
+            background: #334155;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            margin-top: -6px;
+            border: 2px solid #0f172a;
+            transition: transform 0.15s ease;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.18);
+        }
+
+        .slider-alpha::-webkit-slider-thumb { background: #3b82f6; }
+        .slider-beta::-webkit-slider-thumb { background: #10b981; }
+        .slider-gamma::-webkit-slider-thumb { background: #f59e0b; }
+
+        /* Asegurar que el applet de GeoGebra ocupe todo el contenedor */
+        #ggb-element, #ggb-element > div {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* Footer nav */
+        .footer-nav{display:flex;align-items:center;gap:.5rem;padding:.55rem .9rem;background:rgba(10,10,18,.95);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.07);font-family:'Segoe UI',system-ui,sans-serif;font-size:.82rem;flex-wrap:wrap;justify-content:center}
+        .footer-nav a{color:#94a3b8;text-decoration:none;padding:.2rem .55rem;border-radius:5px;transition:.15s;white-space:nowrap}
+        .footer-nav a:hover{background:rgba(255,255,255,.08);color:#e2e8f0}
+        .footer-nav .fn-sep{color:rgba(255,255,255,.2);pointer-events:none}
+        .footer-nav .fn-active{color:#e2e8f0;font-weight:700}
+
+        /* Keyboard shortcut hint */
+        .kbd-hint{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.65rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:0 .35rem;line-height:1.6;color:#94a3b8;vertical-align:middle}
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased lg:h-screen lg:overflow-hidden flex flex-col">
+
+    <!-- Barra de Navegación Apuntes -->
+    <div class="apuntes-nav" role="navigation" aria-label="Navegación de apuntes">
+        <a href="https://joacodelacorte.netlify.app/#apuntes">&#x2190; Portafolio</a>
+        <span class="an-sep">/</span>
+        <a href="../apuntes/" class="an-hub">Hub</a>
+        <span class="an-sep">/</span>
+        <a href="teoria.html">Unidad 1</a>
+        <span class="an-sep">&middot;</span>
+        <a href="teoria-unidad2.html">Unidad 2</a>
+        <span class="an-sep">&middot;</span>
+        <a href="teoria-unidad3.html">Unidad 3-4</a>
+        <span class="an-sep">&middot;</span>
+        <a href="juegos.html">&#x1F3AE; Juegos</a>
+        <span class="an-sep">&middot;</span>
+        <span class="an-cur">&#x1F9EA; Lab 3D</span>
+    </div>
+
+    <!-- Barra Superior -->
+    <header class="bg-slate-900/95 border-b border-slate-800 px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 shrink-0 z-20">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-indigo-600/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400 font-bold font-mono text-sm" aria-hidden="true">
+                R³
+            </div>
+            <div>
+                <h1 class="text-sm sm:text-base font-bold text-slate-100 leading-tight">
+                    Cambio de Base en <span class="text-indigo-400">R³</span> · Visualizador GeoGebra 3D
+                </h1>
+                <p class="text-xs text-slate-400 hidden sm:block">
+                    Álgebra Lineal I · Vector <span class="font-mono text-rose-400">v = (-2, 1, 3)</span> en base <span class="font-mono text-slate-300">B = {(1,1,-1), (2,1,-1), (0,1,1)}</span>
+                    <span class="ml-2 kbd-hint" title="Usá ← → para navegar pasos, 0-4 para ir directo">⌨ ←→ 0-4</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 text-xs">
+            <span class="hidden md:inline-flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-3 py-1 rounded-lg font-mono">
+                [v]_B = (0, -1, 2)
+            </span>
+        </div>
+    </header>
+
+    <!-- Contenedor Principal Dashboard: Panel Lateral Izquierdo (~370px) + GeoGebra 3D Amplio a la Derecha -->
+    <main class="flex-1 flex flex-col lg:flex-row lg:overflow-hidden">
+
+        <!-- PANEL LATERAL IZQUIERDO (~370px): Controles, Paso a Paso y Juego 3D -->
+        <aside class="w-full lg:w-[375px] shrink-0 lg:h-full bg-slate-900 border-b lg:border-b-0 lg:border-r border-slate-800 flex flex-col overflow-y-auto p-4 gap-4">
+
+            <!-- Selector de Pestañas Principales -->
+            <div class="grid grid-cols-2 bg-slate-950 p-1 rounded-xl border border-slate-800 shrink-0" role="tablist" aria-label="Modo de visualización">
+                <button id="tab-btn-steps" onclick="switchMode('steps')" aria-label="Modo paso a paso" role="tab" aria-selected="true" aria-controls="panel-steps"
+                    class="py-2 px-2.5 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow-sm">
+                    1. Paso a Paso (Ejercicio)
+                </button>
+                <button id="tab-btn-play" onclick="switchMode('play')" aria-label="Modo laboratorio libre" role="tab" aria-selected="false" aria-controls="panel-play"
+                    class="py-2 px-2.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-slate-200">
+                    2. Laboratorio y Juego 3D
+                </button>
+            </div>
+
+            <!-- ==================== PESTAÑA 1: PASO A PASO (EJERCICIO) ==================== -->
+            <div id="panel-steps" class="flex flex-col gap-3.5" role="tabpanel" aria-labelledby="tab-btn-steps">
+
+                <!-- Navegación de Pasos (Paso 0 a Paso 4) -->
+                <div class="bg-slate-800/70 border border-slate-700/80 rounded-2xl p-3.5">
+                    <div class="flex items-center justify-between mb-2.5">
+                        <span class="text-xs font-bold uppercase tracking-wider text-indigo-400">Recorrido Guiado</span>
+                        <span id="step-badge" class="text-xs font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-md">
+                            Paso 0 de 4
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-5 gap-1 mb-3" role="group" aria-label="Pasos del ejercicio">
+                        <button onclick="goToStep(0)" id="pill-step-0" aria-label="Paso 0: Base" class="py-2 px-1 rounded-xl text-[11px] font-bold border transition text-center">
+                            0. Base
+                        </button>
+                        <button onclick="goToStep(1)" id="pill-step-1" aria-label="Paso 1: α por b1" class="py-2 px-1 rounded-xl text-[11px] font-bold border transition text-center">
+                            1. α·b₁
+                        </button>
+                        <button onclick="goToStep(2)" id="pill-step-2" aria-label="Paso 2: β por b2" class="py-2 px-1 rounded-xl text-[11px] font-bold border transition text-center">
+                            2. β·b₂
+                        </button>
+                        <button onclick="goToStep(3)" id="pill-step-3" aria-label="Paso 3: γ por b3" class="py-2 px-1 rounded-xl text-[11px] font-bold border transition text-center">
+                            3. γ·b₃
+                        </button>
+                        <button onclick="goToStep(4)" id="pill-step-4" aria-label="Paso 4: Comparación" class="py-2 px-1 rounded-xl text-[11px] font-bold border transition text-center">
+                            4. Comp.
+                        </button>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button id="btn-prev-step" onclick="changeStep(-1)" aria-label="Paso anterior"
+                            class="flex-1 py-2 px-3 rounded-xl text-xs font-semibold bg-slate-950 hover:bg-slate-800 disabled:opacity-40 disabled:pointer-events-none text-slate-200 border border-slate-700 transition">
+                            ← Anterior
+                        </button>
+                        <button id="btn-next-step" onclick="changeStep(1)" aria-label="Paso siguiente"
+                            class="flex-1 py-2 px-3 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md transition">
+                            Siguiente →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tarjeta Dinámica de Explicación Matemática -->
+                <div id="step-content-card" class="bg-slate-800/60 border border-slate-700/80 rounded-2xl p-4 flex flex-col gap-2.5" role="region" aria-live="polite" aria-label="Explicación del paso actual">
+                    <!-- Contenido dinámico -->
+                </div>
+
+                <!-- Opciones de Visualización (Checkboxes) -->
+                <div class="bg-slate-800/50 border border-slate-700/70 rounded-2xl p-3.5 space-y-2.5">
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Opciones del Gráfico 3D</div>
+                    
+                    <label class="flex items-center gap-2.5 text-xs text-slate-200 cursor-pointer select-none">
+                        <input type="checkbox" id="chk-show-base" checked onchange="toggleReferenceBase(this.checked)" aria-label="Mostrar vectores base b1, b2, b3 en el origen"
+                            class="w-4 h-4 rounded border-slate-600 bg-slate-900 text-indigo-600 focus:ring-indigo-500">
+                        <span>Mostrar vectores base <span class="font-mono text-slate-300">b₁, b₂, b₃</span> en el origen</span>
+                    </label>
+
+                    <label class="flex items-center gap-2.5 text-xs text-slate-200 cursor-pointer select-none">
+                        <input type="checkbox" id="chk-show-labels" checked onchange="toggleAllLabels(this.checked)" aria-label="Mostrar etiquetas y nombres en 3D"
+                            class="w-4 h-4 rounded border-slate-600 bg-slate-900 text-indigo-600 focus:ring-indigo-500">
+                        <span>Mostrar etiquetas y nombres en 3D</span>
+                    </label>
+                </div>
+
+                <!-- Ecuación Resumen -->
+                <div class="bg-slate-950/90 border border-slate-800 rounded-2xl p-3.5">
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Descomposición Vectorial</div>
+                    <div class="font-mono text-xs leading-relaxed text-slate-300 space-y-1">
+                        <div>
+                            <span class="text-blue-400 font-bold">0</span>·b₁ + 
+                            <span class="text-emerald-400 font-bold">(-1)</span>·b₂ + 
+                            <span class="text-amber-400 font-bold">2</span>·b₃ = v
+                        </div>
+                        <div class="text-slate-400">
+                            (0,0,0) + (-2,-1,1) + (0,2,2) = (-2,1,3)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PESTAÑA 2: LABORATORIO Y JUEGO 3D ==================== -->
+            <div id="panel-play" class="hidden flex-col gap-3.5" role="tabpanel" aria-labelledby="tab-btn-play">
+
+                <!-- Banner de Reto Aleatorio -->
+                <div id="challenge-banner" class="hidden bg-indigo-950/80 border border-indigo-500/50 rounded-2xl p-3.5 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-indigo-300">🎯 Reto 3D Activo</span>
+                        <span id="challenge-target-badge" class="font-mono text-xs font-bold text-rose-400 bg-slate-950 px-2 py-0.5 rounded border border-rose-500/30"></span>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Mové los deslizadores <span class="font-mono text-blue-400">α</span>, <span class="font-mono text-emerald-400">β</span> y <span class="font-mono text-amber-400">γ</span> hasta alcanzar el vector destino rojo <span class="font-mono text-rose-400">v</span>.
+                    </p>
+                    <div id="challenge-solution-box" class="hidden font-mono text-xs bg-slate-950/90 border border-amber-500/40 text-amber-300 p-2 rounded-lg"></div>
+                </div>
+
+                <!-- Sliders Sincronizados con Inputs Numéricos -->
+                <div class="bg-slate-800/70 border border-slate-700/80 rounded-2xl p-3.5 space-y-3.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Escalares (Coordenadas)</span>
+                        <span class="text-[11px] text-slate-400">[-4 a 4]</span>
+                    </div>
+
+                    <!-- Alpha -->
+                    <div class="space-y-1">
+                        <div class="flex items-center justify-between text-xs">
+                            <label for="slider-alpha" class="font-semibold text-blue-400 flex items-center gap-1.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-blue-500" aria-hidden="true"></span>
+                                α · b₁ <span class="font-mono text-slate-400 font-normal">(1,1,-1)</span>
+                            </label>
+                            <input type="number" id="input-alpha" min="-4" max="4" step="0.5" value="0"
+                                oninput="updateScalarFromInput('alpha', this.value)" aria-label="Valor numérico de alfa"
+                                class="w-16 bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 text-right font-mono font-bold text-blue-300 text-xs focus:outline-none focus:border-blue-500">
+                        </div>
+                        <input type="range" id="slider-alpha" min="-4" max="4" step="0.5" value="0"
+                            oninput="updateScalarFromSlider('alpha', this.value)" aria-label="Deslizador de alfa"
+                            class="w-full slider-alpha">
+                    </div>
+
+                    <!-- Beta -->
+                    <div class="space-y-1">
+                        <div class="flex items-center justify-between text-xs">
+                            <label for="slider-beta" class="font-semibold text-emerald-400 flex items-center gap-1.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500" aria-hidden="true"></span>
+                                β · b₂ <span class="font-mono text-slate-400 font-normal">(2,1,-1)</span>
+                            </label>
+                            <input type="number" id="input-beta" min="-4" max="4" step="0.5" value="-1"
+                                oninput="updateScalarFromInput('beta', this.value)" aria-label="Valor numérico de beta"
+                                class="w-16 bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 text-right font-mono font-bold text-emerald-300 text-xs focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <input type="range" id="slider-beta" min="-4" max="4" step="0.5" value="-1"
+                            oninput="updateScalarFromSlider('beta', this.value)" aria-label="Deslizador de beta"
+                            class="w-full slider-beta">
+                    </div>
+
+                    <!-- Gamma -->
+                    <div class="space-y-1">
+                        <div class="flex items-center justify-between text-xs">
+                            <label for="slider-gamma" class="font-semibold text-amber-400 flex items-center gap-1.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-500" aria-hidden="true"></span>
+                                γ · b₃ <span class="font-mono text-slate-400 font-normal">(0,1,1)</span>
+                            </label>
+                            <input type="number" id="input-gamma" min="-4" max="4" step="0.5" value="2"
+                                oninput="updateScalarFromInput('gamma', this.value)" aria-label="Valor numérico de gamma"
+                                class="w-16 bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 text-right font-mono font-bold text-amber-300 text-xs focus:outline-none focus:border-amber-500">
+                        </div>
+                        <input type="range" id="slider-gamma" min="-4" max="4" step="0.5" value="2"
+                            oninput="updateScalarFromSlider('gamma', this.value)" aria-label="Deslizador de gamma"
+                            class="w-full slider-gamma">
+                    </div>
+                </div>
+
+                <!-- Tarjeta de Estado en Vivo -->
+                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-3.5 space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Estado en Vivo</span>
+                        <span id="live-distance-badge" class="font-mono text-xs text-slate-300">Dist: 0.00</span>
+                    </div>
+
+                    <!-- Alerta Verde cuando distancia < 0.01 -->
+                    <div id="goal-alert" class="bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 rounded-xl px-3 py-2 text-xs font-bold text-center" role="alert">
+                        ¡Objetivo alcanzado! Encontraste [v]_B
+                    </div>
+
+                    <div class="font-mono text-xs bg-slate-900/90 p-2.5 rounded-xl border border-slate-800 space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-400">Resultante u (canónica):</span>
+                            <span id="live-u-coords" class="text-cyan-400 font-bold">(-2, 1, 3)</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-400">Objetivo v (canónica):</span>
+                            <span id="live-v-coords" class="text-rose-400 font-bold">(-2, 1, 3)</span>
+                        </div>
+                        <div class="flex items-center justify-between pt-1 border-t border-slate-800">
+                            <span class="text-slate-400">Distancia ‖u - v‖:</span>
+                            <span id="live-distance" class="text-emerald-400 font-bold">0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones del Juego / Retos -->
+                <div class="flex flex-col gap-2">
+                    <button onclick="generateRandomChallenge()" aria-label="Generar un nuevo reto aleatorio"
+                        class="w-full py-2.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow transition">
+                        🎲 Nuevo Reto Aleatorio
+                    </button>
+
+                    <button id="btn-show-solution" onclick="revealChallengeSolution()" disabled aria-label="Revelar la solución del reto actual"
+                        class="w-full py-2 px-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 disabled:opacity-40 disabled:pointer-events-none border border-amber-500/40 text-amber-300 font-semibold text-xs transition">
+                        💡 Ver Solución del Reto
+                    </button>
+
+                    <button onclick="returnToOriginalExercise()" aria-label="Volver al ejercicio original v=(-2,1,3)"
+                        class="w-full py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs transition">
+                        ↺ Volver al Ejercicio v=(-2,1,3)
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- LIENZO GEOGEBRA 3D AMPLIO A LA DERECHA (Ocupa todo el ancho y alto disponible, mín 650px) -->
+        <section id="ggb-wrapper" class="flex-1 min-h-[650px] lg:h-full relative bg-slate-900 select-none" aria-label="Visualización GeoGebra 3D">
+
+            <!-- Pantalla de Carga -->
+            <div id="ggb-loader" class="absolute inset-0 z-30 bg-slate-900 flex flex-col items-center justify-center gap-3 p-6 text-center" role="status" aria-label="Cargando GeoGebra">
+                <div class="w-10 h-10 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" aria-hidden="true"></div>
+                <p class="text-sm font-semibold text-slate-200">Inicializando GeoGebra 3D...</p>
+                <p class="text-xs text-slate-400 max-w-xs">Arrastrá con el mouse para rotar en 3D y usá la rueda para acercar o alejar.</p>
+            </div>
+
+            <!-- Applet GeoGebra -->
+            <div id="ggb-element" class="w-full h-full"></div>
+
+            <!-- Leyenda Visual Flotante -->
+            <div class="absolute top-3 left-3 z-10 bg-slate-950/85 backdrop-blur-md border border-slate-800 rounded-xl px-3.5 py-2 shadow-lg pointer-events-none" aria-label="Referencias de colores 3D">
+                <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Referencias 3D</div>
+                <div class="flex flex-wrap gap-x-3.5 gap-y-1 text-xs font-medium">
+                    <span class="flex items-center gap-1.5 text-rose-400">
+                        <span class="w-2.5 h-2.5 rounded-full bg-rose-500" aria-hidden="true"></span> v (Destino)
+                    </span>
+                    <span class="flex items-center gap-1.5 text-blue-400">
+                        <span class="w-2.5 h-2.5 rounded-full bg-blue-500" aria-hidden="true"></span> b₁ / α·b₁
+                    </span>
+                    <span class="flex items-center gap-1.5 text-emerald-400">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500" aria-hidden="true"></span> b₂ / β·b₂
+                    </span>
+                    <span class="flex items-center gap-1.5 text-amber-400">
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-500" aria-hidden="true"></span> b₃ / γ·b₃
+                    </span>
+                    <span id="legend-canonical" class="hidden items-center gap-1.5 text-purple-400">
+                        <span class="w-3 h-0.5 border-t-2 border-dashed border-purple-400" aria-hidden="true"></span> Camino Canónico (-2i+1j+3k)
+                    </span>
+                    <span id="legend-resultant" class="hidden items-center gap-1.5 text-cyan-400">
+                        <span class="w-3 h-0.5 border-t-2 border-dashed border-cyan-400" aria-hidden="true"></span> Resultante u
+                    </span>
+                </div>
+            </div>
+
+            <!-- Barra Inferior de Vistas de Cámara -->
+            <div class="absolute bottom-3 left-3 right-3 z-10 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
+                <div class="flex flex-wrap items-center gap-1.5 bg-slate-950/85 backdrop-blur-md border border-slate-800 p-1.5 rounded-xl shadow-lg pointer-events-auto">
+                    <span class="text-[11px] font-semibold text-slate-400 px-1.5 hidden sm:inline">Vista 3D:</span>
+                    <button onclick="resetCamera3D()" aria-label="Centrar cámara 3D en ejes -4.5 a 4.5" class="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 hover:bg-indigo-600 text-slate-200 hover:text-white transition">
+                        Centrar Ejes (-4.5 a 4.5)
+                    </button>
+                </div>
+                <div class="bg-slate-950/85 backdrop-blur-md border border-slate-800 px-3 py-1 rounded-lg text-[11px] text-slate-400 hidden sm:block">
+                    🖱️ Click izquierdo y arrastrar: rotar 3D · Rueda: zoom · ⌨ ←→ pasos · 0-4 directo
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer de Navegación -->
+    <footer class="footer-nav shrink-0" role="navigation" aria-label="Navegación inferior de páginas relacionadas">
+        <a href="teoria-unidad3.html">📖 Teoría Unidad 3-4 (Coordenadas)</a>
+        <span class="fn-sep">·</span>
+        <span class="fn-active">🧪 Lab 3D: Cambio de Base</span>
+        <span class="fn-sep">·</span>
+        <a href="juegos.html">🎮 Juegos</a>
+        <span class="fn-sep">·</span>
+        <a href="teoria-unidad2.html">📖 Unidad 2 (Bases y Dimensión)</a>
+    </footer>
+
+    <script>
+        // =========================================================================
+        // 1. CONSTANTES Y ESTADO GLOBAL
+        // =========================================================================
+        const B1 = [1, 1, -1];
+        const B2 = [2, 1, -1];
+        const B3 = [0, 1, 1];
+        const EXERCISE_TARGET = [-2, 1, 3];
+        const EXERCISE_COORDS = [0, -1, 2];
+
+        let ggbApi = null;
+        let currentMode = 'steps'; // 'steps' | 'play'
+        let currentStep = 0;
+        let showReferenceBase = true;
+        let show3DLabels = true;
+
+        let playState = {
+            alpha: 0,
+            beta: -1,
+            gamma: 2,
+            target: [...EXERCISE_TARGET],
+            challengeAnswer: null
+        };
+
+        // Contenido didáctico de los 5 pasos (Paso 0 a Paso 4)
+        const STEPS_INFO = [
+            {
+                badge: "Paso 0 de 4",
+                title: "Punto de partida O, destino v y la Base B",
+                color: "text-rose-400",
+                border: "border-rose-500/40",
+                body: `
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Partimos desde <span class="font-mono font-bold text-slate-100">O = (0, 0, 0)</span>. El vector rojo <span class="font-mono font-bold text-rose-400">v = (-2, 1, 3)</span> es el punto fijo al que queremos llegar.
+                    </p>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        En el origen dibujamos los tres vectores de la base ordenada <span class="font-mono text-slate-200">B</span> como nuestros "ejes inclinados" permitidos:
+                    </p>
+                    <div class="font-mono text-xs bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-1">
+                        <div class="text-blue-400">b₁ = (1, 1, -1)</div>
+                        <div class="text-emerald-400">b₂ = (2, 1, -1)</div>
+                        <div class="text-amber-400">b₃ = (0, 1, 1)</div>
+                    </div>
+                    <div class="bg-indigo-950/50 border border-indigo-500/30 rounded-xl p-2.5 mt-1">
+                        <div class="text-[11px] font-bold uppercase tracking-wider text-indigo-400 mb-1">✅ Verificación de base</div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            B es una base válida de R³ porque sus vectores son <b class="text-slate-100">linealmente independientes</b>: el determinante de la matriz que los tiene por columnas es <span class="font-mono font-bold text-indigo-300">det = 1·(1+1) − 1·(2+0) + (−1)·(2−0) = 2 − 2 − 2 = −2 ≠ 0</span>. Si el determinante fuera 0, no podríamos expresar todo vector de R³ en esa base.
+                        </p>
+                    </div>
+                    <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-2 mt-1">
+                        <p class="text-[11px] text-slate-400 leading-relaxed">
+                            📚 <b class="text-slate-300">Conexión con la teoría:</b> Esto se corresponde con la sección de <em>Coordenadas respecto de una base</em> en <a href="teoria-unidad3.html" class="text-indigo-400 hover:text-indigo-300 underline underline-offset-2">Unidad 3-4</a>. Dado un vector y una base, buscamos los escalares únicos que lo descomponen.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                badge: "Paso 1 de 4",
+                title: "Primer tramo (α = 0): 0 · b₁ = (0, 0, 0)",
+                color: "text-blue-400",
+                border: "border-blue-500/40",
+                body: `
+                    <div class="font-mono text-xs bg-blue-950/40 border border-blue-500/30 text-blue-200 p-2 rounded-xl">
+                        w₁ = 0 · (1, 1, -1) = (0, 0, 0)
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Como <span class="font-mono font-bold text-blue-400">α = 0</span>, no avanzamos nada en la dirección de <span class="font-mono">b₁</span>.
+                    </p>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        El primer punto de parada <span class="font-mono font-bold text-blue-300">P₁ = (0, 0, 0)</span> permanece en el origen.
+                    </p>
+                `
+            },
+            {
+                badge: "Paso 2 de 4",
+                title: "Segundo tramo (β = -1): -1 · b₂ = (-2, -1, 1)",
+                color: "text-emerald-400",
+                border: "border-emerald-500/40",
+                body: `
+                    <div class="font-mono text-xs bg-emerald-950/40 border border-emerald-500/30 text-emerald-200 p-2 rounded-xl">
+                        w₂ = (-1) · (2, 1, -1) = (-2, -1, 1)
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Encadenado desde <span class="font-mono">P₁</span>, el escalar <span class="font-mono font-bold text-emerald-400">β = -1</span> invierte el sentido de <span class="font-mono">b₂</span>.
+                    </p>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Llegamos al punto intermedio <span class="font-mono font-bold text-emerald-300">P₂ = (-2, -1, 1)</span>.
+                    </p>
+                `
+            },
+            {
+                badge: "Paso 3 de 4",
+                title: "Tercer tramo (γ = 2): +2 · b₃ = (0, 2, 2)",
+                color: "text-amber-400",
+                border: "border-amber-500/40",
+                body: `
+                    <div class="font-mono text-xs bg-amber-950/40 border border-amber-500/30 text-amber-200 p-2 rounded-xl">
+                        w₃ = 2 · (0, 1, 1) = (0, 2, 2)
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Desde <span class="font-mono text-emerald-300">P₂</span> sumamos dos veces <span class="font-mono text-amber-400">b₃</span>. El extremo <span class="font-mono font-bold text-amber-300">P₃ = (-2, 1, 3)</span> coincide exactamente con la punta de <span class="font-mono text-rose-400">v</span>.
+                    </p>
+                `
+            },
+            {
+                badge: "Paso 4 de 4",
+                title: "Comparación: Base Canónica vs. Base B",
+                color: "text-purple-400",
+                border: "border-purple-500/40",
+                body: `
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Observá los <b>dos caminos distintos</b> llegando al mismo destino físico <span class="font-mono text-rose-400">(-2, 1, 3)</span>:
+                    </p>
+                    <div class="font-mono text-[11px] bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-1.5">
+                        <div class="text-purple-300">• Canónica: -2·i + 1·j + 3·k</div>
+                        <div class="text-emerald-300">• Base B: 0·b₁ - 1·b₂ + 2·b₃</div>
+                    </div>
+                    <p class="text-xs text-slate-400">
+                        El vector es el mismo; solo cambian las coordenadas según qué base uses para medirlo.
+                    </p>
+                `
+            }
+        ];
+
+        // =========================================================================
+        // 2. INICIALIZACIÓN DE GEOGEBRA 3D (REGLA CRÍTICA: SIN ESTILOS EN evalCommand)
+        // =========================================================================
+        function initGeoGebra() {
+            const wrapper = document.getElementById('ggb-wrapper');
+            const w = Math.max(320, wrapper.clientWidth);
+            const h = Math.max(650, wrapper.clientHeight);
+
+            const params = {
+                appName: "3d",
+                width: w,
+                height: h,
+                showToolBar: false,
+                showAlgebraInput: false,
+                showMenuBar: false,
+                enableRightClick: true,
+                enableShiftDragZoom: true,
+                showResetIcon: false,
+                useBrowserForJS: true,
+                appletOnLoad: function(api) {
+                    ggbApi = api;
+                    buildMathObjects();
+                    styleObjectsWithJSAPI();
+                    document.getElementById('ggb-loader').style.display = 'none';
+                    goToStep(0);
+                    setupResizeObserver();
+                }
+            };
+
+            const applet = new GGBApplet(params, true);
+            applet.inject('ggb-element');
+        }
+
+        // ÚNICAMENTE definiciones matemáticas puras en evalCommand
+        function buildMathObjects() {
+            if (!ggbApi) return;
+
+            const mathCommands = [
+                'O = (0, 0, 0)',
+                'V_obj = (-2, 1, 3)',
+                'v = Vector(O, V_obj)',
+
+                'b1 = Vector(O, (1, 1, -1))',
+                'b2 = Vector(O, (2, 1, -1))',
+                'b3 = Vector(O, (0, 1, 1))',
+
+                'P1 = (0, 0, 0)',
+                'P2 = (-2, -1, 1)',
+                'P3 = (-2, 1, 3)',
+
+                'w1 = Vector(O, P1)',
+                'w2 = Vector(P1, P2)',
+                'w3 = Vector(P2, P3)',
+                'u = Vector(O, P3)',
+
+                'C1 = (-2, 0, 0)',
+                'C2 = (-2, 1, 0)',
+                'C3 = (-2, 1, 3)',
+                'c1 = Vector(O, C1)',
+                'c2 = Vector(C1, C2)',
+                'c3 = Vector(C2, C3)'
+            ];
+
+            mathCommands.forEach(cmd => ggbApi.evalCommand(cmd));
+        }
+
+        // EXCLUSIVAMENTE métodos nativos de la API JS para estilos, colores y etiquetas
+        function styleObjectsWithJSAPI() {
+            if (!ggbApi) return;
+
+            ggbApi.setCoordSystem(-4.5, 4.5, -4.5, 4.5, -4.5, 4.5);
+            ggbApi.setAxesVisible(true, true, true);
+            ggbApi.setGridVisible(true);
+
+            // Origen
+            ggbApi.setColor('O', 226, 232, 240);
+            ggbApi.setPointSize('O', 4);
+            ggbApi.setCaption('O', 'O');
+            ggbApi.setLabelStyle('O', 3);
+            ggbApi.setLabelVisible('O', true);
+
+            // Punto auxiliar oculto y vector destino v (rojo)
+            ggbApi.setVisible('V_obj', false);
+            ggbApi.setColor('v', 244, 63, 94);
+            ggbApi.setLineThickness('v', 8);
+            ggbApi.setCaption('v', 'v (-2,1,3)');
+            ggbApi.setLabelStyle('v', 3);
+            ggbApi.setLabelVisible('v', true);
+
+            // Vectores base B en el origen
+            ggbApi.setColor('b1', 59, 130, 246);
+            ggbApi.setLineThickness('b1', 5);
+            ggbApi.setCaption('b1', 'b₁');
+            ggbApi.setLabelStyle('b1', 3);
+            ggbApi.setLabelVisible('b1', true);
+
+            ggbApi.setColor('b2', 16, 185, 129);
+            ggbApi.setLineThickness('b2', 5);
+            ggbApi.setCaption('b2', 'b₂');
+            ggbApi.setLabelStyle('b2', 3);
+            ggbApi.setLabelVisible('b2', true);
+
+            ggbApi.setColor('b3', 245, 158, 11);
+            ggbApi.setLineThickness('b3', 5);
+            ggbApi.setCaption('b3', 'b₃');
+            ggbApi.setLabelStyle('b3', 3);
+            ggbApi.setLabelVisible('b3', true);
+
+            // Puntos intermedios P1, P2, P3
+            ggbApi.setColor('P1', 96, 165, 250);
+            ggbApi.setPointSize('P1', 5);
+            ggbApi.setCaption('P1', 'P₁');
+            ggbApi.setLabelStyle('P1', 3);
+            ggbApi.setLabelVisible('P1', true);
+
+            ggbApi.setColor('P2', 52, 211, 153);
+            ggbApi.setPointSize('P2', 5);
+            ggbApi.setCaption('P2', 'P₂');
+            ggbApi.setLabelStyle('P2', 3);
+            ggbApi.setLabelVisible('P2', true);
+
+            ggbApi.setColor('P3', 251, 191, 36);
+            ggbApi.setPointSize('P3', 6);
+            ggbApi.setCaption('P3', 'P₃');
+            ggbApi.setLabelStyle('P3', 3);
+            ggbApi.setLabelVisible('P3', true);
+
+            // Tramos encadenados w1, w2, w3
+            ggbApi.setColor('w1', 96, 165, 250);
+            ggbApi.setLineThickness('w1', 7);
+            ggbApi.setCaption('w1', 'α·b₁');
+            ggbApi.setLabelStyle('w1', 3);
+            ggbApi.setLabelVisible('w1', true);
+
+            ggbApi.setColor('w2', 52, 211, 153);
+            ggbApi.setLineThickness('w2', 7);
+            ggbApi.setCaption('w2', 'β·b₂');
+            ggbApi.setLabelStyle('w2', 3);
+            ggbApi.setLabelVisible('w2', true);
+
+            ggbApi.setColor('w3', 251, 191, 36);
+            ggbApi.setLineThickness('w3', 7);
+            ggbApi.setCaption('w3', 'γ·b₃');
+            ggbApi.setLabelStyle('w3', 3);
+            ggbApi.setLabelVisible('w3', true);
+
+            // Vector resultante u (cian discontinuo)
+            ggbApi.setColor('u', 34, 211, 238);
+            ggbApi.setLineThickness('u', 5);
+            ggbApi.setLineStyle('u', 2);
+            ggbApi.setCaption('u', 'u');
+            ggbApi.setLabelStyle('u', 3);
+            ggbApi.setLabelVisible('u', false);
+
+            // Camino ortogonal canónico (Paso 4)
+            ggbApi.setColor('C1', 192, 132, 252);
+            ggbApi.setPointSize('C1', 4);
+            ggbApi.setLabelVisible('C1', false);
+
+            ggbApi.setColor('C2', 192, 132, 252);
+            ggbApi.setPointSize('C2', 4);
+            ggbApi.setLabelVisible('C2', false);
+
+            ggbApi.setVisible('C3', false);
+
+            ggbApi.setColor('c1', 192, 132, 252);
+            ggbApi.setLineThickness('c1', 5);
+            ggbApi.setLineStyle('c1', 1);
+            ggbApi.setCaption('c1', '-2i');
+            ggbApi.setLabelStyle('c1', 3);
+            ggbApi.setLabelVisible('c1', true);
+
+            ggbApi.setColor('c2', 192, 132, 252);
+            ggbApi.setLineThickness('c2', 5);
+            ggbApi.setLineStyle('c2', 1);
+            ggbApi.setCaption('c2', '+1j');
+            ggbApi.setLabelStyle('c2', 3);
+            ggbApi.setLabelVisible('c2', true);
+
+            ggbApi.setColor('c3', 192, 132, 252);
+            ggbApi.setLineThickness('c3', 5);
+            ggbApi.setLineStyle('c3', 1);
+            ggbApi.setCaption('c3', '+3k');
+            ggbApi.setLabelStyle('c3', 3);
+            ggbApi.setLabelVisible('c3', true);
+        }
+
+        function setupResizeObserver() {
+            const wrapper = document.getElementById('ggb-wrapper');
+            const observer = new ResizeObserver(entries => {
+                if (!ggbApi) return;
+                for (const entry of entries) {
+                    const width = Math.floor(entry.contentRect.width);
+                    const height = Math.floor(entry.contentRect.height);
+                    if (width > 50 && height > 50) {
+                        ggbApi.setSize(width, height);
+                    }
+                }
+            });
+            observer.observe(wrapper);
+        }
+
+        function resetCamera3D() {
+            if (!ggbApi) return;
+            ggbApi.setCoordSystem(-4.5, 4.5, -4.5, 4.5, -4.5, 4.5);
+        }
+
+        // =========================================================================
+        // 3. CAMBIO DE PESTAÑAS
+        // =========================================================================
+        function switchMode(mode) {
+            currentMode = mode;
+            const btnSteps = document.getElementById('tab-btn-steps');
+            const btnPlay = document.getElementById('tab-btn-play');
+            const panelSteps = document.getElementById('panel-steps');
+            const panelPlay = document.getElementById('panel-play');
+            const legendResultant = document.getElementById('legend-resultant');
+
+            if (mode === 'steps') {
+                btnSteps.className = "py-2 px-2.5 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow-sm";
+                btnSteps.setAttribute('aria-selected', 'true');
+                btnPlay.className = "py-2 px-2.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-slate-200";
+                btnPlay.setAttribute('aria-selected', 'false');
+                panelSteps.classList.remove('hidden');
+                panelSteps.classList.add('flex');
+                panelPlay.classList.add('hidden');
+                panelPlay.classList.remove('flex');
+                legendResultant.classList.add('hidden');
+                legendResultant.classList.remove('flex');
+                goToStep(currentStep);
+            } else {
+                btnPlay.className = "py-2 px-2.5 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow-sm";
+                btnPlay.setAttribute('aria-selected', 'true');
+                btnSteps.className = "py-2 px-2.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-slate-200";
+                btnSteps.setAttribute('aria-selected', 'false');
+                panelPlay.classList.remove('hidden');
+                panelPlay.classList.add('flex');
+                panelSteps.classList.add('hidden');
+                panelSteps.classList.remove('flex');
+                legendResultant.classList.remove('hidden');
+                legendResultant.classList.add('flex');
+                document.getElementById('legend-canonical').classList.add('hidden');
+                document.getElementById('legend-canonical').classList.remove('flex');
+                enterPlayMode();
+            }
+        }
+
+        // =========================================================================
+        // 4. LÓGICA DE LA PESTAÑA 1: PASO A PASO (PASOS 0 AL 4)
+        // =========================================================================
+        function changeStep(delta) {
+            const next = Math.max(0, Math.min(4, currentStep + delta));
+            goToStep(next);
+        }
+
+        function goToStep(stepIndex) {
+            currentStep = stepIndex;
+            const info = STEPS_INFO[stepIndex];
+
+            document.getElementById('step-badge').innerText = info.badge;
+            const card = document.getElementById('step-content-card');
+            card.className = `bg-slate-800/70 border ${info.border} rounded-2xl p-4 flex flex-col gap-2.5 transition-all`;
+            card.innerHTML = `
+                <h2 class="text-sm font-bold ${info.color}">${info.title}</h2>
+                ${info.body}
+            `;
+
+            for (let i = 0; i <= 4; i++) {
+                const pill = document.getElementById(`pill-step-${i}`);
+                if (i === stepIndex) {
+                    pill.className = "py-2 px-1 rounded-xl text-[11px] font-bold border border-indigo-400 bg-indigo-600 text-white shadow transition text-center";
+                } else if (i < stepIndex) {
+                    pill.className = "py-2 px-1 rounded-xl text-[11px] font-semibold border border-emerald-500/40 bg-emerald-950/40 text-emerald-300 transition text-center";
+                } else {
+                    pill.className = "py-2 px-1 rounded-xl text-[11px] font-medium border border-slate-700 bg-slate-950 text-slate-400 hover:text-slate-200 transition text-center";
+                }
+            }
+
+            document.getElementById('btn-prev-step').disabled = (stepIndex === 0);
+            const nextBtn = document.getElementById('btn-next-step');
+            if (stepIndex === 4) {
+                nextBtn.innerText = "Repetir Paso 0 ↺";
+                nextBtn.onclick = () => goToStep(0);
+            } else {
+                nextBtn.innerText = "Siguiente →";
+                nextBtn.onclick = () => changeStep(1);
+            }
+
+            const legendCanonical = document.getElementById('legend-canonical');
+            if (stepIndex === 4) {
+                legendCanonical.classList.remove('hidden');
+                legendCanonical.classList.add('flex');
+            } else {
+                legendCanonical.classList.add('hidden');
+                legendCanonical.classList.remove('flex');
+            }
+
+            if (!ggbApi) return;
+
+            // Fijar coordenadas exactas del ejercicio
+            ggbApi.setCoords('V_obj', -2, 1, 3);
+            ggbApi.setCaption('v', 'v (-2,1,3)');
+            ggbApi.setCoords('P1', 0, 0, 0);
+            ggbApi.setCoords('P2', -2, -1, 1);
+            ggbApi.setCoords('P3', -2, 1, 3);
+
+            ggbApi.setVisible('v', true);
+            ggbApi.setVisible('b1', showReferenceBase);
+            ggbApi.setVisible('b2', showReferenceBase);
+            ggbApi.setVisible('b3', showReferenceBase);
+            ggbApi.setVisible('u', false);
+
+            // Tramos de Base B
+            ggbApi.setVisible('P1', stepIndex >= 1);
+            ggbApi.setVisible('w1', stepIndex >= 1);
+
+            ggbApi.setVisible('P2', stepIndex >= 2);
+            ggbApi.setVisible('w2', stepIndex >= 2);
+
+            ggbApi.setVisible('P3', stepIndex >= 3);
+            ggbApi.setVisible('w3', stepIndex >= 3);
+
+            // Camino canónico (solo en Paso 4)
+            const showCan = (stepIndex === 4);
+            ggbApi.setVisible('C1', showCan);
+            ggbApi.setVisible('C2', showCan);
+            ggbApi.setVisible('c1', showCan);
+            ggbApi.setVisible('c2', showCan);
+            ggbApi.setVisible('c3', showCan);
+
+            applyLabelVisibility();
+        }
+
+        function toggleReferenceBase(checked) {
+            showReferenceBase = checked;
+            if (!ggbApi) return;
+            ggbApi.setVisible('b1', checked);
+            ggbApi.setVisible('b2', checked);
+            ggbApi.setVisible('b3', checked);
+        }
+
+        function toggleAllLabels(checked) {
+            show3DLabels = checked;
+            applyLabelVisibility();
+        }
+
+        function applyLabelVisibility() {
+            if (!ggbApi) return;
+            const labeledObjs = ['O', 'v', 'b1', 'b2', 'b3', 'P1', 'P2', 'P3', 'w1', 'w2', 'w3', 'c1', 'c2', 'c3'];
+            labeledObjs.forEach(name => {
+                ggbApi.setLabelVisible(name, show3DLabels);
+            });
+            ggbApi.setLabelVisible('u', show3DLabels && currentMode === 'play');
+        }
+
+        // =========================================================================
+        // 5. LÓGICA DE LA PESTAÑA 2: LABORATORIO Y JUEGO 3D
+        // =========================================================================
+        function enterPlayMode() {
+            if (!ggbApi) return;
+
+            ggbApi.setVisible('v', true);
+            ggbApi.setVisible('b1', showReferenceBase);
+            ggbApi.setVisible('b2', showReferenceBase);
+            ggbApi.setVisible('b3', showReferenceBase);
+
+            ggbApi.setVisible('P1', true);
+            ggbApi.setVisible('P2', true);
+            ggbApi.setVisible('P3', true);
+            ggbApi.setVisible('w1', true);
+            ggbApi.setVisible('w2', true);
+            ggbApi.setVisible('w3', true);
+            ggbApi.setVisible('u', true);
+
+            // Ocultar camino canónico del paso 4
+            ggbApi.setVisible('C1', false);
+            ggbApi.setVisible('C2', false);
+            ggbApi.setVisible('c1', false);
+            ggbApi.setVisible('c2', false);
+            ggbApi.setVisible('c3', false);
+
+            applyLabelVisibility();
+            syncPlayScene();
+        }
+
+        function updateScalarFromSlider(axis, val) {
+            const num = parseFloat(val);
+            playState[axis] = num;
+            document.getElementById(`input-${axis}`).value = num;
+            syncPlayScene();
+        }
+
+        function updateScalarFromInput(axis, val) {
+            let num = parseFloat(val);
+            if (isNaN(num)) return;
+            num = Math.max(-4, Math.min(4, num));
+            playState[axis] = num;
+            document.getElementById(`slider-${axis}`).value = num;
+            syncPlayScene();
+        }
+
+        function syncPlayScene() {
+            const { alpha, beta, gamma, target } = playState;
+
+            const p1 = [alpha * B1[0], alpha * B1[1], alpha * B1[2]];
+            const p2 = [p1[0] + beta * B2[0], p1[1] + beta * B2[1], p1[2] + beta * B2[2]];
+            const p3 = [p2[0] + gamma * B3[0], p2[1] + gamma * B3[1], p2[2] + gamma * B3[2]];
+
+            if (ggbApi) {
+                ggbApi.setCoords('V_obj', target[0], target[1], target[2]);
+                ggbApi.setCoords('P1', p1[0], p1[1], p1[2]);
+                ggbApi.setCoords('P2', p2[0], p2[1], p2[2]);
+                ggbApi.setCoords('P3', p3[0], p3[1], p3[2]);
+            }
+
+            const dx = p3[0] - target[0];
+            const dy = p3[1] - target[1];
+            const dz = p3[2] - target[2];
+            const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+            const fmt = n => Number.isInteger(n) ? n : n.toFixed(1);
+            document.getElementById('live-u-coords').innerText = `(${fmt(p3[0])}, ${fmt(p3[1])}, ${fmt(p3[2])})`;
+            document.getElementById('live-v-coords').innerText = `(${fmt(target[0])}, ${fmt(target[1])}, ${fmt(target[2])})`;
+            document.getElementById('live-distance').innerText = dist.toFixed(2);
+            document.getElementById('live-distance-badge').innerText = `Dist: ${dist.toFixed(2)}`;
+
+            const goalAlert = document.getElementById('goal-alert');
+            const distEl = document.getElementById('live-distance');
+
+            if (dist < 0.01) {
+                goalAlert.classList.remove('hidden');
+                distEl.className = "text-emerald-400 font-bold";
+            } else {
+                goalAlert.classList.add('hidden');
+                distEl.className = "text-amber-400 font-bold";
+            }
+        }
+
+        function setScalars(a, b, g) {
+            playState.alpha = a;
+            playState.beta = b;
+            playState.gamma = g;
+            document.getElementById('slider-alpha').value = a;
+            document.getElementById('input-alpha').value = a;
+            document.getElementById('slider-beta').value = b;
+            document.getElementById('input-beta').value = b;
+            document.getElementById('slider-gamma').value = g;
+            document.getElementById('input-gamma').value = g;
+        }
+
+        function generateRandomChallenge() {
+            const choices = [-2, -1, 0, 1, 2];
+            let a = 0, b = 0, g = 0;
+            let newTarget = [...playState.target];
+
+            while (
+                (a === 0 && b === 0 && g === 0) ||
+                (newTarget[0] === playState.target[0] && newTarget[1] === playState.target[1] && newTarget[2] === playState.target[2])
+            ) {
+                a = choices[Math.floor(Math.random() * choices.length)];
+                b = choices[Math.floor(Math.random() * choices.length)];
+                g = choices[Math.floor(Math.random() * choices.length)];
+                newTarget = [
+                    a * B1[0] + b * B2[0] + g * B3[0],
+                    a * B1[1] + b * B2[1] + g * B3[1],
+                    a * B1[2] + b * B2[2] + g * B3[2]
+                ];
+            }
+
+            playState.target = newTarget;
+            playState.challengeAnswer = [a, b, g];
+            setScalars(0, 0, 0);
+
+            if (ggbApi) {
+                ggbApi.setCaption('v', `v (${newTarget[0]},${newTarget[1]},${newTarget[2]})`);
+            }
+
+            document.getElementById('challenge-banner').classList.remove('hidden');
+            document.getElementById('challenge-target-badge').innerText = `v = (${newTarget[0]}, ${newTarget[1]}, ${newTarget[2]})`;
+            document.getElementById('challenge-solution-box').classList.add('hidden');
+            document.getElementById('btn-show-solution').disabled = false;
+
+            syncPlayScene();
+        }
+
+        function revealChallengeSolution() {
+            if (!playState.challengeAnswer) return;
+            const [a, b, g] = playState.challengeAnswer;
+            const solBox = document.getElementById('challenge-solution-box');
+            solBox.innerText = `Solución: [v]_B = (${a}, ${b}, ${g})  →  α = ${a}, β = ${b}, γ = ${g}`;
+            solBox.classList.remove('hidden');
+            setScalars(a, b, g);
+            syncPlayScene();
+        }
+
+        function returnToOriginalExercise() {
+            playState.target = [...EXERCISE_TARGET];
+            playState.challengeAnswer = null;
+            setScalars(EXERCISE_COORDS[0], EXERCISE_COORDS[1], EXERCISE_COORDS[2]);
+
+            if (ggbApi) {
+                ggbApi.setCaption('v', 'v (-2,1,3)');
+            }
+
+            document.getElementById('challenge-banner').classList.add('hidden');
+            document.getElementById('btn-show-solution').disabled = true;
+            syncPlayScene();
+        }
+
+        // =========================================================================
+        // 6. ATAJOS DE TECLADO
+        // =========================================================================
+        document.addEventListener('keydown', function(e) {
+            // No interceptar si el foco está en un input
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+            if (currentMode === 'steps') {
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    changeStep(-1);
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    changeStep(1);
+                } else if (e.key >= '0' && e.key <= '4') {
+                    e.preventDefault();
+                    goToStep(parseInt(e.key));
+                }
+            }
+        });
+
+        window.addEventListener('load', initGeoGebra);
+    </script>
+</body>
+</html>

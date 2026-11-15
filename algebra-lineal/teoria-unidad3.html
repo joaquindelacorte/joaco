@@ -297,6 +297,8 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
     <button class="tab-btn" id="tb-resumen" onclick="showPage('resumen',this)">⚡ Resumen 20min</button>
     <button class="tab-btn" id="tb-machete" onclick="showPage('machete',this)">📚 Machete</button>
     <button class="tab-btn" id="tb-simulacro" onclick="showPage('simulacro',this)">📝 Simulacro papel</button>
+    <button class="tab-btn" id="tb-resoluciones" onclick="showPage('resoluciones',this)">📝 Resoluciones P4-P5</button>
+    <button class="tab-btn" id="tb-mazo" onclick="showPage('mazo',this)">🧠 Mazo Rápido</button>
     <button class="tab-btn" id="tb-quiz" onclick="showPage('quiz',this)">🎓 Quiz</button>
     <button class="tab-btn" onclick="openAlg3ErrorsModal()" style="border-bottom-color:#ef4444">🔁 Repasar errores</button>
   </div>
@@ -370,6 +372,16 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
         <span class="mic">📚</span>
         <div class="mstep">Extra</div>
         <div class="mname">Machete</div>
+      </div>
+      <div class="map-card" onclick="showPage('resoluciones',document.getElementById('tb-resoluciones'))">
+        <span class="mic">📝</span>
+        <div class="mstep">Ayuda Memoria</div>
+        <div class="mname">Resoluciones P4-P5</div>
+      </div>
+      <div class="map-card" onclick="showPage('mazo',document.getElementById('tb-mazo'))">
+        <span class="mic">🧠</span>
+        <div class="mstep">Repaso activo</div>
+        <div class="mname">Mazo Rápido</div>
       </div>
       <div class="map-card" onclick="showPage('quiz',document.getElementById('tb-quiz'))">
         <span class="mic">🎓</span>
@@ -1658,6 +1670,390 @@ footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--gray-lt)}
   </div>
 </div>
 
+<!-- ═══════════════ RESOLUCIONES P4-P5 ═══════════════ -->
+<div class="page" id="resoluciones">
+<div class="container">
+  <p style="margin-bottom:1rem"><a href="#" onclick="showPage('inicio',document.getElementById('tb-inicio'));return false" style="color:var(--pur);font-weight:700">← Volver al inicio</a></p>
+  <div class="stitle"><span class="ico">📝</span> Resoluciones completas — Prácticas 4 y 5</div>
+  <div class="tip">📖 <div>Todas las resoluciones paso a paso del simulacro y las prácticas 4 y 5, organizadas por bloque temático. Los ejercicios marcados con <span style="color:var(--red);font-weight:700">IGUAL AL PARCIAL</span> coinciden con el simulacro del Prof. Sebastián Domínguez.</div></div>
+
+  <!-- MAPA ESTRATÉGICO -->
+  <div class="stitle"><span class="ico">🗺️</span> Mapa estratégico de estudio</div>
+  <div class="twrap">
+    <table class="std">
+      <thead><tr><th>Prioridad</th><th>Ejercicio Simulacro</th><th>Idéntico en Práctica</th><th>Variantes resueltas abajo</th></tr></thead>
+      <tbody>
+        <tr><td><span class="priority-chip must">1°</span></td><td><strong>Ej. 1:</strong> Base/Dim de sistema y $S = T$</td><td>P4 Ej. 6a y 7 iii)</td><td>P4 Ej. 6b, 7i, 7ii, 8, 5a-b, 3</td></tr>
+        <tr><td><span class="priority-chip must">2°</span></td><td><strong>Ej. 2:</strong> $S_1+S_2=\mathbb{R}^3$, Directa y $S_1^\perp$</td><td>P4 Ej. 9 iii) y 10</td><td>P4 Ej. 9i, 9ii, 10a-b, 11</td></tr>
+        <tr><td><span class="priority-chip justify">3°</span></td><td><strong>Ej. 3:</strong> Coordenadas $[v]_B$</td><td>P4 Ej. 13a</td><td>P4 Ej. 13b, 12, 4a-b; P5 Ej. 17</td></tr>
+        <tr><td><span class="priority-chip deep">4°</span></td><td><strong>Ej. 4:</strong> Existencia, unicidad y fórmula de T.L.</td><td>P5 Ej. 2a + Ej. 3</td><td>P5 Ej. 2b-e, 3, 6a, 7a-b</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══ BLOQUE 1: Bases, Dimensión, Igualdad S=T ═══ -->
+  <div class="stitle"><span class="ico">📐</span> Bloque 1 — Bases, Dimensión e Igualdad $S = T$</div>
+  <div class="card pu" style="margin-bottom:1rem">
+    <h3>🧠 Ayuda Memoria — Bloque 1</h3>
+    <div class="fbox"><span class="big">$\dim(S) = n - \text{Rg}(A)$</span><span class="sub">DIMensión = Incógnitas meNos Rango ("D.I.M. = I.N.R.")</span></div>
+    <ul style="margin:.7rem 0 0 1.2rem;line-height:2;font-size:.9rem">
+      <li><strong>De Ecuaciones a Base (Ej. 6):</strong> Matriz de coeficientes → Gauss → despejar variables con pivote en función de las libres → separar por parámetros.</li>
+      <li><strong>De Generadores a Base y Extensión (Ej. 5):</strong> Vectores en filas → Gauss → filas no nulas = base. Para extender a $\mathbb{R}^n$, agregar $e_i$ en columnas sin pivote.</li>
+      <li><strong>Comparar $S = T$ (Ej. 7):</strong> Misma dimensión NO basta. Apilar generadores de ambos y comprobar que no suba la dimensión.</li>
+    </ul>
+  </div>
+
+  <p style="font-weight:700;margin-bottom:.5rem">Expandí/colapsá todas: <button class="sim-btn ghost" style="font-size:.8rem;padding:.3rem .7rem" onclick="document.querySelectorAll('#resoluciones details').forEach(d=>d.open=true)">Abrir todas</button> <button class="sim-btn ghost" style="font-size:.8rem;padding:.3rem .7rem" onclick="document.querySelectorAll('#resoluciones details').forEach(d=>d.open=false)">Cerrar todas</button></p>
+
+  <!-- P4 Ej 6 -->
+  <details open>
+    <summary><span style="color:var(--red);font-weight:700">IGUAL AL PARCIAL</span> Práctica 4 - Ej. 6 a) y b): Base, Dimensión y comparación</summary>
+    <div class="dbody">
+      <p><strong>Ítem a) $S_1 \subset \mathbb{R}^4$:</strong></p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li>Triangulamos la matriz de coeficientes: $$\begin{pmatrix} 2 & -1 & -1 & 2 \\ -1 & 2 & 1 & -1 \\ 1 & 1 & 0 & 1 \end{pmatrix} \sim \begin{pmatrix} 2 & -1 & -1 & 2 \\ 0 & 3 & 1 & 0 \\ 0 & 0 & 0 & 0 \end{pmatrix} \implies \text{Rg}(A) = 2$$</li>
+        <li>Sistema equivalente: $x_3 = -3x_2$ y $x_1 = -x_2 - x_4$.</li>
+        <li>Vector genérico: $(-x_2-x_4, x_2, -3x_2, x_4) = x_2(-1,1,-3,0) + x_4(-1,0,0,1)$.</li>
+      </ol>
+      <div class="result-box ok"><strong>Resultado 6a:</strong> $B_{S_1} = \{(-1,1,-3,0), (-1,0,0,1)\}$, $\dim(S_1) = 4 - 2 = 2$.</div>
+      <p style="margin-top:1rem"><strong>Ítem b) $S_2 \subset \mathbb{R}^5$ dado por 4 ecuaciones en 5 incógnitas:</strong></p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li>Armamos la matriz $4 \times 5$ y escalonamos:
+        $$\begin{pmatrix} 1 & 1 & 2 & 1 & 2 \\ -1 & 2 & 1 & -1 & -2 \\ 2 & 1 & -3 & -1 & 1 \\ 2 & 4 & 0 & -1 & 1 \end{pmatrix} \xrightarrow{\text{Gauss}} \begin{pmatrix} 1 & 0 & 0 & \frac{1}{2} & \frac{3}{2} \\ 0 & 1 & 0 & -\frac{1}{2} & -\frac{1}{2} \\ 0 & 0 & 1 & \frac{1}{2} & \frac{1}{2} \\ 0 & 0 & 0 & 0 & 0 \end{pmatrix} \implies \text{Rg}(A) = 3$$</li>
+        <li>Variables libres: $x_4, x_5$. Multiplicando por 2:
+        $$B_{S_2} = \{(-1, 1, -1, 2, 0),\; (-3, 1, -1, 0, 2)\}$$</li>
+        <li><strong>Comparación:</strong> Ecuaciones no nulas ($3$) + $\dim(S_2)$ ($2$) = $5$ ($\dim(\mathbb{R}^5)$).</li>
+      </ol>
+      <div class="result-box ok"><strong>Resultado 6b:</strong> $B_{S_2} = \{(-1, 1, -1, 2, 0), (-3, 1, -1, 0, 2)\}$, $\dim(S_2) = 5 - 3 = 2$.</div>
+    </div>
+  </details>
+
+  <!-- P4 Ej 7 y 8 -->
+  <details>
+    <summary><span style="color:var(--red);font-weight:700">7iii IGUAL AL PARCIAL</span> Práctica 4 - Ej. 7 (i, ii, iii) y Ej. 8: Decidir si $S = T$</summary>
+    <div class="dbody">
+      <p><strong>7 i) $S = \text{gen}\{(1,-1,2)\}$ y $T: \{x+y=0;\; x-y-z=0\}$:</strong></p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li>$x+y=0 \implies x = -y$. Reemplazando: $-2y - z = 0 \implies z = -2y$.</li>
+        <li>$T = \text{gen}\{(-1, 1, -2)\}$.</li>
+        <li>$(1, -1, 2) = -1 \cdot (-1, 1, -2)$: misma recta.</li>
+      </ol>
+      <div class="result-box ok"><strong>7i:</strong> $S = T$.</div>
+      <p style="margin-top:.9rem"><strong>7 ii) $S = \text{gen}\{(1,-1,1,2)\}$ y $T = \{x+z-w=0\}$:</strong></p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li>$\dim(S) = 1$, $\dim(T) = 4 - 1 = 3$. Distinta dimensión.</li>
+      </ol>
+      <div class="result-box no"><strong>7ii:</strong> $S \neq T$ ($\dim(S)=1 \neq \dim(T)=3$).</div>
+      <p style="margin-top:.9rem"><strong>7 iii) $S = \text{gen}\{(1,-1,1),(2,0,1)\}$ y $T = \text{gen}\{(4,-2,3),(7,-3,5)\}$:</strong></p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li>$\dim(S) = 2$ y $\dim(T) = 2$. Apilamos los 4 vectores:
+        $$\begin{pmatrix} 1 & -1 & 1 \\ 2 & 0 & 1 \\ 4 & -2 & 3 \\ 7 & -3 & 5 \end{pmatrix} \sim \begin{pmatrix} 1 & -1 & 1 \\ 0 & -2 & 1 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix} \implies \text{Rg} = 2$$</li>
+      </ol>
+      <div class="result-box ok"><strong>7iii:</strong> $S = T$.</div>
+      <p style="margin-top:.9rem"><strong>Ej. 8 (Base de $T$ del 7ii que contenga a $(1,-1,1,2)$):</strong></p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li>Necesitamos 3 vectores L.I. que cumplan $x+z-w=0$, empezando por $v_1 = (1,-1,1,2)$.</li>
+        <li>$v_2 = (0, 1, 0, 0)$ y $v_3 = (0, 0, 1, 1)$ cumplen la ecuación y son L.I.</li>
+      </ol>
+      <div class="result-box ok"><strong>Ej. 8:</strong> $B_T = \{(1,-1,1,2),\; (0,1,0,0),\; (0,0,1,1)\}$.</div>
+    </div>
+  </details>
+
+  <!-- P4 Ej 5 -->
+  <details>
+    <summary>Práctica 4 - Ej. 5 a) y b): Base de generadores y Extensión a $\mathbb{R}^4$ y $\mathbb{R}^5$</summary>
+    <div class="dbody">
+      <p><strong>Ítem a) $S_1 = \text{gen}\{(1,-1,2,1), (2,-3,3,-1), (-1,2,-1,2)\} \subset \mathbb{R}^4$:</strong></p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li>Triangulamos: $$\begin{pmatrix} 1 & -1 & 2 & 1 \\ 2 & -3 & 3 & -1 \\ -1 & 2 & -1 & 2 \end{pmatrix} \xrightarrow{\text{Gauss}} \begin{pmatrix} 1 & 0 & 3 & 4 \\ 0 & 1 & 1 & 3 \\ 0 & 0 & 0 & 0 \end{pmatrix} \implies \dim(S_1) = 2$$</li>
+        <li><strong>Extensión a $\mathbb{R}^4$:</strong> pivotes en cols 1 y 2 → agregar $e_3, e_4$.</li>
+      </ol>
+      <div class="result-box ok"><strong>5a:</strong> $\dim(S_1)=2$. Base extendida: $\{(1,-1,2,1), (2,-3,3,-1), (0,0,1,0), (0,0,0,1)\}$.</div>
+      <p style="margin-top:.9rem"><strong>Ítem b) $S_2 = \text{gen}\{(2,-3,1,4,1), (2,-3,3,-1,1), (1,0,-1,3,1), (1,0,-3,2,1)\} \subset \mathbb{R}^5$:</strong></p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li>Triangulamos → $\text{Rg} = 4$. Los 4 vectores son L.I.</li>
+        <li>Columna sin pivote: 5ta → extender con $e_5$.</li>
+      </ol>
+      <div class="result-box ok"><strong>5b:</strong> $\dim(S_2)=4$. Se extiende a base de $\mathbb{R}^5$ agregando $e_5 = (0,0,0,0,1)$.</div>
+    </div>
+  </details>
+
+  <!-- P4 Ej 3 -->
+  <details>
+    <summary>Práctica 4 - Ej. 3 (i al v): Independencia lineal</summary>
+    <div class="dbody">
+      <ul style="margin-left:1.2rem;line-height:2">
+        <li><strong>i) $\{(1,1), (1,-1)\}$:</strong> $\det = -2 \neq 0 \implies$ <strong>L.I.</strong></li>
+        <li><strong>ii) $\{(1,0,1), (2,1,2)\}$:</strong> No son múltiplos ($2 \cdot (1,0,1) = (2,0,2) \neq (2,1,2)$) → <strong>L.I.</strong></li>
+        <li><strong>iii) $\{(1,1), (1,-1), (2,-1)\}$:</strong> 3 vectores en $\mathbb{R}^2$ → siempre <strong>L.D.</strong> Subconjunto L.I.: $\{(1,1), (1,-1)\}$.</li>
+        <li><strong>iv) $\{(1,1,1), (0,2,1), (1,-1,0), (1,1,3)\}$:</strong> 4 vectores en $\mathbb{R}^3$ → <strong>L.D.</strong> Subconjunto L.I.: $\{(1,1,1), (0,2,1), (1,1,3)\}$.</li>
+        <li><strong>v) $\{(0,2,1,1), (0,1,1,1), (1,0,1,0), (1,1,0,1)\}$:</strong> $\text{Rg} = 4 \implies$ <strong>L.I.</strong> (base de $\mathbb{R}^4$).</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- ═══ BLOQUE 2: Suma Directa y Ortogonal ═══ -->
+  <div class="stitle"><span class="ico">➕</span> Bloque 2 — Suma Directa y Complemento Ortogonal $S^\perp$</div>
+  <div class="card te" style="margin-bottom:1rem">
+    <h3>🧠 Ayuda Memoria — Bloque 2</h3>
+    <div class="fbox"><span class="big">$\dim(S + T) = \dim(S) + \dim(T) - \dim(S \cap T)$</span><span class="sub">Suma directa ($S \oplus T$) ⟺ $\dim(S \cap T) = 0$ (solo se cortan en $\vec{0}$)</span></div>
+    <ul style="margin:.7rem 0 0 1.2rem;line-height:2;font-size:.9rem">
+      <li><strong>Truco para $S^\perp$:</strong> Si $S = \text{gen}\{v_1, v_2\}$, entonces $S^\perp$ es el espacio solución (núcleo) del sistema homogéneo cuyas filas son $v_1$ y $v_2$.</li>
+      <li><strong>Al revés:</strong> Si $S$ viene dado por ecuaciones $Ax = 0$, entonces $S^\perp$ está generado por las filas de $A$.</li>
+      <li><strong>Construir $S'$ con $S \oplus S' = \mathbb{R}^3$:</strong> Completá la base de $S$ a una base de $\mathbb{R}^3$ eligiendo vectores que no sean c.l. de $S$.</li>
+    </ul>
+  </div>
+
+  <!-- P4 Ej 9 -->
+  <details open>
+    <summary><span style="color:var(--red);font-weight:700">9iii IGUAL AL PARCIAL</span> Práctica 4 - Ej. 9 (i, ii, iii): Suma directa y $S + T = \mathbb{R}^3$</summary>
+    <div class="dbody">
+      <p><strong>9 i) $S = \text{gen}\{(1,-1,3), (2,-2,1)\}$ y $T = \text{gen}\{(1,1,-1), (1,0,1)\}$:</strong></p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li>Apilamos los 4 generadores → $\text{Rg} = 3 \implies S + T = \mathbb{R}^3$.</li>
+        <li>Teorema: $3 = 2 + 2 - \dim(S \cap T) \implies \dim(S \cap T) = 1 \neq 0$.</li>
+      </ol>
+      <div class="result-box warn"><strong>9i:</strong> $S + T = \mathbb{R}^3$, pero <strong>NO es suma directa</strong> ($\dim(S \cap T) = 1$).</div>
+      <p style="margin-top:.9rem"><strong>9 ii) $S = \text{gen}\{(2,1,1), (-1,-2,0)\}$ y $T: \{x+y+2z=0;\; x-y-z=0\}$:</strong></p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li>$T = \text{gen}\{(1, 3, -2)\}$, $\dim(T) = 1$.</li>
+        <li>$\det\begin{pmatrix} 2 & 1 & 1 \\ -1 & -2 & 0 \\ 1 & 3 & -2 \end{pmatrix} = 5 \neq 0 \implies \text{Rg} = 3$.</li>
+        <li>$\dim(S \cap T) = 2 + 1 - 3 = 0$.</li>
+      </ol>
+      <div class="result-box ok"><strong>9ii:</strong> $S \oplus T = \mathbb{R}^3$ (ES suma directa).</div>
+      <p style="margin-top:.9rem"><strong>9 iii) $S_1: \{x_1-2x_2+2x_3=0;\; x_1-3x_2=0\}$ y $S_2: \{2x_1-2x_2+x_3=0\}$:</strong></p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li>$S_1 = \text{gen}\{(-6,-2,1)\}$ ($\dim=1$) y $S_2 = \text{gen}\{(1,0,-2), (0,1,2)\}$ ($\dim=2$).</li>
+        <li>$\text{Rg} = 3$ y $\dim(S_1 \cap S_2) = 1 + 2 - 3 = 0$.</li>
+      </ol>
+      <div class="result-box ok"><strong>9iii:</strong> $S_1 \oplus S_2 = \mathbb{R}^3$.</div>
+    </div>
+  </details>
+
+  <!-- P4 Ej 10 -->
+  <details>
+    <summary>Práctica 4 - Ej. 10 a) y b): $S^\perp$, $T^\perp$ y otro $S'$ con $S \oplus S' = \mathbb{R}^3$</summary>
+    <div class="dbody">
+      <p><strong>Para 9i ($S = \text{gen}\{(1,-1,3), (2,-2,1)\}$):</strong></p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li>$S^\perp$: $\begin{cases} x-y+3z=0 \\ 2x-2y+z=0 \end{cases} \implies S^\perp = \text{gen}\{(1, 1, 0)\}$.</li>
+        <li>$T^\perp$: $\begin{cases} x+y-z=0 \\ x+z=0 \end{cases} \implies T^\perp = \text{gen}\{(-1, 2, 1)\}$.</li>
+        <li>$S \oplus S^\perp = \mathbb{R}^3$ (det $= 10 \neq 0$). Otro $S' = \text{gen}\{(1,0,0)\}$.</li>
+      </ol>
+      <div class="result-box ok"><strong>10 (9i):</strong> $S^\perp = \text{gen}\{(1,1,0)\}$, $T^\perp = \text{gen}\{(-1,2,1)\}$, $S' = \text{gen}\{(1,0,0)\}$.</div>
+      <p style="margin-top:.9rem"><strong>Para 9ii ($S = \text{gen}\{(2,1,1), (-1,-2,0)\}$):</strong></p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li>$S^\perp = \text{gen}\{(-2, 1, 3)\}$.</li>
+        <li>$T^\perp = \text{gen}\{(-3, 1, 0), (2, 0, 1)\}$.</li>
+      </ol>
+      <div class="result-box ok"><strong>10 (9ii):</strong> $S^\perp = \text{gen}\{(-2,1,3)\}$, $T^\perp = \text{gen}\{(-3,1,0), (2,0,1)\}$, $S' = \text{gen}\{(0,0,1)\}$.</div>
+    </div>
+  </details>
+
+  <!-- P4 Ej 11 -->
+  <details>
+    <summary>Práctica 4 - Ej. 11: Complemento ortogonal de Ej. 5 y 6</summary>
+    <div class="dbody">
+      <ul style="margin-left:1.2rem;line-height:2">
+        <li><strong>Para Ej. 5a:</strong> $B_{S_1^\perp} = \{(-3, -1, 1, 0),\; (-4, -3, 0, 1)\}$ ($\dim = 2$).</li>
+        <li><strong>Para Ej. 5b:</strong> $B_{S_2^\perp} = \{(-3, -1, 0, 0, 3)\}$ ($\dim = 1$).</li>
+        <li><strong>Para Ej. 6a:</strong> $S_1^\perp$ generado por las filas de $A$: $B_{S_1^\perp} = \{(2, -1, -1, 2),\; (0, 3, 1, 0)\}$.</li>
+        <li><strong>Para Ej. 6b:</strong> $B_{S_2^\perp} = \{(1, 1, 2, 1, 2),\; (0, 3, 3, 0, 0),\; (0, 0, -6, -3, -3)\}$.</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- ═══ BLOQUE 3: Coordenadas y Cambio de Base ═══ -->
+  <div class="stitle"><span class="ico">📌</span> Bloque 3 — Coordenadas y Cambio de Base</div>
+  <div class="card bl" style="margin-bottom:1rem">
+    <h3>🧠 Ayuda Memoria — Bloque 3</h3>
+    <ul style="margin:.5rem 0 0 1.2rem;line-height:2;font-size:.9rem">
+      <li><strong>De Canónica a Base $B$ ($v 
+ightarrow [v]_B$):</strong> vectores de $B$ en COLUMNAS, ampliar con $v$ y triangular.</li>
+      <li><strong>De Base $B$ a Canónica ($[w]_B 
+ightarrow w$):</strong> ¡NO triangulás! Combinación lineal directa: $w = \alpha v_1 + \beta v_2 + \gamma v_3$.</li>
+      <li><strong>Matriz $C_{EB}$:</strong> $C_{EB} = (C_{BE})^{-1}$ donde $C_{BE}$ tiene a los vectores de $B$ como columnas.</li>
+      <li><strong>Base con parámetro $k$:</strong> $\det(A) \neq 0$ para que formen base.</li>
+    </ul>
+  </div>
+
+  <!-- P4 Ej 13 -->
+  <details open>
+    <summary><span style="color:var(--red);font-weight:700">13a IGUAL AL PARCIAL</span> Práctica 4 - Ej. 13 a) y b): $[v]_B$ y vector desde $[w]_B$</summary>
+    <div class="dbody">
+      <p>$B = \{(1,1,-1),\; (2,1,-1),\; (0,1,1)\}$:</p>
+      <p><strong>13a) $[v]_B$ para $v = (-2, 1, 3)$:</strong></p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li>$$\left(\begin{array}{ccc|c} 1 & 2 & 0 & -2 \\ 1 & 1 & 1 & 1 \\ -1 & -1 & 1 & 3 \end{array}
+ight) \sim \left(\begin{array}{ccc|c} 1 & 2 & 0 & -2 \\ 0 & 1 & -1 & -3 \\ 0 & 0 & -2 & -4 \end{array}
+ight) \implies \gamma = 2,\; \beta = -1,\; \alpha = 0$$</li>
+      </ol>
+      <div class="result-box ok"><strong>13a:</strong> $[v]_B = (0, -1, 2)$.</div>
+      <p style="margin-top:.9rem"><strong>13b) Vector $w$ si $[w]_B = (1, 2, 3)$:</strong></p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li>$w = 1\cdot(1, 1, -1) + 2\cdot(2, 1, -1) + 3\cdot(0, 1, 1) = (5, 6, 0)$.</li>
+      </ol>
+      <div class="result-box ok"><strong>13b:</strong> $w = (5, 6, 0)$.</div>
+    </div>
+  </details>
+
+  <!-- P4 Ej 12 y P5 Ej 17 -->
+  <details>
+    <summary>Práctica 4 - Ej. 12 y P5 - Ej. 17: Cambio de base en $\mathbb{R}^2$ y $M_{BB'}(T)$</summary>
+    <div class="dbody">
+      <p>$E = \{(1,0),(0,1)\}$, $B = \{(1,1),(1,-1)\}$, $B' = \{(3,1),(2,-1)\}$, $v = (2,-1)$, $w = (2,2)$.</p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li><strong>12 i) $[v]_B$:</strong> $\alpha + \beta = 2$, $\alpha - \beta = -1$ → $\alpha = \frac{1}{2}$, $\beta = \frac{3}{2}$ → $[v]_B = (\frac{1}{2}, \frac{3}{2})$.</li>
+        <li><strong>12 ii) $[v]_{B'}$:</strong> $(2,-1)$ es el 2° vector de $B'$ → $[v]_{B'} = (0, 1)$. Para $w = (2,2)$: $[w]_B = (2, 0)$; $[w]_{B'} = (\frac{6}{5}, -\frac{4}{5})$.</li>
+        <li><strong>P5 - Ej. 17 i) $C_{EB}$:</strong> $C_{EB} = \begin{pmatrix} \frac{1}{2} & \frac{1}{2} \\ \frac{1}{2} & -\frac{1}{2} \end{pmatrix}$. Verificación: $[v]_B = C_{EB} \cdot (2, -1)^T = (\frac{1}{2}, \frac{3}{2})^T$ ✓.</li>
+        <li><strong>P5 - Ej. 17 ii) $M_{BB'}(T)$ para $T(x,y) = (2x-y, x+y)$:</strong>
+        $M_{BB'}(T) = \begin{pmatrix} 1 & \frac{3}{5} \\ -1 & \frac{3}{5} \end{pmatrix}$.</li>
+      </ol>
+    </div>
+  </details>
+
+  <!-- P4 Ej 4 -->
+  <details>
+    <summary>Práctica 4 - Ej. 4 a) y b): Base de $\mathbb{R}^3$ y hallar $k$</summary>
+    <div class="dbody">
+      <p><strong>a) $B = \{(1,-1,0),\; (2,1,-1),\; (0,-1,-1)\}$:</strong></p>
+      <p>$\det = -4 \neq 0$ → <strong>es base de $\mathbb{R}^3$</strong>.</p>
+      <p style="margin-top:.9rem"><strong>b) $B' = \{(-1,2,-1),\; (1,0,k),\; (1,-1,k)\}$:</strong></p>
+      <p>$\det = 1 - k$. Exigimos $1 - k \neq 0$.</p>
+      <div class="result-box ok"><strong>4b:</strong> $B'$ es base para todo $k \in \mathbb{R} - \{1\}$.</div>
+    </div>
+  </details>
+
+  <!-- ═══ BLOQUE 4: Transformaciones Lineales ═══ -->
+  <div class="stitle"><span class="ico">🔁</span> Bloque 4 — Transformaciones Lineales</div>
+  <div class="card or" style="margin-bottom:1rem">
+    <h3>🧠 Ayuda Memoria — T.F.T.L.</h3>
+    <div class="fbox">
+      <span class="big" style="font-size:.95rem">Triangulá la matriz ampliada $(v_i \mid w_i)$ con los datos en filas:</span>
+      <span class="sub">1. $\text{Rg}(V) = \dim(\text{Dominio})$ y sin contradicción → <strong>EXISTE Y ES ÚNICA</strong><br/>2. $\text{Rg}(V) < \dim(\text{Dominio})$ y $0 = 0$ → <strong>EXISTE, NO ES ÚNICA</strong><br/>3. Fila $(0 \; 0 \; 0 \mid \neq 0)$ → <strong>NO EXISTE</strong></span>
+    </div>
+    <ul style="margin:.7rem 0 0 1.2rem;line-height:2;font-size:.9rem">
+      <li><strong>Si hay infinitas T.L. (Ej. 3):</strong> Completá asignando valores libres a las imágenes faltantes.</li>
+      <li><strong>Matriz $M_{EE}(T)$:</strong> Columnas = $T(e_1), T(e_2), \dots$</li>
+    </ul>
+  </div>
+
+  <!-- P5 Ej 2a y 2e -->
+  <details open>
+    <summary><span style="color:var(--red);font-weight:700">2a CASI IGUAL AL PARCIAL</span> P5 - Ej. 2a), 2e) y Ej. 3: Existencia, Unicidad y Fórmula</summary>
+    <div class="dbody">
+      <p><strong>2a) $T:\mathbb{R}^3 \to \mathbb{R}^4$:</strong> $(1,0,1), (0,1,1), (0,0,1)$ tienen $\text{Rg} = 3$ → base de $\mathbb{R}^3$ → <strong>existe y es única</strong>.</p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li>$T(0,0,1) = (1,1,2,0)$</li>
+        <li>$T(1,0,0) = T(1,0,1) - T(0,0,1) = (-2,-1,-1,2)$</li>
+        <li>$T(0,1,0) = T(0,1,1) - T(0,0,1) = (-1,0,-1,2)$</li>
+        <li><strong>Fórmula:</strong> $T(x_1,x_2,x_3) = (-2x_1 - x_2 + x_3,\; -x_1 + x_3,\; -x_1 - x_2 + 2x_3,\; 2x_1 + 2x_2)$.</li>
+      </ol>
+      <p style="margin-top:.9rem"><strong>2e)</strong> Dato extra $T(-1,2,1) = (1,2,1,2)$ es redundante y consistente → misma fórmula.</p>
+    </div>
+  </details>
+
+  <!-- P5 Ej 2b, 2c, 2d -->
+  <details>
+    <summary>P5 - Ej. 2b), 2c), 2d): Casos L.D., Contradicción y Dos Fórmulas</summary>
+    <div class="dbody">
+      <p><strong>2b) $T:\mathbb{R}^4 \to \mathbb{R}^4$:</strong> $v_2 - v_3 = v_4$, y $T(v_2)-T(v_3) = T(v_4)$ ✓. $\text{Rg}=3 < 4$ → <strong>EXISTE, NO ES ÚNICA</strong>.</p>
+      <ul style="margin-left:1.2rem;line-height:1.8">
+        <li><strong>Fórmula 1</strong> ($T(e_4) = (0,0,0,0)$): $T_1(x) = (x_1, x_1+x_2, x_1+x_2-x_3, x_1+x_2+x_3)$.</li>
+        <li><strong>Fórmula 2</strong> ($T(e_4) = (2,0,0,0)$): $T_2(x) = (x_2-x_3+2x_4, x_1+x_2, x_1+x_2-x_3, x_1+x_2+x_3)$.</li>
+      </ul>
+      <p style="margin-top:.9rem"><strong>2c) $T:\mathbb{R}^3 \to \mathbb{R}^4$:</strong> $(1,1,0)-(0,1,1)=(1,0,-1)$ pero $T(1,1,0)-T(0,1,1) = (-1,-1,0,0) \neq (1,1,2,0) = T(1,0,-1)$.</p>
+      <div class="result-box no"><strong>2c:</strong> <strong>NO EXISTE</strong> ninguna TL.</div>
+      <p style="margin-top:.9rem"><strong>2d) $T:\mathbb{R}^4 \to \mathbb{R}^3$:</strong> 3 vectores L.I. en $\mathbb{R}^4$ → falta 1 → <strong>EXISTE, NO ES ÚNICA</strong>.</p>
+      <ul style="margin-left:1.2rem;line-height:1.8">
+        <li><strong>Fórmula 1</strong> ($T(e_1) = (0,0,0)$): $T_1(x) = (x_2 - 2x_3 + x_4, x_2 - x_3 + x_4, x_2 + x_3)$.</li>
+        <li><strong>Fórmula 2</strong> ($T(e_1) = (1,0,0)$): $T_2(x) = (x_1 + 2x_2 - 3x_3 + x_4, x_2 - x_3 + x_4, x_2 + x_3)$.</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- P5 Ej 7 y 6a -->
+  <details>
+    <summary>P5 - Ej. 7 a), b) y Ej. 6a): Construir T.L. con Núcleo/Imagen dados</summary>
+    <div class="dbody">
+      <p><strong>7a) $F:\mathbb{R}^4 \to \mathbb{R}^3$ con $N(F) = \text{gen}\{(1,2,0,0), (2,1,0,0)\}$ y $F(0,0,0,1) = (1,1,1)$:</strong></p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li>$F(1,0,0,0) = F(0,1,0,0) = (0,0,0)$. $\dim(\text{Im}(F)) = 4 - 2 = 2$.</li>
+        <li>Definimos $F(0,0,1,0) = (1,0,0)$. → $F(x) = (x_3 + x_4, x_4, x_4)$.</li>
+        <li>¿Epimorfismo? <strong>No</strong>, $\dim(\text{Im}) = 2 < 3$.</li>
+      </ol>
+      <p style="margin-top:.9rem"><strong>7b) $G:\mathbb{R}^3 \to \mathbb{R}^4$ con $\text{Im}(G) = \text{gen}\{(1,1,0,0), (1,1,1,0)\}$:</strong></p>
+      <ol style="margin-left:1.2rem;line-height:2">
+        <li>$G(1,0,0) = (1,1,0,0)$, $G(0,1,0) = (0,0,0,0)$ → $G(x) = (x_1, x_1, x_3, 0)$.</li>
+        <li>¿Monomorfismo? <strong>No</strong>, $\dim(N(G)) = 1 \neq 0$.</li>
+      </ol>
+      <p style="margin-top:.9rem"><strong>6a) Matrices asociadas $M_{EE}(T)$:</strong></p>
+      <div class="fbox" style="font-size:.85rem;text-align:left">
+        $M_{EE}(T_{2a}) = \begin{pmatrix} -2 & -1 & 1 \\ -1 & 0 & 1 \\ -1 & -1 & 2 \\ 2 & 2 & 0 \end{pmatrix}$ &emsp; $M_{EE}(T_{2b,1}) = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 1 & 1 & 0 & 0 \\ 1 & 1 & -1 & 0 \\ 1 & 1 & 1 & 0 \end{pmatrix}$
+      </div>
+    </div>
+  </details>
+
+  <!-- EXTRAS -->
+  <div class="stitle"><span class="ico">⚡</span> Mini-Guía Express: Núcleo, Imagen y Clasificación</div>
+  <div class="grid g2">
+    <div class="card te">
+      <h3>Núcleo, Imagen y Clasificación</h3>
+      <ul style="margin-left:1.2rem;line-height:2;font-size:.88rem">
+        <li><strong>Núcleo $N(T)$:</strong> Igualá la fórmula a $(0,\dots,0)$ y resolvé el sistema homogéneo.</li>
+        <li><strong>Imagen $\text{Im}(T)$:</strong> Evaluá $T$ en la base canónica y extraé subconjunto L.I.</li>
+        <li><strong>Teorema de la Dimensión:</strong> $\dim(V) = \dim(N(T)) + \dim(\text{Im}(T))$.</li>
+        <li><strong>Monomorfismo:</strong> $N(T) = \{\vec{0}\}$. <strong>Epimorfismo:</strong> $\dim(\text{Im}) = \dim(W)$.</li>
+        <li><strong>Isomorfismo:</strong> mono + epi (solo si $\dim(V) = \dim(W)$ y $\det \neq 0$).</li>
+      </ul>
+    </div>
+    <div class="card or">
+      <h3>Subespacios y T.L. Geométricas</h3>
+      <ul style="margin-left:1.2rem;line-height:2;font-size:.88rem">
+        <li><strong>Subespacio:</strong> $\vec{0} \in W$, cerrado suma/escalar. Sin $x^2$, sin $|x|$, sin $\ge 0$.</li>
+        <li><strong>T.L.:</strong> $T(\vec{0}) = \vec{0}$, variables lineales grado 1, sin constantes.</li>
+        <li><strong>Simetría eje $x$:</strong> $(x, -y)$. <strong>Eje $y$:</strong> $(-x, y)$.</li>
+        <li><strong>Proyección eje $x$:</strong> $(x, 0)$. <strong>Rotación $\theta$:</strong> $\begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}$.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:1.5rem">🏅 Recorrer las resoluciones te da +100 EXP.</div>
+  <button class="sim-btn green" style="margin-top:1rem" onclick="addExp(100);this.textContent='✅ +100 EXP sumados'">✅ Revisé las resoluciones</button>
+</div>
+</div>
+
+<!-- ═══════════════ MAZO RÁPIDO (16 TARJETAS) ═══════════════ -->
+<div class="page" id="mazo">
+<div class="container">
+  <p style="margin-bottom:1rem"><a href="#" onclick="showPage('inicio',document.getElementById('tb-inicio'));return false" style="color:var(--pur);font-weight:700">← Volver al inicio</a></p>
+  <div class="stitle"><span class="ico">🧠</span> Entrenador de Memoria Activa — 16 Tarjetas</div>
+  <div class="tip">🎴 <div>Leé la pregunta, respondé mentalmente o en papel antes de mirar, y calificá tu recuerdo. Las difíciles vuelven inmediatamente a tu cola.</div></div>
+
+  <div style="max-width:720px;margin:0 auto">
+    <div class="card" id="fc-box" style="min-height:230px;display:flex;flex-direction:column;justify-content:space-between">
+      <div>
+        <span id="fc-tag" class="lvl-chip" style="font-size:.78rem">TEMA</span>
+        <h3 id="fc-question" style="margin-top:.8rem;font-size:1.1rem;color:var(--gray)">Cargando pregunta...</h3>
+      </div>
+      <div id="fc-answer" style="display:none;margin-top:1.2rem;padding-top:.8rem;border-top:2px dashed var(--border);color:var(--green);font-size:.92rem;line-height:1.7"></div>
+      <div style="margin-top:1.2rem">
+        <button id="fc-reveal-btn" class="sim-btn" style="width:100%;font-size:1rem" onclick="revealFlashcard()">Mostrar Respuesta</button>
+        <div id="fc-rate" style="display:none;margin-top:.8rem;display:none;flex-wrap:wrap;gap:.5rem;align-items:center;justify-content:space-between;padding:.8rem;background:var(--pur-bg);border-radius:8px">
+          <span style="font-size:.85rem;color:var(--gray-lt)">¿Qué tan bien la sabías?</span>
+          <div style="display:flex;gap:.4rem">
+            <button onclick="rateFlashcard(1)" style="padding:.4rem .8rem;border:none;border-radius:6px;font-weight:700;cursor:pointer;background:var(--red);color:#fff;font-size:.82rem">Difícil</button>
+            <button onclick="rateFlashcard(2)" style="padding:.4rem .8rem;border:none;border-radius:6px;font-weight:700;cursor:pointer;background:var(--yellow);color:#0f172a;font-size:.82rem">Bien</button>
+            <button onclick="rateFlashcard(3)" style="padding:.4rem .8rem;border:none;border-radius:6px;font-weight:700;cursor:pointer;background:var(--green);color:#fff;font-size:.82rem">Fácil</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p id="fc-counter" style="text-align:center;color:var(--gray-lt);font-size:.85rem;margin-top:.6rem"></p>
+  </div>
+</div>
+</div>
+
 <nav class="apuntes-footer-nav">
   <span class="apuntes-footer-nav__label">Más de esta materia:</span>
   <a href="teoria.html">Unidad 1</a>
@@ -2041,10 +2437,79 @@ function confetti(){
 // ═══════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// MAZO DE TARJETAS (Flashcards con repetición espaciada)
+// ═══════════════════════════════════════════════════
+const fcDeck = [
+  { tag: "Dimensión (P4 Ej. 6)", q: "¿Cuál es la fórmula de Rouché-Frobenius para la dimensión de un subespacio dado por ecuaciones homogéneas?", a: "$\\dim(S) = n - \\text{Rg}(A)$, donde $n$ es la cantidad de incógnitas y $\\text{Rg}(A)$ es el número de ecuaciones no nulas tras triangular." },
+  { tag: "Igualdad S = T (P4 Ej. 7)", q: "Si $\\dim(S) = 2$ y $\\dim(T) = 2$ en $\\mathbb{R}^3$, ¿qué condición falta verificar para asegurar que $S = T$?", a: "Apilar los generadores de $S$ y de $T$ en una sola matriz y comprobar que el rango siga siendo $2$ ($\\dim(S+T) = 2$)." },
+  { tag: "Extender Base (P4 Ej. 5)", q: "Triangulaste una matriz de generadores en $\\mathbb{R}^4$ y los pivotes quedaron en las columnas 1 y 2. ¿Qué vectores agregás para extender a una base de $\\mathbb{R}^4$?", a: "Los vectores canónicos correspondientes a las columnas SIN pivote: $e_3 = (0,0,1,0)$ y $e_4 = (0,0,0,1)$." },
+  { tag: "Suma Directa (P4 Ej. 9)", q: "¿Qué dos condiciones definen que $S_1 \\oplus S_2 = \\mathbb{R}^3$?", a: "1) $S_1 + S_2 = \\mathbb{R}^3$ ($\\dim(S_1+S_2)=3$), y 2) $S_1 \\cap S_2 = \\{\\vec{0}\\}$ ($\\dim(S_1 \\cap S_2) = 0$)." },
+  { tag: "Teorema Dimensión", q: "Escribí el Teorema de la Dimensión para la suma de dos subespacios $S$ y $T$.", a: "$\\dim(S + T) = \\dim(S) + \\dim(T) - \\dim(S \\cap T)$" },
+  { tag: "Ortogonal (P4 Ej. 10-11)", q: "Si $S$ viene dado por ecuaciones homogéneas $A \\cdot x = 0$, ¿cómo obtenés rápidamente generadores de $S^\\perp$?", a: "$S^\\perp$ está generado directamente por las <strong>filas no nulas</strong> de la matriz $A$." },
+  { tag: "Coordenadas [v]_B (P4 Ej. 13a)", q: "Para calcular $[v]_B$, ¿los vectores de la base $B$ van como filas o como columnas en la matriz ampliada?", a: "Van como <strong>COLUMNAS</strong>, con el vector $v$ en la última columna ampliada, porque resolvés $\\alpha v_1 + \\beta v_2 + \\gamma v_3 = v$." },
+  { tag: "Vector desde [w]_B (P4 Ej. 13b)", q: "Si conocés $[w]_B = (1, 2, 3)$ y los vectores de $B = \\{v_1, v_2, v_3\\}$, ¿cómo hallás $w$ en base canónica sin triangular?", a: "Multiplicás directamente: $w = 1\\cdot v_1 + 2\\cdot v_2 + 3\\cdot v_3$." },
+  { tag: "Base con parámetro (P4 Ej. 4b)", q: "¿Qué condición rápida te permite hallar los $k \\in \\mathbb{R}$ para que 3 vectores de $\\mathbb{R}^3$ formen base?", a: "Plantear que el determinante de la matriz formada por los 3 vectores sea distinto de cero ($\\det(A) \\neq 0$)." },
+  { tag: "T.F.T.L. (P5 Ej. 2a)", q: "¿Qué exige el Teorema Fundamental de las T.L. para garantizar que $T$ existe y es única?", a: "Que los vectores dados en el dominio formen una <strong>BASE</strong> del espacio de salida ($\\text{Rg} = \\dim(\\text{Dominio})$)." },
+  { tag: "T.L. No Única (P5 Ej. 2b/2d)", q: "Si los vectores del dominio son L.D. (o faltan vectores para llegar a $\\dim(V)$) pero NO hay contradicción en las imágenes, ¿qué concluís?", a: "La T.L. <strong>EXISTE, pero NO ES ÚNICA</strong> (hay infinitas; para dar dos fórmulas distintas asignás dos valores diferentes a la imagen libre)." },
+  { tag: "T.L. Inexistente (P5 Ej. 2c)", q: "¿Cuándo NO existe ninguna transformación lineal que cumpla las condiciones dadas?", a: "Cuando una combinación lineal de los vectores del dominio da $\\vec{0}$ (o un vector dado), pero esa misma combinación en las imágenes NO coincide." },
+  { tag: "Matriz Asociada (P5 Ej. 6a)", q: "¿Cómo se arma la matriz asociada $M_{EE}(T)$ en bases canónicas?", a: "Colocando en cada <strong>COLUMNA</strong> la imagen de cada vector de la base canónica: $T(e_1), T(e_2), \\dots$" },
+  { tag: "Teorema Dimensión T.L.", q: "Para una transformación lineal $T: V \\to W$, ¿qué relación vincula $\\dim(V)$, $\\dim(N(T))$ y $\\dim(\\text{Im}(T))$?", a: "$\\dim(V) = \\dim(N(T)) + \\dim(\\text{Im}(T))$" },
+  { tag: "Monomorfismo (P5 Ej. 7b)", q: "¿Cuándo una transformación lineal $T$ es un monomorfismo (inyectiva)?", a: "Cuando su núcleo es únicamente el vector nulo: $N(T) = \\{\\vec{0}\\}$, es decir, $\\dim(N(T)) = 0$." },
+  { tag: "Epimorfismo (P5 Ej. 7a)", q: "¿Cuándo una transformación lineal $T: V \\to W$ es un epimorfismo (sobreyectiva)?", a: "Cuando $\\text{Im}(T) = W$, es decir, $\\dim(\\text{Im}(T)) = \\dim(W)$." }
+];
+
+let fcMastered = 0;
+
+function renderFlashcard(){
+  if(fcDeck.length === 0){
+    document.getElementById('fc-tag').textContent = '¡COMPLETADO!';
+    document.getElementById('fc-question').textContent = '¡Excelente! Dominaste las 16 tarjetas del Simulacro + Prácticas 4 y 5.';
+    document.getElementById('fc-answer').style.display = 'none';
+    document.getElementById('fc-reveal-btn').style.display = 'none';
+    document.getElementById('fc-rate').style.display = 'none';
+    return;
+  }
+  const c = fcDeck[0];
+  document.getElementById('fc-tag').textContent = c.tag;
+  document.getElementById('fc-question').innerHTML = c.q;
+  document.getElementById('fc-answer').innerHTML = c.a;
+  document.getElementById('fc-answer').style.display = 'none';
+  document.getElementById('fc-reveal-btn').style.display = 'block';
+  document.getElementById('fc-rate').style.display = 'none';
+  document.getElementById('fc-counter').textContent = 'Tarjetas pendientes: '+fcDeck.length+' | Dominadas: '+fcMastered;
+  if(typeof renderMathInElement!=='undefined'){
+    renderMathInElement(document.getElementById('fc-question'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+  }
+}
+
+function revealFlashcard(){
+  document.getElementById('fc-answer').style.display = 'block';
+  document.getElementById('fc-reveal-btn').style.display = 'none';
+  document.getElementById('fc-rate').style.display = 'flex';
+  if(typeof renderMathInElement!=='undefined'){
+    renderMathInElement(document.getElementById('fc-answer'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+  }
+}
+
+function rateFlashcard(level){
+  const card = fcDeck.shift();
+  if(level === 1){
+    fcDeck.splice(1, 0, card);
+  } else if(level === 2){
+    fcDeck.splice(Math.min(3, fcDeck.length), 0, card);
+  } else {
+    fcMastered++;
+  }
+  renderFlashcard();
+  if(fcMastered >= 16){ addExp(150); }
+}
+
 document.addEventListener('DOMContentLoaded',()=>{
   refreshUI();
   refreshExp();
   buildQuiz();
+  renderFlashcard();
 });
 
 // ═══════════════ NUEVO CÓDIGO: GAUSS, DET, INVERSA, SIMULACRO ═══════════════

@@ -1848,13 +1848,15 @@ function showPage(id, btn) {
 // ════════════════════ ANIMACIÓN 1: LAZO 4-20mA ════════════════════
 const loopC = document.getElementById('loopCanvas');
 const loopCtx = loopC ? loopC.getContext('2d') : null;
-let loopPct = 0, loopFault = false;
+let loopPct = 0, loopFault = false, loopAnim = null, loopFaultPulse = 0;
+const loopSegs = [[120,180],[290,360],[470,540]];
+const loopParts = Array.from({length:18}, (_,i) => ({seg: i%3, t: i/18 + Math.random()*0.05}));
 
-function setLoop(pct) { loopFault = false; loopPct = pct; drawLoop(); drawLoopGraph(); }
+function setLoop(pct) { loopFault = false; loopPct = pct; if(!loopAnim) animateLoop(); drawLoopGraph(); }
 function toggleLoopFault() {
   loopFault = !loopFault;
   document.getElementById('loopFaultBtn').textContent = loopFault ? '⚡ Cable Cortado (simulado)' : '⚡ Simular Rotura';
-  drawLoop(); drawLoopGraph();
+  if(!loopAnim) animateLoop(); drawLoopGraph();
 }
 
 function drawLoop() {
@@ -1890,16 +1892,35 @@ function drawLoop() {
   // PLC (derecha)
   drawBox(loopCtx, 540, wireY - 40, 110, 80, '#16a34a', '#f0fdf4', 'PLC', loopFault ? '⚠ LAZO ROTO' : 'OK ' + pct100);
 
-  // Flechita de corriente animada
+  // Animated current particles
+  const speed = mA / 20 * 0.04;
   if (!loopFault && mA > 0) {
     loopCtx.fillStyle = '#0369a1';
-    for (let x of [140, 300, 480]) {
+    for (let i = 0; i < loopParts.length; i++) {
+      const p = loopParts[i];
+      p.t += speed;
+      if (p.t > 1) p.t -= 1;
+      const seg = loopSegs[p.seg];
+      const px = seg[0] + (seg[1] - seg[0]) * p.t;
       loopCtx.beginPath();
-      loopCtx.moveTo(x, wireY - 6);
-      loopCtx.lineTo(x + 14, wireY);
-      loopCtx.lineTo(x, wireY + 6);
+      loopCtx.arc(px, wireY, 3, 0, 2 * Math.PI);
       loopCtx.fill();
     }
+    // Static direction arrows
+    for (const x of [150, 325, 505]) {
+      loopCtx.beginPath();
+      loopCtx.moveTo(x, wireY - 5);
+      loopCtx.lineTo(x + 10, wireY);
+      loopCtx.lineTo(x, wireY + 5);
+      loopCtx.fill();
+    }
+  } else if (loopFault) {
+    loopFaultPulse += 0.08;
+    const alpha = 0.3 + 0.3 * Math.sin(loopFaultPulse);
+    loopCtx.strokeStyle = `rgba(220,38,38,${alpha})`;
+    loopCtx.lineWidth = 6;
+    loopCtx.beginPath(); loopCtx.moveTo(30, wireY); loopCtx.lineTo(W - 30, wireY);
+    loopCtx.stroke();
   }
 
   // Label mA arriba
@@ -1979,8 +2000,12 @@ function animateHart() {
   hartAnim = requestAnimationFrame(animateHart);
 }
 
+function animateLoop() {
+  drawLoop();
+  loopAnim = requestAnimationFrame(animateLoop);
+}
 // Dibujar loop inicial al cargar
-setTimeout(drawLoop, 100);
+setTimeout(animateLoop, 100);
 
 // ════════════════════ ANIMACIÓN 3: CMG (Ferraris) ════════════════════
 const cmgC = document.getElementById('cmgCanvas');
@@ -2193,6 +2218,9 @@ const vfdInfoMap = {
   chop: 'CHOPPER DE FRENADO: Transistor Chopper desvía energía regenerativa hacia resistencia externa cuando el bus DC sube >750V por desaceleración de cargas con alta inercia.'
 };
 
+let vfdAnim = null, vfdDotPhase = 0;
+const vfdDots = Array.from({length:9}, (_,i) => ({seg: i%3, t: (i%3===0? i/9 : i/9 + 0.33*(i%3))}));
+
 function drawVFD() {
   if (!vfdCtx) return;
   const W = vfdC.width, H = vfdC.height;
@@ -2226,6 +2254,24 @@ function drawVFD() {
   // Red izquierda
   vfdCtx.fillStyle = '#6b7280'; vfdCtx.font = '10px Segoe UI'; vfdCtx.textAlign = 'center';
   vfdCtx.fillText('Red 400V\n50Hz', 10, 108); vfdCtx.fillText('Motor', W-15, 108);
+
+  // Animated energy dots flowing between blocks
+  const dotSegs = [[160,200],[340,380],[520,560]];
+  const dotColors = ['#0369a1','#7c3aed','#16a34a'];
+  vfdDotPhase += 0.012;
+  for (let i = 0; i < vfdDots.length; i++) {
+    const d = vfdDots[i];
+    d.t += 0.008;
+    if (d.t > 1) d.t -= 1;
+    const seg = dotSegs[d.seg];
+    const dx = seg[0] + (seg[1] - seg[0]) * d.t;
+    vfdCtx.globalAlpha = 0.85;
+    vfdCtx.fillStyle = dotColors[d.seg];
+    vfdCtx.beginPath(); vfdCtx.arc(dx, 100, 4, 0, 2*Math.PI); vfdCtx.fill();
+    vfdCtx.globalAlpha = 1;
+  }
+
+  vfdAnim = requestAnimationFrame(drawVFD);
 }
 
 setTimeout(drawVFD, 300);
@@ -2387,6 +2433,8 @@ function animateHart() {
 
 // CMG: vector + senoides con ejes y frecuencia seleccionable.
 let cmgFrequency=50;
+const cmgTrail = Array.from({length:40}, () => ({x:0, y:0}));
+let cmgTrailIdx = 0;
 function setCMGFrequency(value){cmgFrequency=Number(value);if(!cmgAnim){animateCMG();cancelAnimationFrame(cmgAnim);cmgAnim=null;}}
 function animateCMG(){
   if(!cmgCtx)return;const W=cmgC.width,H=cmgC.height,cx=135,cy=132,R=82,plotX=285,plotY=43,plotW=W-plotX-25,plotH=165,t=cmgAngle;
@@ -2394,7 +2442,19 @@ function animateCMG(){
   cmgCtx.fillStyle='#1e293b';cmgCtx.beginPath();cmgCtx.arc(cx,cy,R+8,0,Math.PI*2);cmgCtx.fill();
   const phases=[{c:'#ef4444',a:0,n:'L1 (R) - Fase A'},{c:'#22c55e',a:2*Math.PI/3,n:'L2 (S) - Fase B'},{c:'#3b82f6',a:4*Math.PI/3,n:'L3 (T) - Fase C'}];
   phases.forEach((p,i)=>{const amp=Math.cos(t-i*2*Math.PI/3),vx=Math.cos(p.a)*amp*R*.85,vy=Math.sin(p.a)*amp*R*.85;chartLine(cmgCtx,cx-Math.cos(p.a)*R,cy-Math.sin(p.a)*R,cx+Math.cos(p.a)*R,cy+Math.sin(p.a)*R,'#475569');chartLine(cmgCtx,cx,cy,cx+vx,cy+vy,p.c,2)});
-  const bx=Math.cos(t)*R*.72,by=Math.sin(t)*R*.72;chartLine(cmgCtx,cx,cy,cx+bx,cy+by,'#fbbf24',4);boundedChartText(cmgCtx,'B_total = 1.5·Bmax',cx,238,'center','#92400e',true,8,plotX-10);
+  const bx=Math.cos(t)*R*.72,by=Math.sin(t)*R*.72;
+  // Trail: store and draw fading positions of resultant vector tip
+  cmgTrail[cmgTrailIdx] = {x: cx+bx, y: cy+by};
+  cmgTrailIdx = (cmgTrailIdx + 1) % cmgTrail.length;
+  for (let i = 0; i < cmgTrail.length; i++) {
+    const idx = (cmgTrailIdx + i) % cmgTrail.length;
+    const pt = cmgTrail[idx];
+    if (pt.x === 0 && pt.y === 0) continue;
+    const alpha = (i + 1) / cmgTrail.length * 0.7;
+    cmgCtx.fillStyle = `rgba(251,191,36,${alpha})`;
+    cmgCtx.beginPath(); cmgCtx.arc(pt.x, pt.y, 1.5 + alpha * 2.5, 0, 2*Math.PI); cmgCtx.fill();
+  }
+  chartLine(cmgCtx,cx,cy,cx+bx,cy+by,'#fbbf24',4);boundedChartText(cmgCtx,'B_total = 1.5·Bmax',cx,238,'center','#92400e',true,8,plotX-10);
   cmgCtx.strokeStyle='#fbbf24';cmgCtx.lineWidth=2;cmgCtx.beginPath();cmgCtx.arc(cx,cy,R-13,-1.1,.2);cmgCtx.stroke();boundedChartText(cmgCtx,`ns ↻ ${cmgFrequency===50?'1500':'1800'} rpm`,cx,22,'center',chartColors.blue,true,8,plotX-10);
   cmgCtx.fillStyle='#f8fafc';cmgCtx.fillRect(plotX,plotY,plotW,plotH);
   [-1,-.5,0,.5,1].forEach(v=>{const y=plotY+plotH/2-v*plotH*.42;chartLine(cmgCtx,plotX,y,plotX+plotW,y);chartText(cmgCtx,String(v),plotX-7,y+3,'right')});
@@ -2428,14 +2488,36 @@ function animateYD(){
 
 // Soft-starter: senoide recortada por α y estimación RMS/par.
 const scrC=document.getElementById('scrCanvas'),scrCtx=scrC?scrC.getContext('2d'):null;
+let scrAnim = null, scrGatePhase = 0, scrCurrentDeg = 120;
 function drawSCR(degrees=120){
+  scrCurrentDeg = degrees;
+  if(!scrAnim) animateSCR();
+}
+function animateSCR(){
+  const degrees = scrCurrentDeg;
   if(!scrCtx)return;const ctx=scrCtx,W=scrC.width,H=scrC.height,L=55,R=22,T=38,B=34,pw=W-L-R,ph=H-T-B,mid=T+ph/2,a=degrees*Math.PI/180;
   ctx.clearRect(0,0,W,H);ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);chartTitle(ctx,'Control de tensión por ángulo de disparo α',W);
   [-400,-200,0,200,400].forEach(v=>{const y=mid-v/400*ph*.43;chartLine(ctx,L,y,W-R,y);chartText(ctx,String(v),L-7,y+3,'right')});[0,30,60,90,120,150,180].forEach(v=>{const x=L+pw*v/180;chartLine(ctx,x,T,x,T+ph);chartText(ctx,v+'°',x,H-10)});chartText(ctx,'V_AC (V)',5,T+8,'left',chartColors.text,true);chartText(ctx,'Ángulo de disparo α',L+pw/2,H-8,'center',chartColors.text,true);
-  const blockedX=L+pw*degrees/180;ctx.fillStyle='rgba(148,163,184,.22)';ctx.fillRect(L,T,blockedX-L,ph);ctx.fillStyle='rgba(2,132,199,.12)';ctx.fillRect(blockedX,T,W-R-blockedX,ph);if(blockedX-L>75)boundedChartText(ctx,'SCR bloqueado',L+(blockedX-L)/2,T+14,'center','#64748b',true,L+3,blockedX-3);if(W-R-blockedX>68)boundedChartText(ctx,'SCR conduce',blockedX+(W-R-blockedX)/2,T+14,'center',chartColors.blue,true,blockedX+3,W-R-3);
+  const blockedX=L+pw*degrees/180;ctx.fillStyle='rgba(148,163,184,.22)';ctx.fillRect(L,T,blockedX-L,ph);
+  // Gradient fill for conducting zone
+  const condGrad=ctx.createLinearGradient(blockedX,0,W-R,0);condGrad.addColorStop(0,'rgba(2,132,199,0.25)');condGrad.addColorStop(1,'rgba(2,132,199,0.05)');ctx.fillStyle=condGrad;ctx.fillRect(blockedX,T,W-R-blockedX,ph);
+  if(blockedX-L>75)boundedChartText(ctx,'SCR bloqueado',L+(blockedX-L)/2,T+14,'center','#64748b',true,L+3,blockedX-3);if(W-R-blockedX>68)boundedChartText(ctx,'SCR conduce',blockedX+(W-R-blockedX)/2,T+14,'center',chartColors.blue,true,blockedX+3,W-R-3);
   ctx.strokeStyle='#94a3b8';ctx.lineWidth=1.5;ctx.beginPath();for(let x=0;x<=pw;x++){const th=x/pw*Math.PI*2,y=mid-Math.sin(th)*ph*.43;x?ctx.lineTo(L+x,y):ctx.moveTo(L,y)}ctx.stroke();
   ctx.strokeStyle=chartColors.blue;ctx.lineWidth=3;ctx.beginPath();let started=false;for(let x=0;x<=pw;x++){const th=x/pw*Math.PI*2,half=th<=Math.PI?th:th-Math.PI,conduct=half>=a,y=conduct?mid-Math.sin(th)*ph*.43:mid;if(!started){ctx.moveTo(L+x,y);started=true}else ctx.lineTo(L+x,y)}ctx.stroke();
+  // Animated gate pulse marker at firing angle
+  scrGatePhase += 0.1;
+  const gpX = blockedX;
+  const gpY = mid;
+  const pulseR = 5 + 2 * Math.sin(scrGatePhase);
+  ctx.fillStyle = '#d97706';
+  ctx.beginPath(); ctx.arc(gpX, gpY, pulseR, 0, 2*Math.PI); ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.font = 'bold 8px Segoe UI'; ctx.textAlign = 'center';
+  ctx.fillText('G', gpX, gpY + 3);
+  // Gate pulse label
+  ctx.fillStyle = '#d97706'; ctx.font = 'bold 10px Segoe UI';
+  ctx.fillText('↓ Gate α=' + degrees + '°', gpX, gpY - pulseR - 4);
   const factor=Math.sqrt(Math.max(0,(Math.PI-a+Math.sin(2*a)/2)/(Math.PI))),vrms=400*factor,torque=factor*factor*100;document.getElementById('scrAngleOut').textContent=degrees+'°';document.getElementById('scrReadout').textContent=`V_rms = ${vrms.toFixed(0)} V | Par estimado ~ ${torque.toFixed(0)}%`;
+  scrAnim = requestAnimationFrame(animateSCR);
 }
 
 // VFD: tres paneles de forma de onda.

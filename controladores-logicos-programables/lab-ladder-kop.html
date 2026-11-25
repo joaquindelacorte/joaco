@@ -1,0 +1,1883 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorio Interactivo PLC Ladder (KOP) — 10 Ejercicios + Caza-Errores</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0b0f17;
+      color: #e2e8f0;
+    }
+    .font-mono-plc {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Animación de flujo de corriente en barras y conductores activos */
+    @keyframes powerPulse {
+      0%, 100% { filter: drop-shadow(0 0 3px rgba(34, 197, 94, 0.7)); }
+      50% { filter: drop-shadow(0 0 7px rgba(74, 222, 128, 0.95)); }
+    }
+    .wire-energized {
+      stroke: #22c55e;
+      animation: powerPulse 1.6s infinite ease-in-out;
+    }
+    .wire-idle {
+      stroke: #475569;
+    }
+    .wire-fault {
+      stroke: #ef4444;
+      filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.9));
+    }
+    /* Rotación de eje de motor */
+    @keyframes spinCW {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes spinCCW {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+    .motor-spin-cw-slow { animation: spinCW 2.4s linear infinite; }
+    .motor-spin-cw-fast { animation: spinCW 0.7s linear infinite; }
+    .motor-spin-ccw { animation: spinCCW 1.4s linear infinite; }
+
+    /* Scrollbar estilizada */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- BARRA DE NAVEGACIÓN SUPERIOR -->
+  <header class="bg-slate-900/95 border-b border-slate-800 sticky top-0 z-30 backdrop-blur">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-mono-plc font-bold text-sm">
+          KOP
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold text-white tracking-tight flex items-center gap-2">
+            Simulador PLC Ladder (IEC 61131-3)
+            <span class="text-[11px] font-mono-plc px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">SCAN: 20ms</span>
+          </h1>
+          <p class="text-xs text-slate-400">Práctica interactiva de automatismos industriales y diagnóstico de fallas</p>
+        </div>
+      </div>
+
+      <!-- SELECTOR DE MODO -->
+      <nav class="flex bg-slate-950 p-1 rounded-xl border border-slate-800 self-start md:self-auto">
+        <button id="tab-solved" onclick="switchMode('solved')" class="px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 bg-emerald-600 text-white shadow-lg shadow-emerald-950/50">
+          <span>1. Los 10 Ejercicios Resueltos</span>
+        </button>
+        <button id="tab-debug" onclick="switchMode('debug')" class="px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white">
+          <span>2. Caza-Errores (Debugging)</span>
+          <span id="debug-badge" class="text-[10px] font-mono-plc px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">0/6</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-5 grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+    <!-- COLUMNA IZQUIERDA: LISTA DE EJERCICIOS / RETOS -->
+    <aside class="lg:col-span-3 flex flex-col gap-3">
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3">
+        <div class="flex items-center justify-between mb-2 px-1">
+          <h2 id="sidebar-title" class="text-xs font-bold uppercase tracking-wider text-slate-400">Programa de Práctica</h2>
+          <span id="sidebar-count" class="text-xs font-mono-plc text-slate-500">10/10</span>
+        </div>
+        <div id="exercise-list" class="flex lg:flex-col gap-1.5 overflow-x-auto lg:overflow-y-auto lg:max-h-[calc(100vh-190px)] pb-1">
+          <!-- Se llena dinámicamente -->
+        </div>
+      </div>
+    </aside>
+
+    <!-- COLUMNA CENTRAL Y DERECHA: WORKBENCH INTERACTIVO -->
+    <section class="lg:col-span-9 flex flex-col gap-4">
+
+      <!-- CABECERA DEL EJERCICIO ACTUAL -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 sm:p-5">
+        <div class="flex flex-wrap items-start justify-between gap-3 mb-2">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span id="ex-level" class="text-[11px] font-mono-plc uppercase px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 border border-sky-500/30">Nivel 1</span>
+              <span id="ex-code" class="text-xs font-mono-plc text-slate-400">EJ-01</span>
+            </div>
+            <h2 id="ex-title" class="text-lg sm:text-xl font-bold text-white">Título del Ejercicio</h2>
+          </div>
+          <button onclick="resetPLC()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition flex items-center gap-1.5">
+            <span>↺ Reiniciar PLC</span>
+          </button>
+        </div>
+        <p id="ex-desc" class="text-sm text-slate-300 leading-relaxed"></p>
+      </div>
+
+      <!-- ALERTA DE CORTOCIRCUITO / FALLA CRÍTICA EN SIMULACIÓN -->
+      <div id="fault-banner" class="hidden bg-red-950/90 border-2 border-red-500 rounded-xl p-4 flex items-center gap-3 animate-pulse">
+        <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 font-bold text-xl shrink-0">⚡</div>
+        <div>
+          <h3 class="font-bold text-red-200 text-sm">¡CORTOCIRCUITO / FALLA CRÍTICA DETECTADA EN POTENCIA!</h3>
+          <p id="fault-banner-msg" class="text-xs text-red-300 mt-0.5">Dos contactores incompatibles entraron simultáneamente. Pulsa "Reiniciar PLC" para restablecer protecciones.</p>
+        </div>
+      </div>
+
+      <!-- PANEL DE CAMPO (PULSADORES + ACTUADORES / MOTOR) -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+        
+        <!-- ENTRADAS DE CAMPO (BOTONERA INDUSTRIAL) -->
+        <div class="md:col-span-7 bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Tablero de Mando (Entradas PLC)</h3>
+              <span class="text-[11px] text-slate-500">Clic = Pulso / Interruptores = Mantenido</span>
+            </div>
+            <div id="inputs-panel" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+              <!-- Botones generados por JS -->
+            </div>
+          </div>
+          <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400">
+            <span>* Los pulsadores de Parada/Térmico son <strong class="text-amber-300">NC físicos</strong> (1 en reposo, 0 al abrirse).</span>
+          </div>
+        </div>
+
+        <!-- SALIDAS Y ESTADO DEL MOTOR -->
+        <div class="md:col-span-5 bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col justify-between">
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Proceso y Salidas (Q)</h3>
+            
+            <!-- VISUALIZADOR DE MOTOR TRIFÁSICO -->
+            <div id="motor-visualizer" class="bg-slate-950 border border-slate-800 rounded-lg p-3 mb-3 flex items-center gap-3">
+              <div class="relative w-14 h-14 rounded-full bg-slate-900 border-2 border-slate-700 flex items-center justify-center shrink-0">
+                <svg id="motor-rotor" class="w-9 h-9 text-slate-500 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="9" stroke-dasharray="4 2"/>
+                  <line x1="12" y1="3" x2="12" y2="21"/>
+                  <line x1="3" y1="12" x2="21" y2="12"/>
+                  <circle cx="12" cy="12" r="2.5" fill="currentColor"/>
+                </svg>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div id="motor-state-title" class="text-sm font-bold text-slate-300 truncate">MOTOR DETENIDO</div>
+                <div id="motor-state-sub" class="text-xs font-mono-plc text-slate-500 mt-0.5">0 RPM • Sin tensión</div>
+                <div id="motor-badges" class="flex flex-wrap gap-1 mt-1.5"></div>
+              </div>
+            </div>
+
+            <!-- PILOTOS Y BOBINAS ACTIVAS -->
+            <div id="outputs-panel" class="grid grid-cols-2 gap-2">
+              <!-- Salidas Q generadas por JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIAGRAMA LADDER EN VIVO (SVG INTERACTIVO) -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300">Editor / Monitor Ladder en Tiempo Real (KOP)</h3>
+          </div>
+          <div class="flex items-center gap-3 text-[11px] font-mono-plc">
+            <span class="flex items-center gap-1 text-emerald-400"><span class="w-3 h-0.5 bg-emerald-400 inline-block"></span> Conduce (1)</span>
+            <span class="flex items-center gap-1 text-slate-400"><span class="w-3 h-0.5 bg-slate-500 inline-block"></span> Abierto (0)</span>
+          </div>
+        </div>
+
+        <div class="bg-[#080c12] border border-slate-800/90 rounded-lg overflow-x-auto p-2">
+          <svg id="ladder-svg" class="w-full min-w-[680px] select-none" viewBox="0 0 820 300"></svg>
+        </div>
+      </div>
+
+      <!-- PANEL INFERIOR: NOTA TÉCNICA (MODO RESUELTO) O DIAGNÓSTICO DE ERROR (MODO DEBUG) -->
+      <div id="bottom-panel" class="bg-slate-900 border border-slate-800 rounded-xl p-4 sm:p-5">
+        <!-- Se renderiza dinámicamente según el modo -->
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+    // =========================================================================
+    // MOTOR DE SIMULACIÓN PLC Y DEFINICIÓN DE EJERCICIOS (RESUELTOS + BUGS)
+    // =========================================================================
+
+    let currentMode = 'solved'; // 'solved' | 'debug'
+    let currentIdx = 0;
+    let debugFixed = false;
+    let solvedDebugIds = new Set();
+    let selectedDebugOption = null;
+
+    // Estado interno del PLC (Entradas I, Salidas Q, Marcas M, Temporizadores T)
+    let plc = {
+      I: {},
+      Q: {},
+      M: {},
+      T: {}, // { T1: { acc: 0, pt: 4000, q: false, running: false } }
+      fault: null,
+      pulseTimers: {}
+    };
+
+    // -------------------------------------------------------------------------
+    // DEFINICIÓN DE LOS 10 EJERCICIOS RESUELTOS
+    // -------------------------------------------------------------------------
+    const SOLVED_EXERCISES = [
+      {
+        id: 'EJ-01',
+        level: 'Nivel 1 • Básico',
+        title: '1. Marcha y parada con retención clásica',
+        desc: 'Al presionar Marcha (I0.0), se activa el motor (Q0.0) y queda enclavado mediante su propio contacto auxiliar en paralelo. Al pulsar Parada (I0.1, físico NC), el circuito se abre. Prevalece la desconexión.',
+        note: '¿Por qué I0.1 se dibuja como contacto abierto --| |-- en el Ladder si el pulsador físico es NC? Porque en campo el pulsador NC entrega 24V (1 lógico) en reposo; por tanto, la instrucción --| |-- evalúa verdadero mientras nadie pulse parada. Si se corta el cable, cae a 0 y detiene el motor por seguridad positiva.',
+        inputs: [
+          { addr: 'I0.0', label: 'Marcha', type: 'momentary', color: 'emerald', defaultVal: false },
+          { addr: 'I0.1', label: 'Parada (NC)', type: 'momentary_nc', color: 'rose', defaultVal: true }
+        ],
+        outputs: [
+          { addr: 'Q0.0', label: 'Motor Principal (KM1)', type: 'motor' }
+        ],
+        timers: [],
+        motorConfig: (s) => ({
+          running: !!s.Q['Q0.0'],
+          dir: 'cw',
+          speed: 'normal',
+          label: s.Q['Q0.0'] ? 'MOTOR EN MARCHA' : 'MOTOR DETENIDO',
+          sub: s.Q['Q0.0'] ? '1450 RPM • KM1 Cerrado' : '0 RPM • En reposo',
+          badges: s.Q['Q0.0'] ? ['KM1 ON'] : []
+        }),
+        evalLogic: (s) => {
+          s.Q['Q0.0'] = (s.I['I0.0'] || s.Q['Q0.0']) && s.I['I0.1'];
+        },
+        rungs: (s) => [
+          {
+            title: 'Network 1: Arranque directo con auto-retención',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.0', label: 'Marcha', active: s.I['I0.0'] },
+                { type: 'NO', addr: 'I0.1', label: 'Parada(NC)', active: s.I['I0.1'] },
+                { type: 'COIL', addr: 'Q0.0', label: 'Motor KM1', active: s.Q['Q0.0'] }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.0', label: 'Retención', active: s.Q['Q0.0'], parallelTo: 0 }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        id: 'EJ-02',
+        level: 'Nivel 1 • Seguridad',
+        title: '2. Marcha/parada con relevo térmico y señalización',
+        desc: 'Incorpora el contacto auxiliar del relé térmico (I0.2, físico NC 95-96). Si ocurre sobrecarga, detiene el motor (Q0.0), bloquea el arranque y enciende el piloto rojo de falla (Q0.1).',
+        note: 'Prueba activar el interruptor "Térmico F1" mientras el motor gira: verás que I0.2 pasa de 1 a 0, abriendo el contacto --| |-- de la Network 1 (apaga Q0.0) y cerrando el contacto negado --|/|-- de la Network 2 (enciende la alarma Q0.1).',
+        inputs: [
+          { addr: 'I0.0', label: 'Marcha', type: 'momentary', color: 'emerald', defaultVal: false },
+          { addr: 'I0.1', label: 'Parada (NC)', type: 'momentary_nc', color: 'rose', defaultVal: true },
+          { addr: 'I0.2', label: 'Térmico F1 (NC)', type: 'toggle_nc', color: 'amber', defaultVal: true }
+        ],
+        outputs: [
+          { addr: 'Q0.0', label: 'Motor (KM1)', type: 'motor' },
+          { addr: 'Q0.1', label: 'Piloto Falla Térmica', type: 'alarm' }
+        ],
+        timers: [],
+        motorConfig: (s) => ({
+          running: !!s.Q['Q0.0'],
+          dir: 'cw',
+          speed: 'normal',
+          label: !s.I['I0.2'] ? 'DISPARO TÉRMICO (F1)' : (s.Q['Q0.0'] ? 'MOTOR EN MARCHA' : 'MOTOR DETENIDO'),
+          sub: !s.I['I0.2'] ? 'Protección activada • Rearmar F1' : (s.Q['Q0.0'] ? '1450 RPM • Normal' : '0 RPM'),
+          badges: !s.I['I0.2'] ? ['FALLA F1'] : (s.Q['Q0.0'] ? ['KM1 ON'] : [])
+        }),
+        evalLogic: (s) => {
+          s.Q['Q0.0'] = (s.I['I0.0'] || s.Q['Q0.0']) && s.I['I0.1'] && s.I['I0.2'];
+          s.Q['Q0.1'] = !s.I['I0.2'];
+        },
+        rungs: (s) => [
+          {
+            title: 'Network 1: Mando de motor protegido por térmico',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.0', label: 'Marcha', active: s.I['I0.0'] },
+                { type: 'NO', addr: 'I0.1', label: 'Parada', active: s.I['I0.1'] },
+                { type: 'NO', addr: 'I0.2', label: 'Térmico OK', active: s.I['I0.2'] },
+                { type: 'COIL', addr: 'Q0.0', label: 'Motor KM1', active: s.Q['Q0.0'] }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.0', label: 'Retención', active: s.Q['Q0.0'], parallelTo: 0 }
+              ]
+            ]
+          },
+          {
+            title: 'Network 2: Señalización óptica de disparo térmico',
+            branches: [
+              [
+                { type: 'NC', addr: 'I0.2', label: 'Falla F1', active: !s.I['I0.2'] },
+                { type: 'COIL', addr: 'Q0.1', label: 'Piloto Rojo', active: s.Q['Q0.1'] }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        id: 'EJ-03',
+        level: 'Nivel 1 • Lógica Combinacional',
+        title: '3. Control desde dos puestos (Local y Remoto)',
+        desc: 'Cinta transportadora (Q0.0) gobernable desde tablero local o pupitre remoto. Cualquiera de los pulsadores de marcha (I0.0 o I0.1) arranca; cualquiera de las paradas (I0.2 o I0.3) o el térmico (I0.4) detienen.',
+        note: 'Regla de oro en automatismos: las condiciones de MARCHA desde múltiples puntos se conectan en PARALELO (función OR), mientras que todas las condiciones de PARADA y SEGURIDAD se conectan en SERIE (función AND).',
+        inputs: [
+          { addr: 'I0.0', label: 'Marcha Local', type: 'momentary', color: 'emerald', defaultVal: false },
+          { addr: 'I0.1', label: 'Marcha Remota', type: 'momentary', color: 'emerald', defaultVal: false },
+          { addr: 'I0.2', label: 'Parada Local (NC)', type: 'momentary_nc', color: 'rose', defaultVal: true },
+          { addr: 'I0.3', label: 'Parada Remota (NC)', type: 'momentary_nc', color: 'rose', defaultVal: true },
+          { addr: 'I0.4', label: 'Térmico (NC)', type: 'toggle_nc', color: 'amber', defaultVal: true }
+        ],
+        outputs: [
+          { addr: 'Q0.0', label: 'Cinta Transportadora', type: 'motor' }
+        ],
+        timers: [],
+        motorConfig: (s) => ({
+          running: !!s.Q['Q0.0'],
+          dir: 'cw',
+          speed: 'normal',
+          label: s.Q['Q0.0'] ? 'CINTA EN MOVIMIENTO' : 'CINTA DETENIDA',
+          sub: s.Q['Q0.0'] ? 'Control Local/Remoto Habilitado' : '0 RPM',
+          badges: s.Q['Q0.0'] ? ['Q0.0 ON'] : []
+        }),
+        evalLogic: (s) => {
+          s.Q['Q0.0'] = (s.I['I0.0'] || s.I['I0.1'] || s.Q['Q0.0']) && s.I['I0.2'] && s.I['I0.3'] && s.I['I0.4'];
+        },
+        rungs: (s) => [
+          {
+            title: 'Network 1: Marchas en paralelo (OR) + Paradas/Seguridad en serie (AND)',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.0', label: 'M. Local', active: s.I['I0.0'] },
+                { type: 'NO', addr: 'I0.2', label: 'P. Local', active: s.I['I0.2'] },
+                { type: 'NO', addr: 'I0.3', label: 'P. Remota', active: s.I['I0.3'] },
+                { type: 'NO', addr: 'I0.4', label: 'Térmico', active: s.I['I0.4'] },
+                { type: 'COIL', addr: 'Q0.0', label: 'Cinta Q0.0', active: s.Q['Q0.0'] }
+              ],
+              [
+                { type: 'NO', addr: 'I0.1', label: 'M. Remota', active: s.I['I0.1'], parallelTo: 0 }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.0', label: 'Retención', active: s.Q['Q0.0'], parallelTo: 0 }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        id: 'EJ-04',
+        level: 'Nivel 1 • Seguridad de Máquinas',
+        title: '4. Parada de emergencia con rearme obligatorio (Reset)',
+        desc: 'Si se presiona el golpe de puño de emergencia (I0.2), el motor cae. Aunque se desenclave el hongo, el sistema NO permite arrancar hasta que el operario pulse Rearme (I0.3) para validar seguridad.',
+        note: 'Según normas ISO 13849 / IEC 60204-1, el desenclavamiento de una seta de emergencia nunca debe reiniciar la máquina por sí solo. Usamos la marca interna M0.0 ("Zona Segura") que requiere el pulso de Rearme I0.3.',
+        inputs: [
+          { addr: 'I0.2', label: 'Emergencia (NC)', type: 'toggle_nc', color: 'rose', defaultVal: true },
+          { addr: 'I0.3', label: 'Rearme / Reset', type: 'momentary', color: 'sky', defaultVal: false },
+          { addr: 'I0.0', label: 'Marcha Motor', type: 'momentary', color: 'emerald', defaultVal: false },
+          { addr: 'I0.1', label: 'Parada Normal (NC)', type: 'momentary_nc', color: 'rose', defaultVal: true }
+        ],
+        outputs: [
+          { addr: 'M0.0', label: 'Marca Sistema Habilitado', type: 'aux' },
+          { addr: 'Q0.0', label: 'Motor Principal', type: 'motor' }
+        ],
+        timers: [],
+        motorConfig: (s) => ({
+          running: !!s.Q['Q0.0'],
+          dir: 'cw',
+          speed: 'normal',
+          label: !s.I['I0.2'] ? '¡EMERGENCIA ACTIVADA!' : (!s.M['M0.0'] ? 'ESPERANDO REARME (I0.3)' : (s.Q['Q0.0'] ? 'MOTOR EN MARCHA' : 'LISTO PARA ARRANCAR')),
+          sub: s.M['M0.0'] ? 'Relé Seguridad M0.0 = 1' : 'Bloqueo de seguridad activo (M0.0 = 0)',
+          badges: s.M['M0.0'] ? ['SEGURIDAD OK'] : ['BLOQUEADO']
+        }),
+        evalLogic: (s) => {
+          s.M['M0.0'] = (s.I['I0.3'] || s.M['M0.0']) && s.I['I0.2'];
+          s.Q['Q0.0'] = (s.I['I0.0'] || s.Q['Q0.0']) && s.I['I0.1'] && s.M['M0.0'];
+        },
+        rungs: (s) => [
+          {
+            title: 'Network 1: Circuito de seguridad y rearme (Marca M0.0)',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.3', label: 'Rearme', active: s.I['I0.3'] },
+                { type: 'NO', addr: 'I0.2', label: 'Emerg. OK', active: s.I['I0.2'] },
+                { type: 'COIL', addr: 'M0.0', label: 'Sist. Hab.', active: s.M['M0.0'] }
+              ],
+              [
+                { type: 'NO', addr: 'M0.0', label: 'Ret. M0.0', active: s.M['M0.0'], parallelTo: 0 }
+              ]
+            ]
+          },
+          {
+            title: 'Network 2: Mando de motor condicionado por M0.0',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.0', label: 'Marcha', active: s.I['I0.0'] },
+                { type: 'NO', addr: 'I0.1', label: 'Parada', active: s.I['I0.1'] },
+                { type: 'NO', addr: 'M0.0', label: 'Sist. Hab.', active: s.M['M0.0'] },
+                { type: 'COIL', addr: 'Q0.0', label: 'Motor Q0.0', active: s.Q['Q0.0'] }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.0', label: 'Retención', active: s.Q['Q0.0'], parallelTo: 0 }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        id: 'EJ-05',
+        level: 'Nivel 2 • Enclavamientos',
+        title: '5. Inversión de giro pasando por parada',
+        desc: 'Controla giro horario (Q0.0) y antihorario (Q0.1). Para cambiar de sentido es obligatorio presionar Parada (I0.2) primero. Incluye enclavamiento eléctrico cruzado entre ambos contactores.',
+        note: 'Los contactos cerrados --|/|-- de Q0.1 en la rama de Q0.0 y de Q0.0 en la rama de Q0.1 impiden que ambos contactores entren a la vez, evitando un cortocircuito franco entre dos fases de la red trifásica.',
+        inputs: [
+          { addr: 'I0.0', label: 'Giro Derecha', type: 'momentary', color: 'emerald', defaultVal: false },
+          { addr: 'I0.1', label: 'Giro Izquierda', type: 'momentary', color: 'sky', defaultVal: false },
+          { addr: 'I0.2', label: 'Parada (NC)', type: 'momentary_nc', color: 'rose', defaultVal: true },
+          { addr: 'I0.3', label: 'Térmico (NC)', type: 'toggle_nc', color: 'amber', defaultVal: true }
+        ],
+        outputs: [
+          { addr: 'Q0.0', label: 'Contactor Derecha (KM1)', type: 'motor' },
+          { addr: 'Q0.1', label: 'Contactor Izquierda (KM2)', type: 'motor' }
+        ],
+        timers: [],
+        motorConfig: (s) => ({
+          running: !!(s.Q['Q0.0'] || s.Q['Q0.1']),
+          dir: s.Q['Q0.1'] ? 'ccw' : 'cw',
+          speed: 'normal',
+          label: s.Q['Q0.0'] ? 'GIRO HORARIO (DER)' : (s.Q['Q0.1'] ? 'GIRO ANTIHORARIO (IZQ)' : 'MOTOR DETENIDO'),
+          sub: s.Q['Q0.0'] ? 'KM1 Activo • Enclavado' : (s.Q['Q0.1'] ? 'KM2 Activo • Enclavado' : 'Listo para seleccionar sentido'),
+          badges: s.Q['Q0.0'] ? ['DERECHA (KM1)'] : (s.Q['Q0.1'] ? ['IZQUIERDA (KM2)'] : [])
+        }),
+        evalLogic: (s) => {
+          const prevQ0 = !!s.Q['Q0.0'];
+          const prevQ1 = !!s.Q['Q0.1'];
+          s.Q['Q0.0'] = (s.I['I0.0'] || prevQ0) && s.I['I0.2'] && s.I['I0.3'] && !prevQ1;
+          s.Q['Q0.1'] = (s.I['I0.1'] || prevQ1) && s.I['I0.2'] && s.I['I0.3'] && !s.Q['Q0.0'];
+        },
+        rungs: (s) => [
+          {
+            title: 'Network 1: Contactor Giro Derecha (KM1) con enclavamiento de KM2',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.0', label: 'Der.', active: s.I['I0.0'] },
+                { type: 'NO', addr: 'I0.2', label: 'Parada', active: s.I['I0.2'] },
+                { type: 'NO', addr: 'I0.3', label: 'Térmico', active: s.I['I0.3'] },
+                { type: 'NC', addr: 'Q0.1', label: 'Encl. Izq', active: !s.Q['Q0.1'] },
+                { type: 'COIL', addr: 'Q0.0', label: 'KM1 Der.', active: s.Q['Q0.0'] }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.0', label: 'Retención', active: s.Q['Q0.0'], parallelTo: 0 }
+              ]
+            ]
+          },
+          {
+            title: 'Network 2: Contactor Giro Izquierda (KM2) con enclavamiento de KM1',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.1', label: 'Izq.', active: s.I['I0.1'] },
+                { type: 'NO', addr: 'I0.2', label: 'Parada', active: s.I['I0.2'] },
+                { type: 'NO', addr: 'I0.3', label: 'Térmico', active: s.I['I0.3'] },
+                { type: 'NC', addr: 'Q0.0', label: 'Encl. Der', active: !s.Q['Q0.0'] },
+                { type: 'COIL', addr: 'Q0.1', label: 'KM2 Izq.', active: s.Q['Q0.1'] }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.1', label: 'Retención', active: s.Q['Q0.1'], parallelTo: 0 }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        id: 'EJ-06',
+        level: 'Nivel 2 • Temporizadores',
+        title: '6. Inversión de giro directa con retardo de frenado (3s)',
+        desc: 'Si gira a la derecha (Q0.0) y se pulsa Izquierda (I0.1), desconecta inmediatamente Q0.0, espera 3.0 segundos para que el rotor pierda inercia y luego conecta Q0.1 automáticamente.',
+        note: 'Invertir un motor en plena marcha sin esperar a que frene genera picos de corriente de hasta 8 veces la nominal y estrés mecánico en ejes y acoplamientos. Los temporizadores TON T1 y T2 garantizan una pausa segura.',
+        inputs: [
+          { addr: 'I0.0', label: 'Pedir Derecha', type: 'momentary', color: 'emerald', defaultVal: false },
+          { addr: 'I0.1', label: 'Pedir Izquierda', type: 'momentary', color: 'sky', defaultVal: false },
+          { addr: 'I0.2', label: 'Parada (NC)', type: 'momentary_nc', color: 'rose', defaultVal: true },
+          { addr: 'I0.3', label: 'Térmico (NC)', type: 'toggle_nc', color: 'amber', defaultVal: true }
+        ],
+        outputs: [
+          { addr: 'Q0.0', label: 'Motor Derecha (KM1)', type: 'motor' },
+          { addr: 'Q0.1', label: 'Motor Izquierda (KM2)', type: 'motor' }
+        ],
+        timers: [
+          { id: 'T1', pt: 3000 },
+          { id: 'T2', pt: 3000 }
+        ],
+        motorConfig: (s) => {
+          const braking = (s.M['M0.0'] && !s.Q['Q0.0']) || (s.M['M0.1'] && !s.Q['Q0.1']);
+          return {
+            running: !!(s.Q['Q0.0'] || s.Q['Q0.1']),
+            dir: s.Q['Q0.1'] ? 'ccw' : 'cw',
+            speed: 'normal',
+            label: braking ? 'FRENADO POR INERCIA (3.0s)...' : (s.Q['Q0.0'] ? 'GIRANDO DERECHA' : (s.Q['Q0.1'] ? 'GIRANDO IZQUIERDA' : 'MOTOR DETENIDO')),
+            sub: braking ? `Esperando temporizador (${((s.M['M0.0'] ? s.T['T1'].acc : s.T['T2'].acc)/1000).toFixed(1)}s / 3.0s)` : 'Inversión directa habilitada',
+            badges: braking ? ['PAUSA SEGURIDAD'] : (s.Q['Q0.0'] ? ['DERECHA'] : (s.Q['Q0.1'] ? ['IZQUIERDA'] : []))
+          };
+        },
+        evalLogic: (s, dt) => {
+          const ok = s.I['I0.2'] && s.I['I0.3'];
+          if (!ok) {
+            s.M['M0.0'] = false; s.M['M0.1'] = false;
+          } else {
+            if (s.I['I0.0']) { s.M['M0.0'] = true; s.M['M0.1'] = false; }
+            if (s.I['I0.1']) { s.M['M0.1'] = true; s.M['M0.0'] = false; }
+          }
+          // T1 cuenta cuando se pide Derecha y ya cayó Q0.1
+          updateTON(s, 'T1', s.M['M0.0'] && !s.Q['Q0.1'], dt);
+          // T2 cuenta cuando se pide Izquierda y ya cayó Q0.0
+          updateTON(s, 'T2', s.M['M0.1'] && !s.Q['Q0.0'], dt);
+
+          s.Q['Q0.0'] = s.M['M0.0'] && s.T['T1'].q && !s.Q['Q0.1'];
+          s.Q['Q0.1'] = s.M['M0.1'] && s.T['T2'].q && !s.Q['Q0.0'];
+        },
+        rungs: (s) => [
+          {
+            title: 'Network 1: Selección de sentido deseado (M0.0 = Der / M0.1 = Izq)',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.0', label: 'Pedir Der', active: s.I['I0.0'] },
+                { type: 'NO', addr: 'I0.2', label: 'Parada', active: s.I['I0.2'] },
+                { type: 'NC', addr: 'M0.1', label: 'No Izq', active: !s.M['M0.1'] },
+                { type: 'COIL', addr: 'M0.0', label: 'Mem. Der', active: s.M['M0.0'] }
+              ],
+              [
+                { type: 'NO', addr: 'M0.0', label: 'Ret.', active: s.M['M0.0'], parallelTo: 0 }
+              ]
+            ]
+          },
+          {
+            title: 'Network 2: Retardo de frenado T1 (3.0s) y activación KM1 Derecha',
+            branches: [
+              [
+                { type: 'NO', addr: 'M0.0', label: 'Mem. Der', active: s.M['M0.0'] },
+                { type: 'NC', addr: 'Q0.1', label: 'KM2 Off', active: !s.Q['Q0.1'] },
+                { type: 'TON', addr: 'T1', pt: '3.0s', acc: s.T['T1'].acc, active: s.T['T1'].q, running: s.T['T1'].running },
+                { type: 'COIL', addr: 'Q0.0', label: 'KM1 Der', active: s.Q['Q0.0'] }
+              ]
+            ]
+          },
+          {
+            title: 'Network 3: Memoria Izquierda (M0.1), retardo T2 (3.0s) y KM2 Izquierda',
+            branches: [
+              [
+                { type: 'NO', addr: 'M0.1', label: 'Mem. Izq', active: s.M['M0.1'] },
+                { type: 'NC', addr: 'Q0.0', label: 'KM1 Off', active: !s.Q['Q0.0'] },
+                { type: 'TON', addr: 'T2', pt: '3.0s', acc: s.T['T2'].acc, active: s.T['T2'].q, running: s.T['T2'].running },
+                { type: 'COIL', addr: 'Q0.1', label: 'KM2 Izq', active: s.Q['Q0.1'] }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        id: 'EJ-07',
+        level: 'Nivel 2 • Control de Velocidad',
+        title: '7. Cambio de velocidad de motor (2 velocidades - Dahlander)',
+        desc: 'Ventilador con Velocidad Baja (Q0.0) y Alta (Q0.1). Permite pasar directamente de Baja a Alta al pulsar I0.1, pero para reducir de Alta a Baja obliga a pasar por Parada (I0.2). Protegido por dos térmicos independientes (I0.3 y I0.4).',
+        note: 'En motores de dos velocidades, pasar bruscamente de Alta (3000 RPM) a Baja (1500 RPM) convierte al motor en generador hipersíncrono provocando un frenado violento. Por eso el contacto cerrado de Q0.1 bloquea el arranque de Q0.0, mientras que I0.1 desactiva Q0.0 para subir a Alta.',
+        inputs: [
+          { addr: 'I0.0', label: 'Vel. Baja', type: 'momentary', color: 'sky', defaultVal: false },
+          { addr: 'I0.1', label: 'Vel. Alta', type: 'momentary', color: 'emerald', defaultVal: false },
+          { addr: 'I0.2', label: 'Parada (NC)', type: 'momentary_nc', color: 'rose', defaultVal: true },
+          { addr: 'I0.3', label: 'Térmico Baja (NC)', type: 'toggle_nc', color: 'amber', defaultVal: true },
+          { addr: 'I0.4', label: 'Térmico Alta (NC)', type: 'toggle_nc', color: 'amber', defaultVal: true }
+        ],
+        outputs: [
+          { addr: 'Q0.0', label: 'Velocidad Baja (1500 RPM)', type: 'motor' },
+          { addr: 'Q0.1', label: 'Velocidad Alta (3000 RPM)', type: 'motor' }
+        ],
+        timers: [],
+        motorConfig: (s) => ({
+          running: !!(s.Q['Q0.0'] || s.Q['Q0.1']),
+          dir: 'cw',
+          speed: s.Q['Q0.1'] ? 'fast' : 'slow',
+          label: s.Q['Q0.1'] ? 'VELOCIDAD ALTA (3000 RPM)' : (s.Q['Q0.0'] ? 'VELOCIDAD BAJA (1500 RPM)' : 'VENTILADOR DETENIDO'),
+          sub: (!s.I['I0.3'] || !s.I['I0.4']) ? 'Falla térmica detectada' : (s.Q['Q0.0'] ? 'Pulsa Alta (I0.1) para acelerar' : (s.Q['Q0.1'] ? 'Pulsa Parada (I0.2) para reducir' : 'Listo')),
+          badges: s.Q['Q0.1'] ? ['ALTA VEL.'] : (s.Q['Q0.0'] ? ['BAJA VEL.'] : [])
+        }),
+        evalLogic: (s) => {
+          const ok = s.I['I0.2'] && s.I['I0.3'] && s.I['I0.4'];
+          const prevQ0 = !!s.Q['Q0.0'];
+          const prevQ1 = !!s.Q['Q0.1'];
+          // Baja cae si se pulsa Alta (I0.1) o si ya está Alta (prevQ1)
+          s.Q['Q0.0'] = (s.I['I0.0'] || prevQ0) && ok && !s.I['I0.1'] && !prevQ1;
+          // Alta puede entrar directo desde Baja
+          s.Q['Q0.1'] = (s.I['I0.1'] || prevQ1) && ok && !s.Q['Q0.0'];
+        },
+        rungs: (s) => [
+          {
+            title: 'Network 1: Velocidad Baja (Q0.0) - Se desconecta al pedir Alta (I0.1)',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.0', label: 'Vel. Baja', active: s.I['I0.0'] },
+                { type: 'NO', addr: 'I0.2', label: 'Parada', active: s.I['I0.2'] },
+                { type: 'NO', addr: 'I0.3', label: 'Térm. B', active: s.I['I0.3'] },
+                { type: 'NO', addr: 'I0.4', label: 'Térm. A', active: s.I['I0.4'] },
+                { type: 'NC', addr: 'I0.1', label: 'No Alta', active: !s.I['I0.1'] },
+                { type: 'NC', addr: 'Q0.1', label: 'Encl. Alta', active: !s.Q['Q0.1'] },
+                { type: 'COIL', addr: 'Q0.0', label: 'KM Baja', active: s.Q['Q0.0'] }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.0', label: 'Ret.', active: s.Q['Q0.0'], parallelTo: 0 }
+              ]
+            ]
+          },
+          {
+            title: 'Network 2: Velocidad Alta (Q0.1) - Paso directo permitido desde Baja',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.1', label: 'Vel. Alta', active: s.I['I0.1'] },
+                { type: 'NO', addr: 'I0.2', label: 'Parada', active: s.I['I0.2'] },
+                { type: 'NO', addr: 'I0.3', label: 'Térm. B', active: s.I['I0.3'] },
+                { type: 'NO', addr: 'I0.4', label: 'Térm. A', active: s.I['I0.4'] },
+                { type: 'NC', addr: 'Q0.0', label: 'Encl. Baja', active: !s.Q['Q0.0'] },
+                { type: 'COIL', addr: 'Q0.1', label: 'KM Alta', active: s.Q['Q0.1'] }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.1', label: 'Ret.', active: s.Q['Q0.1'], parallelTo: 0 }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        id: 'EJ-08',
+        level: 'Nivel 2 • Secuencia Automática',
+        title: '8. Control de velocidad escalonada por tiempos (Mezcladora)',
+        desc: 'Al pulsar Inicio (I0.0), arranca en Velocidad Lenta (Q0.0) durante 4 segundos. Luego pasa automáticamente a Velocidad Rápida (Q0.1) durante 6 segundos y finaliza el ciclo deteniéndose sola.',
+        note: 'El uso de una marca de ciclo activo (M0.0) simplifica enormemente las secuencias temporizadas: M0.0 se auto-retiene al inicio y se resetea automáticamente cuando el último temporizador (T2) cumple su tiempo.',
+        inputs: [
+          { addr: 'I0.0', label: 'Iniciar Ciclo', type: 'momentary', color: 'emerald', defaultVal: false },
+          { addr: 'I0.1', label: 'Parada (NC)', type: 'momentary_nc', color: 'rose', defaultVal: true },
+          { addr: 'I0.2', label: 'Térmico (NC)', type: 'toggle_nc', color: 'amber', defaultVal: true }
+        ],
+        outputs: [
+          { addr: 'M0.0', label: 'Ciclo en Curso', type: 'aux' },
+          { addr: 'Q0.0', label: 'Mezcla Lenta (Fase 1)', type: 'motor' },
+          { addr: 'Q0.1', label: 'Mezcla Rápida (Fase 2)', type: 'motor' }
+        ],
+        timers: [
+          { id: 'T1', pt: 4000 },
+          { id: 'T2', pt: 6000 }
+        ],
+        motorConfig: (s) => ({
+          running: !!(s.Q['Q0.0'] || s.Q['Q0.1']),
+          dir: 'cw',
+          speed: s.Q['Q0.1'] ? 'fast' : 'slow',
+          label: s.Q['Q0.0'] ? 'FASE 1: MEZCLA LENTA' : (s.Q['Q0.1'] ? 'FASE 2: MEZCLA RÁPIDA' : 'CICLO FINALIZADO / EN ESPERA'),
+          sub: s.Q['Q0.0'] ? `Tiempo Fase 1: ${(s.T['T1'].acc/1000).toFixed(1)}s / 4.0s` : (s.Q['Q0.1'] ? `Tiempo Fase 2: ${(s.T['T2'].acc/1000).toFixed(1)}s / 6.0s` : 'Pulsa Iniciar Ciclo (I0.0)'),
+          badges: s.Q['Q0.0'] ? ['LENTA (T1)'] : (s.Q['Q0.1'] ? ['RÁPIDA (T2)'] : [])
+        }),
+        evalLogic: (s, dt) => {
+          const ok = s.I['I0.1'] && s.I['I0.2'];
+          s.M['M0.0'] = (s.I['I0.0'] || s.M['M0.0']) && ok && !s.T['T2'].q;
+          updateTON(s, 'T1', s.M['M0.0'], dt);
+          updateTON(s, 'T2', s.M['M0.0'] && s.T['T1'].q, dt);
+          s.Q['Q0.0'] = s.M['M0.0'] && !s.T['T1'].q;
+          s.Q['Q0.1'] = s.M['M0.0'] && s.T['T1'].q && !s.T['T2'].q;
+        },
+        rungs: (s) => [
+          {
+            title: 'Network 1: Memoria de ciclo automático (se resetea con T2)',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.0', label: 'Inicio', active: s.I['I0.0'] },
+                { type: 'NO', addr: 'I0.1', label: 'Parada', active: s.I['I0.1'] },
+                { type: 'NO', addr: 'I0.2', label: 'Térmico', active: s.I['I0.2'] },
+                { type: 'NC', addr: 'T2', label: 'Fin Ciclo', active: !s.T['T2'].q },
+                { type: 'COIL', addr: 'M0.0', label: 'Ciclo Act.', active: s.M['M0.0'] }
+              ],
+              [
+                { type: 'NO', addr: 'M0.0', label: 'Ret.', active: s.M['M0.0'], parallelTo: 0 }
+              ]
+            ]
+          },
+          {
+            title: 'Network 2: Fase 1 — Velocidad Lenta (4.0s)',
+            branches: [
+              [
+                { type: 'NO', addr: 'M0.0', label: 'Ciclo Act.', active: s.M['M0.0'] },
+                { type: 'NC', addr: 'T1', label: 'No T1', active: !s.T['T1'].q },
+                { type: 'COIL', addr: 'Q0.0', label: 'Vel. Lenta', active: s.Q['Q0.0'] }
+              ],
+              [
+                { type: 'TON', addr: 'T1', pt: '4.0s', acc: s.T['T1'].acc, active: s.T['T1'].q, running: s.T['T1'].running, parallelTo: 1 }
+              ]
+            ]
+          },
+          {
+            title: 'Network 3: Fase 2 — Velocidad Rápida (6.0s)',
+            branches: [
+              [
+                { type: 'NO', addr: 'M0.0', label: 'Ciclo Act.', active: s.M['M0.0'] },
+                { type: 'NO', addr: 'T1', label: 'T1 OK', active: s.T['T1'].q },
+                { type: 'TON', addr: 'T2', pt: '6.0s', acc: s.T['T2'].acc, active: s.T['T2'].q, running: s.T['T2'].running },
+                { type: 'COIL', addr: 'Q0.1', label: 'Vel. Rápida', active: s.Q['Q0.1'] }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        id: 'EJ-09',
+        level: 'Nivel 3 • Arranque de Potencia',
+        title: '9. Arranque Estrella-Triángulo (Y-Δ) con tiempo muerto',
+        desc: 'Al pulsar Marcha (I0.0), entran Línea (Q0.0) y Estrella (Q0.1). Tras 4.0s cae Estrella, transcurre un tiempo muerto de 0.6s (T2) para extinción de arco y entra Triángulo (Q0.2).',
+        note: 'En la práctica industrial, el tiempo muerto entre abrir el contactor Estrella (KM2) y cerrar Triángulo (KM3) es de 50ms a 150ms (aquí ajustado a 0.6s para que lo aprecies visualmente). Sin ese tiempo muerto, el arco eléctrico en KM2 provocaría un cortocircuito trifásico.',
+        inputs: [
+          { addr: 'I0.0', label: 'Marcha Y-Δ', type: 'momentary', color: 'emerald', defaultVal: false },
+          { addr: 'I0.1', label: 'Parada (NC)', type: 'momentary_nc', color: 'rose', defaultVal: true },
+          { addr: 'I0.2', label: 'Térmico (NC)', type: 'toggle_nc', color: 'amber', defaultVal: true }
+        ],
+        outputs: [
+          { addr: 'Q0.0', label: 'Contactor Línea (KM1)', type: 'motor' },
+          { addr: 'Q0.1', label: 'Contactor Estrella (KM2)', type: 'aux' },
+          { addr: 'Q0.2', label: 'Contactor Triángulo (KM3)', type: 'motor' }
+        ],
+        timers: [
+          { id: 'T1', pt: 4000 },
+          { id: 'T2', pt: 600 }
+        ],
+        motorConfig: (s) => {
+          const deadTime = s.Q['Q0.0'] && s.T['T1'].q && !s.T['T2'].q;
+          return {
+            running: !!s.Q['Q0.0'],
+            dir: 'cw',
+            speed: s.Q['Q0.2'] ? 'fast' : 'slow',
+            label: s.Q['Q0.1'] ? 'ARRANQUE EN ESTRELLA (Y)' : (deadTime ? 'CONMUTACIÓN (TIEMPO MUERTO)' : (s.Q['Q0.2'] ? 'RÉGIMEN EN TRIÁNGULO (Δ)' : 'MOTOR DETENIDO')),
+            sub: s.Q['Q0.1'] ? `Tensión reducida 58% (${(s.T['T1'].acc/1000).toFixed(1)}s / 4.0s)` : (deadTime ? 'Extinción de arco KM2 antes de KM3' : (s.Q['Q0.2'] ? 'Plena potencia 100% • KM1 + KM3' : '0 RPM')),
+            badges: s.Q['Q0.1'] ? ['LÍNEA KM1', 'ESTRELLA (Y)'] : (s.Q['Q0.2'] ? ['LÍNEA KM1', 'TRIÁNGULO (Δ)'] : (deadTime ? ['PAUSA ARCO'] : []))
+          };
+        },
+        evalLogic: (s, dt) => {
+          const ok = s.I['I0.1'] && s.I['I0.2'];
+          s.Q['Q0.0'] = (s.I['I0.0'] || s.Q['Q0.0']) && ok;
+          updateTON(s, 'T1', s.Q['Q0.0'], dt);
+          updateTON(s, 'T2', s.Q['Q0.0'] && s.T['T1'].q, dt);
+          s.Q['Q0.1'] = s.Q['Q0.0'] && !s.T['T1'].q && !s.Q['Q0.2'];
+          s.Q['Q0.2'] = s.Q['Q0.0'] && s.T['T2'].q && !s.Q['Q0.1'];
+        },
+        rungs: (s) => [
+          {
+            title: 'Network 1: Contactor de Línea (KM1) y Temporizador Estrella (T1 = 4.0s)',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.0', label: 'Marcha', active: s.I['I0.0'] },
+                { type: 'NO', addr: 'I0.1', label: 'Parada', active: s.I['I0.1'] },
+                { type: 'NO', addr: 'I0.2', label: 'Térmico', active: s.I['I0.2'] },
+                { type: 'COIL', addr: 'Q0.0', label: 'KM1 Línea', active: s.Q['Q0.0'] }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.0', label: 'Ret.', active: s.Q['Q0.0'], parallelTo: 0 }
+              ]
+            ]
+          },
+          {
+            title: 'Network 2: Contactor Estrella (KM2) + Tiempo Muerto (T2 = 0.6s)',
+            branches: [
+              [
+                { type: 'NO', addr: 'Q0.0', label: 'KM1 On', active: s.Q['Q0.0'] },
+                { type: 'NC', addr: 'T1', label: 'No T1', active: !s.T['T1'].q },
+                { type: 'NC', addr: 'Q0.2', label: 'Encl. Δ', active: !s.Q['Q0.2'] },
+                { type: 'COIL', addr: 'Q0.1', label: 'KM2 Estr.', active: s.Q['Q0.1'] }
+              ],
+              [
+                { type: 'TON', addr: 'T1', pt: '4.0s', acc: s.T['T1'].acc, active: s.T['T1'].q, running: s.T['T1'].running, parallelTo: 1 }
+              ]
+            ]
+          },
+          {
+            title: 'Network 3: Contactor Triángulo (KM3) tras tiempo muerto T2',
+            branches: [
+              [
+                { type: 'NO', addr: 'Q0.0', label: 'KM1 On', active: s.Q['Q0.0'] },
+                { type: 'NO', addr: 'T1', label: 'Fin Y', active: s.T['T1'].q },
+                { type: 'TON', addr: 'T2', pt: '0.6s', acc: s.T['T2'].acc, active: s.T['T2'].q, running: s.T['T2'].running },
+                { type: 'NC', addr: 'Q0.1', label: 'Encl. Y', active: !s.Q['Q0.1'] },
+                { type: 'COIL', addr: 'Q0.2', label: 'KM3 Triáng.', active: s.Q['Q0.2'] }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        id: 'EJ-10',
+        level: 'Nivel 3 • Integración Completa',
+        title: '10. Arranque Estrella-Triángulo con inversión de giro',
+        desc: 'Combina inversión de giro (pasando por parada) con arranque Estrella-Triángulo. Según el sentido elegido (I0.0 Der / I0.1 Izq), cierra Q0.0 o Q0.1 y ejecuta la secuencia Estrella (Q0.2) -> Triángulo (Q0.3).',
+        note: 'Observa cómo las marcas M0.0 (Derecha) y M0.1 (Izquierda) se enclavan mutuamente y alimentan en paralelo (OR) la secuencia común de Estrella-Triángulo. De este modo no duplicamos temporizadores.',
+        inputs: [
+          { addr: 'I0.0', label: 'Arranque Der.', type: 'momentary', color: 'emerald', defaultVal: false },
+          { addr: 'I0.1', label: 'Arranque Izq.', type: 'momentary', color: 'sky', defaultVal: false },
+          { addr: 'I0.2', label: 'Parada (NC)', type: 'momentary_nc', color: 'rose', defaultVal: true },
+          { addr: 'I0.3', label: 'Térmico (NC)', type: 'toggle_nc', color: 'amber', defaultVal: true }
+        ],
+        outputs: [
+          { addr: 'Q0.0', label: 'Línea Derecha (KM1)', type: 'motor' },
+          { addr: 'Q0.1', label: 'Línea Izquierda (KM2)', type: 'motor' },
+          { addr: 'Q0.2', label: 'Estrella (KM3)', type: 'aux' },
+          { addr: 'Q0.3', label: 'Triángulo (KM4)', type: 'motor' }
+        ],
+        timers: [
+          { id: 'T1', pt: 4000 },
+          { id: 'T2', pt: 600 }
+        ],
+        motorConfig: (s) => {
+          const lineOn = s.Q['Q0.0'] || s.Q['Q0.1'];
+          const dirTxt = s.Q['Q0.0'] ? 'DERECHA' : 'IZQUIERDA';
+          return {
+            running: !!lineOn,
+            dir: s.Q['Q0.1'] ? 'ccw' : 'cw',
+            speed: s.Q['Q0.3'] ? 'fast' : 'slow',
+            label: !lineOn ? 'MOTOR DETENIDO' : (s.Q['Q0.2'] ? `${dirTxt} • ESTRELLA (Y)` : (s.Q['Q0.3'] ? `${dirTxt} • TRIÁNGULO (Δ)` : `${dirTxt} • CONMUTANDO...`)),
+            sub: !lineOn ? 'Selecciona sentido de giro' : (s.Q['Q0.2'] ? `Acelerando (${(s.T['T1'].acc/1000).toFixed(1)}s / 4.0s)` : 'Régimen nominal alcanzado'),
+            badges: !lineOn ? [] : [dirTxt, s.Q['Q0.2'] ? 'ESTRELLA' : (s.Q['Q0.3'] ? 'TRIÁNGULO' : 'PAUSA')]
+          };
+        },
+        evalLogic: (s, dt) => {
+          const ok = s.I['I0.2'] && s.I['I0.3'];
+          const prevQ0 = !!s.Q['Q0.0'];
+          const prevQ1 = !!s.Q['Q0.1'];
+          s.Q['Q0.0'] = (s.I['I0.0'] || prevQ0) && ok && !prevQ1;
+          s.Q['Q0.1'] = (s.I['I0.1'] || prevQ1) && ok && !s.Q['Q0.0'];
+          const anyLine = s.Q['Q0.0'] || s.Q['Q0.1'];
+          updateTON(s, 'T1', anyLine, dt);
+          updateTON(s, 'T2', anyLine && s.T['T1'].q, dt);
+          s.Q['Q0.2'] = anyLine && !s.T['T1'].q && !s.Q['Q0.3'];
+          s.Q['Q0.3'] = anyLine && s.T['T2'].q && !s.Q['Q0.2'];
+        },
+        rungs: (s) => [
+          {
+            title: 'Network 1: Contactores de Línea Derecha (Q0.0) e Izquierda (Q0.1)',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.0', label: 'Der.', active: s.I['I0.0'] },
+                { type: 'NO', addr: 'I0.2', label: 'Parada', active: s.I['I0.2'] },
+                { type: 'NO', addr: 'I0.3', label: 'Térmico', active: s.I['I0.3'] },
+                { type: 'NC', addr: 'Q0.1', label: 'Encl. Izq', active: !s.Q['Q0.1'] },
+                { type: 'COIL', addr: 'Q0.0', label: 'KM1 Der.', active: s.Q['Q0.0'] }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.0', label: 'Ret.', active: s.Q['Q0.0'], parallelTo: 0 }
+              ]
+            ]
+          },
+          {
+            title: 'Network 2: Contactor Línea Izquierda (Q0.1)',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.1', label: 'Izq.', active: s.I['I0.1'] },
+                { type: 'NO', addr: 'I0.2', label: 'Parada', active: s.I['I0.2'] },
+                { type: 'NO', addr: 'I0.3', label: 'Térmico', active: s.I['I0.3'] },
+                { type: 'NC', addr: 'Q0.0', label: 'Encl. Der', active: !s.Q['Q0.0'] },
+                { type: 'COIL', addr: 'Q0.1', label: 'KM2 Izq.', active: s.Q['Q0.1'] }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.1', label: 'Ret.', active: s.Q['Q0.1'], parallelTo: 0 }
+              ]
+            ]
+          },
+          {
+            title: 'Network 3: Secuencia común Estrella (Q0.2) -> T1 -> T2 -> Triángulo (Q0.3)',
+            branches: [
+              [
+                { type: 'NO', addr: 'Q0.0', label: 'Línea Der', active: s.Q['Q0.0'] },
+                { type: 'NC', addr: 'T1', label: 'No T1', active: !s.T['T1'].q },
+                { type: 'NC', addr: 'Q0.3', label: 'Encl. Δ', active: !s.Q['Q0.3'] },
+                { type: 'COIL', addr: 'Q0.2', label: 'KM3 Estr.', active: s.Q['Q0.2'] }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.1', label: 'Línea Izq', active: s.Q['Q0.1'], parallelTo: 0 }
+              ],
+              [
+                { type: 'TON', addr: 'T1', pt: '4.0s', acc: s.T['T1'].acc, active: s.T['T1'].q, running: s.T['T1'].running, parallelTo: 1 }
+              ]
+            ]
+          },
+          {
+            title: 'Network 4: Conmutación a Triángulo (Q0.3)',
+            branches: [
+              [
+                { type: 'NO', addr: 'T1', label: 'Fin Y', active: s.T['T1'].q },
+                { type: 'TON', addr: 'T2', pt: '0.6s', acc: s.T['T2'].acc, active: s.T['T2'].q, running: s.T['T2'].running },
+                { type: 'NC', addr: 'Q0.2', label: 'Encl. Y', active: !s.Q['Q0.2'] },
+                { type: 'COIL', addr: 'Q0.3', label: 'KM4 Triáng.', active: s.Q['Q0.3'] }
+              ]
+            ]
+          }
+        ]
+      }
+    ];
+
+    // -------------------------------------------------------------------------
+    // DEFINICIÓN DE LOS 6 RETOS DE CAZA-ERRORES (DEBUGGING)
+    // -------------------------------------------------------------------------
+    const DEBUG_EXERCISES = [
+      {
+        id: 'BUG-01',
+        level: 'Falla #1 • Lógica de Seguridades',
+        title: 'El motor no arranca jamás al pulsar Marcha',
+        desc: 'Se programó un arranque directo con Parada física NC (I0.1) y Térmico físico NC (I0.2). Sin embargo, el operario pulsa Marcha (I0.0) y el motor Q0.0 nunca enciende. Prueba pulsar I0.0 y observa la barra de energía en el Ladder.',
+        question: '¿Cuál es el error en la Network 1?',
+        options: [
+          'Falta conectar la bobina Q0.0 a la barra derecha de neutro.',
+          'El pulsador de Parada I0.1 es NC físico (entrega 1 en reposo), pero en el Ladder se programó como contacto cerrado --|/|--, abriendo el circuito cuando nadie lo pulsa.',
+          'El contacto de retención Q0.0 debe ir en serie con I0.0 y no en paralelo.'
+        ],
+        correctIdx: 1,
+        explanation: '¡Exacto! Cuando un pulsador de parada es NC en el tablero, envía 24V (estado 1) al PLC mientras no se toca. Si en Ladder pones --|/|-- (negado), el PLC lo evalúa como FALSO en reposo y bloquea el paso de corriente. Debe ir como --| |--.',
+        inputs: [
+          { addr: 'I0.0', label: 'Marcha', type: 'momentary', color: 'emerald', defaultVal: false },
+          { addr: 'I0.1', label: 'Parada (NC)', type: 'momentary_nc', color: 'rose', defaultVal: true },
+          { addr: 'I0.2', label: 'Térmico (NC)', type: 'toggle_nc', color: 'amber', defaultVal: true }
+        ],
+        outputs: [
+          { addr: 'Q0.0', label: 'Motor Principal', type: 'motor' }
+        ],
+        timers: [],
+        motorConfig: (s) => ({
+          running: !!s.Q['Q0.0'],
+          dir: 'cw',
+          speed: 'normal',
+          label: s.Q['Q0.0'] ? 'MOTOR EN MARCHA (REPARADO)' : 'MOTOR DETENIDO',
+          sub: s.Q['Q0.0'] ? '1450 RPM • Lógica corregida' : 'Observa dónde se corta la línea verde en el Ladder',
+          badges: s.Q['Q0.0'] ? ['OK'] : ['SIN ENERGÍA']
+        }),
+        evalLogic: (s, dt, fixed) => {
+          const stopCond = fixed ? s.I['I0.1'] : !s.I['I0.1'];
+          s.Q['Q0.0'] = (s.I['I0.0'] || s.Q['Q0.0']) && stopCond && s.I['I0.2'];
+        },
+        rungs: (s, fixed) => [
+          {
+            title: 'Network 1: Arranque con parada física NC (I0.1)',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.0', label: 'Marcha', active: s.I['I0.0'] },
+                { type: fixed ? 'NO' : 'NC', addr: 'I0.1', label: 'Parada(NC)', active: fixed ? s.I['I0.1'] : !s.I['I0.1'], isBug: !fixed },
+                { type: 'NO', addr: 'I0.2', label: 'Térmico', active: s.I['I0.2'] },
+                { type: 'COIL', addr: 'Q0.0', label: 'Motor Q0.0', active: s.Q['Q0.0'] }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.0', label: 'Retención', active: s.Q['Q0.0'], parallelTo: 0 }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        id: 'BUG-02',
+        level: 'Falla #2 • Retención Defectuosa',
+        title: 'El motor solo gira mientras mantienes apretado el botón',
+        desc: 'El técnico conectó una rama en paralelo para la auto-retención, pero al soltar el pulsador de Marcha (I0.0), el motor Q0.0 se apaga inmediatamente. Haz clic en Marcha para comprobarlo.',
+        question: '¿Por qué no funciona la auto-retención?',
+        options: [
+          'El contacto de retención en paralelo está direccionado a I0.0 en lugar de referenciar a la salida Q0.0.',
+          'El pulsador de parada I0.1 está desconectando la bobina al soltar I0.0.',
+          'Falta agregar un temporizador TON de 1 segundo en la retención.'
+        ],
+        correctIdx: 0,
+        explanation: '¡Correcto! Poner I0.0 en paralelo con I0.0 es redundante: ambos dependen del botón físico. La retención debe leer el estado de la propia bobina de salida (Q0.0) para mantener el camino cerrado una vez suelto el pulsador.',
+        inputs: [
+          { addr: 'I0.0', label: 'Marcha', type: 'momentary', color: 'emerald', defaultVal: false },
+          { addr: 'I0.1', label: 'Parada (NC)', type: 'momentary_nc', color: 'rose', defaultVal: true }
+        ],
+        outputs: [
+          { addr: 'Q0.0', label: 'Bomba Hidráulica', type: 'motor' }
+        ],
+        timers: [],
+        motorConfig: (s) => ({
+          running: !!s.Q['Q0.0'],
+          dir: 'cw',
+          speed: 'normal',
+          label: s.Q['Q0.0'] ? 'BOMBA EN MARCHA' : 'BOMBA DETENIDA',
+          sub: s.Q['Q0.0'] ? 'Retención activa' : 'Se cae al soltar I0.0',
+          badges: s.Q['Q0.0'] ? ['Q0.0 ON'] : []
+        }),
+        evalLogic: (s, dt, fixed) => {
+          const latchAddr = fixed ? 'Q0.0' : 'I0.0';
+          s.Q['Q0.0'] = (s.I['I0.0'] || (latchAddr === 'Q0.0' ? s.Q['Q0.0'] : s.I['I0.0'])) && s.I['I0.1'];
+        },
+        rungs: (s, fixed) => [
+          {
+            title: 'Network 1: Circuito de arranque con rama paralela',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.0', label: 'Marcha', active: s.I['I0.0'] },
+                { type: 'NO', addr: 'I0.1', label: 'Parada', active: s.I['I0.1'] },
+                { type: 'COIL', addr: 'Q0.0', label: 'Bomba Q0.0', active: s.Q['Q0.0'] }
+              ],
+              [
+                { type: 'NO', addr: fixed ? 'Q0.0' : 'I0.0', label: fixed ? 'Ret. Q0.0' : 'Paralelo I0.0', active: fixed ? s.Q['Q0.0'] : s.I['I0.0'], parallelTo: 0, isBug: !fixed }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        id: 'BUG-03',
+        level: 'Falla #3 • Riesgo de Cortocircuito',
+        title: '¡Peligro! Cortocircuito entre fases en inversión de giro',
+        desc: 'Prueba arrancar hacia la Derecha (I0.0) y luego, SIN pulsar Parada, pulsa Izquierda (I0.1). ¡Verás saltar una alarma crítica de cortocircuito en potencia!',
+        question: '¿Qué protección esencial falta en este diagrama de inversión de giro?',
+        options: [
+          'Falta un segundo pulsador de parada exclusivo para el giro izquierdo.',
+          'Faltan los contactos de enclavamiento cruzado --|/|-- de Q0.1 en la rama de Q0.0 y de Q0.0 en la rama de Q0.1.',
+          'Las bobinas Q0.0 y Q0.1 deberían ir en serie en la misma Network.'
+        ],
+        correctIdx: 1,
+        explanation: '¡Muy bien! Sin enclavamiento cruzado (--|/|-- Q0.1 antes de Q0.0 y --|/|-- Q0.0 antes de Q0.1), si un operario pulsa el sentido contrario sin detener el motor, ambos contactores cierran simultáneamente uniendo L1 con L3.',
+        inputs: [
+          { addr: 'I0.0', label: 'Giro Derecha', type: 'momentary', color: 'emerald', defaultVal: false },
+          { addr: 'I0.1', label: 'Giro Izquierda', type: 'momentary', color: 'sky', defaultVal: false },
+          { addr: 'I0.2', label: 'Parada (NC)', type: 'momentary_nc', color: 'rose', defaultVal: true }
+        ],
+        outputs: [
+          { addr: 'Q0.0', label: 'Contactor Derecha (KM1)', type: 'motor' },
+          { addr: 'Q0.1', label: 'Contactor Izquierda (KM2)', type: 'motor' }
+        ],
+        timers: [],
+        motorConfig: (s) => ({
+          running: !!(s.Q['Q0.0'] || s.Q['Q0.1']),
+          dir: s.Q['Q0.1'] ? 'ccw' : 'cw',
+          speed: 'normal',
+          label: s.fault ? '¡CORTOCIRCUITO KM1 + KM2!' : (s.Q['Q0.0'] ? 'GIRO DERECHA' : (s.Q['Q0.1'] ? 'GIRO IZQUIERDA' : 'DETENIDO')),
+          sub: s.fault ? 'Falla grave de enclavamiento' : 'Prueba pulsar Der y luego Izq sin parar',
+          badges: s.fault ? ['CORTOCIRCUITO'] : []
+        }),
+        evalLogic: (s, dt, fixed) => {
+          if (fixed) {
+            const p0 = !!s.Q['Q0.0'];
+            const p1 = !!s.Q['Q0.1'];
+            s.Q['Q0.0'] = (s.I['I0.0'] || p0) && s.I['I0.2'] && !p1;
+            s.Q['Q0.1'] = (s.I['I0.1'] || p1) && s.I['I0.2'] && !s.Q['Q0.0'];
+          } else {
+            s.Q['Q0.0'] = (s.I['I0.0'] || s.Q['Q0.0']) && s.I['I0.2'];
+            s.Q['Q0.1'] = (s.I['I0.1'] || s.Q['Q0.1']) && s.I['I0.2'];
+            if (s.Q['Q0.0'] && s.Q['Q0.1']) {
+              s.fault = '¡KM1 (Q0.0) y KM2 (Q0.1) cerraron al mismo tiempo provocando un cortocircuito trifásico!';
+            }
+          }
+        },
+        rungs: (s, fixed) => [
+          {
+            title: 'Network 1: Giro Derecha (Q0.0)',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.0', label: 'Der.', active: s.I['I0.0'] },
+                { type: 'NO', addr: 'I0.2', label: 'Parada', active: s.I['I0.2'] },
+                ...(fixed ? [{ type: 'NC', addr: 'Q0.1', label: 'Encl. Izq', active: !s.Q['Q0.1'] }] : []),
+                { type: 'COIL', addr: 'Q0.0', label: 'KM1 Der.', active: s.Q['Q0.0'] }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.0', label: 'Ret.', active: s.Q['Q0.0'], parallelTo: 0 }
+              ]
+            ]
+          },
+          {
+            title: 'Network 2: Giro Izquierda (Q0.1)',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.1', label: 'Izq.', active: s.I['I0.1'] },
+                { type: 'NO', addr: 'I0.2', label: 'Parada', active: s.I['I0.2'] },
+                ...(fixed ? [{ type: 'NC', addr: 'Q0.0', label: 'Encl. Der', active: !s.Q['Q0.0'] }] : []),
+                { type: 'COIL', addr: 'Q0.1', label: 'KM2 Izq.', active: s.Q['Q0.1'] }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.1', label: 'Ret.', active: s.Q['Q0.1'], parallelTo: 0 }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        id: 'BUG-04',
+        level: 'Falla #4 • Estrella-Triángulo',
+        title: 'El motor arranca en Estrella pero NUNCA pasa a Triángulo',
+        desc: 'Pulsa Marcha (I0.0). Entran Línea (Q0.0) y Estrella (Q0.1), el temporizador T1 llega a 4.0s y cae Estrella... pero Triángulo (Q0.2) jamás entra. Observa atentamente la Network 3.',
+        question: '¿Por qué nunca se energiza el contactor Triángulo Q0.2?',
+        options: [
+          'Porque en la Network 3 se colocó un contacto abierto --| |-- de Q0.1 (Estrella) en serie con Q0.2, cuando debería ser cerrado --|/|--.',
+          'Porque el temporizador T1 debe ser de tipo TOF en lugar de TON.',
+          'Porque Q0.0 debe desconectarse antes de entrar Q0.2.'
+        ],
+        correctIdx: 0,
+        explanation: '¡Exacto! Cuando T1 termina su cuenta, Estrella (Q0.1) se apaga para dar paso a Triángulo (Q0.2). Si pones un contacto abierto --| |-- de Q0.1 condicionando a Q0.2, ¡le estás exigiendo que Estrella esté encendido para encender Triángulo! Debe ser cerrado --|/|-- como enclavamiento.',
+        inputs: [
+          { addr: 'I0.0', label: 'Marcha Y-Δ', type: 'momentary', color: 'emerald', defaultVal: false },
+          { addr: 'I0.1', label: 'Parada (NC)', type: 'momentary_nc', color: 'rose', defaultVal: true }
+        ],
+        outputs: [
+          { addr: 'Q0.0', label: 'Línea (KM1)', type: 'motor' },
+          { addr: 'Q0.1', label: 'Estrella (KM2)', type: 'aux' },
+          { addr: 'Q0.2', label: 'Triángulo (KM3)', type: 'motor' }
+        ],
+        timers: [
+          { id: 'T1', pt: 3500 }
+        ],
+        motorConfig: (s) => ({
+          running: !!s.Q['Q0.0'],
+          dir: 'cw',
+          speed: s.Q['Q0.2'] ? 'fast' : 'slow',
+          label: s.Q['Q0.1'] ? 'ARRANCANDO EN ESTRELLA...' : (s.Q['Q0.2'] ? 'TRIÁNGULO ACTIVO (OK)' : (s.Q['Q0.0'] ? 'ESTANCADO SIN TRIÁNGULO' : 'DETENIDO')),
+          sub: s.Q['Q0.0'] && !s.Q['Q0.1'] && !s.Q['Q0.2'] ? 'T1 terminó pero Q0.2 no cierra' : 'Prueba pulsar Marcha I0.0',
+          badges: s.Q['Q0.1'] ? ['ESTRELLA'] : (s.Q['Q0.2'] ? ['TRIÁNGULO'] : [])
+        }),
+        evalLogic: (s, dt, fixed) => {
+          s.Q['Q0.0'] = (s.I['I0.0'] || s.Q['Q0.0']) && s.I['I0.1'];
+          updateTON(s, 'T1', s.Q['Q0.0'], dt);
+          s.Q['Q0.1'] = s.Q['Q0.0'] && !s.T['T1'].q && !s.Q['Q0.2'];
+          const interlockY = fixed ? !s.Q['Q0.1'] : s.Q['Q0.1'];
+          s.Q['Q0.2'] = s.Q['Q0.0'] && s.T['T1'].q && interlockY;
+        },
+        rungs: (s, fixed) => [
+          {
+            title: 'Network 1: Contactor de Línea (Q0.0)',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.0', label: 'Marcha', active: s.I['I0.0'] },
+                { type: 'NO', addr: 'I0.1', label: 'Parada', active: s.I['I0.1'] },
+                { type: 'COIL', addr: 'Q0.0', label: 'KM1 Línea', active: s.Q['Q0.0'] }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.0', label: 'Ret.', active: s.Q['Q0.0'], parallelTo: 0 }
+              ]
+            ]
+          },
+          {
+            title: 'Network 2: Contactor Estrella (Q0.1) y Temporizador T1 (3.5s)',
+            branches: [
+              [
+                { type: 'NO', addr: 'Q0.0', label: 'KM1 On', active: s.Q['Q0.0'] },
+                { type: 'NC', addr: 'T1', label: 'No T1', active: !s.T['T1'].q },
+                { type: 'COIL', addr: 'Q0.1', label: 'KM2 Estr.', active: s.Q['Q0.1'] }
+              ],
+              [
+                { type: 'TON', addr: 'T1', pt: '3.5s', acc: s.T['T1'].acc, active: s.T['T1'].q, running: s.T['T1'].running, parallelTo: 1 }
+              ]
+            ]
+          },
+          {
+            title: 'Network 3: Contactor Triángulo (Q0.2)',
+            branches: [
+              [
+                { type: 'NO', addr: 'Q0.0', label: 'KM1 On', active: s.Q['Q0.0'] },
+                { type: 'NO', addr: 'T1', label: 'T1 OK', active: s.T['T1'].q },
+                { type: fixed ? 'NC' : 'NO', addr: 'Q0.1', label: 'Encl. Y', active: fixed ? !s.Q['Q0.1'] : s.Q['Q0.1'], isBug: !fixed },
+                { type: 'COIL', addr: 'Q0.2', label: 'KM3 Triáng.', active: s.Q['Q0.2'] }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        id: 'BUG-05',
+        level: 'Falla #5 • Rearme de Emergencia',
+        title: 'Falla grave de seguridad: arranca solo al soltar la emergencia',
+        desc: 'Pon en marcha el motor (I0.0). Luego activa la Seta de Emergencia (I0.2). El motor se detiene, pero al desenclavar la seta de emergencia, ¡el motor vuelve a arrancar solo sin que nadie pulse Rearme ni Marcha!',
+        question: '¿Por qué el motor reinicia automáticamente al liberar la seta de emergencia?',
+        options: [
+          'Porque la seta de emergencia está cortando directamente a Q0.0 en lugar de cortar una marca de seguridad con rearme (M0.0), dejando intacta la auto-retención o reactivando el lazo.',
+          'Porque el pulsador de Rearme I0.3 está cableado en paralelo con Parada.',
+          'Porque Q0.0 necesita un contacto cerrado de I0.3.'
+        ],
+        correctIdx: 0,
+        explanation: '¡Correcto! En este código defectuoso, el programador puso I0.2 en serie pero olvidó quitar la retención o usar una marca de habilitación M0.0 que exija el pulso de Rearme I0.3. Peor aún: dejó I0.3 en paralelo con I0.0, haciendo que Rearme arranque el motor directamente.',
+        inputs: [
+          { addr: 'I0.2', label: 'Emergencia (NC)', type: 'toggle_nc', color: 'rose', defaultVal: true },
+          { addr: 'I0.3', label: 'Rearme Seguridad', type: 'momentary', color: 'sky', defaultVal: false },
+          { addr: 'I0.0', label: 'Marcha', type: 'momentary', color: 'emerald', defaultVal: false },
+          { addr: 'I0.1', label: 'Parada (NC)', type: 'momentary_nc', color: 'rose', defaultVal: true }
+        ],
+        outputs: [
+          { addr: 'M0.0', label: 'Relé Seguridad M0.0', type: 'aux' },
+          { addr: 'Q0.0', label: 'Prensa Industrial', type: 'motor' }
+        ],
+        timers: [],
+        motorConfig: (s) => ({
+          running: !!s.Q['Q0.0'],
+          dir: 'cw',
+          speed: 'normal',
+          label: s.Q['Q0.0'] ? 'PRENSA EN MARCHA' : (!s.I['I0.2'] ? 'EMERGENCIA ACTIVADA' : 'PRENSA DETENIDA'),
+          sub: 'Prueba arrancar -> activar Emergencia -> liberar Emergencia',
+          badges: s.Q['Q0.0'] ? ['ACTIVA'] : ['DETENIDA']
+        }),
+        evalLogic: (s, dt, fixed) => {
+          if (fixed) {
+            s.M['M0.0'] = (s.I['I0.3'] || s.M['M0.0']) && s.I['I0.2'];
+            s.Q['Q0.0'] = (s.I['I0.0'] || s.Q['Q0.0']) && s.I['I0.1'] && s.M['M0.0'];
+          } else {
+            // Bug: M0.0 se activa solo con I0.2 (sin pedir Rearme I0.3), y Q0.0 retiene sobre M0.0
+            s.M['M0.0'] = s.I['I0.2'];
+            s.Q['Q0.0'] = (s.I['I0.0'] || s.I['I0.3'] || s.Q['Q0.0']) && s.I['I0.1'];
+            if (!s.I['I0.2']) {
+              // Simula que corta salida física pero deja la memoria latched interna mal diseñada
+              s.Q['Q0.0'] = false;
+              if (s.I['I0.0']) s.M['M0.1'] = true;
+            }
+            if (s.I['I0.2'] && s.M['M0.1']) {
+              s.Q['Q0.0'] = true; // Rearranca sola al liberar hongo!
+            }
+            if (!s.I['I0.1']) s.M['M0.1'] = false;
+            if (s.Q['Q0.0']) s.M['M0.1'] = true;
+          }
+        },
+        rungs: (s, fixed) => fixed ? [
+          {
+            title: 'Network 1 (REPARADA): Seguridad con rearme obligatorio M0.0',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.3', label: 'Rearme', active: s.I['I0.3'] },
+                { type: 'NO', addr: 'I0.2', label: 'Emerg. OK', active: s.I['I0.2'] },
+                { type: 'COIL', addr: 'M0.0', label: 'Sist. Hab.', active: s.M['M0.0'] }
+              ],
+              [
+                { type: 'NO', addr: 'M0.0', label: 'Ret. M0.0', active: s.M['M0.0'], parallelTo: 0 }
+              ]
+            ]
+          },
+          {
+            title: 'Network 2 (REPARADA): Mando condicionado por M0.0',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.0', label: 'Marcha', active: s.I['I0.0'] },
+                { type: 'NO', addr: 'I0.1', label: 'Parada', active: s.I['I0.1'] },
+                { type: 'NO', addr: 'M0.0', label: 'Sist. Hab.', active: s.M['M0.0'] },
+                { type: 'COIL', addr: 'Q0.0', label: 'Prensa Q0.0', active: s.Q['Q0.0'] }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.0', label: 'Ret.', active: s.Q['Q0.0'], parallelTo: 0 }
+              ]
+            ]
+          }
+        ] : [
+          {
+            title: 'Network 1 (CON FALLA): Sin retención de seguridad ni rearme real',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.2', label: 'Emerg. OK', active: s.I['I0.2'], isBug: true },
+                { type: 'COIL', addr: 'M0.0', label: 'Sist. Hab.', active: s.M['M0.0'] }
+              ]
+            ]
+          },
+          {
+            title: 'Network 2 (CON FALLA): Rearme I0.3 arranca el motor y memoria no cae',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.0', label: 'Marcha', active: s.I['I0.0'] },
+                { type: 'NO', addr: 'I0.1', label: 'Parada', active: s.I['I0.1'] },
+                { type: 'NO', addr: 'I0.2', label: 'Emerg. OK', active: s.I['I0.2'] },
+                { type: 'COIL', addr: 'Q0.0', label: 'Prensa Q0.0', active: s.Q['Q0.0'] }
+              ],
+              [
+                { type: 'NO', addr: 'I0.3', label: 'Rearme?!', active: s.I['I0.3'], parallelTo: 0, isBug: true }
+              ],
+              [
+                { type: 'NO', addr: 'M0.1', label: 'Mem. Suc.', active: !!s.M['M0.1'], parallelTo: 0, isBug: true }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        id: 'BUG-06',
+        level: 'Falla #6 • Cambio de Velocidad',
+        title: 'Falla en ventilador de 2 velocidades: no deja subir a Alta',
+        desc: 'Arranca el ventilador en Velocidad Baja (I0.0 -> Q0.0). Luego intenta pasar directamente a Velocidad Alta pulsando I0.1. Verás que Q0.1 no entra mientras Q0.0 esté encendido.',
+        question: '¿Por qué no permite pasar directamente de Velocidad Baja (Q0.0) a Alta (Q0.1)?',
+        options: [
+          'Porque en la Network 1 falta el contacto cerrado --|/|-- de I0.1 (Pulsador Alta) para liberar el enclavamiento de Q0.0 al pedir velocidad Alta.',
+          'Porque el térmico I0.3 está abierto.',
+          'Porque Q0.1 debe ir conectado en paralelo con Q0.0.'
+        ],
+        correctIdx: 0,
+        explanation: '¡Brillante! Como Q0.0 tiene un contacto cerrado --|/|-- en la rama de Q0.1 (enclavamiento cruzado), Q0.1 no puede entrar hasta que Q0.0 caiga. Al faltar --|/|-- I0.1 en serie con la retención de Q0.0, pulsar Alta nunca suelta la velocidad Baja.',
+        inputs: [
+          { addr: 'I0.0', label: 'Vel. Baja', type: 'momentary', color: 'sky', defaultVal: false },
+          { addr: 'I0.1', label: 'Vel. Alta', type: 'momentary', color: 'emerald', defaultVal: false },
+          { addr: 'I0.2', label: 'Parada (NC)', type: 'momentary_nc', color: 'rose', defaultVal: true }
+        ],
+        outputs: [
+          { addr: 'Q0.0', label: 'Velocidad Baja', type: 'motor' },
+          { addr: 'Q0.1', label: 'Velocidad Alta', type: 'motor' }
+        ],
+        timers: [],
+        motorConfig: (s) => ({
+          running: !!(s.Q['Q0.0'] || s.Q['Q0.1']),
+          dir: 'cw',
+          speed: s.Q['Q0.1'] ? 'fast' : 'slow',
+          label: s.Q['Q0.1'] ? 'VELOCIDAD ALTA (OK)' : (s.Q['Q0.0'] ? 'VELOCIDAD BAJA (ATASCADO AQUÍ)' : 'DETENIDO'),
+          sub: 'Prueba arrancar en Baja (I0.0) y luego pulsar Alta (I0.1)',
+          badges: s.Q['Q0.1'] ? ['ALTA'] : (s.Q['Q0.0'] ? ['BAJA'] : [])
+        }),
+        evalLogic: (s, dt, fixed) => {
+          const p0 = !!s.Q['Q0.0'];
+          const p1 = !!s.Q['Q0.1'];
+          const releaseLow = fixed ? !s.I['I0.1'] : true;
+          s.Q['Q0.0'] = (s.I['I0.0'] || p0) && s.I['I0.2'] && releaseLow && !p1;
+          s.Q['Q0.1'] = (s.I['I0.1'] || p1) && s.I['I0.2'] && !s.Q['Q0.0'];
+        },
+        rungs: (s, fixed) => [
+          {
+            title: 'Network 1: Velocidad Baja (Q0.0)',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.0', label: 'Vel. Baja', active: s.I['I0.0'] },
+                { type: 'NO', addr: 'I0.2', label: 'Parada', active: s.I['I0.2'] },
+                ...(fixed ? [{ type: 'NC', addr: 'I0.1', label: 'Lib. Alta', active: !s.I['I0.1'] }] : []),
+                { type: 'NC', addr: 'Q0.1', label: 'Encl. Alta', active: !s.Q['Q0.1'] },
+                { type: 'COIL', addr: 'Q0.0', label: 'KM Baja', active: s.Q['Q0.0'] }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.0', label: 'Ret.', active: s.Q['Q0.0'], parallelTo: 0 }
+              ]
+            ]
+          },
+          {
+            title: 'Network 2: Velocidad Alta (Q0.1)',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.1', label: 'Vel. Alta', active: s.I['I0.1'] },
+                { type: 'NO', addr: 'I0.2', label: 'Parada', active: s.I['I0.2'] },
+                { type: 'NC', addr: 'Q0.0', label: 'Encl. Baja', active: !s.Q['Q0.0'], isBug: !fixed && s.Q['Q0.0'] },
+                { type: 'COIL', addr: 'Q0.1', label: 'KM Alta', active: s.Q['Q0.1'] }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.1', label: 'Ret.', active: s.Q['Q0.1'], parallelTo: 0 }
+              ]
+            ]
+          }
+        ]
+      }
+    ];
+
+    // =========================================================================
+    // FUNCIONES AUXILIARES DE TEMPORIZACIÓN Y CICLO SCAN DEL PLC
+    // =========================================================================
+
+    function updateTON(s, id, enable, dt) {
+      if (!s.T[id]) s.T[id] = { acc: 0, pt: 1000, q: false, running: false };
+      const t = s.T[id];
+      if (enable) {
+        if (t.acc < t.pt) {
+          t.acc = Math.min(t.pt, t.acc + dt);
+          t.running = t.acc < t.pt;
+        } else {
+          t.running = false;
+        }
+        t.q = t.acc >= t.pt;
+      } else {
+        t.acc = 0;
+        t.q = false;
+        t.running = false;
+      }
+    }
+
+    function getCurrentExercise() {
+      return currentMode === 'solved' ? SOLVED_EXERCISES[currentIdx] : DEBUG_EXERCISES[currentIdx];
+    }
+
+    function resetPLC() {
+      const ex = getCurrentExercise();
+      // Limpiar timeouts de pulsadores momentáneos
+      Object.values(plc.pulseTimers).forEach(clearTimeout);
+      plc = {
+        I: {},
+        Q: {},
+        M: {},
+        T: {},
+        fault: null,
+        pulseTimers: {}
+      };
+      ex.inputs.forEach(inp => {
+        plc.I[inp.addr] = inp.defaultVal;
+      });
+      ex.outputs.forEach(out => {
+        if (out.addr.startsWith('Q')) plc.Q[out.addr] = false;
+        if (out.addr.startsWith('M')) plc.M[out.addr] = false;
+      });
+      ex.timers.forEach(tm => {
+        plc.T[tm.id] = { acc: 0, pt: tm.pt, q: false, running: false };
+      });
+      // Ejecutar un scan inicial
+      ex.evalLogic(plc, 0, debugFixed);
+      renderAll();
+    }
+
+    function switchMode(mode) {
+      currentMode = mode;
+      currentIdx = 0;
+      debugFixed = false;
+      selectedDebugOption = null;
+
+      const tabSolved = document.getElementById('tab-solved');
+      const tabDebug = document.getElementById('tab-debug');
+
+      if (mode === 'solved') {
+        tabSolved.className = 'px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 bg-emerald-600 text-white shadow-lg shadow-emerald-950/50';
+        tabDebug.className = 'px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white';
+        document.getElementById('sidebar-title').textContent = '10 Ejercicios Resueltos';
+        document.getElementById('sidebar-count').textContent = '10/10';
+      } else {
+        tabDebug.className = 'px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 bg-amber-600 text-white shadow-lg shadow-amber-950/50';
+        tabSolved.className = 'px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white';
+        document.getElementById('sidebar-title').textContent = 'Retos Caza-Errores';
+        document.getElementById('sidebar-count').textContent = `${solvedDebugIds.size}/6`;
+      }
+
+      resetPLC();
+    }
+
+    function selectExercise(idx) {
+      currentIdx = idx;
+      debugFixed = false;
+      selectedDebugOption = null;
+      resetPLC();
+    }
+
+    // Interacción con entradas físicas del tablero
+    function triggerInput(addr, type) {
+      if (plc.fault) return; // Bloqueado hasta reiniciar si hubo cortocircuito
+
+      if (type === 'momentary') {
+        plc.I[addr] = true;
+        clearTimeout(plc.pulseTimers[addr]);
+        plc.pulseTimers[addr] = setTimeout(() => {
+          plc.I[addr] = false;
+        }, 380);
+      } else if (type === 'momentary_nc') {
+        plc.I[addr] = false;
+        clearTimeout(plc.pulseTimers[addr]);
+        plc.pulseTimers[addr] = setTimeout(() => {
+          plc.I[addr] = true;
+        }, 420);
+      } else if (type === 'toggle_nc' || type === 'toggle') {
+        plc.I[addr] = !plc.I[addr];
+      }
+      const ex = getCurrentExercise();
+      ex.evalLogic(plc, 0, debugFixed);
+      renderDynamicState();
+    }
+
+    // =========================================================================
+    // RENDERIZADO DE INTERFAZ Y DIAGRAMA LADDER SVG
+    // =========================================================================
+
+    function renderSidebar() {
+      const list = document.getElementById('exercise-list');
+      const items = currentMode === 'solved' ? SOLVED_EXERCISES : DEBUG_EXERCISES;
+      list.innerHTML = items.map((item, i) => {
+        const active = i === currentIdx;
+        const isDone = currentMode === 'debug' && solvedDebugIds.has(item.id);
+        return `
+          <button onclick="selectExercise(${i})" class="text-left px-3 py-2.5 rounded-lg border transition-all shrink-0 lg:shrink flex items-center justify-between gap-2 ${
+            active
+              ? (currentMode === 'solved' ? 'bg-emerald-500/15 border-emerald-500/50 text-white' : 'bg-amber-500/15 border-amber-500/50 text-white')
+              : 'bg-slate-950/60 border-slate-800/80 text-slate-400 hover:bg-slate-800/70 hover:text-slate-200'
+          }">
+            <div class="min-w-0">
+              <div class="text-[10px] font-mono-plc ${active ? (currentMode === 'solved' ? 'text-emerald-400' : 'text-amber-400') : 'text-slate-500'}">${item.id}</div>
+              <div class="text-xs font-semibold truncate max-w-[190px] lg:max-w-none">${item.title.replace(/^\d+\.\s*/, '')}</div>
+            </div>
+            ${isDone ? '<span class="text-emerald-400 text-xs font-bold">✓</span>' : ''}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function renderHeaderAndInputs() {
+      const ex = getCurrentExercise();
+      document.getElementById('ex-level').textContent = ex.level;
+      document.getElementById('ex-code').textContent = ex.id;
+      document.getElementById('ex-title').textContent = ex.title;
+      document.getElementById('ex-desc').textContent = ex.desc;
+
+      const inputsPanel = document.getElementById('inputs-panel');
+      inputsPanel.innerHTML = ex.inputs.map(inp => {
+        const isToggle = inp.type.startsWith('toggle');
+        const btnColorMap = {
+          emerald: 'border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300',
+          rose: 'border-rose-500/40 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300',
+          amber: 'border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300',
+          sky: 'border-sky-500/40 bg-sky-500/10 hover:bg-sky-500/20 text-sky-300'
+        };
+        return `
+          <button id="btn-in-${inp.addr.replace('.', '_')}" onclick="triggerInput('${inp.addr}', '${inp.type}')"
+            class="p-2.5 rounded-xl border transition-all active:scale-95 flex flex-col items-start justify-between gap-1.5 text-left ${btnColorMap[inp.color] || btnColorMap.sky}">
+            <div class="w-full flex items-center justify-between">
+              <span class="font-mono-plc text-xs font-bold">${inp.addr}</span>
+              <span id="led-in-${inp.addr.replace('.', '_')}" class="w-2.5 h-2.5 rounded-full bg-slate-600"></span>
+            </div>
+            <div class="text-xs font-semibold text-white leading-tight">${inp.label}</div>
+            <div id="state-in-${inp.addr.replace('.', '_')}" class="text-[10px] font-mono-plc opacity-80">
+              ${isToggle ? 'INTERRUPTOR' : 'PULSADOR'}
+            </div>
+          </button>
+        `;
+      }).join('');
+
+      const outputsPanel = document.getElementById('outputs-panel');
+      outputsPanel.innerHTML = ex.outputs.map(out => `
+        <div id="card-out-${out.addr.replace('.', '_')}" class="p-2.5 rounded-lg bg-slate-950 border border-slate-800 flex items-center gap-2.5 transition-colors">
+          <span id="led-out-${out.addr.replace('.', '_')}" class="w-3 h-3 rounded-full bg-slate-700 shrink-0"></span>
+          <div class="min-w-0">
+            <div class="font-mono-plc text-[11px] font-bold text-slate-400">${out.addr}</div>
+            <div class="text-xs font-semibold text-slate-200 truncate">${out.label}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderBottomPanel() {
+      const ex = getCurrentExercise();
+      const panel = document.getElementById('bottom-panel');
+
+      if (currentMode === 'solved') {
+        panel.innerHTML = `
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-400 font-bold text-sm shrink-0 mt-0.5">i</div>
+            <div>
+              <h4 class="text-xs font-bold uppercase tracking-wider text-sky-300 mb-1">Nota Técnica de Automatización</h4>
+              <p class="text-sm text-slate-300 leading-relaxed">${ex.note}</p>
+            </div>
+          </div>
+        `;
+      } else {
+        panel.innerHTML = `
+          <div class="flex flex-col gap-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h4 class="text-sm font-bold text-amber-300 flex items-center gap-2">
+                <span>🔍 Diagnóstico del Circuito:</span>
+                <span class="text-white font-semibold">${ex.question}</span>
+              </h4>
+              ${debugFixed ? '<span class="px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold">✓ Circuito Reparado y Operativo</span>' : ''}
+            </div>
+
+            <div class="grid grid-cols-1 gap-2">
+              ${ex.options.map((opt, i) => {
+                const isSelected = selectedDebugOption === i;
+                const isCorrect = i === ex.correctIdx;
+                let style = 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-600';
+                if (isSelected) {
+                  style = isCorrect
+                    ? 'bg-emerald-950/60 border-emerald-500 text-emerald-100'
+                    : 'bg-rose-950/60 border-rose-500 text-rose-100';
+                }
+                return `
+                  <button onclick="checkDebugAnswer(${i})" class="p-3 rounded-xl border text-left text-xs sm:text-sm transition-all flex items-start gap-3 ${style}">
+                    <span class="font-mono-plc font-bold px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-xs shrink-0">${String.fromCharCode(65 + i)}</span>
+                    <span>${opt}</span>
+                  </button>
+                `;
+              }).join('')}
+            </div>
+
+            ${selectedDebugOption !== null ? `
+              <div class="p-3.5 rounded-xl border ${selectedDebugOption === ex.correctIdx ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200' : 'bg-rose-950/40 border-rose-500/40 text-rose-200'} text-xs sm:text-sm leading-relaxed">
+                ${selectedDebugOption === ex.correctIdx ? ex.explanation : '❌ Ese no es el origen del problema. Prueba accionar los botones en el tablero superior y observa dónde se interrumpe o cruza la línea verde en el diagrama Ladder.'}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }
+    }
+
+    function checkDebugAnswer(optionIdx) {
+      const ex = getCurrentExercise();
+      selectedDebugOption = optionIdx;
+      if (optionIdx === ex.correctIdx) {
+        debugFixed = true;
+        solvedDebugIds.add(ex.id);
+        document.getElementById('debug-badge').textContent = `${solvedDebugIds.size}/6`;
+        document.getElementById('sidebar-count').textContent = `${solvedDebugIds.size}/6`;
+        resetPLC(); // Reinicia estado limpio con la lógica reparada
+      } else {
+        renderBottomPanel();
+      }
+    }
+
+    // Renderizado SVG del diagrama Ladder KOP en tiempo real
+    function renderLadderSVG() {
+      const ex = getCurrentExercise();
+      const svg = document.getElementById('ladder-svg');
+      const rungs = ex.rungs(plc, debugFixed);
+
+      const leftRailX = 28;
+      const rightRailX = 792;
+      const startX = 64;
+      const stepX = 112;
+
+      let currentY = 26;
+      let svgContent = '';
+
+      rungs.forEach((rung) => {
+        // Título de la Network
+        svgContent += `<text x="${leftRailX + 10}" y="${currentY}" fill="#94a3b8" font-size="11" font-weight="600" font-family="Inter, sans-serif">${rung.title}</text>`;
+        currentY += 28;
+
+        const mainBranch = rung.branches[0];
+        const parallelBranches = rung.branches.slice(1);
+        const branchSpacing = 54;
+        const rungBottomY = currentY + parallelBranches.length * branchSpacing;
+
+        // Evaluar conducción paso a paso en la rama principal
+        let powerFlow = true;
+        const mainNodesX = [];
+
+        // Separar elementos de serie y bobina final
+        const coilItem = mainBranch[mainBranch.length - 1];
+        const seriesItems = mainBranch.slice(0, -1);
+
+        // Calcular si alguna rama paralela al elemento 0 está conduciendo
+        let parallel0Active = false;
+        parallelBranches.forEach(pb => {
+          const el = pb[0];
+          if (el && el.parallelTo === 0 && el.active) {
+            parallel0Active = true;
+          }
+        });
+
+        // Dibujar rama principal
+        let cursorX = leftRailX;
+        seriesItems.forEach((el, idx) => {
+          const elCenterX = startX + idx * stepX + 36;
+          mainNodesX.push(elCenterX);
+
+          // Cable de entrada al contacto
+          const incomingEnergized = (idx === 0) ? true : powerFlow;
+          svgContent += `<line x1="${cursorX}" y1="${currentY}" x2="${elCenterX - 24}" y2="${currentY}" stroke-width="2.5" class="${incomingEnergized ? 'wire-energized' : 'wire-idle'}"/>`;
+
+          // Dibujar símbolo del elemento
+          svgContent += drawLadderSymbol(el, elCenterX, currentY, incomingEnergized);
+
+          // Actualizar flujo de corriente
+          if (idx === 0) {
+            powerFlow = Boolean(el.active || parallel0Active);
+          } else {
+            powerFlow = Boolean(powerFlow && el.active);
+          }
+
+          cursorX = elCenterX + 24;
+        });
+
+        // Dibujar ramas en paralelo
+        parallelBranches.forEach((pb, pIdx) => {
+          const el = pb[0];
+          const py = currentY + (pIdx + 1) * branchSpacing;
+          const targetIdx = el.parallelTo || 0;
+          const targetCenterX = mainNodesX[targetIdx] || (startX + 36);
+          const leftDropX = targetCenterX - 42;
+          const rightDropX = targetCenterX + 42;
+
+          const branchEnergized = Boolean(el.active);
+          const leftWireClass = (targetIdx === 0) ? 'wire-energized' : 'wire-idle';
+          const rightWireClass = branchEnergized ? 'wire-energized' : 'wire-idle';
+
+          // Bajada vertical izquierda
+          svgContent += `<line x1="${leftDropX}" y1="${currentY}" x2="${leftDropX}" y2="${py}" stroke-width="2.2" class="${leftWireClass}"/>`;
+          // Horizontal hacia contacto paralelo
+          svgContent += `<line x1="${leftDropX}" y1="${py}" x2="${targetCenterX - 24}" y2="${py}" stroke-width="2.2" class="${leftWireClass}"/>`;
+          // Símbolo paralelo
+          svgContent += drawLadderSymbol(el, targetCenterX, py, true);
+          // Horizontal salida
+          svgContent += `<line x1="${targetCenterX + 24}" y1="${py}" x2="${rightDropX}" y2="${py}" stroke-width="2.2" class="${rightWireClass}"/>`;
+          // Subida vertical derecha
+          svgContent += `<line x1="${rightDropX}" y1="${py}" x2="${rightDropX}" y2="${currentY}" stroke-width="2.2" class="${rightWireClass}"/>`;
+        });
+
+        // Cable hacia la bobina final en el extremo derecho
+        const coilCenterX = rightRailX - 54;
+        const finalWireClass = plc.fault ? 'wire-fault' : (powerFlow ? 'wire-energized' : 'wire-idle');
+        svgContent += `<line x1="${cursorX}" y1="${currentY}" x2="${coilCenterX - 24}" y2="${currentY}" stroke-width="2.5" class="${finalWireClass}"/>`;
+
+        // Dibujar Bobina
+        svgContent += drawLadderSymbol(coilItem, coilCenterX, currentY, powerFlow);
+
+        // Conexión bobina a barra derecha
+        svgContent += `<line x1="${coilCenterX + 24}" y1="${currentY}" x2="${rightRailX}" y2="${currentY}" stroke-width="2.5" class="${finalWireClass}"/>`;
+
+        currentY = rungBottomY + 46;
+      });
+
+      const totalHeight = Math.max(220, currentY);
+      svg.setAttribute('viewBox', `0 0 820 ${totalHeight}`);
+
+      // Rieles verticales izquierdo (L+) y derecho (M/N)
+      const railsSVG = `
+        <line x1="${leftRailX}" y1="12" x2="${leftRailX}" y2="${totalHeight - 12}" stroke="#22c55e" stroke-width="4" stroke-linecap="round"/>
+        <line x1="${rightRailX}" y1="12" x2="${rightRailX}" y2="${totalHeight - 12}" stroke="#475569" stroke-width="4" stroke-linecap="round"/>
+      `;
+
+      svg.innerHTML = railsSVG + svgContent;
+    }
+
+    function drawLadderSymbol(el, cx, cy, incomingPower) {
+      const isActive = Boolean(el.active);
+      const isBug = Boolean(el.isBug);
+      const strokeColor = isBug ? '#f59e0b' : (isActive && incomingPower ? '#22c55e' : (isActive ? '#38bdf8' : '#94a3b8'));
+      const textColor = isBug ? '#fbbf24' : (isActive ? '#4ade80' : '#cbd5e1');
+
+      let g = `<g>`;
+
+      // Etiqueta superior (Dirección PLC)
+      g += `<text x="${cx}" y="${cy - 17}" text-anchor="middle" fill="${textColor}" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace">${el.addr}</text>`;
+
+      if (el.type === 'NO' || el.type === 'NC') {
+        // Barras verticales del contacto --| |-- o --|/|--
+        g += `<line x1="${cx - 24}" y1="${cy}" x2="${cx - 7}" y2="${cy}" stroke="${strokeColor}" stroke-width="2.5"/>`;
+        g += `<line x1="${cx + 7}" y1="${cy}" x2="${cx + 24}" y2="${cy}" stroke="${strokeColor}" stroke-width="2.5"/>`;
+        g += `<line x1="${cx - 7}" y1="${cy - 11}" x2="${cx - 7}" y2="${cy + 11}" stroke="${strokeColor}" stroke-width="2.5"/>`;
+        g += `<line x1="${cx + 7}" y1="${cy - 11}" x2="${cx + 7}" y2="${cy + 11}" stroke="${strokeColor}" stroke-width="2.5"/>`;
+
+        if (el.type === 'NC') {
+          g += `<line x1="${cx - 9}" y1="${cy + 10}" x2="${cx + 9}" y2="${cy - 10}" stroke="${strokeColor}" stroke-width="2.2"/>`;
+        }
+      } else if (el.type === 'COIL') {
+        // Bobina --( )--
+        const fillCoil = isActive ? 'rgba(34, 197, 94, 0.18)' : 'rgba(15, 23, 42, 0.9)';
+        g += `<circle cx="${cx}" cy="${cy}" r="14" fill="${fillCoil}" stroke="${strokeColor}" stroke-width="2.5"/>`;
+        if (isActive) {
+          g += `<circle cx="${cx}" cy="${cy}" r="5" fill="#22c55e"/>`;
+        }
+      } else if (el.type === 'TON') {
+        // Bloque Temporizador --[TON]--
+        const fillBox = isActive ? 'rgba(34, 197, 94, 0.18)' : (el.running ? 'rgba(56, 189, 248, 0.15)' : '#0f172a');
+        const boxStroke = isActive ? '#22c55e' : (el.running ? '#38bdf8' : '#64748b');
+        g += `<rect x="${cx - 24}" y="${cy - 15}" width="48" height="30" rx="5" fill="${fillBox}" stroke="${boxStroke}" stroke-width="2"/>`;
+        g += `<text x="${cx}" y="${cy - 2}" text-anchor="middle" fill="#e2e8f0" font-size="9" font-weight="700" font-family="JetBrains Mono, monospace">TON</text>`;
+        const secTxt = `${((el.acc || 0) / 1000).toFixed(1)}s`;
+        g += `<text x="${cx}" y="${cy + 10}" text-anchor="middle" fill="${isActive ? '#4ade80' : '#38bdf8'}" font-size="9" font-weight="700" font-family="JetBrains Mono, monospace">${secTxt}</text>`;
+      }
+
+      // Etiqueta inferior descriptiva
+      if (el.label) {
+        g += `<text x="${cx}" y="${cy + 24}" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="Inter, sans-serif">${el.label}</text>`;
+      }
+
+      if (isBug) {
+        g += `<text x="${cx}" y="${cy + 35}" text-anchor="middle" fill="#f59e0b" font-size="9" font-weight="700">⚠ REVISAR</text>`;
+      }
+
+      g += `</g>`;
+      return g;
+    }
+
+    // Actualiza LEDs, botones, visualizador de motor y SVG en cada ciclo de scan
+    function renderDynamicState() {
+      const ex = getCurrentExercise();
+
+      // Banner de falla crítica
+      const faultBanner = document.getElementById('fault-banner');
+      if (plc.fault) {
+        faultBanner.classList.remove('hidden');
+        document.getElementById('fault-banner-msg').textContent = plc.fault;
+      } else {
+        faultBanner.classList.add('hidden');
+      }
+
+      // Actualizar estado visual de entradas
+      ex.inputs.forEach(inp => {
+        const key = inp.addr.replace('.', '_');
+        const val = !!plc.I[inp.addr];
+        const led = document.getElementById(`led-in-${key}`);
+        const st = document.getElementById(`state-in-${key}`);
+        if (led) {
+          led.className = `w-2.5 h-2.5 rounded-full transition-colors ${val ? 'bg-emerald-400 shadow-[0_0_8px_#4ade80]' : 'bg-rose-500 shadow-[0_0_8px_#f43f5e]'}`;
+        }
+        if (st) {
+          st.textContent = val ? 'ESTADO: 1 (CERRADO)' : 'ESTADO: 0 (ABIERTO)';
+        }
+      });
+
+      // Actualizar salidas Q y Marcas M
+      ex.outputs.forEach(out => {
+        const key = out.addr.replace('.', '_');
+        const val = out.addr.startsWith('Q') ? !!plc.Q[out.addr] : !!plc.M[out.addr];
+        const card = document.getElementById(`card-out-${key}`);
+        const led = document.getElementById(`led-out-${key}`);
+        if (card && led) {
+          if (val) {
+            const isAlarm = out.type === 'alarm';
+            card.className = `p-2.5 rounded-lg border flex items-center gap-2.5 transition-colors ${
+              isAlarm ? 'bg-rose-950/50 border-rose-500/60' : 'bg-emerald-950/40 border-emerald-500/50'
+            }`;
+            led.className = `w-3 h-3 rounded-full shrink-0 ${
+              isAlarm ? 'bg-rose-500 shadow-[0_0_10px_#f43f5e] animate-ping' : 'bg-emerald-400 shadow-[0_0_10px_#4ade80]'
+            }`;
+          } else {
+            card.className = 'p-2.5 rounded-lg bg-slate-950 border border-slate-800 flex items-center gap-2.5 transition-colors';
+            led.className = 'w-3 h-3 rounded-full bg-slate-700 shrink-0';
+          }
+        }
+      });
+
+      // Actualizar visualizador de motor
+      const mCfg = ex.motorConfig(plc);
+      const rotor = document.getElementById('motor-rotor');
+      const mTitle = document.getElementById('motor-state-title');
+      const mSub = document.getElementById('motor-state-sub');
+      const mBadges = document.getElementById('motor-badges');
+
+      mTitle.textContent = mCfg.label;
+      mTitle.className = `text-sm font-bold truncate ${
+        plc.fault ? 'text-red-400' : (mCfg.running ? 'text-emerald-400' : 'text-slate-300')
+      }`;
+      mSub.textContent = mCfg.sub;
+
+      if (mCfg.running && !plc.fault) {
+        let spinClass = 'motor-spin-cw-slow';
+        if (mCfg.dir === 'ccw') spinClass = 'motor-spin-ccw';
+        else if (mCfg.speed === 'fast') spinClass = 'motor-spin-cw-fast';
+        rotor.setAttribute('class', `w-9 h-9 text-emerald-400 ${spinClass}`);
+      } else {
+        rotor.setAttribute('class', `w-9 h-9 ${plc.fault ? 'text-red-500' : 'text-slate-600'}`);
+      }
+
+      mBadges.innerHTML = (mCfg.badges || []).map(b => `
+        <span class="text-[10px] font-mono-plc px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">${b}</span>
+      `).join('');
+
+      // Dibujar Ladder actualizado
+      renderLadderSVG();
+    }
+
+    function renderAll() {
+      renderSidebar();
+      renderHeaderAndInputs();
+      renderBottomPanel();
+      renderDynamicState();
+    }
+
+    // Bucle principal de ejecución cíclica del PLC (cada 50ms)
+    let lastTick = performance.now();
+    function plcScanLoop(now) {
+      const dt = now - lastTick;
+      lastTick = now;
+
+      const ex = getCurrentExercise();
+      if (ex && !plc.fault) {
+        ex.evalLogic(plc, dt, debugFixed);
+        renderDynamicState();
+      }
+      requestAnimationFrame(plcScanLoop);
+    }
+
+    // Inicialización al cargar la página
+    window.addEventListener('DOMContentLoaded', () => {
+      switchMode('solved');
+      lastTick = performance.now();
+      requestAnimationFrame(plcScanLoop);
+    });
+  </script>
+</body>
+</html>

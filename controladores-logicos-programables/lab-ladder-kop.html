@@ -63,7 +63,7 @@
         <div>
           <h1 class="text-base sm:text-lg font-bold text-white tracking-tight flex items-center gap-2">
             Simulador PLC Ladder (IEC 61131-3)
-            <span id="scan-badge" class="text-[11px] font-mono-plc px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">SCAN: —ms</span>
+            <span id="scan-badge" class="text-[11px] font-mono-plc px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">SCAN: 20 ms (configurado)</span>
           </h1>
           <p class="text-xs text-slate-400">Práctica interactiva de automatismos industriales y diagnóstico de fallas</p>
         </div>
@@ -1906,52 +1906,39 @@
       renderDynamicState();
     }
 
-    // H-02: Bucle de scan PLC real a 20ms (setInterval) separado del render (rAF)
-    // El PLC industrial ejecuta su scan en un intervalo fijo determinístico.
-    // La visualización se actualiza a la tasa del monitor (60fps) sin afectar la lógica.
-    let lastScanTick = performance.now();
-    let scanDtEma = 20; // exponential moving average of scan dt (ms)
-    const SCAN_INTERVAL_MS = 20;
-    const EMA_ALPHA = 0.1; // smoothing factor — reacts in ~10 samples
+    // H-02 + Motor determinista: acumulador de pasos lógicos de 20ms (rAF)
+    // Cada frame, el acumulador consume N pasos de exactamente SCAN_DT.
+    // Esto garantiza que temporizadores TON avanzan siempre en incrementos
+    // fijos de 20ms, independientemente del framerate real del navegador.
+    // El badge es un parámetro de diseño fijo, no una medición dinámica.
+    const SCAN_DT = 20;          // ms — paso lógico determinista del PLC
+    const MAX_CATCH_UP = 200;    // cap anti-spiral para pestañas ocultas
+    let accumulator = 0;
+    let lastFrameTime = 0;
 
-    setInterval(() => {
-      const now = performance.now();
-      const dt = now - lastScanTick;
-      lastScanTick = now;
-      // Update EMA of real scan period (immune to background throttling distortion)
-      scanDtEma = EMA_ALPHA * dt + (1 - EMA_ALPHA) * scanDtEma;
+    function mainLoop(timestamp) {
+      if (!lastFrameTime) { lastFrameTime = timestamp; }
+      let elapsed = timestamp - lastFrameTime;
+      lastFrameTime = timestamp;
+      // Cap: si la pestaña estuvo oculta, no acumular más de 200ms
+      if (elapsed > MAX_CATCH_UP) elapsed = MAX_CATCH_UP;
 
+      accumulator += elapsed;
       const ex = getCurrentExercise();
-      if (ex && !plc.fault) {
-        ex.evalLogic(plc, dt, debugFixed);
+      while (accumulator >= SCAN_DT) {
+        if (ex && !plc.fault) {
+          ex.evalLogic(plc, SCAN_DT, debugFixed);
+        }
+        accumulator -= SCAN_DT;
       }
-    }, SCAN_INTERVAL_MS);
-
-    // Indicador SCAN en vivo: actualiza cada segundo con el período real medido (EMA)
-    setInterval(() => {
-      const badge = document.getElementById('scan-badge');
-      if (badge) {
-        const realMs = Math.round(scanDtEma);
-        badge.textContent = `SCAN: ${realMs}ms`;
-        // Visual feedback: green if near target (<=25ms), amber if browser-throttled
-        const isHealthy = realMs <= 25;
-        badge.className = badge.className
-          .replace(/bg-(emerald|amber)-500\/15/g, isHealthy ? 'bg-emerald-500/15' : 'bg-amber-500/15')
-          .replace(/text-(emerald|amber)-400/g, isHealthy ? 'text-emerald-400' : 'text-amber-400')
-          .replace(/border-(emerald|amber)-500\/30/g, isHealthy ? 'border-emerald-500/30' : 'border-amber-500/30');
-      }
-    }, 1000);
-
-    // Render visual a 60fps (independiente del scan PLC)
-    function displayLoop() {
       renderDynamicState();
-      requestAnimationFrame(displayLoop);
+      requestAnimationFrame(mainLoop);
     }
 
     // Inicialización al cargar la página
     window.addEventListener('DOMContentLoaded', () => {
       switchMode('solved');
-      requestAnimationFrame(displayLoop);
+      requestAnimationFrame(mainLoop);
     });
   </script>
 </body>

@@ -63,7 +63,7 @@
         <div>
           <h1 class="text-base sm:text-lg font-bold text-white tracking-tight flex items-center gap-2">
             Simulador PLC Ladder (IEC 61131-3)
-            <span class="text-[11px] font-mono-plc px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">SCAN: 20ms</span>
+            <span id="scan-badge" class="text-[11px] font-mono-plc px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">SCAN: —ms</span>
           </h1>
           <p class="text-xs text-slate-400">Práctica interactiva de automatismos industriales y diagnóstico de fallas</p>
         </div>
@@ -527,12 +527,13 @@
         },
         evalLogic: (s, dt) => {
           const ok = s.I['I0.2'] && s.I['I0.3'];
-          if (!ok) {
-            s.M['M0.0'] = false; s.M['M0.1'] = false;
-          } else {
-            if (s.I['I0.0']) { s.M['M0.0'] = true; s.M['M0.1'] = false; }
-            if (s.I['I0.1']) { s.M['M0.1'] = true; s.M['M0.0'] = false; }
-          }
+          // H-01/H-05: evalLogic alineado con representación Ladder/interlocks
+          // Network 1: M0.0 — el pulso opuesto I0.1 rompe la retención (inversión directa)
+          s.M['M0.0'] = (s.I['I0.0'] || s.M['M0.0']) && ok && !s.I['I0.1'];
+          // Network 2: M0.1 — simétrico, I0.0 rompe M0.1
+          s.M['M0.1'] = (s.I['I0.1'] || s.M['M0.1']) && ok && !s.I['I0.0'];
+          // Pulsos simultáneos: ambos caen a false (parada segura) — determinístico
+
           // T1 cuenta cuando se pide Derecha y ya cayó Q0.1
           updateTON(s, 'T1', s.M['M0.0'] && !s.Q['Q0.1'], dt);
           // T2 cuenta cuando se pide Izquierda y ya cayó Q0.0
@@ -543,12 +544,13 @@
         },
         rungs: (s) => [
           {
-            title: 'Network 1: Selección de sentido deseado (M0.0 = Der / M0.1 = Izq)',
+            title: 'Network 1: Memoria Derecha (M0.0) — pulso I0.1 la desactiva (inversión directa)',
             branches: [
               [
                 { type: 'NO', addr: 'I0.0', label: 'Pedir Der', active: s.I['I0.0'] },
                 { type: 'NO', addr: 'I0.2', label: 'Parada', active: s.I['I0.2'] },
-                { type: 'NC', addr: 'M0.1', label: 'No Izq', active: !s.M['M0.1'] },
+                { type: 'NO', addr: 'I0.3', label: 'Térmico', active: s.I['I0.3'] },
+                { type: 'NC', addr: 'I0.1', label: 'No Izq', active: !s.I['I0.1'] },
                 { type: 'COIL', addr: 'M0.0', label: 'Mem. Der', active: s.M['M0.0'] }
               ],
               [
@@ -557,7 +559,22 @@
             ]
           },
           {
-            title: 'Network 2: Retardo de frenado T1 (3.0s) y activación KM1 Derecha',
+            title: 'Network 2: Memoria Izquierda (M0.1) — pulso I0.0 la desactiva (inversión directa)',
+            branches: [
+              [
+                { type: 'NO', addr: 'I0.1', label: 'Pedir Izq', active: s.I['I0.1'] },
+                { type: 'NO', addr: 'I0.2', label: 'Parada', active: s.I['I0.2'] },
+                { type: 'NO', addr: 'I0.3', label: 'Térmico', active: s.I['I0.3'] },
+                { type: 'NC', addr: 'I0.0', label: 'No Der', active: !s.I['I0.0'] },
+                { type: 'COIL', addr: 'M0.1', label: 'Mem. Izq', active: s.M['M0.1'] }
+              ],
+              [
+                { type: 'NO', addr: 'M0.1', label: 'Ret.', active: s.M['M0.1'], parallelTo: 0 }
+              ]
+            ]
+          },
+          {
+            title: 'Network 3: Retardo de frenado T1 (3.0s) y activación KM1 Derecha',
             branches: [
               [
                 { type: 'NO', addr: 'M0.0', label: 'Mem. Der', active: s.M['M0.0'] },
@@ -568,7 +585,7 @@
             ]
           },
           {
-            title: 'Network 3: Memoria Izquierda (M0.1), retardo T2 (3.0s) y KM2 Izquierda',
+            title: 'Network 4: Memoria Izquierda, retardo T2 (3.0s) y KM2 Izquierda',
             branches: [
               [
                 { type: 'NO', addr: 'M0.1', label: 'Mem. Izq', active: s.M['M0.1'] },
@@ -585,7 +602,7 @@
         level: 'Nivel 2 • Control de Velocidad',
         title: '7. Cambio de velocidad de motor (2 velocidades - Dahlander)',
         desc: 'Ventilador con Velocidad Baja (Q0.0) y Alta (Q0.1). Permite pasar directamente de Baja a Alta al pulsar I0.1, pero para reducir de Alta a Baja obliga a pasar por Parada (I0.2). Protegido por dos térmicos independientes (I0.3 y I0.4).',
-        note: 'En motores de dos velocidades, pasar bruscamente de Alta (3000 RPM) a Baja (1500 RPM) convierte al motor en generador hipersíncrono provocando un frenado violento. Por eso el contacto cerrado de Q0.1 bloquea el arranque de Q0.0, mientras que I0.1 desactiva Q0.0 para subir a Alta.',
+        note: 'En motores de dos velocidades, pasar bruscamente de Alta (3000 RPM) a Baja (1500 RPM) convierte al motor en generador hipersíncrono provocando un frenado violento. Por eso el contacto cerrado de Q0.1 bloquea el arranque de Q0.0, mientras que I0.1 desactiva Q0.0 para subir a Alta. Además, al reducir de Alta a Baja, se activa un retardo de desaceleración (T1 = 2.0s, marca M0.0) para que el rotor pierda inercia antes de reconectar en Baja.',
         inputs: [
           { addr: 'I0.0', label: 'Vel. Baja', type: 'momentary', color: 'sky', defaultVal: false },
           { addr: 'I0.1', label: 'Vel. Alta', type: 'momentary', color: 'emerald', defaultVal: false },
@@ -595,29 +612,45 @@
         ],
         outputs: [
           { addr: 'Q0.0', label: 'Velocidad Baja (1500 RPM)', type: 'motor' },
-          { addr: 'Q0.1', label: 'Velocidad Alta (3000 RPM)', type: 'motor' }
+          { addr: 'Q0.1', label: 'Velocidad Alta (3000 RPM)', type: 'motor' },
+          { addr: 'M0.0', label: 'Retardo Desaceleración', type: 'aux' }
         ],
-        timers: [],
-        motorConfig: (s) => ({
-          running: !!(s.Q['Q0.0'] || s.Q['Q0.1']),
-          dir: 'cw',
-          speed: s.Q['Q0.1'] ? 'fast' : 'slow',
-          label: s.Q['Q0.1'] ? 'VELOCIDAD ALTA (3000 RPM)' : (s.Q['Q0.0'] ? 'VELOCIDAD BAJA (1500 RPM)' : 'VENTILADOR DETENIDO'),
-          sub: (!s.I['I0.3'] || !s.I['I0.4']) ? 'Falla térmica detectada' : (s.Q['Q0.0'] ? 'Pulsa Alta (I0.1) para acelerar' : (s.Q['Q0.1'] ? 'Pulsa Parada (I0.2) para reducir' : 'Listo')),
-          badges: s.Q['Q0.1'] ? ['ALTA VEL.'] : (s.Q['Q0.0'] ? ['BAJA VEL.'] : [])
-        }),
-        evalLogic: (s) => {
+        timers: [
+          { id: 'T1', pt: 2000 }
+        ],
+        motorConfig: (s) => {
+          const braking = !!s.M['M0.0'];
+          return {
+            running: !!(s.Q['Q0.0'] || s.Q['Q0.1']),
+            dir: 'cw',
+            speed: s.Q['Q0.1'] ? 'fast' : 'slow',
+            label: braking ? 'DESACELERACIÓN SEGURA (2.0s)...' : (s.Q['Q0.1'] ? 'VELOCIDAD ALTA (3000 RPM)' : (s.Q['Q0.0'] ? 'VELOCIDAD BAJA (1500 RPM)' : 'VENTILADOR DETENIDO')),
+            sub: braking ? `Retardo T1: ${(s.T['T1'].acc/1000).toFixed(1)}s / 2.0s — Esperando inercia` : ((!s.I['I0.3'] || !s.I['I0.4']) ? 'Falla térmica detectada' : (s.Q['Q0.0'] ? 'Pulsa Alta (I0.1) para acelerar' : (s.Q['Q0.1'] ? 'Pulsa Parada (I0.2) para reducir' : 'Listo'))),
+            badges: braking ? ['PAUSA SEGURIDAD'] : (s.Q['Q0.1'] ? ['ALTA VEL.'] : (s.Q['Q0.0'] ? ['BAJA VEL.'] : []))
+          };
+        },
+        evalLogic: (s, dt) => {
           const ok = s.I['I0.2'] && s.I['I0.3'] && s.I['I0.4'];
           const prevQ0 = !!s.Q['Q0.0'];
           const prevQ1 = !!s.Q['Q0.1'];
-          // Baja cae si se pulsa Alta (I0.1) o si ya está Alta (prevQ1)
-          s.Q['Q0.0'] = (s.I['I0.0'] || prevQ0) && ok && !s.I['I0.1'] && !prevQ1;
+
+          // H-03: Retardo seguro Alta→Baja
+          // Cuando Q0.1 (Alta) cae, M0.0 se activa y bloquea Q0.0 (Baja)
+          // hasta que T1 complete 2.0s de desaceleración
+          if (prevQ1 && !((s.I['I0.1'] || prevQ1) && ok && !prevQ0)) {
+            s.M['M0.0'] = true;
+          }
+          updateTON(s, 'T1', !!s.M['M0.0'], dt);
+          if (s.T['T1'].q) s.M['M0.0'] = false;
+
+          // Baja: cae si se pulsa Alta (I0.1) o si ya está Alta; bloqueada por M0.0
+          s.Q['Q0.0'] = (s.I['I0.0'] || prevQ0) && ok && !s.I['I0.1'] && !prevQ1 && !s.M['M0.0'];
           // Alta puede entrar directo desde Baja
           s.Q['Q0.1'] = (s.I['I0.1'] || prevQ1) && ok && !s.Q['Q0.0'];
         },
         rungs: (s) => [
           {
-            title: 'Network 1: Velocidad Baja (Q0.0) - Se desconecta al pedir Alta (I0.1)',
+            title: 'Network 1: Velocidad Baja (Q0.0) — Bloqueada por Alta, retardo y térmicos',
             branches: [
               [
                 { type: 'NO', addr: 'I0.0', label: 'Vel. Baja', active: s.I['I0.0'] },
@@ -626,6 +659,7 @@
                 { type: 'NO', addr: 'I0.4', label: 'Térm. A', active: s.I['I0.4'] },
                 { type: 'NC', addr: 'I0.1', label: 'No Alta', active: !s.I['I0.1'] },
                 { type: 'NC', addr: 'Q0.1', label: 'Encl. Alta', active: !s.Q['Q0.1'] },
+                { type: 'NC', addr: 'M0.0', label: 'No Retar.', active: !s.M['M0.0'] },
                 { type: 'COIL', addr: 'Q0.0', label: 'KM Baja', active: s.Q['Q0.0'] }
               ],
               [
@@ -634,7 +668,7 @@
             ]
           },
           {
-            title: 'Network 2: Velocidad Alta (Q0.1) - Paso directo permitido desde Baja',
+            title: 'Network 2: Velocidad Alta (Q0.1) — Paso directo permitido desde Baja',
             branches: [
               [
                 { type: 'NO', addr: 'I0.1', label: 'Vel. Alta', active: s.I['I0.1'] },
@@ -646,6 +680,16 @@
               ],
               [
                 { type: 'NO', addr: 'Q0.1', label: 'Ret.', active: s.Q['Q0.1'], parallelTo: 0 }
+              ]
+            ]
+          },
+          {
+            title: 'Network 3: Retardo de desaceleración (T1 = 2.0s) tras caída de Alta',
+            branches: [
+              [
+                { type: 'NO', addr: 'M0.0', label: 'Retardo', active: !!s.M['M0.0'] },
+                { type: 'TON', addr: 'T1', pt: '2.0s', acc: s.T['T1'].acc, active: s.T['T1'].q, running: s.T['T1'].running },
+                { type: 'COIL', addr: 'M0.0', label: 'Reset M0.0', active: !s.M['M0.0'] && s.T['T1'].q }
               ]
             ]
           }
@@ -906,13 +950,17 @@
             ]
           },
           {
-            title: 'Network 4: Conmutación a Triángulo (Q0.3)',
+            title: 'Network 4: Conmutación a Triángulo (Q0.3) — condicionada a línea activa',
             branches: [
               [
+                { type: 'NO', addr: 'Q0.0', label: 'Línea Der', active: s.Q['Q0.0'] },
                 { type: 'NO', addr: 'T1', label: 'Fin Y', active: s.T['T1'].q },
                 { type: 'TON', addr: 'T2', pt: '0.6s', acc: s.T['T2'].acc, active: s.T['T2'].q, running: s.T['T2'].running },
                 { type: 'NC', addr: 'Q0.2', label: 'Encl. Y', active: !s.Q['Q0.2'] },
                 { type: 'COIL', addr: 'Q0.3', label: 'KM4 Triáng.', active: s.Q['Q0.3'] }
+              ],
+              [
+                { type: 'NO', addr: 'Q0.1', label: 'Línea Izq', active: s.Q['Q0.1'], parallelTo: 0 }
               ]
             ]
           }
@@ -1858,25 +1906,49 @@
       renderDynamicState();
     }
 
-    // Bucle principal de ejecución cíclica del PLC (cada 50ms)
-    let lastTick = performance.now();
-    function plcScanLoop(now) {
-      const dt = now - lastTick;
-      lastTick = now;
+    // H-02: Bucle de scan PLC real a 20ms (setInterval) separado del render (rAF)
+    // El PLC industrial ejecuta su scan en un intervalo fijo determinístico.
+    // La visualización se actualiza a la tasa del monitor (60fps) sin afectar la lógica.
+    let scanCount = 0;
+    let lastScanTick = performance.now();
+    const SCAN_INTERVAL_MS = 20;
+
+    setInterval(() => {
+      const now = performance.now();
+      const dt = now - lastScanTick;
+      lastScanTick = now;
+      scanCount++;
 
       const ex = getCurrentExercise();
       if (ex && !plc.fault) {
         ex.evalLogic(plc, dt, debugFixed);
-        renderDynamicState();
       }
-      requestAnimationFrame(plcScanLoop);
+    }, SCAN_INTERVAL_MS);
+
+    // Indicador SCAN en vivo: actualiza cada segundo con el ciclo real medido
+    setInterval(() => {
+      const badge = document.getElementById('scan-badge');
+      if (badge && scanCount > 0) {
+        const realMs = Math.round(1000 / scanCount);
+        badge.textContent = `SCAN: ${realMs}ms`;
+        // Visual feedback: green if near target, amber if throttled
+        if (realMs <= 25) {
+          badge.className = badge.className.replace(/bg-amber-500\/15 text-amber-400 border-amber-500\/30/g, 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30');
+        }
+      }
+      scanCount = 0;
+    }, 1000);
+
+    // Render visual a 60fps (independiente del scan PLC)
+    function displayLoop() {
+      renderDynamicState();
+      requestAnimationFrame(displayLoop);
     }
 
     // Inicialización al cargar la página
     window.addEventListener('DOMContentLoaded', () => {
       switchMode('solved');
-      lastTick = performance.now();
-      requestAnimationFrame(plcScanLoop);
+      requestAnimationFrame(displayLoop);
     });
   </script>
 </body>
